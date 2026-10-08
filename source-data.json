@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "source_page": "https://www.jaapsch.net/puzzles/diamdil.htm",
+  "notice": "Original diagrams are not bundled or relicensed. Running prepare_data.py downloads them from the named source unless --source-dir is supplied. Source-image copyright remains with its owner. Hashes identify the input used for this project, not a solution claim.",
+  "sources": [
+    {
+      "name": "tilessilver.gif",
+      "url": "https://www.jaapsch.net/puzzles/images/diamdil/tilessilver.gif",
+      "sha256": "5493647a9ad2586612d96e53e006ab730959cec1c5536e99eb587fc35c7e06ff"
+    },
+    {
+      "name": "tilesred.gif",
+      "url": "https://www.jaapsch.net/puzzles/images/diamdil/tilesred.gif",
+      "sha256": "b8843c2d58e376ae4844e1ae06780ff6939e5d171f2fb45ea3f9705527ae7b32"
+    },
+    {
+      "name": "tilesblue.gif",
+      "url": "https://www.jaapsch.net/puzzles/images/diamdil/tilesblue.gif",
+      "sha256": "21bd5ed3d89853a1637ba3c69fbc72dd4e93dc93eba713e59db74d30fd3f9d76"
+    }
+  ],
+  "expected": {
+    "tile_count": 160,
+    "segment_count": 365,
+    "endpoint_count": 730,
+    "topology_sha256": "4cd6d6a723d0b5de22dd0874f44f3438ff73c3d19eae0970377c69ec6dd35871"
+  }
+}

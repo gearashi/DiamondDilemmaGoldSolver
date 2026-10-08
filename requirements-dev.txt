@@ -1,0 +1,3 @@
+# CPU-only data preparation and unit tests; CUDA and OR-Tools are not required.
+numpy==2.5.3
+Pillow==12.3.0
