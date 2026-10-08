@@ -19,6 +19,7 @@ import numpy as np
 from geometry import build_board
 from validator import orientation_masks, validate_arrangement
 from dfs_gpu import DFS, fill_order, ensure_disjoint_prefixes
+from gpu_backends import choose_backend
 from exact_frontier import plan_frontier
 from systematic_jobs import JobLedger
 from checkpoint_writer import CheckpointWriter
@@ -51,6 +52,7 @@ def main():
     parser.add_argument('--seconds',type=float,default=3600,help='Run duration in seconds; 0 means unlimited.')
     parser.add_argument('--replicas',type=int,default=131072)
     parser.add_argument('--seed',type=int,default=20261007)
+    parser.add_argument('--backend',choices=('auto','cuda','webgpu'),default='auto',help='CUDA for NVIDIA; WebGPU for Metal/Vulkan/DirectX; auto detects the platform.')
     parser.add_argument('--nodes',type=int,default=32)
     parser.add_argument('--checkpoint-seconds',type=float,default=30)
     parser.add_argument('--resume',action='store_true')
@@ -58,6 +60,8 @@ def main():
     parser.add_argument('--data',type=Path,default=ROOT/'data'/'tiles.json')
     parser.add_argument('--output',type=Path,default=ROOT/'runtime')
     args=parser.parse_args()
+    try: backend=choose_backend(args.backend)
+    except ValueError as exc: parser.error(str(exc))
     if not math.isfinite(args.seconds) or args.seconds<0 or not 1<=args.replicas<=131072 or not 1<=args.nodes<=512 or not math.isfinite(args.checkpoint_seconds) or args.checkpoint_seconds<=0:
         parser.error('Seconds must be 0 (unlimited) or positive; checkpoint interval positive, replicas 1..131072, nodes 1..512 required.')
     run=args.output.resolve(); run.mkdir(parents=True,exist_ok=True)
@@ -74,7 +78,7 @@ def main():
     state='starting'; error=None; generation=0; maximum=0; checked=0; trusted=False
     checkpoint=exact/'checkpoint.npz'; frontier_path=exact/'frontier.npz'
     status={'state':'starting','method':'systematic','search_mode':'systematic','pid':os.getpid(),
-            'run_id':run_id,'replicas':args.replicas,'time_limit_seconds':args.seconds,
+            'run_id':run_id,'backend':backend,'replicas':args.replicas,'time_limit_seconds':args.seconds,
             'no_repeat_scope':'Disjoint branches and saved DFS cursors; crashes may replay since the last checkpoint.'}
     hashes={}; frontier_hash=None; frontier_metadata={}; previous_best=None
     def request_stop(*_):
@@ -112,8 +116,11 @@ def main():
         input_snapshot=inputs/(data_sha+'.json')
         if not input_snapshot.exists(): input_snapshot.write_bytes(input_bytes)
         (evidence/'tiles.json').write_bytes(input_bytes)
-        for name in ('systematic_search.py','systematic_jobs.py','exact_frontier.py','dfs_gpu.py','dfs_kernels.cu','gpu_engine.py','geometry.py','validator.py','io_utils.py','checkpoint_writer.py'):
+        for name in ('gpu_backends.py','systematic_search.py','systematic_jobs.py','exact_frontier.py','dfs_gpu.py','dfs_kernels.cu','gpu_engine.py','geometry.py','validator.py','io_utils.py','checkpoint_writer.py'):
             body=(ROOT/name).read_bytes(); (evidence/name).write_bytes(body); hashes[name]=hashlib.sha256(body).hexdigest()
+        if backend=='webgpu':
+            for name in ('dfs_webgpu.py','dfs_kernels.wgsl'):
+                body=(ROOT/name).read_bytes(); (evidence/name).write_bytes(body); hashes[name]=hashlib.sha256(body).hexdigest()
         hashes['tiles.json']=data_sha; status['source_sha256']=hashes
         if (run/'best.json').exists():
             previous_best=json.loads((run/'best.json').read_text(encoding='utf-8-sig'))
@@ -176,7 +183,11 @@ def main():
             atomic_json(exact/'exhaustion.json',{'state':state,'frontier_sha256':frontier_hash,'source_sha256':hashes,'metadata':frontier_metadata})
             publish(); return
         publish('initializing_gpu','Preparing GPU lanes for disjoint branches.')
-        gpu=DFS(masks,board.neighbor_cells,board.neighbor_sides,n=replicas,seed=args.seed,order=order,prefixes=[])
+        engine=DFS
+        if backend=='webgpu':
+            from dfs_webgpu import WebGPUDFS
+            engine=WebGPUDFS
+        gpu=engine(masks,board.neighbor_cells,board.neighbor_sides,n=replicas,seed=args.seed,order=order,prefixes=[])
         if args.resume and checkpoint.exists():
             publish('restoring_checkpoint','Restoring saved branches; excess branches will pause with their progress preserved.')
             with np.load(checkpoint,allow_pickle=False) as archive:
@@ -200,7 +211,7 @@ def main():
                            exact_terminal=np.array(state if state in ('solved','edge_perfect','exhausted') else ''))
             return payload
         writer=CheckpointWriter(snapshot,lambda payload,gen: atomic_npz(checkpoint,payload))
-        config={'method':'systematic','run_id':run_id,'pid':os.getpid(),'started_at':started.isoformat(),
+        config={'method':'systematic','backend':backend,'run_id':run_id,'pid':os.getpid(),'started_at':started.isoformat(),
                 'replicas':gpu.n,'requested_replicas':args.replicas,'seconds':args.seconds,'seed':args.seed,
                 'source_sha256':hashes,'frontier_sha256':frontier_hash,'total_jobs':ledger.total,
                 'paused_jobs':ledger.paused_count,'checkpoint_seconds':args.checkpoint_seconds,'stop_on_matched_edges':240,'resumed':args.resume and checkpoint.exists()}

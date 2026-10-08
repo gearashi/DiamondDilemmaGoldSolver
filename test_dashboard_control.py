@@ -12,6 +12,7 @@ import unittest
 from unittest.mock import patch
 
 import dashboard_server as dashboard
+import gpu_backends as backends
 
 ROOT = Path(__file__).resolve().parent
 
@@ -40,6 +41,61 @@ class DashboardControlTests(unittest.TestCase):
         data = {'state': 'running', 'pid': 4242, 'replicas': 131072}
         data.update(fields)
         (self.directory / 'status.json').write_text(json.dumps(data), encoding='utf-8')
+
+    def test_posix_pid_probe_distinguishes_missing_and_permission_denied(self):
+        for error, expected in ((None, True), (PermissionError('not owned'), True),
+                                (ProcessLookupError('gone'), False), (OSError('other failure'), False)):
+            with self.subTest(error=error):
+                calls = []
+                def probe(pid, signal):
+                    calls.append((pid, signal))
+                    if error is not None:
+                        raise error
+                with patch.object(dashboard, 'os', SimpleNamespace(name='posix', kill=probe)):
+                    self.assertEqual(dashboard.pid_alive(4242), expected)
+                    self.assertFalse(dashboard.pid_alive(True))
+                    self.assertFalse(dashboard.pid_alive(-1))
+                self.assertEqual(calls, [(4242, 0)])
+
+    def test_exited_owned_child_is_reaped_before_stale_lock_probe(self):
+        (self.directory / 'run.lock').write_text('4242', encoding='utf-8')
+        calls = []
+        child = SimpleNamespace(pid=4242, poll=lambda: calls.append('reaped') or 1)
+        with patch.object(dashboard, 'CHILD', child), \
+             patch.object(dashboard, 'pid_alive', side_effect=AssertionError('Zombie PID must not be probed')):
+            self.assertIsNone(dashboard.live_pid())
+            self.assertFalse(dashboard.state_payload()['process_running'])
+            self.assertFalse(dashboard.request_stop()['stop_requested'])
+        self.assertEqual(calls, ['reaped', 'reaped', 'reaped'])
+        self.assertFalse((self.directory / 'stop.request').exists())
+
+    def test_child_poll_precedes_other_recorded_pid_probe(self):
+        (self.directory / 'run.lock').write_text('9000', encoding='utf-8')
+        calls = []
+        child = SimpleNamespace(pid=4242, poll=lambda: calls.append('poll') or 0)
+        def alive(pid):
+            calls.append(('probe', pid))
+            return True
+        with patch.object(dashboard, 'CHILD', child), patch.object(dashboard, 'pid_alive', side_effect=alive):
+            self.assertEqual(dashboard.live_pid(), 9000)
+        self.assertEqual(calls, ['poll', ('probe', 9000)])
+
+    def test_live_owned_child_is_used_before_its_lock_is_written(self):
+        child = SimpleNamespace(pid=4242, poll=lambda: None)
+        with patch.object(dashboard, 'CHILD', child):
+            self.assertEqual(dashboard.live_pid(), 4242)
+
+    def test_permission_denied_pid_keeps_lock_and_prevents_duplicate_spawn(self):
+        lock = self.directory / 'run.lock'
+        lock.write_text('4242', encoding='utf-8')
+        def denied(*args):
+            raise PermissionError('Process exists but access is denied')
+        with patch.object(dashboard, 'os', SimpleNamespace(name='posix', kill=denied)), \
+             patch.object(dashboard.subprocess, 'Popen') as spawn:
+            with self.assertRaisesRegex(ValueError, 'already running'):
+                dashboard.start_solver({})
+        self.assertEqual(lock.read_text(encoding='utf-8'), '4242')
+        spawn.assert_not_called()
 
     def test_state_identifies_the_server_installation_not_saved_status(self):
         self.status(installation_root='C:\\a-different-checkout')
@@ -206,6 +262,78 @@ Write-Output 'Installation identity, occupied-port refusal, preflight, and hidde
         self.assertEqual(active['paused_jobs'], 130944)
         self.assertEqual(active['queued_jobs'], active['paused_jobs'] + active['unassigned_jobs'])
 
+    def test_backend_selection_is_forwarded_and_available_during_startup(self):
+        for backend in ('auto', 'cuda', 'webgpu'):
+            with self.subTest(backend=backend):
+                child = SimpleNamespace(pid=5678, poll=lambda: None)
+                with patch.object(dashboard, 'live_pid', return_value=None), \
+                     patch.object(dashboard.sys, 'platform', 'linux'), \
+                     patch.object(dashboard.subprocess, 'Popen', return_value=child) as spawn, \
+                     patch.object(backends, '_automatic_backend', return_value='cuda'):
+                    result = dashboard.start_solver({'backend': backend, 'replicas': 128})
+                command = spawn.call_args.args[0]
+                self.assertEqual(Path(command[1]).name, 'systematic_search.py')
+                self.assertEqual(command[command.index('--backend') + 1], backend)
+                self.assertEqual(result['backend'], backend)
+                self.assertEqual(dashboard.LAUNCH_CONFIG['backend'], backend)
+                with patch.object(dashboard, 'live_pid', return_value=5678):
+                    status = dashboard.state_payload()['status']
+                self.assertEqual(status['state'], 'starting')
+                self.assertEqual(status['backend'], backend)
+                self.assertEqual(status['replicas'], 128)
+
+    def test_invalid_backend_is_rejected_without_removing_state_or_spawning(self):
+        lock = self.directory / 'run.lock'
+        stop = self.directory / 'stop.request'
+        lock.write_text('999', encoding='utf-8')
+        stop.write_text('pending', encoding='utf-8')
+        with patch.object(dashboard, 'live_pid', return_value=None), \
+             patch.object(dashboard.subprocess, 'Popen') as spawn:
+            for value in ('metal', 'CUDA', '', None, True, 1, [], {}):
+                with self.subTest(backend=value), self.assertRaisesRegex(ValueError, 'backend'):
+                    dashboard.start_solver({'backend': value})
+            with self.assertRaisesRegex(ValueError, 'CUDA'):
+                dashboard.start_solver({'method': 'stochastic', 'backend': 'webgpu'})
+        spawn.assert_not_called()
+        self.assertEqual(lock.read_text(encoding='utf-8'), '999')
+        self.assertEqual(stop.read_text(encoding='utf-8'), 'pending')
+        self.assertFalse((self.directory / 'solver.log').exists())
+
+    def test_macos_cuda_and_legacy_stochastic_fail_before_spawn(self):
+        with patch.object(dashboard.sys, 'platform', 'darwin'), \
+             patch.object(dashboard, 'live_pid', return_value=None), \
+             patch.object(dashboard.subprocess, 'Popen') as spawn:
+            with self.assertRaisesRegex(ValueError, 'macOS|Metal|CUDA'):
+                dashboard.start_solver({'backend': 'cuda'})
+            with self.assertRaisesRegex(ValueError, 'macOS|Metal|CUDA'):
+                dashboard.start_solver({'backend': 'auto', 'method': 'stochastic'})
+        spawn.assert_not_called()
+        self.assertFalse((self.directory / 'solver.log').exists())
+
+    def test_startup_recovers_backend_from_server_owned_child_arguments(self):
+        self.status(pid=111, backend='cuda')
+        child = SimpleNamespace(pid=333, poll=lambda: None, args=[
+            'python', 'systematic_search.py', '--backend', 'webgpu', '--replicas', '128'])
+        with patch.object(dashboard, 'live_pid', return_value=4242), \
+             patch.object(dashboard, 'CHILD', child):
+            status = dashboard.state_payload()['status']
+        self.assertEqual(status['backend'], 'webgpu')
+        self.assertEqual(status['method'], 'systematic')
+        self.assertEqual(status['replicas'], 128)
+
+    def test_backend_config_requires_matching_pid_and_live_status_is_authoritative(self):
+        self.status(pid=111, backend='cuda')
+        config = {'pid': 4242, 'backend': 'webgpu', 'method': 'systematic', 'replicas': 128}
+        path = self.directory / 'run-config.json'
+        path.write_text(json.dumps(config), encoding='utf-8')
+        with patch.object(dashboard, 'live_pid', return_value=4242):
+            self.assertEqual(dashboard.state_payload()['status']['backend'], 'webgpu')
+            config['pid'] = 111
+            path.write_text(json.dumps(config), encoding='utf-8')
+            self.assertNotIn('backend', dashboard.state_payload()['status'])
+            self.status(pid=4242, backend='cuda')
+            self.assertEqual(dashboard.state_payload()['status']['backend'], 'cuda')
+
     def test_checkpoint_phase_survives_friendly_stopping_overlay(self):
         checkpoint = {'phase': 'saving', 'elapsed_seconds': 1.25}
         self.status(state='stopping', checkpoint=checkpoint)
@@ -266,7 +394,8 @@ Write-Output 'Installation identity, occupied-port refusal, preflight, and hidde
         self.assertTrue((self.directory / 'stop.request').is_file())
 
     def test_unlimited_duration_passes_zero_to_both_solver_methods(self):
-        with patch.object(dashboard, 'live_pid', return_value=None):
+        with patch.object(dashboard, 'live_pid', return_value=None), \
+             patch.object(dashboard.sys, 'platform', 'linux'):
             for method, script in (('systematic', 'systematic_search.py'),
                                    ('stochastic', 'solve.py')):
                 with self.subTest(method=method), patch.object(
@@ -372,6 +501,62 @@ assert.equal(element('controlHint').textContent.split('To change GPU load:').len
 console.log('Immediate stop, persistent replica edits, 128-lane resume, paused counts, and unlimited duration passed');
 """
         result = subprocess.run([shutil.which('node'), '-e', harness, str(ROOT / 'Dashboard.html')], cwd=ROOT, capture_output=True, text=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    @unittest.skipUnless(shutil.which('node'), 'Node.js is only needed for the isolated frontend control test')
+    def test_frontend_backend_preference_active_selection_and_start_payload(self):
+        harness = r"""
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const source=fs.readFileSync(process.argv[1],'utf8').split('<script>')[1].split('</script>')[0].replace('poll();setInterval(poll,1000);','');
+function boot(saved){
+ const elements=new Map();
+ function element(id){if(!elements.has(id))elements.set(id,{value:'4096',style:{},dataset:{},classList:{add(){},remove(){},toggle(){}},setAttribute(){},listeners:{},addEventListener(type,fn){this.listeners[type]=fn},clientWidth:500,textContent:'',innerHTML:'',checked:true});return elements.get(id)}
+ const storage={values:{'diamond.requestedBackend':saved},getItem(key){return this.values[key]??null},setItem(key,value){this.values[key]=value}};
+ const context=vm.createContext({document:{getElementById:element,addEventListener(){}},window:{addEventListener(){},localStorage:storage},console,Date,Number,String,Math,Set,JSON,setTimeout(){return 1},clearTimeout(){},setInterval(){},fetchCalls:[]});
+ context.fetch=(url,options)=>{context.fetchCalls.push([url,options]);return new Promise(()=>{})};
+ vm.runInContext(source,context);
+ return {context,element,storage};
+}
+for(const saved of ['auto','cuda','webgpu'])assert.equal(boot(saved).element('backendInput').value,saved);
+for(const saved of ['metal','CUDA','',null])assert.equal(boot(saved).element('backendInput').value,'auto');
+const {context,element,storage}=boot('webgpu');
+function render(script){vm.runInContext(script+';renderState();',context)}
+function changeBackend(value){const el=element('backendInput');el.value=value;const fn=el.onchange||el.listeners.change;assert.equal(typeof fn,'function');fn({target:el});}
+render("state={process_running:false,control_token:'test',status:{state:'stopped',method:'systematic',backend:'cuda',replicas:128},history:[]}");
+assert.equal(element('backendInput').value,'webgpu');
+assert.equal(element('backendInput').disabled,false);
+changeBackend('auto');
+assert.equal(storage.values['diamond.requestedBackend'],'auto');
+render('state.status.backend="webgpu"');
+assert.equal(element('backendInput').value,'auto');
+// Active status controls the disabled display, without replacing the saved preference.
+render("state.process_running=true;state.status.state='running';state.status.backend='cuda'");
+assert.equal(element('backendInput').value,'cuda');
+assert.equal(element('backendInput').disabled,true);
+assert.equal(storage.values['diamond.requestedBackend'],'auto');
+render("state.status.state='starting';state.status.backend='webgpu'");
+assert.equal(element('backendInput').value,'webgpu');
+assert.equal(element('backendInput').disabled,true);
+assert.doesNotMatch(element('gpuName').textContent,/CUDA/);
+render("state.process_running=false;state.status.state='stopped'");
+assert.equal(element('backendInput').value,'auto');
+assert.equal(element('backendInput').disabled,false);
+changeBackend('webgpu');
+element('replicaInput').value='128';element('seconds').value='3600';element('seedInput').value='17';
+render('');
+assert.equal(element('backendInput').value,'webgpu');
+vm.runInContext("command('start');",context);
+assert.equal(element('backendInput').disabled,true);
+assert.equal(context.fetchCalls.length,1);
+assert.equal(context.fetchCalls[0][0],'/api/start');
+const request=context.fetchCalls[0][1];
+assert.equal(request.headers['X-Diamond-Control'],'test');
+assert.deepEqual(JSON.parse(request.body),{method:'systematic',backend:'webgpu',seconds:3600,replicas:128,seed:17});
+assert.equal(storage.values['diamond.requestedBackend'],'webgpu');
+console.log('Stored backend preference, active backend display, idle restoration, and Start payload passed');
+"""
+        result = subprocess.run([shutil.which('node'), '-e', harness, str(ROOT / 'Dashboard.html')],
+                                cwd=ROOT, capture_output=True, text=True, timeout=10)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_http_stop_preserves_token_origin_and_host_protection(self):

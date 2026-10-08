@@ -49,6 +49,14 @@ Normal Stop/Resume retains cursors and ownership. A crash can replay work perfor
 
 `--seconds 0` means Unlimited. It does not disable checkpointing or automatic stopping at the first 240-edge candidate.
 
+## GPU compute backends
+
+The systematic runner accepts `--backend auto`, `cuda`, or `webgpu`. CUDA targets NVIDIA GPUs on Windows/Linux. WebGPU runs a native compute kernel through Metal on macOS or Vulkan/DX12 on compatible PCs; the browser only displays and controls the search.
+
+CUDA and WebGPU share the systematic checkpoint schema, including paused branches. Bounded interchange tests on an RTX 2060 passed transfer in both directions and continued search after restore. The puzzle data, geometry, cell order, and immutable frontier must agree; retain the entire output directory and its input snapshots when changing `--backend`. The stochastic and standalone drivers remain separate formats.
+
+Both Intel and Apple Silicon Macs use the same Python source with native dependencies for their CPU architecture. Driver support and adapter memory/compute limits still determine whether a particular machine can run the requested population. Package imports and CPU fixtures are separate from testing a kernel on actual GPU hardware.
+
 ## Separate backends
 
 Use separate output directories to avoid mixing status files or certificates.
@@ -64,6 +72,8 @@ Use separate output directories to avoid mixing status files or certificates.
 .\venv\Scripts\python.exe dfs_gpu.py --seconds 120 --replicas 3840 --output dfs-runtime
 ```
 
+On Linux/macOS, replace `.\venv\Scripts\python.exe` in these commands with `venv/bin/python`. Forward slashes work for data and output paths on all platforms.
+
 The dashboard and launcher control the default systematic runtime. The other drivers have their own checkpoint behavior; inspect their `--help` before use. To request their stop, write a `stop.request` file in that driver's output directory. The standalone DFS driver may require removal of that request before restarting.
 
 The stochastic backend's recent-board cache is bounded and evicts old entries. Different replicas have separate caches, and old placements can recur. Its persistent validation cache avoids repeating CPU report calculations; it is not a ledger of exhaustive search coverage.
@@ -78,4 +88,6 @@ A Gold solution requires all of the following:
 
 Segments may join two points on the same tile side. Geometric crossings of drawn strokes are not graph junctions.
 
-CPU tests exercise topology, small exhaustive prefix covers, checkpoint ownership, terminal validation, and control behavior. Synthetic host arrays test runner scheduling without CUDA. Separate GPU tests check actual kernels. Source-image extraction checks require locally prepared diagrams and data. None of these test categories substitutes for independently validating a complete candidate.
+Native Vulkan checks on an RTX 2060 enumerated the expected 54 synthetic arrangements while exercising resizing, frozen pending candidates, and counters. A comparison using actual puzzle masks and a varied cell order matched every CUDA device-state field after each of 20 launches, each with a 32-node budget per lane across three lanes. CUDA-to-WebGPU and WebGPU-to-CUDA checkpoint restoration and continued execution passed. An isolated 128-replica systematic run also saved, restored, and advanced its saved search state. These finite results establish the tested compatibility cases, not correctness on every GPU or every possible search state.
+
+CPU tests exercise topology, small exhaustive prefix covers, checkpoint ownership, terminal validation, and control behavior. Synthetic host arrays test runner scheduling without CUDA. Separate GPU tests check actual kernels. Bounded WebGPU tests run on an NVIDIA Vulkan adapter; CI also executes finite shader checks through Mesa lavapipe with an explicit test-only software-adapter opt-in. Neither establishes AMD or macOS Metal hardware correctness. Source-image extraction checks require locally prepared diagrams and data. None of these test categories substitutes for independently validating a complete candidate.

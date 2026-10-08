@@ -86,6 +86,42 @@ class DFS:
 
     def __init__(self, masks, neighbors, neighbor_sides, n=3840, seed=20261007,
                  root_codes=None, order=None, prefixes=None):
+        initial_rows = self._prepare_host(masks, neighbors, neighbor_sides, n, root_codes, order, prefixes)
+        os.environ.setdefault('CUPY_CACHE_DIR', str(Path(tempfile.gettempdir()) / 'DiamondDilemmaGoldSolver-cupy-cache'))
+        import cupy as cp
+        self.cp = cp
+        name = cp.cuda.runtime.getDeviceProperties(cp.cuda.Device().id)['name']
+        self.device = name.decode() if isinstance(name, bytes) else str(name)
+        host_rng = np.random.default_rng(seed)
+        self._prepare_tables()
+        self.tables = [cp.asarray(v) for v in (self.host_faces, self.host_reverse, self.neighbors, self.neighbor_sides)]
+        self.pool = cp.asarray(self.host_pool)
+        self.single_offsets = cp.asarray(self.host_single_offsets)
+        self.pair_offsets = cp.asarray(self.host_pair_offsets)
+        self.device_order = cp.asarray(self.order)
+        self.module = cp.RawModule(code=(ROOT / 'dfs_kernels.cu').read_text(encoding='utf-8-sig'),
+                                  options=('--std=c++17',), name_expressions=('dfs_search',))
+        self.kernel = self.module.get_function('dfs_search')
+        self.boards = cp.full((160, n), -1, np.int16)
+        self.used = cp.zeros((5, n), np.uint32)
+        self.depths = cp.zeros(n, np.int16)
+        self.maxdepths = cp.zeros(n, np.int16)
+        self.states = cp.full(n, 3, np.uint8)
+        self.floors = cp.zeros(n, np.int16)
+        self.firsts = cp.zeros((160, n), np.uint16)
+        self.lengths = cp.zeros((160, n), np.uint16)
+        self.cursors = cp.full((160, n), 65535, np.uint16)
+        self.shifts = cp.zeros((160, n), np.uint16)
+        self.rng = cp.asarray(host_rng.integers(1, 2**32, n, dtype=np.uint32))
+        self.counters = cp.zeros((3, n), np.uint64)
+        self.prefix_codes = np.full((n, 160), -1, np.int16)
+        self.prefixes = [None] * n
+        self.roots = np.full(n, -1, np.int16)
+        if len(initial_rows):
+            self.load_prefixes(initial_rows, lanes=np.arange(len(initial_rows), dtype=np.int32))
+
+    def _prepare_host(self, masks, neighbors, neighbor_sides, n, root_codes, order, prefixes):
+        """Shared integer input validation; no device or search work occurs here."""
         if type(n) is not int or not 1 <= n <= 131072:
             raise ValueError('Replica count must be in1..131072.')
         self.n = n
@@ -132,17 +168,14 @@ class DFS:
         self._verify_prefix_rows(initial_rows, initial_lengths)
         self.fingerprint = hashlib.sha256(self.masks.tobytes() + self.neighbors.tobytes()
                                          + self.neighbor_sides.tobytes() + self.order.tobytes()).hexdigest()
-        os.environ.setdefault('CUPY_CACHE_DIR', str(Path(tempfile.gettempdir()) / 'DiamondDilemmaGoldSolver-cupy-cache'))
-        import cupy as cp
-        self.cp = cp
-        name = cp.cuda.runtime.getDeviceProperties(cp.cuda.Device().id)['name']
-        self.device = name.decode() if isinstance(name, bytes) else str(name)
-        host_rng = np.random.default_rng(seed)
+        return initial_rows
+
+    def _prepare_tables(self):
+        """Shared exact candidate buckets, independent of the device API."""
         palette = np.unique(np.concatenate((self.masks.ravel(), reverse11(self.masks).ravel())))
         self.host_faces = np.searchsorted(palette, self.masks).astype(np.uint16)
         self.host_reverse = np.searchsorted(palette, reverse11(self.masks)).astype(np.uint16)
         self.colors = len(palette)
-        self.tables = [cp.asarray(v) for v in (self.host_faces, self.host_reverse, self.neighbors, self.neighbor_sides)]
         code_arrays = [np.arange(480, dtype=np.int16)]
         single_keys = np.concatenate([side * self.colors + self.host_faces[:, side].astype(np.int32) for side in range(3)])
         single_order = np.argsort(single_keys, kind='stable')
@@ -159,30 +192,6 @@ class DFS:
         self.host_pair_offsets[1:] = np.cumsum(np.bincount(pair_keys, minlength=len(self.host_pair_offsets) - 1), dtype=np.int32)
         self.host_pair_offsets += 1920
         self.host_pool = np.concatenate(code_arrays)
-        self.pool = cp.asarray(self.host_pool)
-        self.single_offsets = cp.asarray(self.host_single_offsets)
-        self.pair_offsets = cp.asarray(self.host_pair_offsets)
-        self.device_order = cp.asarray(self.order)
-        self.module = cp.RawModule(code=(ROOT / 'dfs_kernels.cu').read_text(encoding='utf-8-sig'),
-                                  options=('--std=c++17',), name_expressions=('dfs_search',))
-        self.kernel = self.module.get_function('dfs_search')
-        self.boards = cp.full((160, n), -1, np.int16)
-        self.used = cp.zeros((5, n), np.uint32)
-        self.depths = cp.zeros(n, np.int16)
-        self.maxdepths = cp.zeros(n, np.int16)
-        self.states = cp.full(n, 3, np.uint8)
-        self.floors = cp.zeros(n, np.int16)
-        self.firsts = cp.zeros((160, n), np.uint16)
-        self.lengths = cp.zeros((160, n), np.uint16)
-        self.cursors = cp.full((160, n), 65535, np.uint16)
-        self.shifts = cp.zeros((160, n), np.uint16)
-        self.rng = cp.asarray(host_rng.integers(1, 2**32, n, dtype=np.uint32))
-        self.counters = cp.zeros((3, n), np.uint64)
-        self.prefix_codes = np.full((n, 160), -1, np.int16)
-        self.prefixes = [None] * n
-        self.roots = np.full(n, -1, np.int16)
-        if len(initial_rows):
-            self.load_prefixes(initial_rows, lanes=np.arange(len(initial_rows), dtype=np.int32))
 
     def _verify_prefix_rows(self, rows, lengths):
         if not len(rows):

@@ -4,6 +4,7 @@ from pathlib import Path
 import argparse,ctypes,datetime,json,os,secrets,subprocess,sys,threading
 from urllib.parse import urlsplit
 from io_utils import read_json_shared
+from gpu_backends import BACKENDS
 ROOT=Path(__file__).resolve().parent
 RUNTIME=ROOT/'runtime';RUNTIME.mkdir(exist_ok=True)
 TOKEN=secrets.token_urlsafe(32)
@@ -24,15 +25,22 @@ def pid_alive(pid):
         try:return kernel.WaitForSingleObject(ctypes.c_void_p(handle),0)==258
         finally:kernel.CloseHandle(ctypes.c_void_p(handle))
     try:os.kill(pid,0);return True
+    except PermissionError:return True  # The process exists but belongs to another user.
+    except ProcessLookupError:return False
     except OSError:return False
 def live_pid():
     global CHILD
+    # Reap an exited owned child before a POSIX PID probe: kill(pid, 0) also
+    # succeeds for zombies, which would otherwise keep a stale lock alive.
+    child=CHILD
+    child_alive=child is not None and child.poll() is None
     try:
         pid=int((RUNTIME/'run.lock').read_text())
+        if child is not None and not child_alive and pid==child.pid:return None
         if pid_alive(pid):return pid
     except (OSError,ValueError):pass
     # Windows venv launchers can have a different PID from the real interpreter.
-    if CHILD is not None and CHILD.poll()is None:return CHILD.pid
+    if child_alive:return child.pid
     return None
 def start_solver(body):
     global CHILD,LAUNCH_CONFIG
@@ -40,6 +48,10 @@ def start_solver(body):
     seconds=body.get('seconds',3600);replicas=body.get('replicas',131072);seed=body.get('seed',20261007)
     method=body.get('method','systematic')
     if method not in ('systematic','stochastic'):raise ValueError('Unknown search method.')
+    backend=body.get('backend','auto')
+    if backend not in BACKENDS:raise ValueError('Choose GPU backend auto, cuda, or webgpu.')
+    if sys.platform=='darwin' and (backend=='cuda' or method=='stochastic'):raise ValueError('CUDA is unavailable on macOS. Choose systematic search with auto or webgpu for Metal.')
+    if method=='stochastic' and backend=='webgpu':raise ValueError('The stochastic engine requires CUDA; choose systematic search for other GPUs.')
     if isinstance(seconds,bool) or not isinstance(seconds,(int,float)) or type(replicas)is not int or type(seed)is not int:
         raise ValueError('Duration must be numeric; replicas and seed must be integers.')
     if (seconds!=0 and not 1<=seconds<=86400) or not 128<=replicas<=131072 or not 0<=seed<2**32:raise ValueError('Choose Unlimited (0) or 1..86400 seconds, 128..131072 replicas, and a nonnegative 32-bit seed.')
@@ -50,11 +62,12 @@ def start_solver(body):
     (RUNTIME/'stop.request').unlink(missing_ok=True)
     script='systematic_search.py' if method=='systematic' else 'solve.py'
     cmd=[sys.executable,str(ROOT/script),'--resume','--stop-file-initialized','--seconds',str(seconds),'--replicas',str(replicas),'--seed',str(seed)]
+    if method=='systematic':cmd.extend(['--backend',backend])
     with (RUNTIME/'solver.log').open('a',encoding='utf-8')as log:
         log.write('\nStarted '+datetime.datetime.now(datetime.timezone.utc).isoformat()+'\n');log.flush()
         CHILD=subprocess.Popen(cmd,cwd=str(ROOT),stdout=log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt'else 0)
-    LAUNCH_CONFIG={'method':method,'launcher_pid':CHILD.pid,'replicas':replicas,'time_limit_seconds':seconds,'seed':seed,'resume':True,'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat()}
-    return {'started':True,'pid':CHILD.pid,'replicas':replicas}
+    LAUNCH_CONFIG={'method':method,'backend':backend,'launcher_pid':CHILD.pid,'replicas':replicas,'time_limit_seconds':seconds,'seed':seed,'resume':True,'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+    return {'started':True,'pid':CHILD.pid,'replicas':replicas,'backend':backend}
 
 def request_stop():
     pid=live_pid()
@@ -67,16 +80,16 @@ def startup_status(pid):
     status={'state':'starting','pid':pid}
     config=read_json('run-config.json',{})
     if isinstance(config,dict) and config.get('pid')==pid:
-        for field in ('method','replicas','seed','started_at','run_id'):
+        for field in ('method','backend','replicas','seed','started_at','run_id'):
             if field in config:status[field]=config[field]
         if 'seconds' in config:status['time_limit_seconds']=config['seconds']
     child_active=CHILD is not None and callable(getattr(CHILD,'poll',None)) and CHILD.poll() is None
     if child_active or LAUNCH_CONFIG.get('launcher_pid')==pid:
-        for field in ('method','replicas','time_limit_seconds','seed','started_at'):
+        for field in ('method','backend','replicas','time_limit_seconds','seed','started_at'):
             if field in LAUNCH_CONFIG:status[field]=LAUNCH_CONFIG[field]
     args=getattr(CHILD,'args',None) if child_active else None
     if isinstance(args,(tuple,list)):
-        for flag,field,cast in (('--replicas','replicas',int),('--seconds','time_limit_seconds',float),('--seed','seed',int)):
+        for flag,field,cast in (('--replicas','replicas',int),('--seconds','time_limit_seconds',float),('--seed','seed',int),('--backend','backend',str)):
             try:status[field]=cast(args[args.index(flag)+1])
             except (ValueError,IndexError,TypeError):pass
     if isinstance(args,(tuple,list)) and any(Path(str(value)).name=='systematic_search.py' for value in args):status['method']='systematic'

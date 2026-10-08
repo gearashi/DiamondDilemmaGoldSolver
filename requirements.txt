@@ -1,6 +1,5 @@
+# NVIDIA CUDA 12 backend for Windows and Linux.
+-r requirements-common.txt
 cupy-cuda12x==14.2.0
-numpy==2.5.3
 nvidia-cuda-runtime-cu12==12.9.79
 nvidia-cuda-nvrtc-cu12==12.9.86
-Pillow==12.3.0
-ortools==9.15.6755

@@ -241,7 +241,7 @@ class Scenario:
     def execute(self, resume=False, replicas=4, seconds=1000):
         self.steps_this_run = 0
         command = [
-            str(ROOT / 'systematic_search.py'), '--seconds', str(seconds),
+            str(ROOT / 'systematic_search.py'), '--backend', 'cuda', '--seconds', str(seconds),
             '--replicas', str(replicas), '--nodes', '4', '--checkpoint-seconds', '1000',
             '--data', str(self.source), '--output', str(self.output),
         ]
@@ -251,7 +251,8 @@ class Scenario:
         def writer_factory(snapshot, write, **kwargs):
             return CheckpointWriter(snapshot, write, clock=self.clock)
 
-        with patch.object(runner, 'DFS', self.gpu_class()), \
+        with patch.object(runner, 'choose_backend', return_value='cuda'), \
+             patch.object(runner, 'DFS', self.gpu_class()), \
              patch.object(runner, 'time', SimpleNamespace(monotonic=self.clock)), \
              patch.object(runner, 'CheckpointWriter', writer_factory), \
              patch.object(runner.signal, 'signal'), \

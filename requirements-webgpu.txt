@@ -1,0 +1,2 @@
+-r requirements-common.txt
+wgpu==0.32.0
