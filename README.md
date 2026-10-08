@@ -101,7 +101,7 @@ The CPU suite uses synthetic fixtures and needs no source diagrams or GPU:
 ```powershell
 py -3.12 -m venv .venv-test
 .\.venv-test\Scripts\python.exe -m pip install -r requirements-dev.txt
-.\.venv-test\Scripts\python.exe -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io
+.\.venv-test\Scripts\python.exe -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io test_replica_resize
 ```
 
 GPU and transcription checks are separate. After full setup, useful checks include:

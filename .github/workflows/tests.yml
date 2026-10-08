@@ -43,3 +43,4 @@ jobs:
           test_position_cache
           test_prepare_data
           test_atomic_io
+          test_replica_resize
