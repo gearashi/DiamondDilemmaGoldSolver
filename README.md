@@ -20,7 +20,7 @@ Use **Python 3.12, 64-bit**, a compatible GPU and its driver, and enough free RA
 
 WebGPU here uses a native `wgpu` compute library; it does not run the search inside the browser. macOS does not use CUDA. Setup installs Python packages, not graphics drivers. Use a native ARM64 Python on Apple Silicon and x86_64 Python on Intel Macs.
 
-The CUDA implementation has been tested on an **RTX 2060 with 6 GB VRAM**. Bounded WebGPU enumeration and checkpoint tests have also run on that NVIDIA GPU through Vulkan. AMD GPU and macOS Metal execution have not been hardware-tested in this project; package installation and CPU checks do not establish that hardware coverage. CPU tests need no GPU or source diagrams. Actual search requires a compatible GPU; there is no CPU search fallback. More replicas increase resource use and do not guarantee a faster solution.
+The CUDA implementation has been tested on an **RTX 2060 with 6 GB VRAM**. Bounded WebGPU enumeration and checkpoint tests have also passed on that NVIDIA GPU through Vulkan and DX12. AMD GPU and macOS Metal execution have not been hardware-tested in this project; package installation and CPU checks do not establish that hardware coverage. CPU tests need no GPU or source diagrams. Actual search requires a compatible GPU; there is no CPU search fallback. More replicas increase resource use and do not guarantee a faster solution.
 
 ## Quick start
 
@@ -196,7 +196,7 @@ DIAMOND_TEST_WEBGPU=1 DIAMOND_CUDA_PYTHON="$PWD/venv/bin/python" DIAMOND_TEST_TI
 
 `DIAMOND_CUDA_PYTHON` may instead point to a separate environment with the CUDA dependencies. Omitting `DIAMOND_TEST_TILE_DATA` uses the test's synthetic edge masks.
 
-On the RTX 2060 through native Vulkan, the 54-arrangement fixture passed enumeration, resizing, pending-candidate freezing, and counter checks. With the actual puzzle data and a varied cell order, every device state field matched CUDA after each of 20 launches with a 32-node budget per lane. Checkpoints transferred both ways and resumed consistently. A separate 128-replica systematic run saved, restored, and advanced its saved search state. These are bounded compatibility checks, not AMD or Metal hardware tests.
+On the RTX 2060 through native Vulkan, the 54-arrangement fixture passed enumeration, resizing, pending-candidate freezing, and counter checks. The 54-arrangement, asymmetric-mask, and counter/resume checks also passed in three native DX12 tests (`WGPU_BACKEND_TYPE=D3D12`); the CUDA comparison below was performed through Vulkan. With the actual puzzle data and a varied cell order, every device state field matched CUDA after each of 20 launches with a 32-node budget per lane. Checkpoints transferred both ways and resumed consistently. A separate 128-replica systematic run saved, restored, and advanced its saved search state. These are bounded compatibility checks, not AMD or Metal hardware tests.
 
 Passing tests is not a puzzle solution or a prediction of completion time.
 

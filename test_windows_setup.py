@@ -110,7 +110,7 @@ class WindowsSetupTests(unittest.TestCase):
         self.create_venv()
         result = self.run_setup('-Backend', 'webgpu', SETUP_TEST_PIP_EXIT='4')
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn('Dependency installation failed', result.stdout + result.stderr)
+        self.assertRegex(result.stdout + result.stderr, r'Dependency\s+installation\s+failed')
         self.assertFalse(self.data_log.exists())
 
 
