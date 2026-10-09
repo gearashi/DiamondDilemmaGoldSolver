@@ -12,7 +12,8 @@ import time
 import urllib.error
 import urllib.request
 import webbrowser
-from gpu_backends import choose_backend
+from gpu_backends import BACKENDS, choose_backend
+from search_algorithms import ALGORITHMS
 from io_utils import read_json_shared
 
 ROOT = Path(__file__).resolve().parent
@@ -94,17 +95,26 @@ def open_dashboard(port=8766, no_browser=False):
             print('Open the address above in your browser.', flush=True)
     return url
 
-def solver_command(hours=1, unlimited=False, replicas=4096, seed=20261007, backend='auto', fresh=False):
+def solver_command(hours=1, unlimited=False, replicas=4096, seed=20261007, backend='auto', fresh=False, algorithm=None):
     if not isinstance(hours, (int, float)) or isinstance(hours, bool) or not math.isfinite(hours) or hours < 0:
         raise ValueError('Hours must be finite and nonnegative.')
     if type(replicas) is not int or not 128 <= replicas <= 131072:
         raise ValueError('Choose between 128 and 131072 replicas.')
     if type(seed) is not int or not 0 <= seed < 2**32:
         raise ValueError('Seed must be a nonnegative 32-bit integer.')
-    choose_backend(backend)
-    command = [str(venv_python()), str(ROOT / 'systematic_search.py'),
+    algorithm = 'gpu-dfs' if algorithm is None else algorithm
+    if algorithm not in ALGORITHMS:
+        raise ValueError('Unknown search algorithm.')
+    if backend not in BACKENDS:
+        raise ValueError('Choose GPU backend auto, cuda, or webgpu.')
+    if algorithm in ('gpu-dfs', 'hybrid'):
+        choose_backend(backend)
+    script = 'systematic_search.py' if algorithm == 'gpu-dfs' else 'constraint_search.py'
+    command = [str(venv_python()), str(ROOT / script),
                '--seconds', str(0 if unlimited else hours * 3600),
                '--replicas', str(replicas), '--seed', str(seed), '--backend', backend]
+    if algorithm != 'gpu-dfs':
+        command.extend(['--algorithm', algorithm])
     if not fresh:
         command.append('--resume')
     return command
@@ -115,13 +125,14 @@ def main(argv=None):
     dashboard = sub.add_parser('dashboard', help='Start the local dashboard')
     dashboard.add_argument('--port', type=int, default=8766)
     dashboard.add_argument('--no-browser', action='store_true')
-    start = sub.add_parser('start', help='Run systematic search in this terminal')
+    start = sub.add_parser('start', help='Run the selected search in this terminal')
     start.add_argument('--hours', type=float, default=1)
     start.add_argument('--unlimited', action='store_true')
     start.add_argument('--replicas', type=int, default=4096)
     start.add_argument('--seed', type=int, default=20261007)
     start.add_argument('--backend', choices=('auto', 'cuda', 'webgpu'), default='auto')
     start.add_argument('--fresh', action='store_true')
+    start.add_argument('--algorithm', choices=ALGORITHMS, default=None, help='New contenders target Gold; omission preserves saved GPU DFS branches.')
     sub.add_parser('stop', help='Request a graceful stop and checkpoint')
     sub.add_parser('status', help='Print saved search status')
     args = parser.parse_args(argv)
@@ -129,7 +140,7 @@ def main(argv=None):
         if args.action == 'dashboard':
             open_dashboard(args.port, args.no_browser)
         elif args.action == 'start':
-            command = solver_command(args.hours, args.unlimited, args.replicas, args.seed, args.backend, args.fresh)
+            command = solver_command(args.hours, args.unlimited, args.replicas, args.seed, args.backend, args.fresh, args.algorithm)
             require_setup()
             return subprocess.call(command, cwd=ROOT)
         elif args.action == 'stop':

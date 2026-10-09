@@ -334,6 +334,117 @@ Write-Output 'Installation identity, occupied-port refusal, preflight, and hidde
             self.status(pid=4242, backend='cuda')
             self.assertEqual(dashboard.state_payload()['status']['backend'], 'cuda')
 
+    def test_all_algorithm_routes_and_truthful_startup_metadata(self):
+        for algorithm in ('gpu-dfs', 'dfs', 'cp', 'cp-sat', 'sat', 'hybrid'):
+            with self.subTest(algorithm=algorithm):
+                child = SimpleNamespace(pid=5678, poll=lambda: None)
+                with patch.object(dashboard.sys, 'platform', 'linux'), \
+                     patch.object(dashboard, 'live_pid', return_value=None), \
+                     patch.object(dashboard.subprocess, 'Popen', return_value=child) as spawn:
+                    result = dashboard.start_solver({'algorithm': algorithm, 'replicas': 128, 'backend': 'webgpu'})
+                command = spawn.call_args.args[0]
+                expected_script = 'systematic_search.py' if algorithm == 'gpu-dfs' else 'constraint_search.py'
+                self.assertEqual(Path(command[1]).name, expected_script)
+                if algorithm == 'gpu-dfs': self.assertNotIn('--algorithm', command)
+                else: self.assertEqual(command[command.index('--algorithm')+1], algorithm)
+                self.assertIn('--resume', command)
+                self.assertIn('--stop-file-initialized', command)
+                cpu = algorithm in ('dfs', 'cp', 'cp-sat', 'sat')
+                expected_replicas, expected_backend = (0, 'cpu') if cpu else (128, 'webgpu')
+                expected_target = 'edges' if algorithm == 'gpu-dfs' else 'gold'
+                self.assertEqual(result['algorithm'], algorithm)
+                self.assertEqual(result['target'], expected_target)
+                self.assertEqual(result['replicas'], expected_replicas)
+                self.assertEqual(result['backend'], expected_backend)
+                with patch.object(dashboard, 'live_pid', return_value=5678):
+                    status = dashboard.state_payload()['status']
+                self.assertEqual(status['algorithm'], algorithm)
+                self.assertEqual(status['target'], expected_target)
+                self.assertEqual(status['replicas'], expected_replicas)
+                self.assertEqual(status['backend'], expected_backend)
+                if cpu:
+                    self.assertEqual(status['startup_phase'], 'building_model')
+                    self.assertIn('CPU', status['phase_message'])
+
+    def test_invalid_or_conflicting_algorithm_does_not_spawn_or_remove_stop(self):
+        sentinel = self.directory / 'stop.request'
+        sentinel.write_text('keep', encoding='utf-8')
+        bad = [{'algorithm': value} for value in ('unknown', None, True, 42, [], {})]
+        bad += [{'method': 'stochastic', 'algorithm': 'dfs'}, {'method': 'constraint'},
+                {'algorithm': 'dfs', 'target': 'edges'}, {'algorithm': 'gpu-dfs', 'target': 'gold'}]
+        with patch.object(dashboard, 'live_pid', return_value=None), patch.object(dashboard.subprocess, 'Popen') as spawn:
+            for body in bad:
+                with self.subTest(body=body), self.assertRaises(ValueError): dashboard.start_solver(body)
+        spawn.assert_not_called()
+        self.assertEqual(sentinel.read_text(encoding='utf-8'), 'keep')
+
+    def test_cpu_algorithm_ignores_unused_gpu_backend_on_macos(self):
+        with patch.object(dashboard.sys, 'platform', 'darwin'), \
+             patch.object(dashboard, 'live_pid', return_value=None), \
+             patch.object(dashboard.subprocess, 'Popen', return_value=SimpleNamespace(pid=5678)) as spawn:
+            result = dashboard.start_solver({'algorithm': 'dfs', 'backend': 'cuda', 'replicas': 128})
+        self.assertEqual(result['backend'], 'cpu')
+        self.assertEqual(result['replicas'], 0)
+        self.assertEqual(Path(spawn.call_args.args[0][1]).name, 'constraint_search.py')
+
+    def test_constraint_child_arguments_restore_algorithm_specific_status(self):
+        self.status(pid=111, method='systematic', backend='cuda')
+        folder = self.directory / 'searches' / 'sat-gold'
+        folder.mkdir(parents=True)
+        (folder / 'checkpoint.json').write_text('{}', encoding='utf-8')
+        child = SimpleNamespace(pid=333, poll=lambda: None, args=[
+            'python', 'constraint_search.py', '--algorithm', 'sat', '--backend', 'webgpu',
+            '--replicas', '4096', '--seconds', '3600'])
+        with patch.object(dashboard, 'CHILD', child), patch.object(dashboard, 'live_pid', return_value=4242):
+            status = dashboard.state_payload()['status']
+        self.assertEqual(status['algorithm'], 'sat')
+        self.assertEqual(status['target'], 'gold')
+        self.assertEqual(status['method'], 'constraint')
+        self.assertEqual(status['replicas'], 0)
+        self.assertEqual(status['backend'], 'cpu')
+        self.assertEqual(status['startup_phase'], 'restoring_checkpoint')
+        self.assertIn('rebuilding', status['phase_message'])
+
+    @unittest.skipUnless(shutil.which('powershell.exe'), 'Windows launcher semantics')
+    def test_windows_launcher_routes_algorithms_without_launching_solver(self):
+        harness = r"""
+param([string]$LauncherPath, [string]$Choice)
+$ErrorActionPreference = 'Stop'
+$global:AlgorithmUnderTest = $Choice
+function Set-Location { param($LiteralPath) }
+function Join-Path {
+    param($Path, $ChildPath)
+    if ($ChildPath -eq 'venv\Scripts\python.exe') { return 'Invoke-FakePython' }
+    return [System.IO.Path]::Combine($Path, $ChildPath)
+}
+function Test-Path { param($LiteralPath) return -not $LiteralPath.EndsWith('run.lock') }
+function Remove-Item { param($LiteralPath, $ErrorAction) }
+function Invoke-FakePython {
+    $seen = @($args)
+    $legacy = $global:AlgorithmUnderTest -in @('default', 'gpu-dfs')
+    $expected = if ($legacy) { 'systematic_search.py' } else { 'constraint_search.py' }
+    if ([System.IO.Path]::GetFileName($seen[0]) -ne $expected) { throw 'Wrong solver script' }
+    if ($seen -notcontains '--resume' -or $seen -notcontains '--stop-file-initialized') { throw 'Resume/stop contract missing' }
+    if ($seen[$seen.IndexOf('--replicas')+1] -ne '128') { throw 'Replica argument missing' }
+    if ($seen[$seen.IndexOf('--backend')+1] -ne 'webgpu') { throw 'Backend argument missing' }
+    if ($legacy -and $seen -contains '--algorithm') { throw 'Legacy launch was changed' }
+    if (-not $legacy -and $seen[$seen.IndexOf('--algorithm')+1] -ne $global:AlgorithmUnderTest) { throw 'Algorithm argument missing' }
+    Write-Output 'MOCKED_SOLVER_ARGUMENTS_OK'
+    $global:LASTEXITCODE = 0
+}
+if ($Choice -eq 'default') { & $LauncherPath -Replicas 128 -Backend webgpu }
+else { & $LauncherPath -Replicas 128 -Backend webgpu -Algorithm $Choice }
+"""
+        script = self.directory / 'algorithm-launcher-test.ps1'
+        script.write_text(harness, encoding='utf-8')
+        for algorithm in ('default', 'gpu-dfs', 'dfs', 'cp', 'cp-sat', 'sat', 'hybrid'):
+            with self.subTest(algorithm=algorithm):
+                result = subprocess.run([shutil.which('powershell.exe'), '-NoProfile', '-ExecutionPolicy', 'Bypass',
+                    '-File', str(script), str(ROOT / 'StartSolver.ps1'), algorithm], cwd=ROOT,
+                    capture_output=True, text=True, timeout=15, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                self.assertIn('MOCKED_SOLVER_ARGUMENTS_OK', result.stdout)
+
     def test_checkpoint_phase_survives_friendly_stopping_overlay(self):
         checkpoint = {'phase': 'saving', 'elapsed_seconds': 1.25}
         self.status(state='stopping', checkpoint=checkpoint)
@@ -438,6 +549,7 @@ context.fetch=(url,options)=>{context.fetchCalls.push([url,options]);return new 
 let source=fs.readFileSync(process.argv[1],'utf8').split('<script>')[1].split('</script>')[0];
 source=source.replace('poll();setInterval(poll,1000);','');
 vm.runInContext(source,context);
+element('algorithmInput').value='gpu-dfs';element('algorithmInput').listeners.change();
 vm.runInContext("state={process_running:true,control_token:'test',status:{state:'running',replicas:131072},history:[]}; command('stop');",context);
 assert.equal(element('stopBtn').disabled,true);
 assert.equal(element('stopBtn').textContent,'Stopping…');
@@ -515,6 +627,7 @@ function boot(saved){
  const context=vm.createContext({document:{getElementById:element,addEventListener(){}},window:{addEventListener(){},localStorage:storage},console,Date,Number,String,Math,Set,JSON,setTimeout(){return 1},clearTimeout(){},setInterval(){},fetchCalls:[]});
  context.fetch=(url,options)=>{context.fetchCalls.push([url,options]);return new Promise(()=>{})};
  vm.runInContext(source,context);
+ element('algorithmInput').value='gpu-dfs';element('algorithmInput').listeners.change();
  return {context,element,storage};
 }
 for(const saved of ['auto','cuda','webgpu'])assert.equal(boot(saved).element('backendInput').value,saved);
@@ -551,9 +664,63 @@ assert.equal(context.fetchCalls.length,1);
 assert.equal(context.fetchCalls[0][0],'/api/start');
 const request=context.fetchCalls[0][1];
 assert.equal(request.headers['X-Diamond-Control'],'test');
-assert.deepEqual(JSON.parse(request.body),{method:'systematic',backend:'webgpu',seconds:3600,replicas:128,seed:17});
+assert.deepEqual(JSON.parse(request.body),{algorithm:'gpu-dfs',method:'systematic',backend:'webgpu',seconds:3600,replicas:128,seed:17});
 assert.equal(storage.values['diamond.requestedBackend'],'webgpu');
 console.log('Stored backend preference, active backend display, idle restoration, and Start payload passed');
+"""
+        result = subprocess.run([shutil.which('node'), '-e', harness, str(ROOT / 'Dashboard.html')],
+                                cwd=ROOT, capture_output=True, text=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    @unittest.skipUnless(shutil.which('node'), 'Node.js is only needed for isolated frontend control tests')
+    def test_frontend_constraint_modes_preserve_preferences_and_do_not_show_old_live_boards(self):
+        harness = r"""
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const elements=new Map();
+function element(id){if(!elements.has(id))elements.set(id,{value:'4096',style:{},dataset:{},classList:{add(){},remove(){},toggle(){}},setAttribute(){},listeners:{},addEventListener(type,fn){this.listeners[type]=fn},clientWidth:500,textContent:'',innerHTML:'',checked:true});return elements.get(id)}
+const storage={values:{'diamond.requestedBackend':'cuda'},getItem(key){return this.values[key]??null},setItem(key,value){this.values[key]=value}};
+const context=vm.createContext({document:{getElementById:element,addEventListener(){}},window:{addEventListener(){},localStorage:storage},console,Date,Number,String,Math,Set,JSON,setTimeout(){return 1},clearTimeout(){},setInterval(){},fetchCalls:[]});
+context.fetch=(url,options)=>{context.fetchCalls.push([url,options]);return new Promise(()=>{})};
+const source=fs.readFileSync(process.argv[1],'utf8').split('<script>')[1].split('</script>')[0].replace('poll();setInterval(poll,1000);','');
+vm.runInContext(source,context);
+function render(script){vm.runInContext(script+';renderState();',context)}
+function select(value){element('algorithmInput').value=value;element('algorithmInput').listeners.change();}
+render("state={process_running:false,control_token:'test',status:{state:'stopped',method:'systematic'},history:[]}");
+assert.equal(element('algorithmInput').value,'dfs');
+assert.equal(element('replicaInput').disabled,true);assert.equal(element('backendInput').disabled,true);
+select('sat');assert.equal(storage.values['diamond.requestedAlgorithm'],'sat');
+element('replicaInput').value='128';element('seconds').value='3600';element('seedInput').value='17';
+vm.runInContext("command('start');",context);
+assert.equal(element('algorithmInput').disabled,true);
+const sent=JSON.parse(context.fetchCalls[0][1].body);
+assert.equal(sent.algorithm,'sat');assert.equal(sent.method,'constraint');assert.equal(sent.replicas,128);
+render("commandBusy=false;state={process_running:true,control_token:'test',status:{state:'running',method:'constraint',algorithm:'dfs',target:'gold',backend:'cpu',replicas:0,run_id:'new',nodes_checked:42,stats:{loop_prunes:3}},live:{method:'systematic',run_id:'old',codes:[0],validation:{matched_edges:207}},history:[]}");
+assert.equal(element('algorithmInput').value,'dfs');assert.equal(element('algorithmInput').disabled,true);
+assert.equal(element('replicaInput').value,'128');assert.equal(element('replicaInput').disabled,true);
+assert.equal(element('replicasLabel').textContent,'CPU search workers');assert.equal(element('replicas').textContent,'1');
+assert.equal(element('viewMeta').textContent,'No live placement yet');
+assert.equal(element('validationStatus').textContent,'No candidate');
+assert.match(element('controlHint').textContent,/one gold loop/);
+assert.equal(element('cacheHits').textContent,'42');assert.equal(element('diskEntries').textContent,'3');
+render("puzzle={tiles:Array.from({length:160},(_,i)=>({id:i,segments:[]})),geometry:{cells:[],vertices:[]}};state.live={method:'constraint',algorithm:'dfs',run_id:'new',codes:[0,...Array(159).fill(-1)],assigned_tiles:1,is_partial:true};");
+assert.equal(element('matched').textContent,1);
+assert.equal(element('validationStatus').textContent,'Partial branch');
+assert.equal(element('viewMeta').textContent,'Actual partial branch');
+render("state.status.algorithm='hybrid';state.status.backend='webgpu';state.status.replicas=256");
+assert.equal(element('algorithmInput').value,'hybrid');
+assert.equal(element('backendInput').value,'webgpu');
+assert.equal(element('replicaInput').value,'256');
+assert.equal(element('replicasLabel').textContent,'GPU sampling replicas');
+assert.equal(storage.values['diamond.requestedBackend'],'cuda');
+render("state.process_running=false;state.status.state='stopped'");
+assert.equal(element('algorithmInput').value,'sat');
+assert.equal(element('backendInput').value,'cuda');
+assert.equal(element('backendInput').disabled,true);
+assert.equal(element('replicaInput').disabled,true);
+render("state.status={state:'error',method:'constraint',algorithm:'sat',target:'gold',backend:'cpu',replicas:0,error:'SAT requires optional python-sat'}");
+assert.equal(element('runStatus').textContent,'Search error');
+assert.match(element('controlHint').textContent,/python-sat/);
+console.log('Gold-mode routing, CPU controls, partial snapshots, historical separation, and hybrid backend preferences passed');
 """
         result = subprocess.run([shutil.which('node'), '-e', harness, str(ROOT / 'Dashboard.html')],
                                 cwd=ROOT, capture_output=True, text=True, timeout=10)

@@ -306,6 +306,40 @@ class PortableLauncherTests(unittest.TestCase):
         self.assertNotIn('--resume', args[0])
         self.assertEqual(args[0][args[0].index('--seconds') + 1], '0')
 
+    def test_algorithm_routes_preserve_legacy_positional_api(self):
+        with patch.object(launcher, 'choose_backend', return_value='webgpu') as choose:
+            legacy = launcher.solver_command(1, False, 128, 17, 'webgpu', False)
+            self.assertEqual(Path(legacy[1]).name, 'systematic_search.py')
+            self.assertNotIn('--algorithm', legacy)
+            for algorithm in ('gpu-dfs', 'dfs', 'cp', 'cp-sat', 'sat', 'hybrid'):
+                with self.subTest(algorithm=algorithm):
+                    choose.reset_mock()
+                    command = launcher.solver_command(replicas=128, backend='webgpu', algorithm=algorithm)
+                    self.assertEqual(Path(command[1]).name, 'systematic_search.py' if algorithm == 'gpu-dfs' else 'constraint_search.py')
+                    if algorithm == 'gpu-dfs': self.assertNotIn('--algorithm', command)
+                    else: self.assertEqual(command[command.index('--algorithm')+1], algorithm)
+                    if algorithm in ('gpu-dfs', 'hybrid'): choose.assert_called_once_with('webgpu')
+                    else: choose.assert_not_called()
+                    self.assertIn('--resume', command)
+
+    def test_cpu_algorithm_does_not_require_a_gpu_driver_and_cli_forwards_selection(self):
+        self.install()
+        with patch.object(launcher, 'choose_backend', side_effect=AssertionError('CPU search must not probe GPU drivers')):
+            result = launcher.main(['start', '--algorithm', 'sat', '--replicas', '128', '--backend', 'cuda', '--fresh'])
+        self.assertEqual(result, 0)
+        command = self.call.call_args.args[0]
+        self.assertEqual(Path(command[1]).name, 'constraint_search.py')
+        self.assertEqual(command[command.index('--algorithm')+1], 'sat')
+        self.assertNotIn('--resume', command)
+
+    def test_unknown_algorithm_is_rejected_before_driver_probe(self):
+        with patch.object(launcher, 'choose_backend') as choose:
+            for value in ('SAT', 'unknown', True, [], {}):
+                with self.subTest(algorithm=value), self.assertRaisesRegex(ValueError, 'algorithm'):
+                    launcher.solver_command(algorithm=value)
+        choose.assert_not_called()
+        self.call.assert_not_called()
+
     def test_main_stop_and_status_use_only_local_runtime(self):
         self.assertEqual(launcher.main(['stop']), 0)
         self.assertFalse((self.root / 'runtime').exists())

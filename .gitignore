@@ -48,3 +48,5 @@ extraction_*.png
 Thumbs.db
 .env
 .env.*
+
+/.venv-compare/

@@ -8,9 +8,21 @@ Each physical tile is labelled. An orientation code is `3 * tile_index + rotatio
 
 The raw labelled space is `160! × 3^160`, approximately `1.03 × 10^361` arrangements. Identical visible patterns and rotations of the entire board are not merged. The scale makes exhaustive completion uncertain; neither a timeout nor an unchanged best depth establishes impossibility.
 
-## Systematic search
+## Gold-only constraint search
 
-The default `systematic_search.py` backend fixes a cell order and partitions the search into prefix jobs. Refining a job replaces it with **all** unused-tile orientations compatible with the already assigned seams. A cancellation or resource cap preserves an unsplit parent rather than dropping its remaining children.
+The dashboard exposes `dfs`, `cp`, `cp-sat`, `sat`, and `hybrid`, implemented by `constraint_search.py`. All five require every tile once, all matching seams, and one complete gold loop. An edge-perfect arrangement with multiple loops is rejected and search continues.
+
+Strong DFS uses bitset domains, minimum-remaining-values cell ordering, seam arc consistency, forced tile uniqueness, and early rejection of closed proper loops. A rejected partial assignment discards all its impossible completions. It stores each pending branch and its next choice, so normal resume does not re-enumerate consumed complete assignments. Periodic checkpoints are written between 30-second search slices; Stop also saves a checkpoint.
+
+SAT uses Glucose through PySAT. CP-SAT and traditional CP use OR-Tools with tile uniqueness and seam constraints. Independently detected closed components generate exclusions of the conjunction of placements preserving that component. This is a sound exclusion of impossible Gold completions, not a heuristic score threshold. Native engines save these validated exclusions and hints; their internal search, propagation, and learned clauses restart after a process restart. A checkpoint timestamp for these engines does not mean an exact native search cursor was saved.
+
+The experimental hybrid uses native CUDA or WebGPU sampling for an initial fraction of its first search slice, independently checks the returned samples, and uses the best sample to order CPU DFS values. It never fixes sampled choices or discards legal branches on score alone. Samples may repeat. Once DFS begins, resumes use its saved stack without sampling again.
+
+Each mode saves under `runtime/searches/<algorithm>-gold/`. A completed exhaustion record is bound to the input, algorithm, and source hashes, and is reused without restarting completed work. It is recorded solver evidence, not an independently checkable UNSAT proof. A saved solution is always independently validated again. These checkpoints are separate from the existing GPU pool and from each other. Search counts cannot be added across algorithms as unique coverage. CPU modes use one worker; GPU replica counts affect GPU work only. See [the algorithm comparison](ALGORITHM_COMPARISON.md).
+
+## Systematic GPU search
+
+The legacy `systematic_search.py` backend fixes a cell order and partitions the search into prefix jobs. Refining a job replaces it with **all** unused-tile orientations compatible with the already assigned seams. A cancellation or resource cap preserves an unsplit parent rather than dropping its remaining children.
 
 The resulting frontier is prefix-free: no job duplicates another job or contains another job as a descendant. Each active GPU lane owns one job. Surplus lanes stay idle. An available lane can continue a paused job from its saved cursor or receive a previously unassigned job.
 
@@ -47,7 +59,7 @@ Stop waits for current work and the required final save. An older write may need
 
 Normal Stop/Resume retains cursors and ownership. A crash can replay work performed after the last completed checkpoint; the program does not claim exactly-once execution across a crash. Never discard, replace, or roll back a checkpoint if preserving its coverage is required.
 
-`--seconds 0` means Unlimited. It does not disable checkpointing or automatic stopping at the first 240-edge candidate.
+For legacy GPU DFS, `--seconds 0` means Unlimited. It does not disable checkpointing or automatic stopping at the first 240-edge candidate. The new constraint modes instead stop automatically only for a verified single-loop Gold solution or exhaustion.
 
 ## GPU compute backends
 
@@ -74,7 +86,7 @@ Use separate output directories to avoid mixing status files or certificates.
 
 On Linux/macOS, replace `.\venv\Scripts\python.exe` in these commands with `venv/bin/python`. Forward slashes work for data and output paths on all platforms.
 
-The dashboard and launcher control the default systematic runtime. The other drivers have their own checkpoint behavior; inspect their `--help` before use. To request their stop, write a `stop.request` file in that driver's output directory. The standalone DFS driver may require removal of that request before restarting.
+The dashboard and launcher select the requested algorithm within the main runtime; command-line launchers keep the legacy GPU default for compatibility. The other drivers have their own checkpoint behavior; inspect their `--help` before use. To request their stop, write a `stop.request` file in that driver's output directory. The standalone DFS driver may require removal of that request before restarting.
 
 The stochastic backend's recent-board cache is bounded and evicts old entries. Different replicas have separate caches, and old placements can recur. Its persistent validation cache avoids repeating CPU report calculations; it is not a ledger of exhaustive search coverage.
 

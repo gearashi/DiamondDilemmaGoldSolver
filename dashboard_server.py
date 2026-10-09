@@ -5,6 +5,7 @@ import argparse,ctypes,datetime,json,os,secrets,subprocess,sys,threading
 from urllib.parse import urlsplit
 from io_utils import read_json_shared
 from gpu_backends import BACKENDS
+from search_algorithms import ALGORITHMS,LABELS
 ROOT=Path(__file__).resolve().parent
 RUNTIME=ROOT/'runtime';RUNTIME.mkdir(exist_ok=True)
 TOKEN=secrets.token_urlsafe(32)
@@ -47,11 +48,21 @@ def start_solver(body):
     if live_pid():raise ValueError('A solver is already running.')
     seconds=body.get('seconds',3600);replicas=body.get('replicas',131072);seed=body.get('seed',20261007)
     method=body.get('method','systematic')
-    if method not in ('systematic','stochastic'):raise ValueError('Unknown search method.')
+    if method not in ('systematic','stochastic','constraint'):raise ValueError('Unknown search method.')
+    algorithm=body.get('algorithm','gpu-dfs')
+    if algorithm not in ALGORITHMS:raise ValueError('Unknown search algorithm.')
+    if method=='stochastic' and 'algorithm' in body:raise ValueError('Choose a search algorithm or legacy stochastic search, not both.')
+    if method=='constraint' and 'algorithm' not in body:raise ValueError('Constraint search requires an explicit algorithm.')
+    constraint=algorithm!='gpu-dfs'
+    if constraint:method='constraint'
+    elif method!='stochastic':method='systematic'
+    cpu=constraint and algorithm!='hybrid'
+    target='gold' if constraint else 'edges'
+    if 'target' in body and body['target']!=target:raise ValueError(f'This algorithm searches the {target} target.')
     backend=body.get('backend','auto')
     if backend not in BACKENDS:raise ValueError('Choose GPU backend auto, cuda, or webgpu.')
-    if sys.platform=='darwin' and (backend=='cuda' or method=='stochastic'):raise ValueError('CUDA is unavailable on macOS. Choose systematic search with auto or webgpu for Metal.')
-    if method=='stochastic' and backend=='webgpu':raise ValueError('The stochastic engine requires CUDA; choose systematic search for other GPUs.')
+    if not cpu and sys.platform=='darwin' and (backend=='cuda' or method=='stochastic'):raise ValueError('CUDA is unavailable on macOS. Choose a CPU algorithm or auto/webgpu for Metal.')
+    if method=='stochastic' and backend=='webgpu':raise ValueError('The stochastic engine requires CUDA; choose another algorithm for other GPUs.')
     if isinstance(seconds,bool) or not isinstance(seconds,(int,float)) or type(replicas)is not int or type(seed)is not int:
         raise ValueError('Duration must be numeric; replicas and seed must be integers.')
     if (seconds!=0 and not 1<=seconds<=86400) or not 128<=replicas<=131072 or not 0<=seed<2**32:raise ValueError('Choose Unlimited (0) or 1..86400 seconds, 128..131072 replicas, and a nonnegative 32-bit seed.')
@@ -60,14 +71,21 @@ def start_solver(body):
     (RUNTIME/'run.lock').unlink(missing_ok=True)
     # Clear a stale request before spawn; the runner must not erase a new request.
     (RUNTIME/'stop.request').unlink(missing_ok=True)
-    script='systematic_search.py' if method=='systematic' else 'solve.py'
+    script='constraint_search.py' if constraint else 'systematic_search.py' if method=='systematic' else 'solve.py'
     cmd=[sys.executable,str(ROOT/script),'--resume','--stop-file-initialized','--seconds',str(seconds),'--replicas',str(replicas),'--seed',str(seed)]
-    if method=='systematic':cmd.extend(['--backend',backend])
+    if method!='stochastic':cmd.extend(['--backend',backend])
+    if constraint:cmd.extend(['--algorithm',algorithm])
     with (RUNTIME/'solver.log').open('a',encoding='utf-8')as log:
         log.write('\nStarted '+datetime.datetime.now(datetime.timezone.utc).isoformat()+'\n');log.flush()
         CHILD=subprocess.Popen(cmd,cwd=str(ROOT),stdout=log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt'else 0)
-    LAUNCH_CONFIG={'method':method,'backend':backend,'launcher_pid':CHILD.pid,'replicas':replicas,'time_limit_seconds':seconds,'seed':seed,'resume':True,'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat()}
-    return {'started':True,'pid':CHILD.pid,'replicas':replicas,'backend':backend}
+    actual_algorithm=algorithm if method!='stochastic' else 'stochastic'
+    actual_backend='cpu' if cpu else backend
+    actual_replicas=0 if cpu else replicas
+    LAUNCH_CONFIG={'method':method,'algorithm':actual_algorithm,'target':target,'backend':actual_backend,
+                  'launcher_pid':CHILD.pid,'replicas':actual_replicas,'requested_replicas':replicas,
+                  'time_limit_seconds':seconds,'seed':seed,'resume':True,'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+    return {'started':True,'pid':CHILD.pid,'replicas':actual_replicas,'backend':actual_backend,
+            'algorithm':actual_algorithm,'method':method,'target':target}
 
 def request_stop():
     pid=live_pid()
@@ -80,23 +98,41 @@ def startup_status(pid):
     status={'state':'starting','pid':pid}
     config=read_json('run-config.json',{})
     if isinstance(config,dict) and config.get('pid')==pid:
-        for field in ('method','backend','replicas','seed','started_at','run_id'):
+        for field in ('method','algorithm','target','backend','replicas','seed','started_at','run_id'):
             if field in config:status[field]=config[field]
         if 'seconds' in config:status['time_limit_seconds']=config['seconds']
     child_active=CHILD is not None and callable(getattr(CHILD,'poll',None)) and CHILD.poll() is None
     if child_active or LAUNCH_CONFIG.get('launcher_pid')==pid:
-        for field in ('method','backend','replicas','time_limit_seconds','seed','started_at'):
+        for field in ('method','algorithm','target','backend','replicas','time_limit_seconds','seed','started_at'):
             if field in LAUNCH_CONFIG:status[field]=LAUNCH_CONFIG[field]
     args=getattr(CHILD,'args',None) if child_active else None
     if isinstance(args,(tuple,list)):
-        for flag,field,cast in (('--replicas','replicas',int),('--seconds','time_limit_seconds',float),('--seed','seed',int),('--backend','backend',str)):
+        for flag,field,cast in (('--replicas','replicas',int),('--seconds','time_limit_seconds',float),('--seed','seed',int),('--backend','backend',str),('--algorithm','algorithm',str)):
             try:status[field]=cast(args[args.index(flag)+1])
             except (ValueError,IndexError,TypeError):pass
-    if isinstance(args,(tuple,list)) and any(Path(str(value)).name=='systematic_search.py' for value in args):status['method']='systematic'
-    systematic=status.get('method')=='systematic'
-    restoring=(RUNTIME/('systematic/checkpoint.npz' if systematic else 'checkpoint.npz')).exists()
-    status['startup_phase']='restoring_checkpoint' if restoring else 'initializing_gpu'
-    status['phase_message']=('Restoring disjoint branches and saved cursors.' if restoring else 'Preparing disjoint GPU search branches.') if systematic else ('Restoring saved search and validating its cache.' if restoring else 'Preparing the GPU search.')
+        scripts={Path(str(value)).name for value in args}
+        if 'constraint_search.py' in scripts:status['method']='constraint'
+        elif 'systematic_search.py' in scripts:status['method']='systematic'
+        elif 'solve.py' in scripts:status['method']='stochastic'
+    algorithm=status.get('algorithm')
+    if status.get('method')=='constraint' or algorithm in ALGORITHMS[1:]:
+        status.update(method='constraint',target='gold')
+        cpu=algorithm!='hybrid'
+        if cpu:status.update(replicas=0,backend='cpu')
+        restoring=algorithm in ALGORITHMS[1:] and (RUNTIME/'searches'/(algorithm+'-gold')/'checkpoint.json').exists()
+        status['startup_phase']='restoring_checkpoint' if restoring else 'building_model' if cpu else 'initializing_gpu'
+        if algorithm in ('dfs','hybrid'):
+            status['phase_message']='Restoring exact Gold search branches.' if restoring else ('Preparing CPU constraints and exact DFS.' if cpu else 'Preparing GPU sampling and constrained DFS.')
+        else:
+            status['phase_message']='Loading saved Gold constraints and rebuilding the CPU model.' if restoring else 'Building the CPU Gold constraint model.'
+    else:
+        systematic=status.get('method')=='systematic'
+        if systematic:status.setdefault('algorithm','gpu-dfs')
+        elif status.get('method')=='stochastic':status.setdefault('algorithm','stochastic')
+        status.setdefault('target','edges')
+        restoring=(RUNTIME/('systematic/checkpoint.npz' if systematic else 'checkpoint.npz')).exists()
+        status['startup_phase']='restoring_checkpoint' if restoring else 'initializing_gpu'
+        status['phase_message']=('Restoring disjoint branches and saved cursors.' if restoring else 'Preparing disjoint GPU search branches.') if systematic else ('Restoring saved search and validating its cache.' if restoring else 'Preparing the GPU search.')
     return status
 
 def state_payload():

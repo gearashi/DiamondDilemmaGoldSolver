@@ -1,14 +1,14 @@
 # Diamond Dilemma Gold Solver
 
-A GPU search tool for the **Gold Challenge** of Diamond Dilemma on Windows, Linux, and macOS, with a local 3D dashboard, resumable search branches, and independent solution validation.
+A CPU and GPU search tool for the **Gold Challenge** of Diamond Dilemma on Windows, Linux, and macOS, with a local 3D dashboard, resumable search branches, and independent solution validation.
 
-**This repository contains a solver, not a verified Gold solution.** A complete result must place all 160 tiles once, match all 240 edges, and join every gold segment into **one closed loop**. The default search stops at its first 240-edge arrangement, even if it contains several loops. Such a result is saved as `edge-perfect.json`; only a verified single loop earns `solution.json`.
+**This repository contains a solver, not a verified Gold solution.** A complete result must place all 160 tiles once, match all 240 edges, and join every gold segment into **one closed loop**. The dashboard offers strongly pruned DFS, SAT, CP-SAT, traditional constraint programming, and experimental GPU sampling followed by CPU DFS. These modes require a single closed loop. The older GPU DFS option preserves its saved branch pool and first-240-edge stopping rule; check its loop count. Only a verified single loop earns `solution.json`.
 
 The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaapsch.net/puzzles/diamdil.htm).
 
 ## Requirements
 
-Use **Python 3.12, 64-bit**, a compatible GPU and its driver, and enough free RAM and disk space for the selected population and checkpoints. Initial dependency installation and puzzle-data preparation need internet access.
+Use **Python 3.12, 64-bit**, a compatible GPU and its driver for GPU modes, and enough free RAM and disk space for the selected population and checkpoints. Initial dependency installation and puzzle-data preparation need internet access.
 
 | Platform and GPU | Compute backend |
 | --- | --- |
@@ -20,7 +20,7 @@ Use **Python 3.12, 64-bit**, a compatible GPU and its driver, and enough free RA
 
 WebGPU here uses a native `wgpu` compute library; it does not run the search inside the browser. macOS does not use CUDA. Setup installs Python packages, not graphics drivers. Use a native ARM64 Python on Apple Silicon and x86_64 Python on Intel Macs.
 
-The CUDA implementation has been tested on an **RTX 2060 with 6 GB VRAM**. Bounded WebGPU enumeration and checkpoint tests have also passed on that NVIDIA GPU through Vulkan and DX12. AMD GPU and macOS Metal execution have not been hardware-tested in this project; package installation and CPU checks do not establish that hardware coverage. CPU tests need no GPU or source diagrams. Actual search requires a compatible GPU; there is no CPU search fallback. More replicas increase resource use and do not guarantee a faster solution.
+The CUDA implementation has been tested on an **RTX 2060 with 6 GB VRAM**. Bounded WebGPU enumeration and checkpoint tests have also passed on that NVIDIA GPU through Vulkan and DX12. AMD GPU and macOS Metal execution have not been hardware-tested in this project; package installation and CPU checks do not establish that hardware coverage. CPU tests need no GPU or source diagrams. The DFS, SAT, CP-SAT, and CP modes run on the CPU without a GPU. GPU DFS and hybrid sampling require a compatible GPU. More replicas increase resource use and do not guarantee a faster solution.
 
 ## Quick start
 
@@ -60,19 +60,22 @@ Windows equivalents are `.\Setup.cmd -Backend webgpu` and `.\Setup.cmd -Backend 
 
 ### Search controls
 
-Choose the duration and replica count, then select **Start search**. Drag the diamond to rotate it and use the mouse wheel to zoom. **Live branch** shows a real partial assignment; empty cells have not yet been filled. Closing the browser leaves the solver running.
+Choose a **Search algorithm** and duration, then select **Start search**. GPU replicas apply only to GPU DFS and hybrid sampling. The dashboard starts with **DFS with constraint pruning**; see the bounded [algorithm comparison](docs/ALGORITHM_COMPARISON.md) for the evidence and limitations. Drag the diamond to rotate it and use the mouse wheel to zoom. **Live placement** shows a real partial assignment when the engine exposes one; native SAT/CP engines can work internally without publishing a partial board. Empty cells have not yet been filled. Closing the browser leaves the solver running.
 
-Select **Stop** to finish the current work and save progress. Wait until the status becomes **Stopped** before starting again. **Unlimited** removes the time limit; Stop, the first 240-edge candidate, or exhaustion of the saved frontier can still end the run.
+Select **Stop** to finish the current work and save progress. Wait until the status becomes **Stopped** before starting again. **Unlimited** removes the time limit. The new modes stop for a verified Gold solution, Stop, or proven exhaustion of their encoded search. Legacy GPU DFS still stops at its first 240-edge candidate.
 
 ## Command line
 
-The launcher defaults to systematic search, resumes compatible saved progress, and selects an available GPU backend automatically.
+For compatibility, the command-line launcher defaults to the existing GPU DFS. Select `dfs`, `cp`, `cp-sat`, `sat`, or `hybrid` explicitly for the new Gold-only searches. The dashboard and launcher resume the selected algorithm’s compatible saved state.
 
 Windows:
 
 ```powershell
-# Run for one hour.
-.\StartSolver.cmd -Hours 1 -Replicas 4096
+# Strongly pruned CPU search for one hour.
+.\StartSolver.cmd -Algorithm dfs -Hours 1
+
+# Experimental GPU sampling followed by CPU DFS.
+.\StartSolver.cmd -Algorithm hybrid -Hours 1 -Replicas 4096
 
 # Run without a time limit.
 .\StartSolver.cmd -Unlimited -Replicas 4096
@@ -84,7 +87,8 @@ Windows:
 Linux and macOS:
 
 ```bash
-bash StartSolver.sh --hours 1 --replicas 4096
+bash StartSolver.sh --algorithm dfs --hours 1
+bash StartSolver.sh --algorithm hybrid --hours 1 --replicas 4096
 bash StartSolver.sh --unlimited --replicas 4096 --backend webgpu
 bash StopSolver.sh
 bash Status.sh
@@ -98,12 +102,14 @@ The corresponding Python command on Windows is:
 .\venv\Scripts\python.exe systematic_search.py --resume --seconds 0 --replicas 4096
 ```
 
-The dashboard accepts 128–131,072 replicas, including when resuming; the selected GPU must have enough memory and support the required compute limits. To reduce GPU load, **Stop**, wait for the saved **Stopped** state, choose fewer replicas, then **Start**. Unfinished branches that do not fit remain paused with their exact search positions; increasing the count later can bring them back onto the GPU. The dashboard shows active and paused branches separately. Paused state still uses host memory and checkpoint storage. Use a separate `--output` directory for an independent search.
+For the legacy **GPU DFS** option, the dashboard accepts 128–131,072 replicas, including when resuming; the selected GPU must have enough memory and support the required compute limits. To reduce GPU load, **Stop**, wait for the saved **Stopped** state, choose fewer replicas, then **Start**. Unfinished branches that do not fit remain paused with their exact search positions; increasing the count later can bring them back onto the GPU. The dashboard shows active and paused branches separately. Paused state still uses host memory and checkpoint storage. For **hybrid**, replicas only control the initial GPU sampling population; it has no paused GPU branch bank, and resuming its CPU DFS does not sample again. Use a separate `--output` directory for an independent search.
 
 ## What is saved
 
 | Path under `runtime/` | Purpose |
 | --- | --- |
+| `searches/<algorithm>-gold/checkpoint.json` | Per-algorithm exact DFS stack, or native solver cuts and hints |
+| `searches/<algorithm>-gold/solution.json` | Independently validated single-loop solution |
 | `systematic/frontier.npz` | Immutable list of disjoint prefix jobs |
 | `systematic/checkpoint.npz` | Active and paused DFS stacks, cursors, and job ownership saved together |
 | `systematic/candidate-job-*.json` | Independently checked complete candidates |
@@ -113,7 +119,9 @@ The dashboard accepts 128–131,072 replicas, including when resuming; the selec
 | `solution.json` | A fully validated Gold solution |
 | `inputs/`, `runs/` | Input snapshots and run-specific source provenance |
 
-Normal Stop/Resume preserves search progress. A crash or power loss can replay work since the last completed checkpoint. Restoring an older checkpoint also restores its older progress.
+DFS and hybrid Stop/Resume preserve their exact pending DFS branches. SAT, CP-SAT, and CP retain validated loop exclusions and hints, but their internal native search restarts after stopping. Switching algorithms uses separate state and does not transfer coverage between engines.
+
+For the DFS engines, normal Stop/Resume preserves search progress. A crash or power loss can replay work since the last completed checkpoint. Restoring an older checkpoint also restores its older progress.
 
 The systematic CUDA and WebGPU engines share the checkpoint and paused-branch format. Bounded tests passed checkpoint transfer in both directions and continued search after restoration. Resuming requires the same puzzle data, geometry, cell order, and saved frontier; keep the complete output directory and input snapshots when changing `--backend`. This compatibility applies to the systematic engines.
 
@@ -150,7 +158,7 @@ The CPU suite uses synthetic fixtures and needs no source diagrams or GPU:
 ```powershell
 py -3.12 -m venv .venv-test
 .\.venv-test\Scripts\python.exe -m pip install -r requirements-dev.txt
-.\.venv-test\Scripts\python.exe -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io test_replica_resize test_linux_setup test_windows_setup test_platform test_webgpu
+.\.venv-test\Scripts\python.exe -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io test_replica_resize test_linux_setup test_windows_setup test_platform test_webgpu test_constraint_dfs test_constraint_models test_constraint_search test_gpu_sampling test_search_fixtures
 ```
 
 On Linux/macOS, use the same test modules with a native Python virtual environment:
@@ -158,7 +166,7 @@ On Linux/macOS, use the same test modules with a native Python virtual environme
 ```bash
 python3.12 -m venv .venv-test
 .venv-test/bin/python -m pip install -r requirements-dev.txt
-.venv-test/bin/python -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io test_replica_resize test_linux_setup test_windows_setup test_platform test_webgpu
+.venv-test/bin/python -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io test_replica_resize test_linux_setup test_windows_setup test_platform test_webgpu test_constraint_dfs test_constraint_models test_constraint_search test_gpu_sampling test_search_fixtures
 ```
 
 CI runs CPU checks on Windows, Ubuntu 24.04, Intel macOS, and Apple Silicon macOS. Windows-specific sharing and launcher tests skip elsewhere. Separate installation jobs import the native WebGPU library on all four platforms; an Ubuntu CUDA package check imports CuPy. These installation checks use `--skip-data`, do not request a GPU adapter, and do not validate kernel execution. A separate shader job executes finite WGSL checks through Mesa lavapipe, a software Vulkan implementation. That test explicitly enables a test-only software adapter; production search still requires hardware. It verifies shader behavior on those finite fixtures, not AMD or Apple GPU compatibility.
@@ -175,6 +183,8 @@ To run the finite WebGPU hardware checks after WebGPU setup:
 ```bash
 DIAMOND_TEST_WEBGPU=1 venv/bin/python -B -m unittest -v test_webgpu
 ```
+
+For the experimental sampler, set `DIAMOND_TEST_GPU_SAMPLING=1` and `DIAMOND_SAMPLING_BACKEND=cuda` or `webgpu`, then run `python -B -m unittest -v test_gpu_sampling.NativeTests`. These native tests independently score every returned fixture board.
 
 On PowerShell, set `$env:DIAMOND_TEST_WEBGPU='1'`, then run `.\venv\Scripts\python.exe -B -m unittest -v test_webgpu`. Leave the software-adapter test opt-in unset for hardware verification.
 

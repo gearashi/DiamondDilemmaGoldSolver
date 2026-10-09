@@ -28,7 +28,9 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: requirements-dev.txt
+          cache-dependency-path: |
+            requirements-dev.txt
+            requirements-common.txt
 
       - name: Install CPU test dependencies
         run: python -m pip install -r requirements-dev.txt
@@ -53,6 +55,11 @@ jobs:
           test_windows_setup
           test_platform
           test_webgpu
+          test_constraint_dfs
+          test_constraint_models
+          test_gpu_sampling
+          test_constraint_search
+          test_search_fixtures
 
   linux-install:
     name: Linux CUDA package installation (no GPU)
@@ -200,7 +207,7 @@ jobs:
           from pathlib import Path, PurePosixPath
           import subprocess
           files = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', 'HEAD', '-z']).decode().split('\0')
-          forbidden = {'data', 'runtime', 'venv', '.venv', '.venv-test', '.venv-webgpu', '.codex', 'audit', 'dist', 'stochastic-runtime', 'dfs-runtime'}
+          forbidden = {'data', 'runtime', 'venv', '.venv', '.venv-test', '.venv-webgpu', '.venv-compare', '.codex', 'audit', 'dist', 'stochastic-runtime', 'dfs-runtime'}
           for name in filter(None, files):
               path = PurePosixPath(name)
               assert not any(part in forbidden for part in path.parts), name

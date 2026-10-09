@@ -1,0 +1,2 @@
+# All CPU search engines; also included by the normal GPU setup.
+-r requirements-common.txt
