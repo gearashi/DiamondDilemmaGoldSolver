@@ -2,7 +2,7 @@
 import threading
 import time
 import unittest
-from unittest.mock import patch
+from unittest.mock import PropertyMock, patch
 from types import SimpleNamespace
 
 import constraint_lns as lns
@@ -113,14 +113,42 @@ class RepairTests(unittest.TestCase):
         self.assertEqual(control.reason,'stopped')
         self.assertFalse(any(thread.name=='diamond-repair-stop' and thread.is_alive() for thread in threading.enumerate()))
 
-    def test_attempt_time_budget_includes_model_build_and_native_result_is_checked(self):
+    def test_attempt_time_budget_includes_model_build_before_native_search(self):
         problem = SearchProblem(simple_tiles(),double_face())
         cp_model = lns._load_cp_model()
-        control = lns._Control(2,None)
-        result, status = lns._solve_patch(problem,[1,3],[0,1],cp_model=cp_model,
-            control=control,seconds=1e-12,seed=0,target='gold')
+        model = cp_model.CpModel()
+        maximize = model.maximize
+        now = [100.0]
+        def build_objective(objective):
+            maximize(objective)
+            # Real model construction consumes the local budget while the
+            # overall run remains live. This is independent of OS clock ticks.
+            now[0] += 1.0
+        with patch.object(lns,'time',SimpleNamespace(monotonic=lambda:now[0])), \
+             patch.object(cp_model,'CpModel',return_value=model) as build_model, \
+             patch.object(model,'maximize',side_effect=build_objective) as build_step, \
+             patch.object(cp_model.CpSolver,'solve',side_effect=AssertionError('Expired model must not run')) as native:
+            control = lns._Control(10,None)
+            result, status = lns._solve_patch(problem,[1,3],[0,1],cp_model=cp_model,
+                control=control,seconds=.5,seed=0,target='gold')
+            self.assertFalse(control.cancelled())
+        build_model.assert_called_once_with()
+        build_step.assert_called_once()
+        native.assert_not_called()
         self.assertIsNone(result)
         self.assertEqual(status,'MODEL_BUDGET')
+
+    def test_native_candidate_with_incorrect_objective_is_rejected(self):
+        tiles, geometry = tetrahedron_tiles()
+        problem = SearchProblem(tiles,geometry,fixed={0:0})
+        cp_model = lns._load_cp_model()
+        # A real native solve supplies the candidate. Its deliberately corrupt
+        # score must fail the independent CPU check before any board is accepted.
+        with patch.object(cp_model.CpSolver,'objective_value',new_callable=PropertyMock,return_value=-1000) as objective:
+            with self.assertRaisesRegex(RuntimeError,'independent CPU seam scoring'):
+                lns._solve_patch(problem,[0,4,6,9],[1],cp_model=cp_model,
+                    control=lns._Control(5,None),seconds=2,seed=17,target='gold')
+        objective.assert_called_once_with()
 
     def test_diverse_archive_deduplicates_and_preserves_best(self):
         best={'codes':[0,3,6,9],'objective':20}
