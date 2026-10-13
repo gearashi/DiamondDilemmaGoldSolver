@@ -25,14 +25,22 @@ fn total(lane:u32)->i32 {
     }
     return value;
 }
-fn score_local(a:u32,b:u32,lane:u32)->i32 {
-    var value=legal(a,lane)*i32(p.edges+1u);
-    for(var side=0u;side<3u;side++) { value+=edge(a,side,lane); }
-    if b!=a {
-        value+=legal(b,lane)*i32(p.edges+1u);
-        for(var side=0u;side<3u;side++) { if neighbor(b,side)!=a { value+=edge(b,side,lane); } }
+// Old placements stay in storage until a proposal is accepted.
+fn score_change(a:u32,b:u32,na:u32,nbcode:u32,lane:u32)->i32 {
+    var delta=0;
+    for(var which=0u;which<select(2u,1u,a==b);which++) {
+        let cell=select(a,b,which==1u); let old=at(cell,lane);let next=select(na,nbcode,which==1u);
+        let base=25u*p.n+p.free_count+cell*3u*p.n;
+        delta+=(i32(table[base+next])-i32(table[base+old]))*i32(p.edges+1u);
+        for(var side=0u;side<3u;side++) {
+            let nb=neighbor(cell,side);if nb>=p.n || (which==1u && nb==a) { continue; }
+            let opposite=table[21u*p.n+cell*3u+side];let other=at(nb,lane);
+            var replacement=other;if nb==a { replacement=na; } else if nb==b { replacement=nbcode; }
+            delta+=select(0,1,table[next*3u+side]==table[9u*p.n+replacement*3u+opposite])
+                  -select(0,1,table[old*3u+side]==table[9u*p.n+other*3u+opposite]);
+        }
     }
-    return value;
+    return delta;
 }
 fn save_best(lane:u32) { for(var cell=0u;cell<p.n;cell++) { best_boards[cell*p.replicas+lane]=at(cell,lane); } }
 @compute @workgroup_size(64)
@@ -49,22 +57,31 @@ fn sample_search(@builtin(global_invocation_id) id:vec3<u32>) {
         for(var index=0u;index<p.free_count;index++) { let cell=table[25u*p.n+index]; boards[cell*r+lane]=3u*(at(cell,lane)/3u)+random_next()%3u; }
         let score=u32(total(lane)); lane_data[r+lane]=score; lane_data[2u*r+lane]=score; lane_data[3u*r+lane]=0u; save_best(lane);
     } else if p.free_count>0u {
+        var score=i32(lane_data[r+lane]);var best_score=i32(lane_data[2u*r+lane]);var iteration=lane_data[3u*r+lane];
         for(var step=0u;step<p.steps;step++) {
-            let a=table[25u*p.n+random_next()%p.free_count]; let b=table[25u*p.n+random_next()%p.free_count];
-            let ca=at(a,lane); let cb=at(b,lane); let before=score_local(a,b,lane);
-            boards[a*r+lane]=3u*(cb/3u)+random_next()%3u;
-            if a!=b { boards[b*r+lane]=3u*(ca/3u)+random_next()%3u; }
-            let delta=score_local(a,b,lane)-before;
-            let heat=0.25+1.25*(1.0-f32(lane_data[3u*r+lane]%4096u)/4096.0);
-            let accept=delta>=0 || f32(random_next()%1000000u)<1000000.0*exp(f32(delta)/heat);
-            lane_data[3u*r+lane]+=1u;
+            let a=table[25u*p.n+random_next()%p.free_count];let b=table[25u*p.n+random_next()%p.free_count];
+            let ca=at(a,lane);let cb=at(b,lane);
+            let na=3u*(cb/3u)+random_next()%3u;var nbcode=cb;if a!=b { nbcode=3u*(ca/3u)+random_next()%3u; }
+            let delta=score_change(a,b,na,nbcode,lane);
+            let heat=0.25+1.25*(1.0-f32(iteration%4096u)/4096.0);
+            let accept=delta>=0 || f32(random_next()%1000000u)<1000000.0*exp(f32(delta)/heat);iteration+=1u;
             if accept {
-                lane_data[r+lane]=u32(i32(lane_data[r+lane])+delta);
-                if lane_data[r+lane]>lane_data[2u*r+lane] || (lane_data[r+lane]==lane_data[2u*r+lane] && random_next()%64u==0u) {
-                    lane_data[2u*r+lane]=lane_data[r+lane]; save_best(lane);
+                boards[a*r+lane]=na;if a!=b { boards[b*r+lane]=nbcode; }score+=delta;
+                if score>best_score || (score==best_score && random_next()%64u==0u) {
+                    best_score=score; save_best(lane);
                 }
-            } else { boards[a*r+lane]=ca; boards[b*r+lane]=cb; }
+            }
         }
+        lane_data[r+lane]=u32(score);lane_data[2u*r+lane]=u32(best_score);lane_data[3u*r+lane]=iteration;
     }
     lane_data[lane]=random_state;
+}
+
+// The prefix contains selected lane IDs; the suffix receives packed row boards.
+@group(0) @binding(5) var<storage,read_write> gathered:array<u32>;
+@compute @workgroup_size(64)
+fn gather_best(@builtin(global_invocation_id) id:vec3<u32>) {
+    let count=p.steps;let index=id.x;if index>=count*p.n { return; }
+    let selected=index/p.n;let cell=index%p.n;
+    gathered[count+index]=best_boards[cell*p.replicas+gathered[selected]];
 }

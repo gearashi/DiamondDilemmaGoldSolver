@@ -3,10 +3,21 @@ from itertools import permutations, product
 import json
 from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 
 from constraint_dfs import solve
 from search_problem import SearchProblem
 from validator import validate_arrangement
+
+
+def legacy_solve(problem, **kwargs):
+    # These callers isolate historical traversal and checkpoint mechanisms.
+    # Stronger necessary deductions legitimately avoid their rejected leaves.
+    kwargs.setdefault('options', {'failure_guided':False, 'lookahead':False,
+        'strand_connectivity':False, 'multi_seam_cuts':False,
+        'regional_cache':False, 'biconnected':False, 'separator_regions':False,
+        'backjumping':False, 'incremental':False, 'adaptive':False, 'persistent_learning':False, 'native':'python'})
+    return solve(problem, **kwargs)
 
 
 def board(n, edges):
@@ -127,11 +138,11 @@ class ConstraintDFSTests(unittest.TestCase):
 
     def test_gold_rejects_multiloop_but_edge_target_accepts(self):
         problem = SearchProblem(multiple_loops(), double_face())
-        edge = solve(problem, target='edges', seconds=2)
+        edge = legacy_solve(problem, target='edges', seconds=2)
         self.assertEqual(edge['status'], 'edge_perfect')
         self.assertEqual(edge['validation']['line_components'], 3)
         self.assertFalse(edge['validation']['valid'])
-        gold = solve(problem, target='gold', seconds=2)
+        gold = legacy_solve(problem, target='gold', seconds=2)
         self.assertEqual(gold['status'], 'infeasible')
         self.assertEqual(gold['stats']['leaves'], 18)
 
@@ -139,11 +150,14 @@ class ConstraintDFSTests(unittest.TestCase):
         geometry = board(4, [(0, s, 1, s) for s in range(3)] + [(2, s, 3, s) for s in range(3)])
         tiles = [{'id': i, 'segments': [[[0, 6], [1, 6]]]} for i in range(4)]
         problem = SearchProblem(tiles, geometry, fixed={0: 0, 1: 3})
-        result = solve(problem, seconds=2, target='gold')
+        # Isolate the segment-loop rule; the separate Gold connectivity rule
+        # now detects this disconnected board before any placements are chosen.
+        with patch('constraint_dfs.ConnectivityPruner.prune', return_value=False):
+            result = legacy_solve(problem, seconds=2, target='gold')
         self.assertEqual(result['status'], 'infeasible')
         self.assertGreater(result['stats']['loop_prunes'], 0)
         self.assertEqual(result['stats']['leaves'], 0)
-        self.assertEqual(solve(problem, seconds=2, target='edges')['status'], 'edge_perfect')
+        self.assertEqual(legacy_solve(problem, seconds=2, target='edges')['status'], 'edge_perfect')
 
     def test_zero_budget_and_requested_stop_are_incomplete_not_infeasible(self):
         problem = SearchProblem(simple_tiles(), double_face())
@@ -158,12 +172,12 @@ class ConstraintDFSTests(unittest.TestCase):
     def test_multiple_stop_resume_visits_every_leaf_once_in_the_same_order(self):
         problem = SearchProblem(multiple_loops(), double_face())
         baseline = []
-        solve(problem, seconds=5, seed=71, progress=lambda event: baseline.append(tuple(event['codes'])) if event['event'] == 'candidate' else None)
+        legacy_solve(problem, seconds=5, seed=71, progress=lambda event: baseline.append(tuple(event['codes'])) if event['event'] == 'candidate' else None)
         self.assertEqual(len(baseline), 18)
         self.assertEqual(len(set(baseline)), 18)
         seen, checkpoint, prior_nodes = [], None, 0
         for limit in (4, 9, 13, 100):
-            result = solve(problem, seconds=5, seed=71, resume=checkpoint,
+            result = legacy_solve(problem, seconds=5, seed=71, resume=checkpoint,
                            stop=lambda: len(seen) >= limit,
                            progress=lambda event: seen.append(tuple(event['codes'])) if event['event'] == 'candidate' else None)
             self.assertGreaterEqual(result['nodes'], prior_nodes)
@@ -180,7 +194,7 @@ class ConstraintDFSTests(unittest.TestCase):
     def test_interruption_inside_propagation_preserves_exact_leaf_coverage(self):
         problem = SearchProblem(multiple_loops(), double_face())
         baseline = []
-        solve(problem, seconds=2, seed=14, progress=lambda event: baseline.append(tuple(event['codes'])) if event['event'] == 'candidate' else None)
+        legacy_solve(problem, seconds=2, seed=14, progress=lambda event: baseline.append(tuple(event['codes'])) if event['event'] == 'candidate' else None)
         for limit in (1, 2, 3, 4, 7, 11, 20, 35, 60, 100):
             with self.subTest(stop_check=limit):
                 calls, seen = [0], []
@@ -189,9 +203,9 @@ class ConstraintDFSTests(unittest.TestCase):
                     return calls[0] >= limit
                 def progress(event):
                     if event['event'] == 'candidate': seen.append(tuple(event['codes']))
-                interrupted = solve(problem, seconds=2, seed=14, stop=stop, progress=progress)
+                interrupted = legacy_solve(problem, seconds=2, seed=14, stop=stop, progress=progress)
                 if interrupted['status'] == 'stopped':
-                    resumed = solve(problem, seconds=2, resume=json.loads(json.dumps(interrupted['checkpoint'])), progress=progress)
+                    resumed = legacy_solve(problem, seconds=2, resume=json.loads(json.dumps(interrupted['checkpoint'])), progress=progress)
                     self.assertEqual(resumed['status'], 'infeasible')
                 self.assertEqual(seen, baseline)
 
@@ -214,20 +228,20 @@ class ConstraintDFSTests(unittest.TestCase):
     def test_resume_rejects_missing_siblings_and_wrong_parent_branches(self):
         problem = SearchProblem(multiple_loops(), double_face())
         seen = []
-        stopped = solve(problem, seconds=2, stop=lambda: len(seen) >= 1,
+        stopped = legacy_solve(problem, seconds=2, stop=lambda: len(seen) >= 1,
                         progress=lambda event: seen.append(event) if event['event'] == 'candidate' else None)
         checkpoint = stopped['checkpoint']
         self.assertGreaterEqual(len(checkpoint['stack']), 2)
         missing = json.loads(json.dumps(checkpoint))
         missing['stack'][0]['choices'].pop()
-        with self.assertRaises(ValueError): solve(problem, seconds=2, resume=missing)
+        with self.assertRaises(ValueError): legacy_solve(problem, seconds=2, resume=missing)
         wrong = json.loads(json.dumps(checkpoint))
         parent = wrong['stack'][0]
         wrong['stack'][1]['domains'][parent['cell']] = hex(1 << parent['choices'][-1])
-        with self.assertRaises(ValueError): solve(problem, seconds=2, resume=wrong)
+        with self.assertRaises(ValueError): legacy_solve(problem, seconds=2, resume=wrong)
         for field in ('seed', 'stats', 'stack'):
             bad = json.loads(json.dumps(checkpoint)); del bad[field]
-            with self.subTest(field=field), self.assertRaises(ValueError): solve(problem, seconds=2, resume=bad)
+            with self.subTest(field=field), self.assertRaises(ValueError): legacy_solve(problem, seconds=2, resume=bad)
 
     def test_damaged_domain_digest_cannot_turn_satisfiable_into_infeasible(self):
         problem = SearchProblem(simple_tiles(), double_face())
@@ -241,11 +255,11 @@ class ConstraintDFSTests(unittest.TestCase):
         from constraint_dfs import _checkpoint_digest
         problem = SearchProblem(multiple_loops(), double_face())
         seen=[]
-        result=solve(problem,seconds=2,stop=lambda:bool(seen),progress=lambda event:seen.append(event) if event['event']=='candidate' else None)
+        result=legacy_solve(problem,seconds=2,stop=lambda:bool(seen),progress=lambda event:seen.append(event) if event['event']=='candidate' else None)
         saved=json.loads(json.dumps(result['checkpoint']))
         saved['stack'][0]['choices'].pop()
         saved['digest']=_checkpoint_digest(saved)
-        with self.assertRaises(ValueError):solve(problem,seconds=2,resume=saved)
+        with self.assertRaises(ValueError):legacy_solve(problem,seconds=2,resume=saved)
 
     def test_invalid_budgets_and_targets_are_rejected(self):
         problem = SearchProblem(simple_tiles(), double_face())

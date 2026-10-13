@@ -50,3 +50,6 @@ Thumbs.db
 .env.*
 
 /.venv-compare/
+
+# Locally compiled optional CPU propagation library
+/.native/

@@ -335,7 +335,7 @@ Write-Output 'Installation identity, occupied-port refusal, preflight, and hidde
             self.assertEqual(dashboard.state_payload()['status']['backend'], 'cuda')
 
     def test_all_algorithm_routes_and_truthful_startup_metadata(self):
-        for algorithm in ('gpu-dfs', 'dfs', 'cp', 'cp-sat', 'sat', 'hybrid'):
+        for algorithm in ('gpu-dfs', 'dfs', 'cp', 'cp-sat', 'cp-sat-circuit', 'sat', 'hybrid'):
             with self.subTest(algorithm=algorithm):
                 child = SimpleNamespace(pid=5678, poll=lambda: None)
                 with patch.object(dashboard.sys, 'platform', 'linux'), \
@@ -349,7 +349,7 @@ Write-Output 'Installation identity, occupied-port refusal, preflight, and hidde
                 else: self.assertEqual(command[command.index('--algorithm')+1], algorithm)
                 self.assertIn('--resume', command)
                 self.assertIn('--stop-file-initialized', command)
-                cpu = algorithm in ('dfs', 'cp', 'cp-sat', 'sat')
+                cpu = algorithm in ('dfs', 'cp', 'cp-sat', 'cp-sat-circuit', 'sat')
                 expected_replicas, expected_backend = (0, 'cpu') if cpu else (128, 'webgpu')
                 expected_target = 'edges' if algorithm == 'gpu-dfs' else 'gold'
                 self.assertEqual(result['algorithm'], algorithm)
@@ -437,13 +437,40 @@ else { & $LauncherPath -Replicas 128 -Backend webgpu -Algorithm $Choice }
 """
         script = self.directory / 'algorithm-launcher-test.ps1'
         script.write_text(harness, encoding='utf-8')
-        for algorithm in ('default', 'gpu-dfs', 'dfs', 'cp', 'cp-sat', 'sat', 'hybrid'):
+        for algorithm in ('default', 'gpu-dfs', 'dfs', 'cp', 'cp-sat', 'cp-sat-circuit', 'sat', 'hybrid', 'parallel-dfs'):
             with self.subTest(algorithm=algorithm):
                 result = subprocess.run([shutil.which('powershell.exe'), '-NoProfile', '-ExecutionPolicy', 'Bypass',
                     '-File', str(script), str(ROOT / 'StartSolver.ps1'), algorithm], cwd=ROOT,
                     capture_output=True, text=True, timeout=15, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                 self.assertIn('MOCKED_SOLVER_ARGUMENTS_OK', result.stdout)
+
+    def test_parallel_controls_reach_runner_and_startup_telemetry(self):
+        child = SimpleNamespace(pid=5678, poll=lambda: None)
+        with patch.object(dashboard, 'live_pid', return_value=None), patch.object(dashboard.subprocess, 'Popen', return_value=child) as spawn:
+            result = dashboard.start_solver({'algorithm':'parallel-dfs','workers':2,
+                'search_options':{'lookahead':False,'native':'python'}})
+        command = spawn.call_args.args[0]
+        self.assertEqual(command[command.index('--workers')+1], '2')
+        options = json.loads(command[command.index('--search-options')+1])
+        self.assertFalse(options['lookahead'])
+        self.assertTrue(options['regional_cache'])
+        self.assertEqual(result['workers'], 2)
+        self.assertEqual(result['replicas'], 0)
+        status = dashboard.startup_status(5678)
+        self.assertEqual(status['workers'], 2)
+        self.assertEqual(status['algorithm'], 'parallel-dfs')
+
+    def test_invalid_optimization_options_never_launch_or_clear_state(self):
+        stop = self.directory/'stop.request'
+        stop.write_text('preserve',encoding='utf-8')
+        for body in ({'workers':0},{'workers':True},{'search_options':{'lookahead':1}},
+                     {'search_options':{'native':'wrong'}},{'search_options':{'unknown':True}}):
+            with self.subTest(body=body), patch.object(dashboard, 'live_pid', return_value=None), patch.object(dashboard.subprocess,'Popen') as spawn:
+                with self.assertRaises(ValueError):
+                    dashboard.start_solver({'algorithm':'parallel-dfs',**body})
+                spawn.assert_not_called()
+                self.assertEqual(stop.read_text(encoding='utf-8'),'preserve')
 
     def test_checkpoint_phase_survives_friendly_stopping_overlay(self):
         checkpoint = {'phase': 'saving', 'elapsed_seconds': 1.25}
@@ -720,7 +747,70 @@ assert.equal(element('replicaInput').disabled,true);
 render("state.status={state:'error',method:'constraint',algorithm:'sat',target:'gold',backend:'cpu',replicas:0,error:'SAT requires optional python-sat'}");
 assert.equal(element('runStatus').textContent,'Search error');
 assert.match(element('controlHint').textContent,/python-sat/);
-console.log('Gold-mode routing, CPU controls, partial snapshots, historical separation, and hybrid backend preferences passed');
+render("commandBusy=false;state={process_running:false,control_token:'test',status:{state:'stopped',method:'constraint',algorithm:'dfs'},history:[]}");
+assert.equal(element('nativeBackend').textContent,'Not recorded');
+select('parallel-dfs');element('workersInput').value='2';element('lookaheadInput').checked=false;element('nativeInput').value='compiled';element('lookaheadInput').listeners.change();
+vm.runInContext("command('start');",context);
+const parallelSent=JSON.parse(context.fetchCalls.at(-1)[1].body);
+assert.equal(parallelSent.workers,2);assert.equal(parallelSent.algorithm,'parallel-dfs');assert.equal(parallelSent.search_options.lookahead,false);assert.equal(parallelSent.search_options.native,'compiled');assert.equal(parallelSent.search_options.regional_cache,true);for(const key of ['biconnected','separator_regions','backjumping','incremental','adaptive','persistent_learning'])assert.equal(parallelSent.search_options[key],true,key);
+assert.equal(JSON.parse(storage.values['diamond.searchOptions']).lookahead,false);for(const key of ['reason_tracking','sat_assist','hierarchical_regions','value_ordering','shared_conflicts'])assert.equal(parallelSent.search_options[key],false,key);
+render("commandBusy=false;state={process_running:true,control_token:'test',status:{state:'running',method:'constraint',algorithm:'parallel-dfs',workers:2,native_backend:'compiled',parallel:{pending_jobs:7},stats:{lookahead_prunes:3,strand_prunes:4,cut_prunes:5,regional_prunes:6,regional_cache_hits:11,biconnected_prunes:12,separator_prunes:13,separator_merges:14,backjumps:15,propagation_unchanged_skips:16,propagation_adaptive_skips:17,native_support_hits:19,reason_conflicts:20,sat_assist_unsat:21,hierarchical_prunes:22,hierarchical_cache_hits:23,hierarchical_subtable_hits:24,value_order_changed:25,hall_explanation_witnesses:26,shared_conflicts_entries:27,shared_conflicts_pending:28},knowledge:{records:18}},history:[]}");
+assert.equal(element('replicas').textContent,'2');assert.equal(element('nativeBackend').textContent,'compiled');assert.equal(element('cpuJobs').textContent,'7');assert.equal(element('regionalHits').textContent,'11');assert.equal(element('lookaheadPrunes').textContent,'3');assert.equal(element('strandPrunes').textContent,'4');assert.equal(element('cutPrunes').textContent,'5');assert.equal(element('regionalPrunes').textContent,'6');assert.equal(element('workersInput').disabled,true);assert.equal(element('nativeInput').disabled,true);
+for(const [id,value] of Object.entries({bottleneckPrunes:'12',separatorPrunes:'13',separatorMerges:'14',backjumps:'15',skippedChecks:'16',deferredChecks:'17',knownLoops:'18',supportHits:'19',reasonConflicts:'20',satAssistUnsat:'21',hierarchicalPrunes:'22',hierarchicalHits:'23'}))assert.equal(element(id).textContent,value,id);
+for(const [id,count]of [['subtableHits','24'],['orderChanged','25'],['hallReasons','26'],['sharedConflicts','27'],['pendingConflicts','28']])assert.equal(element(id).textContent,count);
+render("commandBusy=false;state={process_running:false,control_token:'test',status:{state:'stopped',method:'constraint',algorithm:'cp-sat-circuit'},history:[]}");
+select('cp-sat-circuit');assert.match(element('algorithmHint').textContent,/Experimental direct single-loop/);
+assert.equal(element('backendInput').disabled,true);assert.equal(element('nativeInput').disabled,true);
+vm.runInContext("command('start');",context);
+const circuitSent=JSON.parse(context.fetchCalls.at(-1)[1].body);
+assert.equal(circuitSent.algorithm,'cp-sat-circuit');assert.equal(circuitSent.method,'constraint');assert.equal(circuitSent.search_options,undefined);
+render("commandBusy=false;state={process_running:true,control_token:'test',status:{state:'running',method:'constraint',algorithm:'cp-sat-circuit',stats:{circuit_nodes:5280,circuit_arcs:147840}},history:[]}");
+assert.equal(element('cacheEntriesLabel').textContent,'Circuit ports / arcs');assert.equal(element('cacheEntries').textContent,'5,280 / 147,840');
+assert.match(element('controlHint').textContent,/Direct circuit constraints/);assert.match(element('loadingText').textContent,/Searching internally/);
+render("state.process_running=false;state.status.state='error';state.status.error='Experimental model is unsupported: arc limit'");
+assert.equal(element('runStatus').textContent,'Search error');assert.match(element('controlHint').textContent,/arc limit/);
+console.log('Gold-mode routing, advanced controls, parallel telemetry, and preserved preferences passed');
+"""
+        result = subprocess.run([shutil.which('node'), '-e', harness, str(ROOT / 'Dashboard.html')],
+                                cwd=ROOT, capture_output=True, text=True, timeout=10)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    @unittest.skipUnless(shutil.which('node'), 'Node.js is only needed for isolated frontend control tests')
+    def test_frontend_active_search_options_restore_saved_next_run_preferences(self):
+        harness = r"""
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const elements=new Map();
+function element(id){if(!elements.has(id))elements.set(id,{value:'4096',style:{},dataset:{},classList:{add(){},remove(){},toggle(){}},setAttribute(){},listeners:{},addEventListener(type,fn){this.listeners[type]=fn},clientWidth:500,textContent:'',innerHTML:'',checked:true});return elements.get(id)}
+const saved={failure_guided:false,lookahead:true,strand_connectivity:false,multi_seam_cuts:true,regional_cache:false,biconnected:false,separator_regions:true,backjumping:false,incremental:true,adaptive:false,persistent_learning:true,reason_tracking:false,sat_assist:false,hierarchical_regions:false,value_ordering:false,shared_conflicts:false,native:'python'};
+const storage={values:{'diamond.requestedAlgorithm':'parallel-dfs','diamond.searchOptions':JSON.stringify(saved),'diamond.workers':'2'},getItem(key){return this.values[key]??null},setItem(key,value){this.values[key]=value}};
+const originalStorage=JSON.stringify(storage.values);
+const context=vm.createContext({document:{getElementById:element,addEventListener(){}},window:{addEventListener(){},localStorage:storage},console,Date,Number,String,Math,Set,JSON,setTimeout(){return 1},clearTimeout(){},setInterval(){}});
+context.fetch=()=>new Promise(()=>{});
+const source=fs.readFileSync(process.argv[1],'utf8').split('<script>')[1].split('</script>')[0].replace('poll();setInterval(poll,1000);','');
+vm.runInContext(source,context);
+const ids={failure_guided:'failureGuidedInput',lookahead:'lookaheadInput',strand_connectivity:'strandInput',multi_seam_cuts:'cutsInput',regional_cache:'regionalInput',biconnected:'biconnectedInput',separator_regions:'separatorInput',backjumping:'backjumpInput',incremental:'incrementalInput',adaptive:'adaptiveInput',persistent_learning:'knowledgeInput',reason_tracking:'reasonsInput',sat_assist:'satAssistInput',hierarchical_regions:'hierarchicalInput',value_ordering:'valueOrderInput',shared_conflicts:'sharedConflictsInput'};
+function render(script){vm.runInContext(script+';renderAlgorithmControls();',context)}
+function assertOptions(expected){for(const[key,id]of Object.entries(ids))assert.equal(element(id).checked,expected[key],key);assert.equal(element('nativeInput').value,expected.native)}
+// Opening this browser during a CLI-started run must display its actual settings.
+render("state={process_running:true,status:{state:'running',method:'constraint',algorithm:'parallel-dfs',workers:3,search_options:{failure_guided:true,lookahead:false,strand_connectivity:true,multi_seam_cuts:false,regional_cache:true,biconnected:true,separator_regions:false,backjumping:true,incremental:false,adaptive:true,persistent_learning:false,reason_tracking:true,sat_assist:true,hierarchical_regions:true,value_ordering:true,shared_conflicts:true,native:'compiled'}}}");
+assertOptions({failure_guided:true,lookahead:false,strand_connectivity:true,multi_seam_cuts:false,regional_cache:true,biconnected:true,separator_regions:false,backjumping:true,incremental:false,adaptive:true,persistent_learning:false,reason_tracking:true,sat_assist:true,hierarchical_regions:true,value_ordering:true,shared_conflicts:true,native:'compiled'});
+assert.equal(element('workersInput').value,'3');assert.equal(element('activeWorkersOption').value,'3');assert.equal(element('activeWorkersOption').hidden,false);
+for(const id of [...Object.values(ids),'nativeInput','workersInput'])assert.equal(element(id).disabled,true);
+assert.equal(JSON.stringify(storage.values),originalStorage);
+render("state.status.workers=8;state.status.search_options.native='auto'");
+assert.equal(element('workersInput').value,'8');assert.equal(element('activeWorkersOption').hidden,true);assert.equal(element('nativeInput').value,'auto');
+render("state.process_running=false;state.status.state='stopped'");
+assertOptions(saved);assert.equal(element('workersInput').value,'2');assert.equal(element('activeWorkersOption').hidden,true);
+for(const id of [...Object.values(ids),'nativeInput','workersInput'])assert.equal(element(id).disabled,false);
+assert.equal(JSON.stringify(storage.values),originalStorage);
+// An idle edit replaces only the next-run preference; later active settings do not.
+element('lookaheadInput').checked=false;element('nativeInput').value='auto';element('workersInput').value='4';element('lookaheadInput').listeners.change();
+const edited={...saved,lookahead:false,native:'auto'};
+assert.deepEqual(JSON.parse(storage.values['diamond.searchOptions']),edited);assert.equal(storage.values['diamond.workers'],'4');
+render("state.process_running=true;state.status.workers=1;state.status.search_options={failure_guided:true,lookahead:true,strand_connectivity:true,multi_seam_cuts:true,regional_cache:true,native:'python'}");
+assert.equal(element('nativeInput').value,'python');assert.equal(element('workersInput').value,'1');assert.equal(element('lookaheadInput').checked,true);
+render("state.process_running=false");assertOptions(edited);assert.equal(element('workersInput').value,'4');
+console.log('Active CPU settings, arbitrary CLI worker count, and next-run preference restoration passed');
 """
         result = subprocess.run([shutil.which('node'), '-e', harness, str(ROOT / 'Dashboard.html')],
                                 cwd=ROOT, capture_output=True, text=True, timeout=10)

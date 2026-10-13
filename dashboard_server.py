@@ -6,6 +6,7 @@ from urllib.parse import urlsplit
 from io_utils import read_json_shared
 from gpu_backends import BACKENDS
 from search_algorithms import ALGORITHMS,LABELS
+from search_options import EXACT_ALGORITHMS,normalize_options,validate_workers
 ROOT=Path(__file__).resolve().parent
 RUNTIME=ROOT/'runtime';RUNTIME.mkdir(exist_ok=True)
 TOKEN=secrets.token_urlsafe(32)
@@ -66,6 +67,8 @@ def start_solver(body):
     if isinstance(seconds,bool) or not isinstance(seconds,(int,float)) or type(replicas)is not int or type(seed)is not int:
         raise ValueError('Duration must be numeric; replicas and seed must be integers.')
     if (seconds!=0 and not 1<=seconds<=86400) or not 128<=replicas<=131072 or not 0<=seed<2**32:raise ValueError('Choose Unlimited (0) or 1..86400 seconds, 128..131072 replicas, and a nonnegative 32-bit seed.')
+    workers=validate_workers(body.get('workers',4))
+    options=normalize_options(body.get('search_options'))
     seconds=float(seconds)
     # Only remove a lock after its recorded process has ended.
     (RUNTIME/'run.lock').unlink(missing_ok=True)
@@ -75,6 +78,9 @@ def start_solver(body):
     cmd=[sys.executable,str(ROOT/script),'--resume','--stop-file-initialized','--seconds',str(seconds),'--replicas',str(replicas),'--seed',str(seed)]
     if method!='stochastic':cmd.extend(['--backend',backend])
     if constraint:cmd.extend(['--algorithm',algorithm])
+    if algorithm in EXACT_ALGORITHMS:
+        cmd.extend(['--search-options',json.dumps(options,separators=(',',':'))])
+    if algorithm=='parallel-dfs':cmd.extend(['--workers',str(workers)])
     with (RUNTIME/'solver.log').open('a',encoding='utf-8')as log:
         log.write('\nStarted '+datetime.datetime.now(datetime.timezone.utc).isoformat()+'\n');log.flush()
         CHILD=subprocess.Popen(cmd,cwd=str(ROOT),stdout=log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt'else 0)
@@ -83,9 +89,11 @@ def start_solver(body):
     actual_replicas=0 if cpu else replicas
     LAUNCH_CONFIG={'method':method,'algorithm':actual_algorithm,'target':target,'backend':actual_backend,
                   'launcher_pid':CHILD.pid,'replicas':actual_replicas,'requested_replicas':replicas,
+                  'workers':workers if algorithm=='parallel-dfs' else 1,'search_options':options,
                   'time_limit_seconds':seconds,'seed':seed,'resume':True,'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat()}
     return {'started':True,'pid':CHILD.pid,'replicas':actual_replicas,'backend':actual_backend,
-            'algorithm':actual_algorithm,'method':method,'target':target}
+            'algorithm':actual_algorithm,'method':method,'target':target,
+            'workers':workers if algorithm=='parallel-dfs' else 1,'search_options':options}
 
 def request_stop():
     pid=live_pid()
@@ -98,16 +106,16 @@ def startup_status(pid):
     status={'state':'starting','pid':pid}
     config=read_json('run-config.json',{})
     if isinstance(config,dict) and config.get('pid')==pid:
-        for field in ('method','algorithm','target','backend','replicas','seed','started_at','run_id'):
+        for field in ('method','algorithm','target','backend','replicas','workers','search_options','seed','started_at','run_id'):
             if field in config:status[field]=config[field]
         if 'seconds' in config:status['time_limit_seconds']=config['seconds']
     child_active=CHILD is not None and callable(getattr(CHILD,'poll',None)) and CHILD.poll() is None
     if child_active or LAUNCH_CONFIG.get('launcher_pid')==pid:
-        for field in ('method','algorithm','target','backend','replicas','time_limit_seconds','seed','started_at'):
+        for field in ('method','algorithm','target','backend','replicas','workers','search_options','time_limit_seconds','seed','started_at'):
             if field in LAUNCH_CONFIG:status[field]=LAUNCH_CONFIG[field]
     args=getattr(CHILD,'args',None) if child_active else None
     if isinstance(args,(tuple,list)):
-        for flag,field,cast in (('--replicas','replicas',int),('--seconds','time_limit_seconds',float),('--seed','seed',int),('--backend','backend',str),('--algorithm','algorithm',str)):
+        for flag,field,cast in (('--workers','workers',int),('--replicas','replicas',int),('--seconds','time_limit_seconds',float),('--seed','seed',int),('--backend','backend',str),('--algorithm','algorithm',str)):
             try:status[field]=cast(args[args.index(flag)+1])
             except (ValueError,IndexError,TypeError):pass
         scripts={Path(str(value)).name for value in args}
@@ -121,7 +129,7 @@ def startup_status(pid):
         if cpu:status.update(replicas=0,backend='cpu')
         restoring=algorithm in ALGORITHMS[1:] and (RUNTIME/'searches'/(algorithm+'-gold')/'checkpoint.json').exists()
         status['startup_phase']='restoring_checkpoint' if restoring else 'building_model' if cpu else 'initializing_gpu'
-        if algorithm in ('dfs','hybrid'):
+        if algorithm in EXACT_ALGORITHMS:
             status['phase_message']='Restoring exact Gold search branches.' if restoring else ('Preparing CPU constraints and exact DFS.' if cpu else 'Preparing GPU sampling and constrained DFS.')
         else:
             status['phase_message']='Loading saved Gold constraints and rebuilding the CPU model.' if restoring else 'Building the CPU Gold constraint model.'

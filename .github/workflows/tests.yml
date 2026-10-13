@@ -35,10 +35,15 @@ jobs:
       - name: Install CPU test dependencies
         run: python -m pip install -r requirements-dev.txt
 
+      - name: Build optional native CPU propagation
+        run: python build_native.py
+
       - name: Confirm tests use synthetic puzzle data
         run: python -c "from pathlib import Path; assert not Path('data/tiles.json').exists()"
 
       - name: Run CPU-only tests
+        env:
+          DIAMOND_REQUIRE_NATIVE: '1'
         run: >-
           python -B -m unittest -v
           test_geometry
@@ -56,7 +61,29 @@ jobs:
           test_platform
           test_webgpu
           test_constraint_dfs
+          test_constraint_pruning
+          test_constraint_parity
+          test_constraint_connectivity
+          test_constraint_advanced
+          test_constraint_separator
+          test_constraint_learning
+          test_constraint_scheduling
+          test_constraint_knowledge
+          test_constraint_parallel
+          test_constraint_native
+          test_search_options
+          test_search_problem
+          test_constraint_symmetry
+          test_smart_dfs
+          test_constraint_lns
           test_constraint_models
+          test_constraint_circuit
+          test_constraint_regions
+          test_constraint_sat_assist
+          test_constraint_shared_conflicts
+          test_constraint_ordering
+          test_constraint_explanations
+          test_constraint_reasons
           test_gpu_sampling
           test_constraint_search
           test_search_fixtures
@@ -162,6 +189,8 @@ jobs:
       - name: Run finite shader tests on lavapipe
         env:
           DIAMOND_TEST_WEBGPU: '1'
+          DIAMOND_TEST_GPU_SAMPLING: '1'
+          DIAMOND_SAMPLING_BACKEND: webgpu
           DIAMOND_TEST_SOFTWARE_GPU: '1'
           WGPU_BACKEND_TYPE: Vulkan
         run: |
@@ -172,7 +201,7 @@ jobs:
           export XDG_RUNTIME_DIR="$RUNNER_TEMP/diamond-vulkan"
           mkdir -p "$XDG_RUNTIME_DIR"
           chmod 700 "$XDG_RUNTIME_DIR"
-          python -B -m unittest -v test_webgpu
+          python -B -m unittest -v test_webgpu test_gpu_sampling
 
   source-distribution:
     name: Source package (${{ matrix.target }})
@@ -207,11 +236,11 @@ jobs:
           from pathlib import Path, PurePosixPath
           import subprocess
           files = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', 'HEAD', '-z']).decode().split('\0')
-          forbidden = {'data', 'runtime', 'venv', '.venv', '.venv-test', '.venv-webgpu', '.venv-compare', '.codex', 'audit', 'dist', 'stochastic-runtime', 'dfs-runtime'}
+          forbidden = {'.native', 'data', 'runtime', 'venv', '.venv', '.venv-test', '.venv-webgpu', '.venv-compare', '.codex', 'audit', 'dist', 'stochastic-runtime', 'dfs-runtime'}
           for name in filter(None, files):
               path = PurePosixPath(name)
               assert not any(part in forbidden for part in path.parts), name
-              assert path.suffix.lower() not in {'.gif', '.png', '.jpg', '.jpeg', '.npz', '.sqlite', '.sqlite3'}, name
+              assert path.suffix.lower() not in {'.gif', '.png', '.jpg', '.jpeg', '.npz', '.sqlite', '.sqlite3', '.dll', '.exe', '.so', '.dylib', '.pyd', '.a', '.lib', '.o', '.obj'}, name
           folder = Path('dist')
           folder.mkdir()
           filename = 'DiamondDilemmaGoldSolver-' + os.environ['PACKAGE_TARGET'] + '-source.' + os.environ['ARCHIVE_FORMAT']

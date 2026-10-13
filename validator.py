@@ -53,9 +53,16 @@ def normalize_tiles(data):
     return result
 
 
+# Only eleven endpoint bits are meaningful. A fixed exact lookup avoids eleven
+# Python shifts/conversions for every seam in models and independently scored
+# heuristic candidates. The final connectivity validator uses explicit points.
+_REVERSED_MASKS = tuple(sum(((value >> bit) & 1) << (10-bit) for bit in range(11))
+                        for value in range(2048))
+
+
 def reverse_mask(mask):
-    """Reverse eleven bits; bit zero is endpoint position one."""
-    return sum(((int(mask)>>p)&1)<<(10-p) for p in range(11))
+    """Reverse eleven low bits; bit zero is endpoint position one."""
+    return _REVERSED_MASKS[int(mask) & 2047]
 
 
 def orientation_masks(data):

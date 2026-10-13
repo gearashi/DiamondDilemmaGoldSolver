@@ -116,7 +116,7 @@ class ConstraintModelTests(unittest.TestCase):
 
     def test_native_sat_and_cpsat_calls_are_interrupted_on_stop_and_deadline(self):
         problem = pair_problem()
-        for engine in [value for value in ENGINES if value != 'cp']:
+        for engine in [value for value in ENGINES if value != 'cp']+['cp-sat-circuit']:
             for reason in ('stopped', 'timeout'):
                 with self.subTest(engine=engine, reason=reason):
                     entered, interrupted = threading.Event(), threading.Event()
@@ -213,6 +213,49 @@ class ConstraintModelTests(unittest.TestCase):
                                progress=lambda event: cuts.append(event.get('cut_cells')) if event['phase'] == 'gold_cut' else None)
                 self.assertEqual(result['status'], 'infeasible')
                 self.assertEqual(cuts, [2])
+
+    def test_native_engines_use_verified_rotation_symmetry_on_fresh_and_legacy_resume(self):
+        from search_fixtures import planted_gold
+        from constraint_symmetry import proper_rotations
+        data, board, reference = planted_gold(17,1,0)
+        problem = SearchProblem(data,board)
+        # Deliberately hint a noncanonical copy. Filtering an inadmissible hint
+        # must not change completeness or produce an invalid native model.
+        noncanonical = next(codes for rotation in proper_rotations(board)
+                            for codes in [rotation.apply(reference)]
+                            if board.cells[next(i for i,code in enumerate(codes) if code//3==0)].face != 0)
+        original = deepcopy(problem.domains)
+        for engine in ENGINES:
+            with self.subTest(engine=engine):
+                legacy = solve(problem,engine=engine,seconds=0)['checkpoint']
+                self.assertNotIn('root_symmetry',legacy)
+                result = solve(problem,engine=engine,seconds=5,resume=legacy,hints=noncanonical)
+                self.assertEqual(result['status'],'solved')
+                self.assertTrue(problem.validate(result['codes'])['valid'])
+                self.assertTrue(result['root_symmetry']['reduction']['applied'])
+                anchor = next(i for i,code in enumerate(result['codes']) if code//3==0)
+                self.assertEqual(board.cells[anchor].face,0)
+        self.assertEqual(problem.domains,original)
+
+    def test_native_symmetry_is_skipped_for_fixed_or_narrowed_input_domains(self):
+        from search_fixtures import planted_gold
+        from constraint_models import _Run, _domains
+        data, board, reference = planted_gold(17,1,0)
+        cases=[SearchProblem(data,board,fixed={0:reference[0]}),SearchProblem(data,board)]
+        cases[1].domains[1].pop()
+        for problem in cases:
+            run=_Run(problem,'cp-sat',5,0,'gold',None,None)
+            rows=_domains(run)
+            self.assertFalse(run.root_symmetry['reduction']['applied'])
+            self.assertEqual(rows,problem.domains)
+
+    def test_partial_and_discarded_hints_remain_preferences_in_traditional_cp(self):
+        problem=pair_problem();expected=brute(problem,'gold')
+        for hints in ({0:0},{1:4},{0:999},{0:0,1:999}):
+            with self.subTest(hints=hints):
+                result=solve(problem,engine='cp',seconds=5,hints=hints)
+                self.assertEqual(result['status'],'solved')
+                self.assertIn(tuple(result['codes']),expected)
 
     def test_invalid_limits_and_options_rejected(self):
         problem = pair_problem()

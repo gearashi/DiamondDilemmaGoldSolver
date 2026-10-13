@@ -2,7 +2,7 @@
 
 A CPU and GPU search tool for the **Gold Challenge** of Diamond Dilemma on Windows, Linux, and macOS, with a local 3D dashboard, resumable search branches, and independent solution validation.
 
-**This repository contains a solver, not a verified Gold solution.** A complete result must place all 160 tiles once, match all 240 edges, and join every gold segment into **one closed loop**. The dashboard offers strongly pruned DFS, SAT, CP-SAT, traditional constraint programming, and experimental GPU sampling followed by CPU DFS. These modes require a single closed loop. The older GPU DFS option preserves its saved branch pool and first-240-edge stopping rule; check its loop count. Only a verified single loop earns `solution.json`.
+**This repository contains a solver, not a verified Gold solution.** A complete result must place all 160 tiles once, match all 240 edges, and join every gold segment into **one closed loop**. The dashboard offers strongly pruned DFS, SAT, CP-SAT (including an experimental direct Gold-circuit model), traditional constraint programming, and experimental GPU sampling and CPU neighborhood repair followed by smart DFS. These modes require a single closed loop. The older GPU DFS option preserves its saved branch pool and first-240-edge stopping rule; check its loop count. Only a verified single loop earns `solution.json`.
 
 The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaapsch.net/puzzles/diamdil.htm).
 
@@ -62,9 +62,13 @@ Windows equivalents are `.\Setup.cmd -Backend webgpu` and `.\Setup.cmd -Backend 
 
 Choose a **Search algorithm** and duration, then select **Start search**. GPU replicas apply only to GPU DFS and hybrid sampling. The dashboard starts with **DFS with constraint pruning**; see the bounded [algorithm comparison](docs/ALGORITHM_COMPARISON.md) for the evidence and limitations. Drag the diamond to rotate it and use the mouse wheel to zoom. **Live placement** shows a real partial assignment when the engine exposes one; native SAT/CP engines can work internally without publishing a partial board. Empty cells have not yet been filled. Closing the browser leaves the solver running.
 
+Expand **Exact-search optimizations** to control loop-bottleneck pruning, regional boundary summaries, conflict backjumping, incremental checks, adaptive scheduling, and persistent verified loop exclusions. Experimental unchecked options add support-based placement ordering, deduction reasons, persistent SAT assistance within a running job, independently verified shared conflicts, and exact joins of regions up to 16 cells. The automatic compiled core also accelerates tile-competition and loop-bottleneck checks. Parallel CPU DFS retains warm job caches and a resumable disjoint job queue. These features have bounded correctness checks; they do not establish a solve-time guarantee. See [the optimization details](docs/OPTIMIZATIONS.md).
+
 Select **Stop** to finish the current work and save progress. Wait until the status becomes **Stopped** before starting again. **Unlimited** removes the time limit. The new modes stop for a verified Gold solution, Stop, or proven exhaustion of their encoded search. Legacy GPU DFS still stops at its first 240-edge candidate.
 
 ## Command line
+
+**Recommended setup:** choose **DFS with constraint pruning**, **Unlimited**, and resume the existing search. This uses the exact pruning rules and retains completed branch coverage; GPU replicas do not apply. To try GPU guidance on a separate hybrid search, choose **Experimental GPU sampling + repair + DFS**, **Automatic** backend, and **4,096 replicas** as a starting point. It uses the saved best board when helpful, spends a bounded initial period sampling and repairing, then searches the complete DFS tree. No real-puzzle speed winner has been established. Both modes accept only a verified single Gold loop. See [implemented optimizations and their limits](docs/OPTIMIZATIONS.md).
 
 For compatibility, the command-line launcher defaults to the existing GPU DFS. Select `dfs`, `cp`, `cp-sat`, `sat`, or `hybrid` explicitly for the new Gold-only searches. The dashboard and launcher resume the selected algorithm’s compatible saved state.
 
@@ -102,7 +106,7 @@ The corresponding Python command on Windows is:
 .\venv\Scripts\python.exe systematic_search.py --resume --seconds 0 --replicas 4096
 ```
 
-For the legacy **GPU DFS** option, the dashboard accepts 128–131,072 replicas, including when resuming; the selected GPU must have enough memory and support the required compute limits. To reduce GPU load, **Stop**, wait for the saved **Stopped** state, choose fewer replicas, then **Start**. Unfinished branches that do not fit remain paused with their exact search positions; increasing the count later can bring them back onto the GPU. The dashboard shows active and paused branches separately. Paused state still uses host memory and checkpoint storage. For **hybrid**, replicas only control the initial GPU sampling population; it has no paused GPU branch bank, and resuming its CPU DFS does not sample again. Use a separate `--output` directory for an independent search.
+For the legacy **GPU DFS** option, the dashboard accepts 128–131,072 replicas, including when resuming; the selected GPU must have enough memory and support the required compute limits. To reduce GPU load, **Stop**, wait for the saved **Stopped** state, choose fewer replicas, then **Start**. Unfinished branches that do not fit remain paused with their exact search positions; increasing the count later can bring them back onto the GPU. The dashboard shows active and paused branches separately. Paused state still uses host memory and checkpoint storage. For **hybrid**, replicas only control the initial GPU sampling population; CPU neighborhood repair then improves the seed before smart DFS; it has no paused GPU branch bank, and resuming its CPU DFS does not sample again. Use a separate `--output` directory for an independent search.
 
 ## What is saved
 
@@ -158,7 +162,7 @@ The CPU suite uses synthetic fixtures and needs no source diagrams or GPU:
 ```powershell
 py -3.12 -m venv .venv-test
 .\.venv-test\Scripts\python.exe -m pip install -r requirements-dev.txt
-.\.venv-test\Scripts\python.exe -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io test_replica_resize test_linux_setup test_windows_setup test_platform test_webgpu test_constraint_dfs test_constraint_models test_constraint_search test_gpu_sampling test_search_fixtures
+.\.venv-test\Scripts\python.exe -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io test_replica_resize test_linux_setup test_windows_setup test_platform test_webgpu test_constraint_dfs test_constraint_pruning test_constraint_parity test_constraint_connectivity test_constraint_advanced test_constraint_separator test_constraint_learning test_constraint_scheduling test_constraint_knowledge test_constraint_parallel test_constraint_native test_search_options test_search_problem test_constraint_symmetry test_smart_dfs test_constraint_lns test_constraint_models test_constraint_circuit test_constraint_regions test_constraint_sat_assist test_constraint_shared_conflicts test_constraint_ordering test_constraint_explanations test_constraint_reasons test_constraint_search test_gpu_sampling test_search_fixtures
 ```
 
 On Linux/macOS, use the same test modules with a native Python virtual environment:
@@ -166,10 +170,10 @@ On Linux/macOS, use the same test modules with a native Python virtual environme
 ```bash
 python3.12 -m venv .venv-test
 .venv-test/bin/python -m pip install -r requirements-dev.txt
-.venv-test/bin/python -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io test_replica_resize test_linux_setup test_windows_setup test_platform test_webgpu test_constraint_dfs test_constraint_models test_constraint_search test_gpu_sampling test_search_fixtures
+.venv-test/bin/python -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io test_replica_resize test_linux_setup test_windows_setup test_platform test_webgpu test_constraint_dfs test_constraint_pruning test_constraint_parity test_constraint_connectivity test_constraint_advanced test_constraint_separator test_constraint_learning test_constraint_scheduling test_constraint_knowledge test_constraint_parallel test_constraint_native test_search_options test_search_problem test_constraint_symmetry test_smart_dfs test_constraint_lns test_constraint_models test_constraint_circuit test_constraint_regions test_constraint_sat_assist test_constraint_shared_conflicts test_constraint_ordering test_constraint_explanations test_constraint_reasons test_constraint_search test_gpu_sampling test_search_fixtures
 ```
 
-CI runs CPU checks on Windows, Ubuntu 24.04, Intel macOS, and Apple Silicon macOS. Windows-specific sharing and launcher tests skip elsewhere. Separate installation jobs import the native WebGPU library on all four platforms; an Ubuntu CUDA package check imports CuPy. These installation checks use `--skip-data`, do not request a GPU adapter, and do not validate kernel execution. A separate shader job executes finite WGSL checks through Mesa lavapipe, a software Vulkan implementation. That test explicitly enables a test-only software adapter; production search still requires hardware. It verifies shader behavior on those finite fixtures, not AMD or Apple GPU compatibility.
+CI runs CPU checks on Windows, Ubuntu 24.04, Intel macOS, and Apple Silicon macOS. Windows-specific sharing and launcher tests skip elsewhere. Separate installation jobs import the native WebGPU library on all four platforms; an Ubuntu CUDA package check imports CuPy. These installation checks use `--skip-data`, do not request a GPU adapter, and do not validate kernel execution. A separate shader job executes finite WGSL DFS and GPU sampler checks through Mesa lavapipe, a software Vulkan implementation. That test explicitly enables a test-only software adapter; production search still requires hardware. It verifies shader behavior on those finite fixtures, not AMD or Apple GPU compatibility.
 
 GPU and transcription checks are separate. After full CUDA setup on an NVIDIA machine, useful checks include:
 
@@ -217,3 +221,22 @@ Successful CI runs produce source archives labelled Windows x64, Linux x64, macO
 ## License
 
 Project code is distributed under the [GNU GPLv3](LICENSE). The third-party puzzle diagrams are obtained separately; the code license does not grant rights to those materials. See [Third-party notices](THIRD_PARTY_NOTICES.txt).
+
+## Advanced exact search
+
+The dashboard's **Exact-search optimizations** controls apply to DFS, parallel CPU DFS, and the DFS phase of the hybrid solver. They enable failure-guided branching, limited look-ahead, individual-strand connectivity, multi-seam region checks, and bounded regional subproblem caching. Each can be disabled for comparisons. Existing recorded sibling choices remain resumable when settings change.
+
+Choose **Parallel CPU DFS** and a CPU worker count to search disjoint unfinished branches. The first resumed parallel run imports an existing `dfs-gold` checkpoint into its own `parallel-dfs-gold` queue; the original DFS save stays intact. Subsequent starts resume the parallel queue. Changing the worker count redistributes its jobs. A graceful Stop commits current job progress; an abrupt process failure may replay work since the last committed job checkpoint.
+
+An optional compiled C engine accelerates seam propagation. Build it locally with GCC or Clang:
+
+```powershell
+.\venv\Scripts\python.exe build_native.py
+```
+
+On Linux or macOS, use `venv/bin/python build_native.py`. **Automatic** uses a matching local build when available and otherwise uses Python. **Compiled CPU** requires that build and reports an error if it is unavailable. Source and binary hashes are checked before loading. Builds stay in `.native/` and are not included in source packages.
+
+The counters report deductions, cached local results and pending jobs; they do not estimate the fraction of all complete boards exhausted. See [the optimization report](docs/OPTIMIZATIONS.md) for the bounds and correctness conditions.
+
+
+Recent exact-search improvements include reusable native propagation buffers, optional support-based placement ordering, intermediate regional-table caching, more precise deduction reasons, and independently verified conflict sharing across CPU workers and restarts. See [search controls](docs/SEARCH.md) and [bounded optimization evidence](docs/OPTIMIZATIONS.md). Costlier experiments default off; saved DFS branch coverage remains authoritative.

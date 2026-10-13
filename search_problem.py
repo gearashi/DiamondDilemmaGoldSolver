@@ -47,6 +47,22 @@ class SearchProblem:
             choices = [self.fixed[cell]] if cell in self.fixed else [code for code in range(3*self.n) if code//3 not in fixed_tiles]
             self.domains.append([code for code in choices if all(self.neighbors[cell, side] >= 0 or self.masks[code, side] == 0 for side in range(3))])
         self.total_segments = sum(len(tile['segments']) for tile in self.tiles)
+        # Endpoint-to-segment tables belong to this immutable tile model. Domain
+        # restrictions and branch assignments never alter them. Each seam pair
+        # can then reuse local segment joins without reconstructing point tuples.
+        self._segment_counts = tuple(len(tile['segments']) for tile in self.tiles)
+        ports = []
+        for tile in self.tiles:
+            base = [[-1]*11 for _ in range(3)]
+            for segment, endpoints in enumerate(tile['segments']):
+                for side, position in endpoints:
+                    base[side][position-1] = segment
+            ports.extend(tuple(tuple(base[(side-rotation)%3]) for side in range(3))
+                         for rotation in range(3))
+        self._segment_ports = tuple(ports)
+        self._seam_joins = {}
+        self._seam_cache_limit = 4096
+        self._closed_key, self._closed_value = None, ()
         encoded = {'tiles': self.tiles, 'edges': self.edges, 'fixed': sorted(self.fixed.items())}
         self.fingerprint = hashlib.sha256(json.dumps(encoded, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
@@ -57,39 +73,54 @@ class SearchProblem:
     def _closed_components(self, assignment):
         if len(assignment) != self.n or any(type(code) is not int or not -1 <= code < 3*self.n for code in assignment):
             raise ValueError('A partial assignment needs one integer code or -1 per cell.')
-        points, cells, parents, degrees = {}, [], [], []
+        key = tuple(assignment)
+        if key == self._closed_key:
+            # Return fresh containers: a caller cannot poison the cached cut.
+            return [(size, list(cells)) for size, cells in self._closed_value]
+        offsets, cells, size = [-1]*self.n, [], 0
         for cell, code in enumerate(assignment):
-            if code < 0:
-                continue
-            tile, rotation = divmod(code, 3)
-            for segment in self.tiles[tile]['segments']:
-                index = len(parents)
-                parents.append(index)
-                degrees.append(0)
-                cells.append(cell)
-                for side, p in segment:
-                    points[cell, (side + rotation) % 3, p] = index
+            if code >= 0:
+                count = self._segment_counts[code//3]
+                offsets[cell] = size
+                cells.extend([cell]*count)
+                size += count
+        parents, degrees = list(range(size)), [0]*size
         def find(x):
             while parents[x] != x:
                 parents[x] = parents[parents[x]]
                 x = parents[x]
             return x
+        cache, ports = self._seam_joins, self._segment_ports
         for a, sa, b, sb in self.edges:
-            if assignment[a] < 0 or assignment[b] < 0:
+            ac, bc = assignment[a], assignment[b]
+            if ac < 0 or bc < 0:
                 continue
-            for p in range(1, 12):
-                left, right = points.get((a, sa, p)), points.get((b, sb, 12-p))
-                if left is not None and right is not None:
-                    x, y = find(left), find(right)
-                    if x != y:
-                        parents[y] = x
-                    degrees[left] += 1
-                    degrees[right] += 1
+            seam = (ac, sa, bc, sb)
+            joins = cache.get(seam)
+            if joins is None:
+                left, right = ports[ac][sa], ports[bc][sb]
+                joins = tuple((segment, right[10-position]) for position, segment in enumerate(left)
+                              if segment >= 0 and right[10-position] >= 0)
+                if len(cache) >= self._seam_cache_limit:
+                    # FIFO eviction loses reuse only; it never removes choices.
+                    del cache[next(iter(cache))]
+                cache[seam] = joins
+            aoffset, boffset = offsets[a], offsets[b]
+            for left, right in joins:
+                left += aoffset
+                right += boffset
+                x, y = find(left), find(right)
+                if x != y:
+                    parents[y] = x
+                degrees[left] += 1
+                degrees[right] += 1
         groups = {}
-        for index in range(len(parents)):
+        for index in range(size):
             groups.setdefault(find(index), []).append(index)
-        return [(len(group), sorted({cells[i] for i in group})) for group in groups.values()
-                if all(degrees[i] == 2 for i in group)]
+        result = tuple((len(group), tuple(sorted({cells[i] for i in group}))) for group in groups.values()
+                       if all(degrees[i] == 2 for i in group))
+        self._closed_key, self._closed_value = key, result
+        return [(size, list(cells)) for size, cells in result]
 
     def partial_loop_impossible(self, assignment):
         """Reject a closed proper loop, whose endpoints cannot reach future tiles."""

@@ -311,7 +311,7 @@ class PortableLauncherTests(unittest.TestCase):
             legacy = launcher.solver_command(1, False, 128, 17, 'webgpu', False)
             self.assertEqual(Path(legacy[1]).name, 'systematic_search.py')
             self.assertNotIn('--algorithm', legacy)
-            for algorithm in ('gpu-dfs', 'dfs', 'cp', 'cp-sat', 'sat', 'hybrid'):
+            for algorithm in ('gpu-dfs', 'dfs', 'cp', 'cp-sat', 'cp-sat-circuit', 'sat', 'hybrid', 'parallel-dfs'):
                 with self.subTest(algorithm=algorithm):
                     choose.reset_mock()
                     command = launcher.solver_command(replicas=128, backend='webgpu', algorithm=algorithm)
@@ -331,6 +331,18 @@ class PortableLauncherTests(unittest.TestCase):
         self.assertEqual(Path(command[1]).name, 'constraint_search.py')
         self.assertEqual(command[command.index('--algorithm')+1], 'sat')
         self.assertNotIn('--resume', command)
+
+    def test_parallel_workers_and_options_forward_from_portable_cli(self):
+        self.install()
+        with patch.object(launcher,'choose_backend',side_effect=AssertionError('No GPU needed')):
+            result=launcher.main(['start','--algorithm','parallel-dfs','--workers','2',
+                '--search-options','{"regional_cache":false,"native":"python"}'])
+        self.assertEqual(result,0)
+        command=self.call.call_args.args[0]
+        self.assertEqual(command[command.index('--workers')+1],'2')
+        options=json.loads(command[command.index('--search-options')+1])
+        self.assertFalse(options['regional_cache'])
+        self.assertEqual(options['native'],'python')
 
     def test_unknown_algorithm_is_rejected_before_driver_probe(self):
         with patch.object(launcher, 'choose_backend') as choose:

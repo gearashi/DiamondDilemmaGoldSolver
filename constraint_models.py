@@ -19,6 +19,7 @@ import threading
 import time
 
 from validator import reverse_mask
+from constraint_symmetry import canonical_root_domains
 
 SCHEMA = 'diamond-constraint-models-v1'
 
@@ -41,6 +42,7 @@ class _Run:
         self.rejected = []
         self.cuts = []
         self.last_codes = None
+        self.root_symmetry = None
         self.stats = {'engine': engine, 'seed': seed, 'target': target,
                       'candidates_checked': 0, 'gold_cuts': 0,
                       'resumed': False, 'resumption_mode': 'restart_with_revalidated_gold_cuts'}
@@ -75,7 +77,7 @@ class _Run:
         if phase == 'model_ready':
             self.stats['model_seconds'] = now-self.started
         if self.progress is not None:
-            event = {'phase': phase, 'engine': self.engine, 'nodes': self.nodes,
+            event = {'root_symmetry': self.root_symmetry, 'phase': phase, 'engine': self.engine, 'nodes': self.nodes,
                      'elapsed_seconds': now-self.started, 'stats': dict(self.stats),
                      'candidates_checked': self.stats['candidates_checked'], **extra}
             if phase in ('model_ready', 'finished') or now-self.last_checkpoint >= 5:
@@ -84,7 +86,7 @@ class _Run:
             self.progress(event)
 
     def finish(self, status, codes=None, validation=None):
-        result = {'status': status, 'codes': codes, 'validation': validation,
+        result = {'root_symmetry': self.root_symmetry, 'status': status, 'codes': codes, 'validation': validation,
                   'elapsed_seconds': time.monotonic()-self.started, 'nodes': int(self.nodes),
                   'complete': status in ('solved', 'edge_perfect', 'infeasible'),
                   'stats': dict(self.stats),
@@ -204,6 +206,14 @@ def _domains(run):
             row = [code for code in row if code == problem.fixed[cell]]
         row = [code for code in row if all(problem.neighbors[cell][side] >= 0 or int(problem.masks[code][side]) == 0 for side in range(3))]
         domains.append(row)
+    # Native checkpoints save cuts/hints, not a resumable branch cursor. They
+    # always rebuild the model, so this verified whole-board symmetry may also
+    # be recomputed on legacy resumes. Restored cuts remain valid globally.
+    canonical, reduction = canonical_root_domains(problem, check=run.check)
+    run.root_symmetry = {'version': 1, 'state': 'ready', 'reduction': reduction}
+    if reduction['applied']:
+        domains = [[code for code in row if canonical[cell] & (1 << code)]
+                   for cell, row in enumerate(domains)]
     return domains
 
 
@@ -358,6 +368,50 @@ def _cpsat(run, domains, hints):
             return run.finish('timeout')
 
 
+def _cpsat_circuit(run,domains,hints):
+    # The edge-only objective deliberately does not require one Gold loop.
+    if run.target=='edges':
+        run.stats['connectivity_encoding']='not_required_for_edges'
+        return _cpsat(run,domains,hints)
+    try:
+        from ortools.sat.python import cp_model
+    except ImportError as exc:
+        raise RuntimeError('CP-SAT circuit requires ortools==9.15.6755; run setup or install the common requirements') from exc
+    from constraint_circuit import build_circuit_model,CircuitLimit
+    try:
+        built=build_circuit_model(run.problem,domains,check=run.check)
+    except CircuitLimit as exc:
+        run.stats['unsupported_reason']=str(exc)
+        result=run.finish('unsupported');result['reason']=str(exc)
+        return result
+    model,codes=built.model,built.codes
+    run.stats.update(built.stats)
+    for cut in run.cuts:
+        run.check()
+        model.add_forbidden_assignments([codes[cell] for cell,_ in cut],[tuple(code for _,code in cut)])
+    for cell,code in hints.items():model.add_hint(codes[cell],code)
+    model.add_decision_strategy(codes,cp_model.CHOOSE_MIN_DOMAIN_SIZE,cp_model.SELECT_MIN_VALUE)
+    solver=cp_model.CpSolver();solver.parameters.num_search_workers=1
+    solver.parameters.random_seed=run.seed%2147483647
+    run.stats.update(node_metric='CP-SAT branches',threads=1,
+                     resumption_mode='rebuild_direct_circuit_with_revalidated_gold_cuts')
+    run.emit('model_ready');run.check()
+    solver.parameters.max_time_in_seconds=max(.000001,run.deadline-time.monotonic())
+    with _watch(run,solver.stop_search):status=solver.solve(model)
+    run.nodes+=int(solver.num_branches);run.stats['last_native_status']=solver.status_name(status)
+    run.check()
+    if status==cp_model.INFEASIBLE:return run.finish('infeasible')
+    if status in (cp_model.OPTIMAL,cp_model.FEASIBLE):
+        selected=[int(solver.value(code)) for code in codes]
+        report=run.validate_edge_candidate(selected)
+        if not report['valid']:
+            raise RuntimeError('Direct Gold circuit produced an invalid loop; refusing to certify or silently add lazy cuts.')
+        return run.candidate(selected)
+    if status==cp_model.MODEL_INVALID:
+        raise RuntimeError('CP-SAT rejected the direct circuit model: '+model.validate())
+    return run.finish('timeout')
+
+
 def _cp(run, domains, hints):
     try:
         from ortools.constraint_solver import pywrapcp
@@ -383,13 +437,18 @@ def _cp(run, domains, hints):
     def add_cut(cut):
         solver.Add(solver.Sum([solver.IsDifferentCstVar(codes[cell], code) for cell, code in cut]) >= 1)
     for cut in run.cuts: add_cut(cut)
-    phase = solver.Phase(codes, solver.CHOOSE_MIN_SIZE_LOWEST_MIN, solver.ASSIGN_MIN_VALUE)
+    default_phase = solver.Phase(codes, solver.CHOOSE_MIN_SIZE_LOWEST_MIN, solver.ASSIGN_MIN_VALUE)
+    phase = default_phase
     if hints:
         assignment = solver.Assignment()
         for cell, code in hints.items():
             assignment.Add(codes[cell])
             assignment.SetValue(codes[cell], code)
-        phase = solver.DecisionBuilderFromAssignment(assignment, phase, codes)
+        # OR-Tools queries assignment.Value(var) for every supplied variable.
+        # Only hinted variables belong here; the fallback still searches ALL
+        # variables. Passing absent entries can crash the native CP engine.
+        hinted_variables = [codes[cell] for cell in hints]
+        phase = solver.DecisionBuilderFromAssignment(assignment, default_phase, hinted_variables)
     run.stats.update(node_metric='CP branches', threads=1, seed_effect='Deterministic minimum-domain/minimum-value phase')
     run.emit('model_ready')
     while True:
@@ -425,8 +484,8 @@ def solve(problem, *, engine='sat', seconds=10, seed=0, target='gold', hints=Non
     infeasibility proof with sound Gold cuts, never a timeout. Nodes have an
     engine-specific meaning named in stats and must not be compared as rates.
     """
-    if engine not in ('sat', 'cp-sat', 'cp') or target not in ('gold', 'edges'):
-        raise ValueError('Choose sat/cp-sat/cp and gold/edges')
+    if engine not in ('sat', 'cp-sat', 'cp-sat-circuit', 'cp') or target not in ('gold', 'edges'):
+        raise ValueError('Choose sat/cp-sat/cp-sat-circuit/cp and gold/edges')
     if isinstance(seconds, bool) or not isinstance(seconds, (int, float)) or not math.isfinite(seconds) or seconds < 0:
         raise ValueError('seconds must be a finite nonnegative budget')
     if type(seed) is not int or seed < 0:
@@ -442,7 +501,8 @@ def solve(problem, *, engine='sat', seconds=10, seed=0, target='gold', hints=Non
         domains = _domains(run)
         if any(not row for row in domains): return run.finish('infeasible')
         run.emit('building_model')
-        return {'sat': _sat, 'cp-sat': _cpsat, 'cp': _cp}[engine](run, domains, _hints(problem, hints))
+        preferred = {cell: code for cell, code in _hints(problem, hints).items() if code in domains[cell]}
+        return {'sat': _sat, 'cp-sat': _cpsat, 'cp-sat-circuit': _cpsat_circuit, 'cp': _cp}[engine](run, domains, preferred)
     except _Interrupted:
         if run.error is not None: raise run.error
         return run.finish(run.reason or 'timeout')

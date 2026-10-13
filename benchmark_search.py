@@ -4,7 +4,7 @@ import argparse, datetime, hashlib, importlib.metadata, json, os, platform, subp
 from pathlib import Path
 import numpy as np
 ROOT=Path(__file__).resolve().parent
-METHODS=('gpu-dfs','dfs','cp','cp-sat','sat','hybrid')
+METHODS=('gpu-dfs','dfs','cp','cp-sat','cp-sat-circuit','sat','hybrid')
 
 def gpu_baseline(problem,seconds,seed,replicas=128,backend='auto'):
     from dfs_gpu import DFS,fill_order
@@ -94,7 +94,7 @@ def main():
     if not 0<args.seconds<=300:parser.error('Use a bounded per-case budget of 0..300 seconds.')
     if args.worker:return worker(args)
     from search_fixtures import planted_gold
-    source_paths=[p for p in ROOT.iterdir() if p.name in {'benchmark_search.py','search_fixtures.py','search_problem.py','constraint_dfs.py','constraint_models.py','gpu_sampling.py','sampling_kernels.wgsl','dfs_gpu.py','dfs_webgpu.py','dfs_kernels.cu','dfs_kernels.wgsl','gpu_engine.py','gpu_backends.py','exact_frontier.py','systematic_jobs.py','validator.py','geometry.py'}]
+    source_paths=[p for p in ROOT.iterdir() if p.name in {'benchmark_search.py','search_fixtures.py','search_problem.py','constraint_dfs.py','constraint_models.py','constraint_circuit.py','gpu_sampling.py','sampling_kernels.wgsl','dfs_gpu.py','dfs_webgpu.py','dfs_kernels.cu','dfs_kernels.wgsl','gpu_engine.py','gpu_backends.py','exact_frontier.py','systematic_jobs.py','validator.py','geometry.py'}]
     source_hashes={str(p):sha(p) for p in source_paths}
     began=time.monotonic();started=datetime.datetime.now(datetime.timezone.utc).isoformat()
     args.output.mkdir(parents=True,exist_ok=True)
