@@ -253,3 +253,118 @@ The runner also avoids enqueueing a terminal checkpoint that its final consumer 
 A further worker-wide immutable-table pool was measured but deferred. With two resident jobs and four-slice affinity, the existing cache needed two builds and fourteen reuses over sixteen slices, with no eviction. A hypothetical pool saved about 21 ms against twelve seconds of nominal slice time. Forced completion churn saved about 39 ms; those construction-only observations do not establish whole-search speedups. The extra ownership lifecycle is not justified by this limited benefit. Revisit if real cache-eviction and table-build counters show materially greater churn.
 
 Release checks now run the sampler's finite WGSL tests through software Vulkan in CI as well as the existing GPU DFS checks. Software adapters are enabled only through an explicit private test argument; the app's hardware requirement and supported Metal/Vulkan/DX12 backends are unchanged.
+
+
+## Round 9: four additional search engines and policies
+
+Four independently selectable options are available in DFS, parallel DFS and the exact stage of hybrid search. They initially remain off so an existing saved run keeps its established policy. The dashboard exposes each option and its counters.
+
+| Option | Implemented behavior | Exactness and resource boundary |
+| --- | --- | --- |
+| Gold subtree CP-SAT | Calls the existing direct single-loop circuit model on a narrowed DFS domain state. A validated solution finishes the search; a conclusive infeasibility result rejects that submitted subtree. | At most 24 open cells, 1,024 placement choices and four attempts per slice; 0.5-second cooperative construction-and-solve budget per call. The first Python dependency import is not preemptible. Exact infeasibility cache only; timeout and model limits leave the branch pending. |
+| Connection-pattern branching | Groups one cell's possible orientations by a real seam endpoint pattern, then searches every group. | The nonempty groups partition the complete current domain. Checkpoints retain every pending group and can resume after disabling this option. Parallel splitting uses the same groups. Old releases cannot consume this new grouped checkpoint representation. |
+| First-UIP lazy clause generation | Builds literal-level implications and resolves a conflict to one highest-level implication point. Learned nogoods can contain intermediate finite-domain mask facts, beyond complete placement equalities. Unit clauses remove incompatible masks. | Sound rule antecedents are required; global rules conservatively retain all input domain facts. Stores bind the exact effective root and target. Default bounds are 8,192 explanation facts, 256 clauses and 4,096 retained literals. Exhausting a budget loses learning only. Clauses and proof graphs are process-local; ordinary DFS sibling cursors retain coverage. |
+| Compiled control loop and reversible trail | A separate C99 library controls branch iteration, domain rollback, node consumption and pending frames. It calls the shared strong propagators and branching policy through Python callbacks. | Disjoint mask choices, bounded memory, cooperative polling, and exact checkpoint conversion. Depth/trail capacity falls back to Python with the remaining frontier intact. Independent final validation remains mandatory. |
+
+`python build_native.py` now builds both the propagation library and the search-control library. The new control loop uses **Automatic** or **Compiled CPU**; **Python reference** selects Python control. A missing optional library is reported as a fallback in Automatic mode.
+
+Finite independent checks include 5,265 assignments across 33 LCG fixtures, every generated clause checked against the valid tiny solutions, all 16 combinations of the four new controls, disjoint checkpoint partitioning, malformed partitions, Python/native cross-resume, fact and native memory caps, and Stop after a committed solution. These are bounded implementation checks, not a proof of correctness for every puzzle.
+
+Component evidence is under `audit/optimization-round9/`. On planted residual problems, a two-second helper budget solved all three tested 160-cell cases. The actual saved frame has 122 open cells and 23,538 placements and is therefore not sent to the oracle. The compiled loop's inexpensive-callback microbenchmarks were slower than Python because conversion and callback overhead dominated. Neither result establishes a full-puzzle speedup.
+
+
+Three alternating copied-checkpoint trials compared v1.1.0, current defaults, each new option, and all four together. Two bounded slices per trial stopped after three partial-loop checks each. Baseline, defaults, the gated oracle, and LCG retained exactly the same 16 additional nodes and pending stacks. Median solver times were **2.38, 2.79, 2.47 and 3.33 seconds**, respectively. Baseline trials ranged from 2.23–3.99 seconds and defaults from 2.21–3.10 seconds, so the overlapping short observations do not establish a reliable default performance change. LCG learned ten clauses but had higher observed overhead. The oracle made no native query because the saved domains exceeded its gate.
+
+Connection branching produced three grouped branches and a different pending partition. The native controller retained a different interruption representation, although independent tiny coverage and cross-resume checks pass. These runs are therefore not used for a same-work speed comparison. Enabling all four also changes the pending partition. The detailed report separates dependency import, input setup, cold/warm solver time and subprocess wall time; all source snapshots, native build hashes and untouched canonical input hashes are retained under `audit/optimization-round9/performance/`.
+
+Keep the existing default controls for normal searching. The four requested experiments are implemented and can be enabled individually, but these bounded measurements do not justify enabling all of them as a faster default. Regional caches and existing default pruning continue to work alongside them.
+
+
+The final local CPU suite passed **668 tests with 23 skipped** (691 discovered), including compiled-worker backend reporting, all 16 option combinations, missing dependencies, checkpoint corruption, interrupted deductions, and native depth/trail fallback. Tests use independent finite enumerations where a deduction or branch partition can change the set of solutions. This round was tested locally on Windows; the updated cross-platform CI definition is included, but no new hosted-platform run is claimed here.
+
+
+Six isolated application runs covered default DFS, two-worker parallel search and one-worker resume, plus all-four DFS, parallel DFS and a **128-replica native CUDA hybrid**. Each saved a checkpoint, and every all-four run reported the compiled control loop. A separate Stop check returned in **0.65 seconds** and its saved parallel queue validated without advancing. One five-second default parallel resume spent its budget preparing and committed no new nodes; it preserved its queue. The six protected canonical puzzle/best/checkpoint files remained unchanged.
+
+
+## Round 10: less work inside the three optional engines
+
+The compiled search loop now propagates matching seams and forced physical-piece inventory before crossing into Python. Rejected branches never allocate a Python domain list or call the strong-rule evaluator. Surviving branches keep the same complete Python checks, and final Gold validation remains independent. A bounded residue table remembers a supporting orientation for each directed arc/value; every reuse checks the current neighbor domain, including after widening or rollback. Interrupted work stays uncommitted. Branches rejected entirely in C currently skip optional clause learning, trading explanation work for fewer callbacks. The original eight-word native statistics export is preserved; additional counters use a separate export.
+
+First-UIP bulk explanations now share immutable pre-rule parent references and expand only reached reasons during conflict analysis. Root consequences need no resolution, and nested facts for one cell retain only their strongest mask. The learned-clause store also maintains a cell-to-clause index: unchanged clauses can skip evaluation, while affected outputs remain pending for the next fixpoint. Repeated inputs, widening, clause eviction and interrupted calls invalidate or update this state explicitly. The learned clauses are still private to their exact root; they do not replace the saved branch stack.
+
+Before a Gold subtree CP-SAT call, forced pieces and seams reduce the domains, occupied physical tiles leave the remaining inventory, and fixed degree-two chains become mandatory connections between unfinished-cell ports. Separate crossing strands and parallel paths remain separate. A fixed proper loop is a contradiction; an all-fixed complete loop still returns the full assignment for independent validation. Immutable rotated segment tables are cached by exact geometry. A completed UNSAT query can also answer a new query only when every new cell domain is a subset of the proved domain, within the same immutable root. Timeouts and unknown results never enter that negative cache.
+
+These are improvements to the existing experimental controls, which continue to start off. Additional dashboard counters expose early native rejections, support reuse, skipped unchanged clauses, contracted endpoints and reused impossible-subtree results. These are computation counters, not unique full-board counts or estimates of how much of the puzzle is exhausted.
+
+
+Five alternating synthetic trials retained identical native ordered leaves and learned-clause outputs. Native prefiltering reduced the median from **1.735 to 1.355 seconds** for 30 five-cell problems (13,336 committed nodes and 8,172 leaves). The disabled-fast-path control measured 2.091 seconds; this is a noisy component comparison, not a real Gold throughput claim. For 20 synthetic 160-cell explanation graphs, shared reasons and demand-driven first-UIP reduced the median from **24.906 to 0.886 seconds**. Separate Python allocation tracing measured 1,012,952 versus 165,160 peak bytes; it does not measure total process memory. Event-indexed learned-clause checks reduced a 1,000-call stable-frontier median from **0.201 to 0.081 seconds**, with identical final domains and clauses.
+
+Three alternating full/contracted model trials on planted 160-cell boards measured construction plus solve:
+
+| Residual fixture | Full circuit | Contracted circuit | Model reduction |
+| --- | ---: | ---: | --- |
+| Ordinary, eight unfinished cells | 152.5 ms | 17.0 ms | Forced seam/inventory preprocessing completes the remaining board. |
+| Equal seam masks, eight unfinished cells | 626.2 ms | 171.6 ms | 960 endpoint nodes become 48. |
+| Equal seam masks, sixteen unfinished cells | 1,059.0 ms | 554.6 ms | 960 endpoint nodes become 96. |
+| All pieces fixed | 214.2 ms | 14.7 ms | Checks the forced complete loop without an optional circuit. |
+
+All 24 model runs produced independently validated Gold witnesses respecting their submitted domains. Another bounded check reused one completed UNSAT result for 100 narrower queries without rebuilding its model. These fixtures contain known planted solutions; they do not establish progress on the unsolved actual puzzle.
+
+Three alternating before/after trials used an immutable copy of the actual saved checkpoint, with identical settings within each comparison. Two slices per run stopped after three completed partial-loop checks per slice. Each comparison retained the same sixteen new nodes and exact pending stack hashes. Import, input setup and process wall times are recorded separately from the following solver medians:
+
+| Settings | Previous round | This round |
+| --- | ---: | ---: |
+| Existing defaults | 1.467 s | 1.685 s |
+| First-UIP learning enabled | 2.126 s | 1.407 s |
+| Compiled search loop enabled | 1.629 s | 1.252 s |
+| All four experimental controls | 2.275 s | 2.312 s |
+
+The LCG and native options took **33.8% and 23.2% less median solver time** for these short equal-work comparisons. Defaults and the combined configuration did not improve. Timings varied substantially: baseline native trials ranged from 1.195 to 3.841 seconds, for example. The oracle remained gated off on this broad real checkpoint. These measurements do not justify enabling every experimental checkbox or predict completion time; existing defaults remain unchanged.
+
+Independent checks include 108 tiny residual solution-set comparisons, 6,885 LCG assignments, 34 learned clauses tested against all valid fixture assignments, 480 indexed/full-scan propagation comparisons, and 45 random finite native problems. A separate clause-store stress review checked 48,020 domain histories, including 2,165 interrupted calls. Full application regression and installation results are recorded below. Reproducible commands, immutable before/after snapshots, exact input hashes, raw timing trials and peer reviews are retained locally under `audit/optimization-round10/`.
+
+
+The final CPU suite ran **720 tests: 697 passed, 23 skipped, no failures or errors**. Installed-source hashes are checked against that run. Tests cover all sixteen option combinations, both reason systems with native prefiltering, old statistics ABI buffer bounds, native Stop/rollback/capacity fallback, malformed checkpoint partitions, interrupted clause passes, fixed-loop circuit edge cases, and cache narrowing versus widening. Local CPU evidence is from Windows; updated CI includes the new residual-model tests, but no new hosted-platform run is claimed.
+
+
+Six isolated app runs passed: DFS, two-worker parallel DFS and one-worker resume, plus experimental DFS, parallel DFS and a **128-replica CUDA hybrid**. All saved checkpoints; experimental runs reported compiled search control. Stop returned in **1.16 seconds**, and its saved parallel queue validated without advancing. The canonical puzzle, best board, DFS/hybrid checkpoints and systematic GPU frontier remained unchanged. The main search was left stopped.
+
+
+## Round 11: the four requested improvements and follow-up checks
+
+| Improvement | Implemented behavior | Coverage safeguard |
+| --- | --- | --- |
+| Skip repeated basic propagation | A completed native seam/inventory pass certifies only the immediate Python callback input. | Later deductions resume ordinary propagation; checkpoints never carry the marker. |
+| Native event queue | A fixed-capacity deduplicated FIFO and incoming-arc adjacency replace global pending/arc scans. | Reconfiguration and imported frames start with all arcs; interrupted scratch is discarded. |
+| Asserting first-UIP backjumps | The learned mask is negated at an eligible pending ancestor; independently excluded deeper pending rectangles are removed. | Unvisited choice unions, selected ancestor masks and earlier siblings are retained. Ineligible jumps fall back to ordinary learning. |
+| Reusable residual CP-SAT templates | A private ancestor encoding is cloned and narrowed for a compatible query. | Exact puzzle/root binding, four entries and an 8 MiB representation cap. No shared mutation, incomplete proof, or native search-state reuse. |
+
+Follow-up improvements retain native fixpoint information privately across live branches, choose sparse inventory enumeration only for sufficiently sparse large rows, compact conclusive UNSAT proofs to remove redundant subsets, and check discardable backjump tails once rather than repeatedly. Empty trusted local nogoods immediately consume the remaining local frontier. The first unconditional inventory prototype regressed dense cases and was replaced with density gating.
+
+These changes preserve the established default search policy. The native search loop, first-UIP engine and Gold oracle remain experimental opt-ins. Finite coverage checks and component timings do not establish a real Gold solve-time estimate or a claim that every possible optimization has been exhausted.
+
+
+Five alternating native component trials on Windows/i7-4790/RTX 2060 compared the frozen round-10 source with the new queue and density-gated inventory logic:
+
+| Bounded workload | Before | After |
+| --- | ---: | ---: |
+| 30 small DFS problems | 0.9681 s | 0.7492 s |
+| 500 sparse 160-cell fixpoints | 60.82 ms | 17.34 ms |
+| 500 medium-density fixpoints | 71.87 ms | 41.78 ms |
+| 500 dense fixpoints | 258.5 ms | 222.2 ms |
+
+The DFS comparison retained the same 13,336 nodes and 8,172 ordered leaves. Arc checks fell from 148,560 to 50,128; 13,306 nodes used private incremental seeds. These component measurements exclude any claim about completing the real Gold puzzle. A subsequent wrapper-only change removes repeat library loading during transactional backjumps; it has separate failure/cancellation tests and was not part of those native component timings. Local scripts, exact input/source hashes, rejected prototypes and peer-review records are retained under `audit/optimization-round11/`.
+
+
+The template comparison used three planted 160-cell residuals and four ancestor/sibling queries per sequence, with three alternating trials. At a two-second per-query budget, warm construction medians changed from **6.20 to 1.58 ms**, **18.16 to 1.97 ms**, and **36.91 to 2.32 ms**. Cold template admission added **4.77, 4.75, and 8.18 ms**. Complete four-query medians were mixed: **61.63 to 50.38 ms**, **372.99 to 384.69 ms**, and **1138.29 to 1051.69 ms**. Short equal-mask queries remained UNKNOWN. These results support construction reuse, not a claim that every query or Gold search is faster.
+
+A further single-pass endpoint-support table builder reduced the median actual-board constructor time from **20.87 to 10.36 ms** over seven alternating trials, with exact support equality. A different candidate that scanned unique segment supports for local connectivity was rejected in the measured scope: the five-frame/800-cell sample slowed from **42.64 to 54.24 ms** cold and **26.35 to 33.79 ms** with warm tables. Exact partitions agreed. The existing local union-find remains in use.
+
+
+The final asserting-backjump discriminator used a physically Gold-infeasible four-tile fixture, seven seeds and five alternating trials. Early loop filters were disabled only in this test to expose independently rejected leaves. Python medians were **10.22 to 10.32 ms** (inconclusive); native medians were **20.31 to 17.48 ms**, with total processed nodes **995 to 800**, 105 useful asserting jumps and 800 skipped duplicate basic passes over 35 current native runs. A prior version wasted work rebuilding state for non-jumping assertions or already-empty tails; the retained version defers ordinary units and requires real pending-work reduction. Full invalid Gold leaves now use the existing certified proper-loop witness for a tighter LCG conflict. No claim is made that these small-fixture gains predict the public puzzle.
+
+
+Three alternating trials on an isolated copy of the real saved checkpoint compared two bounded slices per configuration. LCG, compiled control, and all four experimental controls retained identical pending-stack hashes and node counts across revisions. Median solver times were **1.501 to 1.341 s**, **1.240 to 0.928 s**, and **1.131 to 0.963 s**, respectively. The all-four current trials ranged from **0.883 to 2.645 s**, showing substantial timing variation. The default comparison is inconclusive: one baseline trial committed an extra node under clock-limited optional probes, so its pending work differed. The public checkpoint still exceeds the oracle trigger gate; these observations do not measure oracle solving on that frame or forecast a Gold solution. Canonical input/checkpoint hashes remained unchanged.
+
+
+Final local validation discovered **749 CPU tests: 726 passed, 23 skipped, no failures**. Six isolated application runs covered default DFS, two-worker parallel search, one-worker resume, and all-four DFS/parallel/CUDA hybrid search with 128 replicas. Each wrote a resumable checkpoint. A separate parallel Stop check returned in **0.41 seconds** and its saved queue validated without advancing. The six protected canonical puzzle, best-board and checkpoint files remained unchanged. Hosted build results are linked from the release; these local checks alone do not validate physical Apple or AMD GPUs.

@@ -3,7 +3,7 @@ from itertools import product, permutations
 import random
 import unittest
 
-from constraint_advanced import AdvancedPruner, STAT_KEYS, cyclic_edge_blocks
+from constraint_advanced import AdvancedPruner, STAT_KEYS, cyclic_edge_blocks, _port_supports
 from constraint_connectivity import ConnectivityPruner
 from constraint_pruning import values
 from search_fixtures import planted_gold
@@ -31,6 +31,24 @@ def chain(extra=False):
 
 
 class StrandTests(unittest.TestCase):
+    def test_one_pass_port_supports_match_independent_endpoint_membership(self):
+        rng = random.Random(812923)
+        # Include an empty orientation collection, empty segment lists, repeated
+        # pairs/endpoints and the full 480-code public-puzzle capacity.
+        for count in (0, 1, 2, 6, 30, 480):
+            for case in range(10):
+                segments = tuple(tuple((rng.randrange(33), rng.randrange(33))
+                                       for _ in range(rng.randrange(5)))
+                                 for _ in range(count))
+                if count and case % 2:
+                    segments = (((0, 0), (0, 32), (0, 32)), *segments[1:])
+                expected = tuple(sum(1 << code for code, pairs in enumerate(segments)
+                                     if port in {v for pair in pairs for v in pair})
+                                 for port in range(33))
+                actual = _port_supports(segments)
+                self.assertEqual(actual, expected)
+                self.assertIsInstance(actual, tuple)
+
     def test_optional_disconnected_port_components_are_not_mandatory(self):
         # Three disjoint optimistic loops are alternatives, not three required
         # loops: a tile chooses a single rotated U on any one of the seams.

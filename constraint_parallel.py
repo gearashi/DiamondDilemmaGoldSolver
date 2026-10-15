@@ -82,9 +82,10 @@ def partition_checkpoint(problem,checkpoint,*,parts=2,options=None):
     for frame in checkpoint['stack']:
         domains=[int(value,16) for value in frame['domains']]
         if frame['cell']>=0:
-            pending=frame['choices'][frame['next']:]
+            masks=([int(value,16) for value in frame['choice_masks']] if 'choice_masks' in frame else [1<<code for code in frame['choices']])
+            pending=masks[frame['next']:]
             if not pending: continue
-            domains[frame['cell']]=sum(1<<code for code in pending)
+            domains[frame['cell']]=sum(pending)
         if any(value==0 for value in domains): continue
         roots.append(domains)
     while len(roots)<parts:
@@ -206,10 +207,27 @@ def _record_backend(result,backends,reasons):
     if isinstance(reason,str):reasons.add(reason)
 
 
+def _record_search_loop(result,backends,reasons):
+    backend=result.get('search_loop_backend')
+    reason=result.get('search_loop_fallback_reason')
+    # A cancelled setup carries the Python placeholder and possibly cumulative
+    # native counters from an earlier slice; it contributes no new loop usage.
+    if (backend not in ('compiled','python','mixed')
+            or result.get('native_backend')=='not_started'
+            or result.get('native_fallback_reason')=='Propagation has not started.'):
+        return
+    backends.update(('compiled','python') if backend=='mixed' else (backend,))
+    if isinstance(reason,str) and reason:reasons.add(reason)
+
+
+def _backend_label(backends):
+    return next(iter(backends)) if len(backends)==1 else 'mixed' if backends else 'not_started'
+
+
 def _add_stats(destination,source,*,retiring=False):
     for key,value in source.items():
         if retiring and (key in SHARED_GAUGES or key.endswith('_entries') or key in ('forced_bonds','forced_clusters','loop_witnesses','sat_assist_clauses',
-                            'hierarchical_subtable_states','hierarchical_subtable_support_slots','hierarchical_cached_summaries')):continue
+                            'hierarchical_subtable_states','hierarchical_subtable_support_slots','hierarchical_cached_summaries','gold_oracle_template_bytes')):continue
         destination[key]=destination.get(key,0)+value
 
 
@@ -261,6 +279,7 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
     jobs={};queue=[];active={};slots=[];started_workers=0;error=None;terminal=None
     previous_elapsed=0.;retired_nodes=0;retired_stats={};next_id=0;completed=0;splits=0;replayed=0
     root_symmetry=None;native_backends=set();native_reasons=set();last_checkpoint=began
+    search_loop_backends=set();search_loop_reasons=set()
     owners={};last_jobs={};worker_caches={};knowledge_sent={};conflicts_sent={};affinity_hits=0;next_verification=began
     def add(checkpoint,region=None):
         nonlocal next_id
@@ -350,7 +369,17 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
                  'splits':splits,'replayed_jobs':replayed,'elapsed_seconds':previous_elapsed+time.monotonic()-began,
                  'inflight_jobs':list(active.values()),'search_options':options.copy(),'root_symmetry':copy.deepcopy(root_symmetry)}
         payload['digest']=_digest(payload);return payload
+    def backend_fields():
+        return {'native_backend':_backend_label(native_backends),
+                'native_fallback_reason':'; '.join(sorted(native_reasons)) or None,
+                'search_loop_backend':_backend_label(search_loop_backends),
+                'search_loop_fallback_reason':'; '.join(sorted(search_loop_reasons)) or None}
     def notify(event,**extra):
+        # Worker events expose a single job's current engine. Record that before
+        # replacing it with the coordinator's whole-run summary for the UI.
+        _record_backend(extra,native_backends,native_reasons)
+        _record_search_loop(extra,search_loop_backends,search_loop_reasons)
+        extra={**extra,**backend_fields()}
         if progress is not None:
             nodes,stats=totals();progress({'event':event,'nodes':nodes,'stats':stats,'elapsed_seconds':time.monotonic()-began,
                                          'search_options':options.copy(),'root_symmetry':copy.deepcopy(root_symmetry),'parallel':parallel_info(),
@@ -364,6 +393,7 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
         status=result.get('status')
         merge_knowledge(result.get('knowledge'));merge_shared(result.get('shared_conflicts'))
         _record_backend(result,native_backends,native_reasons)
+        _record_search_loop(result,search_loop_backends,search_loop_reasons)
         if status in ('solved','edge_perfect'):
             codes=result.get('codes');report=problem.validate(codes)
             domain_ok=isinstance(codes,(list,tuple)) and len(codes)==problem.n and all(code in problem.domains[cell] for cell,code in enumerate(codes))
@@ -515,9 +545,8 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
         elif _stopped(stop):status='stopped'
         value={'status':status,'codes':None,'nodes':nodes,'stats':stats,'complete':False,'checkpoint':snapshot()}
     value.update(elapsed_seconds=time.monotonic()-began,method='parallel-dfs',search_options=options.copy(),
-                 root_symmetry=copy.deepcopy(root_symmetry),parallel=parallel_info(),native_backend=next(iter(native_backends)) if len(native_backends)==1 else 'mixed' if native_backends else 'not_started',replay_scope='Only work after the last committed per-job checkpoint may replay after failure or intermediate-snapshot resume.')
+                 root_symmetry=copy.deepcopy(root_symmetry),parallel=parallel_info(),**backend_fields(),replay_scope='Only work after the last committed per-job checkpoint may replay after failure or intermediate-snapshot resume.')
     if knowledge is not None and options.get('persistent_learning',True):value['knowledge']=knowledge.snapshot()
     if shared_conflicts is not None and options.get('shared_conflicts',False):value['shared_conflicts']=shared_conflicts.snapshot()
-    if native_reasons:value['native_fallback_reason']='; '.join(sorted(native_reasons))
     if error is not None:value['error']=error
     return value

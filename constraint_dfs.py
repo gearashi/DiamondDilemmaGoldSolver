@@ -18,6 +18,7 @@ import time
 from validator import reverse_mask
 from constraint_pruning import Pruner, STAT_KEYS as PRUNER_STAT_KEYS, _tile_choices
 from constraint_symmetry import canonical_root_domains
+from constraint_branching import ConnectionBranching, branch_mask, branch_masks, from_native_frame, to_native_frame, STAT_KEYS as BRANCH_STAT_KEYS
 from constraint_connectivity import ConnectivityPruner, STAT_KEYS as CONNECTIVITY_STAT_KEYS
 from constraint_native import NativePropagation, select_native, STAT_KEYS as NATIVE_STAT_KEYS
 from search_options import normalize_options
@@ -25,6 +26,9 @@ from constraint_advanced import AdvancedPruner, STAT_KEYS as ADVANCED_STAT_KEYS
 from constraint_scheduling import PropagationScheduler, STAT_KEYS as SCHEDULING_STAT_KEYS
 from constraint_knowledge import KnowledgeStore
 from constraint_reasons import ReasonState, STAT_KEYS as REASON_STAT_KEYS
+from constraint_lcg import LCGState, LCGStore, STAT_KEYS as LCG_STAT_KEYS
+from constraint_gold_oracle import GoldOracle, STAT_KEYS as GOLD_ORACLE_STAT_KEYS, GAUGE_KEYS as GOLD_ORACLE_GAUGE_KEYS
+from constraint_native_search import select_native_search, STAT_KEYS as NATIVE_SEARCH_STAT_KEYS
 from constraint_sat_assist import SatAssist, STAT_KEYS as SAT_ASSIST_STAT_KEYS
 from constraint_ordering import SupportOrdering, STAT_KEYS as ORDERING_STAT_KEYS
 from constraint_shared_conflicts import VerifiedConflictStore, STAT_KEYS as SHARED_STAT_KEYS, GAUGE_KEYS as SHARED_GAUGES
@@ -32,7 +36,7 @@ from constraint_shared_conflicts import VerifiedConflictStore, STAT_KEYS as SHAR
 VERSION = 2
 GUIDANCE_STAT_KEYS = ('failure_guided_choices','failure_weight_updates','lookahead_probes','lookahead_prunes','lookahead_failures','lookahead_aborted')
 KNOWLEDGE_STAT_KEYS = ('loop_witnesses',)
-EXPLANATION_STAT_KEYS = ('explanation_probes', 'explanation_literals_removed', 'explanation_aborted', 'explanation_skipped', 'explanation_time_ns', 'backjumps', 'backjump_levels')
+EXPLANATION_STAT_KEYS = ('explanation_probes', 'explanation_literals_removed', 'explanation_aborted', 'explanation_skipped', 'explanation_time_ns', 'backjumps', 'backjump_levels', 'native_basic_passes_skipped')
 BASE_STAT_KEYS = ('propagations', 'arc_revisions', 'tile_prunes', 'loop_prunes', 'leaves', 'backtracks')
 CONFLICT_STAT_KEYS = ('conflicts_learned', 'conflicts_subsumed', 'conflict_evictions',
                       'conflict_checks', 'conflict_prunes', 'conflict_hits', 'conflict_cache_entries')
@@ -118,6 +122,8 @@ class _SearchRuntime:
         self.sat=None
         self.ordering=None
         self.pruner_tables=None
+        self.lcg=None
+        self.gold_oracle=None
 
     def valid(self,fingerprint,target,initial_domains,n):
         return (self.fingerprint==fingerprint and self.target==target
@@ -414,7 +420,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
     n, count = problem.n, 3*problem.n
     initial = ([sum(1 << code for code in domain) for domain in problem.domains]
                if _initial_domains is None else list(_initial_domains))
-    stats = dict.fromkeys(BASE_STAT_KEYS + PRUNER_STAT_KEYS + CONFLICT_STAT_KEYS + CONNECTIVITY_STAT_KEYS + NATIVE_STAT_KEYS + GUIDANCE_STAT_KEYS + ADVANCED_STAT_KEYS + EXPLANATION_STAT_KEYS + SCHEDULING_STAT_KEYS + KNOWLEDGE_STAT_KEYS + REASON_STAT_KEYS + SAT_ASSIST_STAT_KEYS + ORDERING_STAT_KEYS + SHARED_STAT_KEYS, 0)
+    stats = dict.fromkeys(BASE_STAT_KEYS + PRUNER_STAT_KEYS + CONFLICT_STAT_KEYS + CONNECTIVITY_STAT_KEYS + NATIVE_STAT_KEYS + GUIDANCE_STAT_KEYS + ADVANCED_STAT_KEYS + EXPLANATION_STAT_KEYS + SCHEDULING_STAT_KEYS + KNOWLEDGE_STAT_KEYS + REASON_STAT_KEYS + SAT_ASSIST_STAT_KEYS + ORDERING_STAT_KEYS + SHARED_STAT_KEYS + BRANCH_STAT_KEYS + LCG_STAT_KEYS + GOLD_ORACLE_STAT_KEYS + NATIVE_SEARCH_STAT_KEYS + ('lcg_trace_budget_skips',), 0)
     nodes, previous_elapsed = 0, 0.0
     if resume is not None:
         if not isinstance(resume, dict) or resume.get('version') != VERSION or resume.get('fingerprint') != problem.fingerprint or resume.get('target') != target:
@@ -450,16 +456,29 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                 raise ValueError('An unexpanded checkpoint frame has choices.')
             if any(type(code) is not int or not 0 <= code < count or cell < 0 or not domains[cell] & (1 << code) for code in choices) or len(set(choices)) != len(choices):
                 raise ValueError('Malformed checkpoint sibling choices.')
-            if cell >= 0 and (domains[cell].bit_count() <= 1 or set(choices) != set(_values(domains[cell]))):
+            masks = saved.get('choice_masks')
+            if masks is not None:
+                if (cell<0 or not isinstance(masks,list) or len(masks)!=len(choices)
+                    or len(masks)<2 or any(not isinstance(value,str) for value in masks)):
+                    raise ValueError('Malformed checkpoint connection choices.')
+                masks=[int(value,16) for value in masks];union=0
+                for code,mask in zip(choices,masks):
+                    if mask<=0 or mask&~domains[cell] or union&mask or code!=(mask&-mask).bit_length()-1:
+                        raise ValueError('Checkpoint connection choices must be disjoint nonempty domains.')
+                    union |= mask
+                if union!=domains[cell]:raise ValueError('Checkpoint connection choices omit remaining orientations.')
+            elif cell >= 0 and (domains[cell].bit_count() <= 1 or set(choices) != set(_values(domains[cell]))):
                 raise ValueError('Checkpoint does not retain all sibling choices.')
             if stack:
                 parent = stack[-1]
                 if parent['cell'] < 0 or parent['next'] == 0:
                     raise ValueError('Checkpoint child has no selected parent branch.')
-                selected = parent['choices'][parent['next']-1]
-                if domains[parent['cell']] != 1 << selected or any(value & ~old for value, old in zip(domains, parent['domains'])):
+                selected = branch_mask(parent,parent['next']-1)
+                if domains[parent['cell']] & ~selected or any(value & ~old for value, old in zip(domains, parent['domains'])):
                     raise ValueError('Checkpoint child differs from its selected branch.')
-            stack.append({'domains': domains, 'cell': cell, 'choices': choices.copy(), 'next': offset})
+            frame={'domains': domains, 'cell': cell, 'choices': choices.copy(), 'next': offset}
+            if masks is not None:frame['choice_masks']=masks
+            stack.append(frame)
     else:
         stack = [{'domains': initial.copy(), 'cell': -1, 'choices': [], 'next': 0}]
     if hints is None:
@@ -539,6 +558,20 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         raise ValueError('The in-memory search runtime cache has different effective problem data or is malformed.')
     if runtime.sat is not None and (not isinstance(runtime.sat,SatAssist) or runtime.sat.initial!=tuple(initial) or runtime.sat.problem.fingerprint!=problem.fingerprint or runtime.sat.target!=target):
         raise ValueError('The private SAT assistance cache has different problem data.')
+    if runtime.lcg is not None and (not isinstance(runtime.lcg,LCGStore) or not runtime.lcg.matches(problem.fingerprint,target,initial)):
+        raise ValueError('The LCG store belongs to different effective root domains.')
+    if options['lcg'] and runtime.lcg is None:runtime.lcg=LCGStore(problem.fingerprint,target,initial)
+    lcg_store=runtime.lcg if options['lcg'] else None
+    if options['gold_oracle']:
+        if runtime.gold_oracle is None:runtime.gold_oracle=GoldOracle(problem,initial,target)
+        if not isinstance(runtime.gold_oracle,GoldOracle) or runtime.gold_oracle.problem is not problem or runtime.gold_oracle.initial!=tuple(initial) or runtime.gold_oracle.target!=target:
+            raise ValueError('The Gold oracle belongs to a different puzzle or effective root.')
+        runtime.gold_oracle.begin_slice()
+    gold_oracle=runtime.gold_oracle if options['gold_oracle'] else None
+    lcg_baseline={key:stats[key] for key in LCG_STAT_KEYS}
+    lcg_entry=dict(lcg_store.stats) if lcg_store is not None else dict.fromkeys(LCG_STAT_KEYS,0)
+    oracle_baseline={key:stats[key] for key in GOLD_ORACLE_STAT_KEYS}
+    oracle_entry=dict(gold_oracle.stats) if gold_oracle is not None else dict.fromkeys(GOLD_ORACLE_STAT_KEYS,0)
     failure_weights = runtime.failure_weights
     probe_deadline = None
     pruner_baseline = {key: stats[key] for key in PRUNER_STAT_KEYS}
@@ -569,14 +602,35 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         if shared is not None:
             for key in SHARED_STAT_KEYS:
                 stats[key]=shared.stats[key] if key in SHARED_GAUGES else shared_baseline[key]+shared.stats[key]-shared_entry[key]
+        if lcg_store is not None:
+            for key in LCG_STAT_KEYS:
+                if key not in ('lcg_nodes','lcg_rebases'):stats[key]=lcg_baseline[key]+lcg_store.stats[key]-lcg_entry[key]
+        if gold_oracle is not None:
+            for key in GOLD_ORACLE_STAT_KEYS:
+                stats[key]=(gold_oracle.stats[key] if key in GOLD_ORACLE_GAUGE_KEYS else
+                            oracle_baseline[key]+gold_oracle.stats[key]-oracle_entry[key])
         stats['conflict_cache_entries'] = len(store.clauses)
         stats['loop_witnesses'] = len(knowledge) if knowledge is not None else 0
+        if native_engine is not None:
+            for key,value in native_engine.stats().items():
+                stats[key]=(max(native_search_baseline[key],value) if 'peak_' in key else native_search_baseline[key]+value)
+
+    native_path=None
+    native_engine=None
+    search_loop_backend='python'
+    search_loop_reason=None
+    native_search_baseline={key:stats[key] for key in NATIVE_SEARCH_STAT_KEYS}
+    def decision_facts():
+        return (list(native_path) if native_path is not None else
+                [(ancestor['cell'],branch_mask(ancestor,ancestor['next']-1)) for ancestor in stack[:-1]])
 
     def decision_conjunction():
-        # The top frame owns alternatives, not an additional active decision.
-        # Each ancestor's most recently selected sibling implies its child.
-        return [(ancestor['cell'], ancestor['choices'][ancestor['next']-1])
-                for ancestor in stack[:-1]]
+        facts=decision_facts()
+        # A pattern representative is not a placement assumption. Existing
+        # placement-only learning is used only when the entire path is singleton.
+        if any(mask.bit_count()!=1 for _,mask in facts):return None
+        return [(cell,mask.bit_length()-1) for cell,mask in facts]
+
 
     def weight_failure(cells):
         if options['failure_guided']:
@@ -601,11 +655,11 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             if key not in imported_shared:
                 store.learn(key,stats);imported_shared.add(key)
 
-    def learn_failure(decisions, gold_assignments=None, reason=None):
+    def learn_failure(decisions, gold_assignments=None, reason=None, *, allow_jump=True):
         # The caller commits the known failed frame BEFORE optional explanation
         # probes. Stop during a probe therefore leaves an ordinary valid stack.
-        learn(decisions, stats)
-        if reason is not None:
+        if decisions is not None:learn(decisions, stats)
+        if reason is not None and decisions is not None:
             if not set(reason)<=set(decisions):raise RuntimeError('Conflict reason escaped its active branch.')
             learn(reason,stats)
             stats['reason_conflicts']+=1
@@ -619,7 +673,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             weight_failure(cell for cell,_ in explanation)
         elif decisions:
             weight_failure([decisions[-1][0]])
-        if not options.get('backjumping', True) or not stack:
+        if not allow_jump or decisions is None or native_path is not None or not options.get('backjumping', True) or not stack:
             return
         # Existing clauses are already proved in this effective job domain.
         # Prefer one whose latest responsible decision is earliest in the stack.
@@ -692,12 +746,15 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             raise ProbeBudget
 
     def snapshot():
+        nonlocal stack
+        if native_engine is not None:stack=[from_native_frame(frame) for frame in native_engine.snapshot()]
         sync_stats()
         payload = {'version': VERSION, 'fingerprint': problem.fingerprint, 'target': target,
                 'seed': seed, 'search_options': dict(options), 'hints': {str(cell): codes for cell, codes in normalized_hints.items()},
                 'nodes': nodes, 'stats': dict(stats), 'elapsed_seconds': previous_elapsed + time.monotonic()-began,
                 'stack': [{'domains': [hex(value) for value in frame['domains']], 'cell': frame['cell'],
-                           'choices': frame['choices'].copy(), 'next': frame['next']} for frame in stack]}
+                           'choices': frame['choices'].copy(), 'next': frame['next'],
+                           **({'choice_masks':[hex(value) for value in frame['choice_masks']]} if 'choice_masks' in frame else {})} for frame in stack]}
         payload['digest'] = _checkpoint_digest(payload)
         return payload
 
@@ -705,7 +762,8 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         sync_stats()
         value = {'status': status, 'codes': codes, 'elapsed_seconds': time.monotonic()-began,
                  'nodes': nodes, 'complete': status in ('solved', 'edge_perfect', 'infeasible'), 'stats': dict(stats),
-                 'search_options':dict(options), 'native_backend':native_backend, 'native_fallback_reason':native_reason}
+                 'search_options':dict(options), 'native_backend':native_backend, 'native_fallback_reason':native_reason,
+                 'search_loop_backend':search_loop_backend, 'search_loop_fallback_reason':search_loop_reason}
         if knowledge is not None and options.get('persistent_learning',True):value['knowledge']=knowledge.snapshot()
         if shared is not None:value['shared_conflicts']=shared.snapshot()
         if report is not None: value['validation'] = report
@@ -717,7 +775,8 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         if progress is not None:
             progress({'event': event, 'nodes': nodes, 'elapsed_seconds': time.monotonic()-began,
                       'stats': dict(stats), 'search_options':dict(options), 'native_backend':native_backend,
-                      'native_fallback_reason':native_reason,
+                      'native_fallback_reason':native_reason, 'search_loop_backend':search_loop_backend,
+                      'search_loop_fallback_reason':search_loop_reason,
                       **({'knowledge':knowledge.snapshot()} if knowledge is not None and options.get('persistent_learning',True) else {}),
                       **({'shared_conflicts':shared.snapshot()} if shared is not None else {}), **extra})
 
@@ -745,6 +804,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         if options['value_ordering']:
             if runtime.ordering is None or runtime.ordering.tables is not support_tables:
                 runtime.ordering=SupportOrdering(support_tables)
+        branching=ConnectionBranching(problem) if options['connection_branching'] else None
         tile_bits = support_tables.tile_bits
         arcs, incoming = support_tables.arcs, support_tables.incoming
         filter_arc = _ArcFilter(support_tables)
@@ -790,10 +850,27 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             return tuple((bool(value&occupied),bool(value&~even)) for value in domains
                          for occupied,even in zip(connectivity.nonempty,connectivity.even_positive))
 
-        def propagate(domains, changed_cell=None, *, proof=False, trace=None):
+        class Traces:
+            def __init__(self,reason,lcg):self.reason,self.lcg=reason,lcg
+            def record_cell(self,cell,value,deps,rule):
+                deps=tuple(deps);count=0
+                if self.reason is not None:count=self.reason.record_cell(cell,value,deps,rule)
+                if self.lcg is not None:stats['lcg_nodes']+=self.lcg.record_cell(cell,value,deps,rule)
+                return count
+            def record(self,domains,deps,rule):
+                deps=tuple(deps);count=0
+                if self.reason is not None:count=self.reason.record(domains,deps,rule)
+                if self.lcg is not None:stats['lcg_nodes']+=self.lcg.record(domains,deps,rule)
+                return count
+            def fail(self,cells):
+                cells=tuple(cells)
+                if self.reason is not None:self.reason.failure=self.reason.causes(cells)
+                if self.lcg is not None:self.lcg.failure=cells
+
+        def propagate(domains, changed_cell=None, *, proof=False, trace=None, basic_complete=False):
             stats['propagations'] += 1
             projections = {}
-            queue = deque(_starting_arcs(len(arcs), incoming, changed_cell))
+            queue = deque(() if basic_complete else _starting_arcs(len(arcs), incoming, changed_cell))
             pending = [False]*len(arcs)
             for index in queue:
                 pending[index] = True
@@ -809,7 +886,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                 try:return action()
                 finally:record(range(n),rule)
             def fail(cells):
-                if trace is not None:trace.failure=trace.causes(cells)
+                if trace is not None:trace.fail(cells)
                 return False
             def enqueue(cell):
                 for index in incoming[cell]:
@@ -843,30 +920,37 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                     arc_steps += 1
                     stats['python_arcs_checked'] += 1
                     if arc_steps % 32 == 0: check()
-                # A cell whose candidates all use one tile owns that tile even
-                # before its rotation is chosen. Also force each tile's sole cell.
-                owners, occurrences = {}, [[] for _ in range(n)]
-                for cell, domain in enumerate(domains):
-                    possible = projections.get(domain)
-                    if possible is None:
-                        possible = tuple(_values(_tile_choices(domain)))
-                        projections[domain] = possible
-                    if len(possible) == 1:
-                        tile = possible[0]
-                        if tile in owners:return fail([cell,owners[tile]])
-                        owners[tile] = cell
-                    for tile in possible: occurrences[tile].append(cell)
-                    if cell % 8 == 0: check()
-                for tile, cell in owners.items():
-                    for other in occurrences[tile]:
-                        if other != cell and narrow(other, domains[other] & ~tile_bits[tile],[cell],'tile ownership'):
+                # Only the current native callback may certify this exact
+                # input. Strong deductions below invalidate it for the next
+                # fixpoint iteration; checkpoints never carry the certificate.
+                if basic_complete:
+                    stats['native_basic_passes_skipped'] += 1
+                    basic_complete = False
+                else:
+                    # A cell whose candidates all use one tile owns that tile even
+                    # before its rotation is chosen. Also force each tile's sole cell.
+                    owners, occurrences = {}, [[] for _ in range(n)]
+                    for cell, domain in enumerate(domains):
+                        possible = projections.get(domain)
+                        if possible is None:
+                            possible = tuple(_values(_tile_choices(domain)))
+                            projections[domain] = possible
+                        if len(possible) == 1:
+                            tile = possible[0]
+                            if tile in owners:return fail([cell,owners[tile]])
+                            owners[tile] = cell
+                        for tile in possible: occurrences[tile].append(cell)
+                        if cell % 8 == 0: check()
+                    for tile, cell in owners.items():
+                        for other in occurrences[tile]:
+                            if other != cell and narrow(other, domains[other] & ~tile_bits[tile],[cell],'tile ownership'):
+                                stats['tile_prunes'] += 1
+                                if not domains[other]: return False
+                    for tile, cells in enumerate(occurrences):
+                        if not cells:return fail(range(n))
+                        if len(cells) == 1 and narrow(cells[0], domains[cells[0]] & tile_bits[tile]):
                             stats['tile_prunes'] += 1
-                            if not domains[other]: return False
-                for tile, cells in enumerate(occurrences):
-                    if not cells:return fail(range(n))
-                    if len(cells) == 1 and narrow(cells[0], domains[cells[0]] & tile_bits[tile]):
-                        stats['tile_prunes'] += 1
-                        if not domains[cells[0]]: return False
+                            if not domains[cells[0]]: return False
                 if any(value == 0 for value in domains): return False
                 # Strong reductions and learned unit clauses use the same
                 # fixpoint as seam propagation. Only unexpanded frame domains
@@ -874,6 +958,8 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                 before = domains.copy()
                 clause_reason=(lambda cell,value,deps:direct(cell,value,deps,'learned clause')) if trace is not None else None
                 bulk(lambda:store.prune(domains, stats, check,reason=clause_reason),'learned clauses')
+                if lcg_store is not None and all(domains):
+                    bulk(lambda:lcg_store.prune(domains,check,reason=clause_reason),'LCG clauses')
                 if any(value == 0 for value in domains): return False
                 proof_context[0]=proof
                 pruner.on_narrow=(lambda cell,value,deps:direct(cell,value,deps,'Hall set')) if trace is not None else None
@@ -902,128 +988,209 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                     continue
                 if not queue: return True
 
-        while stack:
-            check()
-            advance_shared()
-            frame = stack[-1]
-            if frame['cell'] == -1:
-                nodes += 1
-                domains = frame['domains']
-                trace=None
-                if options['reason_tracking']:
-                    trace=frame.get('_reasons')
-                    if trace is None or trace.domains!=domains or len(trace.facts)>8192:
-                        trace=ReasonState(domains,decision_conjunction(),initial=initial)
-                        frame['_reasons']=trace;stats['reason_rebases']+=1
-                    trace.failure=None
-                if not propagate(domains, frame.pop('_changed_cell', None),trace=trace):
-                    decisions=decision_conjunction()
-                    stack.pop(); stats['backtracks'] += 1
-                    reason=(trace.failure if trace.failure is not None else trace.contradiction()) if trace is not None else None
-                    learn_failure(decisions,reason=reason)
-                    continue
-                if options['sat_assist'] and (nodes==1 or nodes%8==0):
+        def evaluate(frame):
+            """Shared strong pruning/branch policy for Python and native control loops."""
+            nonlocal nodes,probe_deadline
+            while True:
+                check();advance_shared();nodes+=1
+                domains=frame['domains'];decisions=decision_conjunction()
+                reason=None;lcg=None
+                if options['reason_tracking'] and decisions is not None:
+                    reason=frame.get('_reasons')
+                    if reason is None or reason.domains!=domains or len(reason.facts)>8192:
+                        reason=ReasonState(domains,decisions,initial=initial)
+                        frame['_reasons']=reason;stats['reason_rebases']+=1
+                    reason.failure=None
+                if lcg_store is not None:
+                    lcg=frame.get('_lcg')
+                    if lcg is None or lcg.domains!=domains or not lcg.enabled:
+                        lcg=LCGState.reconstruct(initial,domains,decision_facts(),fingerprint=problem.fingerprint,target=target)
+                        frame['_lcg']=lcg;stats['lcg_rebases']+=1
+                    lcg.failure=None
+                trace=Traces(reason,lcg) if reason is not None or lcg is not None else None
+                def failure(*,gold=None,cells=None,codes=None,report=None):
+                    if lcg is not None and gold is not None:
+                        # A certified proper-loop witness usually mentions
+                        # fewer cells than the full rejected arrangement.
+                        # Keep only already fixed placements on this path.
+                        witness=problem.gold_nogood(gold)
+                        if witness and all(domains[cell]==1<<code for cell,code in witness):
+                            cells=[cell for cell,_ in witness]
+                    clause=lcg.first_uip(cells) if lcg is not None else None
+                    if lcg is not None and not lcg.enabled:stats['lcg_trace_budget_skips']+=1
+                    why=(reason.failure if reason.failure is not None else reason.contradiction()) if reason is not None else None
+                    return {'action':'reject','decisions':decisions,'reason':why,'lcg_clause':clause,
+                            'gold':gold,'codes':codes,'validation':report}
+                if not propagate(domains,frame.pop('_changed_cell',None),trace=trace,
+                                 basic_complete=frame.pop('_native_basic_complete',False)):return failure()
+                frame['_propagated']=True
+                if options['sat_assist'] and decisions is not None and (nodes==1 or nodes%8==0):
                     runtime.sat.prepare(check,seconds=.005)
-                    core=runtime.sat.query(decision_conjunction(),check,seconds=.01)
+                    core=runtime.sat.query(decisions,check,seconds=.01)
                     if core is not None:
-                        decisions=decision_conjunction();stack.pop();stats['backtracks']+=1
-                        learn(core,stats);learn_failure(decisions)
-                        continue
-                frame['_propagated'] = True
-                if all(value.bit_count() == 1 for value in domains):
-                    codes = [value.bit_length()-1 for value in domains]
-                    decisions = decision_conjunction()
-                    stack.pop()  # Commit leaf consumption before any callback can stop.
-                    report = problem.validate(codes)
-                    stats['leaves'] += 1
-                    accepted = report['valid'] or (target == 'edges' and report['unique_tiles']
-                                                   and report['matched_edges'] == len(problem.edges))
-                    if not accepted:
-                        learn_failure(decisions,codes if target=='gold' else None)
-                    notify('candidate', codes=codes, validation=report)
-                    if report['valid']: return result('solved', codes, report)
-                    if accepted: return result('edge_perfect', codes, report)
-                    continue
-                assigned = [value.bit_length()-1 if value.bit_count() == 1 else -1 for value in domains]
-                if target == 'gold' and problem.partial_loop_impossible(assigned):
-                    decisions=decision_conjunction()
-                    stats['loop_prunes'] += 1; stack.pop()
-                    cause=None
-                    if trace is not None:
+                        learn(core,stats)
+                        return failure(cells=range(n))
+                if all(value.bit_count()==1 for value in domains):
+                    codes=[value.bit_length()-1 for value in domains];report=problem.validate(codes)
+                    accepted=report['valid'] or (target=='edges' and report['unique_tiles'] and report['matched_edges']==len(problem.edges))
+                    stats['leaves']+=1
+                    if accepted:return {'action':'solved','codes':codes,'validation':report}
+                    return failure(gold=codes if target=='gold' else None,cells=range(n),codes=codes,report=report)
+                assigned=[value.bit_length()-1 if value.bit_count()==1 else -1 for value in domains]
+                if target=='gold' and problem.partial_loop_impossible(assigned):
+                    stats['loop_prunes']+=1;cells=None
+                    if reason is not None or lcg is not None:
                         witness=problem.gold_nogood(assigned)
-                        if all(domains[cell]==1<<code for cell,code in witness):cause=trace.causes(cell for cell,_ in witness)
-                    learn_failure(decisions,assigned,reason=cause)
-                    continue
-                guided = options['failure_guided'] and any(weight>1 for weight in failure_weights)
+                        cells=([cell for cell,code in witness] if all(domains[cell]==1<<code for cell,code in witness) else range(n))
+                        if reason is not None:reason.failure=reason.causes(cells)
+                    return failure(gold=assigned,cells=cells)
+                if gold_oracle is not None and gold_oracle.should_query(domains,node=nodes):
+                    answer=gold_oracle.query(domains,check,seconds=.5,node=nodes)
+                    if answer.status=='solved':
+                        return {'action':'solved','codes':list(answer.codes),'validation':answer.validation,'via_oracle':True}
+                    if answer.status=='infeasible':return failure(cells=range(n))
+                guided=options['failure_guided'] and any(weight>1 for weight in failure_weights)
                 def cell_key(i):
-                    neighbors = [int(nb) for nb in problem.neighbors[i] if nb >= 0]
-                    activity = failure_weights[i]+sum(failure_weights[nb] for nb in neighbors) if guided else 0
-                    return (domains[i].bit_count(), -activity,
-                            -sum(domains[nb].bit_count()==1 for nb in neighbors), cell_rank[i])
-                cell = min((i for i, value in enumerate(domains) if value.bit_count()>1), key=cell_key)
-                if guided:stats['failure_guided_choices'] += 1
-                hinted = {code: index for index, code in enumerate(normalized_hints.get(cell, []))}
-                choices = (runtime.ordering.order(cell,domains,list(_values(domains[cell])),hinted,rank,check,stats)
-                           if options['value_ordering'] else sorted(_values(domains[cell]), key=lambda code: (0, hinted[code]) if code in hinted else (1, rank[code])))
-                # A few tight-domain probes can establish a failed value before
-                # opening a real branch. They use private copies and learn the
-                # complete active decision conjunction INCLUDING the probe.
-                if (options['lookahead'] and n>=4 and 2<=len(choices)<=4
-                        and not frame.get('_lookahead_done')):
-                    removed = False
-                    probe_deadline = min(deadline,time.monotonic()+0.02)
+                    neighbors=[int(nb) for nb in problem.neighbors[i] if nb>=0]
+                    activity=failure_weights[i]+sum(failure_weights[nb] for nb in neighbors) if guided else 0
+                    return (domains[i].bit_count(),-activity,-sum(domains[nb].bit_count()==1 for nb in neighbors),cell_rank[i])
+                cell=min((i for i,value in enumerate(domains) if value.bit_count()>1),key=cell_key)
+                if guided:stats['failure_guided_choices']+=1
+                hinted={code:index for index,code in enumerate(normalized_hints.get(cell,[]))}
+                choices=(runtime.ordering.order(cell,domains,list(_values(domains[cell])),hinted,rank,check,stats)
+                         if options['value_ordering'] else sorted(_values(domains[cell]),key=lambda code:(0,hinted[code]) if code in hinted else (1,rank[code])))
+                if options['lookahead'] and n>=4 and 2<=len(choices)<=4 and not frame.get('_lookahead_done'):
+                    removed=False;probe_deadline=min(deadline,time.monotonic()+.02)
                     try:
                         for code in choices[:3]:
-                            check()
-                            stats['lookahead_probes'] += 1
-                            trial = domains.copy();trial[cell] = 1 << code
-                            failed = not propagate(trial,cell)
+                            check();stats['lookahead_probes']+=1;trial=domains.copy();trial[cell]=1<<code
+                            failed=not propagate(trial,cell)
                             if not failed and target=='gold':
-                                assigned_trial = [value.bit_length()-1 if value.bit_count()==1 else -1 for value in trial]
-                                failed = problem.partial_loop_impossible(assigned_trial)
+                                assigned_trial=[value.bit_length()-1 if value.bit_count()==1 else -1 for value in trial]
+                                failed=problem.partial_loop_impossible(assigned_trial)
                             check()
                             if failed:
-                                # Commit only a completed contradiction. A
-                                # cancellation/budget exception cannot reach it.
-                                learn([*decision_conjunction(),(cell,code)],stats)
-                                domains[cell] &= ~(1 << code)
-                                stats['lookahead_failures'] += 1
-                                stats['lookahead_prunes'] += 1
-                                weight_failure([cell]);removed = True
-                    except ProbeBudget:
-                        stats['lookahead_aborted'] += 1
-                    except Interrupted:
-                        stats['lookahead_aborted'] += 1
-                        raise
-                    finally:
-                        probe_deadline = None
-                    frame['_lookahead_done'] = True
+                                if decisions is not None:learn([*decisions,(cell,code)],stats)
+                                domains[cell]&=~(1<<code);stats['lookahead_failures']+=1;stats['lookahead_prunes']+=1
+                                weight_failure([cell]);removed=True
+                    except ProbeBudget:stats['lookahead_aborted']+=1
+                    except Interrupted:stats['lookahead_aborted']+=1;raise
+                    finally:probe_deadline=None
+                    frame['_lookahead_done']=True
                     if removed:
-                        frame['_propagated'] = False
-                        continue  # Ordinary full propagation on the real domains.
-                frame.update(cell=cell, choices=choices, next=0)
-            if frame['next'] >= len(frame['choices']):
-                decisions=decision_conjunction()
-                stack.pop(); stats['backtracks'] += 1
-                learn_failure(decisions)
+                        frame['_propagated']=False
+                        continue
+                plan=branching.choose(domains,cell,check,stats) if branching is not None else None
+                if plan is not None:
+                    frame['choice_masks']=list(plan.masks);cell=plan.cell
+                    choices=[(mask&-mask).bit_length()-1 for mask in plan.masks]
+                frame.update(cell=cell,choices=choices,next=0)
+                return {'action':'branch','domains':domains,'cell':cell,'choices':branch_masks(frame)}
+
+        def consume(out):
+            # Call only after consuming the leaf/failed frame. Optional conflict
+            # work and user callbacks must not cause that completed leaf to replay.
+            if out['action']=='reject':
+                stats['backtracks']+=1
+                clause=out.get('lcg_clause');replacement=None
+                if clause is not None:lcg_store.learn(clause)
+                if clause is not None and options.get('backjumping',True) and native_path is None:
+                    replacement=lcg_store.asserting_frontier([to_native_frame(frame) for frame in stack],clause)
+                # The existing placement explanation can sometimes jump when
+                # a conservative mask assertion cannot; keep that fallback.
+                learn_failure(out['decisions'],out.get('gold'),out.get('reason'),allow_jump=replacement is None)
+                if replacement is not None:stack[:]=[from_native_frame(frame) for frame in replacement]
+            if out.get('codes') is not None:
+                notify('candidate',codes=out['codes'],validation=out['validation'])
+
+        if options['native_search']:
+            if not all(all(frame['domains']) for frame in stack):
+                search_loop_reason='A saved zero-domain frame is completed through Python validation.'
+            else:
+                native_engine,search_loop_reason=select_native_search(n,count,mode=options['native'])
+                if native_engine is not None and len(stack)>native_engine.max_depth:
+                    native_engine.close();native_engine=None
+                    search_loop_reason='Saved stack exceeds native depth capacity; exact pending branches continued in Python.'
+            if native_engine is not None:
+                # C commits only exact seam/inventory consequences. Surviving
+                # nodes receive fresh conservative reasons from their actual
+                # path below; early contradictions skip optional learning.
+                native_engine.configure_propagation(support_tables)
+                search_loop_backend='compiled'
+                def native_process(domains,decisions):
+                    nonlocal native_path
+                    native_path=decisions
+                    return evaluate({'domains':domains,'cell':-1,'choices':[],'next':0,
+                                     '_native_basic_complete':native_engine.basic_propagated})
+                def native_event(name,out):
+                    nonlocal last_progress,stack,nodes
+                    if name=='fast_reject':
+                        # This node was consumed by C before this callback. A
+                        # later Stop must preserve that committed rejection.
+                        nodes+=1;stats['backtracks']+=1;stats['propagations']+=1
+                    elif name in ('reject','solved'):
+                        consume(out)
+                        clause=out.get('lcg_clause')
+                        if name=='reject' and clause is not None and options.get('backjumping',True):
+                            replacement=lcg_store.asserting_frontier(native_engine.snapshot(),clause,require_jump=True)
+                            if replacement is not None:return {'replace_stack':replacement}
+                    elif name=='backtrack':stats['backtracks']+=1
+                    if time.monotonic()-last_progress>=1:
+                        stack=[from_native_frame(frame) for frame in native_engine.snapshot()]
+                        if stack:
+                            values=stack[-1]['domains']
+                            notify('progress',codes=[v.bit_length()-1 if v.bit_count()==1 else -1 for v in values],
+                                   assigned_tiles=sum(v.bit_count()==1 for v in values),is_partial=True)
+                        last_progress=time.monotonic()
+                native_result=native_engine.run([to_native_frame(frame) for frame in stack],native_process,check,native_event)
+                stack=[from_native_frame(frame) for frame in native_result['stack']]
+                if native_result['status']=='solved':
+                    out=native_result['value']
+                    return result('solved' if out['validation']['valid'] else 'edge_perfect',out['codes'],out['validation'])
+                if native_result['status']=='exhausted':return result('infeasible')
+                if native_result['status']=='limit':
+                    sync_stats();native_engine.close();native_engine=None;native_path=None
+                    search_loop_backend='python';search_loop_reason='Native trail/depth capacity reached; exact pending branches continued in Python.'
+                else:return result('timeout')
+
+        while stack:
+            check();advance_shared();frame=stack[-1]
+            if frame['cell']==-1:
+                out=evaluate(frame)
+                if out['action'] in ('reject','solved'):
+                    stack.pop();consume(out)
+                    if out['action']=='solved':return result('solved' if out['validation']['valid'] else 'edge_perfect',out['codes'],out['validation'])
+                    continue
+            if frame['next']>=len(frame['choices']):
+                decisions=decision_conjunction();stack.pop();stats['backtracks']+=1;learn_failure(decisions)
                 continue
-            code = frame['choices'][frame['next']]
-            frame['next'] += 1
-            child = frame['domains'].copy(); child[frame['cell']] = 1 << code
-            next_frame={'domains': child, 'cell': -1, 'choices': [], 'next': 0,
-                        '_changed_cell': frame['cell'] if frame.get('_propagated') else None}
-            if options['reason_tracking']:
+            code=frame['choices'][frame['next']];selected_mask=branch_mask(frame,frame['next']);frame['next']+=1
+            child=frame['domains'].copy();child[frame['cell']]=selected_mask
+            next_frame={'domains':child,'cell':-1,'choices':[],'next':0,
+                        '_changed_cell':frame['cell'] if frame.get('_propagated') else None}
+            if options['reason_tracking'] and decision_conjunction() is not None and selected_mask.bit_count()==1:
                 parent_trace=frame.get('_reasons')
                 if parent_trace is None or parent_trace.domains!=frame['domains']:
-                    parent_trace=ReasonState(frame['domains'],decision_conjunction(),initial=initial)
-                    frame['_reasons']=parent_trace
-                next_frame['_reasons']=parent_trace.fork(frame['cell'],code)
-                stats['reason_nodes']+=1
+                    parent_trace=ReasonState(frame['domains'],decision_conjunction(),initial=initial);frame['_reasons']=parent_trace
+                next_frame['_reasons']=parent_trace.fork(frame['cell'],code);stats['reason_nodes']+=1
+            if lcg_store is not None:
+                parent_lcg=frame.get('_lcg')
+                if parent_lcg is None or parent_lcg.domains!=frame['domains'] or not parent_lcg.enabled:
+                    parent_lcg=LCGState.reconstruct(initial,frame['domains'],decision_facts(),fingerprint=problem.fingerprint,target=target)
+                    frame['_lcg']=parent_lcg;stats['lcg_rebases']+=1
+                next_frame['_lcg']=parent_lcg.fork(frame['cell'],selected_mask);stats['lcg_nodes']+=1
             stack.append(next_frame)
-            if time.monotonic() - last_progress >= 1:
-                notify('progress', codes=[value.bit_length()-1 if value.bit_count() == 1 else -1 for value in child],
-                       assigned_tiles=sum(value.bit_count() == 1 for value in child), is_partial=True)
-                last_progress = time.monotonic()
+            if time.monotonic()-last_progress>=1:
+                notify('progress',codes=[value.bit_length()-1 if value.bit_count()==1 else -1 for value in child],
+                       assigned_tiles=sum(value.bit_count()==1 for value in child),is_partial=True)
+                last_progress=time.monotonic()
         return result('infeasible')
     except Interrupted as exc:
+        if native_engine is not None and native_engine.last_result is not None:
+            saved=native_engine.last_result;stack=[from_native_frame(frame) for frame in saved['stack']]
+            if saved['status']=='solved':
+                out=saved['value'];return result('solved' if out['validation']['valid'] else 'edge_perfect',out['codes'],out['validation'])
+            if saved['status']=='exhausted':return result('infeasible')
         return result(exc.status)
+    finally:
+        if native_engine is not None:native_engine.close()

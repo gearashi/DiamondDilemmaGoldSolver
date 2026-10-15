@@ -36,6 +36,18 @@ def _put(cache, key, value, limit):
     cache[key] = value
 
 
+def _port_supports(segments):
+    """Build exact orientation supports for all ports in one segment pass."""
+    ports = [0]*33
+    for code, pairs in enumerate(segments):
+        bit = 1 << code
+        for a, b in pairs:
+            # Repeated endpoints/segments contribute the same orientation once.
+            ports[a] |= bit
+            ports[b] |= bit
+    return tuple(ports)
+
+
 class _DSU:
     def __init__(self, n):
         self.parents = list(range(n))
@@ -135,8 +147,7 @@ class AdvancedPruner:
                                     for a, b in tile['segments'])
                               for tile in problem.tiles for r in range(3))
         self.heads = tuple(tuple(a for a, _ in pairs) for pairs in self.segments)
-        self.port_codes = tuple(sum(1 << code for code, pairs in enumerate(self.segments)
-                                    if any(port in pair for pair in pairs)) for port in range(33))
+        self.port_codes = _port_supports(self.segments)
         self.nonempty = tuple(sum(1 << code for code, row in enumerate(self.masks)
                                   if row[side]) for side in range(3))
         self.adj = [[] for _ in range(self.n)]

@@ -318,7 +318,7 @@ def main(argv=None):
         state['stats'] = event.get('stats', state['stats'])
         if 'root_symmetry' in event:
             state['root_symmetry'] = event['root_symmetry']
-        for key in ('native_backend', 'native_fallback_reason', 'parallel'):
+        for key in ('native_backend', 'native_fallback_reason', 'search_loop_backend', 'search_loop_fallback_reason', 'parallel'):
             if key in event:
                 state[key] = event[key]
         phase = event.get('phase', event.get('event'))
@@ -426,13 +426,13 @@ def main(argv=None):
         binding = hashlib.sha256(raw+args.algorithm.encode()+b':gold:v1').hexdigest()
         (evidence/'tiles.json').write_bytes(raw)
         source_hashes = {}
-        for name in ('constraint_search.py', 'search_problem.py', 'constraint_dfs.py', 'constraint_models.py', 'constraint_circuit.py',
+        for name in ('constraint_search.py', 'search_problem.py', 'constraint_dfs.py', 'constraint_models.py', 'constraint_circuit.py', 'constraint_residual.py',
                      'gpu_sampling.py', 'constraint_pruning.py', 'constraint_parity.py', 'constraint_symmetry.py',
                      'constraint_lns.py', 'constraint_connectivity.py', 'constraint_advanced.py', 'constraint_parallel.py',
                      'constraint_native.py', 'build_native.py', 'constraint_native.c', 'constraint_knowledge.py',
                      'constraint_separator.py', 'constraint_scheduling.py', 'constraint_reasons.py', 'constraint_sat_assist.py',
                      'constraint_regions.py', 'constraint_ordering.py', 'constraint_explanations.py',
-                     'constraint_shared_conflicts.py', 'search_options.py', 'sampling_kernels.wgsl',
+                     'constraint_shared_conflicts.py', 'constraint_branching.py', 'constraint_gold_oracle.py', 'constraint_lcg.py', 'constraint_native_search.py', 'constraint_native_search.c', 'search_options.py', 'sampling_kernels.wgsl',
                      'search_algorithms.py', 'validator.py', 'geometry.py'):
             path = ROOT/name
             if path.exists():
@@ -519,7 +519,7 @@ def main(argv=None):
         state['stats'] = result.get('stats', state['stats'])
         if 'root_symmetry' in result:
             state['root_symmetry'] = result['root_symmetry']
-        for key in ('native_backend', 'native_fallback_reason', 'parallel'):
+        for key in ('native_backend', 'native_fallback_reason', 'search_loop_backend', 'search_loop_fallback_reason', 'parallel'):
             if key in result:
                 state[key] = result[key]
         sampling(result.get('gpu_sampling'), show_sample=last_snapshot is None)

@@ -69,6 +69,7 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(state['stats']['gold_cuts'],0)
         record=self.read('searches/cp-sat-circuit-gold/solution.json')
         self.assertTrue((Path(record['input_snapshot']).parent/'constraint_circuit.py').is_file())
+        self.assertTrue((Path(record['input_snapshot']).parent/'constraint_residual.py').is_file())
         self.assertFalse((self.run/'searches/cp-sat-gold').exists())
         self.assert_released()
 
@@ -681,7 +682,12 @@ class RunnerTests(unittest.TestCase):
         with patch.object(runner,'run_solver',side_effect=second):
             runner.main(self.args('parallel-dfs','--search-options','{"shared_conflicts":true}'))
         self.assertEqual(path.read_bytes(),original)
-        self.assertEqual(self.read('status.json')['shared_conflicts']['loaded'],1)
+        # 'loaded' counts proofs completed in the initial 20 ms allowance.
+        # Later consumer work may finish verification; it must still report a
+        # verified record without requiring a particular machine's timing.
+        restored=self.read('status.json')['shared_conflicts']
+        self.assertIn(restored['loaded'],(0,1))
+        self.assertEqual(restored['records'],1)
         self.assertFalse(any(Path(call.args[0]).name=='conflicts-gold.json' for call in self.write.call_args_list))
         self.assert_released()
 

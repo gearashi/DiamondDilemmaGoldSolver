@@ -34,9 +34,11 @@ class CircuitModel:
 def build_circuit_model(problem,domains,*,check=lambda:None,group_supports=True,
                         break_direction=True,max_cells=MAX_CELLS,
                         max_placements=MAX_PLACEMENTS,max_arcs=MAX_CIRCUIT_ARCS,
-                        max_link_terms=MAX_LINK_TERMS):
+                        max_link_terms=MAX_LINK_TERMS,contract_fixed=False):
     from ortools.sat.python import cp_model
     check()
+    if type(contract_fixed) is not bool:
+        raise ValueError('contract_fixed must be a boolean.')
     if len(domains)!=problem.n:raise ValueError('One orientation domain is required per cell.')
     if problem.n>max_cells:raise CircuitLimit(f'Direct circuit model supports at most {max_cells} cells.')
     domains=[tuple(sorted(set(row))) for row in domains]
@@ -47,6 +49,11 @@ def build_circuit_model(problem,domains,*,check=lambda:None,group_supports=True,
     placement_count=sum(map(len,domains))
     if placement_count>max_placements:
         raise CircuitLimit(f'Direct circuit placement limit exceeded ({placement_count}>{max_placements}).')
+    if contract_fixed:
+        from constraint_residual import build_residual_circuit
+        return build_residual_circuit(problem, domains, check=check,
+            group_supports=group_supports, break_direction=break_direction,
+            max_arcs=max_arcs, max_link_terms=max_link_terms)
     model=cp_model.CpModel();codes=[];placements=[];by_tile=[[] for _ in range(problem.n)]
     stats={'connectivity_encoding':'direct_optional_endpoint_circuit','circuit_nodes':0,
            'circuit_arcs':0,'circuit_segment_edges':0,'circuit_seam_edges':0,

@@ -12,7 +12,7 @@ jobs:
   cpu:
     name: CPU tests (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -61,6 +61,11 @@ jobs:
           test_platform
           test_webgpu
           test_constraint_dfs
+          test_constraint_branching
+          test_constraint_gold_oracle
+          test_constraint_lcg
+          test_constraint_native_search
+          test_constraint_engines
           test_constraint_pruning
           test_constraint_parity
           test_constraint_connectivity
@@ -78,6 +83,7 @@ jobs:
           test_constraint_lns
           test_constraint_models
           test_constraint_circuit
+          test_constraint_residual
           test_constraint_regions
           test_constraint_sat_assist
           test_constraint_shared_conflicts

@@ -17,7 +17,7 @@ class OptionsTests(unittest.TestCase):
         self.assertEqual(normalize_options(), DEFAULT_OPTIONS)
 
     def test_experimental_options_are_explicit_and_strictly_boolean(self):
-        for name in ('reason_tracking','sat_assist','hierarchical_regions','value_ordering','shared_conflicts'):
+        for name in ('reason_tracking','sat_assist','hierarchical_regions','value_ordering','shared_conflicts','gold_oracle','connection_branching','lcg','native_search'):
             self.assertFalse(normalize_options()[name])
             self.assertTrue(normalize_options({name:True})[name])
             with self.assertRaises(ValueError):normalize_options({name:1})

@@ -168,11 +168,34 @@ The compiled backend runs the seam-consistency queue in bounded native batches a
 
 ### Conflict explanations and propagation scheduling
 
-A contradiction first commits the failed frame, so cancellation during subsequent optional explanation work leaves a valid ordinary DFS stack. Explanation minimization tries at most four assumption deletions under a shared cooperative 10 ms budget. Each deletion must be reproved from the effective initial domains using sound constraints. Already proved applicable clauses can jump without another proof. A jump retains the responsible ancestor frame's complete sibling list and next-choice cursor; it discards only continuations excluded by the clause. This is bounded conflict minimization, not a full lazy-clause-generation engine.
+A contradiction first commits the failed frame, so cancellation during subsequent optional explanation work leaves a valid ordinary DFS stack. Explanation minimization tries at most four assumption deletions under a shared cooperative 10 ms budget. Each deletion must be reproved from the effective initial domains using sound constraints. Already proved applicable clauses can jump without another proof. A jump retains the responsible ancestor frame's complete sibling list and next-choice cursor; it discards only continuations excluded by the clause. This default mechanism uses bounded conflict minimization. The separate optional first-UIP engine is described below.
 
 Scheduling caches at most eight completed unchanged dependency signatures per phase. Matching depends on physical-tile availability; cluster checks include relevant orientations and outside-piece presence; inventory checks include boundary orientations; parity and connectivity include the endpoint categories read by those deductions. Domain widening, backtracking, changed settings, and changed inputs cannot reuse an incompatible signature. An interrupted or resource-limited pass is not recorded as a completed unchanged result.
 
 Adaptive scheduling observes elapsed cost and reductions. Optional propagators can wait up to sixteen calls before a retry; expensive unproductive explanation probes can wait up to thirty-two failed frames. A useful pass resets its cooldown. Skipped checks produce no deduction, and explanation proof passes bypass scheduling shortcuts. Required seam consistency, tile ownership, and independent final validation still determine whether a candidate is accepted.
+
+### Optional Gold assistance, pattern branching, first-UIP learning, and native search
+
+Four additional **Exact-search optimizations** checkboxes default to off. They can be combined in `dfs`, `parallel-dfs`, and the exact phase of `hybrid`. Enable them in the dashboard or pass the corresponding Boolean keys through `--search-options`:
+
+| Dashboard control | Option key |
+| --- | --- |
+| Gold CP-SAT help on narrowed branches | `gold_oracle` |
+| Branch on connection patterns | `connection_branching` |
+| First-UIP conflict learning | `lcg` |
+| Compiled search loop and undo trail | `native_search` |
+
+For example, `--search-options '{"gold_oracle":true,"connection_branching":true,"lcg":true,"native_search":true}'` enables all four; adapt quoting to the shell. GPU replica counts do not change these CPU controls.
+
+**Gold CP-SAT assistance** submits a narrowed branch to the direct single-loop model only when at most 24 cells remain undecided and at most 1,024 candidate placements remain in total. Each DFS slice permits four attempts, with a 0.5-second cooperative construction/search budget per call and increasing delays after inconclusive calls. Only a completed infeasibility result excludes the submitted domain state; a returned solution must pass independent Gold validation. Missing OR-Tools, model limits, timeout, and cancellation do not prove impossibility. A job keeps at most 64 conclusive infeasible domain queries in memory.
+
+**Connection-pattern branching** groups a cell's orientations by the endpoint pattern on one seam. Each group is a disjoint subset, and all groups together cover the cell's current domain. Ordinary placement branching remains available when no eligible grouping is found. Checkpoints retain every pending group's full orientation mask and cursor. New versions accept older singleton-choice checkpoints; checkpoints containing grouped choices require a version supporting this feature and must not be opened by older releases. Turning this option off when resuming preserves existing groups and uses ordinary choices for future branches.
+
+**First-UIP learning** records implications between facts of the form “this cell's orientation belongs to this mask.” Conflict analysis resolves the latest relevant implications until one fact remains at the highest involved decision level. That fact can describe an intermediate deduction rather than a tile-placement decision. Local rules record their antecedents; global rules may conservatively depend on all current domains. Learned clauses can remove an entire forbidden mask when their other conditions hold. The default limits are 8,192 explanation facts, 256 clauses, and 4,096 stored literals per job. These trusted clauses bind the puzzle, target, and exact effective root; they are neither shared across different roots nor loaded from disk. Resume reconstructs conservative reasons. Fact limits disable explanation work, and clause eviction loses only reuse. Ordinary DFS retains its saved sibling coverage; this option does not add CDCL restarts or persistent first-UIP proof graphs.
+
+**Compiled search control** moves branch iteration, pending-frame management, and domain rollback into a C loop with an undo trail. Puzzle propagation and final validation remain shared with Python. Run `python build_native.py` to build both native libraries, then select Automatic or Compiled CPU. Automatic falls back to Python if the optional library is unavailable; explicitly requesting Compiled reports an unavailable-library error. Python CPU selection uses the Python loop. A saved stack beyond the native 4,096-frame limit, or a reached native trail/depth cap, continues its exact pending work in Python. A capacity limit never establishes exhaustion.
+
+These controls preserve the exact search contract, but their overhead can outweigh their benefit. See [measured optimization scope and limitations](OPTIMIZATIONS.md).
 
 ### Biconnected loops and regional dynamic programming
 
@@ -209,3 +232,25 @@ The `value_ordering` experiment prefers placements with more jointly compatible 
 The `shared_conflicts` experiment offers short local failures to a separate SAT verifier built from the original puzzle domains, physical-piece inventory and seam constraints. A worker, coordinator or disk reader independently proves each received claim before applying or republishing it. Job-specific restrictions and symmetry choices are never assumed by this verifier. Its bounded verified cache is saved separately as `conflicts-gold.json`; incomplete or interrupted proofs are not saved as exclusions. Proper-loop witnesses still use their separate existing store. Neither file is a list of every board visited.
 
 Intermediate regional tables now survive overlapping parent queries within a running job. Their keys include physical inventory restrictions, boundary masks, and Gold strand connectivity; partial tables are not reusable. Cache eviction affects speed only. Native seam propagation reuses its allocated workspace and synchronizes changed rows, including widening after backtracking.
+
+
+### Reduced work inside the optional engines (round 10)
+
+The compiled control loop now applies seam consistency and forced tile inventory before converting a surviving node to Python. A contradiction consumes that branch directly; a surviving node still receives the existing strong checks and independent final validation. Native last-support hints are revalidated against current neighbor domains after every rollback. Stop during unfinished propagation retains the original pending node. Reason tracking conservatively accounts for completed native reductions using the actual decision path.
+
+First-UIP learning shares immutable antecedent captures for bulk deductions and expands only reasons reached by conflict analysis. Nested facts for one cell collapse to their strongest mask. An event index checks learned clauses affected by changed domains, retaining pending deductions across fixpoints and invalidating interrupted passes. These private caches do not replace saved DFS coverage.
+
+The Gold subtree oracle contracts fixed degree-two chains to mandatory connections between unfinished-cell endpoints. It removes occupied physical tiles, retains separate crossing strands and parallel paths, rejects a fixed proper loop, and reconstructs a full board for independent validation. Only a completed infeasibility result can answer a narrower domain query from cache. A wider query, unknown result, timeout or changed puzzle cannot reuse that proof. The public standalone circuit model still supports the original full encoding.
+
+These improvements are used by their existing experimental checkboxes; no new search mode is required. New dashboard counters show early native rejections, reused supports, skipped unchanged clauses, contracted endpoints, and impossible subtree results reused. These counters are work metrics, not counts of uniquely exhausted full boards.
+
+
+### Reuse and asserting backjumps (round 11)
+
+The compiled search loop passes a private, callback-only completion marker to Python after seam and forced-inventory propagation. Python skips that duplicate first basic pass. Any subsequent strong deduction queues normal checks again. The marker is never saved or trusted from a checkpoint. Native propagation uses a bounded deduplicated queue and precomputed incoming arcs; live child frames seed it from the branch choice and every row narrowed by Python. Imported or reconfigured frames receive a full scan. Sparse large domains enumerate their present tile groups, while dense and small domains keep the cheaper full inventory scan.
+
+First-UIP learning now also asserts the complement of its learned mask on a compatible pending ancestor. A deeper pending rectangle is discarded only if the complete learned nogood excludes it. The retained frame contains only still-unvisited choices; earlier siblings and selected ancestor masks remain intact. Ineligible clauses use ordinary learning and chronological coverage. Stop, disabled-option resume, and Python/compiled transfer preserve this frontier. This bounded, mask-aware mechanism does not add unrestricted CDCL restarts or save proof graphs to disk.
+
+The Gold oracle retains up to four immutable ancestor model templates under an 8 MiB representation budget per warm job. It clones a compatible template and restricts the clone's cell-code domains; the cached model is never mutated or passed to search. The budget counts UTF-8 model representation and key/index metadata, not total process memory. Templates save model construction, not native CP-SAT search state, and even an unknown query may leave a completed reusable encoding. Only completed infeasibility proofs remove boards. Broader proofs replace redundant narrower cached proofs transactionally.
+
+Dashboard counters expose skipped basic passes, nodes using changed rows, learned assertions and backjumps, model-template reuse, and redundant cached proofs removed. These measure internal work, not the number of exhausted full-board positions. Existing experimental controls and saved-search locations are unchanged.

@@ -34,6 +34,18 @@ def checkpoint_emitting_worker(problem,connection,cancel):
     connection.send({'kind':'result','id':request['id'],'pid':os.getpid(),'result':result})
     connection.recv();connection.close()
 
+def backend_emitting_worker(problem,connection,cancel):
+    request=connection.recv()
+    if request is None:return
+    for backend,reason in (('compiled',None),('python','Fixture native capacity fallback.')):
+        connection.send({'kind':'progress','id':request['id'],'pid':os.getpid(),'event':{
+            'event':'progress','nodes':0,'native_backend':'compiled',
+            'search_loop_backend':backend,'search_loop_fallback_reason':reason}})
+    cancel.wait(3)
+    result=dfs_solve(problem,seconds=0,target=request['target'],resume=request['checkpoint'],options=request['options'])
+    connection.send({'kind':'result','id':request['id'],'pid':os.getpid(),'result':result})
+    connection.recv();connection.close()
+
 def forged_knowledge_worker(problem,connection,cancel):
     from constraint_knowledge import KnowledgeStore,_digest as knowledge_digest
     request=connection.recv()
@@ -88,6 +100,8 @@ class ParallelTests(unittest.TestCase):
         self.assertEqual(result['status'],'timeout');self.assertFalse(result['complete'])
         self.assertEqual(result['parallel']['pending_jobs'],1)
         self.assertEqual(result['checkpoint']['inflight_jobs'],[])
+        self.assertEqual(result['search_loop_backend'],'not_started')
+        self.assertIsNone(result['search_loop_fallback_reason'])
     def test_exact_spawn_enumeration_matches_serial_and_is_disjoint(self):
         expected=[];seen=[]
         serial=dfs_solve(self.problem,seconds=5,options=OPTIONS,progress=lambda e:expected.append(tuple(e['codes'])) if e['event']=='candidate' else None)
@@ -97,6 +111,7 @@ class ParallelTests(unittest.TestCase):
         self.assertEqual(set(seen),set(expected));self.assertEqual(len(seen),len(set(seen)));self.assertEqual(len(seen),18)
         self.assertEqual(result['stats']['parallel_workers_started'],2)
         self.assertEqual(result['native_backend'],'python')
+        self.assertEqual(result['search_loop_backend'],'python')
     def test_cooperative_stop_and_changed_worker_resume_preserve_leaf_coverage(self):
         seen=[]
         def progress(event):
@@ -231,6 +246,52 @@ class ParallelTests(unittest.TestCase):
         self.assertEqual(backends,{'compiled','python'})
         self.assertEqual(reasons,{'Extension unavailable.'})
 
+    def test_search_loop_aggregation_ignores_cancelled_setup_placeholders(self):
+        from constraint_parallel import _record_search_loop,_backend_label
+        backends,reasons=set(),set()
+        self.assertEqual(_backend_label(backends),'not_started')
+        _record_search_loop({'search_loop_backend':'compiled'},backends,reasons)
+        self.assertEqual(_backend_label(backends),'compiled')
+        _record_search_loop({'search_loop_backend':'python',
+                            'native_fallback_reason':'Propagation has not started.',
+                            'stats':{'native_search_nodes':100}},backends,reasons)
+        _record_search_loop({'search_loop_backend':'not_started'},backends,reasons)
+        _record_search_loop({'search_loop_backend':'unknown'},backends,reasons)
+        self.assertEqual(backends,{'compiled'});self.assertEqual(reasons,set())
+        _record_search_loop({'search_loop_backend':'python',
+                            'search_loop_fallback_reason':'Missing local library.'},backends,reasons)
+        self.assertEqual(_backend_label(backends),'mixed')
+        self.assertEqual(reasons,{'Missing local library.'})
+        other=set();_record_search_loop({'search_loop_backend':'mixed'},other,set())
+        self.assertEqual(other,{'compiled','python'})
+
+    def test_worker_loop_labels_are_aggregated_in_live_and_final_payloads(self):
+        events=[]
+        with patch('constraint_parallel._worker',backend_emitting_worker):
+            result=solve(self.problem,seconds=5,workers=1,resume=legacy_root(self.problem),options=OPTIONS,
+                         progress=events.append,stop=lambda:sum(e['event']=='progress' for e in events)>=2)
+        self.assertEqual(result['status'],'stopped',result.get('error'))
+        updates=[event for event in events if event['event']=='progress']
+        self.assertEqual([event['search_loop_backend'] for event in updates],['compiled','mixed'])
+        self.assertEqual(updates[-1]['search_loop_fallback_reason'],'Fixture native capacity fallback.')
+        self.assertEqual(result['search_loop_backend'],'mixed')
+        self.assertEqual(result['search_loop_fallback_reason'],'Fixture native capacity fallback.')
+        self.assertTrue(all(event['search_loop_backend']=='mixed' for event in events if event['event']=='parallel_progress'))
+
+    def test_actual_compiled_search_spawn_reports_live_and_final_loop(self):
+        import constraint_native_search
+        try:constraint_native_search.load_library()
+        except (OSError,ValueError,RuntimeError) as exc:
+            if os.environ.get('DIAMOND_REQUIRE_NATIVE')=='1':raise
+            self.skipTest(str(exc))
+        active={**OPTIONS,'native':'compiled','native_search':True};events=[]
+        result=solve(self.problem,seconds=10,workers=2,resume=legacy_root(self.problem),options=active,progress=events.append)
+        self.assertEqual(result['status'],'infeasible',result.get('error'))
+        self.assertEqual(result['search_loop_backend'],'compiled')
+        self.assertIsNone(result['search_loop_fallback_reason'])
+        candidates=[event for event in events if event['event']=='candidate'];self.assertTrue(candidates)
+        self.assertTrue(all(event['search_loop_backend']=='compiled' for event in candidates))
+
     def test_worker_lru_is_bounded_and_private_but_support_is_reused(self):
         from constraint_dfs import _build_support_tables,_NogoodStore
         problem=self.problem;caches=_WorkerCaches(problem,limit=2)
@@ -318,7 +379,7 @@ class ParallelSharedConflictTests(unittest.TestCase):
         retired={};_add_stats(retired,{'shared_conflicts_entries':3,'shared_conflicts_pending':4,
                                     'shared_conflicts_clauses':50,'shared_conflicts_calls':2,
                                     'hierarchical_subtable_states':20,'hierarchical_subtable_support_slots':40,
-                                    'hierarchical_cached_summaries':25},retiring=True)
+                                    'hierarchical_cached_summaries':25,'gold_oracle_template_bytes':1024,'gold_oracle_template_entries':2},retiring=True)
         self.assertEqual(retired,{'shared_conflicts_calls':2})
     def test_wrong_original_scope_is_rejected_before_spawn(self):
         from constraint_shared_conflicts import VerifiedConflictStore
