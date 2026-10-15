@@ -15,6 +15,9 @@ import dashboard_server as dashboard
 import gpu_backends as backends
 
 ROOT = Path(__file__).resolve().parent
+# Shared runners can take several seconds to start Node before running the
+# finite VM harness. Preserve every assertion and retain a bounded hang limit.
+FRONTEND_PROCESS_TIMEOUT = 30
 
 
 class DashboardControlTests(unittest.TestCase):
@@ -639,7 +642,7 @@ assert.match(element('cacheHint').textContent,/Waiting includes paused branches 
 assert.equal(element('controlHint').textContent.split('To change GPU load:').length,2);
 console.log('Immediate stop, persistent replica edits, 128-lane resume, paused counts, and unlimited duration passed');
 """
-        result = subprocess.run([shutil.which('node'), '-e', harness, str(ROOT / 'Dashboard.html')], cwd=ROOT, capture_output=True, text=True, timeout=10)
+        result = subprocess.run([shutil.which('node'), '-e', harness, str(ROOT / 'Dashboard.html')], cwd=ROOT, capture_output=True, text=True, timeout=FRONTEND_PROCESS_TIMEOUT)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(shutil.which('node'), 'Node.js is only needed for the isolated frontend control test')
@@ -696,7 +699,7 @@ assert.equal(storage.values['diamond.requestedBackend'],'webgpu');
 console.log('Stored backend preference, active backend display, idle restoration, and Start payload passed');
 """
         result = subprocess.run([shutil.which('node'), '-e', harness, str(ROOT / 'Dashboard.html')],
-                                cwd=ROOT, capture_output=True, text=True, timeout=10)
+                                cwd=ROOT, capture_output=True, text=True, timeout=FRONTEND_PROCESS_TIMEOUT)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(shutil.which('node'), 'Node.js is only needed for isolated frontend control tests')
@@ -772,7 +775,7 @@ assert.equal(element('runStatus').textContent,'Search error');assert.match(eleme
 console.log('Gold-mode routing, advanced controls, parallel telemetry, and preserved preferences passed');
 """
         result = subprocess.run([shutil.which('node'), '-e', harness, str(ROOT / 'Dashboard.html')],
-                                cwd=ROOT, capture_output=True, text=True, timeout=10)
+                                cwd=ROOT, capture_output=True, text=True, timeout=FRONTEND_PROCESS_TIMEOUT)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(shutil.which('node'), 'Node.js is only needed for isolated frontend control tests')
@@ -813,7 +816,7 @@ render("state.process_running=false");assertOptions(edited);assert.equal(element
 console.log('Active CPU settings, arbitrary CLI worker count, and next-run preference restoration passed');
 """
         result = subprocess.run([shutil.which('node'), '-e', harness, str(ROOT / 'Dashboard.html')],
-                                cwd=ROOT, capture_output=True, text=True, timeout=10)
+                                cwd=ROOT, capture_output=True, text=True, timeout=FRONTEND_PROCESS_TIMEOUT)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_http_stop_preserves_token_origin_and_host_protection(self):
