@@ -3,7 +3,7 @@ import copy
 import random
 import unittest
 
-from ortools.sat.python import cp_model
+from test_dependencies import cp_model, requires_ortools
 from constraint_circuit import build_circuit_model, CircuitLimit
 from constraint_residual import _rotation_tables
 from search_problem import SearchProblem
@@ -46,6 +46,7 @@ def enumerate_domains(problem, rows, *, contract_fixed=True, break_direction=Tru
 
 
 class ResidualCircuitTests(unittest.TestCase):
+    @requires_ortools
     def test_finite_domain_solution_sets_match_full_model_and_validator(self):
         tiles,geometry=tetrahedron_tiles()
         fixtures=[pair_problem(),pair_problem(multiple_loops=True),pair_problem(boundary=True),
@@ -67,6 +68,7 @@ class ResidualCircuitTests(unittest.TestCase):
                     self.assertEqual(contracted.boards,full.boards)
                     self.assertEqual(problem.domains,original)
 
+    @requires_ortools
     def test_fixed_anchor_and_variable_anchor_preserve_direction_and_parallel_paths(self):
         problem=mixed_problem()
         for fixed_code in (0,3):
@@ -84,6 +86,7 @@ class ResidualCircuitTests(unittest.TestCase):
             self.assertEqual(built.stats['circuit_nodes'],6)
             self.assertEqual(built.stats['circuit_fixed_inventory_removals'],3)
 
+    @requires_ortools
     def test_all_fixed_gold_needs_no_circuit_but_full_codes_are_reconstructed(self):
         problem=pair_problem();reference=next(iter(brute(problem,'gold')))
         found,built=enumerate_domains(problem,[[code] for code in reference])
@@ -94,6 +97,7 @@ class ResidualCircuitTests(unittest.TestCase):
         self.assertEqual([code.name for code in built.codes],['code_0','code_1'])
         self.assertTrue(problem.validate(list(next(iter(found.boards))))['valid'])
 
+    @requires_ortools
     def test_closed_proper_fixed_loop_is_not_an_empty_solved_residual(self):
         data=[{'id':i,'segments':[[[0,6],[1,6]]]} for i in range(4)]
         geometry=board(4,[(a,side,a+1,side) for a in (0,2) for side in range(3)])
@@ -107,6 +111,7 @@ class ResidualCircuitTests(unittest.TestCase):
         found,built=enumerate_domains(all_fixed,[[0],[3]])
         self.assertFalse(found.boards);self.assertEqual(built.stats['circuit_fixed_cycles'],2)
 
+    @requires_ortools
     def test_duplicate_fixed_inventory_empty_domains_and_fixed_seam_mismatch(self):
         problem=pair_problem()
         for rows in ([[0],[0]],[[],[3]],[[0],[4]]):
@@ -115,6 +120,7 @@ class ResidualCircuitTests(unittest.TestCase):
             self.assertEqual(found.boards,expected)
             if not expected:self.assertIn('circuit_residual_rejection',built.stats)
 
+    @requires_ortools
     def test_narrowed_160_cell_symmetric_fixture_contracts_without_deciding_open_cells(self):
         problem,reference=symmetric_planted()
         open_cells=list(range(0,160,20));pool=[3*(reference[cell]//3)+r for cell in open_cells for r in range(3)]
@@ -133,6 +139,7 @@ class ResidualCircuitTests(unittest.TestCase):
         self.assertTrue(problem.validate(codes)['valid'])
         self.assertTrue(all(code in rows[cell] for cell,code in enumerate(codes)))
 
+    @requires_ortools
     def test_limits_and_cancellation_are_inconclusive(self):
         problem=mixed_problem();rows=[[0],list(range(6))]
         for limits in ({'max_cells':1},{'max_placements':1},{'max_arcs':1}):

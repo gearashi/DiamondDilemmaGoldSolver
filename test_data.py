@@ -18,6 +18,8 @@ ROOT=Path(__file__).resolve().parent
 class SourceDataTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        if not (ROOT/'data'/'tiles.json').is_file():
+            raise unittest.SkipTest('Source-data audit requires locally prepared puzzle data; run prepare_data.py first')
         cls.data=json.loads((ROOT/'data'/'tiles.json').read_text(encoding='utf-8-sig'))
         cls.audit=json.loads((ROOT/'data'/'endpoint_audit.json').read_text(encoding='utf-8-sig'))
 

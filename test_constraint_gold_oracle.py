@@ -5,7 +5,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
-from ortools.sat.python import cp_model
+from test_dependencies import cp_model, requires_ortools
 import constraint_gold_oracle as oracle_module
 from constraint_gold_oracle import GoldOracle
 from constraint_circuit import CircuitLimit, build_circuit_model
@@ -28,6 +28,7 @@ def fake_solver(status, codes=()):
 
 
 class GoldOracleTests(unittest.TestCase):
+    @requires_ortools
     def test_finite_narrowed_domains_match_independent_enumeration(self):
         rng = random.Random(91287)
         fixtures = [pair_problem(), pair_problem(multiple_loops=True),
@@ -58,6 +59,7 @@ class GoldOracleTests(unittest.TestCase):
                     else:
                         self.assertEqual(result.status, 'infeasible')
 
+    @requires_ortools
     def test_planted_closed_ten_cell_board_completes_narrowed_gold(self):
         data, board, reference = planted_gold(seed=91, size=1, extra_edges=3)
         problem = SearchProblem(data, board)
@@ -70,6 +72,7 @@ class GoldOracleTests(unittest.TestCase):
         self.assertEqual(result.status, 'solved')
         self.assertTrue(problem.validate(list(result.codes))['valid'])
 
+    @requires_ortools
     def test_exact_infeasible_cache_does_not_cover_wider_domains(self):
         problem = pair_problem()
         initial = bitsets(problem)
@@ -84,6 +87,7 @@ class GoldOracleTests(unittest.TestCase):
         self.assertEqual(oracle.stats['gold_oracle_cache_hits'], 1)
         self.assertEqual(len(oracle.cache), 1)
 
+    @requires_ortools
     def test_lru_eviction_and_new_oracle_binding_are_safe(self):
         problem = pair_problem()
         oracle = GoldOracle(problem, bitsets(problem), cache_limit=2)
@@ -96,6 +100,7 @@ class GoldOracleTests(unittest.TestCase):
         self.assertFalse(other.cache)
         self.assertNotEqual(oracle.binding, other.binding)
 
+    @requires_ortools
     def test_cancellation_preempts_even_a_cached_answer(self):
         problem = pair_problem()
         oracle = GoldOracle(problem, bitsets(problem))
@@ -104,6 +109,7 @@ class GoldOracleTests(unittest.TestCase):
         with self.assertRaises(InterruptedError): oracle.query([1, 1], stopped)
         self.assertEqual(oracle.stats['gold_oracle_cache_hits'], 0)
 
+    @requires_ortools
     def test_zero_budget_unknown_and_unknown_native_answer_not_cached(self):
         problem = pair_problem()
         oracle = GoldOracle(problem, bitsets(problem))
@@ -117,6 +123,7 @@ class GoldOracleTests(unittest.TestCase):
         self.assertEqual(result.status, 'unknown')
         self.assertFalse(oracle.cache)
 
+    @requires_ortools
     def test_construction_time_is_inside_budget_and_no_solve_is_started(self):
         problem = pair_problem()
         oracle = GoldOracle(problem, bitsets(problem))
@@ -151,6 +158,7 @@ class GoldOracleTests(unittest.TestCase):
         builder.assert_not_called()
         self.assertFalse(oracle.cache)
 
+    @requires_ortools
     def test_native_exception_is_not_hidden_and_watcher_is_joined(self):
         problem = pair_problem()
         oracle = GoldOracle(problem, bitsets(problem))
@@ -163,6 +171,7 @@ class GoldOracleTests(unittest.TestCase):
         self.assertFalse(any(t.name == 'diamond-gold-oracle-stop' for t in threading.enumerate()))
         self.assertFalse(oracle.cache)
 
+    @requires_ortools
     def test_native_stop_and_local_timeout_never_become_infeasible(self):
         problem = pair_problem()
         for reason in ('stop', 'timeout'):
@@ -194,12 +203,14 @@ class GoldOracleTests(unittest.TestCase):
         for path, error, reason in [('build_circuit_model', CircuitLimit('fixture cap'), 'fixture cap'),
                                     ('_load_cp_model', ImportError('missing'), 'ortools_unavailable')]:
             oracle = GoldOracle(problem, bitsets(problem))
-            with patch.object(oracle_module, path, side_effect=error):
+            with patch.object(oracle_module, '_load_cp_model', return_value=object()), \
+                 patch.object(oracle_module, path, side_effect=error):
                 result = oracle.query(bitsets(problem), seconds=2)
             self.assertEqual(result.status, 'skip')
             self.assertEqual(result.reason, reason)
             self.assertFalse(oracle.cache)
 
+    @requires_ortools
     def test_native_invalid_model_and_invalid_witnesses_raise(self):
         for kind in ('model', 'inventory', 'domain', 'multiple_loops'):
             problem = pair_problem(multiple_loops=kind == 'multiple_loops')
@@ -247,6 +258,7 @@ class GoldOracleTests(unittest.TestCase):
         with self.assertRaises(ValueError): GoldOracle(problem, [True, 1])
         with self.assertRaises(ValueError): GoldOracle(problem, initial, max_attempts=0)
 
+    @requires_ortools
     def test_cached_proof_rejects_mutated_problem_even_if_fingerprint_is_unchanged(self):
         for field in ('domains', 'tiles', 'edges', 'neighbors', 'masks', 'fixed', 'board_edges'):
             problem = pair_problem()
@@ -263,6 +275,7 @@ class GoldOracleTests(unittest.TestCase):
                 oracle.query([1, 1], seconds=2)
 
 
+    @requires_ortools
     def test_conclusive_unsat_subsumption_only_covers_narrower_domains(self):
         problem = pair_problem();initial = bitsets(problem)
         oracle = GoldOracle(problem, initial)
@@ -279,6 +292,7 @@ class GoldOracleTests(unittest.TestCase):
             self.assertEqual(result.status, 'solved')
             self.assertTrue(result.validation['valid'])
 
+    @requires_ortools
     def test_unsat_root_cache_covers_all_narrower_domains_without_relaxing_binding(self):
         problem = pair_problem(multiple_loops=True);initial = bitsets(problem)
         oracle = GoldOracle(problem, initial)
@@ -289,6 +303,7 @@ class GoldOracleTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'structure changed'):
             oracle.query([1, 8], seconds=0)
 
+    @requires_ortools
     def test_subsumption_check_observes_cancellation_and_midcheck_mutation(self):
         for mutate in (False, True):
             problem = pair_problem();oracle = GoldOracle(problem, bitsets(problem))
@@ -302,6 +317,7 @@ class GoldOracleTests(unittest.TestCase):
                 oracle.query([1, 2], check, seconds=0)
             self.assertEqual(oracle.stats['gold_oracle_cache_hits'], 0)
 
+    @requires_ortools
     def test_full_and_contracted_oracles_reconstruct_identical_valid_domain_witnesses(self):
         from test_constraint_knowledge import mixed_problem
         problem = mixed_problem();domains = [1, 56]
@@ -316,6 +332,7 @@ class GoldOracleTests(unittest.TestCase):
         with self.assertRaises(ValueError):GoldOracle(problem, bitsets(problem), contract_fixed=1)
 
 
+@requires_ortools
 class GoldTemplateTests(unittest.TestCase):
     @staticmethod
     def boards(built):

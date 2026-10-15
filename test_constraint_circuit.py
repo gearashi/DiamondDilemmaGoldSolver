@@ -5,7 +5,7 @@ import random
 import threading
 import unittest
 from unittest.mock import patch
-from ortools.sat.python import cp_model
+from test_dependencies import cp_model, requires_ortools
 from constraint_circuit import build_circuit_model,CircuitLimit
 from constraint_models import solve
 from search_problem import SearchProblem
@@ -28,6 +28,7 @@ def enumerate_model(problem,*,group_supports=True,break_direction=True):
     return collector,built
 
 
+@requires_ortools
 class CircuitTests(unittest.TestCase):
     def test_complete_tiny_solution_sets_match_independent_validator(self):
         fixtures=[pair_problem(),pair_problem(multiple_loops=True),pair_problem(boundary=True),pair_problem(fixed={0:0})]

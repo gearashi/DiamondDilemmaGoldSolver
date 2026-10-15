@@ -21,6 +21,7 @@ from io_utils import atomic_json, read_json_shared
 from search_algorithms import ALGORITHMS, RECOMMENDED, LABELS
 from search_problem import SearchProblem
 from search_options import EXACT_ALGORITHMS, normalize_options, validate_workers
+from runtime_capabilities import validate_runtime_selection
 
 ROOT = Path(__file__).resolve().parent
 EVENT_BATCH = 32
@@ -104,6 +105,7 @@ def main(argv=None):
     try:
         options = normalize_options(args.search_options)
         validate_workers(args.workers)
+        validate_runtime_selection(args.algorithm, args.backend, options)
     except ValueError as exc:
         parser.error(str(exc))
     run = args.output.resolve()
@@ -432,7 +434,7 @@ def main(argv=None):
                      'constraint_native.py', 'build_native.py', 'constraint_native.c', 'constraint_knowledge.py',
                      'constraint_separator.py', 'constraint_scheduling.py', 'constraint_reasons.py', 'constraint_sat_assist.py',
                      'constraint_regions.py', 'constraint_ordering.py', 'constraint_explanations.py',
-                     'constraint_shared_conflicts.py', 'constraint_branching.py', 'constraint_gold_oracle.py', 'constraint_lcg.py', 'constraint_native_search.py', 'constraint_native_search.c', 'search_options.py', 'sampling_kernels.wgsl',
+                     'constraint_shared_conflicts.py', 'constraint_branching.py', 'constraint_gold_oracle.py', 'constraint_lcg.py', 'constraint_native_search.py', 'constraint_native_search.c', 'search_options.py', 'runtime_capabilities.py', 'sampling_kernels.wgsl',
                      'search_algorithms.py', 'validator.py', 'geometry.py'):
             path = ROOT/name
             if path.exists():

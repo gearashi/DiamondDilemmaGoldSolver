@@ -16,6 +16,9 @@ import json, os
 from pathlib import Path
 import shutil, sys
 args = sys.argv[1:]
+version = json.loads(os.environ.get('SETUP_TEST_VERSIONS', '{}')).get(Path(__file__).name, '3.12')
+version_file = Path(__file__).parent.parent / '.test-version'
+if Path(__file__).parent.name == 'bin' and version_file.exists(): version = version_file.read_text()
 entry = {'args': args, 'executable': str(Path(__file__)), 'cwd': os.getcwd(),
          'pip_target': os.environ.get('PIP_TARGET'), 'pip_prefix': os.environ.get('PIP_PREFIX'),
          'pip_user': os.environ.get('PIP_USER'), 'pip_config': os.environ.get('PIP_CONFIG_FILE')}
@@ -25,6 +28,10 @@ if args and args[0] == '-c':
     if 'sys.version_info' in args[1]:
         bad = Path(__file__).name in json.loads(os.environ.get('SETUP_BAD_NAMES', '[]'))
         bad |= Path(__file__).parent.name == 'bin' and Path(__file__).parent.parent.name == 'venv' and os.environ.get('SETUP_BAD_VENV') == '1'
+        bad |= os.environ.get('SETUP_TEST_FREE_THREADED') == '1'
+        bad |= version not in ('3.12', '3.15')
+        bad |= len(args) > 2 and version != args[2]
+        if not bad: print(version)
         raise SystemExit(1 if bad else 0)
     if 'sys.prefix' in args[1]:
         raise SystemExit(1 if os.environ.get('SETUP_BAD_ISOLATION') == '1' else 0)
@@ -34,6 +41,7 @@ if args[:2] == ['-m', 'venv']:
     target.parent.mkdir(parents=True)
     shutil.copyfile(__file__, target)
     target.chmod(0o755)
+    (target.parent.parent / '.test-version').write_text(version)
     raise SystemExit(0)
 if args[:2] == ['-m', 'pip']:
     raise SystemExit(4 if os.environ.get('SETUP_FAIL_PIP') == '1' else 0)
@@ -54,13 +62,14 @@ class LinuxSetupTests(unittest.TestCase):
         self.bin = self.root / 'interpreters'
         for folder in (self.repo, self.caller, self.bin): folder.mkdir()
         shutil.copyfile(ROOT / 'Setup.sh', self.repo / 'Setup.sh')
-        for name in ('requirements.txt', 'requirements-common.txt', 'requirements-webgpu.txt'):
+        for name in ('requirements.txt', 'requirements-common.txt', 'requirements-webgpu.txt', 'requirements-py315.txt'):
             (self.repo / name).write_text('fixture==1.0\n')
         (self.repo / 'prepare_data.py').write_text('# fake interpreter handles this path\n')
         self.log = self.root / 'calls.jsonl'
         self.env = dict(os.environ, SETUP_TEST_LOG=str(self.log), PATH=str(self.bin) + ':/usr/bin:/bin')
         self.env.pop('BASH_ENV', None)
-        for name in ('python3.12', 'python3'): self.make_python(name)
+        for name in ('python3.12', 'python3.15', 'python3'): self.make_python(name)
+        self.env['SETUP_TEST_VERSIONS'] = json.dumps({'python3.15': '3.15'})
         self.make_command('uname', 'printf Linux')
         self.make_command('nvidia-smi', 'exit 1')
 
@@ -169,6 +178,48 @@ class LinuxSetupTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('64-bit Python 3.12', result.stderr)
         self.assertEqual(len(self.calls()), 1)
+
+    def test_python312_is_preferred_even_when_python3_resolves_to_python315(self):
+        result = self.run_setup('--skip-data', SETUP_TEST_VERSIONS=json.dumps({'python3': '3.15', 'python3.15': '3.15'}))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        creation = next(call for call in self.calls() if call['args'][:2] == ['-m', 'venv'])
+        self.assertEqual(Path(creation['executable']).name, 'python3.12')
+        self.assertEqual(self.selected_requirements(), ['requirements-webgpu.txt'])
+
+    def test_python315_fallback_profile_and_explicit_cuda_rejection(self):
+        self.make_command('nvidia-smi', "printf 'RTX fixture'")
+        result = self.run_setup('--skip-data', SETUP_BAD_NAMES=json.dumps(['python3.12', 'python3']))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        creation = next(call for call in self.calls() if call['args'][:2] == ['-m', 'venv'])
+        self.assertEqual(Path(creation['executable']).name, 'python3.15')
+        self.assertEqual(self.selected_requirements(), ['requirements-py315.txt'])
+        self.log.unlink()
+        result = self.run_setup('--skip-data', '--backend', 'webgpu')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.selected_requirements(), ['requirements-py315.txt'])
+        self.log.unlink()
+        result = self.run_setup('--skip-data', '--backend', 'cuda')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('CUDA is unavailable', result.stderr)
+        self.assertFalse(any(call['args'][:2] == ['-m', 'pip'] for call in self.calls()))
+
+    def test_requested_version_mismatch_preserves_existing_environment(self):
+        self.assertEqual(self.run_setup('--skip-data').returncode, 0)
+        python = self.repo / 'venv/bin/python'
+        before = python.read_bytes()
+        self.log.unlink()
+        result = self.run_setup('--skip-data', '--python', 'python3.15')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('does not match existing venv', result.stderr)
+        self.assertEqual(python.read_bytes(), before)
+        self.assertFalse(any(call['args'][:2] in (['-m', 'venv'], ['-m', 'pip']) for call in self.calls()))
+
+    def test_free_threaded_interpreter_is_rejected_before_environment_creation(self):
+        result = self.run_setup('--skip-data', '--python', 'python3.15', SETUP_TEST_FREE_THREADED='1')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Free-threaded builds are not supported', result.stderr)
+        self.assertFalse((self.repo / 'venv').exists())
+        self.assertFalse(any(call['args'][:2] == ['-m', 'pip'] for call in self.calls()))
 
     def test_missing_or_unknown_arguments_fail_before_changes(self):
         for args in (('--python',), ('--source-dir',), ('--backend',), ('--backend', 'unknown'), ('--unknown',)):

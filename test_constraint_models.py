@@ -1,6 +1,5 @@
 """Finite exhaustive oracle checks for all three constraint engines; no GPU."""
 from copy import deepcopy
-import importlib.util
 from itertools import permutations, product
 from types import SimpleNamespace
 import threading
@@ -9,8 +8,9 @@ from unittest.mock import MagicMock, patch
 
 from constraint_models import solve
 from search_problem import SearchProblem
+from test_dependencies import HAS_ORTOOLS, HAS_SAT, requires_ortools, requires_solver
 
-ENGINES = ['cp-sat', 'cp'] + (['sat'] if importlib.util.find_spec('pysat') else [])
+ENGINES = (['cp-sat', 'cp'] if HAS_ORTOOLS else []) + (['sat'] if HAS_SAT else [])
 
 
 def pair_problem(*, multiple_loops=False, fixed=None, boundary=False):
@@ -39,6 +39,7 @@ def brute(problem, target):
 
 
 class ConstraintModelTests(unittest.TestCase):
+    @requires_solver
     def test_gold_witnesses_match_independent_exhaustive_oracle(self):
         problem = pair_problem()
         expected = brute(problem, 'gold')
@@ -51,6 +52,7 @@ class ConstraintModelTests(unittest.TestCase):
                 self.assertTrue(result['complete'])
                 self.assertTrue(problem.validate(result['codes'])['valid'])
 
+    @requires_solver
     def test_edge_objective_and_gold_objective_are_distinct(self):
         problem = pair_problem(multiple_loops=True)
         expected = brute(problem, 'edges')
@@ -67,6 +69,7 @@ class ConstraintModelTests(unittest.TestCase):
                 self.assertGreater(gold['stats']['gold_cuts'], 0)
                 self.assertLessEqual(gold['stats']['candidates_checked'], len(expected))
 
+    @requires_solver
     def test_nonzero_reversal_fixed_domains_and_boundaries(self):
         for fixed, boundary in (({0: 0}, False), ({0: 0, 1: 4}, False), ({0: 0}, True)):
             problem = pair_problem(fixed=fixed, boundary=boundary)
@@ -81,6 +84,7 @@ class ConstraintModelTests(unittest.TestCase):
                         self.assertEqual(result['status'], 'infeasible')
                     self.assertTrue(result['complete'])
 
+    @requires_solver
     def test_duplicate_fixed_tile_is_infeasible(self):
         problem = pair_problem(fixed={0: 0, 1: 0})
         for engine in ENGINES:
@@ -93,7 +97,7 @@ class ConstraintModelTests(unittest.TestCase):
         problem = pair_problem()
         stop = threading.Event()
         stop.set()
-        for engine in ENGINES:
+        for engine in ('sat','cp-sat','cp','cp-sat-circuit'):
             with self.subTest(engine=engine):
                 timeout = solve(problem, engine=engine, seconds=0)
                 stopped = solve(problem, engine=engine, seconds=5, stop=stop)
@@ -102,6 +106,7 @@ class ConstraintModelTests(unittest.TestCase):
                 self.assertFalse(timeout['complete'])
                 self.assertFalse(stopped['complete'])
 
+    @requires_solver
     def test_stop_during_model_build_is_checked_before_native_search(self):
         problem = pair_problem()
         for engine in ENGINES:
@@ -114,9 +119,10 @@ class ConstraintModelTests(unittest.TestCase):
                 self.assertEqual(result['nodes'], 0)
                 self.assertFalse(result['complete'])
 
+    @requires_solver
     def test_native_sat_and_cpsat_calls_are_interrupted_on_stop_and_deadline(self):
         problem = pair_problem()
-        for engine in [value for value in ENGINES if value != 'cp']+['cp-sat-circuit']:
+        for engine in [value for value in ENGINES if value != 'cp']+(['cp-sat-circuit'] if HAS_ORTOOLS else []):
             for reason in ('stopped', 'timeout'):
                 with self.subTest(engine=engine, reason=reason):
                     entered, interrupted = threading.Event(), threading.Event()
@@ -146,6 +152,7 @@ class ConstraintModelTests(unittest.TestCase):
                     self.assertEqual(result['status'], reason)
                     self.assertFalse(result['complete'])
 
+    @requires_ortools
     def test_traditional_cp_stop_is_observed_inside_native_limit_callback(self):
         from ortools.constraint_solver import pywrapcp
         original = pywrapcp.Solver.CustomLimit
@@ -161,6 +168,7 @@ class ConstraintModelTests(unittest.TestCase):
         self.assertEqual(result['status'], 'stopped')
         self.assertFalse(result['complete'])
 
+    @requires_solver
     def test_gold_cut_checkpoint_restarts_with_revalidated_witnesses(self):
         problem = pair_problem(multiple_loops=True)
         for engine in ENGINES:
@@ -181,6 +189,7 @@ class ConstraintModelTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'different inputs'):
                     solve(problem, engine=engine, seconds=5, resume=tampered)
 
+    @requires_solver
     def test_progress_checkpoints_are_independent_snapshots_of_cut_witnesses(self):
         problem = pair_problem(multiple_loops=True)
         for engine in ENGINES:
@@ -201,6 +210,7 @@ class ConstraintModelTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'valid Gold solution'):
             solve(problem, engine='cp', seconds=5, resume=checkpoint)
 
+    @requires_solver
     def test_component_cut_can_be_strictly_smaller_than_board(self):
         pair = pair_problem()
         data = [{'id': str(i), 'segments': pair.tiles[i % 2]['segments']} for i in range(4)]
@@ -214,6 +224,7 @@ class ConstraintModelTests(unittest.TestCase):
                 self.assertEqual(result['status'], 'infeasible')
                 self.assertEqual(cuts, [2])
 
+    @requires_solver
     def test_native_engines_use_verified_rotation_symmetry_on_fresh_and_legacy_resume(self):
         from search_fixtures import planted_gold
         from constraint_symmetry import proper_rotations
@@ -249,6 +260,7 @@ class ConstraintModelTests(unittest.TestCase):
             self.assertFalse(run.root_symmetry['reduction']['applied'])
             self.assertEqual(rows,problem.domains)
 
+    @requires_ortools
     def test_partial_and_discarded_hints_remain_preferences_in_traditional_cp(self):
         problem=pair_problem();expected=brute(problem,'gold')
         for hints in ({0:0},{1:4},{0:999},{0:0,1:999}):

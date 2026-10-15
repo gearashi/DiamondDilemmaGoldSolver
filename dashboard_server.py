@@ -7,6 +7,7 @@ from io_utils import read_json_shared
 from gpu_backends import BACKENDS
 from search_algorithms import ALGORITHMS,LABELS
 from search_options import EXACT_ALGORITHMS,normalize_options,validate_workers
+from runtime_capabilities import runtime_capabilities,validate_runtime_selection
 ROOT=Path(__file__).resolve().parent
 RUNTIME=ROOT/'runtime';RUNTIME.mkdir(exist_ok=True)
 TOKEN=secrets.token_urlsafe(32)
@@ -69,6 +70,8 @@ def start_solver(body):
     if (seconds!=0 and not 1<=seconds<=86400) or not 128<=replicas<=131072 or not 0<=seed<2**32:raise ValueError('Choose Unlimited (0) or 1..86400 seconds, 128..131072 replicas, and a nonnegative 32-bit seed.')
     workers=validate_workers(body.get('workers',4))
     options=normalize_options(body.get('search_options'))
+    validate_runtime_selection(algorithm,backend,options,stochastic=method=='stochastic',
+                               capabilities=runtime_capabilities())
     seconds=float(seconds)
     # Only remove a lock after its recorded process has ended.
     (RUNTIME/'run.lock').unlink(missing_ok=True)
@@ -154,7 +157,7 @@ def state_payload():
     return {'service':'diamond-dilemma','installation_root':str(ROOT.resolve()),'status':status,'display_state':display_state,
         'stop_requested':stop_requested,'best':read_json('best.json'),
         'live':read_json('live.json'),'history':read_json('history.json',[]),
-        'process_running':bool(pid),'control_token':TOKEN}
+        'process_running':bool(pid),'control_token':TOKEN,'capabilities':runtime_capabilities()}
 
 class Handler(BaseHTTPRequestHandler):
     def log_message(self,*_):pass

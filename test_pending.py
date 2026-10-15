@@ -7,8 +7,10 @@ import numpy as np
 from gpu_engine import GPU
 from geometry import build_board
 from test_gpu import fixture
+from test_dependencies import requires_cupy
 
 
+@requires_cupy
 class PendingCandidateTests(unittest.TestCase):
     def flat_gpu(self, n=8):
         geometry=build_board()

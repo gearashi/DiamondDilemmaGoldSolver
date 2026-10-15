@@ -14,6 +14,7 @@ from unittest.mock import patch
 import constraint_search as runner
 from io_utils import atomic_json
 from search_problem import SearchProblem
+from test_dependencies import requires_ortools, requires_sat
 
 
 def pair_problem(multiple_loops=False):
@@ -29,6 +30,7 @@ def pair_problem(multiple_loops=False):
 
 class RunnerTests(unittest.TestCase):
     def setUp(self):
+        self.enterContext(patch.object(runner, 'validate_runtime_selection'))
         self.directory = self.enterContext(tempfile.TemporaryDirectory(prefix='diamond-constraint-runner-'))
         self.root = Path(self.directory).resolve()
         self.run = self.root/'runtime'
@@ -60,6 +62,7 @@ class RunnerTests(unittest.TestCase):
         self.assertFalse((self.run/'run.lock').exists())
         self.assertEqual(self.handlers, {sig: signal.getsignal(sig) for sig in self.handlers})
 
+    @requires_ortools
     def test_direct_circuit_route_runs_and_snapshots_its_model(self):
         runner.main(self.args('cp-sat-circuit'))
         state=self.read('status.json')
@@ -73,6 +76,7 @@ class RunnerTests(unittest.TestCase):
         self.assertFalse((self.run/'searches/cp-sat-gold').exists())
         self.assert_released()
 
+    @requires_ortools
     def test_direct_circuit_model_cap_is_visible_and_never_exhausted(self):
         from constraint_circuit import CircuitLimit
         with patch('constraint_circuit.build_circuit_model',side_effect=CircuitLimit('fixture arc limit')), self.assertRaisesRegex(SystemExit,'fixture arc limit'):
@@ -658,6 +662,7 @@ class RunnerTests(unittest.TestCase):
             return store.snapshot()
         finally:store.close()
 
+    @requires_sat
     def test_shared_conflicts_are_reproved_saved_and_restored_in_separate_stores(self):
         payload=self.conflict_fixture();producer=[]
         def first(problem,algorithm,**kwargs):
@@ -691,6 +696,7 @@ class RunnerTests(unittest.TestCase):
         self.assertFalse(any(Path(call.args[0]).name=='conflicts-gold.json' for call in self.write.call_args_list))
         self.assert_released()
 
+    @requires_sat
     def test_false_claim_with_recomputed_digest_never_becomes_a_disk_exclusion(self):
         from constraint_shared_conflicts import _digest
         payload=self.conflict_fixture();payload['records']=[[[0,0]]];payload['digest']=_digest(payload)
@@ -703,7 +709,8 @@ class RunnerTests(unittest.TestCase):
 
     def test_unknown_shared_claims_remain_pending_and_are_not_serialized(self):
         from constraint_shared_conflicts import VerifiedConflictStore
-        payload=self.conflict_fixture()
+        from test_constraint_shared_conflicts import snapshot_claims
+        payload=snapshot_claims(self.problem,[[[0,0],[1,0]]])
         with patch.object(VerifiedConflictStore,'advance',return_value=0),patch.object(runner,'run_solver',return_value=self.terminal('stopped',shared_conflicts=payload)):
             runner.main(self.args('dfs','--search-options','{"shared_conflicts":true}'))
         state=self.read('status.json')['shared_conflicts']
@@ -726,6 +733,7 @@ class RunnerTests(unittest.TestCase):
         self.assertNotIn('shared_conflicts',self.read('status.json'))
         self.assertEqual(path.stat().st_size,MAX_BYTES+1);self.assert_released()
 
+    @requires_sat
     def test_shared_cache_write_failure_stops_worker_and_releases_lock(self):
         payload=self.conflict_fixture();finished=threading.Event()
         def solve(problem,algorithm,**kwargs):

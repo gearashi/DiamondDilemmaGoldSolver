@@ -8,7 +8,9 @@ The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaap
 
 ## Requirements
 
-Use **Python 3.12, 64-bit**, a compatible GPU and its driver for GPU modes, and enough free RAM and disk space for the selected population and checkpoints. Initial dependency installation and puzzle-data preparation need internet access.
+Use **Python 3.12, 64-bit** for all search engines, or **standard Python 3.15, 64-bit** for DFS and WebGPU, a compatible GPU and its driver for GPU modes, and enough free RAM and disk space for the selected population and checkpoints. Initial dependency installation and puzzle-data preparation need internet access.
+
+Python 3.15 uses a separate dependency profile: dashboard, data preparation, Python/compiled DFS, parallel DFS, and WebGPU search/sampling. CUDA, SAT, CP, CP-SAT, CP-SAT subtree checks/repair, and SAT assistance require the full Python 3.12 environment because their pinned native packages do not provide Python 3.15 wheels. The dashboard reports installed-package availability. Wheel availability was checked on 2026-10-15 against the pinned [OR-Tools](https://pypi.org/project/ortools/9.15.6755/#files), [PySAT](https://pypi.org/project/python-sat/1.9.dev15/#files), and [CuPy](https://pypi.org/project/cupy-cuda12x/14.2.0/#files) releases. Free-threaded Python is not supported by setup. Installing a newer system Python does not upgrade an existing `venv`.
 
 | Platform and GPU | Compute backend |
 | --- | --- |
@@ -44,7 +46,7 @@ bash Setup.sh
 bash OpenDashboard.sh
 ```
 
-Setup tries `python3.12`, then a compatible `python3` on PATH, creates `venv/`, and prepares the puzzle data. It does not use `sudo` or change system Python packages. To select a Python interpreter, use `bash Setup.sh --python /path/to/python3.12`. The dashboard is local to [127.0.0.1:8766](http://127.0.0.1:8766/). A desktop browser is needed for the 3D dashboard; command-line search also works without it.
+Setup tries `python3.12`, `python3.15`, then a compatible `python3` on PATH, creates `venv/`, and prepares the puzzle data. It does not use `sudo` or change system Python packages. To select a Python interpreter, use `bash Setup.sh --python /path/to/python3.12`. The dashboard is local to [127.0.0.1:8766](http://127.0.0.1:8766/). A desktop browser is needed for the 3D dashboard; command-line search also works without it.
 
 Setup defaults to `auto`: it installs WebGPU on every platform and adds CUDA on Windows/Linux only when an NVIDIA driver query succeeds. To select packages explicitly:
 
@@ -57,6 +59,20 @@ bash Setup.sh --backend cuda
 ```
 
 Windows equivalents are `.\Setup.cmd -Backend webgpu` and `.\Setup.cmd -Backend cuda`. CUDA setup is rejected on macOS. Existing virtual environments are reused only when compatible; use a separate checkout/environment for each operating system and native CPU architecture.
+
+### Selecting Python 3.15
+
+In a fresh checkout without `venv`, select the interpreter explicitly:
+
+```powershell
+.\Setup.cmd -Python "C:\path\to\Python315\python.exe" -Backend webgpu
+```
+
+```bash
+bash Setup.sh --python python3.15 --backend webgpu
+```
+
+Setup keeps an existing compatible environment and rejects a requested version that differs from it. To keep CUDA and the SAT/CP engines, retain your Python 3.12 checkout/environment; use a separate checkout for the Python 3.15 profile. Setup never overwrites an existing environment or changes system packages. Without an explicit interpreter, it prefers Python 3.12 and falls back to 3.15 when available. On Python 3.15, `auto` installs WebGPU and an explicit CUDA request fails with an explanation.
 
 ### Search controls
 

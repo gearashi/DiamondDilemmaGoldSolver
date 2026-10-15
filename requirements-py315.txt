@@ -1,0 +1,5 @@
+# Python 3.15 DFS and native WebGPU profile (regular 64-bit CPython).
+# CP/CP-SAT/SAT and CUDA dependencies currently require the Python 3.12 profile.
+numpy==2.5.3
+Pillow==12.3.0
+wgpu==0.32.0

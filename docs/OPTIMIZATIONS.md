@@ -368,3 +368,10 @@ Three alternating trials on an isolated copy of the real saved checkpoint compar
 
 
 Final local validation discovered **749 CPU tests: 726 passed, 23 skipped, no failures**. Six isolated application runs covered default DFS, two-worker parallel search, one-worker resume, and all-four DFS/parallel/CUDA hybrid search with 128 replicas. Each wrote a resumable checkpoint. A separate parallel Stop check returned in **0.41 seconds** and its saved queue validated without advancing. The six protected canonical puzzle, best-board and checkpoint files remained unchanged. Hosted build results are linked from the release; these local checks alone do not validate physical Apple or AMD GPUs.
+
+
+### Python 3.15 compatibility follow-up
+
+Regular 64-bit Python 3.15.0 now has a separate DFS/WebGPU setup profile. The full Python 3.12 profile remains available for CUDA, SAT, CP, CP-SAT, and their optional assistance/repair. Setup preserves existing environments, and the dashboard reports installed engine availability before starting a search.
+
+The final local regression runs each discovered 766 tests: Python 3.12 passed 739 with 27 skips; Python 3.15 passed 648 with 118 explicit dependency/platform/hardware skips. Both had no failures. The reduced profile retains DFS, native control, first-UIP, checkpoint, and cancellation coverage; missing native solver packages are not reported as tested. All 27 opted-in Python 3.15 WebGPU/sampling checks passed on the RTX 2060 through Vulkan, including comparison with Python 3.12 CUDA checkpoints. Six additional isolated Python 3.15 application runs covered compiled DFS, parallel resume, and WebGPU hybrid search, preserving the canonical saved searches. These checks establish bounded compatibility, not a Python-version performance advantage or a Gold solution.

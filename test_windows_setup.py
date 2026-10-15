@@ -21,7 +21,7 @@ class WindowsSetupTests(unittest.TestCase):
         self.repo = self.root / 'release copy'
         self.repo.mkdir()
         shutil.copyfile(ROOT / 'Setup.ps1', self.repo / 'Setup.ps1')
-        for name in ('requirements.txt', 'requirements-common.txt', 'requirements-webgpu.txt'):
+        for name in ('requirements.txt', 'requirements-common.txt', 'requirements-webgpu.txt', 'requirements-py315.txt'):
             (self.repo / name).write_text('fixture==1.0\n')
         self.fake = self.root / 'fake modules'
         (self.fake / 'pip').mkdir(parents=True)
@@ -33,6 +33,13 @@ class WindowsSetupTests(unittest.TestCase):
             "sys.exit(int(os.environ.get('SETUP_TEST_PIP_EXIT','0')))\n")
         (self.repo / 'prepare_data.py').write_text(
             "import os,sys,json\nfrom pathlib import Path\nPath(os.environ['SETUP_TEST_DATA_LOG']).write_text(json.dumps(sys.argv[1:]))\n")
+        (self.fake / 'sitecustomize.py').write_text(
+            'import collections,os,sys,sysconfig\n'
+            "version=os.environ.get('SETUP_TEST_VERSION')\n"
+            "if version: sys.version_info=collections.namedtuple('version_info','major minor micro releaselevel serial')(*map(int,version.split('.')),0,'final',0)\n"
+            "if os.environ.get('SETUP_TEST_FREE_THREADED')=='1':\n"
+            "    original=sysconfig.get_config_var\n"
+            "    sysconfig.get_config_var=lambda name: 1 if name=='Py_GIL_DISABLED' else original(name)\n")
         self.bin = self.root / 'fake tools'
         self.bin.mkdir()
         (self.bin / 'nvidia-smi.cmd').write_text(
@@ -73,7 +80,7 @@ class WindowsSetupTests(unittest.TestCase):
             with self.subTest(response=response):
                 result = self.run_setup('-SkipData', SETUP_TEST_NVIDIA=response)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                self.assertEqual(self.requirements(), expected)
+                self.assertEqual(self.requirements(), ['requirements-py315.txt'] if sys.version_info[:2] == (3, 15) else expected)
                 self.assertFalse(self.data_log.exists())
 
     def test_explicit_backend_and_pip_destination_isolation(self):
@@ -82,8 +89,12 @@ class WindowsSetupTests(unittest.TestCase):
             with self.subTest(backend=backend):
                 result = self.run_setup('-SkipData', '-Backend', backend, SETUP_TEST_NVIDIA='working',
                                         PIP_TARGET='outside-fixture', PIP_PREFIX='outside-fixture', PIP_USER='1', PIP_ROOT='outside-fixture')
+                if sys.version_info[:2] == (3, 15) and backend == 'cuda':
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertRegex(result.stdout + result.stderr, r'CUDA\s+is\s+unavailable')
+                    continue
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                self.assertEqual(self.requirements(), expected)
+                self.assertEqual(self.requirements(), ['requirements-py315.txt'] if sys.version_info[:2] == (3, 15) else expected)
                 environment = json.loads(self.pip_log.read_text())['env']
                 self.assertEqual(environment.pop('PIP_CONFIG_FILE'), 'NUL')
                 self.assertTrue(all(value is None for value in environment.values()))
@@ -105,6 +116,53 @@ class WindowsSetupTests(unittest.TestCase):
         self.assertIn('separate Windows checkout', result.stdout + result.stderr)
         self.assertEqual(sentinel.read_bytes(), b'preserve foreign environment')
         self.assertFalse(self.pip_log.exists())
+
+    def test_explicit_python_creates_local_environment_and_same_version_reuses_it(self):
+        result = self.run_setup('-SkipData', '-Python', sys.executable, '-Backend', 'webgpu')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        config = self.repo / 'venv/pyvenv.cfg'
+        before = config.read_bytes()
+        result = self.run_setup('-SkipData', '-Python', sys.executable, '-Backend', 'webgpu')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(config.read_bytes(), before)
+        expected = 'requirements-py315.txt' if sys.version_info[:2] == (3, 15) else 'requirements-webgpu.txt'
+        self.assertEqual(self.requirements(), [expected])
+
+    def test_requested_version_mismatch_preserves_existing_environment(self):
+        self.create_venv()
+        config = self.repo / 'venv/pyvenv.cfg'
+        before = config.read_bytes()
+        other = '3.12' if sys.version_info[:2] == (3, 15) else '3.15'
+        requested = self.bin / "requested python's version.cmd"
+        requested.write_text('@echo off\nset "SETUP_TEST_VERSION=' + other + '"\n"' + sys.executable + '" %*\n')
+        result = self.run_setup('-SkipData', '-Python', str(requested))
+        self.assertNotEqual(result.returncode, 0)
+        self.assertRegex(result.stdout + result.stderr, r'does\s+not\s+match\s+existing\s+venv')
+        self.assertEqual(config.read_bytes(), before)
+        self.assertFalse(self.pip_log.exists())
+
+    def test_python315_profile_uses_webgpu_even_when_nvidia_is_available(self):
+        self.create_venv()
+        for backend in ('auto', 'webgpu'):
+            with self.subTest(backend=backend):
+                result = self.run_setup('-SkipData', '-Backend', backend,
+                                        SETUP_TEST_VERSION='3.15', SETUP_TEST_NVIDIA='working')
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                self.assertEqual(self.requirements(), ['requirements-py315.txt'])
+        self.pip_log.unlink()
+        result = self.run_setup('-SkipData', '-Backend', 'cuda', SETUP_TEST_VERSION='3.15')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertRegex(result.stdout + result.stderr, r'CUDA\s+is\s+unavailable')
+        self.assertFalse(self.pip_log.exists())
+
+    def test_unsupported_and_free_threaded_interpreters_fail_before_install(self):
+        self.create_venv()
+        for environment in ({'SETUP_TEST_VERSION': '3.14'}, {'SETUP_TEST_FREE_THREADED': '1'}):
+            with self.subTest(environment=environment):
+                result = self.run_setup('-SkipData', **environment)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertRegex(result.stdout + result.stderr, r'regular\s+64-bit\s+Python\s+3\.12\s+or\s+3\.15')
+                self.assertFalse(self.pip_log.exists())
 
     def test_package_install_failure_does_not_prepare_data(self):
         self.create_venv()

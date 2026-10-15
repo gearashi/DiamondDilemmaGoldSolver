@@ -1,42 +1,65 @@
 [CmdletBinding()]
 param(
     [string]$SourceDir,
+    [string]$Python,
     [ValidateSet('auto', 'cuda', 'webgpu')][string]$Backend = 'auto',
     [switch]$SkipData
 )
 $ErrorActionPreference = 'Stop'
 if ($SourceDir) { $SourceDir = [System.IO.Path]::GetFullPath($SourceDir) }
+if ($Python -and ($Python.Contains('\') -or $Python.Contains('/'))) { $Python = [System.IO.Path]::GetFullPath($Python) }
 Set-Location -LiteralPath $PSScriptRoot
 try {
+    # Keep full engine support on 3.12; 3.15 currently has a DFS/WebGPU profile.
+    # Free-threaded builds have different native package compatibility.
+    $versionCheck = 'import struct,sys,sysconfig;v=str(sys.version_info.major)+chr(46)+str(sys.version_info.minor);ok=sys.version_info[:2] in ((3,12),(3,15)) and struct.calcsize(chr(80))==8 and not sysconfig.get_config_var(''Py_GIL_DISABLED'') and (len(sys.argv)<2 or v==sys.argv[1]);print(v) if ok else None;sys.exit(0 if ok else 1)'
+    $requestedVersion = $null
+    $launcher = $null
+    $launcherArgs = @()
+    if ($Python) {
+        $command = Get-Command $Python -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+        if (-not $command) { throw "The requested Python executable was not found: $Python" }
+        $launcher = $command.Source
+        $requestedVersion = & $launcher -c $versionCheck
+        if ($LASTEXITCODE -ne 0) { throw 'The requested interpreter must be regular 64-bit Python 3.12 or 3.15. Free-threaded builds are not supported.' }
+    }
     $venvPython = Join-Path $PSScriptRoot 'venv\Scripts\python.exe'
     if (-not (Test-Path -LiteralPath $venvPython)) {
         if (Test-Path -LiteralPath (Join-Path $PSScriptRoot 'venv')) { throw 'venv exists without a usable Windows Scripts/python.exe. Use a separate Windows checkout or move that environment aside before setup.' }
-        $launcher = $null
-        $launcherArgs = @()
-        foreach ($candidate in @('py', 'python')) {
-            $command = Get-Command $candidate -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
-            if (-not $command) { continue }
-            $candidateArgs = @()
-            if ($candidate -eq 'py') { $candidateArgs = @('-3.12') }
-            try {
-                & $command.Source @candidateArgs -c 'import sys,struct;sys.exit(0 if sys.version_info[:2]==(3,12) and struct.calcsize(chr(80))==8 else 1)' 2>$null
-            } catch { continue }
-            if ($LASTEXITCODE -eq 0) {
-                $launcher = $command.Source
-                $launcherArgs = $candidateArgs
-                break
+        if (-not $launcher) {
+            foreach ($wantedVersion in @('3.12', '3.15')) {
+                foreach ($candidate in @('py', 'python')) {
+                    $command = Get-Command $candidate -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+                    if (-not $command) { continue }
+                    $candidateArgs = @()
+                    if ($candidate -eq 'py') { $candidateArgs = @('-' + $wantedVersion) }
+                    try {
+                        $candidateVersion = & $command.Source @candidateArgs -c $versionCheck $wantedVersion 2>$null
+                    } catch { continue }
+                    if ($LASTEXITCODE -eq 0) {
+                        $launcher = $command.Source
+                        $launcherArgs = $candidateArgs
+                        break
+                    }
+                }
+                if ($launcher) { break }
             }
         }
-        if (-not $launcher) { throw 'Install 64-bit Python 3.12 from python.org with the Python launcher or add it to PATH, then run Setup.cmd again.' }
+        if (-not $launcher) { throw 'Install regular 64-bit Python 3.12 (all engines) or 3.15 (DFS/WebGPU), or supply -Python PATH. Free-threaded builds are not supported.' }
         & $launcher @launcherArgs -m venv (Join-Path $PSScriptRoot 'venv')
         if ($LASTEXITCODE -ne 0) { throw 'Python could not create the local virtual environment.' }
     }
-    & $venvPython -c 'import sys,struct;sys.exit(0 if sys.version_info[:2]==(3,12) and struct.calcsize(chr(80))==8 else 1)'
-    if ($LASTEXITCODE -ne 0) { throw 'The existing venv must use 64-bit Python 3.12. Move it aside before rebuilding it.' }
+    $venvVersion = & $venvPython -c $versionCheck
+    if ($LASTEXITCODE -ne 0) { throw 'The existing venv must use regular 64-bit Python 3.12 or 3.15. Move it aside before rebuilding it. Free-threaded builds are not supported.' }
+    if ($requestedVersion -and $requestedVersion -ne $venvVersion) { throw "The requested Python $requestedVersion does not match existing venv Python $venvVersion. The existing environment was preserved; use a separate checkout or move it aside before changing Python versions." }
     & $venvPython -c 'import os,sys;sys.exit(0 if sys.prefix != sys.base_prefix and os.path.realpath(sys.prefix)==os.path.realpath(sys.argv[1]) else 1)' (Join-Path $PSScriptRoot 'venv')
     if ($LASTEXITCODE -ne 0) { throw 'venv must be an isolated environment belonging to this checkout.' }
     $requirements = @()
-    if ($Backend -eq 'cuda') {
+    if ($venvVersion -eq '3.15') {
+        if ($Backend -eq 'cuda') { throw 'CUDA is unavailable in the Python 3.15 dependency profile. Use -Backend webgpu, or Python 3.12 for CUDA and CP/SAT engines.' }
+        $requirements += 'requirements-py315.txt'
+        Write-Host 'Python 3.15 profile: DFS and WebGPU search. CP, CP-SAT, SAT, and their optional assistance require Python 3.12.'
+    } elseif ($Backend -eq 'cuda') {
         $requirements += 'requirements.txt'
     } else {
         $requirements += 'requirements-webgpu.txt'

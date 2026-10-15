@@ -31,6 +31,10 @@ class DashboardControlTests(unittest.TestCase):
         self.runtime_patch.start()
         self.child_patch.start()
         self.launch_patch.start()
+        # These lifecycle tests mock launches, independently of installed engines.
+        from test_runtime_capabilities import capabilities
+        self.enterContext(patch.object(dashboard, 'runtime_capabilities',
+            return_value=capabilities('ortools', 'pysat', 'cupy', 'wgpu')))
         self.addCleanup(self.launch_patch.stop)
         self.addCleanup(self.child_patch.stop)
         self.addCleanup(self.runtime_patch.stop)

@@ -6,11 +6,13 @@ from unittest.mock import PropertyMock, patch
 from types import SimpleNamespace
 
 import constraint_lns as lns
+from test_dependencies import requires_ortools
 from search_problem import SearchProblem
 from test_constraint_dfs import board, double_face, simple_tiles, multiple_loops, tetrahedron_tiles
 
 
 class RepairTests(unittest.TestCase):
+    @requires_ortools
     def test_gold_certificate_and_multiloop_are_distinct(self):
         problem = SearchProblem(simple_tiles(), double_face())
         result = lns.repair(problem,[0,3],seconds=1)
@@ -26,6 +28,7 @@ class RepairTests(unittest.TestCase):
         self.assertGreater(gold['stats']['loop_cuts'],0)
         self.assertFalse(gold['validation']['valid'])
 
+    @requires_ortools
     def test_native_patch_preserves_outside_inventory_fixed_cells_and_scores(self):
         tiles, geometry = tetrahedron_tiles()
         problem = SearchProblem(tiles,geometry,fixed={0:0})
@@ -49,6 +52,7 @@ class RepairTests(unittest.TestCase):
         self.assertNotEqual(result['status'],'infeasible')
         self.assertGreaterEqual(result['best_score'], lns.score(problem,[0,3])['matched_edges'])
 
+    @requires_ortools
     def test_native_infeasible_patch_is_only_a_local_result(self):
         tiles = [{'id':0,'segments':[[[0,2],[0,10]]]},
                  {'id':1,'segments':[[[0,3],[0,9]]]}]
@@ -58,6 +62,7 @@ class RepairTests(unittest.TestCase):
         self.assertEqual(result['status'],'inconclusive')
         self.assertFalse(result['complete'])
 
+    @requires_ortools
     def test_progress_stats_are_independent_snapshots(self):
         problem = SearchProblem(multiple_loops(),double_face())
         events = []
@@ -65,6 +70,7 @@ class RepairTests(unittest.TestCase):
         self.assertEqual(events[0]['stats']['native_statuses'],{})
         self.assertEqual(sum(events[-1]['stats']['native_statuses'].values()),2)
 
+    @requires_ortools
     def test_patch_expands_through_matched_neighbors_and_includes_bad_domains(self):
         import random
         tiles, geometry = tetrahedron_tiles()
@@ -83,6 +89,10 @@ class RepairTests(unittest.TestCase):
         with patch.object(lns,'_load_cp_model',side_effect=AssertionError('No solver should start')):
             self.assertEqual(lns.repair(problem,[1,3],seconds=0)['status'],'timeout')
             self.assertEqual(lns.repair(problem,[1,3],seconds=2,stop=lambda:True)['status'],'stopped')
+
+    @requires_ortools
+    def test_stop_at_repair_attempt_never_starts_native_search(self):
+        problem = SearchProblem(simple_tiles(),double_face())
         event = threading.Event()
         progress = []
         def notify(value):
@@ -113,6 +123,7 @@ class RepairTests(unittest.TestCase):
         self.assertEqual(control.reason,'stopped')
         self.assertFalse(any(thread.name=='diamond-repair-stop' and thread.is_alive() for thread in threading.enumerate()))
 
+    @requires_ortools
     def test_attempt_time_budget_includes_model_build_before_native_search(self):
         problem = SearchProblem(simple_tiles(),double_face())
         cp_model = lns._load_cp_model()
@@ -138,6 +149,7 @@ class RepairTests(unittest.TestCase):
         self.assertIsNone(result)
         self.assertEqual(status,'MODEL_BUDGET')
 
+    @requires_ortools
     def test_native_candidate_with_incorrect_objective_is_rejected(self):
         tiles, geometry = tetrahedron_tiles()
         problem = SearchProblem(tiles,geometry,fixed={0:0})
@@ -158,6 +170,7 @@ class RepairTests(unittest.TestCase):
         self.assertEqual(archive,[best,far])
         self.assertIsNot(archive[0]['codes'],best['codes'])
 
+    @requires_ortools
     def test_loop_aware_repair_can_join_identical_signatures_into_gold(self):
         tiles=[{'id':i,'segments':[[[0,2],[1,2]],[[0,10],[1,10]],[[2,2],[2,10]]]} for i in range(2)]
         problem=SearchProblem(tiles,double_face())

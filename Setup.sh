@@ -13,8 +13,8 @@ Usage: bash Setup.sh [--backend auto|cuda|webgpu] [--python PATH] [--source-dir 
 
   --backend NAME    auto (default): WebGPU, plus CUDA if an NVIDIA query succeeds.
                     cuda: NVIDIA CUDA on Linux; webgpu: Metal/Vulkan/DX12.
-  --python PATH     Use this 64-bit Python 3.12 interpreter to create venv/.
-                    Otherwise try python3.12, then python3 on PATH.
+  --python PATH     Use regular 64-bit Python 3.12 or 3.15 to create venv/.
+                    Prefer 3.12 (all engines), then 3.15 (DFS/WebGPU).
   --source-dir DIR  Use the three existing source GIFs offline. Relative paths
                     are resolved from the directory where you invoke setup.
   --skip-data       Install dependencies only; do not prepare/download data.
@@ -24,6 +24,7 @@ Installs pinned requirements into this checkout's venv/bin/python. No sudo or
 system Python changes are made. Package installation needs network access;
 missing puzzle diagrams are downloaded unless --source-dir or --skip-data is
 used. Existing incompatible environments are preserved and reported as errors.
+Free-threaded Python builds are not supported.
 USAGE
 }
 
@@ -63,20 +64,6 @@ case "$platform" in Linux|Darwin) ;; *) fail 'Setup.sh supports Linux and macOS;
 if [[ "$platform" == Darwin && "$backend" == cuda ]]; then
     fail 'CUDA is not supported on macOS. Use --backend webgpu for native Metal GPU search.'
 fi
-requirements=()
-if [[ "$backend" == cuda ]]; then
-    requirements+=(requirements.txt)
-else
-    requirements+=(requirements-webgpu.txt)
-    if [[ "$backend" == auto && "$platform" != Darwin ]] && command -v nvidia-smi >/dev/null 2>&1; then
-        if gpu_names=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null) && [[ -n "${gpu_names//[[:space:]]/}" ]]; then
-            requirements+=(requirements.txt)
-        fi
-    fi
-fi
-for requirement in requirements-common.txt "${requirements[@]}"; do
-    [[ -f "$script_dir/$requirement" ]] || fail "Missing $requirement next to Setup.sh."
-done
 if [[ -n "$source_dir" ]]; then
     [[ "$source_dir" = /* ]] || source_dir="$caller_dir/$source_dir"
     [[ -d "$source_dir" ]] || fail "Source directory does not exist: $source_dir"
@@ -86,10 +73,11 @@ if [[ "$skip_data" == false ]]; then
     [[ -f "$script_dir/prepare_data.py" ]] || fail 'Missing prepare_data.py next to Setup.sh.'
 fi
 
-version_check='import struct,sys;sys.exit(0 if sys.version_info[:2]==(3,12) and struct.calcsize("P")==8 else 1)'
+version_check='import struct,sys,sysconfig;v=str(sys.version_info.major)+chr(46)+str(sys.version_info.minor);ok=sys.version_info[:2] in ((3,12),(3,15)) and struct.calcsize("P")==8 and not sysconfig.get_config_var("Py_GIL_DISABLED") and (len(sys.argv)<2 or v==sys.argv[1]);print(v) if ok else None;sys.exit(0 if ok else 1)'
 venv_dir="$script_dir/venv"
 venv_python="$venv_dir/bin/python"
 python_command=''
+requested_version=''
 if [[ -n "$python_request" ]]; then
     if [[ "$python_request" == */* ]]; then
         [[ "$python_request" = /* ]] || python_request="$caller_dir/$python_request"
@@ -98,7 +86,7 @@ if [[ -n "$python_request" ]]; then
     else
         python_command=$(command -v -- "$python_request") || fail "Python interpreter was not found: $python_request"
     fi
-    "$python_command" -c "$version_check" >/dev/null 2>&1 || fail 'The requested interpreter must be 64-bit Python 3.12.'
+    requested_version=$("$python_command" -c "$version_check") || fail 'The requested interpreter must be regular 64-bit Python 3.12 or 3.15. Free-threaded builds are not supported.'
 fi
 
 if [[ ! -x "$venv_python" ]]; then
@@ -106,22 +94,47 @@ if [[ ! -x "$venv_python" ]]; then
         fail 'venv/ exists without a usable POSIX bin/python. Use a separate checkout for this operating system or move that environment aside before setup.'
     fi
     if [[ -z "$python_command" ]]; then
-        for candidate in python3.12 python3; do
-            if candidate_path=$(command -v -- "$candidate") && "$candidate_path" -c "$version_check" >/dev/null 2>&1; then
-                python_command=$candidate_path
-                break
-            fi
+        for wanted_version in 3.12 3.15; do
+            for candidate in "python$wanted_version" python3; do
+                if candidate_path=$(command -v -- "$candidate") && "$candidate_path" -c "$version_check" "$wanted_version" >/dev/null 2>&1; then
+                    python_command=$candidate_path
+                    break
+                fi
+            done
+            [[ -z "$python_command" ]] || break
         done
     fi
-    [[ -n "$python_command" ]] || fail '64-bit Python 3.12 was not found. Install it with venv support, or supply --python PATH.'
+    [[ -n "$python_command" ]] || fail 'Regular 64-bit Python 3.12 or 3.15 was not found. Install it with venv support, or supply --python PATH. Free-threaded builds are not supported.'
     printf 'Creating local Python environment: %s\n' "$venv_dir"
     "$python_command" -m venv "$venv_dir" || fail 'Could not create venv/. Ensure this Python has venv/ensurepip support and the checkout is writable.'
 fi
 [[ -x "$venv_python" ]] || fail 'Environment creation did not produce venv/bin/python.'
-"$venv_python" -c "$version_check" >/dev/null 2>&1 || fail 'The existing venv/ must use 64-bit Python 3.12. Move it aside before rebuilding.'
+venv_version=$("$venv_python" -c "$version_check") || fail 'The existing venv/ must use regular 64-bit Python 3.12 or 3.15. Move it aside before rebuilding. Free-threaded builds are not supported.'
+if [[ -n "$requested_version" && "$requested_version" != "$venv_version" ]]; then
+    fail "The requested Python $requested_version does not match existing venv Python $venv_version. The existing environment was preserved; use a separate checkout or move it aside before changing Python versions."
+fi
 # A misplaced symlink to system Python must never turn this into a global pip install.
 "$venv_python" -c 'import os,sys;sys.exit(0 if sys.prefix != sys.base_prefix and os.path.realpath(sys.prefix)==os.path.realpath(sys.argv[1]) else 1)' "$venv_dir" \
     || fail 'venv/bin/python is not an isolated environment belonging to this checkout.'
+
+requirements=()
+if [[ "$venv_version" == 3.15 ]]; then
+    [[ "$backend" != cuda ]] || fail 'CUDA is unavailable in the Python 3.15 dependency profile. Use --backend webgpu, or Python 3.12 for CUDA and CP/SAT engines.'
+    requirements+=(requirements-py315.txt)
+    printf '%s\n' 'Python 3.15 profile: DFS and WebGPU search. CP, CP-SAT, SAT, and their optional assistance require Python 3.12.'
+elif [[ "$backend" == cuda ]]; then
+    requirements+=(requirements.txt)
+else
+    requirements+=(requirements-webgpu.txt)
+    if [[ "$backend" == auto && "$platform" != Darwin ]] && command -v nvidia-smi >/dev/null 2>&1; then
+        if gpu_names=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null) && [[ -n "${gpu_names//[[:space:]]/}" ]]; then
+            requirements+=(requirements.txt)
+        fi
+    fi
+fi
+for requirement in "${requirements[@]}"; do
+    [[ -f "$script_dir/$requirement" ]] || fail "Missing $requirement next to Setup.sh."
+done
 
 printf 'Installing pinned dependencies for %s into venv/ (network required)...\n' "$backend"
 pip_requirements=()

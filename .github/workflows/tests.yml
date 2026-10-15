@@ -10,30 +10,37 @@ permissions:
 
 jobs:
   cpu:
-    name: CPU tests (${{ matrix.os }})
+    name: CPU tests (${{ matrix.os }}, Python ${{ matrix.python }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-24.04, macos-15-intel, macos-15]
+        python: ['3.12', '3.15']
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - name: Set up Python 3.12
+      - name: Set up Python ${{ matrix.python }}
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.12'
+          python-version: ${{ matrix.python }}
           cache: pip
           cache-dependency-path: |
+            requirements-py315.txt
             requirements-dev.txt
             requirements-common.txt
 
-      - name: Install CPU test dependencies
+      - name: Install full Python 3.12 dependencies
+        if: matrix.python == '3.12'
         run: python -m pip install -r requirements-dev.txt
+
+      - name: Install Python 3.15 DFS and WebGPU profile
+        if: matrix.python == '3.15'
+        run: python -m pip install --only-binary=:all: -r requirements-py315.txt
 
       - name: Build optional native CPU propagation
         run: python build_native.py
@@ -59,6 +66,7 @@ jobs:
           test_linux_setup
           test_windows_setup
           test_platform
+          test_runtime_capabilities
           test_webgpu
           test_constraint_dfs
           test_constraint_branching
@@ -124,7 +132,7 @@ jobs:
           assert not Path('data/tiles.json').exists()"
 
   webgpu-install:
-    name: Native WebGPU package installation (${{ matrix.os }})
+    name: Native WebGPU package installation (${{ matrix.os }}, Python ${{ matrix.python }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     strategy:
@@ -133,28 +141,30 @@ jobs:
         # GitHub standard runner labels: Intel and native Apple Silicon.
         # https://docs.github.com/en/actions/reference/runners/github-hosted-runners
         os: [windows-latest, ubuntu-24.04, macos-15-intel, macos-15]
+        python: ['3.12', '3.15']
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - name: Set up native Python 3.12
+      - name: Set up native Python ${{ matrix.python }}
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.12'
+          python-version: ${{ matrix.python }}
           cache: pip
           cache-dependency-path: |
+            requirements-py315.txt
             requirements-webgpu.txt
             requirements-common.txt
 
       - name: Install Windows WebGPU packages
         if: runner.os == 'Windows'
-        run: .\Setup.ps1 -SkipData -Backend webgpu
+        run: .\Setup.ps1 -SkipData -Backend webgpu -Python (Get-Command python).Source
 
       - name: Install Linux or macOS WebGPU packages
         if: runner.os != 'Windows'
-        run: bash Setup.sh --skip-data --backend webgpu --python python3.12
+        run: bash Setup.sh --skip-data --backend webgpu --python python${{ matrix.python }}
 
       - name: Import native packages without requesting a GPU
         shell: bash
@@ -163,26 +173,31 @@ jobs:
           import os
           import subprocess
           executable = 'venv/Scripts/python.exe' if os.name == 'nt' else 'venv/bin/python'
-          code = "import platform,wgpu,numpy,ortools; from PIL import Image; from wgpu.backends import wgpu_native; from pathlib import Path; print(platform.system(), platform.machine(), wgpu.__version__); assert not Path('data/tiles.json').exists()"
+          code = "import platform,wgpu,numpy; from PIL import Image; from wgpu.backends import wgpu_native; from pathlib import Path; print(platform.system(), platform.machine(), wgpu.__version__); assert not Path('data/tiles.json').exists()"
           subprocess.check_call([executable, '-c', code])
           PY
 
   shader-validation:
-    name: WGSL finite checks (software Vulkan)
+    name: WGSL finite checks (software Vulkan, Python ${{ matrix.python }})
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.12', '3.15']
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - name: Set up Python 3.12
+      - name: Set up Python ${{ matrix.python }}
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: '3.12'
+          python-version: ${{ matrix.python }}
           cache: pip
           cache-dependency-path: |
+            requirements-py315.txt
             requirements-webgpu.txt
             requirements-common.txt
 
@@ -190,7 +205,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y mesa-vulkan-drivers libvulkan1
-          python -m pip install -r requirements-webgpu.txt
+          if [ "${{ matrix.python }}" = "3.15" ]; then
+            python -m pip install --only-binary=:all: -r requirements-py315.txt
+          else
+            python -m pip install -r requirements-webgpu.txt
+          fi
 
       - name: Run finite shader tests on lavapipe
         env:
@@ -253,7 +272,7 @@ jobs:
           archive = folder / filename
           subprocess.check_call(['git', 'archive', '--format=' + os.environ['ARCHIVE_FORMAT'], '--prefix=DiamondDilemmaGoldSolver/', '--output=' + str(archive), 'HEAD'])
           (folder / 'SHA256SUMS.txt').write_text(hashlib.sha256(archive.read_bytes()).hexdigest() + '  ' + filename + '\n')
-          (folder / 'PACKAGE-NOTES.txt').write_text('Portable source distribution, not a standalone executable. Install native Python 3.12 and run Setup.cmd (Windows) or bash Setup.sh (Linux/macOS). Dependencies and puzzle data are prepared locally. These target labels identify setup platforms; source contents are shared.\n')
+          (folder / 'PACKAGE-NOTES.txt').write_text('Portable source distribution, not a standalone executable. Install native Python 3.12 for all engines, or standard Python 3.15 for DFS and WebGPU only, and run Setup.cmd (Windows) or bash Setup.sh (Linux/macOS). Dependencies and puzzle data are prepared locally. These target labels identify setup platforms; source contents are shared.\n')
           PY
 
       - name: Upload source distribution
