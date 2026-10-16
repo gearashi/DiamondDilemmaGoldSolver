@@ -245,10 +245,18 @@ def main():
             publish(); return
         state='running'; writer.finish(generation); publish()
         last_live=last_status=last_verify=0.0
+        # Larger pools did not show a stable full-iteration benefit. Use the
+        # actual restored/resized engine size and retain ordinary step above it.
+        step_and_states=getattr(gpu,'step_and_states',None) if gpu.n<=4096 else None
         while (args.seconds==0 or time.monotonic()-began<args.seconds) and not stopping():
             trusted=False
-            gpu.step(args.nodes); generation+=1
-            flags=gpu.states.get()
+            if step_and_states is None:
+                gpu.step(args.nodes); generation+=1
+                flags=gpu.states.get()
+            else:
+                # WebGPU's required state read also completes the launch.
+                # A failed read leaves trusted false, preserving the old checkpoint.
+                flags=step_and_states(args.nodes); generation+=1
             ledger.retire(flags)
             trusted=True
             pending=np.flatnonzero(flags==1)

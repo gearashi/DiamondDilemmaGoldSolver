@@ -8,6 +8,7 @@ is no CPU sampling fallback, and sample failure never establishes infeasibility.
 from __future__ import annotations
 import math
 from pathlib import Path
+from types import SimpleNamespace
 import time
 import numpy as np
 from gpu_backends import choose_backend
@@ -101,6 +102,49 @@ def score_board(problem, codes):
             'objective': int((problem.n-violations)*(len(problem.edges)+1)+matched)}
 
 
+def _verification_view(problem, count):
+    """Fresh membership tables for a batch; the raw-mask validator is unchanged."""
+    if count < 32:
+        return problem
+    domains, shared = [], {}
+    try:
+        for values in problem.domains:
+            # Small domains do not amortize the setup cost across this batch.
+            if len(values) < 64:
+                domains.append(values)
+                continue
+            key = tuple(values)
+            domain = shared.get(key)
+            if domain is None:
+                domain = frozenset(key)
+                shared[key] = domain
+            domains.append(domain)
+    except TypeError:
+        return problem  # Preserve ordinary membership semantics for unusual inputs.
+    if not shared:
+        return problem
+    # Nothing survives this collection: domain changes before the next sample
+    # are observed, and GPU tables/scores never supply validation evidence.
+    return SimpleNamespace(n=problem.n, fixed=problem.fixed, masks=problem.masks,
+                           edges=problem.edges, domains=domains)
+
+
+def _top_ids(scores, count):
+    """Match stable descending score order, including descending lane-ID ties."""
+    size = len(scores)
+    count = min(count, size)
+    if size < 2048 or count <= 0 or count * 8 >= size:
+        return np.argsort(scores, kind='stable')[-count:][::-1].copy()
+    # Only the best few uint32 scores are needed. Partition finds the cutoff;
+    # explicitly keep the highest lane IDs on that boundary before sorting the
+    # selected values. Arbitrary partition tie order must never choose hints.
+    cutoff = np.partition(scores, size - count)[size - count]
+    better = np.flatnonzero(scores > cutoff)
+    tied = np.flatnonzero(scores == cutoff)[-(count - len(better)):]
+    ids = np.concatenate((better, tied))
+    return ids[np.lexsort((ids, scores[ids]))[::-1]].copy()
+
+
 class _CUDA:
     def __init__(self, problem, table, free, replicas, seed):
         import cupy as cp
@@ -120,7 +164,7 @@ class _CUDA:
         self.cp.cuda.get_current_stream().synchronize()
     def top(self, count=32):
         scores = self.meta[2].get()
-        ids = np.argsort(scores, kind='stable')[-min(count, self.r):][::-1].copy()
+        ids = _top_ids(scores, count)
         return self.best[:, ids].get().T.astype(int), scores[ids].astype(int)
     def close(self):
         self.boards = self.best = self.meta = self.table = self.kernel = None
@@ -175,7 +219,7 @@ class _WebGPU:
         self.queue.read_buffer(self.buffers[2], 0, 4)  # Tiny synchronization fence.
     def top(self, count=32):
         scores = np.frombuffer(self.queue.read_buffer(self.buffers[2], 2*self.r*4, self.r*4), np.uint32).copy()
-        ids = np.argsort(scores, kind='stable')[-min(count, self.r):][::-1].copy()
+        ids = _top_ids(scores, count)
         # One dispatch gathers selected lanes, instead of n*count host copy commands.
         count = len(ids)
         if count > self.gather_capacity:
@@ -235,10 +279,11 @@ def sample(problem, *, seconds, seed=0, replicas=128, backend='auto', stop=None,
     def collect():
         nonlocal archive
         boards,scores = engine.top()
+        verification = _verification_view(problem, len(boards))
         checked = []
         observed = {tuple(item['codes']) for item in archive}
         for codes,objective in zip(boards,scores):
-            metrics = score_board(problem,codes)
+            metrics = score_board(verification,codes)
             if metrics['objective'] != int(objective):
                 raise RuntimeError('GPU sample failed independent CPU scoring.')
             values = codes.astype(int).tolist()

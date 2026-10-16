@@ -60,6 +60,12 @@ def load_library(directory=None):
         lib.dd_strands_destroy.argtypes=[C.c_void_p];lib.dd_strands_destroy.restype=None
         lib.dd_strands_allowed.argtypes=[C.c_void_p,u64,u64,i32,POLL_CALLBACK]
         lib.dd_strands_allowed.restype=C.c_int
+    if hasattr(lib,'dd_biconnected_create'):
+        lib.dd_biconnected_create.argtypes=[C.c_void_p,C.c_int,C.c_int,i32]
+        lib.dd_biconnected_create.restype=C.c_void_p
+        lib.dd_biconnected_destroy.argtypes=[C.c_void_p];lib.dd_biconnected_destroy.restype=None
+        lib.dd_biconnected_allowed.argtypes=[C.c_void_p,u64,u64,i32,POLL_CALLBACK]
+        lib.dd_biconnected_allowed.restype=C.c_int
     return lib
 
 
@@ -245,12 +251,16 @@ class NativeGraphHelpers:
         self.lib=library if library is not None else load_library()
         if not hasattr(self.lib,'dd_cyclic_blocks'):raise RuntimeError('Native graph helper missing; rebuild locally.')
         self.supports_strands=all(hasattr(self.lib,name) for name in ('dd_strands_create','dd_strands_destroy','dd_strands_allowed'))
+        self.supports_biconnected=all(hasattr(self.lib,name) for name in ('dd_biconnected_create','dd_biconnected_destroy','dd_biconnected_allowed'))
     def prepare_local_forests(self,segments,check=lambda:None):
         """Prepare immutable orientation segments for repeated exact local unions."""
         return NativeLocalForests(segments,self.lib,check)
     def prepare_strands(self,n,segments,edges,check=lambda:None):
         """Prepare a bounded full strand filter with immutable puzzle tables."""
         return NativeStrandPruner(n,segments,edges,self.lib,check)
+    def prepare_biconnected(self,n,segments,edges,check=lambda:None):
+        """Prepare complete cyclic-block support filtering for one puzzle."""
+        return NativeBiconnectedPruner(n,segments,edges,self.lib,check)
     def cyclic_edge_blocks(self,vertex_count,edges,check=lambda:None):
         if type(vertex_count)is not int or not 0<=vertex_count<=5280:raise ValueError('Invalid native graph vertex count.')
         check();edges=tuple(edges)
@@ -466,6 +476,75 @@ class NativeStrandPruner:
     def close(self):
         if self._active:raise RuntimeError('Cannot close an active native strand workspace.')
         if self._handle:self.lib.dd_strands_destroy(self._handle);self._handle=None
+        if self._forests is not None:self._forests.close();self._forests=None
+
+    def __del__(self):
+        if not getattr(self,'_active',False):self.close()
+
+
+class NativeBiconnectedPruner:
+    """Whole biconnected connectivity filter; complete supports are returned privately.
+
+    Geometry and local certificates are owned by this helper, never a checkpoint.
+    C keeps at most 1024 exact local certificates and bounded scratch for 160 cells;
+    Python publishes no incomplete domain support or global cache entry.
+    """
+    def __init__(self,n,segments,edges,library=None,check=lambda:None):
+        self._handle=None;self._active=False;self._forests=None
+        if type(n)is not int or not 1<=n<=160 or not isinstance(segments,(tuple,list)) or len(segments)!=3*n:
+            raise ValueError('Native biconnected filter requires 1..160 cells and three codes per tile.')
+        check();edges=tuple(edges)
+        if len(edges)>3*n:raise ValueError('Native biconnected edge bound exceeded.')
+        flat=[]
+        for edge in edges:
+            check()
+            if (not isinstance(edge,(tuple,list)) or len(edge)!=4 or any(type(v)is not int for v in edge)
+                    or not(0<=edge[0]<n and 0<=edge[2]<n and 0<=edge[1]<3 and 0<=edge[3]<3)):
+                raise ValueError('Malformed native biconnected board edge.')
+            flat.extend(edge)
+        self.lib=library if library is not None else load_library()
+        if not all(hasattr(self.lib,name) for name in ('dd_biconnected_create','dd_biconnected_destroy','dd_biconnected_allowed')):
+            raise RuntimeError('Native biconnected helper missing; rebuild locally.')
+        self.n=n;self.count=3*n;self.words=(self.count+63)//64;self.width=8*self.words
+        self._domains=(C.c_uint64*(n*self.words))();self._allowed=(C.c_uint64*(n*self.words))();self._failed=C.c_int32()
+        self._forests=NativeLocalForests(segments,self.lib,check)
+        try:
+            packed=(C.c_int32*len(flat))(*flat);check()
+            self._handle=self.lib.dd_biconnected_create(self._forests._handle,n,len(edges),packed)
+            if not self._handle:raise RuntimeError('Unable to prepare native biconnected workspace.')
+            check()
+        except BaseException:self.close();raise
+
+    def allowed(self,domains,check=lambda:None):
+        if not self._handle:raise RuntimeError('Native biconnected workspace is closed.')
+        if self._active:raise RuntimeError('Native biconnected workspace is already active.')
+        domains=tuple(domains)
+        if len(domains)!=self.n or any(type(v)is not int or v<0 or v.bit_length()>self.count for v in domains):
+            raise ValueError('Malformed native biconnected domains.')
+        self._active=True
+        try:
+            check();raw=b''.join(v.to_bytes(self.width,'little') for v in domains)
+            C.memmove(self._domains,raw,len(raw));interrupted=[]
+            def poll():
+                try:check();return 0
+                except BaseException as exc:interrupted.append(exc);return 1
+            status=self.lib.dd_biconnected_allowed(self._handle,self._domains,self._allowed,C.byref(self._failed),POLL_CALLBACK(poll))
+            if interrupted:raise interrupted[0]
+            if status==0:
+                failed=self._failed.value
+                if not 0<=failed<self.n:raise RuntimeError('Malformed native biconnected failure cell.')
+                result=((failed,0),)
+            elif status==1:
+                raw=C.string_at(self._allowed,self.n*self.width)
+                result=tuple((cell,int.from_bytes(raw[cell*self.width:(cell+1)*self.width],'little')) for cell in range(self.n))
+                if any(value&~domains[cell] for cell,value in result):raise RuntimeError('Native biconnected support exceeds its input.')
+            else:raise RuntimeError('Native biconnected filter failed with status '+str(status))
+            check();return result
+        finally:self._active=False
+
+    def close(self):
+        if self._active:raise RuntimeError('Cannot close an active native biconnected workspace.')
+        if self._handle:self.lib.dd_biconnected_destroy(self._handle);self._handle=None
         if self._forests is not None:self._forests.close();self._forests=None
 
     def __del__(self):

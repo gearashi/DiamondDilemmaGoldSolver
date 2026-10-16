@@ -237,6 +237,7 @@ class BiconnectedTests(unittest.TestCase):
         for size in (1,2):
             data,mesh,reference=planted_gold(54,size);problem=SearchProblem(data,mesh)
             compact=AdvancedPruner(problem);full=AdvancedPruner(problem)
+            if full.native_graph is not None:full.native_graph.supports_biconnected=False
             def uncompressed(domain,check):
                 pairs=tuple(sorted({tuple(sorted(pair)) for code in values(domain) for pair in full.segments[code]}))
                 ports=sum(1<<port for port in {p for pair in pairs for p in pair})

@@ -263,7 +263,88 @@ class Scenario:
             runner.main()
 
 
+class CombinedScenario(Scenario):
+    """A completed state read is the only supported launch interface."""
+    combined_calls = 0
+    fail_read_at = None
+
+    def gpu_class(self):
+        engine = super().gpu_class()
+        legacy = engine.step
+        def combined(gpu, budget):
+            self.combined_calls += 1
+            legacy(gpu, budget)
+            if self.combined_calls == self.fail_read_at:
+                self.last_trusted_checkpoint = (self.output / 'systematic' / 'checkpoint.npz').read_bytes()
+                raise RuntimeError('Injected combined state read failure')
+            return gpu.states.get()
+        def forbidden(gpu, budget):
+            raise AssertionError('Combined runner repeated the ordinary launch')
+        engine.step_and_states = combined
+        engine.step = forbidden
+        return engine
+
+
 class SystematicRunnerTests(unittest.TestCase):
+    def test_combined_interface_gate_uses_restored_engine_replica_count(self):
+        for replicas, expected in ((4096, 'combined'), (4097, 'ordinary')):
+            with self.subTest(replicas=replicas), scratch() as (root, source):
+                scenario = Scenario(root / 'run', source)
+                engine = scenario.gpu_class()
+                advance = engine.step
+                calls = []
+                def ordinary(gpu, budget):
+                    calls.append('ordinary')
+                    return advance(gpu, budget)
+                def combined(gpu, budget):
+                    calls.append('combined')
+                    advance(gpu, budget)
+                    return gpu.states.get()
+                engine.step, engine.step_and_states = ordinary, combined
+                scenario.stop_after = 1
+                with patch.object(scenario, 'gpu_class', return_value=engine):
+                    scenario.execute(replicas=replicas)
+                    self.assertEqual(calls, [expected])
+                    self.assertEqual(read(scenario.output / 'status.json')['state'], 'stopped')
+                    calls.clear()
+                    scenario.execute(resume=True, replicas=128)
+                    self.assertEqual(calls, ['combined'])
+                    self.assertEqual(scenario.instances[-1].n, 128)
+                    self.assertEqual(read(scenario.output / 'status.json')['state'], 'stopped')
+
+    def test_combined_state_read_stop_resize_resume_covers_each_work_unit_once(self):
+        with scratch() as (root, source):
+            scenario = CombinedScenario(root / 'run', source)
+            scenario.stop_after = 2
+            scenario.execute()
+            self.assertEqual(read(scenario.output / 'status.json')['state'], 'stopped')
+            self.assertEqual(scenario.combined_calls, 2)
+            scenario.stop_after = None
+            scenario.execute(resume=True, replicas=2)
+            self.assertEqual(read(scenario.output / 'status.json')['state'], 'exhausted')
+            expected = {((code,), cursor) for code in range(480) for cursor in range(3)}
+            self.assertEqual(set(scenario.events), expected)
+            self.assertEqual(len(scenario.events), len(expected))
+            self.assertEqual(scenario.combined_calls, scenario.all_steps)
+
+    def test_failed_combined_state_read_keeps_last_trusted_checkpoint(self):
+        with scratch() as (root, source):
+            scenario = CombinedScenario(root / 'run', source)
+            scenario.stop_after = 2
+            scenario.execute()
+            checkpoint = scenario.output / 'systematic' / 'checkpoint.npz'
+            scenario.stop_after = None
+            scenario.fail_read_at = 3
+            with self.assertRaisesRegex(SystemExit, 'combined state read failure'):
+                scenario.execute(resume=True)
+            status = read(scenario.output / 'status.json')
+            self.assertEqual(status['state'], 'error')
+            self.assertIn('combined state read failure', status['error'])
+            self.assertEqual(checkpoint.read_bytes(), scenario.last_trusted_checkpoint)
+            with np.load(checkpoint, allow_pickle=False) as saved:
+                self.assertEqual(saved['test_work_cursor'].tolist(), [2, 2, 2, 2])
+            self.assertEqual(scenario.combined_calls, 3)
+
     def test_unfinished_lanes_do_not_repeat_refill_reads_between_launches(self):
         with scratch() as (root, source):
             scenario = Scenario(root / 'run', source)

@@ -171,6 +171,7 @@ class AdvancedPruner:
         self._local_ports, self._strand_cache = {}, {}
         self._native_forests = None
         self._native_strands = None
+        self._native_biconnected = None
         self._buckets, self._cut_cache, self._regional_cache = {}, {}, {}
         self.cut_vector_limit, self.region_node_limit = 256, 4096
         self.region_size_limit, self.region_misses_per_call = 4, 4
@@ -380,6 +381,11 @@ class AdvancedPruner:
             return False
         self.stats['biconnected_checks'] += 1
         key=tuple(domains);allowed=self._biconnected_cache.get(key)
+        if allowed is None and self.n>=10 and getattr(self.native_graph,'supports_biconnected',False) is True:
+            if self._native_biconnected is None:
+                self._native_biconnected=self.native_graph.prepare_biconnected(self.n,self.segments,self.problem.edges,check)
+            allowed=self._native_biconnected.allowed(domains,check)
+            _put(self._biconnected_cache,key,allowed,4)
         if allowed is None:
             if self._segment_supports is None and self.native_graph is None:
                 supports={}

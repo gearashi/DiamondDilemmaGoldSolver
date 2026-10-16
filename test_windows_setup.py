@@ -113,7 +113,7 @@ class WindowsSetupTests(unittest.TestCase):
         sentinel.write_bytes(b'preserve foreign environment')
         result = self.run_setup('-SkipData')
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn('separate Windows checkout', result.stdout + result.stderr)
+        self.assertRegex(result.stdout + result.stderr, r'separate\s+Windows\s+checkout')
         self.assertEqual(sentinel.read_bytes(), b'preserve foreign environment')
         self.assertFalse(self.pip_log.exists())
 

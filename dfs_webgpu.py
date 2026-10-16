@@ -200,10 +200,9 @@ class WebGPUDFS(DFS):
         self.queue.read_buffer(self.buffers[5], 0, 4)
         self.readback_bytes += 4
 
-    def step(self, nodes=128):
+    def _dispatch_step(self, nodes):
         if type(nodes) is not int or not 1 <= nodes <= 512:
             raise ValueError('Use a bounded work budget of 1..512 per launch.')
-        started = time.perf_counter()
         self.queue.write_buffer(self.parameters, 0, np.array([self.n, nodes, self.colors, 0], np.uint32))
         encoder = self.gpu_device.create_command_encoder()
         compute = encoder.begin_compute_pass()
@@ -212,8 +211,22 @@ class WebGPUDFS(DFS):
         compute.dispatch_workgroups((self.n + 63) // 64)
         compute.end()
         self.queue.submit([encoder.finish()])
+
+    def step(self, nodes=128):
+        started = time.perf_counter()
+        self._dispatch_step(nodes)
         self._synchronize()
         return (time.perf_counter() - started) * 1000
+
+    def step_and_states(self, nodes=128):
+        """Complete a bounded launch and read its lane states with one mapping.
+
+        The states read fences the submitted work. Callers already needing these
+        flags can avoid step()'s separate four-byte fence; step() retains its
+        synchronous timing contract for every other caller.
+        """
+        self._dispatch_step(nodes)
+        return self.states.get()
 
     def has_pending(self):
         return bool(np.any(self.states.get() == 1))

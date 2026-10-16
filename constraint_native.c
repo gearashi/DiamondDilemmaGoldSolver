@@ -447,9 +447,11 @@ static void strand_join(StrandWorkspace *s,int left,int right) {
     if(s->ranks[a]<s->ranks[b]){int t=a;a=b;b=t;}
     s->parents[b]=a;if(s->ranks[a]==s->ranks[b])s->ranks[a]++;
 }
+/* Candidate mapping polls every 256 actual code/endpoint work units, including
+ * long segment lists. Cell, seam and graph traversal polls remain independent. */
 EXPORT int dd_strands_allowed(void *ptr,const uint64_t *domains,uint64_t *allowed,int32_t *failed,dd_poll poll) {
     StrandWorkspace *s=(StrandWorkspace *)ptr;LocalForests *f;
-    int common[33],common_count=0,vertices;
+    int common[33],common_count=0,vertices;unsigned work=0;
     if(!s||!domains||!allowed||!failed)return -2;
     f=s->local;vertices=33*s->n;*failed=-1;
     if(poll&&poll())return -3;
@@ -498,15 +500,18 @@ EXPORT int dd_strands_allowed(void *ptr,const uint64_t *domains,uint64_t *allowe
             uint64_t bits=domain[w];
             while(bits) {
                 int code=w*64+(int)low_index(bits),host=-1;bits&=bits-1;
-                if((code&31)==0&&poll&&poll())return -3;
+                if((++work&255)==0&&poll&&poll())return -3;
                 if(distinct==1)host=only;
                 else for(int i=f->offsets[code];i<f->offsets[code+1];i++) {
+                    if((++work&255)==0&&poll&&poll())return -3;
                     int root=s->parents[33*cell+f->ends[2*i]];
                     if(host<0)host=root;else if(host!=root){host=-1;break;}
                 }
                 s->hosting[cell*f->codes+code]=host;
                 if(host>=0) {
                     if(cell==0&&s->seen[host]!=1) {
+                        /* Distinct hosts contain distinct occupied ports of cell zero;
+                         * at most its 33 ports can contribute a host. */
                         if(common_count>=33)return -2;
                         common[common_count++]=host;
                     }
@@ -522,6 +527,151 @@ EXPORT int dd_strands_allowed(void *ptr,const uint64_t *domains,uint64_t *allowe
         if(!common_count){*failed=cell;if(poll&&poll())return -3;return 0;}
     }
     for(int p=0;p<vertices;p++)s->seen[p]=0;
+    for(int i=0;i<common_count;i++)s->seen[common[i]]=1;
+    for(int cell=0;cell<s->n;cell++) {
+        if(poll&&poll())return -3;
+        for(int w=0;w<f->words;w++) {
+            uint64_t bits=domains[cell*f->words+w],keep=0;
+            while(bits) {
+                uint64_t bit=bits&(0-bits);int code=w*64+(int)low_index(bit),host=s->hosting[cell*f->codes+code];bits^=bit;
+                if(host>=0&&s->seen[host])keep|=bit;
+            }
+            allowed[cell*f->words+w]=keep;
+        }
+    }
+    if(poll&&poll())return -3;
+    return 1;
+}
+/* Full cyclic-block filter over the same ordered sparse local certificates.
+ * Endpoint graphs, seam IDs, per-code hosts and complete local caches are
+ * privately owned; the only result published by callers is a completed support. */
+#define DD_BLOCK_CACHE 1024
+typedef struct {
+    uint64_t domain[8],used;
+    int32_t count;
+    uint8_t pairs[2*561],valid;
+} BlockCertificate;
+typedef struct {
+    LocalForests *local;
+    int n,m,capacity;
+    int32_t board[4*480];
+    int32_t *memory,*graph,*blocks,*seen,*hosting,*seams;
+    uint64_t used[160];
+    BlockCertificate cache[DD_BLOCK_CACHE];
+} BlockWorkspace;
+EXPORT void *dd_biconnected_create(void *local,int n,int m,const int32_t *edges) {
+    LocalForests *f=(LocalForests *)local;BlockWorkspace *s;size_t length;
+    if(!f||n<1||n>160||f->codes!=3*n||m<0||m>3*n||(!edges&&m))return NULL;
+    for(int i=0;i<m;i++) {
+        int a=edges[4*i],sa=edges[4*i+1],b=edges[4*i+2],sb=edges[4*i+3];
+        if(a<0||a>=n||b<0||b>=n||sa<0||sa>2||sb<0||sb>2)return NULL;
+    }
+    s=(BlockWorkspace *)calloc(1,sizeof(BlockWorkspace));if(!s)return NULL;
+    s->local=f;s->n=n;s->m=m;s->capacity=n*561+11*m;
+    length=(size_t)(4*s->capacity+n*f->codes+33*n);
+    s->memory=(int32_t *)calloc(length,sizeof(int32_t));
+    if(!s->memory){free(s);return NULL;}
+    s->graph=s->memory;s->blocks=s->graph+2*s->capacity;s->seen=s->blocks+s->capacity;
+    s->hosting=s->seen+s->capacity;s->seams=s->hosting+n*f->codes;
+    for(int i=0;i<4*m;i++)s->board[i]=edges[i];
+    return s;
+}
+EXPORT void dd_biconnected_destroy(void *ptr) {
+    BlockWorkspace *s=(BlockWorkspace *)ptr;if(s){free(s->memory);free(s);}
+}
+EXPORT int dd_biconnected_allowed(void *ptr,const uint64_t *domains,uint64_t *allowed,int32_t *failed,dd_poll poll) {
+    BlockWorkspace *s=(BlockWorkspace *)ptr;LocalForests *f;int common[33],common_count=0,m=0,status;unsigned work=0;
+    if(!s||!domains||!allowed||!failed)return -2;
+    f=s->local;*failed=-1;
+    if(poll&&poll())return -3;
+    for(int cell=0;cell<s->n;cell++)
+        if(f->codes%64&&domains[cell*f->words+f->words-1]>>(f->codes%64))return -2;
+    for(int p=0;p<33*s->n;p++)s->seams[p]=-1;
+    for(int cell=0;cell<s->n;cell++) {
+        const uint64_t *domain=domains+cell*f->words;uint64_t hash=UINT64_C(1469598103934665603);
+        if(poll&&poll())return -3;
+        for(int w=0;w<f->words;w++)hash=(hash^domain[w])*UINT64_C(1099511628211);
+        /* Upper hash bits include every input bit; equality of the complete
+         * key remains authoritative even when cache indices collide. */
+        BlockCertificate *cached=s->cache+(hash>>54);int hit=cached->valid;
+        for(int w=0;w<f->words&&hit;w++)if(cached->domain[w]!=domain[w])hit=0;
+        if(!hit) {
+            int32_t pairs[2*561],count=0;uint64_t used;
+            status=dd_local_forests_certificate(f,domain,pairs,&count,&used);
+            if(status!=1)return status;
+            if(count<0||count>561)return -2;
+            for(int w=0;w<f->words;w++)cached->domain[w]=domain[w];
+            for(int i=0;i<2*count;i++)cached->pairs[i]=(uint8_t)pairs[i];
+            cached->used=used;cached->count=count;cached->valid=1;
+        }
+        s->used[cell]=cached->used;
+        if(m+cached->count>s->capacity)return -2;
+        for(int i=0;i<cached->count;i++) {
+            s->graph[2*m]=33*cell+cached->pairs[2*i];s->graph[2*m+1]=33*cell+cached->pairs[2*i+1];m++;
+        }
+    }
+    for(int i=0;i<s->m;i++) {
+        if(poll&&poll())return -3;
+        int a=s->board[4*i],sa=s->board[4*i+1],b=s->board[4*i+2],sb=s->board[4*i+3];
+        for(int p=0;p<11;p++) {
+            int u=11*sa+p,v=11*sb+10-p;
+            if((s->used[a]>>u&1)&&(s->used[b]>>v&1)) {
+                if(m>=s->capacity)return -2;
+                s->graph[2*m]=33*a+u;s->graph[2*m+1]=33*b+v;
+                s->seams[33*a+u]=m;s->seams[33*b+v]=m;m++;
+            }
+        }
+    }
+    status=dd_cyclic_blocks(33*s->n,m,s->graph,s->blocks,poll);if(status!=1)return status;
+    for(int i=0;i<m;i++)s->seen[i]=0;
+    for(int cell=0;cell<s->n;cell++) {
+        const uint64_t *domain=domains+cell*f->words;int port_blocks[33],only=-2,distinct=0;
+        if(poll&&poll())return -3;
+        for(int p=0;p<33;p++) {
+            int edge=s->seams[33*cell+p];port_blocks[p]=edge<0?-1:s->blocks[edge];
+            if(s->used[cell]>>p&1) {
+                if(!distinct){only=port_blocks[p];distinct=1;}
+                else if(only!=port_blocks[p])distinct=2;
+            }
+        }
+        for(int w=0;w<f->words;w++) {
+            uint64_t bits=domain[w];
+            while(bits) {
+                int code=w*64+(int)low_index(bits),host=-2;bits&=bits-1;
+                if((++work&255)==0&&poll&&poll())return -3;
+                if(distinct==1&&only>=0)host=only;
+                else {
+                    for(int i=f->offsets[code];i<f->offsets[code+1]&&host!=-1;i++) {
+                        for(int endpoint=0;endpoint<2;endpoint++) {
+                            if((++work&255)==0&&poll&&poll())return -3;
+                            int block=port_blocks[f->ends[2*i+endpoint]];
+                            if(block<0||(host>=0&&host!=block)){host=-1;break;}
+                            host=block;
+                        }
+                    }
+                }
+                if(host==-2)host=-1;
+                if(host>=m)return -2;
+                s->hosting[cell*f->codes+code]=host;
+                if(host>=0) {
+                    if(cell==0&&s->seen[host]!=1) {
+                        /* Distinct hosts contain distinct occupied ports of cell zero;
+                         * at most its 33 ports can contribute a host. */
+                        if(common_count>=33)return -2;
+                        common[common_count++]=host;
+                    }
+                    s->seen[host]=cell+1;
+                }
+            }
+        }
+        if(cell) {
+            int count=0;
+            for(int i=0;i<common_count;i++)if(s->seen[common[i]]==cell+1)common[count++]=common[i];
+            common_count=count;
+        }
+        if(!common_count){*failed=cell;if(poll&&poll())return -3;return 0;}
+    }
+    for(int i=0;i<m;i++)s->seen[i]=0;
     for(int i=0;i<common_count;i++)s->seen[common[i]]=1;
     for(int cell=0;cell<s->n;cell++) {
         if(poll&&poll())return -3;

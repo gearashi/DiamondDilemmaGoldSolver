@@ -401,6 +401,7 @@ class NativeGraphTests(unittest.TestCase):
                   for cell,row in enumerate(problem.domains)]
             python=AdvancedPruner(problem,options={'native':'python'})
             compiled=AdvancedPruner(problem,options={'native':'compiled'})
+            compiled.native_graph.supports_biconnected=False  # Exercise the old-export packed graph path.
             graphs=[];packed_graphs=[];plain=python._cyclic_edge_blocks;packed=compiled.native_graph.cyclic_edge_blocks_packed
             def capture(n,edges,check):
                 graphs.append((n,tuple(edges)));return plain(n,edges,check)
@@ -435,6 +436,7 @@ class NativeGraphTests(unittest.TestCase):
             getattr(AdvancedPruner(problem, options={'native': 'python'}), method)(expected)
             helper = AdvancedPruner(problem, options={'native': 'compiled'})
             helper.native_graph.supports_strands = False  # Exercise the old-export assembly fallback.
+            helper.native_graph.supports_biconnected = False
             actual = domains.copy()
             # A host with wider C ints must use the ordered Python traversal;
             # handing its 64-bit endpoint buffer to the native ABI is invalid.
@@ -457,6 +459,7 @@ class NativeGraphTests(unittest.TestCase):
             for stop_at in (1, problem.n, problem.n+1, problem.n+len(problem.edges)+1):
                 helper = AdvancedPruner(problem, options={'native': 'compiled'})
                 helper.native_graph.supports_strands = False  # Keep coverage of fallback graph assembly.
+                helper.native_graph.supports_biconnected = False
                 # Isolate graph construction and packing from local preparation.
                 for domain in domains:
                     getattr(helper, local)(domain, lambda: None)

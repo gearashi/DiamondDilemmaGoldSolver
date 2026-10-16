@@ -14,6 +14,112 @@ from test_constraint_dfs import board, double_face, simple_tiles, multiple_loops
 
 
 class SamplingTests(unittest.TestCase):
+    def test_fresh_verification_tables_match_raw_validator_and_domain_changes(self):
+        problem = SearchProblem([{'id': i, 'segments': [[[0, 2], [1, 5]]]} for i in range(160)])
+        codes = np.arange(160) * 3
+        self.assertIs(sampling._verification_view(problem, 1), problem)
+        self.assertIs(sampling._verification_view(problem, 31), problem)
+        original_domains = problem.domains
+        problem.domains = [row[:63] for row in original_domains]
+        self.assertIs(sampling._verification_view(problem, 32), problem)
+        problem.domains = [row[:64] for row in original_domains]
+        boundary = sampling._verification_view(problem, 32)
+        self.assertIsNot(boundary, problem)
+        self.assertEqual(sampling.score_board(boundary, codes), sampling.score_board(problem, codes))
+        problem.domains = original_domains
+        for domains in (problem.domains, [row[::2] for row in problem.domains],
+                        [[int(code)] for code in codes], problem.domains):
+            problem.domains = domains
+            view = sampling._verification_view(problem, 32)
+            self.assertEqual(sampling.score_board(view, codes), sampling.score_board(problem, codes))
+        problem.domains = [list(range(480)) for _ in range(160)]
+        first = sampling._verification_view(problem, 32)
+        self.assertEqual(sampling.score_board(first, codes)['domain_violations'], 0)
+        problem.domains[0].remove(0)
+        second = sampling._verification_view(problem, 32)
+        self.assertEqual(sampling.score_board(second, codes), sampling.score_board(problem, codes))
+        self.assertEqual(sampling.score_board(second, codes)['domain_violations'], 1)
+        problem.domains[0].append(0)
+        third = sampling._verification_view(problem, 32)
+        self.assertEqual(sampling.score_board(third, codes)['domain_violations'], 0)
+        for invalid in (codes.astype(float), codes[:-1], np.full(160, -1),
+                        np.full(160, 480), np.zeros(160, dtype=int)):
+            with self.subTest(kind=invalid.dtype, size=len(invalid)):
+                with self.assertRaises(ValueError) as expected:
+                    sampling.score_board(problem, invalid)
+                with self.assertRaisesRegex(ValueError, str(expected.exception)):
+                    sampling.score_board(third, invalid)
+        problem.fixed[0] = 1
+        with self.assertRaisesRegex(ValueError, 'fixed placement'):
+            sampling.score_board(sampling._verification_view(problem, 32), codes)
+        problem.fixed.clear()
+        # Unhashable entries still use the original list membership behavior.
+        problem.domains[0].append([])
+        self.assertIs(sampling._verification_view(problem, 32), problem)
+        self.assertEqual(sampling.score_board(problem, codes)['domain_violations'], 0)
+        problem.domains = [[int(code)] for code in codes]
+        self.assertIs(sampling._verification_view(problem, 32), problem)
+
+    def test_collection_view_preserves_archive_progress_and_first_invalid_board(self):
+        helper = sampling._verification_view
+        for invalid in (False, True):
+            results = []
+            for prepared in (False, True):
+                problem = SearchProblem([{'id': i, 'segments': [[[0, 2], [1, 5]]]} for i in range(160)])
+                codes = np.arange(160) * 3
+                clock, events = [0.0], []
+                class Fake:
+                    device = 'finite verification fixture'
+                    closed = False
+                    calls = 0
+                    def launch(self, steps): clock[0] += 2
+                    def top(self):
+                        self.calls += 1
+                        boards = np.tile(codes, (32, 1))
+                        scores = np.full(32, sampling.score_board(problem, codes)['objective'])
+                        if invalid: boards[17] = 0
+                        return boards, scores
+                    def close(self): self.closed = True
+                engine = Fake()
+                def progress(event):
+                    events.append(event)
+                    if event['event'] == 'sampling_progress':
+                        problem.domains[0].remove(0)
+                with patch.object(sampling, '_make_sampler', return_value=engine),                      patch.object(sampling, 'choose_backend', return_value='cuda'),                      patch.object(sampling.time, 'monotonic', side_effect=lambda: clock[0]),                      patch.object(sampling, '_verification_view', new=helper if prepared else lambda p, n: p):
+                    if invalid:
+                        with self.assertRaisesRegex(ValueError, 'repeats or omits physical tiles'):
+                            sampling.sample(problem, seconds=1, progress=progress)
+                        self.assertEqual(events, [])
+                        self.assertEqual(engine.calls, 1)
+                    else:
+                        result = sampling.sample(problem, seconds=1, progress=progress)
+                        self.assertEqual(result['archive_checks'], 64)
+                        self.assertEqual(result['archive_repeated_observations'], 63)
+                        self.assertEqual(result['archive_unique_boards'], 1)
+                        results.append((result, events))
+                self.assertTrue(engine.closed)
+            if not invalid:
+                self.assertEqual(results[0], results[1])
+
+    def test_partial_top_selection_matches_independent_total_order(self):
+        rng = np.random.default_rng(451)
+        for size in (0, 1, 7, 128, 2047, 2048, 4096, 32768):
+            arrays = [np.zeros(size, np.uint32), np.full(size, 2**32-1, np.uint32),
+                      np.arange(size, dtype=np.uint32),
+                      np.arange(size, dtype=np.uint32)[::-1],
+                      rng.integers(0, 7, size, dtype=np.uint32),
+                      rng.integers(0, 2**32, size, dtype=np.uint32)]
+            for scores in arrays:
+                ordered = sorted(range(size), key=lambda lane: (int(scores[lane]), lane))
+                original = scores.copy()
+                for count in (-1, 0, 1, 7, 32, size // 8, size, size + 1):
+                    with self.subTest(size=size, count=count):
+                        expected = ordered[-min(count, size):][::-1]
+                        actual = sampling._top_ids(scores, count)
+                        np.testing.assert_array_equal(actual, expected)
+                        self.assertEqual(actual.dtype, np.dtype(np.intp))
+                np.testing.assert_array_equal(scores, original)
+
     def test_software_adapter_opt_in_is_private_and_backend_limits_still_apply(self):
         for info in ({'adapter_type':'CPU','backend_type':'Vulkan'},
                      {'adapter_type':'DiscreteGPU','backend_type':'Vulkan','device':'lavapipe'},
@@ -265,6 +371,30 @@ class NativeTests(unittest.TestCase):
             # Patching the private factory also covers sample()/hybrid callers.
             factory = partial(sampling._make_sampler, allow_software=True)
             self.enterContext(patch.object(sampling, '_make_sampler', factory))
+
+    def test_large_pool_partial_top_gather_preserves_tied_lane_order(self):
+        backend = sampling.choose_backend(os.environ.get('DIAMOND_SAMPLING_BACKEND', 'auto'))
+        tiles, geometry = tetrahedron_tiles()
+        problem = SearchProblem(tiles, geometry)
+        engine = sampling._make_sampler(problem, *sampling._inputs(problem), 4096, 451, backend)
+        self.devices.add(engine.device)
+        try:
+            engine.launch(7)
+            if backend == 'cuda':
+                best, scores = engine.best.get().T, engine.meta[2].get()
+            else:
+                best = np.frombuffer(engine.queue.read_buffer(engine.buffers[1]), np.uint32).reshape(engine.n, engine.r).T.copy()
+                scores = np.frombuffer(engine.queue.read_buffer(engine.buffers[2], 2*engine.r*4, engine.r*4), np.uint32).copy()
+            ordered = sorted(range(engine.r), key=lambda lane: (int(scores[lane]), lane), reverse=True)
+            for count in (1, 32, 7, 512, 4096, 32):
+                boards, selected = engine.top(count)
+                ids = ordered[:count]
+                np.testing.assert_array_equal(boards, best[ids])
+                np.testing.assert_array_equal(selected, scores[ids])
+                for codes, objective in zip(boards[:32], selected[:32]):
+                    self.assertEqual(sampling.score_board(problem, codes)['objective'], int(objective))
+        finally:
+            engine.close()
 
     def test_asymmetric_and_boundary_scores_fixed_cells_and_moves(self):
         backend = os.environ.get('DIAMOND_SAMPLING_BACKEND', 'auto')

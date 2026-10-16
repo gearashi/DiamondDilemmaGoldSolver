@@ -1,6 +1,7 @@
 """Independent finite checks for publication of globally re-proved conflicts."""
 import copy,itertools,json,threading,unittest
 from unittest.mock import patch
+from types import SimpleNamespace
 from constraint_shared_conflicts import VerifiedConflictStore,_digest,_disk_bytes,MAX_BYTES,MAX_PENDING,MAX_ATTEMPTS
 from constraint_sat_assist import SatAssist
 from test_constraint_sat_assist import Fake,HAS_SAT
@@ -76,15 +77,45 @@ class SharedConflictSafetyTests(unittest.TestCase):
 
     def test_unknown_attempts_are_bounded_and_interrupted_false_never_proves(self):
         class LateFalse(Fake):
-            def solve_limited(self,**kwargs):self.called=True;self.ended.wait(.5);return False
+            def solve_limited(self,**kwargs):
+                self.called=True
+                if not self.ended.wait(5):raise AssertionError('Verifier monitor did not interrupt')
+                return False
             def get_core(self):raise AssertionError('Interrupted answer cannot provide proof')
         store=VerifiedConflictStore(ring(4),factory=LateFalse);store.offer([(0,0),(1,0)])
+        # Freeze preparation/main-thread time, then expire the deadline in the
+        # real monitor thread. Each call must complete exactly one interrupted
+        # query, independently of host load or how long model preparation takes.
+        caller=threading.get_ident()
+        clock=SimpleNamespace(monotonic=lambda:0.0 if threading.get_ident()==caller else 1.0)
         try:
-            for _ in range(MAX_ATTEMPTS):store.advance(seconds=.01,attempts=1)
+            with patch('constraint_shared_conflicts.time',clock),patch('constraint_sat_assist.time',clock):
+                for attempt in range(MAX_ATTEMPTS):
+                    self.assertEqual(store.advance(seconds=.01,attempts=1),0)
+                    self.assertEqual(store.stats['shared_conflicts_calls'],attempt+1)
+                    self.assertEqual(store.stats['shared_conflicts_unknown'],attempt+1)
+                    self.assertEqual(store.pending_count,int(attempt+1<MAX_ATTEMPTS))
             self.assertEqual(store.records(),[]);self.assertEqual(store.pending_count,0)
             self.assertEqual(store.stats['shared_conflicts_unknown'],MAX_ATTEMPTS)
             self.assertEqual(store.stats['shared_conflicts_pending_dropped'],1)
+            self.assertEqual(store._oracle.stats['sat_assist_unsat'],0)
             self.assertFalse(store.offer([(0,0),(1,0)]))
+        finally:store.close()
+
+    def test_preparation_budget_expiry_does_not_consume_a_query_attempt(self):
+        store=VerifiedConflictStore(ring(4),factory=Fake);store.offer([(0,0),(1,0)])
+        try:
+            # The enclosing budget expires before preparation begins. No query
+            # occurred, so this claim must retain all of its retry allowance.
+            ticks=iter((0.0,.01))
+            with patch('constraint_shared_conflicts.time',SimpleNamespace(monotonic=lambda:next(ticks))), \
+                 patch('constraint_sat_assist.time',SimpleNamespace(monotonic=lambda:0.0)):
+                self.assertEqual(store.advance(seconds=.01,attempts=1),0)
+            self.assertFalse(store._oracle.ready);self.assertFalse(store._oracle.solver.called)
+            self.assertEqual(store.pending_count,1);self.assertEqual(store.records(),[])
+            self.assertEqual(list(store._pending.values()),[0])
+            for name in ('shared_conflicts_calls','shared_conflicts_unknown','shared_conflicts_pending_dropped'):
+                self.assertEqual(store.stats[name],0)
         finally:store.close()
 
     def test_native_stop_retains_unverified_pending_claim(self):

@@ -71,6 +71,13 @@ def check_colored_tail(test, factory):
 
 
 class ArrayTests(unittest.TestCase):
+    def test_both_step_interfaces_reject_invalid_work_before_dispatch(self):
+        gpu = WebGPUDFS.__new__(WebGPUDFS)
+        for method in (gpu.step, gpu.step_and_states):
+            for value in (0, -1, 513, True, np.int64(1), 1.5):
+                with self.subTest(method=method.__name__, value=value), self.assertRaisesRegex(ValueError, 'bounded work budget'):
+                    method(value)
+
     def test_selected_storage_views_and_unsigned_counter_limbs(self):
         class Memory:
             n = 4
@@ -126,6 +133,12 @@ class NativeTests(unittest.TestCase):
         check_colored_tail(self, factory)
 
     def test_finite_leaves_shrink_grow_pending_freeze_and_checkpoint(self):
+        self._finite_leaves_shrink_grow_pending_freeze_and_checkpoint(combined=False)
+
+    def test_combined_states_finite_leaves_shrink_grow_pending_freeze_and_checkpoint(self):
+        self._finite_leaves_shrink_grow_pending_freeze_and_checkpoint(combined=True)
+
+    def _finite_leaves_shrink_grow_pending_freeze_and_checkpoint(self, combined):
         rows = np.full((3, 160), -1, np.int16)
         rows[:, :158] = np.arange(158, dtype=np.int16) * 3
         rows[:, 0] = np.arange(3)
@@ -149,8 +162,13 @@ class NativeTests(unittest.TestCase):
                 np.testing.assert_array_equal(ledger.counter_totals(gpu), previous_counts)
                 resized = True
             before = gpu.readback_bytes
-            gpu.step(128)
-            self.assertEqual(gpu.readback_bytes - before, 4, 'A launch should fence four bytes, not read back stacks.')
+            if combined:
+                flags = gpu.step_and_states(128)
+                self.assertEqual(gpu.readback_bytes - before, gpu.n * 4)
+                np.testing.assert_array_equal(flags, gpu.states.get())
+            else:
+                gpu.step(128)
+                self.assertEqual(gpu.readback_bytes - before, 4, 'A launch should fence four bytes, not read back stacks.')
             gpu.verify()
             pending = gpu.pending()
             if len(pending):
