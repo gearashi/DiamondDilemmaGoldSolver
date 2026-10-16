@@ -40,9 +40,20 @@ def load_library(directory=None):
     if hasattr(lib,'dd_cyclic_blocks'):
         lib.dd_cyclic_blocks.argtypes=[C.c_int,C.c_int,i32,i32,POLL_CALLBACK]
         lib.dd_cyclic_blocks.restype=C.c_int
+    if hasattr(lib,'dd_graph_union_roots'):
+        lib.dd_graph_union_roots.argtypes=[C.c_int,C.c_int,i32,i32,POLL_CALLBACK]
+        lib.dd_graph_union_roots.restype=C.c_int
     if hasattr(lib,'dd_hall_allowed'):
         lib.dd_hall_allowed.argtypes=[C.c_int,C.c_int,u64,u64,i32,i32,POLL_CALLBACK]
         lib.dd_hall_allowed.restype=C.c_int
+    if hasattr(lib,'dd_local_forests_create'):
+        lib.dd_local_forests_create.argtypes=[C.c_int,C.c_int,i32,u8]
+        lib.dd_local_forests_create.restype=C.c_void_p
+        lib.dd_local_forests_destroy.argtypes=[C.c_void_p];lib.dd_local_forests_destroy.restype=None
+        lib.dd_local_forests_calculate.argtypes=[C.c_void_p,u64,i32,u64]
+        lib.dd_local_forests_calculate.restype=C.c_int
+        lib.dd_local_forests_certificate.argtypes=[C.c_void_p,u64,i32,i32,u64]
+        lib.dd_local_forests_certificate.restype=C.c_int
     return lib
 
 
@@ -227,6 +238,9 @@ class NativeGraphHelpers:
     def __init__(self,library=None):
         self.lib=library if library is not None else load_library()
         if not hasattr(self.lib,'dd_cyclic_blocks'):raise RuntimeError('Native graph helper missing; rebuild locally.')
+    def prepare_local_forests(self,segments,check=lambda:None):
+        """Prepare immutable orientation segments for repeated exact local unions."""
+        return NativeLocalForests(segments,self.lib,check)
     def cyclic_edge_blocks(self,vertex_count,edges,check=lambda:None):
         if type(vertex_count)is not int or not 0<=vertex_count<=5280:raise ValueError('Invalid native graph vertex count.')
         check();edges=tuple(edges)
@@ -260,6 +274,25 @@ class NativeGraphHelpers:
         inputs=(C.c_int32*(len(packed)//4)).from_buffer_copy(packed)
         return self._cyclic_blocks(vertex_count,len(packed)//8,inputs,check,packed=True)
 
+    def union_roots_packed(self,vertex_count,packed,check=lambda:None):
+        """Exact ordered union roots from immutable signed32 endpoint pairs."""
+        if type(vertex_count)is not int or not 0<=vertex_count<=5280:
+            raise ValueError('Invalid native graph vertex count.')
+        if type(packed)is not bytes or len(packed)%8 or len(packed)>8*262144:
+            raise ValueError('Packed native graph must contain bounded signed32 endpoint pairs.')
+        if not vertex_count and packed:raise ValueError('A zero-vertex graph cannot have edges.')
+        if not hasattr(self.lib,'dd_graph_union_roots'):raise RuntimeError('Native graph union helper missing; rebuild locally.')
+        check();inputs=(C.c_int32*(len(packed)//4)).from_buffer_copy(packed)
+        output=(C.c_int32*vertex_count)();interrupted=[]
+        def poll():
+            try:check();return 0
+            except BaseException as exc:interrupted.append(exc);return 1
+        status=self.lib.dd_graph_union_roots(vertex_count,len(packed)//8,inputs,output,POLL_CALLBACK(poll))
+        if interrupted:raise interrupted[0]
+        if status==-2:raise ValueError('Malformed packed native graph endpoint.')
+        if status!=1:raise RuntimeError('Native graph union failed with status '+str(status))
+        check();return tuple(output)
+
     def _cyclic_blocks(self,vertex_count,edge_count,inputs,check,packed=False):
         output=(C.c_int32*edge_count)();interrupted=[]
         def poll():
@@ -281,6 +314,83 @@ def select_graph_helpers(mode='auto'):
         reason='Compiled graph helper unavailable: '+str(exc)
         if mode=='compiled':raise RuntimeError(reason+' Run python build_native.py to build it locally.') from exc
         return None,reason
+
+
+class NativeLocalForests:
+    """Exact local union forests with privately owned, validated segment tables.
+
+    Each native query is bounded by 480 orientation codes and 32768 segments;
+    checks bracket that finite work. Returned results are immutable, and a
+    cancellation or malformed request never changes search or cache state.
+    """
+    def __init__(self,segments,library=None,check=lambda:None):
+        self._handle=None;self._active=False
+        if sys.byteorder!='little':raise ValueError('Native local forests require a little-endian host.')
+        if not isinstance(segments,(tuple,list)) or not 1<=len(segments)<=480:
+            raise ValueError('Native local forests require 1..480 orientation segment lists.')
+        check();offsets=[0];ends=[]
+        for pairs in segments:
+            if not isinstance(pairs,(tuple,list)) or len(pairs)>32768-len(ends)//2:
+                raise ValueError('Native local forest segment bound exceeded.')
+            for pair in pairs:
+                if len(ends)%512==0:check()
+                if (not isinstance(pair,(tuple,list)) or len(pair)!=2 or
+                        any(type(p)is not int or not 0<=p<33 for p in pair)):
+                    raise ValueError('Malformed native local forest endpoint.')
+                ends.extend(pair)
+            offsets.append(len(ends)//2)
+        self.lib=library if library is not None else load_library()
+        if not all(hasattr(self.lib,name) for name in ('dd_local_forests_create','dd_local_forests_destroy','dd_local_forests_calculate','dd_local_forests_certificate')):
+            raise RuntimeError('Native local forest helper missing; rebuild locally.')
+        self.count=len(segments);self.words=(self.count+63)//64;self.width=8*self.words
+        self._domains=(C.c_uint64*self.words)();self._roots=(C.c_int32*33)();self._used=C.c_uint64()
+        self._edges=(C.c_int32*(2*561))();self._edge_count=C.c_int32()
+        packed_offsets=(C.c_int32*len(offsets))(*offsets);packed_ends=(C.c_uint8*max(1,len(ends)))(*ends)
+        check();self._handle=self.lib.dd_local_forests_create(self.count,len(ends)//2,packed_offsets,packed_ends)
+        if not self._handle:raise RuntimeError('Unable to prepare native local forests.')
+        try:check()
+        except BaseException:self.close();raise
+
+    def calculate(self,domain,check=lambda:None):
+        if not self._handle:raise RuntimeError('Native local forest workspace is closed.')
+        if self._active:raise RuntimeError('Native local forest workspace is already active.')
+        if type(domain)is not int or domain<0 or domain.bit_length()>self.count:
+            raise ValueError('Malformed native local forest domain.')
+        self._active=True
+        try:
+            check();C.memmove(self._domains,domain.to_bytes(self.width,'little'),self.width)
+            status=self.lib.dd_local_forests_calculate(self._handle,self._domains,self._roots,C.byref(self._used))
+            if status!=1:raise RuntimeError('Native local forest failed with status '+str(status))
+            used=self._used.value;remaining=used;forest=[]
+            while remaining:
+                bit=remaining&-remaining;port=bit.bit_length()-1;remaining^=bit
+                root=self._roots[port]
+                if port!=root:forest.append((port,root))
+            result=tuple(forest),used;check();return result
+        finally:self._active=False
+
+    def certificate(self,domain,check=lambda:None):
+        """Return a sparse graph preserving connectivity after any port deletion."""
+        if not self._handle:raise RuntimeError('Native local forest workspace is closed.')
+        if self._active:raise RuntimeError('Native local forest workspace is already active.')
+        if type(domain)is not int or domain<0 or domain.bit_length()>self.count:
+            raise ValueError('Malformed native local forest domain.')
+        self._active=True
+        try:
+            check();C.memmove(self._domains,domain.to_bytes(self.width,'little'),self.width)
+            status=self.lib.dd_local_forests_certificate(self._handle,self._domains,self._edges,C.byref(self._edge_count),C.byref(self._used))
+            if status!=1:raise RuntimeError('Native local certificate failed with status '+str(status))
+            result=tuple((self._edges[2*i],self._edges[2*i+1]) for i in range(self._edge_count.value)),self._used.value
+            check();return result
+        finally:self._active=False
+
+    def close(self):
+        if self._active:raise RuntimeError('Cannot close an active native local forest workspace.')
+        if self._handle:self.lib.dd_local_forests_destroy(self._handle);self._handle=None
+
+    def __del__(self):
+        handle=getattr(self,'_handle',None)
+        if handle and not getattr(self,'_active',False):self.lib.dd_local_forests_destroy(handle);self._handle=None
 
 
 class NativeHall:

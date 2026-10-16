@@ -133,6 +133,7 @@ class PrunerTables:
     cluster_masks: tuple
     parity: object
     stars: tuple | None = None
+    cluster_supports: tuple | None = None
 
 
 class Pruner:
@@ -193,6 +194,12 @@ class Pruner:
             self.parity = ParityPruner(problem, tables=tables.parity, check=check) if parity else None
             self.regions = tuple((cells, dict(boundary), size) for cells, boundary, size in tables.regions)
             self.bonds, self.clusters, self._cluster_masks = tables.bonds, tables.clusters, tables.cluster_masks
+            self._cluster_supports = tables.cluster_supports
+            if self._cluster_supports is None:
+                # Complete older in-memory tables before publishing the new
+                # immutable index; cancelled construction publishes nothing.
+                self._cluster_supports = self._build_cluster_supports()
+                tables = replace(tables, cluster_supports=self._cluster_supports)
             self._cluster_cache = [{} for _ in self.clusters]
             self.stats.update(pruner_table_reuses=1, forced_bonds=len(self.bonds), forced_clusters=len(self.clusters))
             self.tables = tables
@@ -218,11 +225,37 @@ class Pruner:
             self._cluster_masks.append(tuple(tuple((cell, 1 << code) for cell, code in embedding)
                                              for embedding in embeddings))
         self._cluster_masks = tuple(self._cluster_masks)
+        self._cluster_supports = self._build_cluster_supports()
         self.tables = PrunerTables(binding,
             tuple((cells, tuple(boundary.items()), size) for cells, boundary, size in self.regions),
             self.bonds, self.clusters, self._cluster_masks,
-            self.parity.tables if self.parity is not None else None)
+            self.parity.tables if self.parity is not None else None,
+            cluster_supports=self._cluster_supports)
         self.stats['pruner_table_builds'] = 1
+
+    def _build_cluster_supports(self):
+        """Transpose finite embeddings into immutable per-cell support bitsets.
+
+        Each bit identifies one complete embedding. The absent mask permits a
+        cell to hold an unrelated tile only when a viable embedding omits it.
+        Tables depend on puzzle geometry, never on mutable search domains.
+        """
+        result = []
+        for embeddings in self._cluster_masks:
+            all_embeddings = (1 << len(embeddings))-1
+            rows, present = [{} for _ in range(self.n)], [0]*self.n
+            for index, embedding in enumerate(embeddings):
+                self.check()
+                bit = 1 << index
+                for cell, orientation in embedding:
+                    present[cell] |= bit
+                    rows[cell][orientation] = rows[cell].get(orientation, 0) | bit
+            immutable_rows = []
+            for used, row in zip(present, rows):
+                self.check()
+                immutable_rows.append((all_embeddings ^ used, tuple(row.items()), sum(row)))
+            result.append((all_embeddings, tuple(immutable_rows)))
+        return tuple(result)
 
     def _build_clusters(self):
         if any(nb < 0 for row in self.neighbors for nb in row):
@@ -490,19 +523,29 @@ class Pruner:
             cache = self._cluster_cache[index]
             allowed = cache.get(signature)
             if allowed is None:
-                support, covered, count = [0]*self.n, [0]*self.n, 0
-                for embedding in self._cluster_masks[index]:
-                    self.check()
-                    if not all(signature[cell] & bit for cell, bit in embedding):
-                        continue
-                    count += 1
-                    for cell, bit in embedding:
-                        support[cell] |= bit
-                        covered[cell] += 1
-                if not count:
+                viable, rows = self._cluster_supports[index]
+                if not viable:
                     return self._fail(domains, 0, 'cluster') or changed
-                allowed = tuple(support[cell] | (~tile_bits if covered[cell] < count else 0)
-                                for cell in range(self.n))
+                for domain, (absent, supports, full) in zip(signature, rows):
+                    self.check()
+                    if domain & full == full:
+                        continue
+                    possible = absent
+                    for bit, embeddings_with_value in supports:
+                        if domain & bit:
+                            possible |= embeddings_with_value
+                    viable &= possible
+                    if not viable:
+                        return self._fail(domains, 0, 'cluster') or changed
+                allowed = []
+                for absent, supports, full in rows:
+                    self.check()
+                    keep = ~tile_bits if absent & viable else 0
+                    for bit, embeddings_with_value in supports:
+                        if embeddings_with_value & viable:
+                            keep |= bit
+                    allowed.append(keep)
+                allowed = tuple(allowed)
                 # Removing unsupported placements does not remove any viable
                 # embedding. The projected output is therefore also a fixed
                 # point of this one cluster filter.

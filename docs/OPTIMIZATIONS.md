@@ -375,3 +375,33 @@ Final local validation discovered **749 CPU tests: 726 passed, 23 skipped, no fa
 Regular 64-bit Python 3.15.0 now has a separate DFS/WebGPU setup profile. The full Python 3.12 profile remains available for CUDA, SAT, CP, CP-SAT, and their optional assistance/repair. Setup preserves existing environments, and the dashboard reports installed engine availability before starting a search.
 
 The final local regression runs each discovered 766 tests: Python 3.12 passed 739 with 27 skips; Python 3.15 passed 648 with 118 explicit dependency/platform/hardware skips. Both had no failures. The reduced profile retains DFS, native control, first-UIP, checkpoint, and cancellation coverage; missing native solver packages are not reported as tested. All 27 opted-in Python 3.15 WebGPU/sampling checks passed on the RTX 2060 through Vulkan, including comparison with Python 3.12 CUDA checkpoints. Six additional isolated Python 3.15 application runs covered compiled DFS, parallel resume, and WebGPU hybrid search, preserving the canonical saved searches. These checks establish bounded compatibility, not a Python-version performance advantage or a Gold solution.
+
+
+## Round 12: graph processing, forced groups and GPU bookkeeping
+
+The optional compiled CPU library now prepares immutable rotated-segment tables once and computes local union forests and vertex-biconnectivity certificates on cache misses. The certificates retain the same ordered edges and used ports as the Python implementation. Whole-board strand connectivity also batches its ordered unions through C, including input packing in the performance checks. Python remains the fallback when the native library is unavailable. Each calculation is bounded, checks cancellation, and publishes a cached result only after completion; no native workspace enters a checkpoint.
+
+Forced-neighbor clusters now transpose their finite embeddings into per-cell bitsets. Intersecting supported embeddings computes the same exact placement union. An unrelated tile remains allowed at a cell only when at least one viable embedding omits that cell. Immutable indices are reused across slices, while the existing eight-entry cache still keys completed results by exact projected domains. This does not merge physical tiles or discard unexplored branches.
+
+First-UIP learned clauses retain bounded cell signatures and mask maps to avoid rebuilding dictionaries during subsumption checks. Stores with fewer than four clauses keep the previous direct scan. Clause meaning, eviction order, root binding and pending search coverage stay unchanged.
+
+The persistent GPU DFS runner avoids refilling when no free lane and queued job can be paired. It still validates ownership after every completed launch and at restore/checkpoint boundaries. CUDA aggregates counters before transferring them to the CPU. CUDA and WGSL candidate checks now test only the occupied third side when the lookup bucket already guarantees the first two occupied sides. Candidate order, random state and checkpoint formats are unchanged.
+
+Seven alternating trials on a copied real checkpoint with 4,096 replicas measured CUDA kernel launches at **1.167 to 0.736 ms** and WebGPU/Vulkan launches at **2.633 to 1.993 ms** on an RTX 2060. Every one of the twelve device fields matched the previous kernels bit for bit at work budgets 1, 7, 64 and 512. A separate 131,072-replica counter test measured **1.564 to 0.204 ms**, including transfer and summation, with exact unsigned-64 overflow parity. These component measurements do not predict time to a Gold solution.
+
+Candidates that did not justify more complexity remain out of the production path: ordinary learned-conflict event indexing regressed small stores and dense changes; staged regional boundary caches gave no consistent benefit; lazy local-certificate edge construction slowed the Python fallback; sparse WebGPU gathering has no measured benefit for the common contiguous live reads. Native frontier snapshots remain a small fraction of the measured work. These are workload-based decisions, not a claim that future optimization is impossible.
+
+
+Three alternating before/after trials resumed the same immutable copy of the actual saved checkpoint, with two slices stopping after three completed partial-loop checks each. Within every settings group the old and new versions committed the same sixteen nodes and retained identical pending stack hashes. Solver medians (excluding dependency import and input setup) were:
+
+| Settings | v1.2.0 | Round 12 | Reduction |
+| --- | ---: | ---: | ---: |
+| Existing defaults | 0.923 s | 0.752 s | 18.4% |
+| First-UIP enabled | 0.976 s | 0.803 s | 17.7% |
+| Compiled search loop enabled | 0.794 s | 0.631 s | 20.5% |
+| All four experimental controls | 0.870 s | 0.725 s | 16.6% |
+
+These are short bounded comparisons on one checkpoint. They support retaining the changes but do not establish a universal speedup, rank the algorithms across the full puzzle, or predict when a Gold solution will be found. Complete raw trials, source/native-library hashes, separate process/import/setup times and exact pending-state comparisons are retained in the local round-12 audit records.
+
+
+The final CPU suites each discovered 793 tests: Python 3.12 passed **764 with 29 skips**, and Python 3.15 passed **673 with 120 skips**, with no failures. Skips explicitly identify unavailable engines, platforms or hardware rather than claiming coverage. Version-2 bounded-run manifests verified the exact source and compiled-library inputs. Ten opted-in Python 3.12 GPU tests passed, and Python 3.15 passed 28 WebGPU/sampling checks with its direct-CUDA test intentionally skipped. Six isolated Python 3.15 application runs saved valid checkpoints and exited cleanly, including two-worker to one-worker resume and WebGPU hybrid search. Canonical puzzle/best/checkpoint hashes remained unchanged. Physical AMD and Apple GPU coverage remains unverified; the local GPU was an RTX 2060.

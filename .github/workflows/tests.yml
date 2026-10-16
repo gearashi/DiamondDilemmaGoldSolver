@@ -85,6 +85,7 @@ jobs:
           test_constraint_knowledge
           test_constraint_parallel
           test_constraint_native
+          test_constraint_native_forests
           test_search_options
           test_search_problem
           test_constraint_symmetry

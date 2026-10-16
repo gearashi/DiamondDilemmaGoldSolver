@@ -27,6 +27,7 @@ class Array:
     def dtype(self): return self.value.dtype
     def __array__(self, dtype=None, copy=None): return np.asarray(self.value, dtype=dtype) if not copy else np.array(self.value, dtype=dtype, copy=True)
     def get(self): return self.value.copy()
+    def sum(self, *args, **kwargs): return Array(self.value.sum(*args, **kwargs))
     def __getitem__(self, key): return Array(self.value[key])
     def __setitem__(self, key, value): self.value[key] = value
 

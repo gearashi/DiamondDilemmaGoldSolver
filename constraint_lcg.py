@@ -321,6 +321,10 @@ class LCGStore:
             raise ValueError('Invalid LCG literal budget.')
         self.limit, self.literal_limit = limit, literal_limit
         self.clauses = []
+        # Bounded metadata for the canonical immutable clauses only. The cell
+        # signature rejects impossible subsumption before any mask comparisons;
+        # the maps avoid rebuilding the same dictionaries for each admission.
+        self._clause_data = {}
         self.stats = dict.fromkeys(STAT_KEYS, 0)
         self._prune_snapshot = None
         self._prune_pending = set()
@@ -357,10 +361,27 @@ class LCGStore:
         if len(clause) > self.literal_limit:
             self.stats['lcg_budget_skips'] += 1
             return False
-        if any(self._subsumes(old, clause) for old in self.clauses):
-            self.stats['lcg_subsumed'] += 1
-            return False
-        retained = [old for old in self.clauses if not self._subsumes(clause, old)]
+        # Tiny stores are cheaper to scan directly. Materialize bounded metadata
+        # only after four clauses survive admission; most early searches retain
+        # fewer. Both paths use exactly the same mask-containment relation.
+        if len(self.clauses) < 4:
+            if any(self._subsumes(old, clause) for old in self.clauses):
+                self.stats['lcg_subsumed'] += 1
+                return False
+            retained = [old for old in self.clauses if not self._subsumes(clause, old)]
+        else:
+            # Left subsumes right only if every left cell occurs on the right
+            # and its forbidden mask contains the right mask.
+            cells = sum(1 << cell for cell, _ in clause)
+            mapping = dict(clause)
+            if any(not (self._clause_data[old][0] & ~cells) and
+                   all(not (mapping[cell] & ~mask) for cell, mask in old)
+                   for old in self.clauses):
+                self.stats['lcg_subsumed'] += 1
+                return False
+            retained = [old for old in self.clauses
+                        if cells & ~self._clause_data[old][0] or
+                        any(self._clause_data[old][1][cell] & ~mask for cell, mask in clause)]
         self.stats['lcg_subsumed'] += len(self.clauses)-len(retained)
         retained.append(clause)
         self.stats['lcg_learned'] += 1
@@ -368,6 +389,17 @@ class LCGStore:
             victim = max(range(len(retained)), key=lambda i: (len(retained[i]), -i))
             retained.pop(victim)
             self.stats['lcg_evictions'] += 1
+        # Drop metadata together with subsumed/evicted clauses; its total mask
+        # entries remain bounded by the same literal budget as the store.
+        if len(retained) >= 4:
+            if not self._clause_data:
+                self._clause_data = {old: (sum(1 << cell for cell, _ in old), dict(old))
+                                     for old in retained}
+            else:
+                self._clause_data = {old: self._clause_data[old] if old in self._clause_data
+                                     else (cells, mapping) for old in retained}
+        elif self._clause_data:
+            self._clause_data = {}
         self.clauses = retained
         self._prune_snapshot = None
         self._prune_pending = set()

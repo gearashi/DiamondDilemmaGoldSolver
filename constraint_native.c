@@ -268,3 +268,145 @@ EXPORT int dd_hall_allowed(int n,int words,const uint64_t *rows,uint64_t *allowe
     if(poll && poll()) return -3;
     return 1;
 }
+/* Immutable local orientation graph, independent of search/checkpoint state.
+ * Each query scans at most 480 codes and 32768 prepared endpoint pairs. */
+typedef struct {
+    int codes,words;
+    int32_t offsets[481];
+    uint8_t *ends;
+    uint64_t ports[33*8];
+    int pair_count;
+    uint8_t pairs[2*561];
+    uint64_t pair_supports[561*8];
+} LocalForests;
+EXPORT void *dd_local_forests_create(int codes,int edges,const int32_t *offsets,const uint8_t *ends) {
+    LocalForests *f;int pair_ids[33*33];
+    if(codes<1||codes>480||edges<0||edges>32768||!offsets||(!ends&&edges)||offsets[0]!=0||offsets[codes]!=edges)return NULL;
+    for(int code=0;code<codes;code++)if(offsets[code]<0||offsets[code]>offsets[code+1]||offsets[code+1]>edges)return NULL;
+    for(int i=0;i<2*edges;i++)if(ends[i]>=33)return NULL;
+    f=(LocalForests *)calloc(1,sizeof(LocalForests));if(!f)return NULL;
+    f->ends=(uint8_t *)malloc((size_t)(edges?2*edges:1));if(!f->ends){free(f);return NULL;}
+    f->codes=codes;f->words=(codes+63)/64;
+    for(int i=0;i<33*33;i++)pair_ids[i]=-1;
+    for(int i=0;i<=codes;i++)f->offsets[i]=offsets[i];
+    for(int i=0;i<2*edges;i++)f->ends[i]=ends[i];
+    for(int code=0;code<codes;code++)for(int i=offsets[code];i<offsets[code+1];i++) {
+        uint64_t bit=UINT64_C(1)<<(code%64);
+        f->ports[(int)ends[2*i]*f->words+code/64]|=bit;
+        f->ports[(int)ends[2*i+1]*f->words+code/64]|=bit;
+        int a=ends[2*i],b=ends[2*i+1],pair;
+        if(a>b){int t=a;a=b;b=t;}
+        pair=pair_ids[a*33+b];
+        if(pair<0){pair=f->pair_count++;pair_ids[a*33+b]=pair;f->pairs[2*pair]=(uint8_t)a;f->pairs[2*pair+1]=(uint8_t)b;}
+        f->pair_supports[pair*f->words+code/64]|=bit;
+    }
+    return f;
+}
+EXPORT void dd_local_forests_destroy(void *ptr) {
+    LocalForests *f=(LocalForests *)ptr;if(f){free(f->ends);free(f);}
+}
+static int local_forest_root(int *parents,int x) {
+    while(parents[x]!=x){parents[x]=parents[parents[x]];x=parents[x];}return x;
+}
+EXPORT int dd_local_forests_calculate(void *ptr,const uint64_t *domain,int32_t *roots,uint64_t *used_out) {
+    LocalForests *f=(LocalForests *)ptr;int parents[33],ranks[33]={0},components=0;uint64_t used=0;
+    if(!f||!domain||!roots||!used_out)return -2;
+    if(f->codes%64 && domain[f->words-1]>>(f->codes%64))return -2;
+    for(int p=0;p<33;p++) {
+        parents[p]=p;
+        for(int w=0;w<f->words;w++)if(domain[w]&f->ports[p*f->words+w]){used|=UINT64_C(1)<<p;components++;break;}
+    }
+    for(int w=0;w<f->words&&components>1;w++) {
+        uint64_t bits=domain[w];
+        while(bits&&components>1) {
+            int code=w*64+(int)low_index(bits);bits&=bits-1;
+            for(int i=f->offsets[code];i<f->offsets[code+1];i++) {
+                int a=local_forest_root(parents,f->ends[2*i]),b=local_forest_root(parents,f->ends[2*i+1]);
+                if(a==b)continue;
+                if(ranks[a]<ranks[b]){int t=a;a=b;b=t;}
+                parents[b]=a;if(ranks[a]==ranks[b])ranks[a]++;components--;
+            }
+        }
+    }
+    for(int p=0;p<33;p++)roots[p]=local_forest_root(parents,p);
+    *used_out=used;return 1;
+}
+
+/* Same vertex-biconnectivity certificate as the Python local graph path:
+ * preserve first-seen pair order, use the identical prefix proof and Tarjan
+ * blocks, then keep bridges and one sorted-vertex cycle per cyclic block. */
+EXPORT int dd_local_forests_certificate(void *ptr,const uint64_t *domain,int32_t *out,int32_t *out_count,uint64_t *used_out) {
+    LocalForests *f=(LocalForests *)ptr;int32_t pairs[2*561],blocks[561];
+    uint64_t used=0,covered=0,groups[561]={0};int order[561],group_count=0,m=0,count=0,ports=0,prefix,status;
+    if(!f||!domain||!out||!out_count||!used_out)return -2;
+    if(f->codes%64 && domain[f->words-1]>>(f->codes%64))return -2;
+    for(int p=0;p<33;p++)for(int w=0;w<f->words;w++)if(domain[w]&f->ports[p*f->words+w]){used|=UINT64_C(1)<<p;ports++;break;}
+    for(int pair=0;pair<f->pair_count;pair++)for(int w=0;w<f->words;w++)if(domain[w]&f->pair_supports[pair*f->words+w]) {
+        pairs[2*m]=f->pairs[2*pair];pairs[2*m+1]=f->pairs[2*pair+1];m++;break;
+    }
+    prefix=m<2*ports?m:2*ports;
+    status=dd_cyclic_blocks(33,prefix,pairs,blocks,NULL);if(status!=1)return status;
+    int complete=prefix>0&&blocks[0]>=0;
+    for(int i=0;i<prefix;i++) {
+        if(blocks[i]!=blocks[0])complete=0;
+        covered|=(UINT64_C(1)<<pairs[2*i])|(UINT64_C(1)<<pairs[2*i+1]);
+    }
+    if(complete&&covered==used) {
+        int first=-1,previous=-1;
+        for(int p=0;p<33;p++)if(used&(UINT64_C(1)<<p)) {
+            if(first<0)first=p;
+            if(previous>=0){out[2*count]=previous;out[2*count+1]=p;count++;}previous=p;
+        }
+        if(previous>=0){out[2*count]=previous;out[2*count+1]=first;count++;}
+    } else {
+        if(prefix!=m){status=dd_cyclic_blocks(33,m,pairs,blocks,NULL);if(status!=1)return status;}
+        for(int i=0;i<m;i++) {
+            int block=blocks[i];
+            if(block<0){out[2*count]=pairs[2*i];out[2*count+1]=pairs[2*i+1];count++;}
+            else {
+                if(block>=561)return -2;
+                if(!groups[block])order[group_count++]=block;
+                groups[block]|=(UINT64_C(1)<<pairs[2*i])|(UINT64_C(1)<<pairs[2*i+1]);
+            }
+        }
+        for(int i=0;i<group_count;i++) {
+            int first=-1,previous=-1;uint64_t vertices=groups[order[i]];
+            for(int p=0;p<33;p++)if(vertices&(UINT64_C(1)<<p)) {
+                if(first<0)first=p;
+                if(previous>=0){if(count>=561)return -2;out[2*count]=previous;out[2*count+1]=p;count++;}previous=p;
+            }
+            if(previous>=0){if(count>=561)return -2;out[2*count]=previous;out[2*count+1]=first;count++;}
+        }
+    }
+    *used_out=used;*out_count=count;return 1;
+}
+/* Ordered union-by-rank roots for a bounded immutable graph. All endpoint
+ * validation precedes indexing, and incomplete output is never a certificate. */
+static int graph_union_root(int32_t *parents,int x) {
+    while(parents[x]!=x){parents[x]=parents[parents[x]];x=parents[x];}return x;
+}
+EXPORT int dd_graph_union_roots(int n,int m,const int32_t *edges,int32_t *roots,dd_poll poll) {
+    uint8_t *ranks;int status=1;
+    if(n<0||n>5280||m<0||m>262144||(!n&&m)||(!edges&&m)||(!roots&&n))return -2;
+    if(poll&&poll())return -3;
+    for(int i=0;i<m;i++) {
+        if((i&255)==0&&poll&&poll())return -3;
+        if(edges[2*i]<0||edges[2*i]>=n||edges[2*i+1]<0||edges[2*i+1]>=n)return -2;
+    }
+    ranks=(uint8_t *)calloc((size_t)(n?n:1),sizeof(uint8_t));if(!ranks)return -4;
+    for(int i=0;i<n;i++)roots[i]=i;
+    for(int i=0;i<m;i++) {
+        if((i&255)==0&&poll&&poll()){status=-3;goto done_union;}
+        int a=graph_union_root(roots,edges[2*i]),b=graph_union_root(roots,edges[2*i+1]);
+        if(a==b)continue;
+        if(ranks[a]<ranks[b]){int t=a;a=b;b=t;}
+        roots[b]=a;if(ranks[a]==ranks[b])ranks[a]++;
+    }
+    for(int i=0;i<n;i++) {
+        if((i&255)==0&&poll&&poll()){status=-3;goto done_union;}
+        roots[i]=graph_union_root(roots,i);
+    }
+    if(poll&&poll())status=-3;
+done_union:
+    free(ranks);return status;
+}

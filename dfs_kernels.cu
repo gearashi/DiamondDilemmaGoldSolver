@@ -5,16 +5,16 @@ __device__ __forceinline__ unsigned int next_random(unsigned int &state) {
 __device__ __forceinline__ bool taken(const unsigned int *used, int tile, int n, int tid) {
     return (used[(tile >> 5) * n + tid] & (1u << (tile & 31))) != 0;
 }
-__device__ __forceinline__ bool matches(
+// The candidate came from bucket(), which covers the first two occupied sides.
+// With three sides total, only an occupied third side can remain unchecked.
+__device__ __forceinline__ bool matches_after_bucket(
     const short *board, const unsigned short *faces, const unsigned short *reverse,
     const short *neighbors, const unsigned char *sides, int cell, int code, int n, int tid
 ) {
-    #pragma unroll
-    for (int side = 0; side < 3; ++side) {
-        int nb = neighbors[cell * 3 + side], other = board[nb * n + tid];
-        if (other >= 0 && faces[code * 3 + side] != reverse[other * 3 + sides[cell * 3 + side]]) return false;
-    }
-    return true;
+    if (board[neighbors[cell * 3] * n + tid] < 0 ||
+        board[neighbors[cell * 3 + 1] * n + tid] < 0) return true;
+    int other = board[neighbors[cell * 3 + 2] * n + tid];
+    return other < 0 || faces[code * 3 + 2] == reverse[other * 3 + sides[cell * 3 + 2]];
 }
 __device__ __forceinline__ void bucket(
     const short *board, const unsigned short *reverse,
@@ -52,7 +52,7 @@ __device__ __forceinline__ bool possible(
     bucket(board, reverse, neighbors, sides, single_offsets, pair_offsets, colors, cell, n, tid, first, length);
     for (int j = 0; j < length; ++j) {
         int code = pool[first + j];
-        if (!taken(used, code / 3, n, tid) && matches(board, faces, reverse, neighbors, sides, cell, code, n, tid)) return true;
+        if (!taken(used, code / 3, n, tid) && matches_after_bucket(board, faces, reverse, neighbors, sides, cell, code, n, tid)) return true;
     }
     return false;
 }
@@ -101,7 +101,7 @@ extern "C" __global__ void dfs_search(
         int code = pool[firsts[location] + (cursor + shifts[location]) % length];
         cursors[location] = cursor + 1; ++tried;
         int tile = code / 3, cell = order[depth];
-        if (taken(used, tile, n, tid) || !matches(board, faces, reverse, neighbors, sides, cell, code, n, tid)) continue;
+        if (taken(used, tile, n, tid) || !matches_after_bucket(board, faces, reverse, neighbors, sides, cell, code, n, tid)) continue;
         board[cell * n + tid] = code;
         used[(tile >> 5) * n + tid] |= 1u << (tile & 31);
         bool feasible = true;

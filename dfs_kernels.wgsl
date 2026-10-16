@@ -30,12 +30,11 @@ fn mark(tile: u32, lane: u32, occupied: bool) {
     let bit = 1u << (tile & 31u);
     if occupied { board_used[location] |= bit; } else { board_used[location] &= ~bit; }
 }
-fn matches(cell: u32, code: u32, lane: u32) -> bool {
-    for (var side = 0u; side < 3u; side++) {
-        let other = board(neighbor(cell, side), lane);
-        if other >= 0 && face(code, side) != reverse_face(u32(other), other_side(cell, side)) { return false; }
-    }
-    return true;
+// bucket() already covers the first two occupied sides of this candidate.
+fn matches_after_bucket(cell: u32, code: u32, lane: u32) -> bool {
+    if board(neighbor(cell, 0u), lane) < 0 || board(neighbor(cell, 1u), lane) < 0 { return true; }
+    let other = board(neighbor(cell, 2u), lane);
+    return other < 0 || face(code, 2u) == reverse_face(u32(other), other_side(cell, 2u));
 }
 fn bucket(cell: u32, lane: u32) -> vec2<u32> {
     var side1 = -1; var side2 = -1; var need1 = 0u; var need2 = 0u;
@@ -61,7 +60,7 @@ fn possible(cell: u32, lane: u32) -> bool {
     let choice = bucket(cell, lane);
     for (var index = 0u; index < choice.y; index++) {
         let code = pool(choice.x + index);
-        if !taken(code / 3u, lane) && matches(cell, code, lane) { return true; }
+        if !taken(code / 3u, lane) && matches_after_bucket(cell, code, lane) { return true; }
     }
     return false;
 }
@@ -102,7 +101,7 @@ fn dfs_search(@builtin(global_invocation_id) invocation: vec3<u32>) {
         let code = pool(firsts[location] + (cursor + shifts[location]) % length);
         cursors[location] = cursor + 1u; tried++;
         let tile = code / 3u; let cell = tables[depth];
-        if taken(tile, lane) || !matches(cell, code, lane) { continue; }
+        if taken(tile, lane) || !matches_after_bucket(cell, code, lane) { continue; }
         board_used[cell * n + lane] = code; mark(tile, lane, true);
         var feasible = true;
         for (var side = 0u; side < 3u; side++) {

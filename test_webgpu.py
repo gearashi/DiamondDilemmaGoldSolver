@@ -10,7 +10,7 @@ import unittest
 from unittest.mock import patch
 import numpy as np
 from dfs_gpu import DFS, fill_order
-from gpu_engine import reverse11
+from gpu_engine import reverse11, score_boards_cpu
 from dfs_webgpu import DeviceField, WebGPUDFS
 from geometry import build_board
 from systematic_jobs import JobLedger
@@ -25,6 +25,49 @@ def checkpoint(gpu, ledger):
     payload = gpu.snapshot_checkpoint()
     payload.update(ledger.fields())
     return payload
+
+
+def check_colored_tail(test, factory):
+    """Enumerate every completion of a two-cell residual against raw seam masks."""
+    board = build_board()
+    order = fill_order(board.neighbor_cells)
+    rng = np.random.default_rng(217)
+    faces = np.zeros((160, 3), np.uint16)
+    palette = np.array([0, 1, 0x400, 3, 0x600, 0x111], np.uint16)
+    for a, sa, b, sb in board.edges:
+        mask = rng.choice(palette)
+        faces[a, sa] = mask
+        faces[b, sb] = reverse11(mask)
+    masks = np.asarray([np.roll(row, rotation) for row in faces for rotation in range(3)], np.uint16)
+    reference = np.arange(160, dtype=np.int16) * 3
+    prefix = reference[order[:158]].tolist()
+    expected = set()
+    for pieces in permutations(order[158:]):
+        for rotations in product(range(3), repeat=2):
+            codes = reference.copy()
+            codes[order[158:]] = [3 * int(tile) + rotation for tile, rotation in zip(pieces, rotations)]
+            if score_boards_cpu(masks, board.neighbor_cells, board.neighbor_sides, codes)[0] == 240:
+                expected.add(tuple(map(int, codes)))
+    test.assertGreater(len(expected), 0)
+    test.assertLess(len(expected), 18)
+    gpu = factory(masks, board.neighbor_cells, board.neighbor_sides, n=1, prefixes=[prefix], order=order)
+    if hasattr(gpu, 'close'): test.addCleanup(gpu.close)
+    found = set()
+    for _ in range(500):
+        gpu.step(16)
+        gpu.verify()
+        flags = gpu.states.get()
+        if flags[0] == 1:
+            codes = tuple(map(int, gpu.boards[:, 0].get()))
+            test.assertIn(codes, expected)
+            test.assertNotIn(codes, found)
+            found.add(codes)
+            gpu.acknowledge([0])
+        elif flags[0] == 2:
+            break
+    else:
+        test.fail('Finite colored tail did not exhaust')
+    test.assertEqual(found, expected)
 
 
 class ArrayTests(unittest.TestCase):
@@ -48,6 +91,8 @@ class ArrayTests(unittest.TestCase):
         np.testing.assert_array_equal(counters[:, [2, 0]].get(), values[:, [2, 0]])
         counters[1, 2] = np.uint64(2**64 - 1)
         self.assertEqual(int(counters[1, 2].get()), 2**64 - 1)
+        expected = counters.get().sum(axis=1, dtype=np.uint64)
+        np.testing.assert_array_equal(counters.sum(axis=1, dtype=np.uint64).get(), expected)
 
     def test_cpu_and_opengl_adapters_are_rejected(self):
         for info in ({'adapter_type': 'CPU', 'backend_type': 'Vulkan'},
@@ -74,6 +119,11 @@ class NativeTests(unittest.TestCase):
         gpu = WebGPUDFS(*arguments(), n=n, prefixes=[], seed=seed, allow_software=os.environ.get("DIAMOND_TEST_SOFTWARE_GPU") == "1")
         self.addCleanup(gpu.close)
         return gpu
+
+    def test_colored_two_cell_tail_matches_independent_exhaustive_scoring(self):
+        def factory(*args, **kwargs):
+            return WebGPUDFS(*args, **kwargs, allow_software=os.environ.get('DIAMOND_TEST_SOFTWARE_GPU') == '1')
+        check_colored_tail(self, factory)
 
     def test_finite_leaves_shrink_grow_pending_freeze_and_checkpoint(self):
         rows = np.full((3, 160), -1, np.int16)
@@ -225,6 +275,12 @@ print(g.device)
             restored.step(64)
             for name in DFS.DEVICE_FIELDS:
                 np.testing.assert_array_equal(getattr(gpu,name).get(), getattr(restored,name).get(), err_msg=name)
+
+
+@unittest.skipUnless(os.environ.get('DIAMOND_TEST_CUDA') == '1', 'Optional finite CUDA regression')
+class CUDATailTests(unittest.TestCase):
+    def test_colored_two_cell_tail_matches_independent_exhaustive_scoring(self):
+        check_colored_tail(self, DFS)
 
 
 if __name__ == '__main__': unittest.main()

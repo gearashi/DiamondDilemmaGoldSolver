@@ -450,6 +450,128 @@ class CombinedSoundnessTests(unittest.TestCase):
 
 
 
+class ClusterBitsetTests(unittest.TestCase):
+    def test_transpose_matches_independent_embedding_sets_after_narrowing_and_widening(self):
+        rows = [[3, 1025, 1025], [reverse_mask(3), 1025, 1025],
+                [5, 1025, 1025], [reverse_mask(5), 1025, 1025]]
+        topology = board(4, [(a, side, a+1, side) for a in (0, 2) for side in range(3)])
+        problem = SearchProblem(masks_to_tiles(rows), topology)
+        helper = Pruner(problem, regions=[])
+        self.assertEqual(len(helper.clusters), 2)
+        self.assertTrue(any(len(embedding) < problem.n for cluster in helper.clusters for embedding in cluster[2]))
+        rng = random.Random(710312)
+        for case in range(400):
+            initial = [bits(code for code in range(12) if rng.random() < (1 if case % 11 == 0 else .6))
+                       for _ in range(4)]
+            expected, calls = initial.copy(), []
+            checks = failures = removed = 0
+            for members, _, embeddings in helper.clusters:
+                checks += 1
+                viable = [dict(embedding) for embedding in embeddings
+                          if all(expected[cell] & (1 << code) for cell, code in embedding)]
+                if not viable:
+                    calls.append((0, 0)); removed += expected[0].bit_count()
+                    expected[0] = 0; failures = 1
+                    break
+                # Independent set enumeration: an unrelated tile is supported
+                # only by an embedding that leaves this particular cell free.
+                allowed = [bits(code for code in range(12) if any(
+                    placement.get(cell) == code or (cell not in placement and code//3 not in members)
+                    for placement in viable)) for cell in range(4)]
+                for cell, keep in enumerate(allowed):
+                    new = expected[cell] & keep
+                    calls.append((cell, new)); removed += (expected[cell] ^ new).bit_count()
+                    expected[cell] = new
+                    if not new:
+                        failures = 1
+                        break
+                if failures:
+                    break
+            actual, actual_calls = initial.copy(), []
+            original = helper._narrow
+            def record(domains, cell, allowed, kind, dependencies=None):
+                actual_calls.append((cell, domains[cell] & allowed))
+                return original(domains, cell, allowed, kind, dependencies)
+            helper._narrow = record
+            before = helper.stats.copy()
+            try:
+                changed = helper.prune_clusters(actual)
+            finally:
+                helper._narrow = original
+            self.assertEqual(actual, expected)
+            self.assertEqual(changed, initial != expected)
+            self.assertEqual(actual_calls, calls)
+            self.assertEqual(helper.stats['cluster_checks']-before['cluster_checks'], checks)
+            self.assertEqual(helper.stats['cluster_failures']-before['cluster_failures'], failures)
+            self.assertEqual(helper.stats['cluster_prunes']-before['cluster_prunes'], removed)
+            self.assertTrue(all(len(cache) <= 8 for cache in helper._cluster_cache))
+
+    def test_empty_embeddings_and_impossible_singletons_fail_without_caching(self):
+        from unittest.mock import patch
+        with patch.object(Pruner, '_build_clusters', return_value=((), (((0,), 7, ()),))):
+            helper = Pruner(blank_problem(1), parity=False)
+        domains = [1]
+        self.assertTrue(helper.prune_clusters(domains))
+        self.assertEqual(domains, [0]); self.assertEqual(helper._cluster_cache, [{}])
+        self.assertEqual(helper.stats['cluster_failures'], 1)
+        problem = unique_tetrahedron(); helper = Pruner(problem)
+        reference = brute(problem, 'edges')[0]
+        domains = [1 << code for code in reference]
+        domains[0] = 1 << reference[1]
+        self.assertTrue(helper.prune_clusters(domains))
+        self.assertEqual(domains[0], 0)
+        self.assertTrue(all(not cache for cache in helper._cluster_cache))
+
+    def test_interrupted_support_construction_publishes_no_tables(self):
+        from dataclasses import replace
+        from unittest.mock import patch
+        problem = unique_tetrahedron(); complete = Pruner(problem)
+        for tables in (None, replace(complete.tables, cluster_supports=None)):
+            partial = Pruner.__new__(Pruner)
+            with patch.object(Pruner, '_build_cluster_supports', side_effect=InterruptedError('index build')):
+                with self.assertRaises(InterruptedError):
+                    partial.__init__(problem, tables=tables)
+            self.assertFalse(hasattr(partial, 'tables'))
+        rebuilt = Pruner(problem, tables=replace(complete.tables, cluster_supports=None))
+        self.assertEqual(rebuilt.tables.cluster_supports, complete.tables.cluster_supports)
+        self.assertIs(rebuilt._cluster_supports, rebuilt.tables.cluster_supports)
+
+    def test_supports_are_immutable_shared_and_bounded_by_finite_embeddings(self):
+        problem = unique_tetrahedron(); helper = Pruner(problem)
+        warm = Pruner(problem, tables=helper.tables)
+        self.assertIs(warm.tables, helper.tables)
+        self.assertIs(warm._cluster_supports, helper._cluster_supports)
+        self.assertIsNot(warm._cluster_cache, helper._cluster_cache)
+        with self.assertRaises(TypeError):
+            helper.tables.cluster_supports[0][1][0][1][0] = (0, 0)
+        for (_, _, embeddings), (all_embeddings, rows) in zip(helper.clusters, helper._cluster_supports):
+            self.assertEqual(all_embeddings, (1 << len(embeddings))-1)
+            self.assertEqual(len(rows), problem.n)
+            for absent, supports, full in rows:
+                self.assertEqual(absent & ~all_embeddings, 0)
+                self.assertEqual(full, bits(bit.bit_length()-1 for bit, _ in supports))
+                self.assertTrue(all(mask & ~all_embeddings == 0 for _, mask in supports))
+                self.assertLessEqual(len(supports), len(embeddings))
+
+    def test_interrupted_query_does_not_cache_incomplete_supports(self):
+        problem = unique_tetrahedron(); helper = Pruner(problem)
+        initial = [tile_domain(range(4))]*4; domains = initial.copy(); calls = [0]
+        def check():
+            calls[0] += 1
+            if calls[0] == 3:
+                raise InterruptedError('during supports')
+        helper.check = check
+        with self.assertRaises(InterruptedError):
+            helper.prune_clusters(domains)
+        self.assertEqual(domains, initial)
+        self.assertTrue(all(not cache for cache in helper._cluster_cache))
+        helper.check = lambda: None
+        expected = initial.copy()
+        expected_changed = Pruner(problem).prune_clusters(expected)
+        self.assertEqual(helper.prune_clusters(domains), expected_changed)
+        self.assertEqual(domains, expected)
+
+
 class ImmutablePrunerTableTests(unittest.TestCase):
     def test_warm_tables_keep_callbacks_stats_and_mutable_caches_private(self):
         from dataclasses import FrozenInstanceError

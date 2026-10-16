@@ -521,4 +521,60 @@ class LazyClauseTests(unittest.TestCase):
                                     satisfying_assignments=solutions_count)
 
 
+    def test_cached_subsumption_metadata_matches_independent_forbidden_boards(self):
+        # Set containment of explicitly enumerated forbidden assignments is an
+        # independent oracle for mask-nogood subsumption, including eviction.
+        rng=random.Random(121503);n=4;boards=tuple(itertools.product(range(3),repeat=n))
+        store=self.store([7]*n,limit=5,literal_limit=12);expected=[]
+        def forbidden(clause):
+            return {row for row in boards if not satisfies(row,clause)}
+        for event in range(400):
+            literals=[(cell,rng.randrange(1,7)) for cell in rng.sample(range(n),rng.randrange(2,5))]
+            if event%19==0:literals.append(literals[0])
+            if event%23==0:literals.append((literals[0][0],7))
+            allowed={}
+            for cell,mask in literals:
+                choices={v for v in range(3) if mask&(1<<v)}
+                allowed[cell]=allowed.get(cell,set(range(3)))&choices
+            clause=tuple(sorted((cell,sum(1<<v for v in choices))
+                                for cell,choices in allowed.items() if len(choices)<3))
+            rejected=any(not choices for choices in allowed.values())
+            covered=forbidden(clause)
+            if not rejected and not any(covered<=forbidden(old) for old in expected):
+                expected=[old for old in expected if not forbidden(old)<=covered]
+                expected.append(clause)
+                while len(expected)>store.limit or sum(map(len,expected))>store.literal_limit:
+                    victim=max(range(len(expected)),key=lambda i:(len(expected[i]),-i))
+                    expected.pop(victim)
+                accepted=clause in expected
+            else:accepted=False
+            actual=store.learn(LearnedClause(store.binding,tuple(literals),None,0,0,0))
+            self.assertEqual(actual,accepted,event)
+            self.assertEqual(store.clauses,expected,event)
+            self.assertEqual(set(store._clause_data),set(expected) if len(expected)>=4 else set())
+            self.assertLessEqual(sum(len(mapping) for _,mapping in store._clause_data.values()),store.literal_limit)
+            for current,(cells,mapping) in store._clause_data.items():
+                self.assertEqual(cells,sum(1<<cell for cell,_ in current))
+                self.assertEqual(mapping,dict(current))
+        self.assertGreater(store.stats['lcg_evictions'],0)
+        self.assertGreater(store.stats['lcg_subsumed'],0)
+
+    def test_subsumption_metadata_handles_high_cells_and_empty_clause(self):
+        store=self.store([7]*160)
+        for clause in (((159,1),(0,1)),((0,3),(159,1)),((0,4),(159,1))):
+            self.assertTrue(store.learn(LearnedClause(store.binding,clause,None,0,0,0)))
+        self.assertEqual(store.clauses,[((0,3),(159,1)),((0,4),(159,1))])
+        self.assertFalse(store._clause_data)  # Preserve the tiny-store fast path.
+        for clause in (((1,1),(158,1)),((2,1),(157,1))):
+            self.assertTrue(store.learn(LearnedClause(store.binding,clause,None,0,0,0)))
+        self.assertEqual(len(store._clause_data),4)
+        self.assertTrue(store.learn(LearnedClause(store.binding,((159,1),),None,0,0,0)))
+        self.assertEqual(len(store.clauses),3)
+        self.assertFalse(store._clause_data)
+        self.assertTrue(store.learn(LearnedClause(store.binding,(),None,0,0,0)))
+        self.assertEqual(store.clauses,[()])
+        self.assertEqual(store._clause_data,{})
+        self.assertFalse(store.learn(LearnedClause(store.binding,((159,1),),None,0,0,0)))
+        self.assertEqual(store._clause_data,{})
+
 if __name__ == '__main__': unittest.main()

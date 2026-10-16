@@ -182,7 +182,7 @@ class GPU:
 
     def cache_stats(self):
         """Cumulative event counters; entries counts only currently retained states."""
-        counters = self.cache_counters.get().sum(axis=1, dtype=np.uint64)
+        counters = self.cache_counters.sum(axis=1, dtype=np.uint64).get()
         memory = sum(getattr(self, field).nbytes for field in ('zobrist', 'current_hashes',
             'cache_boards', 'cache_hashes', 'cache_scores', 'cache_counts', 'cache_cursors', 'cache_counters'))
         return {'enabled': bool(self.cache_slots), 'slots_per_replica': self.cache_slots,

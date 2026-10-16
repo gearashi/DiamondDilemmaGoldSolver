@@ -169,6 +169,7 @@ class AdvancedPruner:
                                                 if (a in region) != (b in region)))
                                  for region in sorted(regions))
         self._local_ports, self._strand_cache = {}, {}
+        self._native_forests = None
         self._buckets, self._cut_cache, self._regional_cache = {}, {}, {}
         self.cut_vector_limit, self.region_node_limit = 256, 4096
         self.region_size_limit, self.region_misses_per_call = 4, 4
@@ -208,6 +209,14 @@ class AdvancedPruner:
         cached = self._local_ports.get(domain)
         if cached is not None:
             return cached
+        if self.native_graph is not None:
+            if self._native_forests is None:
+                self._native_forests = self.native_graph.prepare_local_forests(self.segments, check)
+            result = self._native_forests.calculate(domain, check)
+            # Publish only a fully completed calculation; interrupted native
+            # calls leave the domain cache untouched.
+            _put(self._local_ports, domain, result, 1024)
+            return result
         dsu = _DSU(33)
         used = sum(1 << port for port, codes in enumerate(self.port_codes) if domain & codes)
         components = used.bit_count()
@@ -239,23 +248,45 @@ class AdvancedPruner:
         key = tuple(domains)
         allowed = self._strand_cache.get(key)
         if allowed is None:
-            dsu, used = _DSU(33*self.n), []
+            dsu = _DSU(33*self.n) if self.native_graph is None else None
+            graph, used = [], []
             for cell, domain in enumerate(domains):
                 check()
                 forest, ports = self._local_forest(domain, check)
                 used.append(ports)
-                for a, b in forest:
-                    dsu.join(33*cell+a, 33*cell+b)
+                if dsu is None:
+                    graph.extend((33*cell+a, 33*cell+b) for a, b in forest)
+                else:
+                    for a, b in forest:
+                        dsu.join(33*cell+a, 33*cell+b)
             for a, sa, b, sb in self.problem.edges:
                 check()
                 for p in range(11):
                     u, v = 11*sa+p, 11*sb+10-p
                     if used[a] >> u & 1 and used[b] >> v & 1:
-                        dsu.join(33*a+u, 33*b+v)
+                        if dsu is None:
+                            graph.append((33*a+u, 33*b+v))
+                        else:
+                            dsu.join(33*a+u, 33*b+v)
+            if dsu is None:
+                check()
+                packed = array('i', chain.from_iterable(graph))
+                if packed.itemsize == 4:
+                    component = self.native_graph.union_roots_packed(33*self.n, packed.tobytes(), check)
+                    find = component.__getitem__
+                else:
+                    dsu = _DSU(33*self.n)
+                    for index, (a, b) in enumerate(graph):
+                        if index % 256 == 0:
+                            check()
+                        dsu.join(a, b)
+                    find = dsu.find
+            else:
+                find = dsu.find
             choices, common = [], None
             for cell, domain in enumerate(domains):
                 check()
-                roots = {p: dsu.find(33*cell+p) for p in values(used[cell])}
+                roots = {p: find(33*cell+p) for p in values(used[cell])}
                 distinct = set(roots.values())
                 if len(distinct) == 1:
                     by_component = {next(iter(distinct)): domain}
@@ -291,6 +322,12 @@ class AdvancedPruner:
         cached=self._local_certificates.get(domain)
         if cached is not None:
             return cached
+        if self.native_graph is not None:
+            if self._native_forests is None:
+                self._native_forests = self.native_graph.prepare_local_forests(self.segments, check)
+            result = self._native_forests.certificate(domain, check)
+            _put(self._local_certificates, domain, result, 1024)
+            return result
         pairs=self._local_edges.get(domain)
         if pairs is None:
             pairs=tuple(pair for pair,support in self._segment_supports if domain&support)
@@ -333,7 +370,7 @@ class AdvancedPruner:
         self.stats['biconnected_checks'] += 1
         key=tuple(domains);allowed=self._biconnected_cache.get(key)
         if allowed is None:
-            if self._segment_supports is None:
+            if self._segment_supports is None and self.native_graph is None:
                 supports={}
                 for code,pairs in enumerate(self.segments):
                     for pair in pairs:

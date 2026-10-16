@@ -103,7 +103,7 @@ class JobLedger:
                 or np.any(self.ids >= self.cursor) or self.paused.max_id >= self.cursor):
             raise ValueError('Job ledger cursor or ownership is invalid.')
         owned = self.ids[self.ids >= 0]
-        if len(np.unique(owned)) != len(owned) or any(int(job) in self.paused.owned for job in owned):
+        if len(np.unique(owned)) != len(owned) or (self.paused.owned and any(int(job) in self.paused.owned for job in owned)):
             raise ValueError('Two active or paused lanes own the same job.')
         if self.completed != self.cursor - len(owned) - self.paused_count:
             raise ValueError('Completed-job count does not match active/paused ownership.')
@@ -168,7 +168,7 @@ class JobLedger:
 
     def counter_totals(self, gpu):
         paused_counts = self.paused.arrays['counters'][:, self.paused.offset:].sum(axis=1, dtype=np.uint64)
-        return gpu.counters.get().sum(axis=1, dtype=np.uint64) + paused_counts + self.retired_counters
+        return gpu.counters.sum(axis=1, dtype=np.uint64).get() + paused_counts + self.retired_counters
 
     def fields(self):
         result = {'exact_job_ids': self.ids.copy(), 'exact_cursor': np.array(self.cursor, np.int64),

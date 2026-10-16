@@ -97,7 +97,7 @@ def main():
                           queued_jobs=ledger.paused_count+ledger.total-ledger.cursor,unassigned_jobs=ledger.total-ledger.cursor,
                           max_depth=maximum,candidates_checked=checked)
         if gpu is not None:
-            counts=ledger.counter_totals(gpu) if ledger is not None else gpu.counters.get().sum(axis=1).astype(object)
+            counts=ledger.counter_totals(gpu) if ledger is not None else gpu.counters.sum(axis=1,dtype=np.uint64).get()
             status.update(gpu=gpu.device,replicas=gpu.n,nodes_checked=int(counts[0]),counters=[int(v) for v in counts])
         if writer is not None: status['checkpoint']=dict(writer.info)
         if error: status['error']=error
@@ -269,9 +269,13 @@ def main():
                 status.update(best_matched_edges=240,best_components=report['line_components'])
                 break
             if stopping(): break
-            trusted=False
-            ledger.refill(gpu,prefixes,lengths)
-            trusted=True
+            # retire(flags) already validated this completed launch. Reading and
+            # validating every lane again cannot assign work unless both a free
+            # lane and queued/paused jobs exist.
+            if (ledger.paused_count or ledger.cursor<ledger.total) and np.any(ledger.ids<0):
+                trusted=False
+                ledger.refill(gpu,prefixes,lengths)
+                trusted=True
             if ledger.completed==ledger.total:
                 state='exhausted'; break
             elapsed=time.monotonic()-began

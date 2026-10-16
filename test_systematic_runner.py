@@ -36,6 +36,9 @@ class Array:
     def __getitem__(self, item):
         return Array(self.values[item])
 
+    def sum(self, *args, **kwargs):
+        return Array(self.values.sum(*args, **kwargs))
+
 
 class Clock:
     def __init__(self):
@@ -261,6 +264,25 @@ class Scenario:
 
 
 class SystematicRunnerTests(unittest.TestCase):
+    def test_unfinished_lanes_do_not_repeat_refill_reads_between_launches(self):
+        with scratch() as (root, source):
+            scenario = Scenario(root / 'run', source)
+            scenario.stop_after = 2
+            calls = []
+            original = runner.JobLedger.refill
+            def refill(ledger, *args, **kwargs):
+                calls.append(scenario.steps_this_run)
+                return original(ledger, *args, **kwargs)
+            with patch.object(runner.JobLedger, 'refill', new=refill):
+                scenario.execute()
+            self.assertEqual(calls, [0])
+            status = read(scenario.output / 'status.json')
+            self.assertEqual(status['state'], 'stopped')
+            self.assertEqual(status['exhausted_jobs'], 0)
+            with np.load(scenario.output / 'systematic' / 'checkpoint.npz', allow_pickle=False) as saved:
+                self.assertEqual(saved['test_work_cursor'].tolist(), [2, 2, 2, 2])
+                self.assertEqual(saved['exact_cursor'], 4)
+
     def test_unlimited_runs_past_one_day_and_still_honors_stop(self):
         with scratch() as (root, source):
             scenario = Scenario(root / 'run', source)

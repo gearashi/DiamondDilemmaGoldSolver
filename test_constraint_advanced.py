@@ -49,6 +49,35 @@ class StrandTests(unittest.TestCase):
                 self.assertEqual(actual, expected)
                 self.assertIsInstance(actual, tuple)
 
+    def test_native_forest_cache_is_lazy_exact_and_interruption_safe(self):
+        from unittest.mock import Mock
+        problem = SearchProblem(simple_tiles(), double_face())
+        helper = AdvancedPruner(problem, options={'native': 'python'})
+        reference = AdvancedPruner(problem, options={'native': 'python'})
+        graph = Mock(); workspace = graph.prepare_local_forests.return_value
+        helper.native_graph = graph
+        def calculate(domain, check):
+            result = reference._local_forest(domain, lambda: None)
+            check()
+            return result
+        workspace.calculate.side_effect = calculate
+        domain = (1 << (3*problem.n))-1
+        def cancel():
+            raise InterruptedError
+        with self.assertRaises(InterruptedError):
+            helper._local_forest(domain, cancel)
+        self.assertFalse(helper._local_ports)
+        result = helper._local_forest(domain, lambda: None)
+        self.assertEqual(result, reference._local_forest(domain, lambda: None))
+        graph.prepare_local_forests.assert_called_once()
+        self.assertEqual(workspace.calculate.call_count, 2)
+        self.assertIs(helper._local_forest(domain, lambda: None), result)
+        self.assertEqual(workspace.calculate.call_count, 2)
+        # Widening and siblings use exact keys rather than inherited hints.
+        for other in (1, 8, domain, 3):
+            self.assertEqual(helper._local_forest(other, lambda: None),
+                             reference._local_forest(other, lambda: None))
+
     def test_optional_disconnected_port_components_are_not_mandatory(self):
         # Three disjoint optimistic loops are alternatives, not three required
         # loops: a tile chooses a single rotated U on any one of the seams.
@@ -181,6 +210,27 @@ class BiconnectedTests(unittest.TestCase):
             if calls==4:raise InterruptedError
         with self.assertRaises(InterruptedError):helper.prune_biconnected(broad,check)
         self.assertFalse(helper._biconnected_cache);self.assertEqual(broad,domains_of(problem))
+
+    def test_native_certificate_cache_discards_interrupted_results(self):
+        from unittest.mock import Mock
+        helper = AdvancedPruner(SearchProblem(simple_tiles(), double_face()),
+                                options={'native': 'python'})
+        graph = Mock(); workspace = graph.prepare_local_forests.return_value
+        helper.native_graph = graph
+        result = (((0, 1),), 3)
+        def calculate(domain, check):
+            check()
+            return result
+        workspace.certificate.side_effect = calculate
+        def cancel():
+            raise InterruptedError
+        with self.assertRaises(InterruptedError):
+            helper._local_block_certificate(1, cancel)
+        self.assertFalse(helper._local_certificates)
+        self.assertIs(helper._local_block_certificate(1, lambda: None), result)
+        self.assertIs(helper._local_block_certificate(1, lambda: None), result)
+        self.assertEqual(workspace.certificate.call_count, 2)
+        graph.prepare_local_forests.assert_called_once()
 
     def test_sparse_local_certificates_equal_full_port_union_filtering(self):
         rng=random.Random(81817)

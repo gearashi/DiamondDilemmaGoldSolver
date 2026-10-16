@@ -411,7 +411,14 @@ class NativeGraphTests(unittest.TestCase):
             compiled.native_graph.cyclic_edge_blocks_packed=capture_packed
             a=rows.copy();b=rows.copy()
             self.assertEqual(python.prune_biconnected(a),compiled.prune_biconnected(b))
-            self.assertEqual(graphs,packed_graphs);self.assertEqual(a,b)
+            # Local 33-port certificates now stay in the prepared native
+            # helper; the whole-board graph still crosses the packed boundary.
+            global_graphs=[graph for graph in graphs if graph[0]==33*problem.n]
+            self.assertTrue(global_graphs);self.assertEqual(global_graphs,packed_graphs)
+            for domain in rows:
+                self.assertEqual(python._local_block_certificate(domain,lambda:None),
+                                 compiled._local_block_certificate(domain,lambda:None))
+            self.assertEqual(a,b)
             self.assertTrue(all(value&(1<<code) for value,code in zip(b,known)))
             self.assertIsNone(python.native_graph)
 
