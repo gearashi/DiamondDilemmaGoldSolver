@@ -228,6 +228,45 @@ class WebGPUDFS(DFS):
         self._dispatch_step(nodes)
         return self.states.get()
 
+    def snapshot_checkpoint(self):
+        """Capture independent frozen logical arrays from six storage buffers."""
+        # The first synchronous map fences all prior queue work. There are no
+        # submissions between these reads on the search thread. Decode each mapping
+        # before releasing it; no returned array aliases device/staging memory.
+        fields = {}
+        def read(index, rows):
+            size = rows * self.n * 4
+            raw = np.frombuffer(self.queue.read_buffer(self.buffers[index], 0, size),
+                                dtype=np.uint32).reshape(rows, self.n)
+            self.readback_bytes += size
+            return raw
+        raw = read(0, 165)
+        fields['boards'] = raw[:160].astype(np.int16)
+        fields['used'] = raw[160:].astype(np.uint32, copy=True)
+        del raw
+        for index, name in enumerate(('firsts', 'lengths', 'cursors', 'shifts'), 1):
+            raw = read(index, 160)
+            fields[name] = raw.astype(np.uint16)
+            del raw
+        raw = read(5, 11)
+        for name, offset, dtype in (('depths', 0, np.int16), ('maxdepths', 1, np.int16),
+                                   ('floors', 2, np.int16), ('states', 3, np.uint8),
+                                   ('rng', 4, np.uint32)):
+            fields[name] = raw[offset].astype(dtype, copy=True)
+        counters = raw[6::2].astype(np.uint64)
+        counters <<= np.uint64(32)
+        counters |= raw[5::2]
+        fields['counters'] = counters
+        del raw
+        payload = {name: fields[name] for name in self.DEVICE_FIELDS}
+        payload.update(dfs_version=np.int32(self.CHECKPOINT_VERSION),
+                       fingerprint=np.array(self.fingerprint), order=self.order.copy(),
+                       roots=self.roots.copy(), prefix_codes=self.prefix_codes.copy())
+        for value in payload.values():
+            if isinstance(value, np.ndarray):
+                value.setflags(write=False)
+        return payload
+
     def has_pending(self):
         return bool(np.any(self.states.get() == 1))
 

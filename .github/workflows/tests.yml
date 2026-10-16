@@ -69,6 +69,7 @@ jobs:
           test_platform
           test_runtime_capabilities
           test_webgpu
+          test_webgpu_checkpoint
           test_constraint_dfs
           test_constraint_branching
           test_constraint_gold_oracle
@@ -76,6 +77,7 @@ jobs:
           test_constraint_native_search
           test_constraint_engines
           test_constraint_pruning
+          test_constraint_projection
           test_constraint_parity
           test_constraint_connectivity
           test_constraint_advanced

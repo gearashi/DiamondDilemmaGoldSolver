@@ -63,15 +63,47 @@ _TILE_GATHER = tuple(sum(bool(chunk & (7 << (3*t))) << t for t in range(4))
                      for chunk in range(4096))
 
 
+# Each mask keeps b bits in every 3*b-bit block. Successive power-of-two
+# shifts merge adjacent groups when gathering; scattering reverses those steps.
+# The 256 logical positions cover the puzzle's 160 tiles. The public helpers
+# retain their generic lookup path beyond the model's supported widths.
+_PROJECTION_MASKS = tuple(
+    sum(((1 << b) - 1) << (3 * b * k) for k in range(256 // b))
+    for b in (1, 2, 4, 8, 16, 32, 64, 128, 256)
+)
+
+
+def _gather_tile_choices(domain):
+    value = (domain | (domain >> 1) | (domain >> 2)) & _PROJECTION_MASKS[0]
+    for shift, mask in zip((2, 4, 8, 16, 32, 64, 128, 256), _PROJECTION_MASKS[1:]):
+        value = (value | (value >> shift)) & mask
+    return value
+
+
+def _scatter_orientation_choices(tiles):
+    value = tiles
+    for shift, mask in zip((256, 128, 64, 32, 16, 8, 4, 2),
+                           reversed(_PROJECTION_MASKS[:-1])):
+        value = (value | (value << shift)) & mask
+    return value | (value << 1) | (value << 2)
+
+
 @lru_cache(maxsize=8192)
 def _tile_choices(domain):
-    result = 0
-    # Sparse late-search domains should not scan dozens of empty chunks.
-    if domain.bit_count() <= domain.bit_length()//12:
-        for code in values(domain):
-            result |= 1 << (code//3)
+    length = domain.bit_length()
+    # Sparse domains retain their set-bit path without a generator call.
+    if domain.bit_count() <= length // 12:
+        result = 0
+        while domain:
+            bit = domain & -domain
+            result |= 1 << ((bit.bit_length() - 1) // 3)
+            domain ^= bit
         return result
-    shift = 0
+    # Fixed-stage gathering pays off for dense domains above 32 tiles. Wider
+    # generic inputs must use the lookup path to retain every orientation bit.
+    if 96 < length <= 480:
+        return _gather_tile_choices(domain)
+    result = shift = 0
     while domain:
         result |= _TILE_GATHER[domain & 4095] << shift
         domain >>= 12
@@ -86,7 +118,11 @@ _ORIENTATION_SCATTER = tuple(sum(7 << (3*t) for t in range(4) if chunk & (1 << t
 @lru_cache(maxsize=8192)
 def _orientation_choices(tiles):
     """Expand physical-tile bits to their three orientation bits."""
-    result, shift = 0, 0
+    # Keep short inventories and generic values beyond 160 tiles on the lookup
+    # path; the bounded parallel expansion handles the wider puzzle inventories.
+    if 32 < tiles.bit_length() <= 160:
+        return _scatter_orientation_choices(tiles)
+    result = shift = 0
     while tiles:
         result |= _ORIENTATION_SCATTER[tiles & 15] << shift
         tiles >>= 4

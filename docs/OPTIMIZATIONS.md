@@ -493,3 +493,28 @@ The exact as-run sources, native binaries, inputs and result are archived with a
 
 
 Final release-source suites discovered **838 tests per environment**: Python 3.12 passed **807 with 31 explicit skips**, and Python 3.15 passed **716 with 122 skips**, with no failures or errors. Both exact-input version-2 manifests validated. Ten opted-in WebGPU/sampling hardware checks passed on the RTX 2060, including comparison against the preserved Python 3.12 CUDA environment. Four isolated application runs validated compiled DFS Stop/resume and 128-replica WebGPU hybrid resume. The observed Stop latency was **0.108 s** in this run, not a guaranteed maximum. All six protected canonical puzzle/best/checkpoint hashes remained unchanged. Two test-only robustness fixes distinguish completed verifier attempts from preparation time and allow PowerShell to wrap an expected diagnostic without changing its meaning. The initial failed runs remain recorded. These tests do not establish physical AMD or Apple GPU execution.
+
+
+## Round 16: physical-piece projections and WebGPU checkpoint capture
+
+CPU pruning now gathers dense orientation-domain bits into physical-tile bits with staged integer masks, and reverses those stages when expanding tile inventories. Sparse domains use the existing set-bit strategy with its loop inlined. Short domains and inputs wider than the 160-piece model retain the original lookup-table paths. Both exact-key LRU caches still hold at most 8,192 entries. The stages only change the representation calculation: they retain all physical-piece identities, all three rotations and the same pruning results.
+
+Independent per-tile oracles checked exhaustive small inputs, every single-bit boundary through 1,024 bits, seeded mixed-width cases and fallback paths on Python 3.12 and 3.15. Longer fixed-work comparisons stop after exactly 32 partial-loop checks and require the entire pending stack, result fields and all non-timing counters to agree. Look-ahead, adaptive scheduling and timed conflict minimization are disabled for this comparison. Nine alternating prototype trials measured Python 3.12 saved and restricted-ancestor samples at **1.848 to 1.671 s** and **1.550 to 1.441 s**; Python 3.15 measured **1.722 to 1.667 s** and **1.371 to 1.308 s**. The earlier four-loop samples were mixed and are retained as contrary evidence.
+
+A final-source comparison used five alternating trials, fresh solver setup and equally cleared projection caches. The saved sample measured **1.997 to 1.783 s**, and the restricted ancestor **1.659 to 1.441 s**, with five of five paired wins in each case. Import and input construction are outside these solver timings. These bounded samples support retaining the change; they do not predict solution time or guarantee a gain for every state or interpreter.
+
+WebGPU checkpoints now read each of the six mutable physical buffers once and immediately decode independently owned, frozen logical arrays. The first synchronous read fences prior dispatches; the search thread submits no intervening work. Existing ownership validation still precedes capture, and the file writer only receives a complete snapshot. Counter limb order, logical dtypes, array order, metadata and checkpoint schema are unchanged. This removes repeated maps and intermediate copies while keeping one physical mapping at a time.
+
+Seven alternating final-source tests included four launches, ledger validation, worker creation, serialization, flush and atomic checkpoint replacement:
+
+| Replica pool | Previous complete Stop/save | New complete Stop/save | Paired wins |
+| --- | ---: | ---: | ---: |
+| 128 | 23.50 ms | 19.75 ms | 7/7 |
+| 4,096 | 93.36 ms | 68.00 ms | 7/7 |
+| 32,768 | 924.70 ms | 440.01 ms | 7/7 |
+
+These are checkpoint-operation gains on an RTX 2060 using Vulkan, not per-node search gains. The prototype's traced Python allocation peak at 32,768 replicas fell from 106.0 to 74.1 MB; this excludes driver and native staging memory. Final integrated checks covered independent scalar field decoding, signed values, 64-bit counter boundaries, frozen ownership, every map-failure position, actual Stop/resume/resize and CUDA checkpoint interchange. Four bounded manifests record the final-source evidence.
+
+Other implemented audit prototypes were rejected. Compact native forced-cluster tables remained slower even after deferring duplicate Python setup and reusing immutable packed inputs: the final refinement regressed actual complete filtering **11.8%** and fixed-work search **2.3%**. Flat neighborhood cache keys reduced some cache storage but regressed longer full searches **1.8% and 3.4%**. Both retained exact domains, counters and pending states; neither enters the application. All prepared candidates in this round are resolved. Further profiling can identify future work, but no unmeasured optimization is credited as a gain.
+
+Final local CPU suites discovered **847 tests per environment**: Python 3.12 passed **816 with 31 explicit skips**, and Python 3.15 passed **725 with 122 skips**, with no failures or errors. Both bounded-run manifests validated against the exact final implementation. Skips identify unavailable dependencies, platforms or hardware; they are not counted as passes. Final integrated WebGPU hardware and application capture/Stop/resume checks also passed. Physical AMD and Apple GPU performance remains unverified.
