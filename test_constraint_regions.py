@@ -11,6 +11,97 @@ from test_constraint_separator import ring,permutation_ring
 from test_constraint_advanced import bits,domains_of,chain
 
 
+class RegionalPartitionTests(unittest.TestCase):
+    @staticmethod
+    def reference(helper,cells,domains,check=lambda:None):
+        # Deliberately use edge scans and explicit sets, independent of masks.
+        from math import log2
+        members=set(cells);cuts=set();minimum=max(1,len(cells)//3)
+        frontier=lambda part:sum((a in part)!=(b in part) for a,_,b,_ in helper.problem.edges)
+        for seed in cells:
+            check();left={seed}
+            while len(left)<=len(cells)-minimum:
+                right=members-left
+                if len(left)>=minimum:
+                    a,b=tuple(sorted(left)),tuple(sorted(right));cuts.add(min((a,b),(b,a)))
+                choices=(set().union(*(helper.neighbors[c] for c in left))&members)-left
+                if not choices:choices=right
+                if not choices:break
+                cell=min(choices,key=lambda c:(frontier(left|{c}),domains[c].bit_count(),c))
+                left.add(cell)
+        def score(pair):
+            left,right=map(set,pair)
+            cut=sum((a in left and b in right) or (b in left and a in right) for a,_,b,_ in helper.problem.edges)
+            return (not(helper._connected(left) and helper._connected(right)),max(frontier(left),frontier(right)),
+                    cut,abs(len(left)-len(right)),max(sum(log2(domains[c].bit_count()) for c in part) for part in pair),pair)
+        return min(cuts,key=score)
+
+    def test_every_small_graph_subset_and_parallel_seam_matches_scan_order(self):
+        from types import SimpleNamespace
+        comparisons=0
+        for n in range(2,5):
+            pairs=[(a,b) for a in range(n) for b in range(a+1,n)]
+            for graph in range(1<<len(pairs)):
+                edges=[pair for i,pair in enumerate(pairs) if graph>>i&1]
+                for extra in ([],[(c,c) for c in range(n)]+edges[:1]):
+                    # Topology-only fixture also checks self-loop cancellation;
+                    # public SearchProblem already rejects self-loop boards.
+                    problem=SimpleNamespace(n=n,edges=tuple((a,0,b,0) for a,b in edges+extra),
+                        masks=[(0,0,0)]*(3*n),tiles=[{'segments':[[[0,1],[1,1]]]}]*n)
+                    helper=HierarchicalRegionPruner(problem)
+                    for subset in range(1<<n):
+                        cells=tuple(c for c in range(n) if subset>>c&1)
+                        if len(cells)<2:continue
+                        for domains in ([1]*n,[(1<<(n-c))-1 for c in range(n)]):
+                            self.assertEqual(helper._partition(cells,domains,lambda:None),self.reference(helper,cells,domains))
+                            comparisons+=1
+        self.assertGreater(comparisons,2500)
+
+    def test_finite_query_results_and_work_equal_scan_reference(self):
+        from unittest.mock import patch
+        rng=random.Random(140224)
+        problem=permutation_ring([(1,0,2),(0,2,1),(1,0,2),(0,2,1)])
+        cases=[]
+        for _ in range(24):
+            row=[bits(c for c in choices if rng.random()<.8) for choices in problem.domains]
+            if all(row):cases.append((problem,row,tuple(range(4))))
+        data,board,known=planted_gold(140225,4);large=SearchProblem(data,board)
+        for face in (0,4,9):
+            cells=tuple(range(16*face,16*(face+1)));row=[1<<c for c in known]
+            for cell in cells:row[cell]|=bits(rng.sample(range(3*large.n),3))
+            cases.append((large,row,cells))
+        for target in ('gold','edges'):
+            for problem,row,cells in cases:
+                actual=HierarchicalRegionPruner(problem,target);reference=HierarchicalRegionPruner(problem,target)
+                for original in (row,row):
+                    a,b=original.copy(),original.copy();changed=actual.prune_region(a,cells)
+                    with patch.object(reference,'_partition',lambda c,d,k:self.reference(reference,c,d,k)):
+                        expected=reference.prune_region(b,cells)
+                    self.assertEqual((changed,a,actual.last_region,actual.stats),(expected,b,reference.last_region,reference.stats))
+                    self.assertEqual(actual.cache,reference.cache)
+                    self.assertEqual(actual.subtables,reference.subtables)
+
+    def test_partition_stop_and_budget_keep_exact_publication_boundaries(self):
+        problem=ring(10);row=domains_of(problem)
+        for limit in range(1,11):
+            helper=HierarchicalRegionPruner(problem);calls=0
+            def stop():
+                nonlocal calls
+                calls+=1
+                if calls==limit:raise InterruptedError
+            with self.assertRaises(InterruptedError):helper._partition(tuple(range(10)),row,stop)
+            self.assertFalse(helper.cache);self.assertFalse(helper.subtables)
+            self.assertEqual(helper._partition(tuple(range(10)),row,lambda:None),self.reference(helper,tuple(range(10)),row))
+        for attribute in ('max_states','max_transitions','max_created'):
+            from unittest.mock import patch
+            a=HierarchicalRegionPruner(problem);b=HierarchicalRegionPruner(problem)
+            setattr(a,attribute,2);setattr(b,attribute,2);da=row.copy();db=row.copy()
+            result=a.prune_region(da,range(10))
+            with patch.object(b,'_partition',lambda c,d,k:self.reference(b,c,d,k)):
+                expected=b.prune_region(db,range(10))
+            self.assertEqual((result,da,a.stats,a.cache,a.subtables),(expected,db,b.stats,b.cache,b.subtables))
+
+
 class HierarchicalTests(unittest.TestCase):
     def test_exact_small_counts_and_supports_match_independent_full_enumeration(self):
         data,mesh=tetrahedron_tiles()

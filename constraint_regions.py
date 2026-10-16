@@ -137,31 +137,38 @@ class HierarchicalRegionPruner(SeparatorPruner):
         return len(seen)==len(cells)
 
     def _partition(self,cells,domains,check):
-        """Choose a bounded balanced cut minimizing child frontier width.
+        """Choose the same bounded balanced cut using exact incidence masks.
 
-        Greedy connected growth from every seed proposes cuts. This is not an
-        optimal separator claim. Disconnected complements remain legal but are
-        ranked after connected splits; table semantics do not assume connected
-        children. Inventory/domain volume breaks equal-width ties.
+        XOR marks each edge crossing a child boundary. The two child masks
+        intersect exactly on their shared cut, including distinct parallel
+        seams. This changes only the bookkeeping of the existing width/domain
+        heuristic, not the candidate cuts or their deterministic ranking. The maintained
+        growth frontier is exactly the adjacent unselected member set.
         """
-        members=set(cells);cuts=set();minimum=max(1,len(cells)//3)
+        members=set(cells);cuts={};minimum=max(1,len(cells)//3)
+        incident=self._incident_edges;all_cut=0
+        for cell in cells:all_cut^=incident[cell]
+        volumes={cell:log2(domains[cell].bit_count()) for cell in cells}
         for seed in cells:
-            check();left={seed}
+            check();left={seed};left_cut=incident[seed]
+            frontier=(self.neighbors[seed]&members)-left
             while len(left)<=len(cells)-minimum:
                 right=members-left
                 if len(left)>=minimum:
                     a,b=tuple(sorted(left)),tuple(sorted(right))
-                    cuts.add(min((a,b),(b,a)))
-                choices=(set().union(*(self.neighbors[c] for c in left))&members)-left
+                    pair=min((a,b),(b,a))
+                    cuts[pair]=left_cut if pair[0]==a else all_cut^left_cut
+                choices=frontier
                 if not choices:choices=right
                 if not choices:break
-                cell=min(choices,key=lambda c:(len(self._frontier(left|{c})),domains[c].bit_count(),c))
-                left.add(cell)
+                cell=min(choices,key=lambda c:((left_cut^incident[c]).bit_count(),domains[c].bit_count(),c))
+                left.add(cell);left_cut^=incident[cell]
+                frontier.discard(cell);frontier.update((self.neighbors[cell]&members)-left)
         def score(pair):
-            left,right=map(set,pair)
-            widths=(len(self._frontier(left)),len(self._frontier(right)))
-            cut=sum(a in left and b in right or b in left and a in right for a,_,b,_ in self.problem.edges)
-            volume=max(sum(log2(domains[c].bit_count()) for c in part) for part in pair)
+            left,right=map(set,pair);left_cut=cuts[pair];right_cut=all_cut^left_cut
+            widths=(left_cut.bit_count(),right_cut.bit_count())
+            cut=(left_cut&right_cut).bit_count()
+            volume=max(sum(volumes[c] for c in part) for part in pair)
             return (not(self._connected(left) and self._connected(right)),max(widths),cut,
                     abs(len(left)-len(right)),volume,pair)
         return min(cuts,key=score)

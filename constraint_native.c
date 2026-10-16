@@ -410,3 +410,130 @@ EXPORT int dd_graph_union_roots(int n,int m,const int32_t *edges,int32_t *roots,
 done_union:
     free(ranks);return status;
 }
+/* Full optimistic strand filter. Prepared geometry is immutable; bounded scratch
+ * and direct-mapped exact local forests are private to this workspace. No search
+ * domains are modified, and callers discard all output on cancellation. */
+#define DD_STRAND_CACHE 1024
+typedef struct {
+    uint64_t domain[8],used;
+    int32_t roots[33];
+    uint8_t valid;
+} StrandForest;
+typedef struct {
+    LocalForests *local;
+    int n,m;
+    int32_t edges[4*480];
+    int32_t parents[5280],hosting[160*480],seen[5280];
+    uint8_t ranks[5280];
+    uint64_t used[160];
+    StrandForest cache[DD_STRAND_CACHE];
+} StrandWorkspace;
+EXPORT void *dd_strands_create(void *local,int n,int m,const int32_t *edges) {
+    LocalForests *f=(LocalForests *)local;StrandWorkspace *s;
+    if(!f||n<1||n>160||f->codes!=3*n||m<0||m>3*n||(!edges&&m))return NULL;
+    for(int i=0;i<m;i++) {
+        int a=edges[4*i],sa=edges[4*i+1],b=edges[4*i+2],sb=edges[4*i+3];
+        if(a<0||a>=n||b<0||b>=n||sa<0||sa>2||sb<0||sb>2)return NULL;
+    }
+    s=(StrandWorkspace *)calloc(1,sizeof(StrandWorkspace));if(!s)return NULL;
+    s->local=f;s->n=n;s->m=m;
+    for(int i=0;i<4*m;i++)s->edges[i]=edges[i];
+    return s;
+}
+EXPORT void dd_strands_destroy(void *ptr) {free(ptr);}
+static void strand_join(StrandWorkspace *s,int left,int right) {
+    int a=graph_union_root(s->parents,left),b=graph_union_root(s->parents,right);
+    if(a==b)return;
+    if(s->ranks[a]<s->ranks[b]){int t=a;a=b;b=t;}
+    s->parents[b]=a;if(s->ranks[a]==s->ranks[b])s->ranks[a]++;
+}
+EXPORT int dd_strands_allowed(void *ptr,const uint64_t *domains,uint64_t *allowed,int32_t *failed,dd_poll poll) {
+    StrandWorkspace *s=(StrandWorkspace *)ptr;LocalForests *f;
+    int common[33],common_count=0,vertices;
+    if(!s||!domains||!allowed||!failed)return -2;
+    f=s->local;vertices=33*s->n;*failed=-1;
+    if(poll&&poll())return -3;
+    for(int cell=0;cell<s->n;cell++)
+        if(f->codes%64&&domains[cell*f->words+f->words-1]>>(f->codes%64))return -2;
+    for(int p=0;p<vertices;p++){s->parents[p]=p;s->ranks[p]=0;s->seen[p]=0;}
+    for(int cell=0;cell<s->n;cell++) {
+        const uint64_t *domain=domains+cell*f->words;uint64_t hash=UINT64_C(1469598103934665603);
+        if(poll&&poll())return -3;
+        for(int w=0;w<f->words;w++)hash=(hash^domain[w])*UINT64_C(1099511628211);
+        StrandForest *cached=s->cache+(hash&(DD_STRAND_CACHE-1));int hit=cached->valid;
+        for(int w=0;w<f->words&&hit;w++)if(cached->domain[w]!=domain[w])hit=0;
+        if(!hit) {
+            int32_t roots[33];uint64_t used;int status=dd_local_forests_calculate(f,domain,roots,&used);
+            if(status!=1)return status;
+            /* A completed local forest remains exact even if a later global
+             * poll cancels; no partial calculation is inserted. */
+            for(int w=0;w<f->words;w++)cached->domain[w]=domain[w];
+            for(int p=0;p<33;p++)cached->roots[p]=roots[p];
+            cached->used=used;cached->valid=1;
+        }
+        s->used[cell]=cached->used;
+        for(int p=0;p<33;p++)if((cached->used>>p&1)&&cached->roots[p]!=p)
+            strand_join(s,33*cell+p,33*cell+cached->roots[p]);
+    }
+    for(int i=0;i<s->m;i++) {
+        if(poll&&poll())return -3;
+        int a=s->edges[4*i],sa=s->edges[4*i+1],b=s->edges[4*i+2],sb=s->edges[4*i+3];
+        for(int p=0;p<11;p++) {
+            int u=11*sa+p,v=11*sb+10-p;
+            if((s->used[a]>>u&1)&&(s->used[b]>>v&1))strand_join(s,33*a+u,33*b+v);
+        }
+    }
+    for(int p=0;p<vertices;p++) {
+        if((p&255)==0&&poll&&poll())return -3;
+        s->parents[p]=graph_union_root(s->parents,p);
+    }
+    for(int cell=0;cell<s->n;cell++) {
+        const uint64_t *domain=domains+cell*f->words;int only=-1,distinct=0;
+        if(poll&&poll())return -3;
+        for(int p=0;p<33;p++)if(s->used[cell]>>p&1) {
+            int root=s->parents[33*cell+p];
+            if(only<0){only=root;distinct=1;}else if(root!=only){distinct=2;break;}
+        }
+        for(int w=0;w<f->words;w++) {
+            uint64_t bits=domain[w];
+            while(bits) {
+                int code=w*64+(int)low_index(bits),host=-1;bits&=bits-1;
+                if((code&31)==0&&poll&&poll())return -3;
+                if(distinct==1)host=only;
+                else for(int i=f->offsets[code];i<f->offsets[code+1];i++) {
+                    int root=s->parents[33*cell+f->ends[2*i]];
+                    if(host<0)host=root;else if(host!=root){host=-1;break;}
+                }
+                s->hosting[cell*f->codes+code]=host;
+                if(host>=0) {
+                    if(cell==0&&s->seen[host]!=1) {
+                        if(common_count>=33)return -2;
+                        common[common_count++]=host;
+                    }
+                    s->seen[host]=cell+1;
+                }
+            }
+        }
+        if(cell) {
+            int count=0;
+            for(int i=0;i<common_count;i++)if(s->seen[common[i]]==cell+1)common[count++]=common[i];
+            common_count=count;
+        }
+        if(!common_count){*failed=cell;if(poll&&poll())return -3;return 0;}
+    }
+    for(int p=0;p<vertices;p++)s->seen[p]=0;
+    for(int i=0;i<common_count;i++)s->seen[common[i]]=1;
+    for(int cell=0;cell<s->n;cell++) {
+        if(poll&&poll())return -3;
+        for(int w=0;w<f->words;w++) {
+            uint64_t bits=domains[cell*f->words+w],keep=0;
+            while(bits) {
+                uint64_t bit=bits&(0-bits);int code=w*64+(int)low_index(bit),host=s->hosting[cell*f->codes+code];bits^=bit;
+                if(host>=0&&s->seen[host])keep|=bit;
+            }
+            allowed[cell*f->words+w]=keep;
+        }
+    }
+    if(poll&&poll())return -3;
+    return 1;
+}

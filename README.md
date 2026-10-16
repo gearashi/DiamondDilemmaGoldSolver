@@ -232,7 +232,7 @@ Passing tests is not a puzzle solution or a prediction of completion time.
 
 ## Source packages
 
-Successful CI runs produce source archives labelled Windows x64, Linux x64, macOS x64, and macOS ARM64, with SHA-256 checksums. They contain the same portable source and setup scripts, not bundled standalone executables. Install native Python 3.12 and run the appropriate setup script after extraction. Environments, runtime state, puzzle diagrams, and generated tile data are excluded.
+Successful CI runs produce source archives labelled Windows x64, Linux x64, macOS x64, and macOS ARM64, with SHA-256 checksums. They contain the same portable source and setup scripts, not bundled standalone executables. Install native Python 3.12 for all engines, or standard Python 3.15 for DFS and WebGPU, and run the appropriate setup script after extraction. Environments, runtime state, puzzle diagrams, and generated tile data are excluded.
 
 ## License
 

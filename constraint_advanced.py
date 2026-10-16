@@ -170,6 +170,7 @@ class AdvancedPruner:
                                  for region in sorted(regions))
         self._local_ports, self._strand_cache = {}, {}
         self._native_forests = None
+        self._native_strands = None
         self._buckets, self._cut_cache, self._regional_cache = {}, {}, {}
         self.cut_vector_limit, self.region_node_limit = 256, 4096
         self.region_size_limit, self.region_misses_per_call = 4, 4
@@ -247,6 +248,13 @@ class AdvancedPruner:
         self.stats['strand_checks'] += 1
         key = tuple(domains)
         allowed = self._strand_cache.get(key)
+        # Full native setup amortizes on Diamond boards (at least ten cells);
+        # tiny standalone fixtures retain the cheaper existing local path.
+        if allowed is None and self.n>=10 and getattr(self.native_graph,'supports_strands',False) is True:
+            if self._native_strands is None:
+                self._native_strands=self.native_graph.prepare_strands(self.n,self.segments,self.problem.edges,check)
+            allowed=self._native_strands.allowed(domains,check)
+            _put(self._strand_cache,key,allowed,4)
         if allowed is None:
             dsu = _DSU(33*self.n) if self.native_graph is None else None
             graph, used = [], []

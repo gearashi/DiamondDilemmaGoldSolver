@@ -212,4 +212,191 @@ class NativeLocalForestAvailabilityTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError,'helper missing'):native.NativeLocalForests([[]],object())
 
 
+
+
+def strand_reference(n,segments,edges,domains):
+    """Independent full union graph using adjacency sets and breadth-first labels."""
+    adjacency=[set() for _ in range(33*n)];used=[]
+    for cell,domain in enumerate(domains):
+        ports=set()
+        for code,pairs in enumerate(segments):
+            if domain>>code&1:
+                for a,b in pairs:
+                    ports.update((a,b));a+=33*cell;b+=33*cell
+                    adjacency[a].add(b);adjacency[b].add(a)
+        used.append(ports)
+    for a,sa,b,sb in edges:
+        for p in range(11):
+            u,v=11*sa+p,11*sb+10-p
+            if u in used[a] and v in used[b]:
+                u+=33*a;v+=33*b;adjacency[u].add(v);adjacency[v].add(u)
+    roots={}
+    for vertex,row in enumerate(adjacency):
+        if vertex in roots:continue
+        todo=[vertex];roots[vertex]=vertex
+        while todo:
+            for other in adjacency[todo.pop()]:
+                if other not in roots:roots[other]=vertex;todo.append(other)
+    choices=[];common=None
+    for cell,domain in enumerate(domains):
+        mapping={};all_roots={roots[33*cell+p] for p in used[cell]}
+        for code,pairs in enumerate(segments):
+            if not(domain>>code&1):continue
+            hosting=all_roots if len(all_roots)==1 else {roots[33*cell+a] for a,b in pairs}
+            if len(hosting)==1:
+                host=next(iter(hosting));mapping[host]=mapping.get(host,0)|(1<<code)
+        choices.append(mapping);common=set(mapping) if common is None else common&set(mapping)
+        if not common:return ((cell,0),)
+    return tuple((cell,sum(mapping[root] for root in common)) for cell,mapping in enumerate(choices))
+
+
+class NativeStrandTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        try:cls.library=native.load_library()
+        except (OSError,ValueError,RuntimeError) as exc:
+            if os.environ.get('DIAMOND_REQUIRE_NATIVE')=='1':raise
+            raise unittest.SkipTest('Optional native library not built: '+str(exc))
+        if not hasattr(cls.library,'dd_strands_create'):
+            if os.environ.get('DIAMOND_REQUIRE_NATIVE')=='1':
+                raise RuntimeError('Required full native strand export is absent.')
+            raise unittest.SkipTest('Optional full native strand export is absent.')
+
+    def helper(self,n,segments,edges):
+        helper=native.NativeStrandPruner(n,segments,edges,self.library)
+        self.addCleanup(helper.close);return helper
+
+    def test_all_small_domains_match_independent_full_graph(self):
+        from itertools import product
+        segments=[[(0,10)],[(11,21)],[(22,32)],[(0,11),(21,10)],[(0,0)],[]]
+        for edges in ([],[(0,0,1,0)],[(0,0,1,0),(0,0,1,0)],[(0,s,1,s) for s in range(3)]):
+            helper=self.helper(2,segments,edges)
+            for domains in product(range(1,64),repeat=2):
+                self.assertEqual(helper.allowed(domains),strand_reference(2,segments,edges,domains),(edges,domains))
+
+    def test_random_domains_and_narrowing_widening_match_independent_full_graph(self):
+        rng=random.Random(142031)
+        for n in (1,2,4,22,40,160):
+            segments=[[(rng.randrange(33),rng.randrange(33)) for _ in range(rng.randrange(0,5))] for code in range(3*n)]
+            edges=[(i,0,(i+1)%n,1) for i in range(n)]
+            edges.extend(edges[:min(4,n)])
+            helper=self.helper(n,segments,edges)
+            for density in (.01,.2,1):
+                for trial in range(7):
+                    domains=[sum(1<<c for c in range(3*n) if rng.random()<density) for _ in range(n)]
+                    for current in (domains,[v&-v for v in domains],domains):
+                        self.assertEqual(helper.allowed(current),strand_reference(n,segments,edges,current))
+
+    def test_cache_collisions_eviction_and_restoration_are_exact(self):
+        n=4;segments=[[(i%33,(i*3+1)%33)] for i in range(12)];edges=[(0,0,1,1),(2,1,3,2)]
+        helper=self.helper(n,segments,edges)
+        for domain in list(range(1,1300))+list(range(1299,0,-13)):
+            domains=[domain,(domain*3)&4095,domain,4095]
+            self.assertEqual(helper.allowed(domains),strand_reference(n,segments,edges,domains))
+
+    def test_every_poll_cancellation_discards_output_and_reuses_workspace(self):
+        n=4;segments=[[(0,10),(11,21),(22,32)]]*12;edges=[(0,s,1,s) for s in range(3)]+[(2,s,3,s) for s in range(3)]
+        successful_segments=[[(p,p+1) for p in range(32)]]*12
+        successful_edges=[(0,0,1,0),(1,1,2,0),(2,1,3,0)]
+        for pairs,seams,successful in ((segments,edges,False),(successful_segments,successful_edges,True)):
+            helper=self.helper(n,pairs,seams);domains=[4095]*n;expected=helper.allowed(domains);calls=[0]
+            self.assertEqual(len(expected)==n,successful)
+            def count():calls[0]+=1
+            helper.allowed(domains,count)
+            for at in range(1,calls[0]+1):
+                polls=[0]
+                def check():
+                    polls[0]+=1
+                    if polls[0]==at:raise InterruptedError
+                before=domains.copy()
+                with self.assertRaises(InterruptedError):helper.allowed(domains,check)
+                self.assertEqual(domains,before);self.assertEqual(helper.allowed(domains),expected)
+
+    def test_inputs_outputs_and_lifecycle_are_privately_owned(self):
+        segments=[[(0,10)]]*6;edges=[(0,0,1,0)];helper=self.helper(2,segments,edges);domains=[63,63]
+        expected=helper.allowed(domains)
+        segments[0].append((1,32));edges.clear()
+        self.assertEqual(helper.allowed(domains),expected)
+        def mutate():domains[:]=[1,1]
+        self.assertEqual(helper.allowed(domains,mutate),expected)
+        self.assertEqual(domains,[1,1])
+        def reenter():helper.allowed([63,63])
+        with self.assertRaisesRegex(RuntimeError,'active'):helper.allowed([63,63],reenter)
+        with self.assertRaisesRegex(RuntimeError,'active'):helper.allowed([63,63],helper.close)
+        helper.close();helper.close()
+        with self.assertRaisesRegex(RuntimeError,'closed'):helper.allowed([63,63])
+
+    def test_argument_bounds_and_native_endpoint_validation(self):
+        helper=self.helper(2,[[(0,10)]]*6,[(0,0,1,0)])
+        for domains in ([1],[-1,1],[True,1],[64,1],[1.0,1]):
+            with self.subTest(domains=domains),self.assertRaises(ValueError):helper.allowed(domains)
+        for n,segments,edges in ((0,[],[]),(161,[[]]*483,[]),(2,[[]]*3,[]),(2,[[]]*6,[(0,0,2,0)]),(2,[[]]*6,[(0,3,1,0)]),(2,[[]]*6,[(True,0,1,0)]),(2,[[]]*6,[(0,0,1,0)]*7)):
+            with self.subTest(n=n,edges=edges),self.assertRaises(ValueError):native.NativeStrandPruner(n,segments,edges,self.library)
+        invalid=(C.c_int32*4)(0,0,2,0)
+        self.assertFalse(self.library.dd_strands_create(helper._forests._handle,2,1,invalid))
+        domains=(C.c_uint64*2)(1<<6,1);output=(C.c_uint64*2)();failed=C.c_int32()
+        self.assertEqual(self.library.dd_strands_allowed(helper._handle,domains,output,C.byref(failed),native.POLL_CALLBACK(lambda:0)),-2)
+
+    def test_advanced_complete_supports_counters_cache_and_gold_witness(self):
+        from constraint_advanced import AdvancedPruner
+        from search_problem import SearchProblem
+        from search_fixtures import planted_gold
+        rng=random.Random(14204)
+        for seed,frequency in ((541,1),(542,2)):
+            tiles,board,known=planted_gold(seed,frequency,extra_edges=2);problem=SearchProblem(tiles,board)
+            compiled=AdvancedPruner(problem,options={'native':'compiled'});python=AdvancedPruner(problem,options={'native':'python'})
+            for size in (1,4,12,3*problem.n):
+                domains=[sum(1<<c for c in set(rng.sample(range(3*problem.n),min(size,3*problem.n)))|{known[cell]}) for cell in range(problem.n)]
+                for trial in range(2):
+                    a,b=domains.copy(),domains.copy()
+                    self.assertEqual(compiled.prune_strands(a),python.prune_strands(b));self.assertEqual(a,b);self.assertEqual(compiled.stats,python.stats)
+                    self.assertTrue(all(v&(1<<c) for v,c in zip(a,known)))
+                    self.assertEqual(compiled._strand_cache[tuple(domains)],python._strand_cache[tuple(domains)])
+            self.assertIsNotNone(compiled._native_strands)
+
+    def test_advanced_interruption_never_caches_partial_support(self):
+        from constraint_advanced import AdvancedPruner
+        from search_fixtures import planted_gold
+        from search_problem import SearchProblem
+        tiles,geometry,known=planted_gold(8194,1);problem=SearchProblem(tiles,geometry)
+        helper=AdvancedPruner(problem,options={'native':'compiled'})
+        helper._native_strands=helper.native_graph.prepare_strands(helper.n,helper.segments,problem.edges)
+        original=[(1<<(3*problem.n))-1]*problem.n
+        for at in (1,2,3,4,5,6,7,8):
+            helper._strand_cache.clear();domains=original.copy();calls=[0]
+            def check():
+                calls[0]+=1
+                if calls[0]==at:raise InterruptedError
+            with self.assertRaises(InterruptedError):helper.prune_strands(domains,check)
+            self.assertEqual(domains,original);self.assertFalse(helper._strand_cache)
+        helper.prune_strands(original.copy());self.assertTrue(helper._strand_cache)
+
+    def test_tiny_board_uses_existing_assembly_without_large_workspace(self):
+        from constraint_advanced import AdvancedPruner
+        from test_constraint_dfs import simple_tiles,double_face,tetrahedron_tiles
+        from search_problem import SearchProblem
+        tetra,geometry=tetrahedron_tiles()
+        for problem in (SearchProblem(simple_tiles(),double_face()),SearchProblem(tetra,geometry)):
+            helper=AdvancedPruner(problem,options={'native':'compiled'});domains=[(1<<(3*problem.n))-1]*problem.n
+            helper.prune_strands(domains);self.assertIsNone(helper._native_strands)
+
+    def test_old_exports_keep_python_orchestrated_native_fallback(self):
+        from constraint_advanced import AdvancedPruner
+        from search_fixtures import planted_gold
+        from search_problem import SearchProblem
+        library=self.library
+        class OldExports:
+            def __getattr__(self,name):
+                if name.startswith('dd_strands_'):raise AttributeError(name)
+                return getattr(library,name)
+        graph=native.NativeGraphHelpers(OldExports());self.assertFalse(graph.supports_strands)
+        tiles,geometry,known=planted_gold(8421,1);problem=SearchProblem(tiles,geometry)
+        self.assertEqual(problem.n,10)  # Exercise the capability gate, not the tiny-board gate.
+        helper=AdvancedPruner(problem,options={'native':'python'});helper.native_graph=graph
+        domains=[(1<<(3*problem.n))-1]*problem.n;actual=domains.copy();helper.prune_strands(actual)
+        self.assertEqual(tuple(helper._strand_cache[tuple(domains)]),strand_reference(problem.n,helper.segments,problem.edges,domains))
+        self.assertTrue(all(value&(1<<code) for value,code in zip(actual,known)))
+        self.assertIsNone(helper._native_strands)
+
+
 if __name__=='__main__':unittest.main()

@@ -434,6 +434,7 @@ class NativeGraphTests(unittest.TestCase):
             expected = domains.copy()
             getattr(AdvancedPruner(problem, options={'native': 'python'}), method)(expected)
             helper = AdvancedPruner(problem, options={'native': 'compiled'})
+            helper.native_graph.supports_strands = False  # Exercise the old-export assembly fallback.
             actual = domains.copy()
             # A host with wider C ints must use the ordered Python traversal;
             # handing its 64-bit endpoint buffer to the native ABI is invalid.
@@ -455,6 +456,7 @@ class NativeGraphTests(unittest.TestCase):
                 ('prune_biconnected', '_local_block_certificate', '_biconnected_cache')):
             for stop_at in (1, problem.n, problem.n+1, problem.n+len(problem.edges)+1):
                 helper = AdvancedPruner(problem, options={'native': 'compiled'})
+                helper.native_graph.supports_strands = False  # Keep coverage of fallback graph assembly.
                 # Isolate graph construction and packing from local preparation.
                 for domain in domains:
                     getattr(helper, local)(domain, lambda: None)
