@@ -22,6 +22,60 @@ def permutation_ring(permutations):
     return SearchProblem(data,board(n,[(i,1,(i+1)%n,0) for i in range(n)]))
 
 
+class SeparatorCutMaskTests(unittest.TestCase):
+    @staticmethod
+    def reference_order(helper,cells,domains):
+        pending=set(cells);done=set();order=[]
+        while pending:
+            frontier=[c for c in pending if helper.neighbors[c]&done] or list(pending)
+            cell=min(frontier,key=lambda c:(sum((a in done|{c})!=(b in done|{c})
+                for a,_,b,_ in helper.problem.edges),domains[c].bit_count(),c))
+            order.append(cell);done.add(cell);pending.remove(cell)
+        return tuple(order)
+
+    def test_all_small_graphs_subsets_orders_and_prefix_frontiers(self):
+        from types import SimpleNamespace
+        from constraint_pruning import values
+        comparisons=0
+        for n in range(1,5):
+            pairs=[(a,b) for a in range(n) for b in range(a+1,n)]
+            for graph in range(1<<len(pairs)):
+                simple=[pair for index,pair in enumerate(pairs) if graph>>index&1]
+                for extra in ([],[(cell,cell) for cell in range(n)]+simple[:1]):
+                    edges=tuple((a,0,b,0) for a,b in simple+extra)
+                    problem=SimpleNamespace(n=n,edges=edges,masks=[(0,0,0)]*(3*n),
+                        tiles=[{'segments':[[[0,1],[1,1]]]}]*n)
+                    helper=SeparatorPruner(problem)
+                    self.assertIsInstance(helper._incident_edges,tuple)
+                    for subset in range(1<<n):
+                        cells=tuple(c for c in range(n) if subset>>c&1)
+                        for domains in ([1]*n,[(1<<(n-c))-1 for c in range(n)]):
+                            order=helper._order(cells,domains)
+                            self.assertEqual(order,self.reference_order(helper,cells,domains))
+                            processed=set();cut=0
+                            for cell in order:
+                                processed.add(cell);cut^=helper._incident_edges[cell]
+                                expected=tuple(eid for eid,(a,_,b,_) in enumerate(edges)
+                                               if (a in processed)!=(b in processed))
+                                self.assertEqual(tuple(values(cut)),expected)
+                            comparisons+=1
+        self.assertGreater(comparisons,4000)
+
+    def test_complete_dp_frontier_ids_follow_exact_edge_order(self):
+        problem=ring(4)
+        for target in ('gold','edges'):
+            for subset in range(1<<problem.n):
+                cells=tuple(c for c in range(problem.n) if subset>>c&1)
+                if len(cells)<2:continue
+                helper=SeparatorPruner(problem,target);domains=domains_of(problem)
+                helper.prune_region(domains,cells)
+                self.assertGreater(helper.last_region['completions'],0)
+                self.assertEqual(helper.last_region['order'],self.reference_order(helper,cells,domains_of(problem)))
+                expected=tuple(eid for eid,(a,_,b,_) in enumerate(problem.edges)
+                               if (a in cells)!=(b in cells))
+                self.assertEqual(helper.last_region['frontier_edges'],expected)
+
+
 class SeparatorTests(unittest.TestCase):
     def test_complete_small_regions_equal_independent_gold_and_edge_enumeration(self):
         tetra,mesh=tetrahedron_tiles()

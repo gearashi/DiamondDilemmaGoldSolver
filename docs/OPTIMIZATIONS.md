@@ -405,3 +405,34 @@ These are short bounded comparisons on one checkpoint. They support retaining th
 
 
 The final CPU suites each discovered 793 tests: Python 3.12 passed **764 with 29 skips**, and Python 3.15 passed **673 with 120 skips**, with no failures. Skips explicitly identify unavailable engines, platforms or hardware rather than claiming coverage. Version-2 bounded-run manifests verified the exact source and compiled-library inputs. Ten opted-in Python 3.12 GPU tests passed, and Python 3.15 passed 28 WebGPU/sampling checks with its direct-CUDA test intentionally skipped. Six isolated Python 3.15 application runs saved valid checkpoints and exited cleanly, including two-worker to one-worker resume and WebGPU hybrid search. Canonical puzzle/best/checkpoint hashes remained unchanged. Physical AMD and Apple GPU coverage remains unverified; the local GPU was an RTX 2060.
+
+
+## Round 13: neighborhood reuse and cheaper graph bookkeeping
+
+Neighborhood pruning retains up to 512 completed local support results per private propagator on boards with at least 32 cells. The exact key includes the center domain, every grouped neighbor domain and immutable seam profiles. Changed rotations or parallel-seam constraints cannot reuse an incompatible result. Incomplete work is never cached, zero-support results remain valid cache entries, and FIFO eviction only causes recomputation. Smaller boards keep the previous per-call cache. No cache is serialized as exhausted search coverage.
+
+Compiled global strand and biconnectivity graphs now collect ordered integer endpoints directly before converting to immutable native buffers. This removes intermediate edge tuples while retaining native range validation, cancellation checks and Python fallback. Biconnectivity uses dense cell/port seam indices and per-cell block rows; missing seams retain a distinct sentinel. Separator dynamic programming computes cut edges using immutable incident-edge bitsets. XOR removes internal seams, preserves separate parallel seams and cancels self-loops. Ascending edge IDs preserve frontier order, tie-breaking and exact local histories.
+
+Seven alternating component trials on the existing Windows/i7-4790/RTX 2060 setup measured:
+
+| Bounded workload | Before | After |
+| --- | ---: | ---: |
+| Neighborhood filter, 25 contiguous saved frames | 20.70 ms | 17.18 ms |
+| Neighborhood filter, 100 repeated frame calls | 79.40 ms | 22.50 ms |
+| Native forest graph construction and traversal, five frames repeated ten times | 191.44 ms | 134.80 ms |
+| Native certificate graph construction and traversal, same bounds | 212.98 ms | 145.91 ms |
+| Complete separator filter, five saved frames | 13.55 ms | 2.81 ms |
+
+Feasible neighborhood workloads without cache reuse incurred 1.3-2.8% helper overhead; the retained cache measured roughly 283-312 KB in recursive Python object sizes, not process RSS. A separate full biconnectivity-filter discriminator measured tuple-key seam lookups versus the selected dense port-block rows at 416.5 to 395.0 ms in Python and 157.4 to 133.1 ms compiled (five saved frames repeated four times). These component gains overlap and must not be added together.
+
+Three alternating whole-search comparisons resumed an immutable copy of the actual checkpoint. Two slices stopped after three completed partial-loop checks each. Defaults, first-UIP and all four experimental controls each preserved their exact pending stack hashes and sixteen new nodes across revisions. Their median solver times were respectively **0.685 to 0.622 s**, **0.768 to 0.682 s**, and **0.687 to 0.633 s**. The native-search-only comparison was inconclusive because one clock-bounded trial followed different pending work; it is not reported as a speedup. Import, input setup and process times are recorded separately. Existing search-policy defaults remain unchanged.
+
+Independent checks cover local-star enumeration, widening, rotations, parallel seams, eviction, cancellation, exact packed graph sequences, non-32-bit array fallback, finite Gold witnesses, and 4,392 small graph/subset/domain ordering comparisons. Raw trials, immutable source/input hashes and peer reviews remain locally under `audit/optimization-round13/`. These bounded results do not establish a Gold solution, a completion-time forecast, or universal exhaustion of future optimization ideas.
+
+
+A follow-up physical-tile projection cache was rejected. Although the complete inventory callback on a recorded access sequence improved from 67.16 to 40.40 ms, sparse miss-heavy input regressed from 15.40 to 16.28 ms. Nine alternating full runs with identical twelve nodes and ordered frontiers measured 683.14 to 696.28 ms. The simpler existing per-propagation cache remains. This decision uses total search behavior, not the favorable inner measurement alone.
+
+
+Port-enumeration reuse was also rejected after a follow-up comparison. A broad tuple cache regressed sparse filters; an inline shortcut for exactly all 33 ports improved a compiled filter sample, but complete equal-pending search medians were 0.681 to 0.741 s with defaults and 0.795 to 0.835 s with first-UIP. All-four improved 0.723 to 0.697 s, and the native-only comparison was inconclusive because pending work differed. The release retains the original streaming enumeration. All trials remain recorded; no additional change met the full-workload acceptance gate in this review.
+
+Final source matches the previously completed bounded regression manifests exactly: **802 tests per environment**, with **773 passed / 29 skipped on Python 3.12** and **682 passed / 120 skipped on Python 3.15**, no failures. Eight targeted Python 3.15 WebGPU/sampling hardware checks passed, including checkpoint interchange through the preserved Python 3.12 CUDA environment. Isolated compiled DFS Stop/resume and 128-replica WebGPU hybrid resume saved valid checkpoints. The observed DFS Stop latency was 0.174 s in this run, not a guaranteed maximum. Unavailable engine/platform tests remain explicit skips. Native libraries and canonical puzzle/best/checkpoint files remained unchanged during validation.

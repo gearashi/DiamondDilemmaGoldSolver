@@ -284,6 +284,143 @@ class NeighborhoodTests(unittest.TestCase):
         self.assertEqual(pruner.stats['neighborhood_checks'], 0)
 
 
+class PersistentNeighborhoodTests(unittest.TestCase):
+    @staticmethod
+    def padded(problem):
+        # Preserve an independently enumerable small star and its physical tile
+        # identities while exercising the larger-board persistent-cache path.
+        padded = blank_problem(32)
+        padded.masks[:3*problem.n] = problem.masks
+        padded.neighbors[:problem.n] = problem.neighbors
+        padded.sides[:problem.n] = problem.sides
+        return padded
+
+    @staticmethod
+    def oracle(problem, domains, limit=None):
+        from constraint_pruning import values
+        snapshot, expected = domains.copy(), domains.copy()
+        for cell, domain in enumerate(snapshot):
+            if limit is not None and domain.bit_count() > limit:
+                continue
+            neighbors = sorted({int(nb) for nb in problem.neighbors[cell] if nb >= 0})
+            if not neighbors:
+                continue
+            keep = 0
+            for code in values(domain):
+                candidates = []
+                for neighbor in neighbors:
+                    candidates.append([other for other in values(snapshot[neighbor])
+                        if other//3 != code//3 and all(
+                            int(problem.masks[other, problem.sides[cell, side]]) ==
+                            reverse_mask(int(problem.masks[code, side]))
+                            for side, nb in enumerate(problem.neighbors[cell]) if nb == neighbor)])
+                if any(len({other//3 for other in choice}) == len(neighbors)
+                       for choice in product(*candidates)):
+                    keep |= 1 << code
+            expected[cell] &= keep
+            if not expected[cell]:
+                break
+        return expected
+
+    def test_exact_keys_match_independent_stars_under_narrowing_widening_and_rotation(self):
+        fixtures = [unique_tetrahedron(), SearchProblem(simple_tiles(), double_face()),
+            SearchProblem(masks_to_tiles([[3, 5, 9], [reverse_mask(m) for m in (3, 9, 5)]]), double_face())]
+        rng = random.Random(918304)
+        for small in fixtures:
+            problem = self.padded(small); helper = Pruner(problem, parity=False, regions=[])
+            valid = brute(small, 'edges')
+            for case in range(160):
+                initial = [bits(code for code in range(3*small.n) if rng.random() < (.8 if case%4 else 1))
+                           for _ in range(small.n)] + [1 << (3*cell) for cell in range(small.n, 32)]
+                expected = self.oracle(problem, initial)
+                for repeat in range(2):
+                    actual = initial.copy(); before = helper.stats['neighborhood_checks']
+                    self.assertEqual(helper.prune_neighborhood(actual), initial != expected)
+                    self.assertEqual(actual, expected)
+                    if repeat:
+                        self.assertEqual(helper.stats['neighborhood_checks'], before)
+                for completion in valid:
+                    if all(initial[cell] & (1 << code) for cell, code in enumerate(completion)):
+                        self.assertTrue(all(actual[cell] & (1 << code) for cell, code in enumerate(completion)))
+                self.assertLessEqual(len(helper._neighborhood_cache), 512)
+
+    def test_changed_neighbor_and_parallel_seam_profile_cannot_reuse_wrong_support(self):
+        small = SearchProblem(simple_tiles(), double_face())
+        problem = self.padded(small); helper = Pruner(problem, parity=False, regions=[])
+        tail = [1 << (3*cell) for cell in range(2,32)]
+        for left,right in ((1,8),(1,16),(1,8),(7,56),(2,8),(7,56)):
+            initial=[left,right]+tail;actual=initial.copy()
+            helper.prune_neighborhood(actual)
+            self.assertEqual(actual,self.oracle(problem,initial))
+        # Identical domain integers on another puzzle with different seam
+        # profiles must start from a private empty cache even with reused tables.
+        warm=Pruner(problem,parity=False,regions=[],tables=helper.tables)
+        self.assertEqual(warm._neighborhood_cache,{})
+        self.assertIsNot(warm._neighborhood_cache,helper._neighborhood_cache)
+        self.assertIs(warm._stars,helper._stars)
+        different=self.padded(SearchProblem(masks_to_tiles([[3,5,9],[reverse_mask(m) for m in (3,9,5)]]),double_face()))
+        other=Pruner(different,parity=False,regions=[]);initial=[7,56]+tail;actual=initial.copy()
+        other.prune_neighborhood(actual)
+        self.assertEqual(actual,self.oracle(different,initial))
+
+    def test_eviction_is_bounded_and_recomputes_old_keys(self):
+        problem=blank_problem(32)
+        problem.neighbors[0,0]=1;problem.sides[0,0]=0
+        problem.neighbors[1,0]=0;problem.sides[1,0]=0
+        helper=Pruner(problem,parity=False,regions=[])
+        tail=[1 << (3*cell) for cell in range(2,32)]
+        first=[1,8]+tail;helper.prune_neighborhood(first.copy())
+        oldest=next(iter(helper._neighborhood_cache))
+        for index in range(2,602):
+            initial=[1,index << 3]+tail;actual=initial.copy()
+            helper.prune_neighborhood(actual)
+            self.assertEqual(actual,self.oracle(problem,initial))
+            self.assertLessEqual(len(helper._neighborhood_cache),512)
+        self.assertEqual(len(helper._neighborhood_cache),512)
+        self.assertNotIn(oldest,helper._neighborhood_cache)
+        before=helper.stats['neighborhood_checks'];actual=first.copy()
+        helper.prune_neighborhood(actual)
+        self.assertGreater(helper.stats['neighborhood_checks'],before)
+        self.assertEqual(actual,self.oracle(problem,first))
+
+    def test_cancellation_retains_only_completed_stars_and_resume_is_exact(self):
+        small=unique_tetrahedron();problem=self.padded(small)
+        initial=[4095]*4+[1 << (3*cell) for cell in range(4,32)]
+        for stop_after_completed in (False,True):
+            helper=Pruner(problem,parity=False,regions=[])
+            helper.prune_neighborhood(initial.copy(),max_domain_values=1)  # Build immutable profiles only.
+            calls=[0]
+            def stop():
+                calls[0]+=1
+                if (bool(helper._neighborhood_cache) if stop_after_completed else calls[0]==2):
+                    raise InterruptedError('star query')
+            helper.check=stop;actual=initial.copy()
+            with self.assertRaises(InterruptedError):helper.prune_neighborhood(actual)
+            self.assertEqual(len(helper._neighborhood_cache),int(stop_after_completed))
+            for completion in brute(small,'edges'):
+                self.assertTrue(all(actual[cell] & (1 << code) for cell,code in enumerate(completion)))
+            helper.check=lambda:None;expected=self.oracle(problem,actual)
+            helper.prune_neighborhood(actual)
+            self.assertEqual(actual,expected)
+            widened=initial.copy();helper.prune_neighborhood(widened)
+            self.assertEqual(widened,self.oracle(problem,initial))
+
+    def test_tiny_gate_and_eligible_limit_preserve_private_cache_rules(self):
+        small=unique_tetrahedron();helper=Pruner(small,parity=False)
+        for _ in range(2):helper.prune_neighborhood([4095]*4)
+        self.assertEqual(helper._neighborhood_cache,{})
+        large=Pruner(self.padded(small),parity=False,regions=[])
+        initial=[4095]*4+[1 << (3*cell) for cell in range(4,32)]
+        self.assertFalse(large.prune_neighborhood(initial.copy(),max_domain_values=1))
+        self.assertEqual(large._neighborhood_cache,{})
+        large.prune_neighborhood(initial.copy())
+        self.assertTrue(large._neighborhood_cache)
+        # Eligibility is checked before cache lookup; unrestricted cached work
+        # must not alter a later restricted invocation.
+        actual=initial.copy();self.assertFalse(large.prune_neighborhood(actual,max_domain_values=1))
+        self.assertEqual(actual,initial)
+
+
 class ReuseTests(unittest.TestCase):
     def test_orientation_scatter_and_gather_are_exact(self):
         rng = random.Random(7781)

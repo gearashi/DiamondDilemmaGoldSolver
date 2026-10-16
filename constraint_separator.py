@@ -44,9 +44,14 @@ class SeparatorPruner:
                          for tile in problem.tiles for rotation in range(3))
         self.adj=[[] for _ in range(problem.n)]
         self.neighbors=[set() for _ in range(problem.n)]
+        incident=[0]*problem.n
         for eid,(a,sa,b,sb) in enumerate(problem.edges):
             self.adj[a].append((b,sa,sb,eid));self.adj[b].append((a,sb,sa,eid))
             self.neighbors[a].add(b);self.neighbors[b].add(a)
+            # XOR counts each seam once at a cut. Self-loops cancel, while
+            # parallel seams retain their distinct edge IDs.
+            incident[a] ^= 1 << eid;incident[b] ^= 1 << eid
+        self._incident_edges=tuple(incident)
         buckets=[{} for _ in range(3)]
         for code,row in enumerate(self.masks):
             for side,mask in enumerate(row):
@@ -61,13 +66,13 @@ class SeparatorPruner:
                 tuple((c,domains[c]) for c in outside))
 
     def _order(self,cells,domains):
-        pending=set(cells);done=set();order=[]
+        pending=set(cells);done=set();order=[];cut=0
         while pending:
             frontier=[c for c in pending if self.neighbors[c]&done] or list(pending)
-            cell=min(frontier,key=lambda c:(sum((a in done|{c})!=(b in done|{c})
-                                             for a,_,b,_ in self.problem.edges),
+            cell=min(frontier,key=lambda c:((cut^self._incident_edges[c]).bit_count(),
                                            domains[c].bit_count(),c))
             order.append(cell);done.add(cell);pending.remove(cell)
+            cut ^= self._incident_edges[cell]
         return tuple(order)
 
     @staticmethod
@@ -100,12 +105,12 @@ class SeparatorPruner:
         # key: (used physical tile bitset, frontier masks, endpoint pairs, cycles)
         # value: (candidate-support tuple, number of concrete local histories)
         layer={(0,(),(),0):((0,)*len(cells),1)}
-        processed=set();old_edges=();transitions=0;created=1;merges=0
+        processed=set();old_edges=();cut=0;transitions=0;created=1;merges=0
         for cell in order:
             check()
             new_processed=processed|{cell}
-            new_edges=tuple(eid for eid,(a,_,b,_) in enumerate(self.problem.edges)
-                            if (a in new_processed)!=(b in new_processed))
+            new_cut=cut^self._incident_edges[cell]
+            new_edges=tuple(values(new_cut))
             following={}
             for (used,mask_tuple,pairs,cycles),(support,count) in layer.items():
                 check()
@@ -164,7 +169,7 @@ class SeparatorPruner:
                     else:
                         following[signature]=(tuple(a|b for a,b in zip(previous[0],new_support)),previous[1]+count)
                         merges+=1
-            layer=following;processed=new_processed;old_edges=new_edges
+            layer=following;processed=new_processed;old_edges=new_edges;cut=new_cut
             if not layer:
                 break
         supports=[0]*len(cells)

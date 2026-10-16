@@ -157,6 +157,7 @@ class Pruner:
         self._matching = None
         self.on_narrow = None
         self._hall_cache = {}
+        self._neighborhood_cache = {}
         self.native_hall,self.native_hall_reason=select_hall(native)
         self._inventory_cache = {}
         self.stats = dict.fromkeys(STAT_KEYS, 0)
@@ -653,6 +654,10 @@ class Pruner:
         IDs, so one orientation must satisfy every seam to the same neighbor.
         The test is exact for this relaxed star, not for the entire puzzle.
         A per-pass snapshot makes cached supports safe after domain reductions.
+        On larger boards, completed exact star results survive calls in a private
+        512-entry cache. The key includes every neighboring domain and immutable
+        support profile; widening or changing a parallel seam cannot hit it.
+        Tiny boards retain the cheaper per-pass cache to avoid eviction overhead.
         The regular propagation pass limits this optional strengthening to small
         center domains; skipping wider stars weakens filtering, never coverage.
         Direct calls default to checking every center domain.
@@ -666,7 +671,9 @@ class Pruner:
             # inside construction leaves both the old record and _stars intact.
             self._stars = self._build_stars()
             self.tables = replace(self.tables, stars=self._stars)
-        snapshot, cache, star_cache, changed = tuple(domains), {}, {}, False
+        persistent_stars = self.n >= 32
+        star_cache = self._neighborhood_cache if persistent_stars else {}
+        snapshot, cache, changed = tuple(domains), {}, False
         for cell in eligible:
             self.check()
             star = self._stars[cell]
@@ -693,7 +700,12 @@ class Pruner:
                     choices.append(cache[key] & ~forbidden)
                 if _distinct_supports(choices):
                     keep |= 1 << code
-            star_cache[signature] = keep
+            # The whole star was checked. No interrupted candidate scan can
+            # publish an incomplete result, even when earlier stars completed.
+            if persistent_stars:
+                _remember(star_cache, signature, keep, 512)
+            else:
+                star_cache[signature] = keep
             changed = self._narrow(domains, cell, keep, 'neighborhood') or changed
             if not domains[cell]:
                 self.stats['neighborhood_failures'] += 1

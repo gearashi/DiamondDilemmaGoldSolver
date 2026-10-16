@@ -422,6 +422,57 @@ class NativeGraphTests(unittest.TestCase):
             self.assertTrue(all(value&(1<<code) for value,code in zip(b,known)))
             self.assertIsNone(python.native_graph)
 
+    def test_flat_global_graphs_keep_non_32bit_array_fallback(self):
+        from array import array
+        from unittest.mock import patch
+        from constraint_advanced import AdvancedPruner
+        data, board, known = planted_gold(9107, 1)
+        problem = SearchProblem(data, board)
+        domains = [sum(1 << c for c in set(row[:6]) | {known[i]})
+                   for i, row in enumerate(problem.domains)]
+        for method in ('prune_strands', 'prune_biconnected'):
+            expected = domains.copy()
+            getattr(AdvancedPruner(problem, options={'native': 'python'}), method)(expected)
+            helper = AdvancedPruner(problem, options={'native': 'compiled'})
+            actual = domains.copy()
+            # A host with wider C ints must use the ordered Python traversal;
+            # handing its 64-bit endpoint buffer to the native ABI is invalid.
+            with patch('constraint_advanced.array', side_effect=lambda _, v: array('q', v)), \
+                 patch.object(helper.native_graph, 'union_roots_packed', side_effect=AssertionError('wrong ABI')), \
+                 patch.object(helper.native_graph, 'cyclic_edge_blocks_packed', side_effect=AssertionError('wrong ABI')):
+                getattr(helper, method)(actual)
+            self.assertEqual(actual, expected)
+            self.assertTrue(all(d & (1 << c) for d, c in zip(actual, known)))
+
+    def test_cancelled_flat_global_graph_does_not_publish_partial_support(self):
+        from constraint_advanced import AdvancedPruner
+        data, board, known = planted_gold(9107, 1)
+        problem = SearchProblem(data, board)
+        domains = [sum(1 << c for c in set(row[:6]) | {known[i]})
+                   for i, row in enumerate(problem.domains)]
+        for method, local, cache in (
+                ('prune_strands', '_local_forest', '_strand_cache'),
+                ('prune_biconnected', '_local_block_certificate', '_biconnected_cache')):
+            for stop_at in (1, problem.n, problem.n+1, problem.n+len(problem.edges)+1):
+                helper = AdvancedPruner(problem, options={'native': 'compiled'})
+                # Isolate graph construction and packing from local preparation.
+                for domain in domains:
+                    getattr(helper, local)(domain, lambda: None)
+                calls = [0]
+                def check():
+                    calls[0] += 1
+                    if calls[0] == stop_at:
+                        raise InterruptedError
+                actual = domains.copy()
+                with self.assertRaises(InterruptedError):
+                    getattr(helper, method)(actual, check)
+                self.assertEqual(actual, domains)
+                self.assertFalse(getattr(helper, cache))
+                getattr(helper, method)(actual)
+                expected = domains.copy()
+                getattr(AdvancedPruner(problem, options={'native': 'python'}), method)(expected)
+                self.assertEqual(actual, expected)
+
     def test_parallel_edges_self_edges_deep_graph_and_repeated_widening(self):
         from constraint_advanced import cyclic_edge_blocks
         rng=random.Random(63471)

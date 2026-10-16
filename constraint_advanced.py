@@ -250,12 +250,15 @@ class AdvancedPruner:
         if allowed is None:
             dsu = _DSU(33*self.n) if self.native_graph is None else None
             graph, used = [], []
+            append = graph.append
             for cell, domain in enumerate(domains):
                 check()
                 forest, ports = self._local_forest(domain, check)
                 used.append(ports)
                 if dsu is None:
-                    graph.extend((33*cell+a, 33*cell+b) for a, b in forest)
+                    base = 33*cell
+                    for a, b in forest:
+                        append(base+a); append(base+b)
                 else:
                     for a, b in forest:
                         dsu.join(33*cell+a, 33*cell+b)
@@ -265,21 +268,21 @@ class AdvancedPruner:
                     u, v = 11*sa+p, 11*sb+10-p
                     if used[a] >> u & 1 and used[b] >> v & 1:
                         if dsu is None:
-                            graph.append((33*a+u, 33*b+v))
+                            append(33*a+u); append(33*b+v)
                         else:
                             dsu.join(33*a+u, 33*b+v)
             if dsu is None:
                 check()
-                packed = array('i', chain.from_iterable(graph))
+                packed = array('i', graph)
                 if packed.itemsize == 4:
                     component = self.native_graph.union_roots_packed(33*self.n, packed.tobytes(), check)
                     find = component.__getitem__
                 else:
                     dsu = _DSU(33*self.n)
-                    for index, (a, b) in enumerate(graph):
-                        if index % 256 == 0:
+                    for index in range(0, len(graph), 2):
+                        if index % 512 == 0:
                             check()
-                        dsu.join(a, b)
+                        dsu.join(graph[index], graph[index+1])
                     find = dsu.find
             else:
                 find = dsu.find
@@ -376,28 +379,50 @@ class AdvancedPruner:
                     for pair in pairs:
                         pair=tuple(sorted(pair));supports[pair]=supports.get(pair,0)|(1<<code)
                 self._segment_supports=tuple(supports.items())
-            graph=[];used=[]
+            graph=[];used=[];append=graph.append
+            native=self.native_graph is not None
             for cell,domain in enumerate(domains):
                 check()
                 pairs,ports=self._local_block_certificate(domain,check)
-                graph.extend((33*cell+a,33*cell+b) for a,b in pairs)
+                base=33*cell
+                if native:
+                    for a,b in pairs:
+                        append(base+a);append(base+b)
+                else:
+                    graph.extend((base+a,base+b) for a,b in pairs)
                 used.append(ports)
-            seam_ids={}
+            # Dense cell/port addressing preserves edge zero and distinguishes
+            # absent seams with -1. Repeated references retain the last edge.
+            seam_ids=[-1]*(33*self.n)
             for a,sa,b,sb in self.problem.edges:
                 check()
                 for p in range(11):
                     u,v=11*sa+p,11*sb+10-p
                     if used[a]>>u&1 and used[b]>>v&1:
-                        eid=len(graph);graph.append((33*a+u,33*b+v))
-                        seam_ids[a,u]=eid;seam_ids[b,v]=eid
-            blocks=self._cyclic_edge_blocks(33*self.n,graph,check)
+                        if native:
+                            eid=len(graph)//2;append(33*a+u);append(33*b+v)
+                        else:
+                            eid=len(graph);append((33*a+u,33*b+v))
+                        seam_ids[33*a+u]=eid;seam_ids[33*b+v]=eid
+            if native:
+                # Keep endpoint order and immutable, range-checked native input.
+                check()
+                packed=array('i',graph)
+                if packed.itemsize==4:
+                    blocks=self.native_graph.cyclic_edge_blocks_packed(33*self.n,packed.tobytes(),check)
+                else:
+                    blocks=cyclic_edge_blocks(33*self.n,list(zip(graph[::2],graph[1::2])),check)
+            else:
+                blocks=self._cyclic_edge_blocks(33*self.n,graph,check)
             choices=[];common=None
             for cell,domain in enumerate(domains):
                 check()
                 # Every chosen port uses its seam edge. When all those edges
                 # share one block, each actual segment joins two vertices in
                 # that block too, even if the certificate replaced that edge.
-                all_blocks={blocks[seam_ids[cell,p]] if (cell,p) in seam_ids else -1 for p in values(used[cell])}
+                offset=33*cell
+                port_blocks=[blocks[e] if e>=0 else -1 for e in seam_ids[offset:offset+33]]
+                all_blocks={port_blocks[p] for p in values(used[cell])}
                 if len(all_blocks)==1 and -1 not in all_blocks:
                     mapping={next(iter(all_blocks)):domain}
                 else:
@@ -408,8 +433,7 @@ class AdvancedPruner:
                         hosting=set()
                         for a,b in self.segments[code]:
                             for port in (a,b):
-                                edge=seam_ids.get((cell,port))
-                                hosting.add(-1 if edge is None else blocks[edge])
+                                hosting.add(port_blocks[port])
                         if len(hosting)==1 and -1 not in hosting:
                             block=next(iter(hosting));mapping[block]=mapping.get(block,0)|(1<<code)
                 choices.append(mapping)
