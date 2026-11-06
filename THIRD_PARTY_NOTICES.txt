@@ -1,0 +1,22 @@
+Third-party materials
+=====================
+
+Puzzle description and reference diagrams:
+Jaap Scherphuis, Jaap's Puzzle Page
+https://www.jaapsch.net/puzzles/diamdil.htm
+https://www.jaapsch.net/puzzles/
+
+The site identifies its content as copyright Jaap Scherphuis. No license
+for redistribution of the reference diagrams was identified on the puzzle
+page or site index. This repository therefore does not include the GIFs,
+image overlays, or extracted tile data. prepare_data.py downloads the
+reference GIFs to the user's local data directory (or imports local copies)
+and checks them against source-data.json before extraction. The GPL license
+for this project's code does not grant rights to third-party materials.
+
+Python packages and NVIDIA components are installed separately by Setup.ps1
+from the package index. Those components retain their respective upstream
+licenses; no package binaries or virtual environment are included here.
+
+This is an independent puzzle-solving project. It does not claim affiliation
+with the puzzle manufacturer or the author of the reference site.

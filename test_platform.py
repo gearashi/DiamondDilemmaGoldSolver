@@ -1,0 +1,491 @@
+"""Portable launcher/backend selection tests without real servers, GPUs, or browsers."""
+from contextlib import redirect_stdout, redirect_stderr
+import io
+import errno
+import json
+import os
+from pathlib import Path
+import subprocess
+import socket
+import tempfile
+from types import SimpleNamespace
+import unittest
+from unittest.mock import MagicMock, patch
+import urllib.error
+
+import gpu_backends as backends
+import platform_launcher as launcher
+
+ROOT = Path(__file__).resolve().parent
+
+
+class GPUFeatureLauncherTests(unittest.TestCase):
+    def test_features_forward_and_default_keeps_legacy_profile(self):
+        with patch.object(launcher, 'choose_backend'):
+            old=launcher.solver_command(replicas=128)
+            new=launcher.solver_command(replicas=128,gpu_features={'dynamic_mrv':True})
+        self.assertNotIn('--gpu-features',old)
+        features=json.loads(new[new.index('--gpu-features')+1])
+        self.assertTrue(features['dynamic_mrv'])
+        self.assertEqual(sum(features.values()),1)
+    def test_cpu_algorithm_does_not_silently_ignore_gpu_features(self):
+        with self.assertRaisesRegex(ValueError,'only to GPU DFS'):
+            launcher.solver_command(algorithm='dfs',gpu_features={'dynamic_mrv':True})
+
+
+class BackendSelectionTests(unittest.TestCase):
+    def setUp(self):
+        backends._automatic_backend.cache_clear()
+        self.addCleanup(backends._automatic_backend.cache_clear)
+        self.spec = self.enterContext(patch.object(backends.importlib.util, 'find_spec', return_value=None))
+        self.which = self.enterContext(patch.object(backends.shutil, 'which', return_value=None))
+        self.run = self.enterContext(patch.object(backends.subprocess, 'run'))
+
+    def platform(self, name):
+        return patch.object(backends, 'sys', SimpleNamespace(platform=name))
+
+    def test_macos_auto_uses_webgpu_without_cuda_probes(self):
+        with self.platform('darwin'):
+            self.assertEqual(backends.choose_backend(), 'webgpu')
+        self.spec.assert_not_called()
+        self.which.assert_not_called()
+        self.run.assert_not_called()
+
+    def test_macos_explicit_cuda_is_rejected(self):
+        with self.platform('darwin'):
+            with self.assertRaisesRegex(ValueError, 'macOS'):
+                backends.choose_backend('cuda')
+            self.assertEqual(backends.choose_backend('webgpu'), 'webgpu')
+        self.run.assert_not_called()
+
+    def test_explicit_backends_do_not_probe_drivers(self):
+        with self.platform('linux'):
+            self.assertEqual(backends.choose_backend('cuda'), 'cuda')
+            self.assertEqual(backends.choose_backend('webgpu'), 'webgpu')
+        self.spec.assert_not_called()
+        self.run.assert_not_called()
+
+    def test_unknown_backends_fail_before_probing(self):
+        for name in ('metal', 'CUDA', '', None, 12):
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                backends.choose_backend(name)
+        self.spec.assert_not_called()
+        self.run.assert_not_called()
+
+    def test_auto_requires_both_cupy_and_nvidia_tool(self):
+        with self.platform('linux'):
+            self.assertEqual(backends.choose_backend(), 'webgpu')
+            self.which.assert_not_called()
+            backends._automatic_backend.cache_clear()
+            self.spec.return_value = object()
+            self.assertEqual(backends.choose_backend(), 'webgpu')
+        self.run.assert_not_called()
+
+    def test_linux_and_windows_cuda_probe_success_and_cached_selection(self):
+        self.spec.return_value = object()
+        self.which.return_value = '/fake/nvidia-smi'
+        self.run.return_value = SimpleNamespace(returncode=0, stdout='Example NVIDIA GPU\n')
+        for platform, os_name in (('linux', 'posix'), ('win32', 'nt')):
+            with self.subTest(platform=platform):
+                backends._automatic_backend.cache_clear()
+                self.run.reset_mock()
+                with self.platform(platform), patch.object(backends, 'os', SimpleNamespace(name=os_name)), \
+                     patch.object(backends.subprocess, 'CREATE_NO_WINDOW', 0x08000000, create=True):
+                    self.assertEqual(backends.choose_backend(), 'cuda')
+                    self.assertEqual(backends.choose_backend(), 'cuda')
+                self.run.assert_called_once()
+                args, kwargs = self.run.call_args
+                self.assertEqual(args[0], ['/fake/nvidia-smi', '--query-gpu=name', '--format=csv,noheader'])
+                self.assertEqual(kwargs['timeout'], 5)
+                self.assertEqual(kwargs['creationflags'], 0x08000000 if os_name == 'nt' else 0)
+
+    def test_failed_empty_or_timed_out_probe_falls_back_to_webgpu(self):
+        self.spec.return_value = object()
+        self.which.return_value = '/fake/nvidia-smi'
+        cases = [SimpleNamespace(returncode=1, stdout='Driver unavailable'),
+                 SimpleNamespace(returncode=0, stdout='  \n'),
+                 OSError('not executable'), subprocess.TimeoutExpired('nvidia-smi', 5)]
+        for case in cases:
+            with self.subTest(case=case):
+                backends._automatic_backend.cache_clear()
+                self.run.side_effect = case if isinstance(case, Exception) else None
+                self.run.return_value = case
+                with self.platform('linux'):
+                    self.assertEqual(backends.choose_backend(), 'webgpu')
+
+
+class LauncherPortTests(unittest.TestCase):
+    def bound_socket(self):
+        owner = self.enterContext(socket.socket(socket.AF_INET, socket.SOCK_STREAM))
+        if hasattr(socket, 'SO_EXCLUSIVEADDRUSE'):
+            owner.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+        owner.bind(('127.0.0.1', 0))
+        return owner
+
+    @unittest.skipUnless(os.name == 'nt', 'Windows bind availability probe')
+    def test_real_bound_only_and_listening_ports_are_unavailable(self):
+        owner = self.bound_socket()
+        port = owner.getsockname()[1]
+        self.assertTrue(launcher._port_unavailable(port))
+        owner.listen(1)
+        self.assertTrue(launcher._port_unavailable(port))
+
+    @unittest.skipUnless(os.name == 'nt', 'Windows bind availability probe')
+    def test_real_released_port_is_available_and_probe_releases_its_bind(self):
+        owner = self.bound_socket()
+        port = owner.getsockname()[1]
+        owner.close()
+        with patch.object(socket, 'create_connection', side_effect=AssertionError('Do not wait for TCP refusal')):
+            self.assertFalse(launcher._port_unavailable(port))
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as replacement:
+            replacement.bind(('127.0.0.1', port))
+
+    def test_bind_probe_uses_exclusive_windows_socket(self):
+        with patch.object(launcher.socket, 'socket') as factory, \
+             patch.object(launcher.socket, 'SO_EXCLUSIVEADDRUSE', -5, create=True), \
+             patch.object(launcher, 'os', SimpleNamespace(name='nt')):
+            probe = factory.return_value.__enter__.return_value
+            self.assertFalse(launcher._port_unavailable(9876))
+            probe.bind.assert_called_once_with(('127.0.0.1', 9876))
+            probe.setsockopt.assert_called_once_with(socket.SOL_SOCKET, -5, 1)
+            factory.return_value.__exit__.assert_called_once()
+
+    def test_unix_probe_preserves_connect_refusal_and_error_behavior(self):
+        with patch.object(launcher, 'os', SimpleNamespace(name='posix')), \
+             patch.object(socket, 'create_connection') as connect:
+            self.assertTrue(launcher._port_unavailable(9876))
+            connect.assert_called_once_with(('127.0.0.1', 9876), timeout=1)
+            connect.side_effect = ConnectionRefusedError()
+            self.assertFalse(launcher._port_unavailable(9876))
+            connect.side_effect = PermissionError('permission denied')
+            with self.assertRaisesRegex(RuntimeError, 'verify'):
+                launcher._port_unavailable(9876)
+
+
+    def test_probe_errors_preserve_reason_and_close_socket(self):
+        self.enterContext(patch.object(launcher, 'os', SimpleNamespace(name='nt')))
+        self.enterContext(patch.object(launcher.socket, 'SO_EXCLUSIVEADDRUSE', -5, create=True))
+        for error in (PermissionError(errno.EACCES, 'permission denied'),
+                      OSError(errno.EADDRNOTAVAIL, 'address unavailable')):
+            with self.subTest(error=error), patch.object(launcher.socket, 'socket') as factory:
+                factory.return_value.__enter__.return_value.bind.side_effect = error
+                with self.assertRaisesRegex(RuntimeError, '9876.*' + str(error.errno)) as raised:
+                    launcher._port_unavailable(9876)
+                self.assertIs(raised.exception.__cause__, error)
+                factory.return_value.__exit__.assert_called_once()
+        with patch.object(launcher.socket, 'socket', side_effect=PermissionError('socket creation denied')):
+            with self.assertRaisesRegex(RuntimeError, 'socket creation denied'):
+                launcher._port_unavailable(9876)
+
+
+class PortableLauncherTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix='platform-test-', dir=ROOT)
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name).resolve()
+        self.assertEqual(self.root.parent, ROOT.resolve())
+        self.enterContext(patch.object(launcher, 'ROOT', self.root))
+        self.spawn = self.enterContext(patch.object(launcher.subprocess, 'Popen'))
+        self.call = self.enterContext(patch.object(launcher.subprocess, 'call', return_value=0))
+        self.browser = self.enterContext(patch.object(launcher.webbrowser, 'open', return_value=True))
+        self.opener_factory = self.enterContext(patch.object(launcher.urllib.request, 'build_opener'))
+        self.socket = self.enterContext(patch.object(launcher.socket, 'socket'))
+        self.tcp = self.enterContext(patch.object(launcher.socket, 'create_connection'))
+        self.sleep = self.enterContext(patch.object(launcher.time, 'sleep'))
+        self.output, self.errors = io.StringIO(), io.StringIO()
+        self.enterContext(redirect_stdout(self.output))
+        self.enterContext(redirect_stderr(self.errors))
+        self.payload = {'service': 'diamond-dilemma', 'installation_root': str(self.root)}
+
+    def install(self):
+        for relative in ('venv/bin/python', 'venv/Scripts/python.exe', 'data/tiles.json'):
+            path = self.root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text('{}', encoding='utf-8')
+
+    def response(self, payload=None, raw=None):
+        response = MagicMock()
+        response.read.return_value = raw if raw is not None else json.dumps(payload).encode()
+        self.opener_factory.return_value.open.return_value.__enter__.return_value = response
+        return response
+
+    def test_local_venv_paths_for_both_platform_families(self):
+        for name, relative in (('posix', 'venv/bin/python'), ('nt', 'venv/Scripts/python.exe')):
+            with self.subTest(name=name), patch.object(launcher, 'os', SimpleNamespace(name=name)):
+                self.assertEqual(launcher.venv_python(), self.root / relative)
+
+    def test_identity_requires_service_absolute_path_and_same_resolved_root(self):
+        self.assertIs(launcher.validate_installation(self.payload), self.payload)
+        alias = dict(self.payload, installation_root=str(self.root / 'unused' / '..'))
+        self.assertIs(launcher.validate_installation(alias), alias)
+        for value in (None, [], {}, {'service': 'other'},
+                      {'service': 'diamond-dilemma'},
+                      dict(self.payload, installation_root='relative'),
+                      dict(self.payload, installation_root=str(self.root.parent))):
+            with self.subTest(value=value), self.assertRaises(RuntimeError):
+                launcher.validate_installation(value)
+
+    def test_dashboard_probe_is_loopback_bounded_and_bypasses_proxies(self):
+        response = self.response(self.payload)
+        self.assertEqual(launcher.read_dashboard(9876), self.payload)
+        handlers = self.opener_factory.call_args.args
+        self.assertEqual(handlers[0].proxies, {})
+        self.assertIs(handlers[1], launcher._NoRedirect)
+        self.opener_factory.return_value.open.assert_called_once_with('http://127.0.0.1:9876/api/state', timeout=2)
+        response.read.assert_called_once_with(1024 * 1024 + 1)
+        self.socket.assert_not_called()
+        self.tcp.assert_not_called()
+
+    def test_bad_port_is_rejected_before_network(self):
+        for port in (0, 65536, -1, True, 8766.0, '8766'):
+            with self.subTest(port=port), self.assertRaises(ValueError):
+                launcher.read_dashboard(port)
+        self.opener_factory.assert_not_called()
+        self.socket.assert_not_called()
+        self.tcp.assert_not_called()
+
+    def test_absent_dashboard_requires_platform_port_check(self):
+        self.opener_factory.return_value.open.side_effect = urllib.error.URLError('connection refused')
+        self.tcp.side_effect = ConnectionRefusedError()
+        self.assertIsNone(launcher.read_dashboard(9876))
+        if os.name == 'nt':
+            self.socket.assert_called_once_with(launcher.socket.AF_INET, launcher.socket.SOCK_STREAM)
+            self.socket.return_value.__enter__.return_value.bind.assert_called_once_with(('127.0.0.1', 9876))
+            self.tcp.assert_not_called()
+        else:
+            self.tcp.assert_called_once_with(('127.0.0.1', 9876), timeout=1)
+            self.socket.assert_not_called()
+
+    def test_occupied_unknown_port_is_not_treated_as_absent(self):
+        self.opener_factory.return_value.open.side_effect = urllib.error.URLError('invalid HTTP service')
+        self.socket.return_value.__enter__.return_value.bind.side_effect = OSError(errno.EADDRINUSE, 'address in use')
+        with self.assertRaisesRegex(RuntimeError, 'occupied'):
+            launcher.read_dashboard(9876)
+        self.spawn.assert_not_called()
+
+    def test_unverifiable_socket_error_does_not_start_another_server(self):
+        self.opener_factory.return_value.open.side_effect = urllib.error.URLError('network error')
+        self.socket.return_value.__enter__.return_value.bind.side_effect = PermissionError('permission denied')
+        self.tcp.side_effect = PermissionError('permission denied')
+        with self.assertRaisesRegex(RuntimeError, 'verify'):
+            launcher.open_dashboard(9876)
+        self.spawn.assert_not_called()
+        self.browser.assert_not_called()
+
+    def test_malformed_json_and_oversized_response_are_rejected(self):
+        self.socket.return_value.__enter__.return_value.bind.side_effect = OSError(errno.EADDRINUSE, 'address in use')
+        for raw, message in ((b'not-json', 'occupied'), (b'x' * (1024 * 1024 + 1), 'large')):
+            with self.subTest(message=message):
+                self.response(raw=raw)
+                with self.assertRaisesRegex(RuntimeError, message):
+                    launcher.read_dashboard(9876)
+
+    def test_redirect_is_rejected_without_following_destination(self):
+        with self.assertRaisesRegex(RuntimeError, 'redirect'):
+            launcher._NoRedirect().redirect_request(None, None, 302, '', {}, 'https://example.invalid/')
+
+    def test_existing_same_installation_is_reused_without_setup_or_spawn(self):
+        self.response(self.payload)
+        self.assertEqual(launcher.open_dashboard(9876), 'http://127.0.0.1:9876/')
+        self.spawn.assert_not_called()
+        self.browser.assert_called_once_with('http://127.0.0.1:9876/')
+        self.assertFalse((self.root / 'runtime').exists())
+
+    def test_foreign_or_unknown_installation_never_opens_browser_or_spawns(self):
+        for payload in ({}, dict(self.payload, installation_root=str(self.root.parent)),
+                        {'service': 'diamond-dilemma'}):
+            with self.subTest(payload=payload):
+                self.response(payload)
+                with self.assertRaises(RuntimeError):
+                    launcher.open_dashboard(9876)
+        self.spawn.assert_not_called()
+        self.browser.assert_not_called()
+
+    def test_no_browser_option_preserves_local_url(self):
+        self.response(self.payload)
+        self.assertEqual(launcher.open_dashboard(9876, no_browser=True), 'http://127.0.0.1:9876/')
+        self.browser.assert_not_called()
+
+    def test_missing_venv_or_data_is_reported_before_spawn(self):
+        with patch.object(launcher, 'read_dashboard', return_value=None):
+            with self.assertRaisesRegex(RuntimeError, 'Setup'):
+                launcher.open_dashboard(9876)
+            path = launcher.venv_python()
+            path.parent.mkdir(parents=True)
+            path.touch()
+            with self.assertRaisesRegex(RuntimeError, 'data'):
+                launcher.open_dashboard(9876)
+        self.spawn.assert_not_called()
+        self.assertFalse((self.root / 'runtime').exists())
+
+    def test_new_dashboard_uses_detached_process_local_cwd_and_log(self):
+        self.install()
+        for os_name in ('posix', 'nt'):
+            with self.subTest(os_name=os_name):
+                self.spawn.reset_mock()
+                with patch.object(launcher, 'os', SimpleNamespace(name=os_name)), \
+                     patch.object(launcher.subprocess, 'CREATE_NO_WINDOW', 0x08000000, create=True), \
+                     patch.object(launcher.subprocess, 'CREATE_NEW_PROCESS_GROUP', 0x00000200, create=True), \
+                     patch.object(launcher, 'read_dashboard', side_effect=[None, self.payload]):
+                    launcher.open_dashboard(9876, no_browser=True)
+                args, kwargs = self.spawn.call_args
+                relative = 'venv/Scripts/python.exe' if os_name == 'nt' else 'venv/bin/python'
+                self.assertEqual(args[0], [str(self.root / relative), str(self.root / 'dashboard_server.py'), '--port', '9876'])
+                self.assertEqual(kwargs['cwd'], str(self.root))
+                self.assertEqual(kwargs['stdin'], subprocess.DEVNULL)
+                self.assertEqual(kwargs['stderr'], subprocess.STDOUT)
+                self.assertEqual(Path(kwargs['stdout'].name), self.root / 'runtime/dashboard.log')
+                if os_name == 'nt':
+                    self.assertEqual(kwargs['creationflags'], 0x08000200)
+                    self.assertNotIn('start_new_session', kwargs)
+                else:
+                    self.assertTrue(kwargs['start_new_session'])
+                    self.assertNotIn('creationflags', kwargs)
+        self.browser.assert_not_called()
+
+    def test_startup_waits_for_owned_child_bound_before_http_ready(self):
+        self.install()
+        self.spawn.return_value.poll.return_value = None
+        with patch.object(launcher, 'read_dashboard', side_effect=[
+                None, launcher.DashboardPending('occupied'), self.payload]):
+            launcher.open_dashboard(9876)
+        self.spawn.assert_called_once()
+        self.sleep.assert_called_once_with(.2)
+        self.browser.assert_called_once_with('http://127.0.0.1:9876/')
+
+    def test_startup_never_retries_a_foreign_installation(self):
+        self.install()
+        with patch.object(launcher, 'read_dashboard', side_effect=[
+                None, RuntimeError('another installation')]):
+            with self.assertRaisesRegex(RuntimeError, 'another installation'):
+                launcher.open_dashboard(9876)
+        self.browser.assert_not_called()
+
+    def test_early_child_exit_reports_log_without_opening_browser(self):
+        self.install()
+        self.spawn.return_value.poll.return_value = 1
+        with patch.object(launcher, 'read_dashboard', return_value=None):
+            with self.assertRaisesRegex(RuntimeError, 'exited.*dashboard.log'):
+                launcher.open_dashboard(9876)
+        self.browser.assert_not_called()
+        self.spawn.return_value.terminate.assert_not_called()
+
+    def test_startup_timeout_is_bounded_and_does_not_kill_a_process(self):
+        self.install()
+        self.spawn.return_value.poll.return_value = None
+        with patch.object(launcher, 'read_dashboard', return_value=None), \
+             patch.object(launcher.time, 'monotonic', side_effect=[0, 0, 21]):
+            with self.assertRaisesRegex(RuntimeError, 'timed out'):
+                launcher.open_dashboard(9876)
+        self.sleep.assert_called_once_with(.2)
+        self.browser.assert_not_called()
+        self.spawn.return_value.terminate.assert_not_called()
+
+    def test_solver_arguments_use_local_venv_and_default_resume(self):
+        with patch.object(launcher, 'choose_backend', return_value='webgpu') as choose:
+            command = launcher.solver_command(hours=2.5, replicas=128, seed=42, backend='webgpu')
+        choose.assert_called_once_with('webgpu')
+        self.assertEqual(command[:2], [str(launcher.venv_python()), str(self.root / 'systematic_search.py')])
+        self.assertEqual(command[2:], ['--seconds', '9000.0', '--replicas', '128', '--seed', '42', '--backend', 'webgpu', '--resume'])
+
+    def test_unlimited_fresh_arguments_and_input_bounds(self):
+        with patch.object(launcher, 'choose_backend', return_value='cuda'):
+            command = launcher.solver_command(unlimited=True, replicas=131072, seed=2**32 - 1, fresh=True)
+            self.assertEqual(command[command.index('--seconds') + 1], '0')
+            self.assertNotIn('--resume', command)
+            cases = [{'hours': v} for v in (-1, True, float('inf'), float('nan'), '1')]
+            cases += [{'replicas': v} for v in (127, 131073, True, 128.0)]
+            cases += [{'seed': v} for v in (-1, 2**32, False, 0.0)]
+            for kwargs in cases:
+                with self.subTest(kwargs=kwargs), self.assertRaises(ValueError):
+                    launcher.solver_command(**kwargs)
+        self.call.assert_not_called()
+
+    def test_main_dispatches_dashboard_and_start_without_real_processes(self):
+        with patch.object(launcher, 'open_dashboard') as dashboard:
+            self.assertEqual(launcher.main(['dashboard', '--port', '9876', '--no-browser']), 0)
+            dashboard.assert_called_once_with(9876, True)
+        self.install()
+        self.call.return_value = 7
+        with patch.object(launcher, 'choose_backend', return_value='webgpu'):
+            result = launcher.main(['start', '--hours', '4', '--unlimited', '--replicas', '128', '--seed', '17', '--backend', 'webgpu', '--fresh'])
+        self.assertEqual(result, 7)
+        args, kwargs = self.call.call_args
+        self.assertEqual(kwargs['cwd'], self.root)
+        self.assertIn('--backend', args[0])
+        self.assertIn('webgpu', args[0])
+        self.assertNotIn('--resume', args[0])
+        self.assertEqual(args[0][args[0].index('--seconds') + 1], '0')
+
+    def test_algorithm_routes_preserve_legacy_positional_api(self):
+        with patch.object(launcher, 'choose_backend', return_value='webgpu') as choose:
+            legacy = launcher.solver_command(1, False, 128, 17, 'webgpu', False)
+            self.assertEqual(Path(legacy[1]).name, 'systematic_search.py')
+            self.assertNotIn('--algorithm', legacy)
+            for algorithm in ('gpu-dfs', 'dfs', 'cp', 'cp-sat', 'cp-sat-circuit', 'sat', 'hybrid', 'parallel-dfs'):
+                with self.subTest(algorithm=algorithm):
+                    choose.reset_mock()
+                    command = launcher.solver_command(replicas=128, backend='webgpu', algorithm=algorithm)
+                    self.assertEqual(Path(command[1]).name, 'systematic_search.py' if algorithm == 'gpu-dfs' else 'constraint_search.py')
+                    if algorithm == 'gpu-dfs': self.assertNotIn('--algorithm', command)
+                    else: self.assertEqual(command[command.index('--algorithm')+1], algorithm)
+                    if algorithm in ('gpu-dfs', 'hybrid'): choose.assert_called_once_with('webgpu')
+                    else: choose.assert_not_called()
+                    self.assertIn('--resume', command)
+
+    def test_cpu_algorithm_does_not_require_a_gpu_driver_and_cli_forwards_selection(self):
+        self.install()
+        with patch.object(launcher, 'choose_backend', side_effect=AssertionError('CPU search must not probe GPU drivers')):
+            result = launcher.main(['start', '--algorithm', 'sat', '--replicas', '128', '--backend', 'cuda', '--fresh'])
+        self.assertEqual(result, 0)
+        command = self.call.call_args.args[0]
+        self.assertEqual(Path(command[1]).name, 'constraint_search.py')
+        self.assertEqual(command[command.index('--algorithm')+1], 'sat')
+        self.assertNotIn('--resume', command)
+
+    def test_parallel_workers_and_options_forward_from_portable_cli(self):
+        self.install()
+        with patch.object(launcher,'choose_backend',side_effect=AssertionError('No GPU needed')):
+            result=launcher.main(['start','--algorithm','parallel-dfs','--workers','2',
+                '--search-options','{"regional_cache":false,"native":"python"}'])
+        self.assertEqual(result,0)
+        command=self.call.call_args.args[0]
+        self.assertEqual(command[command.index('--workers')+1],'2')
+        options=json.loads(command[command.index('--search-options')+1])
+        self.assertFalse(options['regional_cache'])
+        self.assertEqual(options['native'],'python')
+
+    def test_unknown_algorithm_is_rejected_before_driver_probe(self):
+        with patch.object(launcher, 'choose_backend') as choose:
+            for value in ('SAT', 'unknown', True, [], {}):
+                with self.subTest(algorithm=value), self.assertRaisesRegex(ValueError, 'algorithm'):
+                    launcher.solver_command(algorithm=value)
+        choose.assert_not_called()
+        self.call.assert_not_called()
+
+    def test_main_stop_and_status_use_only_local_runtime(self):
+        self.assertEqual(launcher.main(['stop']), 0)
+        self.assertFalse((self.root / 'runtime').exists())
+        self.assertEqual(launcher.main(['status']), 0)
+        runtime = self.root / 'runtime'
+        runtime.mkdir()
+        (runtime / 'status.json').write_text('{"state":"stopped"}', encoding='utf-8')
+        self.assertEqual(launcher.main(['status']), 0)
+        self.assertIn('stopped', self.output.getvalue())
+        self.assertEqual(launcher.main(['stop']), 0)
+        self.assertTrue((runtime / 'stop.request').is_file())
+        self.spawn.assert_not_called()
+        self.call.assert_not_called()
+        self.browser.assert_not_called()
+
+    def test_main_reports_controlled_errors_with_nonzero_status(self):
+        with patch.object(launcher, 'open_dashboard', side_effect=RuntimeError('occupied')):
+            self.assertEqual(launcher.main(['dashboard']), 1)
+        self.assertIn('Error: occupied', self.errors.getvalue())
+        with patch.object(launcher, 'choose_backend', return_value='webgpu'):
+            self.assertEqual(launcher.main(['start', '--replicas', '1']), 1)
+        self.call.assert_not_called()
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,0 +1,2 @@
+# CPU-only data preparation and exact search tests; GPU packages are optional.
+-r requirements-common.txt
