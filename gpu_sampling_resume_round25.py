@@ -11,7 +11,7 @@ class SamplerSession:
         if type(seed)is not int or seed<0 or type(replicas)is not int or not 1<=replicas<=131072 or backend not in ('auto','cuda','webgpu'):
             raise ValueError('Invalid durable sampler configuration.')
         if target not in ('gold','edges') or type(gold_aware)is not bool:raise ValueError('Invalid durable sampling objective.')
-        self.problem=problem;self.inputs=_inputs(problem,gold_aware=gold_aware);self.flags=sampling_flags(experiments)
+        self.problem=problem;self.inputs=None if any(not row for row in problem.domains) else _inputs(problem,gold_aware=gold_aware);self.flags=sampling_flags(experiments)
         self.config={'fingerprint':problem.fingerprint,'domains':[list(row) for row in problem.domains],'fixed':[[int(c),int(v)] for c,v in sorted(problem.fixed.items())],
                      'replicas':replicas,'seed':seed,'target':target,'gold_aware':gold_aware,'flags':self.flags,'controller_version':1,
                      'sources':{name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('gpu_sampling_resume_round25.py','gpu_sampling_state_round25.py','gpu_sampling.py','constraint_lns.py','search_problem.py','validator.py')}}
@@ -118,7 +118,8 @@ class SamplerSession:
         self._check_scope()
         experiments=self.engine.experiment_stats() if self.engine is not None else self.last_experiments
         top=self.archive[0] if self.archive else None
-        return {'status':'sampled' if self.done else 'timeout','backend':self.selected or self.backend,'device':self.device,'replicas':self.config['replicas'],
+        return {'status':'skipped' if self.inputs is None else ('sampled' if self.done else 'timeout'),
+            'reason':'Empty domain or incompatible fixed placements; exact search must decide feasibility.' if self.inputs is None else None,'backend':self.selected or self.backend,'device':self.device,'replicas':self.config['replicas'],
             **self.counts,'complete':False,'unique_boards':None,'duplicates_tracked':False,'elapsed_seconds':self.elapsed,
             'top_samples':deepcopy(self.archive),'top_board':list(top['codes']) if top else None,'best_score':top['matched_edges'] if top else None,
             'best_objective':top['objective'] if top else None,'domain_violations':top['domain_violations'] if top else None,

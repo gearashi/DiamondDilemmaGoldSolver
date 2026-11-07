@@ -188,8 +188,10 @@ class HybridTests(unittest.TestCase):
         self.assertEqual(result['checkpoint']['phase'],'exact_dfs')
     def test_empty_original_domain_reaches_exact_not_false_heuristic_unsat(self):
         p=problem();p.domains[0]=[]
-        result=sampling.solve(p,seconds=10,options={'durable_hybrid':True,'native':'python'})
+        with patch.object(sampling,'_make_sampler',side_effect=AssertionError('GPU allocated for empty domain')),patch('gpu_backends.choose_backend',side_effect=AssertionError('GPU selected for empty domain')):
+            result=sampling.solve(p,seconds=10,options={'durable_hybrid':True,'native':'python'})
         self.assertTrue(result['complete']);self.assertEqual(result['phase'],'exact_dfs');self.assertEqual(result['status'],'infeasible')
+        self.assertEqual(result['gpu_sampling']['status'],'skipped')
     def test_saved_valid_gold_solution_returns_before_gpu(self):
         tiles,board=tetrahedron_tiles();p=SearchProblem(tiles,board)
         with patch.object(sampling,'_make_sampler',side_effect=AssertionError('allocated')):
