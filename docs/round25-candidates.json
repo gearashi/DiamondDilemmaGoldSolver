@@ -637,10 +637,25 @@
       "id": 37,
       "proposal": "Adapt replica-exchange temperatures from measured behavior",
       "owner": "gpu_hybrid",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "sampling_temperatures_round25.py",
+        "sampling_round24.cu",
+        "sampling_round24.wgsl",
+        "gpu_sampling.py",
+        "gpu_sampling_resume_round25.py",
+        "gpu_sampling_state_round25.py",
+        "test_gpu_temperatures_reference_round25.py",
+        "test_gpu_temperatures_round25.py",
+        "benchmark_gpu_temperatures_round25.py",
+        "test_benchmark_gpu_temperatures_round25.py",
+        "docs/ROUND25_GPU.md"
+      ],
+      "disposition": "Retained opt-in after independent review; bounded measured exchange-rate ladder redistribution with adverse cases disclosed",
+      "original_puzzle_gain": "not established",
+      "access": "adaptive_temperatures; hybrid CUDA/native WebGPU; implies replica_exchange; direct sampler minimum8replicas",
+      "finite_evidence": "26focused checks pass. Bothbackends24paired synthetic10cellcases:20static/21adaptive solved;20bothsolved cost966656 to667648 laneproposals,7wins4losses9ties;1adaptive-onlysolution,3bothcapped. All8positive cases afteractualadjustment. Adversefixture17 cost126976 to139264. Allburn-in included, pairedinitial/preadaptationstate, independentGoldvalidation.",
+      "limits": "Heuristic only, no original-puzzle/universal/stationary-distribution/coverage claim. Every16dispatches,8eligiblewindows thenfreeze, fixedendpoints andfloat32checkedpositivegaps.29native rows, workstats excludefloatbits; controller16KiB bound andsamplerv3 source/policy/native binding. Partialwritepoisons session. Hostfeedback/transferwork separate fromproposal counts."
     }
   ]
 }

@@ -77,6 +77,10 @@ __device__ void guided_cycle(const unsigned*t,const unsigned*b,unsigned*m,int n,
   if(value>best_value){best_value=value;next[count-1]=code;}
  }
 }
+// Adaptive temperatures are bounded host policy state, not a pruning rule.
+__device__ float exchange_heat(const unsigned*m,int r,int lane,int flags){
+ return (flags&32)?__uint_as_float(m[28*r+lane]):(.2f*powf(1.5f,float(lane%8)));
+}
 extern "C" __global__ void sample_search(unsigned*b,unsigned*best,unsigned*m,const unsigned*t,int n,int r,int f,int steps,int phase,int edges,int gold_total,int flags){
  int lane=blockIdx.x*blockDim.x+threadIdx.x;if(lane>=r)return;unsigned random=m[lane];
  if(phase==0){
@@ -84,7 +88,8 @@ extern "C" __global__ void sample_search(unsigned*b,unsigned*best,unsigned*m,con
   for(int count=f;count>1;count--){int a=t[25*n+count-1],d=t[25*n+rnd(random)%count];unsigned old=b[a*r+lane];b[a*r+lane]=b[d*r+lane];b[d*r+lane]=old;}
   for(int i=0;i<f;i++){int c=t[25*n+i];b[c*r+lane]=3*(b[c*r+lane]/3)+rnd(random)%3;}
   m[r+lane]=m[2*r+lane]=total(t,b,n,r,f,edges,lane)*(gold_total+1)+gold_total-loops(t,b,n,r,f,-1,-1,lane,gold_total);
-  for(int row=3;row<((flags&16)?28:((flags&8)?22:18));row++)m[row*r+lane]=0;
+  for(int row=3;row<((flags&32)?29:((flags&16)?28:((flags&8)?22:18)));row++)m[row*r+lane]=0;
+  if(flags&32)m[28*r+lane]=__float_as_uint(.2f*powf(1.5f,float(lane%8)));
   for(int c=0;c<n;c++)best[c*r+lane]=b[c*r+lane];
  }else if(f>0){
   int score=m[r+lane],bestscore=m[2*r+lane];unsigned iteration=m[3*r+lane];
@@ -117,7 +122,7 @@ extern "C" __global__ void sample_search(unsigned*b,unsigned*best,unsigned*m,con
    bool tabu=false;
    if(flags&2)for(int i=0;i<count;i++)for(int k=0;k<4;k++)
     if(m[(5+k)*r+lane]==unsigned(cells[i]*(3*n)+next[i])&&int(m[(9+k)*r+lane]-iteration)>0)tabu=true;
-   float heat=(flags&4)?(.2f*powf(1.5f,float(lane%8))):(.25f+1.25f*(1.f-float(iteration%4096)/4096.f));
+   float heat=(flags&4)?exchange_heat(m,r,lane,flags):(.25f+1.25f*(1.f-float(iteration%4096)/4096.f));
    bool accept=false,skip=false,predrawn=false;int delta=0;
    // Lnew>=0 makes this an integer upper bound. Tabu aspiration is
    // strictly greater than personal best, and this path consumes no RNG.
@@ -149,10 +154,10 @@ extern "C" __global__ void sample_search(unsigned*b,unsigned*best,unsigned*m,con
   m[r+lane]=score;m[2*r+lane]=bestscore;m[3*r+lane]=iteration;
  }m[lane]=random;
 }
-extern "C" __global__ void replica_exchange(unsigned*b,unsigned*best,unsigned*m,int n,int r,int gold_total,int parity){
+extern "C" __global__ void replica_exchange(unsigned*b,unsigned*best,unsigned*m,int n,int r,int gold_total,int parity,int flags){
  int pair=blockIdx.x*blockDim.x+threadIdx.x,a=2*pair+parity,d=a+1;
  if(d>=r||a/8!=d/8)return;
- unsigned random=m[a];float ta=.2f*powf(1.5f,float(a%8)),td=.2f*powf(1.5f,float(d%8));
+ unsigned random=m[a];float ta=exchange_heat(m,r,a,flags),td=exchange_heat(m,r,d,flags);
  float exponent=(1.f/ta-1.f/td)*float(int(m[r+d])-int(m[r+a]))/float(gold_total+1);m[16*r+a]++;
  if(exponent>=0||float(rnd(random)%1000000)<1000000.f*expf(exponent)){
   for(int c=0;c<n;c++){unsigned old=b[c*r+a];b[c*r+a]=b[c*r+d];b[c*r+d]=old;}

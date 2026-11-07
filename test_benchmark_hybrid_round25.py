@@ -106,4 +106,14 @@ class SamplerBenchmarkTests(unittest.TestCase):
                 with self.assertRaises(json.JSONDecodeError):bench.launch(args,path,profile='baseline',objective='gold',seed=71,replicas=128,dispatches=2,finish=True)
             cleanup.assert_called_once()
 
+class AdaptivePopulationTests(unittest.TestCase):
+    def test_invalid_population_stops_before_worker_or_matrix_launch(self):
+        for extra in (['--profiles','adaptive','--replica-counts','7'],['--worker','--profile','adaptive','--replicas','7']):
+            with self.subTest(extra=extra),tempfile.TemporaryDirectory() as directory:
+                argv=['benchmark_hybrid_round25.py','--output',str(Path(directory)/'out'),*extra]
+                with patch.object(bench.sys,'argv',argv),patch.object(bench,'worker') as worker,patch.object(bench,'launch') as launch,contextlib.redirect_stderr(io.StringIO()):
+                    with self.assertRaises(SystemExit):bench.main()
+                worker.assert_not_called();launch.assert_not_called()
+                self.assertFalse((Path(directory)/'out').exists())
+
 if __name__=='__main__':unittest.main()

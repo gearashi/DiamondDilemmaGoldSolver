@@ -138,6 +138,7 @@ def run_hybrid(problem,*,seconds,seed,replicas,backend,options,learning_state,pu
  if type(replicas)is not int or not 1<=replicas<=131072 or backend not in ('auto','cuda','webgpu'):
   raise ValueError('Invalid hybrid benchmark GPU policy.')
  if options.get('durable_hybrid') is not True:raise ValueError('All hybrid profiles require durable_hybrid.')
+ if options.get('adaptive_temperatures') and replicas<8:raise ValueError('Adaptive temperatures require at least8 replicas.')
  learning_state['_hybrid_run_seconds']=seconds
  started=time.monotonic();remaining=seconds;resume=None;history=[]
  try:
@@ -388,6 +389,10 @@ def main():
  replica_limit=131072 if args.engine=='hybrid' and args.worker or args.suite=='hybrid' else 512
  if not 1<=args.replicas<=replica_limit or any(not 1<=n<=512 for n in args.replica_counts or []):parser.error('GPU domain replica counts must be1..512; hybrid sampling allows1..131072.')
  if any(not 1<=n<=131072 for n in args.hybrid_replica_counts or []):parser.error('Hybrid sampling replica counts must be1..131072.')
+ if args.worker and args.engine=='hybrid':
+  if HYBRID_PROFILES.get(args.profile,{}).get('adaptive_temperatures') and args.replicas<8:parser.error('Adaptive temperatures require at least8 replicas.')
+ elif args.suite=='hybrid':
+  if any(HYBRID_PROFILES[name].get('adaptive_temperatures') for name in args.hybrid_profiles) and any(n<8 for n in args.hybrid_replica_counts or [args.replicas]):parser.error('Adaptive temperatures require at least8 replicas.')
  if args.worker:return worker(args)
  require_fresh((args.output/'report.json',args.output/'results.json'))
  args.output.mkdir(parents=True,exist_ok=True);before=source_hashes();runtime_before=runtime_snapshot();repository=repository_snapshot(ROOT);records=[]

@@ -5,7 +5,7 @@ BOOLEAN_OPTIONS = ('failure_guided', 'lookahead', 'pair_lookahead', 'strand_conn
                    'biconnected', 'separator_regions', 'backjumping', 'incremental', 'adaptive', 'persistent_learning', 'reason_tracking', 'sat_assist', 'hierarchical_regions', 'value_ordering', 'shared_conflicts', 'gold_oracle', 'connection_branching', 'lcg', 'native_search')
 EXPERIMENTAL_OPTIONS = ('smart_learning','group_lookahead','deep_paths','conservation','signature_branching','impact_branching','objective_ordering','frontier_restarts','worker_portfolio','limited_discrepancy','compact_explanations','conditional_hall','wide_cuts','piece_symmetry','proof_certificates','rotated_learning','extended_regions','gpu_gold_sampling','dependency_repair','dirty_neighborhood','parity_root_reuse')
 ROUND24_OPTIONS = ('resumable_reasoning','queue_pruning','shared_coverage','portable_frontier','proof_transport','persistent_sat','incremental_hall','witness_pool','support_cover','retained_relations','joint_conservation','affine_reasoning','pb_learning','sat_theory','interface_formulas','obstruction_rules','symbolic_regions','symbolic_inventory','elimination','mini_buckets','relaxed_diagrams','representative_connectivity','subset_joins','lazy_regions','certified_relaxation','labelled_routing','residual_reuse','dual_piece_branching','strand_branching','completion_ordering','learned_ordering','core_repair','loop_trades','fragment_crossover','repair_learning','ejection_chains','move_tabu','replica_exchange')
-ROUND25_OPTIONS = ('sat_core_lifting','shared_sat_assistant','resumable_proof_checking','native_explanations','symbolic_coverage','mixed_proof_dag','higher_order_relations','incremental_affine','native_sat_persistence','conflict_pb','integer_lattice','hall_rematch','reversible_gold_graph','incremental_regions','durable_regions','compact_factors','gold_elimination','separator_search','selective_refinement','joint_symbolic_regions','algebraic_connectivity','residual_isomorphism','gold_pricing','multichain_routing','region_certificates','gpu_joint_support','gpu_propagated_forks','gpu_event_propagation','gpu_precise_reasons','gpu_shared_clauses','gpu_lane_balance','gpu_incremental_checkpoint','durable_hybrid','obstruction_chains','cycle_crossover','lazy_gold_scoring')
+ROUND25_OPTIONS = ('sat_core_lifting','shared_sat_assistant','resumable_proof_checking','native_explanations','symbolic_coverage','mixed_proof_dag','higher_order_relations','incremental_affine','native_sat_persistence','conflict_pb','integer_lattice','hall_rematch','reversible_gold_graph','incremental_regions','durable_regions','compact_factors','gold_elimination','separator_search','selective_refinement','joint_symbolic_regions','algebraic_connectivity','residual_isomorphism','gold_pricing','multichain_routing','region_certificates','gpu_joint_support','gpu_propagated_forks','gpu_event_propagation','gpu_precise_reasons','gpu_shared_clauses','gpu_lane_balance','gpu_incremental_checkpoint','durable_hybrid','obstruction_chains','cycle_crossover','lazy_gold_scoring','adaptive_temperatures')
 EXPERIMENTAL_OPTIONS += ROUND24_OPTIONS + ROUND25_OPTIONS
 BOOLEAN_OPTIONS += EXPERIMENTAL_OPTIONS
 DEFAULT_OPTIONS = {**dict.fromkeys(BOOLEAN_OPTIONS, True), 'native': 'auto', 'lookahead_ms': 100, 'reason_tracking': False, 'sat_assist': False, 'hierarchical_regions': False, 'value_ordering': False, 'shared_conflicts': False, 'gold_oracle': False, 'connection_branching': False, 'lcg': False, 'native_search': False, **dict.fromkeys(EXPERIMENTAL_OPTIONS,False), 'ordering_goal': 'auto'}
@@ -39,6 +39,7 @@ def normalize_options(options=None):
     if result['native_explanations']:result['native_search']=True;result['lcg']=True
     if result['obstruction_chains']:result['ejection_chains']=True
     if result['lazy_gold_scoring']:result['gpu_gold_sampling']=True;result['ejection_chains']=True
+    if result['adaptive_temperatures']:result['replica_exchange']=True
     if result['symbolic_coverage']:result['shared_coverage']=True
     if result['incremental_affine']:result['affine_reasoning']=True
     if result['conflict_pb']:result['pb_learning']=True
@@ -58,6 +59,7 @@ def validate_algorithm_options(algorithm, options):
     allowed['obstruction_chains']={'hybrid'}
     allowed['cycle_crossover']={'hybrid'}
     allowed['lazy_gold_scoring']={'hybrid'}
+    allowed['adaptive_temperatures']={'hybrid'}
     allowed['sat_core_lifting']={'sat'}
     allowed['native_sat_persistence']={'sat'}
     allowed['symbolic_coverage']={'dfs','parallel-dfs','sat'}

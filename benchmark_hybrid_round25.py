@@ -14,6 +14,8 @@ ROOT=Path(__file__).resolve().parent
 PROFILES={'baseline':{},'ejection':{'ejection_chains':True},'tabu':{'move_tabu':True},
           'exchange':{'replica_exchange':True},'lazy':{'ejection_chains':True,'lazy_gold_scoring':True},'crossover':{'cycle_crossover':True},'guided':{'ejection_chains':True,'obstruction_chains':True},
           'legacy-combined':{'ejection_chains':True,'move_tabu':True,'replica_exchange':True}}
+PROFILES['adaptive']={'replica_exchange':True,'adaptive_temperatures':True}
+PROFILES['round25-combined']={**PROFILES['legacy-combined'],'obstruction_chains':True,'cycle_crossover':True,'lazy_gold_scoring':True,'adaptive_temperatures':True}
 
 
 def continuation_signature(value):
@@ -152,6 +154,9 @@ def main():
     if not math.isfinite(args.limit_seconds) or not 0<args.limit_seconds<=3600:p.error('limit-seconds must be positive and at most3600.')
     if any(not 1<=value<=131072 for value in [args.replicas,*args.replica_counts]):p.error('replicas must be within1..131072.')
     if any(value<0 for value in [args.seed,*args.seeds]):p.error('seeds must be nonnegative.')
+    active_profiles=[args.profile] if args.worker else args.profiles
+    populations=[args.replicas] if args.worker else args.replica_counts
+    if any(PROFILES[name].get('adaptive_temperatures') for name in active_profiles) and any(value<8 for value in populations):p.error('Adaptive temperatures require at least8 replicas.')
     if args.worker:return worker(args)
     if args.resume_comparison and args.dispatches<2:p.error('resume comparison needs at least2dispatches.')
     require_fresh((args.output/'report.json',args.output/'results.json'))

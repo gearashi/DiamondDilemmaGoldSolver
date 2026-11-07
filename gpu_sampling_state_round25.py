@@ -47,6 +47,11 @@ def decode(problem,table,engine,value):
         if any(np.any(boards[cell]!=code) for cell,code in problem.fixed.items()):raise ValueError('Sampler checkpoint changed a fixed placement.')
     meta=arrays[2];maximum=(problem.n*(len(problem.edges)+1)+len(problem.edges))*(engine.gold_total+1)+engine.gold_total
     if np.any(meta[0]==0) or np.any(meta[1:3]>maximum):raise ValueError('Invalid sampler RNG or objective range.')
+    if engine.flags&32:
+        from gpu_sampling import _temperature_values
+        values=_temperature_values(list(map(float,meta[28,:8].view(np.float32))))
+        expected=np.resize(values,engine.r).view(np.uint32)
+        if not np.array_equal(meta[28],expected):raise ValueError('Sampler checkpoint has inconsistent per-group temperature ladders.')
     return arrays
 
 def restore(problem,table,engine,value):

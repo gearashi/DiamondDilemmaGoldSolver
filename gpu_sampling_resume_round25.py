@@ -12,16 +12,21 @@ class SamplerSession:
             raise ValueError('Invalid durable sampler configuration.')
         if target not in ('gold','edges') or type(gold_aware)is not bool:raise ValueError('Invalid durable sampling objective.')
         self.problem=problem;self.inputs=None if any(not row for row in problem.domains) else _inputs(problem,gold_aware=gold_aware);self.flags=sampling_flags(experiments)
+        if self.flags&32 and replicas<8:raise ValueError('Adaptive exchange requires at least eight replicas.')
         self.config={'fingerprint':problem.fingerprint,'domains':[list(row) for row in problem.domains],'fixed':[[int(c),int(v)] for c,v in sorted(problem.fixed.items())],
                      'replicas':replicas,'seed':seed,'target':target,'gold_aware':gold_aware,'flags':self.flags,'controller_version':1,
                      'sources':{name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('gpu_sampling_resume_round25.py','gpu_sampling_state_round25.py','gpu_sampling.py','constraint_lns.py','search_problem.py','validator.py')}}
         self.experiments={} if experiments is None else dict(experiments);self.backend=backend;self.allow_software=allow_software
-        self.crossover=None;self.crossover_parents=[]
+        self.crossover=None;self.crossover_parents=[];self.temperatures=None
         if self.experiments.get('cycle_crossover'):
             from sampling_crossover_round25 import CycleCrossover
             self.crossover=CycleCrossover(problem,gold_aware=gold_aware)
             self.config['controller_version']=2;self.config['cycle_crossover']=True
             self.config['sources']['sampling_crossover_round25.py']=hashlib.sha256((Path(__file__).parent/'sampling_crossover_round25.py').read_bytes()).hexdigest()
+        if self.flags&32:
+            from sampling_temperatures_round25 import AdaptiveTemperatures
+            self.temperatures=AdaptiveTemperatures();self.config['controller_version']=3
+            self.config['sources']['sampling_temperatures_round25.py']=hashlib.sha256((Path(__file__).parent/'sampling_temperatures_round25.py').read_bytes()).hexdigest()
         self.engine=None;self.native=None;self.archive=[];self.launches=0;self.last_collected=-1;self.elapsed=0.;self.done=False;self.solution=None
         self.counts={'initial_boards':0,'move_proposals':0,'samples_considered':0,'archive_checks':0,'archive_repeated_observations':0,'sampler_restores':0}
         self.selected=None;self.device=None;self.last_experiments={};self._active_since=None;self.closed=False;self.poisoned=False
@@ -36,7 +41,8 @@ class SamplerSession:
     def _restore(self,value):
         expected={'sampler_session_version','config','selected','device','native','archive','launches','last_collected','elapsed','done','solution','counts','experiment_stats','digest'}
         if self.crossover is not None:expected.update(('crossover','crossover_parents'))
-        if (not isinstance(value,dict) or set(value)!=expected or type(value['sampler_session_version'])is not int or value['sampler_session_version']!=(2 if self.crossover is not None else 1)
+        if self.temperatures is not None:expected.add('temperatures')
+        if (not isinstance(value,dict) or set(value)!=expected or type(value['sampler_session_version'])is not int or value['sampler_session_version']!=(3 if self.temperatures is not None else (2 if self.crossover is not None else 1))
                 or value['digest']!=digest({k:v for k,v in value.items() if k!='digest'}) or value['config']!=self.config):raise ValueError('Durable sampler input or policy differs.')
         if value['selected'] not in (None,'cuda','webgpu') or self.backend!='auto' and value['selected'] not in (None,self.backend):raise ValueError('Unfinished sampler requires the saved backend.')
         if (type(value['launches'])is not int or value['launches']<0 or type(value['last_collected'])is not int or not -1<=value['last_collected']<=value['launches']
@@ -75,6 +81,11 @@ class SamplerSession:
                 if row!={'codes':row['codes'],**metrics}:raise ValueError('Crossover parent pool failed independent rescoring.')
             if len({tuple(row['codes']) for row in parents})!=len(parents):raise ValueError('Repeated crossover parent pool board.')
             self.crossover_parents=deepcopy(parents)
+        if self.temperatures is not None:
+            from sampling_temperatures_round25 import AdaptiveTemperatures
+            self.temperatures=AdaptiveTemperatures(resume=value['temperatures'])
+            if (self.temperatures.last_dispatch>self.launches or not self.temperatures.frozen and self.temperatures.last_dispatch!=16*(self.launches//16)):
+                raise ValueError('Adaptive temperature cadence differs from native dispatch progress.')
         self.counts=dict(counts);self.last_experiments=dict(value['experiment_stats'])
     def _ensure_engine(self):
         if self.closed:raise RuntimeError("Sampler session is closed.")
@@ -88,6 +99,10 @@ class SamplerSession:
         try:
             if self.native is not None:restore(self.problem,self.inputs[0],engine,self.native);self.counts['sampler_restores']+=1
             else:self.counts['initial_boards']=self.config['replicas'];self.counts['samples_considered']=self.config['replicas']
+            if self.temperatures is not None:
+                feedback=engine.temperature_feedback()
+                if self.temperatures.temperatures is not None and feedback['temperatures']!=self.temperatures.temperatures:
+                    raise ValueError('Native temperature ladder differs from saved controller.')
             self.engine=engine;self.selected=selected;self.device=engine.device
         except BaseException:self.poisoned=True;engine.close();raise
     def collect(self,*,inject=True):
@@ -133,6 +148,9 @@ class SamplerSession:
             while time.monotonic()-began<seconds and not stop() and not self.done and (max_dispatches is None or count<max_dispatches):
                 self.engine.launch(64);self.launches+=1;count+=1
                 if self.flags&4 and self.launches%8==0:self.engine.exchange((self.launches//8)%2)
+                if self.temperatures is not None:
+                    from gpu_sampling import _temperature_step
+                    _temperature_step(self.temperatures,self.engine,self.launches)
                 self.counts['move_proposals']+=self.config['replicas']*64;self.counts['samples_considered']+=self.config['replicas']*64
                 if self.launches%8==0:self.collect()
                 if progress is not None and time.monotonic()-last_progress>=1:
@@ -155,7 +173,7 @@ class SamplerSession:
             'top_samples':deepcopy(self.archive),'top_board':list(top['codes']) if top else None,'best_score':top['matched_edges'] if top else None,
             'best_objective':top['objective'] if top else None,'domain_violations':top['domain_violations'] if top else None,
             'archive_capacity':8,'archive_unique_boards':len(self.archive),'gold_aware':self.config['gold_aware'],
-            'sampling_experiments':{**self.experiments,**experiments,**(self.crossover.stats if self.crossover is not None else {})},'dispatches':self.launches,
+            'sampling_experiments':{**self.experiments,**experiments,**(self.crossover.stats if self.crossover is not None else {}),**(self.temperatures.stats if self.temperatures is not None else {})},'dispatches':self.launches,
             'hint_scope':'Heuristic samples only; no exclusions or coverage. Same-runtime native continuation.'}
     def snapshot(self):
         self._healthy()
@@ -165,10 +183,11 @@ class SamplerSession:
         from gpu_sampling_state_round25 import encode
         native=encode(self.problem,self.inputs[0],self.engine) if self.engine is not None else deepcopy(self.native)
         experiments=self.engine.experiment_stats() if self.engine is not None else self.last_experiments
-        value={'sampler_session_version':2 if self.crossover is not None else 1,'config':deepcopy(self.config),'selected':self.selected,'device':self.device,'native':native,
+        value={'sampler_session_version':3 if self.temperatures is not None else (2 if self.crossover is not None else 1),'config':deepcopy(self.config),'selected':self.selected,'device':self.device,'native':native,
             'archive':deepcopy(self.archive),'launches':self.launches,'last_collected':self.last_collected,'elapsed':self.elapsed,'done':self.done,
             'solution':deepcopy(self.solution),'counts':dict(self.counts),'experiment_stats':dict(experiments)}
         if self.crossover is not None:value['crossover']=self.crossover.snapshot();value['crossover_parents']=deepcopy(self.crossover_parents)
+        if self.temperatures is not None:value['temperatures']=self.temperatures.snapshot()
         value['digest']=digest(value);return value
     def close(self):
         try:

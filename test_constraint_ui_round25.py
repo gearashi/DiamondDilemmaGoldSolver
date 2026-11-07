@@ -13,7 +13,7 @@ KEYS=('sat_core_lifting','shared_sat_assistant','resumable_proof_checking',
       'native_sat_persistence','conflict_pb','integer_lattice','hall_rematch','reversible_gold_graph',
       'incremental_regions','durable_regions','compact_factors','gold_elimination',
       'separator_search','selective_refinement','joint_symbolic_regions','algebraic_connectivity','residual_isomorphism','gold_pricing',
-      'multichain_routing','region_certificates','gpu_joint_support','gpu_propagated_forks','gpu_event_propagation','gpu_precise_reasons','gpu_shared_clauses','gpu_lane_balance','gpu_incremental_checkpoint','durable_hybrid','obstruction_chains','cycle_crossover','lazy_gold_scoring')
+      'multichain_routing','region_certificates','gpu_joint_support','gpu_propagated_forks','gpu_event_propagation','gpu_precise_reasons','gpu_shared_clauses','gpu_lane_balance','gpu_incremental_checkpoint','durable_hybrid','obstruction_chains','cycle_crossover','lazy_gold_scoring','adaptive_temperatures')
 HARNESS=r"""
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const elements=new Map();
@@ -83,6 +83,23 @@ edit('lazy_gold_scoring',false);assert.equal(element('r25_lazy_gold_scoring').di
         self.node(r"""
 run(`state={process_running:true,status:{state:'running',method:'constraint',algorithm:'hybrid',gpu_sampling:{sampling_experiments:{"gold_old_base_scans_saved": 1, "gold_old_loop_traces_saved": 2, "gold_candidate_loop_traces": 3, "gold_tabu_traces_skipped": 4, "gold_metropolis_traces_skipped": 5, "gold_early_metropolis_draws": 6}}},history:[]};renderState();`);
 for(const[id,n]of [["r25GoldBaseSaved", 1], ["r25GoldOldTracesSaved", 2], ["r25GoldCandidateTraces", 3], ["r25GoldTabuSkipped", 4], ["r25GoldMetropolisSkipped", 5], ["r25GoldEarlyDraws", 6]])assert.equal(element(id).textContent,String(n));
+""")
+
+    def test_adaptive_temperature_scope_and_exchange_dependency(self):
+        self.node(r"""
+select('dfs');assert.equal(element('r25_adaptive_temperatures').disabled,true);
+select('hybrid');edit('adaptive_temperatures',true);
+element('seconds').value='0';element('seedInput').value='17';run("command('start')");
+const opts=JSON.parse(context.fetchCalls.at(-1)[1].body).search_options;
+assert.equal(opts.adaptive_temperatures,true);assert.equal(opts.replica_exchange,true);
+idle();select('parallel-dfs');assert.equal(element('startBtn').disabled,true);
+edit('adaptive_temperatures',false);assert.equal(element('r25_adaptive_temperatures').disabled,true);
+""")
+
+    def test_adaptive_temperature_feedback_counters(self):
+        self.node(r"""
+run(`state={process_running:true,status:{state:'running',method:'constraint',algorithm:'hybrid',gpu_sampling:{sampling_experiments:{"temperature_feedback_windows": 1, "temperature_eligible_windows": 2, "temperature_adjustments": 3, "temperature_empty_windows": 4, "temperature_freezes": 1, "temperature_feedback_attempts": 6, "temperature_feedback_accepts": 7}}},history:[]};renderState();`);
+for(const[id,n]of [["r25TemperatureWindows", 1], ["r25TemperatureEligible", 2], ["r25TemperatureAdjustments", 3], ["r25TemperatureEmpty", 4], ["r25TemperatureFrozen", 1], ["r25TemperatureAttempts", 6], ["r25TemperatureAccepts", 7]])assert.equal(element(id).textContent,String(n));
 """)
 
     def node(self,body):

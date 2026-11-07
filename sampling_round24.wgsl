@@ -112,6 +112,10 @@ fn guided_cycle(lane:u32,count:u32,score:i32,cells:ptr<function,array<u32,6>>,ol
         if value>best_value {best_value=value;(*next)[count-1u]=code;}
     }
 }
+fn exchange_heat(lane:u32)->f32 {
+ if (p.unused1&32u)!=0u {return bitcast<f32>(lane_data[28u*p.replicas+lane]);}
+ return 0.2*pow(1.5,f32(lane%8u));
+}
 fn save_best(lane:u32) { for(var cell=0u;cell<p.n;cell++) { best_boards[cell*p.replicas+lane]=at(cell,lane); } }
 @compute @workgroup_size(64)
 fn sample_search(@builtin(global_invocation_id) id:vec3<u32>) {
@@ -121,7 +125,8 @@ fn sample_search(@builtin(global_invocation_id) id:vec3<u32>) {
   for(var count=p.free_count;count>1u;count--){let a=table[25u*p.n+count-1u];let b=table[25u*p.n+random_next()%count];let code=at(a,lane);boards[a*r+lane]=at(b,lane);boards[b*r+lane]=code;}
   for(var i=0u;i<p.free_count;i++){let cell=table[25u*p.n+i];boards[cell*r+lane]=3u*(at(cell,lane)/3u)+random_next()%3u;}
   let initial=u32(total(lane)*i32(p.gold_total+1u)+i32(p.gold_total)-loops(lane,-1,-1));lane_data[r+lane]=initial;lane_data[2u*r+lane]=initial;
-  for(var row=3u;row<select(select(18u,22u,(flags&8u)!=0u),28u,(flags&16u)!=0u);row++){lane_data[row*r+lane]=0u;}save_best(lane);
+  for(var row=3u;row<select(select(select(18u,22u,(flags&8u)!=0u),28u,(flags&16u)!=0u),29u,(flags&32u)!=0u);row++){lane_data[row*r+lane]=0u;}
+  if (flags&32u)!=0u {lane_data[28u*r+lane]=bitcast<u32>(0.2*pow(1.5,f32(lane%8u)));}save_best(lane);
  } else if p.free_count>0u {
   var score=i32(lane_data[r+lane]);var best_score=i32(lane_data[2u*r+lane]);var iteration=lane_data[3u*r+lane];
   for(var step=0u;step<p.steps;step++){
@@ -155,7 +160,7 @@ fn sample_search(@builtin(global_invocation_id) id:vec3<u32>) {
     if lane_data[(5u+k)*r+lane]==cells[i]*(3u*p.n)+next[i] && i32(lane_data[(9u+k)*r+lane]-iteration)>0 {tabu=true;}
    }}}
    var heat=0.25+1.25*(1.0-f32(iteration%4096u)/4096.0);
-   if (flags&4u)!=0u {heat=0.2*pow(1.5,f32(lane%8u));}
+   if (flags&4u)!=0u {heat=exchange_heat(lane);}
    var accept=false;var skip=false;var predrawn=false;var delta:i32=0;
    // Lnew>=0 bounds aspiration by an integer. Equality still rejects;
    // a tabu failure must not consume a Metropolis random number.
@@ -187,7 +192,7 @@ fn sample_search(@builtin(global_invocation_id) id:vec3<u32>) {
 @compute @workgroup_size(64)
 fn replica_exchange(@builtin(global_invocation_id) id:vec3<u32>){
  let a=2u*id.x+p.phase;let b=a+1u;let r=p.replicas;if b>=r||a/8u!=b/8u{return;}
- random_state=lane_data[a];let ta=0.2*pow(1.5,f32(a%8u));let tb=0.2*pow(1.5,f32(b%8u));
+ random_state=lane_data[a];let ta=exchange_heat(a);let tb=exchange_heat(b);
  let exponent=(1.0/ta-1.0/tb)*f32(i32(lane_data[r+b])-i32(lane_data[r+a]))/f32(p.gold_total+1u);lane_data[16u*r+a]++;
  if exponent>=0.0||f32(random_next()%1000000u)<1000000.0*exp(exponent){
   for(var cell=0u;cell<p.n;cell++){let old=at(cell,a);boards[cell*r+a]=at(cell,b);boards[cell*r+b]=old;}

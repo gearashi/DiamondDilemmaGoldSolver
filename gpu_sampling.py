@@ -206,13 +206,44 @@ def _injection_values(engine,problem,codes):
     if metrics['domain_violations']:raise ValueError('Crossover injection requires original-domain legality.')
     return np.asarray(codes,dtype=np.uint32),int(metrics['gold_objective' if engine.gold_total else 'objective'])
 
+def _temperature_values(values):
+    if not isinstance(values,(list,tuple)) or len(values)!=8 or any(type(v) not in (int,float) or not math.isfinite(v) or not .01<=v<=100 for v in values):
+        raise ValueError('Adaptive temperature ladder must contain eight bounded finite temperatures.')
+    packed=np.asarray(values,dtype=np.float32)
+    if np.any(packed[1:]<=packed[:-1]):raise ValueError('Adaptive temperatures must remain strictly increasing after float32 rounding.')
+    return packed
+
+
+def _temperature_feedback(counters,temperature_bits):
+    temps=np.asarray(temperature_bits,dtype=np.uint32).view(np.float32)
+    values=_temperature_values(list(map(float,temps)))
+    if counters.shape[0]!=2:raise ValueError('Invalid native exchange feedback shape.')
+    result={'temperatures':list(map(float,values))}
+    for row,key in enumerate(('attempts','accepts')):
+        result[key]=[int(np.asarray(counters[row,edge::8],dtype=np.uint64).sum(dtype=np.uint64))&0xffffffff for edge in range(7)]
+    return result
+
+
+def _temperature_step(controller,engine,dispatches):
+    if controller is None or controller.frozen or dispatches%16:return
+    try:
+        ladder=controller.observe(engine.temperature_feedback(),dispatches)
+        if ladder is not None:engine.set_temperatures(ladder)
+    except BaseException:
+        # Host policy may have advanced before a failed device update. Neither
+        # side may be published or continued; restore a complete prior snapshot.
+        engine._poisoned=True
+        raise
+
+
 class _CUDA:
     def __init__(self, problem, table, free, replicas, seed, *, experiments=None, initialize=True):
         import cupy as cp
         self.cp, self.n, self.r, self.f, self.e = cp, problem.n, replicas, free, len(problem.edges)
         self._poisoned=False
         self.input_binding=_injection_binding(problem)
-        self.flags=sampling_flags(experiments);self.meta_rows=28 if self.flags&16 else (22 if self.flags&8 else (18 if self.flags else 4))
+        self.flags=sampling_flags(experiments);self.meta_rows=29 if self.flags&32 else (28 if self.flags&16 else (22 if self.flags&8 else (18 if self.flags else 4)))
+        if self.flags&32 and replicas<8:raise ValueError('Adaptive exchange requires at least eight replicas.')
         base=25*self.n+free+3*self.n*self.n
         self.gold_total=int(table[base]) if len(table)>base else 0
         name = cp.cuda.runtime.getDeviceProperties(cp.cuda.Device().id)['name']
@@ -237,6 +268,16 @@ class _CUDA:
         if self.meta_rows>4:self.meta[4:13,lane]=0
         self.cp.cuda.get_current_stream().synchronize()
         return {'injected':True,'lane':lane,'objective':objective,'best_updated':update}
+    def temperature_feedback(self):
+        _require_sampler_healthy(self)
+        if not self.flags&32:raise ValueError('Adaptive temperatures are disabled.')
+        return _temperature_feedback(self.meta[16:18].get(),self.meta[28,:8].get())
+    @_injection_transaction
+    def set_temperatures(self,values):
+        if not self.flags&32:raise ValueError('Adaptive temperatures are disabled.')
+        packed=_temperature_values(values);bits=np.resize(packed,self.r).view(np.uint32)
+        device=self.cp.asarray(bits);self._injection_writes_started=True;self.meta[28]=device
+        self.cp.cuda.get_current_stream().synchronize()
     def snapshot_arrays(self):
         _require_sampler_healthy(self);return [self.boards.get(),self.best.get(),self.meta.get()]
     def restore_arrays(self,arrays):
@@ -255,12 +296,13 @@ class _CUDA:
         _require_sampler_healthy(self)
         if self.exchange_kernel is None:return
         self.exchange_kernel(((self.r+255)//256,),(128,),
-            (self.boards,self.best,self.meta,*map(np.int32,(self.n,self.r,self.gold_total,parity))))
+            (self.boards,self.best,self.meta,*map(np.int32,(self.n,self.r,self.gold_total,parity,self.flags))))
         self.cp.cuda.get_current_stream().synchronize()
     def experiment_stats(self):
         _require_sampler_healthy(self)
         if not self.flags:return {}
-        counts=self.meta[13:self.meta_rows].sum(axis=1,dtype=self.cp.uint64).get()
+        end=28 if self.flags&16 else (22 if self.flags&8 else 18)
+        counts=self.meta[13:end].sum(axis=1,dtype=self.cp.uint64).get()
         return dict(zip(SAMPLING_COUNTERS,map(int,counts)))
     def top(self, count=32):
         _require_sampler_healthy(self)
@@ -287,7 +329,8 @@ class _WebGPU:
         self.wgpu, self.n, self.r, self.f, self.e = wgpu, problem.n, replicas, free, len(problem.edges)
         self._poisoned=False
         self.input_binding=_injection_binding(problem)
-        self.flags=sampling_flags(experiments);self.meta_rows=28 if self.flags&16 else (22 if self.flags&8 else (18 if self.flags else 4))
+        self.flags=sampling_flags(experiments);self.meta_rows=29 if self.flags&32 else (28 if self.flags&16 else (22 if self.flags&8 else (18 if self.flags else 4)))
+        if self.flags&32 and replicas<8:raise ValueError('Adaptive exchange requires at least eight replicas.')
         base=25*self.n+free+3*self.n*self.n
         self.gold_total=int(table[base]) if len(table)>base else 0
         adapter = wgpu.gpu.request_adapter_sync(power_preference='high-performance', force_fallback_adapter=False)
@@ -335,6 +378,18 @@ class _WebGPU:
             for row in range(4,13):self.queue.write_buffer(self.buffers[2],(row*self.r+lane)*4,zero)
         self.queue.read_buffer(self.buffers[2],(self.r+lane)*4,4) # Complete the atomic host-controller operation before publishing.
         return {'injected':True,'lane':lane,'objective':objective,'best_updated':update}
+    def temperature_feedback(self):
+        _require_sampler_healthy(self)
+        if not self.flags&32:raise ValueError('Adaptive temperatures are disabled.')
+        counts=np.frombuffer(self.queue.read_buffer(self.buffers[2],16*self.r*4,2*self.r*4),np.uint32).reshape(2,self.r)
+        bits=np.frombuffer(self.queue.read_buffer(self.buffers[2],28*self.r*4,8*4),np.uint32)
+        return _temperature_feedback(counts,bits)
+    @_injection_transaction
+    def set_temperatures(self,values):
+        if not self.flags&32:raise ValueError('Adaptive temperatures are disabled.')
+        packed=_temperature_values(values);bits=np.resize(packed,self.r).view(np.uint32)
+        self._injection_writes_started=True;self.queue.write_buffer(self.buffers[2],28*self.r*4,bits)
+        self.queue.read_buffer(self.buffers[2],28*self.r*4,4)
     def snapshot_arrays(self):
         _require_sampler_healthy(self)
         shapes=((self.n,self.r),(self.n,self.r),(self.meta_rows,self.r))
@@ -389,7 +444,7 @@ class _WebGPU:
     def experiment_stats(self):
         _require_sampler_healthy(self)
         if not self.flags:return {}
-        rows=self.meta_rows-13
+        rows=(28 if self.flags&16 else (22 if self.flags&8 else 18))-13
         counts=np.frombuffer(self.queue.read_buffer(self.buffers[2],13*self.r*4,rows*self.r*4),np.uint32).reshape(rows,self.r).sum(axis=1,dtype=np.uint64)
         return dict(zip(SAMPLING_COUNTERS,map(int,counts)))
     def close(self):
@@ -398,7 +453,7 @@ class _WebGPU:
         self.params.destroy(); self.gpu.destroy()
 
 
-SAMPLING_EXPERIMENTS=('ejection_chains','move_tabu','replica_exchange','obstruction_chains','cycle_crossover','lazy_gold_scoring')
+SAMPLING_EXPERIMENTS=('ejection_chains','move_tabu','replica_exchange','obstruction_chains','cycle_crossover','lazy_gold_scoring','adaptive_temperatures')
 SAMPLING_COUNTERS=('accepted_moves','tabu_rejections','chain_proposals','exchange_attempts','exchange_accepts',
                    'guided_proposals','guided_candidate_checks','guided_obstruction_starts','guided_base_improvements',
                    'gold_old_base_scans_saved','gold_old_loop_traces_saved','gold_candidate_loop_traces',
@@ -406,13 +461,15 @@ SAMPLING_COUNTERS=('accepted_moves','tabu_rejections','chain_proposals','exchang
 
 def sampling_flags(experiments=None):
     experiments={} if experiments is None else experiments
-    names={'ejection_chains':1,'move_tabu':2,'replica_exchange':4,'obstruction_chains':8,'cycle_crossover':0,'lazy_gold_scoring':16}
+    names={'ejection_chains':1,'move_tabu':2,'replica_exchange':4,'obstruction_chains':8,'cycle_crossover':0,'lazy_gold_scoring':16,'adaptive_temperatures':32}
     if not isinstance(experiments,dict) or set(experiments)-set(names) or any(type(value) is not bool for value in experiments.values()):
         raise ValueError('Invalid sampling experiment switches.')
     flags=sum(bit for name,bit in names.items() if experiments.get(name,False))
-    return flags|1 if flags&(8|16) else flags
+    flags=flags|1 if flags&(8|16) else flags
+    return flags|4 if flags&32 else flags
 
 def _make_sampler(problem, table, free, replicas, seed, backend, *, allow_software=False, experiments=None, initialize=True):
+    if sampling_flags(experiments)&32 and replicas<8:raise ValueError('Adaptive exchange requires at least eight replicas.')
     extra={'experiments':experiments} if sampling_flags(experiments) else {}
     if not initialize:extra['initialize']=False
     if backend == 'cuda': return _CUDA(problem, table, free, replicas, seed,**extra)
@@ -450,6 +507,7 @@ def sample(problem, *, seconds, seed=0, replicas=128, backend='auto', stop=None,
     if type(replicas) is not int or not 1 <= replicas <= 131072 or type(seed) is not int or seed < 0:
         raise ValueError('replicas must be 1..131072 and seed a nonnegative integer.')
     if backend not in ('auto', 'cuda', 'webgpu'): raise ValueError('Unknown sampling backend.')
+    if flags&32 and replicas<8:raise ValueError('Adaptive exchange requires at least eight replicas.')
     result = {'status': 'timeout', 'backend': backend, 'device': None, 'replicas': replicas,
               'initial_boards': 0, 'move_proposals': 0, 'samples_considered': 0,
               'unique_boards': None, 'duplicates_tracked': False, 'complete': False,
@@ -469,7 +527,10 @@ def sample(problem, *, seconds, seed=0, replicas=128, backend='auto', stop=None,
         return finish()
     engine = None
     archive = []
-    crossover=None;crossover_parents=[]
+    crossover=None;crossover_parents=[];temperatures=None
+    if flags&32:
+        from sampling_temperatures_round25 import AdaptiveTemperatures
+        temperatures=AdaptiveTemperatures()
     if experiments and experiments.get('cycle_crossover'):
         from sampling_crossover_round25 import CycleCrossover
         crossover=CycleCrossover(problem,gold_aware=gold_aware)
@@ -495,7 +556,8 @@ def sample(problem, *, seconds, seed=0, replicas=128, backend='auto', stop=None,
             archive,solution=_crossover_step(problem,crossover,archive,engine,gold_aware=gold_aware,inject=inject,parents=crossover_parents)
             crossover_parents=_crossover_parent_pool([*crossover_parents,*archive],gold_aware=gold_aware)
             if solution is not None:result['solution']=solution
-            result['sampling_experiments']={**experiments,**engine.experiment_stats(),**crossover.stats}
+        if flags or crossover is not None:
+            result['sampling_experiments']={**experiments,**engine.experiment_stats(),**(crossover.stats if crossover is not None else {}),**(temperatures.stats if temperatures is not None else {})}
         if archive:
             result.update(top_samples=archive,top_board=archive[0]['codes'],best_score=archive[0]['matched_edges'],
                           best_objective=archive[0]['objective'],domain_violations=archive[0]['domain_violations'],
@@ -511,6 +573,7 @@ def sample(problem, *, seconds, seed=0, replicas=128, backend='auto', stop=None,
             if stop is not None and stop(): result['status']='stopped'; break
             engine.launch(64);launches+=1
             if flags&4 and launches%8==0:engine.exchange((launches//8)%2)
+            _temperature_step(temperatures,engine,launches)
             result['move_proposals'] += replicas*64
             result['samples_considered'] += replicas*64
             if time.monotonic()-last_progress >= 1:
@@ -520,7 +583,7 @@ def sample(problem, *, seconds, seed=0, replicas=128, backend='auto', stop=None,
                     progress({'event':'sampling_progress', **result, 'elapsed_seconds':last_progress-began})
                 if result.get('solution') is not None:break
         if result.get('solution') is None:collect(inject=False)
-        if flags or crossover is not None:result['sampling_experiments']={**experiments,**engine.experiment_stats(),**(crossover.stats if crossover is not None else {})}
+        if flags or crossover is not None:result['sampling_experiments']={**experiments,**engine.experiment_stats(),**(crossover.stats if crossover is not None else {}),**(temperatures.stats if temperatures is not None else {})}
         if stop is not None and stop(): result['status']='stopped'
         elif not inputs[1]: result['status']='sampled'
         if progress is not None: progress({'event':'sampling', **result, 'elapsed_seconds':time.monotonic()-began})

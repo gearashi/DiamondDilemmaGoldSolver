@@ -49,6 +49,15 @@ class OptionsTests(unittest.TestCase):
             validate_algorithm_options('sat',normalize_options({'persistent_sat':True,'sat_theory':True}))
         validate_algorithm_options('sat',normalize_options({'persistent_sat':True,'symbolic_coverage':True}))
 
+    def test_adaptive_temperatures_require_replica_exchange_and_hybrid(self):
+        options=normalize_options({'adaptive_temperatures':True,'replica_exchange':False})
+        validate_algorithm_options('hybrid',options)
+        self.assertTrue(options['replica_exchange'])
+        for engine in ('dfs','parallel-dfs','gpu-domains','sat','cp-sat','cp'):
+            with self.assertRaises(ValueError):validate_algorithm_options(engine,options)
+        self.assertFalse(normalize_options()['adaptive_temperatures'])
+        with self.assertRaises(ValueError):normalize_options({'adaptive_temperatures':1})
+
     def test_lazy_gold_scoring_implies_gold_and_chain_generator(self):
         options=normalize_options({'lazy_gold_scoring':True,'gpu_gold_sampling':False,'ejection_chains':False})
         validate_algorithm_options('hybrid',options)

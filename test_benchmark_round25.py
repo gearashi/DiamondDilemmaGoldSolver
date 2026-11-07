@@ -585,7 +585,7 @@ class HybridPipelineBenchmarkTests(unittest.TestCase):
    argv=['benchmark_round25.py','--output',str(folder/'matrix'),'--data',str(data),'--suite','all','--profiles','baseline','--finite-cases','small']
    with patch.object(benchmark.sys,'argv',argv),patch.object(benchmark,'source_hashes',return_value={}),patch.object(benchmark,'runtime_snapshot',return_value={}),patch.object(benchmark,'repository_snapshot',return_value={}),patch.object(benchmark.subprocess,'Popen',side_effect=fake),contextlib.redirect_stdout(io.StringIO()):benchmark.main()
    self.assertTrue(engines);self.assertNotIn('hybrid',engines)
-  for extra in (['--hybrid-replica-counts','0'],['--hybrid-replica-counts','131073'],['--replicas','131073'],['--finite-seconds','nan']):
+  for extra in (['--hybrid-replica-counts','0'],['--hybrid-replica-counts','131073'],['--replicas','131073'],['--finite-seconds','nan'],['--hybrid-profiles','adaptive','--hybrid-replica-counts','7']):
    with tempfile.TemporaryDirectory(prefix='benchmark-hybrid-bound-',dir=benchmark.ROOT) as directory:
     argv=['benchmark_round25.py','--output',directory,'--suite','hybrid',*extra]
     with patch.object(benchmark.sys,'argv',argv),patch.object(benchmark.subprocess,'Popen') as launch,contextlib.redirect_stderr(io.StringIO()):
