@@ -1,0 +1,46 @@
+name: Linux SAT capability diagnostic
+
+on:
+  push:
+    branches: [codex/round25-linux-sat-probe]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capabilities:
+    name: Isolated native SAT probes (Ubuntu 24.04, Python 3.12)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out isolated diagnostic source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Set up Python 3.12
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: '3.12'
+      - name: Initialize diagnostic report
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          output=Path('diagnostics/sat-capabilities-linux-py312.json')
+          output.parent.mkdir(parents=True,exist_ok=True)
+          output.write_text(json.dumps({'status':'not_completed','reason':'Dependency installation or diagnostic execution did not complete.'},indent=2)+'\n')
+          PY
+      - name: Install pinned SAT package
+        run: python -m pip install --only-binary=:all: python-sat==1.9.dev15
+      - name: Run each backend in an isolated child process
+        run: python -B benchmark_sat_capabilities_round25.py --output diagnostics/sat-capabilities-linux-py312.json
+      - name: Upload capability report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: sat-capabilities-linux-py312
+          path: diagnostics/sat-capabilities-linux-py312.json
+          if-no-files-found: error
