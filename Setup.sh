@@ -160,6 +160,6 @@ else
         printf '%s\n' 'Verifying local data; missing source GIFs will be downloaded from jaapsch.net...'
     fi
     "$venv_python" "${data_args[@]}" || fail 'Data preparation failed. See the error above; conflicting existing files were preserved.'
-    printf '%s\n' 'Setup complete. Use ./OpenDashboard.sh to open the dashboard.'
+    printf '%s\n' 'Setup complete. Use bash OpenDashboard.sh to open the dashboard.'
 fi
 printf '%s\n' 'GPU search requires a compatible GPU and driver. WebGPU uses native Metal on macOS and Vulkan/DX12 on supported PCs. Setup does not install drivers.'

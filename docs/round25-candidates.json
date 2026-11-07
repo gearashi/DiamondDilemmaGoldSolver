@@ -434,64 +434,118 @@
       "id": 26,
       "proposal": "Combine seam and inventory support in CUDA domains",
       "owner": "gpu_hybrid",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_gpu_domain_round25.py",
+        "benchmark_gpu_round25.py",
+        "docs/ROUND25_GPU.md"
+      ],
+      "disposition": "Retained opt-in after independent review; joint neighboring seam and inventory support",
+      "original_puzzle_gain": "not established",
+      "access": "gpu_joint_support; experimental gpu-domains CUDA engine",
+      "finite_evidence": "Independent full enumeration preserved: six edge completions with decisions 13 to 9; repeated-seam infeasibility decisions 3 to 0. All 4368 bounded support-cap matching systems agree; controlled 160-cell planted Gold witness preserved.",
+      "limits": "Five separate added-work counters; 40 additional state bytes per lane. No original-puzzle gain established. Enabled native v2 policy changes reconstruct scratch from portable remaining cubes."
     },
     {
       "id": 27,
       "proposal": "Fork GPU branches after propagating their common parent",
       "owner": "gpu_hybrid",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_gpu_domain_round25.py",
+        "benchmark_gpu_round25.py",
+        "docs/ROUND25_GPU.md"
+      ],
+      "disposition": "Retained opt-in after independent review; propagate once before cloning root facts",
+      "original_puzzle_gain": "not established",
+      "access": "gpu_propagated_forks; experimental gpu-domains CUDA engine",
+      "finite_evidence": "Two controlled Gold completions preserved; inclusive strand joins 44 to17 with candidate checks46 to60. Six edge completions preserve decisions6 while removals25 to18/checks103 to98. Stop/native resume and deferred original-parent coverage verified.",
+      "limits": "Preparation is serial per parent. Neutral eighteen-solution case adds candidate checks621 to643. No original-puzzle gain established. One temporary parent allocation accompanies the child batch."
     },
     {
       "id": 28,
       "proposal": "Make CUDA propagation respond only to affected constraints",
       "owner": "gpu_hybrid",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_gpu_domain_round25.py",
+        "benchmark_gpu_round25.py",
+        "docs/ROUND25_GPU.md"
+      ],
+      "disposition": "Retained opt-in after independent review; deduplicated dependency-driven CUDA propagation",
+      "original_puzzle_gain": "not established",
+      "access": "gpu_event_propagation; experimental gpu-domains CUDA engine",
+      "finite_evidence": "112 target/joint/learning/strand configurations preserve independent complete solution sets. Four finite cases reduce candidate visits64 to46,117 to108,640 to346,326 to171 with unchanged decisions; added queue/index work counted separately.",
+      "limits": "60extra state bytes per lane at160cells and3200-byte static table. Rollback conservatively schedules all cells. No original-puzzle gain established; exact nativev3 queue/cursor resume and policy-change portable restart."
     },
     {
       "id": 29,
       "proposal": "Track more precise GPU failure explanations",
       "owner": "gpu_hybrid",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_gpu_domain_round25.py",
+        "benchmark_gpu_round25.py",
+        "docs/ROUND25_GPU.md"
+      ],
+      "disposition": "Retained opt-in after independent review; bounded precise removal explanations with conservative fallback",
+      "original_puzzle_gain": "not established",
+      "access": "gpu_precise_reasons; experimental gpu-domains CUDA engine",
+      "finite_evidence": "Independently found six-cell prism: both edge/Gold decisions21 to17, clauses20 to16; candidate checks509 to458 edge and497 to446 Gold.56 complete-enumeration configurations preserve solutions. Tiny8-slot saturation safely restores baseline work.",
+      "limits": "Bounded2048-slot cache,<=32probes, half occupancy; misses use conservative cell reasons. Full160 all-current-features1010844bytes/lane;512lanes493.58MiB.25focused checks including independent remaining-solution entailment, collisions/redeletion/native scope. No original-puzzle gain established."
     },
     {
       "id": 30,
       "proposal": "Share verified general GPU clauses between lanes",
       "owner": "gpu_hybrid",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "gpu_shared_round25.py",
+        "test_gpu_domain_round25.py",
+        "test_constraint_shared_pending_round25.py",
+        "benchmark_gpu_round25.py",
+        "docs/ROUND25_GPU.md"
+      ],
+      "disposition": "Retained opt-in after independent review; original-root-verified GPU clause sharing",
+      "original_puzzle_gain": "not established",
+      "access": "gpu_shared_clauses; experimental gpu-domains plus python-sat",
+      "finite_evidence": "Actual producer yields one global claim accepted and one lane-only claim rejected. Three disjoint recipient cubes preserve4completions while decisions4 to2/checks87 to64; producerprefix5decisions54checks and verifier2queries88clauses reported separately.26focused checks pass.",
+      "limits": "Only independently verified original-domain cuts broadcast; pending/unknown/discarded states carry no proof authority. Bounded128pending128tombstones,32literals,1MiB pendingtransport;8short cuts refresh existing lane rings. Native SAT search may retry after restart. No original-puzzle gain established."
     },
     {
       "id": 31,
       "proposal": "Refill individual lanes in the newer CUDA domain engine",
       "owner": "gpu_hybrid",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "gpu_lane_pool_round25.py",
+        "test_gpu_domain_round25.py",
+        "benchmark_gpu_round25.py",
+        "docs/ROUND25_GPU.md"
+      ],
+      "disposition": "Retained opt-in after independent review; exact queued refill and bounded donor reconstruction with durable owner accounting",
+      "original_puzzle_gain": "not established",
+      "access": "gpu_lane_balance; experimental gpu-domains CUDA engine",
+      "finite_evidence": "Complete independently infeasible prism with12roots/4lanes: fixedwork1/8/17/64 dispatches559 to393,70 to53,34 to26,10 to7. Decisions can increase21 to23 atwork17; extra reconstruction/checks reported.73related plus9finalfocused tests pass.",
+      "limits": "Only donor/idle selected columns reconstruct; untouched native state preserved. Original owner exhausts only after all live/queued descendants. No new per-lane arrays; up to2 temporary replacement columns. Queue donation cap4096; policy change retains exact portable remainder. No original-puzzle gain established."
     },
     {
       "id": 32,
       "proposal": "Use incremental, shared checkpoint representations",
       "owner": "gpu_hybrid",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "gpu_checkpoint_codec_round25.py",
+        "gpu_checkpoint_round25.py",
+        "test_gpu_checkpoint_round25.py",
+        "benchmark_gpu_round25.py",
+        "docs/ROUND25_GPU.md"
+      ],
+      "disposition": "Retained opt-in after independent review; one frozen native snapshot, bounded shared live-prefix generations and safe complete recovery",
+      "original_puzzle_gain": "not established",
+      "access": "gpu_incremental_checkpoint; experimental gpu-domains CUDA engine",
+      "finite_evidence": "37focused checks including every-primitive canonical continuation phases0-4,160activeframes,owner donation/refill/Stop,delayedconsumer andpublication failures. Four completed snapshot continuations: controlled160x4 raw4043216bytes to249766packed,compressed27695 to22791,nextgeneration1of4chunksreused and146789logicalwritebytes vs165028legacyJSON.",
+      "limits": "512MiB logical retention plus32768files; noGC, requiresappsinglewriter. Delayedrefsretained; cap/IOfailure currentstate selfcontainedlegacyfallback. Onlyexplicitknownorigin/predecessor recovery, strictnormalresume. Deadpaddingnormalizeszero; actualnativeprocessstate trusted, notproof. Smallfixturemetadata canincreasefiles. Nooriginalpuzzlegainestablished."
     },
     {
       "id": 33,

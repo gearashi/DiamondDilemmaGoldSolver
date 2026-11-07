@@ -67,7 +67,7 @@ def runtime_capabilities():
                        'sat': dict(sat), 'sat-propagator':dict(sat),
                        'sat-channel':dict(sat),'cp-sat-regions':dict(cp)},
         'backends': {'auto': gpu, 'cuda': cuda, 'webgpu': webgpu},
-        'options': {'sat_assist': dict(sat), 'gold_oracle': dict(cp), 'gold_pricing':dict(cp), 'smart_learning':dict(sat), 'shared_sat_assistant':dict(sat), 'higher_order_relations':dict(sat), 'native_sat_persistence':sat_persistence,'native_explanations':_native_explanation_build()},
+        'options': {'sat_assist': dict(sat), 'gold_oracle': dict(cp), 'gold_pricing':dict(cp), 'smart_learning':dict(sat), 'shared_sat_assistant':dict(sat), 'higher_order_relations':dict(sat), 'native_sat_persistence':sat_persistence,'gpu_shared_clauses':dict(sat),'native_explanations':_native_explanation_build()},
         'features': {'repair': dict(cp)},
     }
 
@@ -85,6 +85,8 @@ def validate_runtime_selection(algorithm, backend='auto', options=None, *,
         selections.append(('backends', 'cuda'))
     elif algorithm in ('gpu-dfs', 'hybrid'):
         selections.append(('backends', backend))
+    if algorithm=='gpu-domains' and (options or {}).get('gpu_shared_clauses'):
+        selections.append(('options','gpu_shared_clauses'))
     if algorithm=='sat' and (options or {}).get('native_sat_persistence'):
         selections.append(('options','native_sat_persistence'))
     if algorithm in EXACT_ALGORITHMS:

@@ -1,9 +1,10 @@
 """Finite regional evidence with complete before/after source/runtime identity."""
 import argparse,json
 from pathlib import Path
-from benchmark_provenance import source_snapshot,runtime_snapshot,repository_snapshot
+from benchmark_provenance import source_snapshot,runtime_snapshot,repository_snapshot,require_assertions
 
 if __name__=='__main__':
+    require_assertions()
     parser=argparse.ArgumentParser();parser.add_argument('--candidate',type=int,choices=(14,15,16,17,18,19,20,21,22,23,24,25));parser.add_argument('--output')
     parser.add_argument('--evidence-stage',choices=('development','frozen'),default='development')
     args=parser.parse_args();root=Path(__file__).resolve().parent

@@ -102,6 +102,26 @@ class RuntimeCapabilityTests(unittest.TestCase):
         self.assertIn('macOS', mac['backends']['cuda']['reason'])
         self.assertTrue(mac['backends']['webgpu']['available'])
 
+    def test_gpu_clause_sharing_requires_its_independent_sat_verifier(self):
+        missing=capabilities('cupy');full=capabilities('cupy','pysat')
+        with self.assertRaisesRegex(ValueError,'gpu_shared_clauses'):
+            runtime.validate_runtime_selection('gpu-domains','cuda',{'gpu_shared_clauses':True},capabilities=missing)
+        runtime.validate_runtime_selection('gpu-domains','cuda',{'gpu_shared_clauses':False},capabilities=missing)
+        runtime.validate_runtime_selection('gpu-domains','cuda',{'gpu_shared_clauses':True},capabilities=full)
+        import dashboard_server as dashboard
+        import constraint_search
+        with tempfile.TemporaryDirectory(prefix='gpu-clause-capability-',dir=ROOT) as directory:
+            folder=Path(directory)
+            for name in ('run.lock','stop.request','saved.json'):(folder/name).write_text('preserved',encoding='utf-8')
+            with patch.object(dashboard,'RUNTIME',folder),patch.object(dashboard,'live_pid',return_value=None),patch.object(dashboard,'runtime_capabilities',return_value=missing),patch.object(dashboard.subprocess,'Popen') as spawn:
+                with self.assertRaisesRegex(ValueError,'gpu_shared_clauses'):dashboard.start_solver({'algorithm':'gpu-domains','search_options':{'gpu_shared_clauses':True}})
+                spawn.assert_not_called()
+            self.assertEqual({path.name:path.read_text(encoding='utf-8') for path in folder.iterdir()},dict.fromkeys(('run.lock','stop.request','saved.json'),'preserved'))
+            output=folder/'must-not-exist'
+            with patch.object(runtime,'runtime_capabilities',return_value=missing),contextlib.redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit) as error:constraint_search.main(['--algorithm','gpu-domains','--search-options','{"gpu_shared_clauses":true}','--output',str(output)])
+            self.assertEqual(error.exception.code,2);self.assertFalse(output.exists())
+
     def test_missing_modules_and_invalid_module_specs_are_absent(self):
         for error in (ImportError('missing'), ValueError('missing spec')):
             with patch.object(runtime.importlib.util, 'find_spec', side_effect=error):

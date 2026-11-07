@@ -15,6 +15,8 @@ MAX_RECORDS=128
 MAX_PENDING=128
 MAX_LITERALS=32
 MAX_BYTES=131072
+PENDING_VERSION=1
+MAX_PENDING_BYTES=1048576
 MAX_ATTEMPTS=3
 MAX_CALLS_PER_ADVANCE=4
 MAX_SECONDS_PER_ADVANCE=.25
@@ -173,6 +175,82 @@ class VerifiedConflictStore:
         if _disk_bytes(payload)>MAX_BYTES:raise ValueError('Shared conflict byte limit exceeded.')
         if not isinstance(payload['digest'],str) or payload['digest']!=_digest(payload):raise ValueError('Shared conflict integrity digest differs.')
         return sum(self.offer(record) for record in normalized)
+    def pending_snapshot(self):
+        """Save optional unverified work, never solver state or proof authority.
+
+        This separate 1 MiB cap holds the full 128 pending + 128 discarded queue for
+        the 160-cell puzzle, including 32 literals per claim and pretty CRLF JSON.
+        No record is silently truncated to meet it. The existing verified-only
+        snapshot format and its 131072-byte limit are unchanged.
+        """
+        self._assert_binding()
+        payload={'shared_conflicts_pending_version':PENDING_VERSION,'fingerprint':self.fingerprint,
+                 'domains_sha256':self.domains_sha256,'target':self.target,
+                 'pending':[{'placements':[list(pair) for pair in record],'attempts':tries}
+                            for record,tries in self._pending.items()],
+                 'discarded':[[list(pair) for pair in record] for record in self._discarded]}
+        payload['digest']=_digest(payload)
+        # Reserve a possible trailing CRLF as well as atomic_json indentation.
+        if _disk_bytes(payload)+2>MAX_PENDING_BYTES:raise ValueError('Pending conflict byte limit exceeded.')
+        return payload
+    def import_pending(self,payload):
+        """Validate then merge optional work; return newly queued claim count.
+
+        Imported attempts and discarded markers only suppress optional verifier
+        work. They cannot enter records()/snapshot() or prune search. Retained
+        claims merge attempts by max; terminal markers dominate pending claims.
+        FIFO caps remain bounded, so eviction can allow later repeated work.
+        """
+        self._assert_binding()
+        keys={'shared_conflicts_pending_version','fingerprint','domains_sha256','target','pending','discarded','digest'}
+        if not isinstance(payload,dict) or set(payload)!=keys:raise ValueError('Malformed pending conflict payload.')
+        if type(payload['shared_conflicts_pending_version'])is not int or payload['shared_conflicts_pending_version']!=PENDING_VERSION:
+            raise ValueError('Unsupported pending conflict version.')
+        if any(type(payload[key])is not str for key in ('fingerprint','domains_sha256','target','digest')):
+            raise ValueError('Malformed pending conflict identity.')
+        if payload['fingerprint']!=self.fingerprint or payload['domains_sha256']!=self.domains_sha256 or payload['target']!=self.target:
+            raise ValueError('Pending conflict input, original domains or target differs.')
+        rows,discarded_rows=payload['pending'],payload['discarded']
+        if any(not isinstance(items,list) or len(items)>MAX_PENDING for items in (rows,discarded_rows)):
+            raise ValueError('Pending conflict record limit exceeded.')
+        normalized=[];seen=set()
+        for row in rows:
+            if not isinstance(row,dict) or set(row)!={'placements','attempts'}:raise ValueError('Malformed pending conflict row.')
+            tries=row['attempts']
+            if type(tries)is not int or not 0<=tries<MAX_ATTEMPTS:raise ValueError('Invalid pending conflict attempts.')
+            record=self._normalize(row['placements'])
+            if len(record)>MAX_LITERALS:raise ValueError('Pending conflict literal limit exceeded.')
+            if record in seen:raise ValueError('Duplicate pending conflict claim.')
+            seen.add(record);normalized.append((record,tries))
+        discarded=[];discarded_seen=set()
+        for row in discarded_rows:
+            record=self._normalize(row)
+            if len(record)>MAX_LITERALS:raise ValueError('Discarded conflict literal limit exceeded.')
+            if record in discarded_seen or record in seen:raise ValueError('Duplicate or overlapping discarded conflict claim.')
+            discarded_seen.add(record);discarded.append(record)
+        if _disk_bytes(payload)+2>MAX_PENDING_BYTES:raise ValueError('Pending conflict byte limit exceeded.')
+        if len(payload['digest'])!=64 or payload['digest']!=_digest(payload):raise ValueError('Pending conflict integrity digest differs.')
+        # No state or cumulative statistic changes before every row is checked.
+        pending=OrderedDict(self._pending);markers=OrderedDict(self._discarded)
+        dropped=duplicates=0;added=set()
+        for record in discarded:
+            if record in pending:del pending[record];dropped+=1
+            markers[record]=None
+        for record,tries in normalized:
+            if record in markers or any(frozenset(old)<=frozenset(record) for old in self._records):
+                duplicates+=1;continue
+            if record in pending:
+                pending[record]=max(pending[record],tries);duplicates+=1
+            else:pending[record]=tries;added.add(record)
+        while len(pending)>MAX_PENDING:
+            pending.popitem(last=False);dropped+=1
+        while len(markers)>MAX_PENDING:markers.popitem(last=False)
+        self._pending,self._discarded=pending,markers
+        self.stats['shared_conflicts_offered']+=len(normalized)
+        self.stats['shared_conflicts_duplicates']+=duplicates
+        self.stats['shared_conflicts_pending_dropped']+=dropped
+        self._refresh()
+        return sum(record in pending for record in added)
     def close(self):
         if self._oracle is not None:self._oracle.close()
         self._oracle=None;self._closed=True;self.status='closed';self.stats['shared_conflicts_clauses']=0

@@ -156,7 +156,7 @@ def main(argv=None):
         'workers': args.workers if args.algorithm == 'parallel-dfs' else 1, 'search_options': options,
         'run_id': run_id, 'replicas': args.replicas if args.algorithm in ('hybrid','gpu-domains') else 0,
         'backend': args.backend if args.algorithm in ('hybrid','gpu-domains') else 'cpu',
-        'gpu': LABELS[args.algorithm]+' ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· '+('GPU + CPU' if args.algorithm in ('hybrid','gpu-domains') else 'CPU'),
+        'gpu': LABELS[args.algorithm]+' | '+('GPU + CPU' if args.algorithm in ('hybrid','gpu-domains') else 'CPU'),
         'time_limit_seconds': args.seconds, 'nodes_checked': 0, 'stats': {}, 'checkpoint': {},
         'work_scope':{'kind':'original_puzzle'},
         'resume_scope': ('Durable CUDA domains, reasoning trail, and disjoint remaining cubes' if args.algorithm=='gpu-domains' else 'Disjoint CPU jobs with exact pending branches' if args.algorithm == 'parallel-dfs' else 'Warm native SAT with durable remaining cubes' if persistent_sat else 'Disjoint CPU jobs with exact pending branches' if args.algorithm=='dfs' and options['shared_coverage'] else 'Exact DFS branch stack' if args.algorithm in ('dfs', 'hybrid')
@@ -186,9 +186,15 @@ def main(argv=None):
     def save_checkpoint(payload):
         if payload is None:
             return
+        gpu_frontier=None
+        if args.algorithm=='gpu-domains':
+            from gpu_checkpoint_round25 import checkpoint_frontier
+            # Validate the named generation before replacing the previous saved
+            # envelope; reading its frontier does not decode native GPU arrays.
+            gpu_frontier=checkpoint_frontier(payload,learning_state['_gpu_checkpoint_dir'])
         envelope = {'version': 1, 'algorithm': args.algorithm, 'target': 'gold', 'binding': binding, 'payload': payload, 'work_scope':dict(state['work_scope'])}
         atomic_json(checkpoint_path, envelope)
-        if args.algorithm=='gpu-domains' and payload.get('frontier') is not None:atomic_json(folder/'remaining-work.json',payload['frontier'])
+        if gpu_frontier is not None:atomic_json(folder/'remaining-work.json',gpu_frontier)
         elif options['portable_frontier'] and args.algorithm in ('dfs','parallel-dfs','sat'):
             from constraint_portable import export_frontier
             atomic_json(folder/'remaining-work.json',export_frontier(problem,payload,'gold',options))
@@ -356,7 +362,7 @@ def main(argv=None):
         if report.get('backend') in ('cuda', 'webgpu'):
             state['backend'] = report['backend']
         if report.get('device'):
-            state['gpu'] = report['device']+' ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· GPU sampling + repair + CPU DFS'
+            state['gpu'] = report['device']+' | GPU sampling + repair + CPU DFS'
         if show_sample and report.get('top_board') is not None:
             write_live(report['top_board'], kind='gpu_sample', sample_metrics={
                 key: report.get(key) for key in ('best_score', 'best_objective', 'domain_violations', 'samples_considered')})
@@ -381,7 +387,7 @@ def main(argv=None):
         state['stats'] = event.get('stats', state['stats'])
         if 'root_symmetry' in event:
             state['root_symmetry'] = event['root_symmetry']
-        for key in ('native_backend', 'native_fallback_reason', 'search_loop_backend', 'search_loop_fallback_reason', 'parallel'):
+        for key in ('native_backend', 'native_fallback_reason', 'search_loop_backend', 'search_loop_fallback_reason', 'parallel', 'gpu_checkpoint_status', 'gpu_checkpoint_note', 'checkpoint_recovery'):
             if key in event:
                 state[key] = event[key]
         phase = event.get('phase', event.get('event'))
@@ -443,6 +449,7 @@ def main(argv=None):
         data = json.loads(raw.decode('utf-8-sig'))
         problem = SearchProblem(data)
         if options['shared_coverage'] and args.algorithm in ('dfs','parallel-dfs','sat','gpu-domains'):learning_state['_coverage_path']=str(run/'completed-coverage.sqlite3')
+        if args.algorithm=='gpu-domains':learning_state['_gpu_checkpoint_dir']=str(folder/'gpu-checkpoints')
         input_sha = hashlib.sha256(raw).hexdigest()
         if args.algorithm in EXACT_ALGORITHMS and options['persistent_learning']:
             from constraint_knowledge import KnowledgeStore, load, MAX_BYTES
@@ -460,7 +467,8 @@ def main(argv=None):
             state['knowledge'] = {'records': len(disk_knowledge.records()),
                                   'loaded': len(disk_knowledge.records()), 'path': str(knowledge_path)}
             learning_state['_knowledge'] = load(problem, snapshot, target='gold')
-        if args.algorithm in EXACT_ALGORITHMS and options.get('shared_conflicts',False):
+        if ((args.algorithm in EXACT_ALGORITHMS and options.get('shared_conflicts',False))
+                or (args.algorithm=='gpu-domains' and options.get('gpu_shared_clauses',False))):
             from constraint_shared_conflicts import VerifiedConflictStore,MAX_BYTES as CONFLICT_BYTES
             disk_conflicts=VerifiedConflictStore(problem,target='gold')
             imported=None
@@ -556,6 +564,9 @@ def main(argv=None):
                 raise ValueError('Checkpoint belongs to different data, algorithm, or target.')
             restore_work_scope(saved)
             checkpoint = saved['payload']
+            if args.algorithm=='gpu-domains':
+                from gpu_checkpoint_round25 import resolve_checkpoint
+                checkpoint=resolve_checkpoint(checkpoint,learning_state['_gpu_checkpoint_dir'])
         elif args.resume and args.algorithm == 'parallel-dfs':
             # Import the exact pending DFS tree once; the original file stays intact.
             source_path = run/'searches/dfs-gold/checkpoint.json'
@@ -641,7 +652,7 @@ def main(argv=None):
         state['stats'] = result.get('stats', state['stats'])
         if 'root_symmetry' in result:
             state['root_symmetry'] = result['root_symmetry']
-        for key in ('native_backend', 'native_fallback_reason', 'search_loop_backend', 'search_loop_fallback_reason', 'parallel'):
+        for key in ('native_backend', 'native_fallback_reason', 'search_loop_backend', 'search_loop_fallback_reason', 'parallel', 'gpu_checkpoint_status', 'gpu_checkpoint_note', 'checkpoint_recovery'):
             if key in result:
                 state[key] = result[key]
         sampling(result.get('gpu_sampling'), show_sample=last_snapshot is None)

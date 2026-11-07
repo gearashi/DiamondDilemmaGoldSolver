@@ -118,6 +118,7 @@ jobs:
           test_gpu_reasoning
           test_gpu_hybrid_reasoning
           test_constraint_shared_conflicts
+          test_constraint_shared_pending_round25
           test_constraint_ordering
           test_constraint_explanations
           test_constraint_reasons
@@ -125,6 +126,7 @@ jobs:
           test_constraint_search
           test_search_fixtures
           test_constraint_app_round24
+          test_constraint_app_round25
           test_constraint_continuation
           test_constraint_coverage_scope_round24
           test_constraint_hybrid_round24
@@ -141,6 +143,9 @@ jobs:
           test_constraint_lattice_round25
           test_constraint_regions_round25
           test_benchmark_round25
+          test_benchmark_gpu_profiles
+          test_benchmark_checkpoint_publication
+          test_benchmark_checkpoint_artifacts
           test_constraint_sat_persistence
           test_constraint_portable
           test_constraint_proof
@@ -155,6 +160,8 @@ jobs:
           test_constraint_work
           test_gpu_domain_checkpoint_validation
           test_gpu_domain_round24
+          test_gpu_domain_round25
+          test_gpu_checkpoint_round25
           test_gpu_domain_runner
           test_gpu_probe_round24
           test_gpu_sampling_round24

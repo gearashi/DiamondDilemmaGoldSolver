@@ -8,9 +8,16 @@ import sys
 import platform
 import subprocess
 
-SOURCE_SUFFIXES=frozenset(('.py','.c','.cu','.wgsl','.html'))
+SOURCE_SUFFIXES=frozenset(('.py','.c','.cu','.wgsl','.html','.ps1','.cmd','.sh'))
 NATIVE_SUFFIXES=frozenset(('.dll','.so','.dylib','.pyd','.json'))
 DEPENDENCIES=('numpy','python-sat','ortools','cupy-cuda12x','wgpu','setuptools')
+
+
+def require_assertions():
+    """Finite discriminators rely on checks that optimized Python would omit."""
+    if not __debug__ or sys.flags.optimize:
+        raise RuntimeError('Benchmark correctness checks require assertions; do not use python -O or PYTHONOPTIMIZE.')
+
 
 
 def source_snapshot(root):
@@ -42,7 +49,7 @@ def runtime_snapshot():
     for name in DEPENDENCIES:
         try:versions[name]=importlib.metadata.version(name)
         except importlib.metadata.PackageNotFoundError:versions[name]=None
-    result={'python':sys.version,'executable':sys.executable,'machine':platform.machine(),'argv':list(sys.argv),'packages':versions}
+    result={'python':sys.version,'executable':sys.executable,'machine':platform.machine(),'argv':list(sys.argv),'packages':versions,'optimization_level':sys.flags.optimize,'assertions_enabled':__debug__}
     spec=importlib.util.find_spec('pysolvers')
     if spec is not None and spec.origin:
         path=Path(spec.origin)

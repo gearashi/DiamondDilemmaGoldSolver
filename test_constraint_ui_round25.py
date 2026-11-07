@@ -13,7 +13,7 @@ KEYS=('sat_core_lifting','shared_sat_assistant','resumable_proof_checking',
       'native_sat_persistence','conflict_pb','integer_lattice','hall_rematch','reversible_gold_graph',
       'incremental_regions','durable_regions','compact_factors','gold_elimination',
       'separator_search','selective_refinement','joint_symbolic_regions','algebraic_connectivity','residual_isomorphism','gold_pricing',
-      'multichain_routing','region_certificates')
+      'multichain_routing','region_certificates','gpu_joint_support','gpu_propagated_forks','gpu_event_propagation','gpu_precise_reasons','gpu_shared_clauses','gpu_lane_balance','gpu_incremental_checkpoint')
 HARNESS=r"""
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const elements=new Map();
@@ -57,6 +57,106 @@ class Round25Controls(unittest.TestCase):
                               cwd=ROOT,capture_output=True,text=True,timeout=30)
         self.assertEqual(result.returncode,0,result.stdout+result.stderr)
         return result.stdout
+
+    def test_gpu_joint_support_scope_posted_option_and_actual_counters(self):
+        self.node(r"""
+assert.equal(element('r25_gpu_joint_support').disabled,true);
+select('gpu-domains');assert.equal(element('r25_gpu_joint_support').disabled,false);
+edit('gpu_joint_support',true);
+element('seconds').value='0';element('seedInput').value='17';
+run("command('start')");
+const sent=JSON.parse(context.fetchCalls.at(-1)[1].body);
+assert.equal(sent.algorithm,'gpu-domains');assert.equal(sent.search_options.gpu_joint_support,true);
+idle();select('dfs');assert.equal(element('r25_gpu_joint_support').checked,true);
+assert.equal(element('r25_gpu_joint_support').disabled,false);assert.equal(element('startBtn').disabled,true);
+edit('gpu_joint_support',false);assert.equal(element('r25_gpu_joint_support').disabled,true);
+run("state={process_running:true,status:{state:'running',method:'constraint',algorithm:'gpu-domains',stats:{joint_support_checks:53,joint_exclusions:4,joint_subset_checks:61,joint_word_scans:82,joint_tile_visits:93}},history:[]};renderState();");
+for(const [id,n]of [['r25GPUJointChecks',53],['r25GPUJointExclusions',4],['r25GPUJointSubsets',61],['r25GPUJointWords',82],['r25GPUJointTiles',93]])assert.equal(element(id).textContent,String(n),id);
+""")
+
+    def test_gpu_parent_forks_control_and_visible_preparation(self):
+        self.node(r"""
+assert.equal(element('r25_gpu_propagated_forks').disabled,true);
+select('gpu-domains');assert.equal(element('r25_gpu_propagated_forks').disabled,false);
+edit('gpu_propagated_forks',true);
+assert.equal(element('r25_gpu_joint_support').checked,false,'Parent reuse is independent of joint support');
+select('hybrid');assert.equal(element('startBtn').disabled,true);
+assert.equal(element('r25_gpu_propagated_forks').disabled,false);edit('gpu_propagated_forks',false);
+run("state={process_running:true,control_token:'test',status:{state:'running',method:'constraint',algorithm:'gpu-domains',phase_message:'Searching',stats:{gpu_domain_preparing:1,fork_parents:2,fork_children:8,fork_root_removals:11,fork_root_checks:23,fork_reused_assignments:32,fork_reused_unions:48}},history:[]};renderState();");
+assert.equal(element('runStatus').textContent,'Preparing shared GPU parent');
+assert.equal(element('stopBtn').disabled,false,'Stop remains available during parent preparation');
+assert.ok(element('replicaNote').textContent.includes('Preparing shared parent'));
+for(const [id,n]of [['r25GPUForkParents',2],['r25GPUForkChildren',8],['r25GPUForkRemovals',11],['r25GPUForkChecks',23],['r25GPUForkAssignments',32],['r25GPUForkUnions',48]])assert.equal(element(id).textContent,String(n),id);
+run("state.stop_requested=true;state.display_state='stopping';renderState();");
+assert.equal(element('runStatus').textContent,'Stopping','Stop status takes priority');
+""")
+
+    def test_gpu_event_control_has_independent_scope_and_separate_work_counters(self):
+        self.node(r"""
+assert.equal(element('r25_gpu_event_propagation').disabled,true);
+select('gpu-domains');edit('gpu_event_propagation',true);
+for(const key of ['gpu_joint_support','gpu_propagated_forks'])assert.equal(element('r25_'+key).checked,false,'Event propagation is independent');
+select('sat');assert.equal(element('startBtn').disabled,true);assert.equal(element('r25_gpu_event_propagation').disabled,false);
+edit('gpu_event_propagation',false);assert.equal(element('r25_gpu_event_propagation').disabled,true);
+run("state={process_running:true,status:{state:'running',method:'constraint',algorithm:'gpu-domains',stats:{event_enqueues:19,event_cell_scans:17,event_inventory_checks:7,event_queue_word_scans:23,event_inventory_words:11}},history:[]};renderState();");
+for(const [id,n]of [['r25GPUEventEnqueues',19],['r25GPUEventScans',17],['r25GPUEventInventory',7],['r25GPUEventQueueWords',23],['r25GPUEventInventoryWords',11]])assert.equal(element(id).textContent,String(n),id);
+""")
+
+    def test_gpu_precise_reasons_independent_control_and_cache_counters(self):
+        self.node(r"""
+assert.equal(element('r25_gpu_precise_reasons').disabled,true);
+select('gpu-domains');edit('gpu_precise_reasons',true);
+for(const key of ['gpu_joint_support','gpu_propagated_forks','gpu_event_propagation'])assert.equal(element('r25_'+key).checked,false);
+assert.equal(element('replicaInput').max,'512','Bounded cache still supports this lane cap');
+select('dfs');assert.equal(element('startBtn').disabled,true);assert.equal(element('r25_gpu_precise_reasons').disabled,false);
+edit('gpu_precise_reasons',false);assert.equal(element('r25_gpu_precise_reasons').disabled,true);
+run("state={process_running:true,status:{state:'running',method:'constraint',algorithm:'gpu-domains',stats:{precise_probes:100,precise_hits:40,precise_fallbacks:3,precise_stores:70,precise_invalidations:9,precise_support_words:250,precise_support_values:300,precise_dropped:2}},history:[]};renderState();");
+for(const [id,n]of [['r25GPUReasonProbes',100],['r25GPUReasonHits',40],['r25GPUReasonFallbacks',3],['r25GPUReasonStores',70],['r25GPUReasonInvalidations',9],['r25GPUReasonWords',250],['r25GPUReasonValues',300],['r25GPUReasonDropped',2]])assert.equal(element(id).textContent,String(n),id);
+""")
+
+    def test_gpu_sharing_requires_verifier_but_pending_counts_are_not_proofs(self):
+        self.node(r"""
+select('gpu-domains');
+run("state.capabilities={options:{gpu_shared_clauses:{available:false,reason:'Requires python-sat.'}}};renderState();");
+assert.equal(element('r25_gpu_shared_clauses').disabled,true);
+edit('gpu_shared_clauses',true);assert.equal(element('r25_gpu_shared_clauses').disabled,false);
+assert.equal(element('startBtn').disabled,true);assert.ok(element('runtimeHint').textContent.includes('python-sat'));
+edit('gpu_shared_clauses',false);
+run("state.capabilities.options.gpu_shared_clauses.available=true;renderState();");
+edit('gpu_shared_clauses',true);assert.equal(element('sharedConflictsInput').checked,false,'Separate GPU scope flag');
+element('seconds').value='0';element('seedInput').value='17';run("command('start')");
+const sent=JSON.parse(context.fetchCalls.at(-1)[1].body);assert.equal(sent.search_options.gpu_shared_clauses,true);
+idle();select('dfs');assert.equal(element('startBtn').disabled,true);edit('gpu_shared_clauses',false);
+run("state={process_running:true,status:{state:'running',method:'constraint',algorithm:'gpu-domains',stats:{gpu_claims_harvested:9,gpu_claims_offered:8,gpu_claims_oversize:1,gpu_shared_imports:3,gpu_shared_comparisons:21,gpu_shared_verification_calls:4,gpu_shared_verified:2,gpu_shared_rejected:1,gpu_shared_unknown:1,gpu_shared_entries:2,gpu_shared_pending:5,gpu_shared_verifier_clauses:88,gpu_verified_root_unsat:0}},history:[]};renderState();");
+for(const [id,n]of [['r25GPUClaimsHarvested',9],['r25GPUClaimsOffered',8],['r25GPUClaimsOversize',1],['r25GPUSharedImports',3],['r25GPUSharedComparisons',21],['r25GPUVerificationCalls',4],['r25GPUSharedVerified',2],['r25GPUSharedRejected',1],['r25GPUSharedUnknown',1],['r25GPUSharedEntries',2],['r25GPUSharedPending',5],['r25GPUVerifierClauses',88],['r25GPUVerifiedRoot',0]])assert.equal(element(id).textContent,String(n),id);
+""")
+
+    def test_gpu_lane_balance_preserves_scope_and_exposes_rebuild_work(self):
+        self.node(r"""
+assert.equal(element('r25_gpu_lane_balance').disabled,true);
+select('gpu-domains');edit('gpu_lane_balance',true);
+assert.equal(element('r25_gpu_propagated_forks').checked,false,'Refill does not require parent forks');
+element('seconds').value='0';element('seedInput').value='17';run("command('start')");
+const sent=JSON.parse(context.fetchCalls.at(-1)[1].body);assert.equal(sent.search_options.gpu_lane_balance,true);
+idle();select('hybrid');assert.equal(element('startBtn').disabled,true);assert.equal(element('r25_gpu_lane_balance').disabled,false);
+edit('gpu_lane_balance',false);assert.equal(element('r25_gpu_lane_balance').disabled,true);
+run("state={process_running:true,status:{state:'running',method:'constraint',algorithm:'gpu-domains',stats:{\"gpu_lane_refills\": 2, \"gpu_lane_donations\": 3, \"gpu_lane_rebuilt_roots\": 4, \"gpu_lane_discarded_frames\": 5, \"gpu_lane_discarded_removals\": 6, \"gpu_lane_owners_completed\": 7, \"gpu_lane_donation_cubes\": 8, \"gpu_lane_balance_deferrals\": 9, \"gpu_lane_idle\": 10, \"gpu_lane_owner_groups\": 11, \"gpu_lane_queue_peak\": 12}},history:[]};renderState();");
+for(const[id,n]of [["r25GPULaneRefills", 2], ["r25GPULaneDonations", 3], ["r25GPULaneRebuiltRoots", 4], ["r25GPULaneDiscardedFrames", 5], ["r25GPULaneDiscardedRemovals", 6], ["r25GPULaneOwnersCompleted", 7], ["r25GPULaneDonationCubes", 8], ["r25GPULaneBalanceDeferrals", 9], ["r25GPULaneIdle", 10], ["r25GPULaneOwnerGroups", 11], ["r25GPULaneQueuePeak", 12]])assert.equal(element(id).textContent,String(n),id);
+""")
+
+    def test_gpu_checkpoint_scope_sizes_and_fallback_reason(self):
+        self.node(r"""
+assert.equal(element('r25_gpu_incremental_checkpoint').disabled,true);
+select('gpu-domains');edit('gpu_incremental_checkpoint',true);
+assert.equal(element('r25_gpu_lane_balance').checked,false,'Checkpoint reuse has no balancing dependency');
+element('seconds').value='0';element('seedInput').value='17';run("command('start')");
+assert.equal(JSON.parse(context.fetchCalls.at(-1)[1].body).search_options.gpu_incremental_checkpoint,true);
+idle();select('dfs');assert.equal(element('startBtn').disabled,true);edit('gpu_incremental_checkpoint',false);
+run("state={process_running:true,status:{state:'running',method:'constraint',algorithm:'gpu-domains',gpu_checkpoint_status:'legacy_fallback',gpu_checkpoint_note:'Retention limit reached',stats:{\"gpu_checkpoint_host_copies\": 20, \"gpu_checkpoint_reused_chunks\": 21, \"gpu_checkpoint_fallbacks\": 22, \"gpu_checkpoint_rollbacks\": 23, \"gpu_checkpoint_packed_bytes\": 24, \"gpu_checkpoint_compressed_bytes\": 25, \"gpu_checkpoint_omitted_bytes\": 26, \"gpu_checkpoint_store_bytes\": 27}},history:[]};renderState();");
+for(const[id,n]of [["r25GPUCheckpointCopies", 20], ["r25GPUCheckpointReuses", 21], ["r25GPUCheckpointFallbacks", 22], ["r25GPUCheckpointRollbacks", 23], ["r25GPUCheckpointPacked", 24], ["r25GPUCheckpointCompressed", 25], ["r25GPUCheckpointOmitted", 26], ["r25GPUCheckpointStore", 27]])assert.equal(element(id).textContent,String(n),id);
+assert.equal(element('r25GPUCheckpointStatus').textContent,'Self-contained fallback');
+assert.equal(element('r25GPUCheckpointNote').textContent,'Retention limit reached');
+""")
 
     def test_actual_js_dependency_normalization_matches_backend(self):
         cases=[{},*({key:True} for key in KEYS),{'mixed_proof_dag':True,'proof_transport':False,'smart_learning':False},

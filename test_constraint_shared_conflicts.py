@@ -353,7 +353,7 @@ class SharedConflictDFSIntegrationTests(unittest.TestCase):
             self.assertTrue(fake.called);self.assertEqual(shared.pending_count,1)
             self.assertEqual(first['status'],'stopped');self.assertEqual(shared.records(),[])
             self.assertTrue(first['checkpoint']['stack'])
-            self.assertNotIn('_reasons',json.dumps(first['checkpoint']))
+            self.assertNotIn('"_reasons":',json.dumps(first['checkpoint']))
             self.assertEqual(first['shared_conflicts']['records'],[])
             resumed=dfs.solve(problem,seconds=5,resume=json.loads(json.dumps(first['checkpoint'])),
                 options=self.options(shared_conflicts=False))

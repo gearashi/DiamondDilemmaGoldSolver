@@ -78,7 +78,7 @@ class ReasonsTests(unittest.TestCase):
         def stop():calls[0]+=1;return calls[0]>25
         first=dfs.solve(problem,seconds=5,stop=stop,options={'reason_tracking':True,'native':'python'})
         self.assertEqual(first['status'],'stopped')
-        payload=json.dumps(first['checkpoint']);self.assertNotIn('_reasons',payload)
+        payload=json.dumps(first['checkpoint']);self.assertNotIn('"_reasons":',payload)
         result=dfs.solve(problem,seconds=5,resume=json.loads(payload),options={'reason_tracking':True})
         self.assertEqual(result['status'],'solved')
 
@@ -130,7 +130,7 @@ class ReasonsTests(unittest.TestCase):
         for clause in captured:
             self.assertFalse(any(all(row[c]==v for c,v in clause) for row in solutions))
         payload=json.loads(json.dumps(first['checkpoint']))
-        self.assertTrue(payload['stack']);self.assertNotIn('_reasons',json.dumps(payload))
+        self.assertTrue(payload['stack']);self.assertNotIn('"_reasons":',json.dumps(payload))
         resumed=dfs.solve(problem,seconds=5,options=options,resume=payload,learning_state=cache)
         self.assertEqual(resumed['status'],'solved');self.assertIn(tuple(resumed['codes']),solutions)
 

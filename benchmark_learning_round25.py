@@ -1,7 +1,7 @@
 """Finite logical-work reports for ordered learning proposals; not speed claims."""
 import argparse,hashlib,json,platform,subprocess,importlib.metadata
 from pathlib import Path
-from benchmark_provenance import source_snapshot, runtime_snapshot, repository_snapshot
+from benchmark_provenance import source_snapshot, runtime_snapshot, repository_snapshot, require_assertions
 
 
 def core_lifting():
@@ -136,7 +136,8 @@ def reversible_gold_graph():
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--output',required=True,type=Path);parser.add_argument('--candidate',type=int,choices=[1,2,3,4,6,7,8,9,10,11,12,13],default=1);args=parser.parse_args()
+    require_assertions()
+    parser=argparse.ArgumentParser();parser.add_argument('--output',required=True,type=Path);parser.add_argument('--candidate',type=int,choices=[1,2,3,4,6,7,8,9,10,11,12,13],default=1);parser.add_argument('--evidence-stage',choices=['development','frozen'],default='development');args=parser.parse_args()
     root=Path(__file__).resolve().parent
     paths=['constraint_sat_session.py','constraint_work.py','constraint_sat_assist.py','constraint_knowledge.py','search_problem.py','validator.py','test_constraint_learning_round25.py','benchmark_learning_round25.py']
     hashes=lambda:{name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in paths}
@@ -155,10 +156,15 @@ def main():
     if args.candidate==12:paths+=['constraint_incremental_hall.py','constraint_pruning.py','constraint_dfs.py','search_options.py','test_constraint_incremental_hall.py']
     if args.candidate==13:paths+=['constraint_gold_graph.py','constraint_advanced.py','constraint_pruning.py','constraint_dfs.py','search_options.py','search_fixtures.py','geometry.py','test_constraint_advanced.py','test_constraint_sat_domains.py']
     frozen_before=source_snapshot(root);runtime_before=runtime_snapshot();repository=repository_snapshot(root)
+    if args.evidence_stage=='frozen' and (not repository.get('commit') or repository.get('dirty') is not False):
+        raise RuntimeError('Frozen learning evidence requires a clean, readable committed checkout.')
     before=hashes();result={1:core_lifting,2:shared_assistant,3:resumable_proof,4:native_explanations,6:symbolic_coverage,7:mixed_proofs,8:higher_relations,9:incremental_affine,10:conflict_pb,11:integer_lattice,12:hall_rematch,13:reversible_gold_graph}[args.candidate]();after=hashes();assert before==after
-    frozen_after=source_snapshot(root);runtime_after=runtime_snapshot()
-    assert frozen_before==frozen_after and runtime_before==runtime_after
-    result.update(source_before=frozen_before,source_after=frozen_after,runtime_before=runtime_before,runtime_after=runtime_after,source_unchanged=frozen_before==frozen_after,runtime_unchanged=runtime_before==runtime_after,python=platform.python_version(),commit=repository.get('commit'),repository=repository,source_sha256=before,inputs_unchanged=before==after)
+    frozen_after=source_snapshot(root);runtime_after=runtime_snapshot();repository_after=repository_snapshot(root)
+    if args.evidence_stage=='frozen' and repository_after!=repository:
+        raise RuntimeError('The committed checkout changed during frozen learning evaluation.')
+    if frozen_before!=frozen_after or runtime_before!=runtime_after:
+        raise RuntimeError('Sources or runtime changed during learning evaluation.')
+    result.update(evidence_stage=args.evidence_stage,repository_after=repository_after,source_before=frozen_before,source_after=frozen_after,runtime_before=runtime_before,runtime_after=runtime_after,source_unchanged=frozen_before==frozen_after,runtime_unchanged=runtime_before==runtime_after,python=platform.python_version(),commit=repository.get('commit'),repository=repository,source_sha256=before,inputs_unchanged=before==after)
     if args.candidate in (1,2,8):result['sat_backend']=sat_provenance()
     args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     print(json.dumps({'proposal':args.candidate,'inputs_unchanged':True,**{k:result[k] for k in ('total_queries','baseline_clause_visits','resumed_clause_visits','slices','baseline_subtraction_checks','coverage_symbolic_apply_steps','coverage_symbolic_nodes') if k in result}}))

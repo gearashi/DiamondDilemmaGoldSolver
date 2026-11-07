@@ -107,6 +107,7 @@ class LinuxSetupTests(unittest.TestCase):
         result = self.run_setup('--python', str(python.relative_to(self.root.parent)) if False else os.path.relpath(python, self.caller),
                                 '--source-dir', source.name)
         self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('Use bash OpenDashboard.sh to open the dashboard.', result.stdout)
         calls = self.calls()
         prepare = next(call for call in calls if call['args'][0].endswith('prepare_data.py'))
         self.assertEqual(prepare['args'], [str(self.repo / 'prepare_data.py'), '--source-dir', str(source.resolve())])

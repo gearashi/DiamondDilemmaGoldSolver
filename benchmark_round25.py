@@ -8,9 +8,11 @@ this harness cannot establish that every descendant is gone. It never claims a
 universal orphan guarantee or starts another case after that ownership failure.
 """
 from __future__ import annotations
-import argparse,hashlib,json,math,os,platform,signal,subprocess,sys,time
+import argparse,datetime,hashlib,json,math,os,platform,signal,subprocess,sys,time
 from pathlib import Path
-from benchmark_provenance import source_snapshot, runtime_snapshot, repository_snapshot
+from benchmark_provenance import source_snapshot, runtime_snapshot, repository_snapshot, require_assertions
+from benchmark_gpu_profiles import GPU_PROFILES,warmup_domain
+from benchmark_checkpoint_publication import CheckpointPublisher
 ROOT=Path(__file__).resolve().parent
 PROFILES={
  'baseline':{},
@@ -23,23 +25,93 @@ PROFILES={
 PROFILES['combined']={**PROFILES['reuse'],**PROFILES['sat-learning'],**PROFILES['arithmetic'],**PROFILES['regional'],
                       'native_explanations':True,'mixed_proof_dag':True}
 
+SAT_PROFILES={
+ 'baseline':dict(persistent_sat=True,native_sat_persistence=False),
+ 'lifted':dict(persistent_sat=True,native_sat_persistence=False,sat_core_lifting=True,shared_coverage=True,symbolic_coverage=True),
+}
+SAT_PARTITIONS=32
+SAT_SLICE_SECONDS=30
+
+
 def source_hashes():return source_snapshot(ROOT)
 def volume(rows):return sum(math.prod(x.bit_count() for x in row) for row in rows)
-def pending_frontier(scope,result,engine):
+def pending_frontier(scope,result,engine,*,checkpoint_dir=None):
  """Validate committed ownership before counting any removed assignments."""
- from constraint_work import checkpoint_boxes,frontier_snapshot,restore_frontier
+ from constraint_work import WorkScope,checkpoint_boxes,frontier_snapshot,restore_frontier
  if result.get('status') in ('solved','edge_perfect'):return None
  saved=result.get('checkpoint')
  if saved is None:
   if result.get('status')=='infeasible' and result.get('complete') is True:return ()
   raise ValueError('An incomplete benchmark result has no committed remaining frontier.')
- if engine=='gpu':return restore_frontier(saved['frontier'],scope)
- rows=tuple(row for job in saved['jobs'] for row in checkpoint_boxes(job['checkpoint']))
- if not rows and result.get('complete') is not True:
+ if engine in ('gpu','sat'):
+  if engine=='gpu':
+   from gpu_checkpoint_round25 import checkpoint_frontier,is_reference
+   if is_reference(saved) and checkpoint_dir is None:
+    raise ValueError('A referenced GPU checkpoint needs its exact local store.')
+   frontier=checkpoint_frontier(saved,checkpoint_dir)
+  else:frontier=saved['frontier']
+  if not isinstance(frontier,dict):raise ValueError('Benchmark checkpoint has no portable remaining frontier.')
+  if WorkScope.restore(frontier['scope'])!=scope:
+   raise ValueError('Benchmark remaining frontier changed its original owned scope.')
+  rows=restore_frontier(frontier,scope)
+ else:rows=tuple(row for job in saved['jobs'] for row in checkpoint_boxes(job['checkpoint']))
+ if result.get('status')=='infeasible':
+  if result.get('complete') is not True or rows:
+   raise ValueError('Infeasibility requires complete exhaustion of the committed frontier.')
+ elif not rows:
   raise ValueError('An incomplete benchmark result has an empty remaining frontier.')
  # All CPU cases start from the same original portable root, without adding a
  # canonical symmetry restriction. Scope/disjointness errors invalidate metrics.
  return restore_frontier(frontier_snapshot(scope,rows),scope)
+
+
+def initial_frontier(scope,engine):
+ """Partition the same full original space; native SAT needs several cubes."""
+ from constraint_work import frontier_snapshot,restore_frontier
+ rows=(scope.root,)
+ if engine=='sat':
+  from gpu_domain_runner import split_cubes
+  rows=tuple(split_cubes(rows,SAT_PARTITIONS))  # Pure host-side exact partition.
+ payload=frontier_snapshot(scope,rows)
+ checked=restore_frontier(payload,scope)
+ if volume(checked)!=volume((scope.root,)):
+  raise ValueError('Initial benchmark partition does not cover the original root.')
+ return payload
+
+
+def require_fresh(paths):
+ for value in paths:
+  path=Path(value)
+  if path.exists() or path.is_symlink():
+   raise FileExistsError('Benchmark output/state already exists; choose a fresh path: '+str(path))
+
+
+def write_artifact(path,payload):
+ """Exclusive artifact creation never replaces source, input, or prior work."""
+ data=(json.dumps(payload,indent=2,allow_nan=False)+'\n').encode('utf-8')
+ with Path(path).open('xb') as stream:stream.write(data)
+ return {'path':str(Path(path).resolve()),'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data)}
+
+
+def run_sat(problem,*,seconds,seed,initial,options,learning_state):
+ """Retain native state between cooperative slices, then always release it."""
+ from constraint_sat_session import solve
+ started=time.monotonic();remaining=seconds;resume=initial;slices=0
+ try:
+  while True:
+   result=solve(problem,seconds=min(SAT_SLICE_SECONDS,remaining),seed=seed,target='gold',
+       resume=resume,options=options,learning_state=learning_state)
+   slices+=1
+   if result.get('status')!='timeout':break
+   remaining=max(0.0,seconds-(time.monotonic()-started))
+   if remaining<=0:break
+   resume=result.get('checkpoint')
+   if resume is None:raise ValueError('A timed SAT slice lost its remaining frontier.')
+  result['benchmark_sat_slices']=slices
+  return result
+ finally:
+  session=learning_state.get('_sat_session')
+  if session is not None:session.close()
 
 
 def terminate_tree(child):
@@ -67,8 +139,21 @@ def terminate_tree(child):
 
 
 def worker(args):
+ require_assertions()
+ from search_options import normalize_options,validate_algorithm_options
+ algorithm={'cpu':'parallel-dfs','gpu':'gpu-domains','sat':'sat'}.get(args.engine)
+ if algorithm is None:raise ValueError('Unknown benchmark engine.')
+ profiles=SAT_PROFILES if args.engine=='sat' else PROFILES if args.engine=='cpu' else GPU_PROFILES
+ if args.profile not in profiles:raise ValueError('Profile is unavailable for benchmark engine: '+args.engine)
+ overrides=profiles[args.profile]
+ options=normalize_options({'native':'compiled',**overrides} if args.engine=='cpu' else overrides)
+ validate_algorithm_options(algorithm,options)
+ args.output=Path(args.output)
+ if args.output.suffix.lower()!='.json':raise ValueError('Benchmark worker output must be a fresh .json file.')
+ state_dir=args.output.with_suffix('.state')
+ require_fresh((args.output,state_dir))
  from search_problem import SearchProblem
- from constraint_work import WorkScope,frontier_snapshot,digest
+ from constraint_work import WorkScope,digest
  provenance={'kind':'original_puzzle_file' if args.case=='original' else 'synthetic_planted_fixture'}
  if args.case=='original':
   source=args.data.read_bytes();provenance['input_sha256']=hashlib.sha256(source).hexdigest()
@@ -99,61 +184,136 @@ def worker(args):
       requested_free_cells=args.free_cells if args.case=='residual' else None,
       planted_reference_sha256=digest(reference),planted_reference_independently_validated=True,
       tile_data_sha256=digest(data),fixed_placements_sha256=digest(sorted(problem.fixed.items())))
- scope=WorkScope.for_problem(problem,'gold');initial=frontier_snapshot(scope,[scope.root]);began=time.monotonic()
+ scope=WorkScope.for_problem(problem,'gold');initial=initial_frontier(scope,args.engine);began=time.monotonic()
  args.output.parent.mkdir(parents=True,exist_ok=True)
- state_dir=args.output.with_suffix('.state')
- if state_dir.exists():raise FileExistsError('Benchmark state already exists; use a fresh per-case output: '+str(state_dir))
- state_dir.mkdir()
+ state_dir.mkdir()  # Exclusive case ownership also rejects concurrent reuse.
+ initial_artifact=write_artifact(state_dir/'initial-frontier.json',initial)
+ initial_info={**initial_artifact,'digest':initial['digest'],'scope':scope.payload(),
+     'requested_boxes':SAT_PARTITIONS if args.engine=='sat' else 1,'actual_boxes':len(initial['boxes']),
+     'cartesian_volume':str(volume((scope.root,))),'same_full_original_root':True,
+     'partition_method':'gpu_domain_runner.split_cubes' if args.engine=='sat' else 'single original root'}
  coverage_path=state_dir/'coverage.sqlite';regional_path=state_dir/'regional';regional_path.mkdir()
- options={'native':'compiled',**PROFILES[args.profile]}
  if args.engine=='cpu':
   from constraint_parallel import solve
   result=solve(problem,seconds=args.seconds,seed=args.seed,target='gold',workers=args.workers,resume=initial,
       options=options,learning_state={'_coverage_path':coverage_path,'_regional_cache_dir':regional_path})
  elif args.engine=='gpu':
   from gpu_domain_runner import solve
-  result=solve(problem,seconds=args.seconds,seed=args.seed,target='gold',replicas=args.replicas,work_frontier=initial,backend='cuda')
- else:raise ValueError(args.engine)
+  warmup=warmup_domain(problem,options)
+  solver_began=time.monotonic()
+  with CheckpointPublisher(state_dir/'published-checkpoint.json') as publication:
+   result=solve(problem,seconds=args.seconds,seed=args.seed,target='gold',replicas=args.replicas,work_frontier=initial,backend='cuda',
+       options=options,learning_state={'_coverage_path':coverage_path,'_gpu_checkpoint_dir':state_dir/'gpu-checkpoints'},
+       progress=publication.progress,stop=publication.failed)
+   publication.publish(result.get('checkpoint'))
+  result['checkpoint_publication']=publication.report()
+  result['gpu_warmup']=warmup
+  result['solver_wall_seconds']=time.monotonic()-solver_began
+ else:
+  result=run_sat(problem,seconds=args.seconds,seed=args.seed,initial=initial,options=options,
+      learning_state={'_coverage_path':coverage_path})
+ status=result['status']
+ if status in ('solved','edge_perfect') and result.get('codes') is None:
+  raise ValueError('A solved benchmark result has no independently checkable witness.')
  if result.get('codes') is not None:
-  check=problem.validate(result['codes']);assert check['valid']
-  assert all(code in problem.domains[cell] for cell,code in enumerate(result['codes']))
+  codes=result['codes']
+  if len(codes)!=problem.n or any(type(code)is not int or code not in problem.domains[cell] for cell,code in enumerate(codes)):
+   raise ValueError('Benchmark witness escapes original domains.')
+  check=problem.validate(codes)
+  if not check['valid']:raise ValueError('Benchmark witness failed independent Gold validation.')
   result['independent_validation']=check
- pending=pending_frontier(scope,result,args.engine);status=result['status']
+ pending=pending_frontier(scope,result,args.engine,checkpoint_dir=state_dir/'gpu-checkpoints')
  # A solved result is a witness, not an enumeration completion: no space claim.
  if status not in ('solved','edge_perfect'):
-  remaining=volume(pending);total=volume([scope.root]);assert 0<=remaining<=total
+  remaining=volume(pending);total=volume([scope.root])
+  if not 0<=remaining<=total:raise ValueError('Invalid committed remaining volume.')
   result['raw_space']={'initial':str(total),'remaining':str(remaining),'closed':str(total-remaining),'closed_log10':math.log10(total-remaining) if total>remaining else None,'definition':'Cartesian orientation assignments absent from the validated committed frontier of the same original unsymmetrized root; not a count of legal boards.'}
+ if result.get('checkpoint') is not None:
+  result['checkpoint_artifact']=write_artifact(state_dir/'checkpoint.json',result['checkpoint'])
+  if args.engine=='gpu':
+   from benchmark_checkpoint_artifacts import retained_store_snapshot,reopen_gpu_checkpoint
+   result['checkpoint_reopen']=reopen_gpu_checkpoint(result['checkpoint_artifact'],state_dir/'gpu-checkpoints',scope)
+   dependencies=retained_store_snapshot(state_dir/'gpu-checkpoints')
+   if dependencies is not None:result['checkpoint_dependencies_artifact']=write_artifact(state_dir/'checkpoint-dependencies.json',dependencies)
  for key in ('checkpoint','knowledge','shared_conflicts','mask_conflicts','local_mask_conflicts','certificates'):result.pop(key,None)
- result.update(case=args.case,engine=args.engine,solver_engine='parallel-dfs' if args.engine=='cpu' else 'gpu-domains',
-     profile=args.profile,seed=args.seed,budget_seconds=args.seconds,workers=args.workers if args.engine=='cpu' else 0,replicas=args.replicas,
-     cells=problem.n,fixed_cells=len(problem.fixed),fingerprint=problem.fingerprint,domains_sha256=digest(scope.original),
-     provenance=provenance,options=options if args.engine=='cpu' else {},
-     benchmark_state={'directory':str(state_dir),'coverage_enabled':args.engine=='cpu' and bool(options.get('shared_coverage')),
+ if args.engine=='sat':
+  stats=result.get('stats',{})
+  result['sat_work']={key:stats.get(key,0) for key in ('session_decisions','session_core_decisions','session_total_decisions','session_model_builds','session_core_model_builds','session_native_calls','session_cubes_closed','session_core_candidates','session_core_verifications','session_core_verified','session_core_unknown','session_core_boxes_removed','session_core_assignments_removed')}
+  result['sat_work']['interpretation']='Native search and independent core-verification decisions are separate; nodes includes both. Closed Cartesian assignments are not legal-board counts.'
+ result.update(case=args.case,engine=args.engine,solver_engine=algorithm,
+     profile=args.profile,seed=args.seed,budget_seconds=args.seconds,workers=args.workers if args.engine=='cpu' else 1 if args.engine=='sat' else 0,replicas=args.replicas if args.engine=='gpu' else 0,
+     cells=problem.n,fixed_cells=len(problem.fixed),free_cells=args.free_cells if args.case=='residual' else None,
+     fingerprint=problem.fingerprint,domains_sha256=digest(scope.original),
+     provenance=provenance,options=options,profile_overrides=overrides,initial_frontier=initial_info,
+     solver_seed_effect='not used; repeated measurements on original input' if args.engine in ('gpu','sat') else 'seeded search ordering',
+     fixture_seed_effect='none on original input' if args.case=='original' else 'seed changes the generated finite fixture',
+     evidence_scope='Worker result only; frozen claims require its unchanged-source coordinator report.',
+     benchmark_state={'directory':str(state_dir),'coverage_enabled':bool(options.get('shared_coverage')),
                       'coverage_file_created':coverage_path.exists(),'regional_directory_supplied':args.engine=='cpu'},
      wall_seconds=time.monotonic()-began)
- args.output.write_text(json.dumps(result,indent=2),encoding='utf-8')
+ write_artifact(args.output,result)
  print(json.dumps({k:result.get(k) for k in ('case','engine','profile','seed','status','nodes','wall_seconds')}),flush=True)
+
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);parser.add_argument('--data',type=Path,default=Path('C:/DiamondDilemmaGoldSolver/data/tiles.json'))
- parser.add_argument('--worker',action='store_true');parser.add_argument('--engine',choices=['cpu','gpu'],default='cpu');parser.add_argument('--case',choices=['original','planted','small','residual'],default='original');parser.add_argument('--profile',choices=PROFILES,default='baseline')
+ require_assertions()
+ parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);parser.add_argument('--data',type=Path,default=ROOT/'data/tiles.json')
+ parser.add_argument('--worker',action='store_true');parser.add_argument('--engine',choices=['cpu','gpu','sat'],default='cpu');parser.add_argument('--case',choices=['original','planted','small','residual'],default='original');parser.add_argument('--profile',choices=tuple(dict.fromkeys((*PROFILES,*SAT_PROFILES,*GPU_PROFILES))),default='baseline')
  parser.add_argument('--seconds',type=float,default=60);parser.add_argument('--seed',type=int,default=71);parser.add_argument('--workers',type=int,default=4);parser.add_argument('--replicas',type=int,default=512);parser.add_argument('--profiles',nargs='+',choices=PROFILES,default=list(PROFILES));parser.add_argument('--include-gpu',action='store_true')
- parser.add_argument('--suite',choices=['finite','original','gpu','all'],default='all');parser.add_argument('--free-cells',type=int,default=60)
+ parser.add_argument('--suite',choices=['finite','original','gpu','sat','all'],default='all');parser.add_argument('--free-cells',type=int,default=60)
+ parser.add_argument('--finite-cases',nargs='+',choices=('small','residual'),default=['small','residual'],help='Finite cases; small runs once per profile/seed, independently of residual depths.')
+ parser.add_argument('--finite-seconds',type=float,default=120,help='Bounded per-case finite search budget.')
+ parser.add_argument('--free-cell-counts',nargs='+',type=int,help='Serial residual depths; defaults to --free-cells.')
+ parser.add_argument('--worker-counts',nargs='+',type=int,help='Serial original-puzzle comparisons at each CPU worker count.')
+ parser.add_argument('--gpu-profiles',nargs='+',choices=GPU_PROFILES,default=list(GPU_PROFILES))
+ parser.add_argument('--gpu-cases',nargs='+',choices=('small','residual','original'),default=['original'])
+ parser.add_argument('--replica-counts',nargs='+',type=int,help='Serial GPU-domain lane counts; defaults to --replicas, within1..512.')
+ parser.add_argument('--sat-profiles',nargs='+',choices=SAT_PROFILES,default=list(SAT_PROFILES))
+ parser.add_argument('--sat-cases',nargs='+',choices=('small','residual','original'),default=['small','residual','original'],help='Dedicated SAT suite, the same deterministic partition of up to32 boxes for both profiles.')
+ parser.add_argument('--evidence-stage',choices=['development','frozen'],default='development')
  args=parser.parse_args()
  if not 0<args.seconds<=3600:parser.error('Use a bounded positive per-case budget of at most one hour.')
- if not 1<=args.free_cells<=160:parser.error('free-cells must be1..160.')
+ if not 0<args.finite_seconds<=3600:parser.error('finite-seconds must be positive and at most one hour.')
+ if not 1<=args.free_cells<=160 or any(not 1<=n<=160 for n in args.free_cell_counts or []):parser.error('free-cell counts must be1..160.')
+ if not 1<=args.workers<=64 or any(not 1<=n<=64 for n in args.worker_counts or []):parser.error('CPU worker counts must be1..64.')
+ if not 1<=args.replicas<=512 or any(not 1<=n<=512 for n in args.replica_counts or []):parser.error('GPU domain replica counts must be1..512.')
  if args.worker:return worker(args)
+ require_fresh((args.output/'report.json',args.output/'results.json'))
  args.output.mkdir(parents=True,exist_ok=True);before=source_hashes();runtime_before=runtime_snapshot();repository=repository_snapshot(ROOT);records=[]
+ if args.evidence_stage=='frozen' and (not repository.get('commit') or repository.get('dirty') is not False):
+  raise RuntimeError('Frozen benchmark evidence requires a clean, readable committed checkout.')
+ worker_counts=list(dict.fromkeys(args.worker_counts or [args.workers]))
+ free_cell_counts=list(dict.fromkeys(args.free_cell_counts or [args.free_cells]))
+ finite_cases=list(dict.fromkeys(args.finite_cases));args.profiles=list(dict.fromkeys(args.profiles))
+ args.sat_profiles=list(dict.fromkeys(args.sat_profiles));sat_cases=list(dict.fromkeys(args.sat_cases))
+ args.gpu_profiles=list(dict.fromkeys(args.gpu_profiles));gpu_cases=list(dict.fromkeys(args.gpu_cases));replica_counts=list(dict.fromkeys(args.replica_counts or [args.replicas]))
  jobs=[]
  if args.suite in ('finite','all'):
-  jobs += [('cpu',case,profile,seed,120,1) for case in ('small','residual') for seed in (817,291) for profile in (args.profiles if seed==817 else list(reversed(args.profiles)))]
+  configurations=[(case,depth,profile) for case in finite_cases for depth in (free_cell_counts if case=='residual' else [None]) for profile in args.profiles]
+  jobs += [('cpu',case,profile,seed,args.finite_seconds,1,depth,args.replicas) for seed in (817,291) for case,depth,profile in (configurations if seed==817 else list(reversed(configurations)))]
  if args.suite in ('original','all'):
-  jobs += [('cpu','original',profile,seed,args.seconds,args.workers) for seed in (71,197) for profile in (args.profiles if seed==71 else list(reversed(args.profiles)))]
+  jobs += [('cpu','original',profile,seed,args.seconds,workers,None,args.replicas) for seed in (71,197) for workers in (worker_counts if seed==71 else list(reversed(worker_counts))) for profile in (args.profiles if seed==71 else list(reversed(args.profiles)))]
  if args.suite=='gpu' or (args.suite=='all' and args.include_gpu):
-  jobs += [('gpu','original','baseline',seed,args.seconds,args.workers) for seed in (71,197)]
+  gpu_finite=[(case,depth,profile,replicas) for case in gpu_cases if case!='original' for depth in (free_cell_counts if case=='residual' else [None]) for replicas in replica_counts for profile in args.gpu_profiles]
+  jobs += [('gpu',case,profile,seed,args.finite_seconds,args.workers,depth,replicas) for seed in (817,291) for case,depth,profile,replicas in (gpu_finite if seed==817 else list(reversed(gpu_finite)))]
+  if 'original' in gpu_cases:
+   gpu_original=[(profile,replicas) for replicas in replica_counts for profile in args.gpu_profiles]
+   jobs += [('gpu','original',profile,seed,args.seconds,args.workers,None,replicas) for seed in (71,197) for profile,replicas in (gpu_original if seed==71 else list(reversed(gpu_original)))]
+ if args.suite=='sat':
+  finite_configs=[(case,depth,profile) for case in sat_cases if case!='original' for depth in (free_cell_counts if case=='residual' else [None]) for profile in args.sat_profiles]
+  jobs += [('sat',case,profile,seed,args.finite_seconds,1,depth,args.replicas) for seed in (817,291) for case,depth,profile in (finite_configs if seed==817 else list(reversed(finite_configs)))]
+  if 'original' in sat_cases:
+   jobs += [('sat','original',profile,seed,args.seconds,1,None,args.replicas) for seed in (71,197) for profile in (args.sat_profiles if seed==71 else list(reversed(args.sat_profiles)))]
+ # Reject every planned collision before launching any child or overwriting logs.
+ for number,(engine,case,profile,seed,budget,workers,free_cells,replicas) in enumerate(jobs):
+  label=case+(f'-free{free_cells}' if case=='residual' else '')
+  planned=args.output/f'{number:02d}-{engine}-{label}-{profile}-{seed}.json'
+  require_fresh((planned,planned.with_suffix('.state'),planned.with_suffix('.stdout.txt'),planned.with_suffix('.stderr.txt')))
  input_before=hashlib.sha256(args.data.read_bytes()).hexdigest() if any(job[1]=='original' for job in jobs) else None
- for number,(engine,case,profile,seed,budget,workers) in enumerate(jobs):
-  path=args.output/f'{number:02d}-{engine}-{case}-{profile}-{seed}.json'
-  command=[sys.executable,'-B',str(Path(__file__).resolve()),'--worker','--output',str(path.resolve()),'--data',str(args.data.resolve()),'--engine',engine,'--case',case,'--profile',profile,'--seed',str(seed),'--seconds',str(budget),'--workers',str(workers),'--replicas',str(args.replicas),'--free-cells',str(args.free_cells)]
+ for number,(engine,case,profile,seed,budget,workers,free_cells,replicas) in enumerate(jobs):
+  case_label=case+(f'-free{free_cells}' if case=='residual' else '')
+  path=args.output/f'{number:02d}-{engine}-{case_label}-{profile}-{seed}.json'
+  command=[sys.executable,'-B',str(Path(__file__).resolve()),'--worker','--output',str(path.resolve()),'--data',str(args.data.resolve()),'--engine',engine,'--case',case,'--profile',profile,'--seed',str(seed),'--seconds',str(budget),'--workers',str(workers),'--replicas',str(replicas),'--free-cells',str(free_cells if free_cells is not None else args.free_cells)]
+  started_at=datetime.datetime.now(datetime.timezone.utc).isoformat()
   tick=time.monotonic();child=None;cleanup_result=None
   try:
    child=subprocess.Popen(command,cwd=ROOT,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0),start_new_session=os.name!='nt',env=dict(os.environ,OMP_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',MKL_NUM_THREADS='1'))
@@ -171,18 +331,18 @@ def main():
   finally:
    if child is not None and child.poll() is None:cleanup_result=terminate_tree(child)
   if cleanup_result is not None:record['cleanup']=cleanup_result
-  record.update(case=case,engine=engine,profile=profile,seed=seed,total_wall_seconds=time.monotonic()-tick);records.append(record)
+  record.update(case=case,engine=engine,profile=profile,seed=seed,budget_seconds=budget,free_cells=free_cells,replicas=replicas if engine=='gpu' else 0,started_at=started_at,finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),total_wall_seconds=time.monotonic()-tick);records.append(record)
   print(json.dumps({key:record.get(key) for key in ('engine','case','profile','seed','status','nodes','total_wall_seconds')}),flush=True)
   (args.output/'results.json').write_text(json.dumps(records,indent=2),encoding='utf-8')
   # Do not launch another case after an unexpected coordinator exit or any
   # failed search. Even an exited coordinator may have left descendants.
   if record['status'] in ('process_error','hard_timeout','error'):break
- after=source_hashes();runtime_after=runtime_snapshot();input_after=hashlib.sha256(args.data.read_bytes()).hexdigest() if input_before is not None else None
+ after=source_hashes();runtime_after=runtime_snapshot();repository_after=repository_snapshot(ROOT);input_after=hashlib.sha256(args.data.read_bytes()).hexdigest() if input_before is not None else None
  input_unchanged=input_before==input_after and all(row.get('provenance',{}).get('input_sha256')==input_before for row in records if row['case']=='original' and row['status'] not in ('process_error','hard_timeout','error'))
- report={'repository':repository,'python':sys.version,'platform':platform.platform(),'runtime_before':runtime_before,'runtime_after':runtime_after,'runtime_unchanged':runtime_before==runtime_after,'source_before':before,'source_after':after,'source_unchanged':before==after,'input_sha256':input_before,'input_after_sha256':input_after,'input_unchanged':input_unchanged,'profiles':{name:PROFILES[name] for name in args.profiles},'suite':args.suite,'planned_cases':len(jobs),'completed_cases':len(records),
+ report={'repository':repository,'repository_after':repository_after,'evidence_stage':args.evidence_stage,'cpu_worker_counts':worker_counts,'python':sys.version,'platform':platform.platform(),'runtime_before':runtime_before,'runtime_after':runtime_after,'runtime_unchanged':runtime_before==runtime_after,'source_before':before,'source_after':after,'source_unchanged':before==after,'input_sha256':input_before,'input_after_sha256':input_after,'input_unchanged':input_unchanged,'profiles':{name:PROFILES[name] for name in args.profiles},'gpu_profiles':{name:GPU_PROFILES[name] for name in args.gpu_profiles},'gpu_cases':gpu_cases,'gpu_replica_counts':replica_counts,'sat_profiles':{name:SAT_PROFILES[name] for name in args.sat_profiles},'sat_cases':sat_cases,'sat_partition_boxes':SAT_PARTITIONS,'seed_interpretation':'GPU-domain and persistent-SAT original cases are repeated measurements, not randomized search seeds. Finite fixture seeds change generated instances; CPU search uses its seed.','suite':args.suite,'planned_cases':len(jobs),'completed_cases':len(records),
          'aborted_after_child_failure':any(row['status'] in ('process_error','hard_timeout','error') for row in records),
          'cleanup_scope':'Owned POSIX group or live Windows task tree only. An exited Windows coordinator has no retained tree handle; escaped/orphan descendants are not universally tracked. No further case starts after a failure.',
-         'free_cells':args.free_cells,'source_convention':'Raw local hashes plus canonical LF hashes; Git normalizes line endings.','cpu_workers':args.workers,'replicas':args.replicas,'results':records,'non_claim':'Bounded original searches are incomplete unless independently validated. These metrics do not identify a universally fastest solver.'}
+         'free_cells':args.free_cells,'free_cell_counts':free_cell_counts,'finite_cases':finite_cases,'finite_seconds':args.finite_seconds,'source_convention':'Raw local hashes plus canonical LF hashes; Git normalizes line endings.','cpu_workers':args.workers,'replicas':args.replicas,'results':records,'non_claim':'Bounded original searches are incomplete unless independently validated. These metrics do not identify a universally fastest solver.'}
  (args.output/'report.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
  if report['aborted_after_child_failure']:
   # Preserve logs and the partial report BEFORE attempting best-effort cleanup
@@ -193,6 +353,7 @@ def main():
    (args.output/'results.json').write_text(json.dumps(records,indent=2),encoding='utf-8')
    (args.output/'report.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
   raise RuntimeError('A benchmark child failed; the remaining matrix was not started.')
+ if args.evidence_stage=='frozen' and repository_after!=repository:raise RuntimeError('The committed checkout changed during frozen benchmarking.')
  if not input_unchanged:raise RuntimeError('Original puzzle inputs changed during the benchmark; results must not be used as final evidence.')
  if runtime_before!=runtime_after:raise RuntimeError('Runtime dependencies changed during the benchmark; results must not be used as final evidence.')
  if before!=after:raise RuntimeError('Sources changed during the benchmark; results must not be used as final evidence.')
