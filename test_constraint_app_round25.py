@@ -9,6 +9,63 @@ from gpu_domain_runner import COUNTERS
 from test_constraint_search import pair_problem
 
 class ApplicationRound25Tests(unittest.TestCase):
+    def test_durable_hybrid_receives_whole_run_budget_separate_from_outer_slice(self):
+        data,problem=pair_problem()
+        for seconds in (0,1800):
+            with self.subTest(seconds=seconds),tempfile.TemporaryDirectory(prefix='r25-hybrid-app-') as directory:
+                root=Path(directory).resolve();source=root/'tiles.json';output=root/'runtime';source.write_text(json.dumps(data),encoding='utf-8')
+                calls=[]
+                def fake(actual,algorithm,**kwargs):
+                    calls.append(kwargs);self.assertEqual(algorithm,'hybrid')
+                    self.assertEqual(kwargs['learning_state']['_hybrid_run_seconds'],seconds)
+                    self.assertGreater(kwargs['seconds'],0);self.assertLessEqual(kwargs['seconds'],30)
+                    return {'status':'stopped','complete':False,'nodes':0,'stats':{}}
+                args=['--algorithm','hybrid','--seconds',str(seconds),'--data',str(source),'--output',str(output),'--search-options',json.dumps({'durable_hybrid':True})]
+                with patch.object(runner,'SearchProblem',return_value=problem),patch.object(runner,'validate_runtime_selection'),patch.object(runner,'run_solver',side_effect=fake),contextlib.redirect_stdout(io.StringIO()):runner.main(args)
+                self.assertEqual(len(calls),1);self.assertFalse((output/'run.lock').exists())
+                status=json.loads((output/'status.json').read_text(encoding='utf-8'))
+                self.assertEqual(status['state'],'stopped');self.assertIn('GPU sampler state',status['resume_scope'])
+
+    def test_hybrid_checkpoint_scope_survives_disabling_the_new_control(self):
+        data,problem=pair_problem()
+        for version in (2,3):
+            with self.subTest(version=version),tempfile.TemporaryDirectory(prefix='r25-hybrid-resume-') as directory:
+                root=Path(directory).resolve();source=root/'tiles.json';output=root/'runtime';source.write_text(json.dumps(data),encoding='utf-8')
+                saved={'hybrid_version':version,'test_marker':'engine-owned-state'};calls=[]
+                def fake(actual,algorithm,**kwargs):
+                    calls.append(kwargs)
+                    if len(calls)==1:self.assertIsNone(kwargs['resume'])
+                    else:
+                        self.assertEqual(kwargs['resume'],saved);self.assertFalse(kwargs['options']['durable_hybrid'])
+                    return {'status':'stopped','complete':False,'nodes':0,'stats':{},'checkpoint':saved}
+                args=['--algorithm','hybrid','--seconds','5','--data',str(source),'--output',str(output)]
+                with patch.object(runner,'SearchProblem',return_value=problem),patch.object(runner,'validate_runtime_selection'),patch.object(runner,'run_solver',side_effect=fake),contextlib.redirect_stdout(io.StringIO()):
+                    runner.main(args+['--search-options',json.dumps({'durable_hybrid':True})])
+                    runner.main(args+['--resume'])
+                self.assertEqual(len(calls),2);status=json.loads((output/'status.json').read_text(encoding='utf-8'))
+                self.assertEqual(status['durable_resume'],version==3)
+                self.assertIn('completed repair work' if version==3 else 'older checkpoint',status['resume_scope'])
+                envelope=json.loads((output/'searches/hybrid-gold/checkpoint.json').read_text(encoding='utf-8'))
+                self.assertEqual(envelope['payload'],saved)
+
+    def test_real_hybrid_controller_checkpoint_event_reaches_app_disk(self):
+        data,problem=pair_problem(multiple_loops=True)
+        with tempfile.TemporaryDirectory(prefix='r25-hybrid-event-') as directory:
+            root=Path(directory).resolve();source=root/'tiles.json';output=root/'runtime';source.write_text(json.dumps(data),encoding='utf-8')
+            real_dispatch=runner.run_solver;stack={'test_cursor':'from exact checkpoint callback'}
+            def dispatch(actual,algorithm,**kwargs):
+                return real_dispatch(actual,algorithm,sampling_fraction=0,repair_fraction=0,**kwargs)
+            def exact(actual,**kwargs):
+                kwargs['progress']({'event':'checkpoint','payload':stack,'nodes':7,'stats':{}})
+                # Deliberately no final checkpoint: only the callback can persist it.
+                return {'status':'stopped','complete':False,'nodes':7,'stats':{},'elapsed_seconds':0.01}
+            args=['--algorithm','hybrid','--seconds','5','--data',str(source),'--output',str(output),'--search-options',json.dumps({'durable_hybrid':True})]
+            with patch.object(runner,'SearchProblem',return_value=problem),patch.object(runner,'validate_runtime_selection'),patch.object(runner,'run_solver',side_effect=dispatch),patch('constraint_dfs.solve',side_effect=exact),patch('gpu_sampling._make_sampler',side_effect=AssertionError('GPU allocation not expected')),contextlib.redirect_stdout(io.StringIO()):runner.main(args)
+            envelope=json.loads((output/'searches/hybrid-gold/checkpoint.json').read_text(encoding='utf-8'))
+            self.assertEqual(envelope['payload']['hybrid_version'],3)
+            self.assertEqual(envelope['payload']['phase'],'exact_dfs');self.assertEqual(envelope['payload']['dfs'],stack)
+            self.assertFalse((output/'run.lock').exists())
+
     def test_gpu_clause_flag_owns_original_scope_verifiers_and_closes_them(self):
         data,problem=pair_problem();scope=WorkScope.for_problem(problem)
         for enabled in (False,True):

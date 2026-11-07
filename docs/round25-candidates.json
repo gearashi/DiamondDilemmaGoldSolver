@@ -551,10 +551,24 @@
       "id": 33,
       "proposal": "Resume sampling and repair phases exactly",
       "owner": "gpu_hybrid",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "gpu_hybrid_resume_round25.py",
+        "gpu_sampling_resume_round25.py",
+        "gpu_sampling_state_round25.py",
+        "constraint_lns_resume_round25.py",
+        "constraint_repair_resume_round25.py",
+        "test_gpu_sampling_round25.py",
+        "test_gpu_probe_round25.py",
+        "benchmark_hybrid_round25.py",
+        "benchmark_repair_round25.py",
+        "docs/ROUND25_GPU.md"
+      ],
+      "disposition": "Retained opt-in after independent review; durable same-runtime sampler trajectory and bounded repair/controller reuse",
+      "original_puzzle_gain": "not established",
+      "access": "durable_hybrid; hybrid engine, CUDA and native WebGPU",
+      "finite_evidence": "28 focused checks pass including actual CUDA/WebGPU9+9 versus18 dispatch state equality and flag-off hybrid resume. Original160 fresh-process two-policy smoke matches147456 proposals without completed dispatch replay. Six finite repair cases preserve outcomes: ordinary54vs72/54vs55 native solves, core4vs5,fragment4vs5,scoped1vs2,trade5transitions retained.",
+      "limits": "Heuristic continuation and scoped query reuse carry no global exclusion authority. Native CP-SAT active queries retry; completed masters/cuts/controllers persist. Exact sampler trajectory requires same device/runtime/policy/source and replica count. Version3 adopts saved phase even flagoff; legacy1/2 stay exactDFS-only. Native bytes256MiB and repair snapshot64MiB bounds. No original-puzzle gain established."
     },
     {
       "id": 34,

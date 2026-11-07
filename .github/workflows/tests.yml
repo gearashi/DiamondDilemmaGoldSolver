@@ -143,6 +143,8 @@ jobs:
           test_constraint_lattice_round25
           test_constraint_regions_round25
           test_benchmark_round25
+          test_benchmark_hybrid_round25
+          test_benchmark_repair_round25
           test_benchmark_sat_evidence
           test_benchmark_gpu_profiles
           test_benchmark_checkpoint_publication
@@ -165,7 +167,9 @@ jobs:
           test_gpu_checkpoint_round25
           test_gpu_domain_runner
           test_gpu_probe_round24
+          test_gpu_probe_round25
           test_gpu_sampling_round24
+          test_gpu_sampling_round25
 
   linux-install:
     name: Linux CUDA package installation (no GPU)

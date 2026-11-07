@@ -185,7 +185,7 @@ def _top_ids(scores, count):
 
 
 class _CUDA:
-    def __init__(self, problem, table, free, replicas, seed, *, experiments=None):
+    def __init__(self, problem, table, free, replicas, seed, *, experiments=None, initialize=True):
         import cupy as cp
         self.cp, self.n, self.r, self.f, self.e = cp, problem.n, replicas, free, len(problem.edges)
         self.flags=sampling_flags(experiments);self.meta_rows=18 if self.flags else 4
@@ -201,7 +201,13 @@ class _CUDA:
         source=(ROOT/'sampling_round24.cu').read_text() if self.flags else CUDA_SOURCE
         self.kernel = cp.RawKernel(source, 'sample_search', options=('--std=c++17',))
         self.exchange_kernel=cp.RawKernel(source,'replica_exchange',options=('--std=c++17',)) if self.flags&4 else None
-        self.launch(0, 0)
+        if initialize:self.launch(0, 0)
+    def snapshot_arrays(self):return [self.boards.get(),self.best.get(),self.meta.get()]
+    def restore_arrays(self,arrays):
+        for target,value in zip((self.boards,self.best,self.meta),arrays):target[:]=self.cp.asarray(value)
+        self.cp.cuda.get_current_stream().synchronize()
+    def runtime_identity(self):
+        return {'backend':'cuda','device':self.device,'cupy':self.cp.__version__,'driver':int(self.cp.cuda.runtime.driverGetVersion()),'runtime':int(self.cp.cuda.runtime.runtimeGetVersion())}
     def launch(self, steps, phase=1):
         self.kernel(((self.r+127)//128,), (128,), (self.boards, self.best, self.meta, self.table,
                     *map(np.int32, (self.n, self.r, self.f, steps, phase, self.e, self.gold_total)),
@@ -235,7 +241,7 @@ def _validate_sampling_adapter(info, *, allow_software=False):
 
 
 class _WebGPU:
-    def __init__(self, problem, table, free, replicas, seed, *, allow_software=False, experiments=None):
+    def __init__(self, problem, table, free, replicas, seed, *, allow_software=False, experiments=None, initialize=True):
         import wgpu
         self.wgpu, self.n, self.r, self.f, self.e = wgpu, problem.n, replicas, free, len(problem.edges)
         self.flags=sampling_flags(experiments);self.meta_rows=18 if self.flags else 4
@@ -243,7 +249,7 @@ class _WebGPU:
         self.gold_total=int(table[base]) if len(table)>base else 0
         adapter = wgpu.gpu.request_adapter_sync(power_preference='high-performance', force_fallback_adapter=False)
         if adapter is None: raise RuntimeError('No native GPU adapter is available for sampling.')
-        info = dict(adapter.info)
+        info = dict(adapter.info);self.adapter_info=info
         _validate_sampling_adapter(info, allow_software=allow_software)
         self.device = f"{info.get('device', 'GPU')} [{info.get('backend_type')}]"
         sizes = [problem.n*replicas*4]*2+[self.meta_rows*replicas*4, table.nbytes]
@@ -267,7 +273,15 @@ class _WebGPU:
         entries.append({'binding': 4, 'resource': {'buffer': self.params}})
         self.group = self.gpu.create_bind_group(layout=self.pipeline.get_bind_group_layout(0), entries=entries)
         self.exchange_group=self.gpu.create_bind_group(layout=self.exchange_pipeline.get_bind_group_layout(0),entries=[entries[i] for i in (0,1,2,4)]) if self.exchange_pipeline is not None else None
-        self.launch(0, 0)
+        if initialize:self.launch(0, 0)
+    def snapshot_arrays(self):
+        shapes=((self.n,self.r),(self.n,self.r),(self.meta_rows,self.r))
+        return [np.frombuffer(self.queue.read_buffer(buffer),np.uint32).reshape(shape).copy() for buffer,shape in zip(self.buffers[:3],shapes)]
+    def restore_arrays(self,arrays):
+        for buffer,value in zip(self.buffers[:3],arrays):self.queue.write_buffer(buffer,0,value)
+        self.queue.read_buffer(self.buffers[2],0,4)
+    def runtime_identity(self):
+        return {'backend':'webgpu','device':self.device,'wgpu':self.wgpu.__version__,'adapter':{k:str(v) for k,v in self.adapter_info.items()}}
     def launch(self, steps, phase=1):
         self.queue.write_buffer(self.params, 0, np.array([self.n,self.r,self.f,steps,phase,self.e,self.gold_total,self.flags],np.uint32))
         encoder = self.gpu.create_command_encoder()
@@ -323,8 +337,9 @@ def sampling_flags(experiments=None):
         raise ValueError('Invalid sampling experiment switches.')
     return sum(bit for name,bit in names.items() if experiments.get(name,False))
 
-def _make_sampler(problem, table, free, replicas, seed, backend, *, allow_software=False, experiments=None):
+def _make_sampler(problem, table, free, replicas, seed, backend, *, allow_software=False, experiments=None, initialize=True):
     extra={'experiments':experiments} if sampling_flags(experiments) else {}
+    if not initialize:extra['initialize']=False
     if backend == 'cuda': return _CUDA(problem, table, free, replicas, seed,**extra)
     return _WebGPU(problem, table, free, replicas, seed, allow_software=allow_software,**extra)
 
@@ -416,6 +431,11 @@ def solve(problem, *, seconds=10, seed=0, target='gold', replicas=128, backend='
     very long run; construction/native return can overrun cooperative budgets.
     Resume skips both phases and preserves the exact DFS stack.
     """
+    if (options and options.get('durable_hybrid')) or (isinstance(resume,dict) and resume.get('hybrid_version')==3):
+        from gpu_hybrid_resume_round25 import solve as durable_solve
+        return durable_solve(problem,seconds=seconds,seed=seed,target=target,replicas=replicas,backend=backend,
+            sampling_fraction=sampling_fraction,repair_fraction=repair_fraction,hints=hints,seed_board=seed_board,
+            stop=stop,progress=progress,resume=resume,learning_state=learning_state,options=options)
     began = time.monotonic()
     from constraint_dfs import solve as exact_solve
     from constraint_lns import repair

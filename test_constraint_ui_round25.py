@@ -13,7 +13,7 @@ KEYS=('sat_core_lifting','shared_sat_assistant','resumable_proof_checking',
       'native_sat_persistence','conflict_pb','integer_lattice','hall_rematch','reversible_gold_graph',
       'incremental_regions','durable_regions','compact_factors','gold_elimination',
       'separator_search','selective_refinement','joint_symbolic_regions','algebraic_connectivity','residual_isomorphism','gold_pricing',
-      'multichain_routing','region_certificates','gpu_joint_support','gpu_propagated_forks','gpu_event_propagation','gpu_precise_reasons','gpu_shared_clauses','gpu_lane_balance','gpu_incremental_checkpoint')
+      'multichain_routing','region_certificates','gpu_joint_support','gpu_propagated_forks','gpu_event_propagation','gpu_precise_reasons','gpu_shared_clauses','gpu_lane_balance','gpu_incremental_checkpoint','durable_hybrid')
 HARNESS=r"""
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const elements=new Map();
@@ -57,6 +57,20 @@ class Round25Controls(unittest.TestCase):
                               cwd=ROOT,capture_output=True,text=True,timeout=30)
         self.assertEqual(result.returncode,0,result.stdout+result.stderr)
         return result.stdout
+
+    def test_durable_hybrid_control_and_observation_counters(self):
+        self.node(r"""
+assert.equal(element('r25_durable_hybrid').disabled,true);
+select('hybrid');edit('durable_hybrid',true);
+assert.ok(element('algorithmHint').textContent.includes('Saves GPU sampling'));
+element('seconds').value='0';element('seedInput').value='17';run("command('start')");
+const sent=JSON.parse(context.fetchCalls.at(-1)[1].body);
+assert.equal(sent.algorithm,'hybrid');assert.equal(sent.search_options.durable_hybrid,true);
+idle();select('dfs');assert.equal(element('startBtn').disabled,true);
+assert.equal(element('r25_durable_hybrid').disabled,false);edit('durable_hybrid',false);
+run("state={process_running:true,status:{state:'running',method:'constraint',algorithm:'hybrid',gpu_sampling:{sampler_restores:2,move_proposals:4096,archive_checks:80,archive_repeated_observations:19}},history:[]};renderState();");
+for(const[id,n]of [['r25SamplerRestores',2],['r25SamplerMoves',4096],['r25SamplerArchiveChecks',80],['r25SamplerArchiveRepeats',19]])assert.equal(element(id).textContent,Number(n).toLocaleString('en-US'));
+""")
 
     def test_gpu_joint_support_scope_posted_option_and_actual_counters(self):
         self.node(r"""

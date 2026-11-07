@@ -92,8 +92,12 @@ def _minimum_hitting_set(cores,cells,control,cp_model):
     if status==cp_model.OPTIMAL:return {cell for cell,var in release.items() if solver.value(var)},int(solver.num_branches)
     return None,'unknown'
 
-def core_guided_repair(problem,codes,*,seconds=10,stop=None,max_queries=128):
+def core_guided_repair(problem,codes,*,seconds=10,stop=None,max_queries=128,durable=False,resume=None):
     """Find a minimum-Hamming-distance Gold board through assumption cores."""
+    if type(durable) is not bool:raise ValueError('durable must be boolean.')
+    if durable or resume is not None:
+        from constraint_repair_resume_round25 import core_guided_repair as continued
+        return continued(problem,codes,seconds=seconds,stop=stop,max_queries=max_queries,resume=resume)
     if type(max_queries)is not int or max_queries<1:raise ValueError('Positive repair query limit required.')
     score(problem,codes);control=_Control(seconds,stop);seed=list(codes)
     result={'status':'unknown','scope':'minimum_change_repair','best_board':seed,'cores':[],
@@ -163,7 +167,11 @@ def _patch_histories(problem,current,patch,check,stats,*,max_states=200000):
 
 class _PatchCap(Exception):pass
 
-def loop_merge_trade(problem,codes,patch,*,seconds=2,stop=None,max_states=200000):
+def loop_merge_trade(problem,codes,patch,*,seconds=2,stop=None,max_states=200000,durable=False,resume=None):
+    if type(durable) is not bool:raise ValueError('durable must be boolean.')
+    if durable or resume is not None:
+        from constraint_repair_resume_round25 import loop_merge_trade as continued
+        return continued(problem,codes,patch,seconds=seconds,stop=stop,max_states=max_states,resume=resume)
     checked=score(problem,codes);report=problem.validate(codes)
     if checked['domain_violations'] or checked['matched_edges']!=len(problem.edges):
         raise ValueError('Loop trades require an edge-perfect legal board.')
@@ -203,7 +211,11 @@ def matched_fragments(problem,boards,max_fragment=8):
             fragments.append({'source':source,'placements':tuple((cell,int(board[cell])) for cell in patch)})
     return fragments
 
-def fragment_crossover(problem,boards,*,seconds=10,stop=None,max_fragment=8,max_queries=32):
+def fragment_crossover(problem,boards,*,seconds=10,stop=None,max_fragment=8,max_queries=32,durable=False,resume=None):
+    if type(durable) is not bool:raise ValueError('durable must be boolean.')
+    if durable or resume is not None:
+        from constraint_repair_resume_round25 import fragment_crossover as continued
+        return continued(problem,boards,seconds=seconds,stop=stop,max_fragment=max_fragment,max_queries=max_queries,resume=resume)
     if not boards:raise ValueError('Crossover needs candidate boards.')
     if type(max_queries)is not int or max_queries<1:raise ValueError('Positive crossover query limit required.')
     control=_Control(seconds,stop);best=list(boards[0]);stats={'fragment_queries':0,'fragment_master_branches':0,'fragments':0}
@@ -244,8 +256,12 @@ def fragment_crossover(problem,boards,*,seconds=10,stop=None,max_fragment=8,max_
     result['elapsed_seconds']=time.monotonic()-control.began
     return result
 
-def scoped_repair_failure(problem,codes,patch,*,seconds=5,stop=None):
+def scoped_repair_failure(problem,codes,patch,*,seconds=5,stop=None,durable=False,resume=None):
     """Query feasibility under outside assignments, without optimization exclusions."""
+    if type(durable) is not bool:raise ValueError('durable must be boolean.')
+    if durable or resume is not None:
+        from constraint_repair_resume_round25 import scoped_repair_failure as continued
+        return continued(problem,codes,patch,seconds=seconds,stop=stop,resume=resume)
     score(problem,codes);control=_Control(seconds,stop)
     patch=set(patch)
     if any(type(cell)is not int or not 0<=cell<problem.n for cell in patch):raise ValueError('Invalid repair patch cell.')

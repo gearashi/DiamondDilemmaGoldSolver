@@ -159,7 +159,7 @@ def main(argv=None):
         'gpu': LABELS[args.algorithm]+' | '+('GPU + CPU' if args.algorithm in ('hybrid','gpu-domains') else 'CPU'),
         'time_limit_seconds': args.seconds, 'nodes_checked': 0, 'stats': {}, 'checkpoint': {},
         'work_scope':{'kind':'original_puzzle'},
-        'resume_scope': ('Durable CUDA domains, reasoning trail, and disjoint remaining cubes' if args.algorithm=='gpu-domains' else 'Disjoint CPU jobs with exact pending branches' if args.algorithm == 'parallel-dfs' else 'Warm native SAT with durable remaining cubes' if persistent_sat else 'Disjoint CPU jobs with exact pending branches' if args.algorithm=='dfs' and options['shared_coverage'] else 'Exact DFS branch stack' if args.algorithm in ('dfs', 'hybrid')
+        'resume_scope': ('Durable CUDA domains, reasoning trail, and disjoint remaining cubes' if args.algorithm=='gpu-domains' else 'Disjoint CPU jobs with exact pending branches' if args.algorithm == 'parallel-dfs' else 'Warm native SAT with durable remaining cubes' if persistent_sat else 'Disjoint CPU jobs with exact pending branches' if args.algorithm=='dfs' and options['shared_coverage'] else 'GPU sampler state, completed repair work, and exact DFS branch stack' if args.algorithm=='hybrid' and options['durable_hybrid'] else 'Exact DFS branch stack' if args.algorithm in ('dfs', 'hybrid')
                          else 'Saved Gold cuts/hints; native internal search restarts'),
     }
 
@@ -183,9 +183,19 @@ def main(argv=None):
             raise ValueError('Malformed imported frontier identity.')
         state['work_scope']=dict(scope)
 
+    def note_hybrid_resume(payload):
+        if args.algorithm!='hybrid' or not isinstance(payload,dict):return
+        if payload.get('hybrid_version')==3:
+            state['durable_resume']=True
+            state['resume_scope']='Saved GPU sampling and completed repair work, plus exact DFS branches; interrupted native repair queries can restart'
+        elif payload.get('hybrid_version') in (1,2):
+            state['durable_resume']=False
+            state['resume_scope']='Exact DFS branch stack; this older checkpoint has no saved sampling or repair phase'
+
     def save_checkpoint(payload):
         if payload is None:
             return
+        note_hybrid_resume(payload)
         gpu_frontier=None
         if args.algorithm=='gpu-domains':
             from gpu_checkpoint_round25 import checkpoint_frontier
@@ -450,6 +460,7 @@ def main(argv=None):
         problem = SearchProblem(data)
         if options['shared_coverage'] and args.algorithm in ('dfs','parallel-dfs','sat','gpu-domains'):learning_state['_coverage_path']=str(run/'completed-coverage.sqlite3')
         if args.algorithm=='gpu-domains':learning_state['_gpu_checkpoint_dir']=str(folder/'gpu-checkpoints')
+        if args.algorithm=='hybrid' and options['durable_hybrid']:learning_state['_hybrid_run_seconds']=args.seconds
         input_sha = hashlib.sha256(raw).hexdigest()
         if args.algorithm in EXACT_ALGORITHMS and options['persistent_learning']:
             from constraint_knowledge import KnowledgeStore, load, MAX_BYTES
@@ -564,6 +575,7 @@ def main(argv=None):
                 raise ValueError('Checkpoint belongs to different data, algorithm, or target.')
             restore_work_scope(saved)
             checkpoint = saved['payload']
+            note_hybrid_resume(checkpoint)
             if args.algorithm=='gpu-domains':
                 from gpu_checkpoint_round25 import resolve_checkpoint
                 checkpoint=resolve_checkpoint(checkpoint,learning_state['_gpu_checkpoint_dir'])

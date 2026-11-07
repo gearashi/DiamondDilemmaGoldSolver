@@ -143,7 +143,7 @@ def _select_patch(problem, current, metrics, size, rng, target, dependency_chain
     return sorted(selected)
 
 
-def _solve_patch(problem, current, patch, *, cp_model, control, seconds, seed, target, loop_aware=True, diagnostics=None):
+def _solve_patch(problem, current, patch, *, cp_model, control, seconds, seed, target, loop_aware=True, diagnostics=None, resume_state=None):
     control.check()
     deadline = min(control.deadline, time.monotonic()+seconds)
     cells = sorted(patch)
@@ -191,7 +191,10 @@ def _solve_patch(problem, current, patch, *, cp_model, control, seconds, seed, t
     diagnostics = diagnostics if diagnostics is not None else {}
     diagnostics.setdefault('loop_cuts',0)
     cut_keys = set()
-    def add_loop_cut(board):
+    if resume_state is not None:
+        if (not isinstance(resume_state,dict) or set(resume_state)!={'version','gold_cuts'} or type(resume_state['version'])is not int or resume_state['version']!=1
+                or not isinstance(resume_state['gold_cuts'],list) or len(resume_state['gold_cuts'])>512):raise ValueError('Invalid local repair cut state.')
+    def add_loop_cut(board,record=True):
         # A full edge-matched rejected witness certifies this Gold nogood.
         # Outside literals already hold as constants, so only patch literals
         # need to appear in the local clause. An untouched external loop is
@@ -199,14 +202,29 @@ def _solve_patch(problem, current, patch, *, cp_model, control, seconds, seed, t
         cut = [(cell,code) for cell,code in problem.gold_nogood(board) if cell in variables]
         key = tuple(cut)
         if not cut or key in cut_keys: return False
+        if record and resume_state is not None and len(resume_state['gold_cuts'])>=512:
+            diagnostics['cut_storage_cap']=True;return False
         model.add_forbidden_assignments([variables[cell] for cell,_ in cut], [tuple(code for _,code in cut)])
-        cut_keys.add(key); diagnostics['loop_cuts'] += 1
+        cut_keys.add(key)
+        if record:
+            diagnostics['loop_cuts']+=1
+            if resume_state is not None:resume_state['gold_cuts'].append(list(board))
+        else:diagnostics['restored_loop_cuts']=diagnostics.get('restored_loop_cuts',0)+1
         return True
+    if resume_state is not None:
+        if resume_state['gold_cuts'] and (not loop_aware or target!='gold'):raise ValueError('Gold cuts conflict with repair policy.')
+        for witness in resume_state['gold_cuts']:
+            control.check();checked=score(problem,witness);report=problem.validate(witness)
+            if (checked['domain_violations'] or checked['matched_edges']!=len(problem.edges) or report['valid']
+                    or any(witness[cell]!=current[cell] for cell in range(problem.n) if cell not in variables)
+                    or {witness[cell]//3 for cell in cells}!=inventory or not add_loop_cut(witness,False)):
+                raise ValueError('Saved local Gold cut failed independent scope/witness validation.')
     if loop_aware and target == 'gold':
         initial = score(problem,current)
         if not initial['domain_violations'] and initial['matched_edges'] == len(problem.edges) and not problem.validate(current)['valid']:
             add_loop_cut(current)
     solver = cp_model.CpSolver()
+    diagnostics["model_built"] = 1
     solver.parameters.num_search_workers = 1
     solver.parameters.random_seed = seed % 2147483647
     fallback = None
@@ -215,6 +233,7 @@ def _solve_patch(problem, current, patch, *, cp_model, control, seconds, seed, t
         if time.monotonic() >= deadline: return fallback, 'MODEL_BUDGET' if fallback is None else 'UNKNOWN'
         solver.parameters.max_time_in_seconds = max(.000001, deadline-time.monotonic())
         with _watch(control, deadline, solver):
+            diagnostics['native_calls']=diagnostics.get('native_calls',0)+1
             status = solver.solve(model)
         name = solver.status_name(status)
         if status == cp_model.MODEL_INVALID:
@@ -235,7 +254,7 @@ def _solve_patch(problem, current, patch, *, cp_model, control, seconds, seed, t
             return fallback,name
         if problem.validate(candidate)['valid']:
             return candidate,name
-        if not add_loop_cut(candidate): return fallback,name
+        if not add_loop_cut(candidate): return fallback,'UNKNOWN' if diagnostics.get('cut_storage_cap') else name
         if control.cancelled() or time.monotonic() >= deadline: return fallback,'UNKNOWN'
 
 
