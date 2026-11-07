@@ -127,7 +127,10 @@ def finite_case():
 def main():
     import pysat
     parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);args=parser.parse_args()
-    cases=[php_case(),finite_case()];rows=[]
+    guarded=php_case();finite=finite_case()
+    plain={**guarded,'name':'unconditional_inventory_prefix','base':[row[1:] for row in guarded['base']],'assumptions':[],'queries':[[]],'expected_queries':[False]}
+    root={**finite,'name':'finite_puzzle_root_learning','assumptions':[]}
+    cases=[guarded,plain,finite,root];rows=[]
     for backend in ['g3','g4','g42','gc3','gc4','mcb']:
         for case in cases:
             request={'backend':backend,**case};production=child(PRODUCE,request)
