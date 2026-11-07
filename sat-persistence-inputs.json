@@ -1,11 +1,14 @@
 {
-  "constraint_sat_persistence.py": "7eff0dbc37d6ee03fa142ee157e6c7b79f26c27897a4577c90da0e9fd157e148",
-  "constraint_sat_session.py": "31240f13adfca045a3bdd3ebe78909596cf1e85884496dc69d5865441190f883",
-  "constraint_proof.py": "803b62379d36898d7bd13b580fac6ee7624f24bea0a166c122e598430637c1d2",
-  "constraint_proof_cursor.py": "4aebb6005d585694065d2a9afe30658104d2d72f30344c8c7a6821d08cf0623f",
-  "constraint_work.py": "05f93d66eca7d55804c720de4523d7e090125795ab56de55421af9f1ecf87c88",
-  "constraint_symbolic_work.py": "afe84fb6ca63d96224c7cf46dec92917f53997d4901e35f72fc0c85a6af5c5f3",
-  "test_constraint_sat_persistence.py": "d012f06ac56c62a48501440f1b7a4e936484c10740573e0305d5e24a7e42c784",
-  "test_constraint_sat_session.py": "743c0f5b3582c40b1ae7f1a98a5446d023668d1afb96099180b3b8369fda8a43",
-  "benchmark_sat_persistence_round25.py": "170235db7bc636cb63f8700c5e2bbab7d4663ef236e92676eb3787060766053e"
+  "normalization": "UTF-8 source with CRLF normalized to LF",
+  "sha256": {
+    "constraint_sat_persistence.py": "bbf6ee82c9a712873c6a10116cc4b1462281d98da4fb2b489b5971af6885e243",
+    "constraint_sat_session.py": "6704c224a5a89dfbd55d98ef45a0969810ffae0714a8e534691f0e4b3c522b8f",
+    "constraint_proof.py": "803b62379d36898d7bd13b580fac6ee7624f24bea0a166c122e598430637c1d2",
+    "constraint_proof_cursor.py": "4aebb6005d585694065d2a9afe30658104d2d72f30344c8c7a6821d08cf0623f",
+    "constraint_work.py": "8cbf834fc1e89d13e23522becfc7378bd870c6f12b46ee9b97450e0c08862bbf",
+    "constraint_symbolic_work.py": "84dacda63ca5ebb1ba31eed57d1d6aa581264f20da0b208c805d7327a4dd9841",
+    "test_constraint_sat_persistence.py": "f0662785229c61df4c6818a90b6c1950a718afcdddd041137825ffbf45e6398e",
+    "test_constraint_sat_session.py": "743c0f5b3582c40b1ae7f1a98a5446d023668d1afb96099180b3b8369fda8a43",
+    "benchmark_sat_persistence_round25.py": "0ef1d550dfede6652cd48aa61ee372794d1107ad9446f7129fd2585f03789930"
+  }
 }

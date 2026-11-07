@@ -76,6 +76,8 @@ class PurePersistenceTests(unittest.TestCase):
         store=example();store.queue_import(bundle_for(store,[[2]]))
         with self.assertRaisesRegex(ValueError,'unverified'):finish(store)
         self.assertFalse(store.projected)
+        with self.assertRaisesRegex(ValueError,'previously failed'):finish(store)
+        with self.assertRaisesRegex(ValueError,'previously failed'):store.queue_import(bundle_for(store,[[1]]))
 
     def test_stop_resumes_exact_checker_cursor_and_unknown_never_imports(self):
         stopped=example();stopped.queue_import(bundle_for(stopped,[[1]]));calls=[0]

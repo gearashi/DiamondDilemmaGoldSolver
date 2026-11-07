@@ -67,13 +67,14 @@ class VerifiedNativeClauses:
         self.max_visits=max_visits;self.stats=dict.fromkeys(STAT_KEYS,0)
         self.proof=[];self.projected=[];self.reusable=[];self.known=set(self.base.clauses)
         self.pending=deque();self.pending_bytes=0;self.buffer=b'';self.offset=0;self.discard_line=False
-        self.cursor=None;self.candidate=None;self.importing=False;self.disable_reason=None;self._claims_after_import=[]
+        self.cursor=None;self.candidate=None;self.importing=False;self.import_failed=False;self.disable_reason=None;self._claims_after_import=[]
         self._proof_bytes=0
 
     def disable(self,reason):
         if self.disable_reason is None:self.disable_reason=reason;self.stats['session_persist_limit_hits']+=1
 
     def queue_import(self,payload):
+        if self.import_failed:raise ValueError('Native clause import previously failed; create a fresh checker.')
         if (not isinstance(payload,dict) or not {'version','binding','proof'}<=set(payload)<= {'version','binding','proof','claims'}
                 or type(payload['version'])is not int or payload['version']!=1 or payload['binding']!=self.binding):
             raise ValueError('Native clause checkpoint root, CNF or variable mapping differs.')
@@ -142,6 +143,7 @@ class VerifiedNativeClauses:
             self.buffer=b'';self.discard_line=True;self.stats['session_persist_rejected_clauses']+=1
 
     def advance(self,check=lambda:None,*,ticks=4096):
+        if self.import_failed:raise ValueError('Native clause import previously failed; create a fresh checker.')
         if type(ticks)is not int or ticks<0:raise ValueError('Invalid native proof verification budget.')
         while ticks and (self.cursor is not None or self.pending or self._claims_after_import):
             check()
@@ -167,6 +169,7 @@ class VerifiedNativeClauses:
             self.cursor=None;self.candidate=None
             if answer is True:self._retain(candidate)
             elif self.importing:
+                self.import_failed=True
                 raise ValueError('Native clause derivation is unverified or exceeds its independent verification bound.')
             else:self.stats['session_persist_unknown_clauses' if limited else 'session_persist_rejected_clauses']+=1
         if self.importing and not self.pending and self.cursor is None and not self._claims_after_import:self.importing=False
@@ -176,7 +179,9 @@ class VerifiedNativeClauses:
         cost=len(json.dumps(clause,separators=(',',':')))+1
         if len(self.proof)>=MAX_STEPS or self._proof_bytes+cost>MAX_PROOF_BYTES:
             self.disable('verified derivation reached its retention bound')
-            if self.importing:raise ValueError('Imported native derivation exceeds retention limits.')
+            if self.importing:
+                self.import_failed=True
+                raise ValueError('Imported native derivation exceeds retention limits.')
             return
         self.proof.append(clause);self.known.add(clause);self._proof_bytes+=cost
         self.stats['session_persist_verified_clauses']+=1
@@ -190,12 +195,12 @@ class VerifiedNativeClauses:
         if len(self.proof)>=MAX_STEPS:self.disable('verified derivation reached its retention bound')
 
     def apply(self,solver):
-        if self.importing:raise ValueError('Cannot import a partially verified native proof.')
+        if self.importing or self.import_failed:raise ValueError('Cannot import a partially verified native proof.')
         for clause in self.reusable:solver.add_clause(clause)
         self.stats['session_persist_imported_clauses']+=len(self.reusable)
 
     def snapshot(self):
-        if self.importing:raise ValueError('Unverified imports must retain their original checkpoint bytes.')
+        if self.importing or self.import_failed:raise ValueError('Unverified imports must retain their original checkpoint bytes.')
         claims=([self.candidate] if self.cursor is not None else [])+list(self.pending)
         payload={'version':1,'binding':dict(self.binding),'proof':[list(row) for row in self.proof]}
         if claims:payload['claims']=[list(row) for row in claims]
