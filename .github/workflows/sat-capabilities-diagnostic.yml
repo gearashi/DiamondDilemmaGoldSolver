@@ -35,7 +35,7 @@ jobs:
           PY
       - name: Install pinned SAT package
         run: >-
-          python -m pip install --only-binary=:all: python-sat==1.9.dev15
+          python -m pip install --only-binary=:all: python-sat==1.9.dev15 numpy==2.5.3
       - name: Run each backend in an isolated child process
         run: python -B benchmark_sat_capabilities_round25.py --output diagnostics/sat-capabilities-linux-py312.json
       - name: Upload capability report
@@ -44,4 +44,14 @@ jobs:
         with:
           name: sat-capabilities-linux-py312
           path: diagnostics/sat-capabilities-linux-py312.json
+          if-no-files-found: error
+
+      - name: Check bounded interrupted proof prefixes and scoped assumptions
+        run: python -B benchmark_sat_prefix_linux_round25.py --output diagnostics/sat-prefix-linux-py312.json
+      - name: Upload prefix diagnostic report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: sat-prefix-linux-py312
+          path: diagnostics/sat-prefix-linux-py312.json
           if-no-files-found: error
