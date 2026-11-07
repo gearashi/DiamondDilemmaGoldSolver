@@ -623,6 +623,10 @@ def main(argv=None):
                 publish()
                 last_publish = time.monotonic()
         thread.join()
+        # Reject an unfinished proof before any final checkpoint or frontier
+        # replacement can erase durable pending work.
+        if result.get('status') == 'infeasible' and result.get('complete') is not True:
+            raise RuntimeError('An infeasible result must represent completed search.')
         while drain_events(events, consume, poll_stop=poll_stop):
             pass
         save_knowledge(result.get('knowledge'))
@@ -665,8 +669,6 @@ def main(argv=None):
             if options['portable_frontier'] or (folder/'remaining-work.json').exists():
                 from constraint_work import WorkScope,frontier_snapshot
                 if all(problem.domains):atomic_json(folder/'remaining-work.json',frontier_snapshot(WorkScope.for_problem(problem,'gold'),[]))
-            if result.get('complete') is not True:
-                raise RuntimeError('An infeasible result must represent completed search.')
             terminal = {'version': 1, 'binding': binding, 'algorithm': args.algorithm, 'target': 'gold',
                         'run_id': run_id, 'source_sha256': source_hashes, 'result': result, 'work_scope':dict(state['work_scope'])}
             terminal['sha256'] = terminal_digest(terminal)

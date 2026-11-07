@@ -41,6 +41,76 @@ class DomainPartitionTests(unittest.TestCase):
         self.assertTrue(disjoint(parts));self.assertEqual(len(parts),23)
         self.assertEqual(sum(math.prod(x.bit_count() for x in row) for row in parts),30)
 
+class CheckpointReuseTests(unittest.TestCase):
+    def run_fake(self,*,save_seconds=35,finish_second=False,later_step_seconds=31,seconds=60):
+        # A deterministic clock models a long save crossing the deadline. No
+        # sleep, GPU allocation, or performance measurement is involved.
+        import copy
+        import types
+        import numpy as np
+        from gpu_domain_runner import COUNTERS
+        problem=SearchProblem(*tetrahedron_tiles());scope=WorkScope.for_problem(problem)
+        clock=[0.0];engines=[];events=[]
+        class BoardRows:
+            def __getitem__(self,key):return types.SimpleNamespace(get=lambda:np.full((problem.n,1),0xffffffff,np.uint32))
+        class Fake:
+            def __init__(self,problem,cubes,**kwargs):
+                self.cubes=tuple(cubes);self.lanes=len(cubes);self.steps=0;self.snapshots=0
+                self.closed=False;self.delivered=False;self.state=BoardRows();self.offsets={'board':0};engines.append(self)
+            def step(self,work):
+                self.steps+=1;clock[0]+=31 if self.steps==1 else later_step_seconds
+                return np.array([2 if finish_second and self.steps==2 else 0])
+            def stats(self):
+                return {**dict.fromkeys(COUNTERS,0),'decisions':self.steps,'lanes':self.lanes,
+                        'active':1,'exhausted':0,'state_bytes':4}
+            def remaining_domain_cubes(self):return list(self.cubes)
+            def checkpoint(self):
+                self.snapshots+=1;clock[0]+=save_seconds
+                return {'state':np.array([[self.steps]],np.uint32),'step':self.steps}
+            def close(self):self.closed=True
+        def progress(event):
+            if event['event']=='checkpoint':
+                events.append(copy.deepcopy(event['payload']))
+                # This belongs to the callback. A private cached checkpoint must
+                # remain unchanged when an event consumer adds its own metadata.
+                event['payload']['totals']['decisions']=999
+                event['payload']['native']['step']=999
+        frontier=frontier_snapshot(scope,split_cubes([scope.root],2)) if finish_second else None
+        with patch('gpu_domain_round24.DomainCUDA',Fake),patch('gpu_domain_runner.time.monotonic',side_effect=lambda:clock[0]):
+            result=solve(problem,seconds=seconds,replicas=1,progress=progress,work_frontier=frontier)
+        self.assertTrue(all(engine.closed for engine in engines))
+        return result,engines,events
+
+    def test_deadline_crossed_during_save_reuses_unchanged_checkpoint(self):
+        result,engines,events=self.run_fake()
+        self.assertEqual(result['status'],'timeout');self.assertEqual(engines[0].snapshots,1)
+        self.assertEqual(result['checkpoint'],events[-1])
+        self.assertEqual(result['checkpoint']['native']['step'],1)
+        self.assertEqual(result['checkpoint']['totals']['decisions'],0)
+        self.assertEqual(digest({k:v for k,v in result['checkpoint'].items() if k!='digest'}),result['checkpoint']['digest'])
+
+    def test_periodic_interval_starts_after_serialization_finishes(self):
+        result,engines,events=self.run_fake(save_seconds=35,later_step_seconds=1,seconds=70)
+        self.assertEqual(len(events),1)
+        self.assertEqual(engines[0].steps,5)
+        self.assertEqual(engines[0].snapshots,2)
+        self.assertEqual(result['checkpoint']['native']['step'],5)
+
+    def test_new_dispatch_invalidates_cached_state(self):
+        result,engines,events=self.run_fake(save_seconds=1)
+        self.assertEqual(engines[0].steps,2);self.assertEqual(engines[0].snapshots,2)
+        self.assertNotEqual(events[0],events[1]);self.assertEqual(result['checkpoint'],events[-1])
+        self.assertEqual(result['checkpoint']['native']['step'],2)
+
+    def test_completed_batch_invalidates_native_queue_and_totals(self):
+        result,engines,events=self.run_fake(save_seconds=1,finish_second=True)
+        self.assertEqual(engines[0].steps,2);self.assertEqual(engines[0].snapshots,1)
+        self.assertNotEqual(result['checkpoint'],events[-1])
+        self.assertIsNone(result['checkpoint']['native'])
+        self.assertEqual(len(result['checkpoint']['queue']),1)
+        self.assertEqual(result['checkpoint']['completed_lanes'],1)
+        self.assertEqual(result['checkpoint']['totals']['decisions'],2)
+
 @unittest.skipUnless(os.environ.get('DIAMOND_TEST_CUDA')=='1','Optional CUDA runner tests')
 class DomainRunnerTests(unittest.TestCase):
     def test_edge_only_completion_is_never_labelled_gold_solved(self):

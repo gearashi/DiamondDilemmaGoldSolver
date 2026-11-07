@@ -6,6 +6,7 @@ one as an infeasible branch. A portable frontier intentionally discards scratch.
 """
 from __future__ import annotations
 import base64
+from copy import deepcopy
 import math
 import time
 import zlib
@@ -98,6 +99,7 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
         if engine is not None:engine.close()
         if ledger is not None:ledger.close()
         raise
+    state_revision=0;cached_revision=-1;cached_payload=None
     def stats():
         live=engine.stats() if engine else {}
         return {**{key:totals[key]+live.get(key,0) for key in COUNTERS},
@@ -105,12 +107,18 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
             'gpu_domain_queued':len(queued),'gpu_domain_completed':completed+live.get('exhausted',0),
             'gpu_domain_state_bytes':live.get('state_bytes',0)}
     def checkpoint():
+        nonlocal cached_revision,cached_payload
+        # GPU dispatch, batch ownership, or accumulated totals invalidate this
+        # private snapshot. A deadline crossed while saving can reuse it exactly.
+        if cached_revision==state_revision:return cached_payload
         native=pack_native(engine) if engine else None
         payload={'version':1,'scope':scope.payload(),'queue':[[hex(x) for x in row] for row in queued],
             'native':native,'totals':dict(totals),'completed_lanes':completed,
             'active_stats':engine.stats() if engine else {},
             'frontier':frontier_snapshot(scope,(*queued,*(engine.remaining_domain_cubes() if engine else ())))}
-        payload['digest']=digest(payload);return payload
+        payload['digest']=digest(payload)
+        cached_revision=state_revision;cached_payload=payload
+        return payload
     try:
         work=256
         while True:
@@ -118,11 +126,13 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
                 current=stats();return {'status':'stopped' if stop() else 'timeout','complete':False,'nodes':current['decisions'],'stats':current,'checkpoint':checkpoint()}
             if engine is None and queued:
                 batch,queued=queued[:replicas],queued[replicas:]
+                state_revision+=1
                 engine=DomainCUDA(problem,batch,target=target,max_memory_bytes=MAX_BYTES)
             if engine is None:
                 return {'status':'infeasible','complete':True,'nodes':totals['decisions'],'stats':stats(),'checkpoint':checkpoint()}
             if stop() or seconds and time.monotonic()-started>=seconds:
                 current=stats();return {'status':'stopped' if stop() else 'timeout','complete':False,'nodes':current['decisions'],'stats':current,'checkpoint':checkpoint()}
+            state_revision+=1
             before=time.monotonic();states=engine.step(work);elapsed=time.monotonic()-before
             if elapsed>.2:work=max(16,work//2)
             elif elapsed<.03:work=min(4096,work*2)
@@ -137,7 +147,7 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
                     for row in engine.cubes:ledger.record_completed(row,status='infeasible',complete=True,evidence={'kind':'cuda_domain_exhaustion'})
                 current=engine.stats()
                 for key in COUNTERS:totals[key]+=current[key]
-                completed+=engine.lanes;engine.close();engine=None
+                completed+=engine.lanes;engine.close();engine=None;state_revision+=1
                 continue
             now=time.monotonic()
             if now-last_progress>=1:
@@ -147,7 +157,11 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
                 event['codes']=[-1 if int(x)==0xffffffff else int(x) for x in boards[:,lane]]
                 progress(event);last_progress=now
             if now-last_checkpoint>=30:
-                current=stats();progress({'event':'checkpoint','payload':checkpoint(),'nodes':current['decisions'],'stats':current});last_checkpoint=now
+                current=stats()
+                # Consumers own their event payload and may modify it. Keep the
+                # reusable private snapshot isolated from callback mutations.
+                progress({'event':'checkpoint','payload':deepcopy(checkpoint()),'nodes':current['decisions'],'stats':current})
+                last_checkpoint=time.monotonic()
     finally:
         if engine is not None:engine.close()
         if ledger is not None:ledger.close()

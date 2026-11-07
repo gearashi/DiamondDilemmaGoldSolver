@@ -23,6 +23,32 @@ class ApplicationRound24Tests(unittest.TestCase):
             with patch.object(runner,'SearchProblem',return_value=problem),patch.object(runner,'validate_runtime_selection'),self.assertRaisesRegex(SystemExit,'Completed work already exists'):
                 runner.main(args+['--resume'])
             self.assertFalse((run/'run.lock').exists())
+    def test_incomplete_infeasible_preserves_pending_work_before_final_writes(self):
+        data,problem=pair_problem()
+        scope=WorkScope.for_problem(problem)
+        for portable in (False,True):
+            for supplied_checkpoint in (False,True):
+                with self.subTest(portable=portable,checkpoint=supplied_checkpoint), tempfile.TemporaryDirectory() as directory:
+                    root=Path(directory);run=root/'runtime';source=root/'tiles.json'
+                    folder=run/'searches'/'parallel-dfs-gold';folder.mkdir(parents=True)
+                    pending=folder/'remaining-work.json'
+                    original=json.dumps(frontier_snapshot(scope,[scope.root]),indent=2).encode('utf-8')
+                    pending.write_bytes(original);source.write_text(json.dumps(data),encoding='utf-8')
+                    result={'status':'infeasible','codes':None,'nodes':1,'stats':{},'complete':False}
+                    if supplied_checkpoint:result['checkpoint']={'must_not_be_saved':True}
+                    args=['--algorithm','parallel-dfs','--seconds','5','--data',str(source),'--output',str(run),
+                          '--search-options',json.dumps({'portable_frontier':portable})]
+                    with patch.object(runner,'SearchProblem',return_value=problem),patch.object(runner,'validate_runtime_selection'),patch.object(runner,'run_solver',return_value=result):
+                        with self.assertRaisesRegex(SystemExit,'An infeasible result must represent completed search'):
+                            runner.main(args)
+                    self.assertEqual(pending.read_bytes(),original)
+                    self.assertFalse((folder/'checkpoint.json').exists())
+                    self.assertFalse((folder/'completed-search.json').exists())
+                    self.assertFalse((folder/'last-result.json').exists())
+                    state=json.loads((run/'status.json').read_text(encoding='utf-8'))
+                    self.assertEqual(state['state'],'error');self.assertFalse(state.get('full_puzzle_exhausted',False))
+                    self.assertFalse((run/'run.lock').exists())
+
     def test_invalid_plain_sat_export_does_not_create_run_lock(self):
         with tempfile.TemporaryDirectory() as folder:
             with patch.object(runner,'validate_runtime_selection'),self.assertRaises(SystemExit):
