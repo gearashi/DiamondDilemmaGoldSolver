@@ -34,7 +34,8 @@ jobs:
           output.write_text(json.dumps({'status':'not_completed','reason':'Dependency installation or diagnostic execution did not complete.'},indent=2)+'\n')
           PY
       - name: Install pinned SAT package
-        run: python -m pip install --only-binary=:all: python-sat==1.9.dev15
+        run: >-
+          python -m pip install --only-binary=:all: python-sat==1.9.dev15
       - name: Run each backend in an isolated child process
         run: python -B benchmark_sat_capabilities_round25.py --output diagnostics/sat-capabilities-linux-py312.json
       - name: Upload capability report
