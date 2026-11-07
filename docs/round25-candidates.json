@@ -595,10 +595,22 @@
       "id": 35,
       "proposal": "Combine parent boards through inventory-preserving cycles",
       "owner": "gpu_hybrid",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "sampling_crossover_round25.py",
+        "gpu_sampling.py",
+        "gpu_sampling_resume_round25.py",
+        "test_gpu_crossover_reference_round25.py",
+        "test_gpu_crossover_round25.py",
+        "benchmark_gpu_crossover_round25.py",
+        "test_benchmark_gpu_crossover_round25.py",
+        "docs/ROUND25_GPU.md"
+      ],
+      "disposition": "Retained opt-in after independent review; bounded inventory-preserving archive crossover with actual native lane injection",
+      "original_puzzle_gain": "not established",
+      "access": "cycle_crossover; legacy/durable hybrid CUDA and native WebGPU",
+      "finite_evidence": "27focused plus4harness checks pass. Given explicit nonGold synthetic parents, eachbackend recovers4physical+4rotation Goldcases with2parent+2childscorings each and0GPUproposals. Physicalbaseline2finish/212proposals and2cap;rotationbaseline4cap. Controlled160singleplantedwitness recovered. Savedchildhistory rescoringdelta0 stillcosts2parentrescoring.",
+      "limits": "Supplied-parent acquisition not measured; synthetic witness recovery is not original puzzle progress. Separate8parentpool,4pairs/16newchildren percollection,256exactchildFIFO; evictions can repeat optional work. Native4/18/22row injection preservesRNG/betterbest/otherlanes; partialwritepoisons session andrequiresfreshrestore. Enabledsamplersubstatev2 savespool/scheduler/history; no pruning or globalcoverage authority."
     },
     {
       "id": 36,

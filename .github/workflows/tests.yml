@@ -146,8 +146,11 @@ jobs:
           test_benchmark_hybrid_round25
           test_benchmark_repair_round25
           test_benchmark_gpu_chains_round25
+          test_benchmark_gpu_crossover_round25
           test_gpu_chains_reference_round25
           test_gpu_chains_round25
+          test_gpu_crossover_reference_round25
+          test_gpu_crossover_round25
           test_benchmark_sat_evidence
           test_benchmark_gpu_profiles
           test_benchmark_checkpoint_publication
@@ -298,7 +301,7 @@ jobs:
           export XDG_RUNTIME_DIR="$RUNNER_TEMP/diamond-vulkan"
           mkdir -p "$XDG_RUNTIME_DIR"
           chmod 700 "$XDG_RUNTIME_DIR"
-          python -B -m unittest -v test_webgpu test_webgpu_counters test_gpu_sampling test_gpu_sampling_round24 test_gpu_gold test_gpu_reasoning test_gpu_hybrid_reasoning test_gpu_chains_round25.WebGPUChains
+          python -B -m unittest -v test_webgpu test_webgpu_counters test_gpu_sampling test_gpu_sampling_round24 test_gpu_gold test_gpu_reasoning test_gpu_hybrid_reasoning test_gpu_chains_round25.WebGPUChains test_gpu_crossover_round25.WebGPUCrossover
 
   native-sat-evidence:
     name: Native SAT proof evidence (${{ matrix.os }})

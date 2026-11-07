@@ -13,7 +13,7 @@ from constraint_lns import score,diverse_archive
 from gpu_sampling_resume_round25 import SamplerSession
 from constraint_lns_resume_round25 import RepairSession
 
-SAMPLING=('ejection_chains','move_tabu','replica_exchange','obstruction_chains')
+SAMPLING=('ejection_chains','move_tabu','replica_exchange','obstruction_chains','cycle_crossover')
 REPAIR=('core_repair','loop_trades','fragment_crossover','repair_learning')
 def _sources():
     root=Path(__file__).parent

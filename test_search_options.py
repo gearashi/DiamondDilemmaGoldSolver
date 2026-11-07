@@ -49,6 +49,14 @@ class OptionsTests(unittest.TestCase):
             validate_algorithm_options('sat',normalize_options({'persistent_sat':True,'sat_theory':True}))
         validate_algorithm_options('sat',normalize_options({'persistent_sat':True,'symbolic_coverage':True}))
 
+    def test_cycle_crossover_is_boolean_default_off_and_hybrid_only(self):
+        options=normalize_options({'cycle_crossover':True})
+        validate_algorithm_options('hybrid',options)
+        for engine in ('dfs','parallel-dfs','gpu-domains','sat','cp-sat','cp'):
+            with self.assertRaises(ValueError):validate_algorithm_options(engine,options)
+        self.assertFalse(normalize_options()['cycle_crossover'])
+        with self.assertRaises(ValueError):normalize_options({'cycle_crossover':1})
+
     def test_obstruction_chains_enable_ejection_chains_for_hybrid_only(self):
         options=normalize_options({'obstruction_chains':True,'ejection_chains':False})
         self.assertTrue(options['ejection_chains']);self.assertFalse(options['durable_hybrid'])

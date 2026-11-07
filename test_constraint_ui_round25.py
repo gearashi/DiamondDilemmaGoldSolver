@@ -13,7 +13,7 @@ KEYS=('sat_core_lifting','shared_sat_assistant','resumable_proof_checking',
       'native_sat_persistence','conflict_pb','integer_lattice','hall_rematch','reversible_gold_graph',
       'incremental_regions','durable_regions','compact_factors','gold_elimination',
       'separator_search','selective_refinement','joint_symbolic_regions','algebraic_connectivity','residual_isomorphism','gold_pricing',
-      'multichain_routing','region_certificates','gpu_joint_support','gpu_propagated_forks','gpu_event_propagation','gpu_precise_reasons','gpu_shared_clauses','gpu_lane_balance','gpu_incremental_checkpoint','durable_hybrid','obstruction_chains')
+      'multichain_routing','region_certificates','gpu_joint_support','gpu_propagated_forks','gpu_event_propagation','gpu_precise_reasons','gpu_shared_clauses','gpu_lane_balance','gpu_incremental_checkpoint','durable_hybrid','obstruction_chains','cycle_crossover')
 HARNESS=r"""
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const elements=new Map();
@@ -50,6 +50,23 @@ class Round25Controls(unittest.TestCase):
             self.assertFalse(normalize_options()[key]);self.assertIn('aria-describedby',rows[0])
         self.assertIn('verified native SAT clause subset',source)
         self.assertIn('not full solver state',source)
+
+    def test_cycle_crossover_is_posted_only_for_hybrid(self):
+        self.node(r"""
+select('dfs');assert.equal(element('r25_cycle_crossover').disabled,true);
+select('hybrid');edit('cycle_crossover',true);
+assert.equal(run('readSearchOptions()').cycle_crossover,true);
+element('seconds').value='0';element('seedInput').value='17';run("command('start')");
+assert.equal(JSON.parse(context.fetchCalls.at(-1)[1].body).search_options.cycle_crossover,true);
+idle();select('parallel-dfs');assert.equal(element('startBtn').disabled,true);
+edit('cycle_crossover',false);assert.equal(element('r25_cycle_crossover').disabled,true);
+""")
+
+    def test_cycle_crossover_work_counters_are_distinct(self):
+        self.node(r"""
+run(`state={process_running:true,status:{state:'running',method:'constraint',algorithm:'hybrid',gpu_sampling:{sampling_experiments:{"cycle_crossover_rounds": 1, "cycle_parent_pairs": 2, "cycle_components": 3, "cycle_candidates": 4, "cycle_duplicate_skips": 5, "cycle_domain_rejections": 6, "cycle_improvements": 7, "cycle_gold_solutions": 8, "cycle_history_evictions": 9, "cycle_injections": 10, "cycle_parent_scores": 11, "cycle_parent_duplicates": 12, "cycle_pair_cursor_evictions": 13, "cycle_offers": 14}}},history:[]};renderState();`);
+for(const[id,n]of [["r25CycleRounds", 1], ["r25CyclePairs", 2], ["r25CycleComponents", 3], ["r25CycleCandidates", 4], ["r25CycleDuplicates", 5], ["r25CycleDomains", 6], ["r25CycleImprovements", 7], ["r25CycleGold", 8], ["r25CycleEvictions", 9], ["r25CycleInjections", 10], ["r25CycleParentScores", 11], ["r25CycleParentDuplicates", 12], ["r25CycleCursorEvictions", 13], ["r25CycleOffers", 14]])assert.equal(element(id).textContent,String(n));
+""")
 
     def node(self,body):
         if not shutil.which('node'):self.skipTest('Node is needed to execute the dashboard JavaScript')

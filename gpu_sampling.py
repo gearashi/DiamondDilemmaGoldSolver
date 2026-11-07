@@ -184,10 +184,34 @@ def _top_ids(scores, count):
     return ids[np.lexsort((ids, scores[ids]))[::-1]].copy()
 
 
+def _require_sampler_healthy(engine):
+    if getattr(engine,'_poisoned',False):raise RuntimeError('GPU injection was interrupted; restore the last checkpoint into a fresh sampler.')
+
+def _injection_transaction(method):
+    def call(engine,*args,**kwargs):
+        _require_sampler_healthy(engine);engine._injection_writes_started=False
+        try:return method(engine,*args,**kwargs)
+        except BaseException:
+            if engine._injection_writes_started:engine._poisoned=True
+            raise
+        finally:engine._injection_writes_started=False
+    return call
+
+def _injection_binding(problem):
+    return (problem.fingerprint,tuple(tuple(row) for row in problem.domains),tuple(sorted(problem.fixed.items())))
+
+def _injection_values(engine,problem,codes):
+    if engine.input_binding!=_injection_binding(problem):raise ValueError('GPU injection input/domain/fixed scope changed.')
+    metrics=gold_score(problem,codes) if engine.gold_total else score_board(problem,codes)
+    if metrics['domain_violations']:raise ValueError('Crossover injection requires original-domain legality.')
+    return np.asarray(codes,dtype=np.uint32),int(metrics['gold_objective' if engine.gold_total else 'objective'])
+
 class _CUDA:
     def __init__(self, problem, table, free, replicas, seed, *, experiments=None, initialize=True):
         import cupy as cp
         self.cp, self.n, self.r, self.f, self.e = cp, problem.n, replicas, free, len(problem.edges)
+        self._poisoned=False
+        self.input_binding=_injection_binding(problem)
         self.flags=sampling_flags(experiments);self.meta_rows=22 if self.flags&8 else (18 if self.flags else 4)
         base=25*self.n+free+3*self.n*self.n
         self.gold_total=int(table[base]) if len(table)>base else 0
@@ -202,27 +226,44 @@ class _CUDA:
         self.kernel = cp.RawKernel(source, 'sample_search', options=('--std=c++17',))
         self.exchange_kernel=cp.RawKernel(source,'replica_exchange',options=('--std=c++17',)) if self.flags&4 else None
         if initialize:self.launch(0, 0)
-    def snapshot_arrays(self):return [self.boards.get(),self.best.get(),self.meta.get()]
+    @_injection_transaction
+    def inject_candidate(self,problem,codes):
+        values,objective=_injection_values(self,problem,codes)
+        lane=int(self.cp.argmin(self.meta[1]).item());current=int(self.meta[1,lane].item());best=int(self.meta[2,lane].item())
+        if objective<current:return {'injected':False,'lane':lane,'objective':objective,'best_updated':False}
+        candidate=self.cp.asarray(values);self._injection_writes_started=True;self.boards[:,lane]=candidate;self.meta[1,lane]=objective
+        update=objective>=best
+        if update:self.best[:,lane]=candidate;self.meta[2,lane]=objective
+        if self.meta_rows>4:self.meta[4:13,lane]=0
+        self.cp.cuda.get_current_stream().synchronize()
+        return {'injected':True,'lane':lane,'objective':objective,'best_updated':update}
+    def snapshot_arrays(self):
+        _require_sampler_healthy(self);return [self.boards.get(),self.best.get(),self.meta.get()]
     def restore_arrays(self,arrays):
+        _require_sampler_healthy(self)
         for target,value in zip((self.boards,self.best,self.meta),arrays):target[:]=self.cp.asarray(value)
         self.cp.cuda.get_current_stream().synchronize()
     def runtime_identity(self):
         return {'backend':'cuda','device':self.device,'cupy':self.cp.__version__,'driver':int(self.cp.cuda.runtime.driverGetVersion()),'runtime':int(self.cp.cuda.runtime.runtimeGetVersion())}
     def launch(self, steps, phase=1):
+        _require_sampler_healthy(self)
         self.kernel(((self.r+127)//128,), (128,), (self.boards, self.best, self.meta, self.table,
                     *map(np.int32, (self.n, self.r, self.f, steps, phase, self.e, self.gold_total)),
                     *((np.int32(self.flags),) if self.flags else ())))
         self.cp.cuda.get_current_stream().synchronize()
     def exchange(self, parity=0):
+        _require_sampler_healthy(self)
         if self.exchange_kernel is None:return
         self.exchange_kernel(((self.r+255)//256,),(128,),
             (self.boards,self.best,self.meta,*map(np.int32,(self.n,self.r,self.gold_total,parity))))
         self.cp.cuda.get_current_stream().synchronize()
     def experiment_stats(self):
+        _require_sampler_healthy(self)
         if not self.flags:return {}
         counts=self.meta[13:self.meta_rows].sum(axis=1,dtype=self.cp.uint64).get()
         return dict(zip(SAMPLING_COUNTERS,map(int,counts)))
     def top(self, count=32):
+        _require_sampler_healthy(self)
         scores = self.meta[2].get()
         ids = _top_ids(scores, count)
         return self.best[:, ids].get().T.astype(int), scores[ids].astype(int)
@@ -244,6 +285,8 @@ class _WebGPU:
     def __init__(self, problem, table, free, replicas, seed, *, allow_software=False, experiments=None, initialize=True):
         import wgpu
         self.wgpu, self.n, self.r, self.f, self.e = wgpu, problem.n, replicas, free, len(problem.edges)
+        self._poisoned=False
+        self.input_binding=_injection_binding(problem)
         self.flags=sampling_flags(experiments);self.meta_rows=22 if self.flags&8 else (18 if self.flags else 4)
         base=25*self.n+free+3*self.n*self.n
         self.gold_total=int(table[base]) if len(table)>base else 0
@@ -274,15 +317,36 @@ class _WebGPU:
         self.group = self.gpu.create_bind_group(layout=self.pipeline.get_bind_group_layout(0), entries=entries)
         self.exchange_group=self.gpu.create_bind_group(layout=self.exchange_pipeline.get_bind_group_layout(0),entries=[entries[i] for i in (0,1,2,4)]) if self.exchange_pipeline is not None else None
         if initialize:self.launch(0, 0)
+    @_injection_transaction
+    def inject_candidate(self,problem,codes):
+        values,objective=_injection_values(self,problem,codes)
+        scores=np.frombuffer(self.queue.read_buffer(self.buffers[2],self.r*4,self.r*4),np.uint32)
+        lane=int(np.argmin(scores));current=int(scores[lane])
+        best=int(np.frombuffer(self.queue.read_buffer(self.buffers[2],(2*self.r+lane)*4,4),np.uint32)[0])
+        if objective<current:return {'injected':False,'lane':lane,'objective':objective,'best_updated':False}
+        update=objective>=best;self._injection_writes_started=True
+        for cell,code in enumerate(values):
+            packed=np.array([code],np.uint32);self.queue.write_buffer(self.buffers[0],(cell*self.r+lane)*4,packed)
+            if update:self.queue.write_buffer(self.buffers[1],(cell*self.r+lane)*4,packed)
+        packed=np.array([objective],np.uint32);self.queue.write_buffer(self.buffers[2],(self.r+lane)*4,packed)
+        if update:self.queue.write_buffer(self.buffers[2],(2*self.r+lane)*4,packed)
+        if self.meta_rows>4:
+            zero=np.zeros(1,np.uint32)
+            for row in range(4,13):self.queue.write_buffer(self.buffers[2],(row*self.r+lane)*4,zero)
+        self.queue.read_buffer(self.buffers[2],(self.r+lane)*4,4) # Complete the atomic host-controller operation before publishing.
+        return {'injected':True,'lane':lane,'objective':objective,'best_updated':update}
     def snapshot_arrays(self):
+        _require_sampler_healthy(self)
         shapes=((self.n,self.r),(self.n,self.r),(self.meta_rows,self.r))
         return [np.frombuffer(self.queue.read_buffer(buffer),np.uint32).reshape(shape).copy() for buffer,shape in zip(self.buffers[:3],shapes)]
     def restore_arrays(self,arrays):
+        _require_sampler_healthy(self)
         for buffer,value in zip(self.buffers[:3],arrays):self.queue.write_buffer(buffer,0,value)
         self.queue.read_buffer(self.buffers[2],0,4)
     def runtime_identity(self):
         return {'backend':'webgpu','device':self.device,'wgpu':self.wgpu.__version__,'adapter':{k:str(v) for k,v in self.adapter_info.items()}}
     def launch(self, steps, phase=1):
+        _require_sampler_healthy(self)
         self.queue.write_buffer(self.params, 0, np.array([self.n,self.r,self.f,steps,phase,self.e,self.gold_total,self.flags],np.uint32))
         encoder = self.gpu.create_command_encoder()
         compute = encoder.begin_compute_pass()
@@ -291,6 +355,7 @@ class _WebGPU:
         self.queue.submit([encoder.finish()])
         self.queue.read_buffer(self.buffers[2], 0, 4)  # Tiny synchronization fence.
     def top(self, count=32):
+        _require_sampler_healthy(self)
         scores = np.frombuffer(self.queue.read_buffer(self.buffers[2], 2*self.r*4, self.r*4), np.uint32).copy()
         ids = _top_ids(scores, count)
         # One dispatch gathers selected lanes, instead of n*count host copy commands.
@@ -315,12 +380,14 @@ class _WebGPU:
         boards = np.frombuffer(self.queue.read_buffer(self.gather_buffer,count*4,count*self.n*4),np.uint32).reshape(count,self.n).astype(int)
         return boards, scores[ids].astype(int)
     def exchange(self, parity=0):
+        _require_sampler_healthy(self)
         if self.exchange_pipeline is None:return
         self.queue.write_buffer(self.params,0,np.array([self.n,self.r,self.f,0,parity,self.e,self.gold_total,self.flags],np.uint32))
         encoder=self.gpu.create_command_encoder();compute=encoder.begin_compute_pass()
         compute.set_pipeline(self.exchange_pipeline);compute.set_bind_group(0,self.exchange_group)
         compute.dispatch_workgroups((self.r+127)//128);compute.end();self.queue.submit([encoder.finish()])
     def experiment_stats(self):
+        _require_sampler_healthy(self)
         if not self.flags:return {}
         rows=self.meta_rows-13
         counts=np.frombuffer(self.queue.read_buffer(self.buffers[2],13*self.r*4,rows*self.r*4),np.uint32).reshape(rows,self.r).sum(axis=1,dtype=np.uint64)
@@ -331,13 +398,13 @@ class _WebGPU:
         self.params.destroy(); self.gpu.destroy()
 
 
-SAMPLING_EXPERIMENTS=('ejection_chains','move_tabu','replica_exchange','obstruction_chains')
+SAMPLING_EXPERIMENTS=('ejection_chains','move_tabu','replica_exchange','obstruction_chains','cycle_crossover')
 SAMPLING_COUNTERS=('accepted_moves','tabu_rejections','chain_proposals','exchange_attempts','exchange_accepts',
                    'guided_proposals','guided_candidate_checks','guided_obstruction_starts','guided_base_improvements')
 
 def sampling_flags(experiments=None):
     experiments={} if experiments is None else experiments
-    names={'ejection_chains':1,'move_tabu':2,'replica_exchange':4,'obstruction_chains':8}
+    names={'ejection_chains':1,'move_tabu':2,'replica_exchange':4,'obstruction_chains':8,'cycle_crossover':0}
     if not isinstance(experiments,dict) or set(experiments)-set(names) or any(type(value) is not bool for value in experiments.values()):
         raise ValueError('Invalid sampling experiment switches.')
     flags=sum(bit for name,bit in names.items() if experiments.get(name,False))
@@ -349,6 +416,29 @@ def _make_sampler(problem, table, free, replicas, seed, backend, *, allow_softwa
     if backend == 'cuda': return _CUDA(problem, table, free, replicas, seed,**extra)
     return _WebGPU(problem, table, free, replicas, seed, allow_software=allow_software,**extra)
 
+
+def _crossover_parent_pool(rows,*,gold_aware=False):
+    # Near-identical parents can contain complementary cycles; do not apply the
+    # diversity distance used by the independent repair-hint archive here.
+    unique={tuple(row['codes']):row for row in rows};key='gold_objective' if gold_aware else 'objective'
+    return [{**row,'codes':list(codes)} for codes,row in sorted(unique.items(),key=lambda item:(-item[1][key],item[0]))[:8]]
+
+def _crossover_step(problem,controller,archive,engine,*,gold_aware=False,target='gold',inject=True,parents=None):
+    trial=controller.propose(archive if parents is None else parents);codes=trial['candidate']
+    if codes is None:
+        if trial['solution'] is not None:raise RuntimeError('Crossover solution is missing its checked candidate.')
+        return archive,None
+    metrics=gold_score(problem,codes) if gold_aware else score_board(problem,codes);values=list(map(int,codes))
+    if metrics['domain_violations'] or metrics!=trial['metrics']:raise RuntimeError('Crossover child failed independent domain/score validation.')
+    validation=problem.validate(values) if metrics['matched_edges']==len(problem.edges) else None
+    solution=values if validation is not None and (validation['valid'] or target=='edges') else None
+    if trial['solution'] is not None and (validation is None or not validation['valid'] or list(trial['solution'])!=values):raise RuntimeError('Crossover Gold certificate failed independent validation.')
+    if solution is None and inject:
+        outcome=engine.inject_candidate(problem,values)
+        if outcome['injected']:controller.record_injection()
+    combined=diverse_archive([*archive,{'codes':values,**metrics}],capacity=8,rank_key='gold_objective' if gold_aware else 'objective')
+    if solution is not None:combined=[{'codes':values,**metrics}]+[row for row in combined if row['codes']!=values][:7]
+    return combined,solution
 
 def sample(problem, *, seconds, seed=0, replicas=128, backend='auto', stop=None, progress=None, gold_aware=False, experiments=None):
     began = time.monotonic()
@@ -377,8 +467,12 @@ def sample(problem, *, seconds, seed=0, replicas=128, backend='auto', stop=None,
         return finish()
     engine = None
     archive = []
-    def collect():
-        nonlocal archive
+    crossover=None;crossover_parents=[]
+    if experiments and experiments.get('cycle_crossover'):
+        from sampling_crossover_round25 import CycleCrossover
+        crossover=CycleCrossover(problem,gold_aware=gold_aware)
+    def collect(*,inject=True):
+        nonlocal archive,crossover_parents
         boards,scores = engine.top()
         verification = _verification_view(problem, len(boards))
         checked = []
@@ -394,6 +488,12 @@ def sample(problem, *, seconds, seed=0, replicas=128, backend='auto', stop=None,
             observed.add(key)
             checked.append({'codes':values,**metrics})
         archive = diverse_archive([*archive,*checked],capacity=result['archive_capacity'], rank_key='gold_objective' if gold_aware else 'objective')
+        if crossover is not None:
+            crossover_parents=_crossover_parent_pool([*crossover_parents,*checked,*archive],gold_aware=gold_aware)
+            archive,solution=_crossover_step(problem,crossover,archive,engine,gold_aware=gold_aware,inject=inject,parents=crossover_parents)
+            crossover_parents=_crossover_parent_pool([*crossover_parents,*archive],gold_aware=gold_aware)
+            if solution is not None:result['solution']=solution
+            result['sampling_experiments']={**experiments,**engine.experiment_stats(),**crossover.stats}
         if archive:
             result.update(top_samples=archive,top_board=archive[0]['codes'],best_score=archive[0]['matched_edges'],
                           best_objective=archive[0]['objective'],domain_violations=archive[0]['domain_violations'],
@@ -416,8 +516,9 @@ def sample(problem, *, seconds, seed=0, replicas=128, backend='auto', stop=None,
                 last_progress = time.monotonic()
                 if progress is not None:
                     progress({'event':'sampling_progress', **result, 'elapsed_seconds':last_progress-began})
-        collect()
-        if flags:result['sampling_experiments']={**experiments,**engine.experiment_stats()}
+                if result.get('solution') is not None:break
+        if result.get('solution') is None:collect(inject=False)
+        if flags or crossover is not None:result['sampling_experiments']={**experiments,**engine.experiment_stats(),**(crossover.stats if crossover is not None else {})}
         if stop is not None and stop(): result['status']='stopped'
         elif not inputs[1]: result['status']='sampled'
         if progress is not None: progress({'event':'sampling', **result, 'elapsed_seconds':time.monotonic()-began})
@@ -503,6 +604,9 @@ def solve(problem, *, seconds=10, seed=0, target='gold', replicas=128, backend='
                                  replicas=replicas, backend=backend, stop=stop, progress=phase_progress('sampling'),
                                  **({'gold_aware':True} if options and options.get('gpu_gold_sampling') and target=='gold' else {}),
                                  **({'experiments':{name:True for name in SAMPLING_EXPERIMENTS if options.get(name)}} if options and any(options.get(name) for name in SAMPLING_EXPERIMENTS) else {}))
+        if sampling_report.get('solution') is not None:
+            found=certificate(sampling_report['solution'],score_board(problem,sampling_report['solution']),'sampling')
+            if found is not None:return found
         samples = sampling_report.get('top_samples', [])
         if not samples and sampling_report.get('top_board') is not None:
             samples = [{'codes':sampling_report['top_board']}]

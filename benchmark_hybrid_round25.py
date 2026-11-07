@@ -12,7 +12,7 @@ from benchmark_round25 import require_fresh,write_artifact,terminate_tree
 
 ROOT=Path(__file__).resolve().parent
 PROFILES={'baseline':{},'ejection':{'ejection_chains':True},'tabu':{'move_tabu':True},
-          'exchange':{'replica_exchange':True},'guided':{'ejection_chains':True,'obstruction_chains':True},
+          'exchange':{'replica_exchange':True},'crossover':{'cycle_crossover':True},'guided':{'ejection_chains':True,'obstruction_chains':True},
           'legacy-combined':{'ejection_chains':True,'move_tabu':True,'replica_exchange':True}}
 
 
