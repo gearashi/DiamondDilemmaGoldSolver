@@ -75,6 +75,13 @@ class HierarchicalRegionPruner(SeparatorPruner):
             self._disk_store=RegionalTableStore(cache_dir,self)
         return self
 
+    def enable_symbolic(self):
+        """Opt in to direct exact DAG construction and symbolic inventory joins."""
+        self.enable_advanced()
+        self._network.direct_diagrams=True
+        self._network.symbolic_inventory=True
+        return self
+
     def note_conflict(self,cells):
         for cell in cells:
             if 0<=cell<self.problem.n:

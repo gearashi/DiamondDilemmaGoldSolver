@@ -321,6 +321,10 @@ def _matching_supports(rows, matching, check=lambda: None):
     return tuple(supported)
 
 
+CUT_CONTINUATION_STATS=('cut_continuation_hits','cut_continuation_states_reused','cut_continuation_states_saved','cut_continuation_queries_completed')
+STAT_KEYS += CUT_CONTINUATION_STATS
+
+
 class AdvancedPruner:
     """Integer-bitset propagator; return changed, with domain zero as failure.
 
@@ -371,6 +375,7 @@ class AdvancedPruner:
         self._native_biconnected = None
         self._buckets, self._cut_cache, self._regional_cache = {}, {}, {}
         self._dynamic_cut_cache = {}
+        self._cut_pending = {}
         self._cut_inventory_cache = {}
         self._cut_inventory_matching = None
         self._hall_certificates = HallCertificateCache()
@@ -388,6 +393,48 @@ class AdvancedPruner:
         self.multi_port = None
         self.endpoint_supply = None
         self.regional_cache_dir = None
+
+    def reasoning_snapshot(self):
+        """Trusted local continuation data; never an externally supplied proof."""
+        records=[]
+        for (edges,involved,inventory),pending in self._cut_pending.items():
+            records.append({'edges':list(edges),'involved':[[c,hex(m)] for c,m in involved],
+                'inventory':[hex(x) for x in inventory],
+                'support':[hex(pending['support'][c]) for c in range(self.n)],
+                'completed':[[i,[[c,hex(m)] for c,m in current],crossings]
+                             for i,current,crossings in sorted(pending['completed'])]})
+        return {'version':1,'fingerprint':self.problem.fingerprint,'target':self.target,'cuts':records}
+
+    def restore_reasoning(self,payload):
+        if (not isinstance(payload,dict) or payload.get('version')!=1
+                or payload.get('fingerprint')!=self.problem.fingerprint or payload.get('target')!=self.target
+                or not isinstance(payload.get('cuts'),list) or len(payload['cuts'])>4):
+            raise ValueError('Reasoning continuation scope or bounds differ.')
+        restored={};full=(1<<(3*self.n))-1
+        for record in payload['cuts']:
+            edges=tuple(record['edges'])
+            if not edges or len(edges)>6 or len(set(edges))!=len(edges) or any(type(x)is not int or not 0<=x<len(self.problem.edges) for x in edges):
+                raise ValueError('Malformed cut continuation boundary.')
+            involved=tuple((c,int(m,16)) for c,m in record['involved'])
+            expected=tuple(sorted({c for e in edges for c in (self.problem.edges[e][0],self.problem.edges[e][2])}))
+            if tuple(c for c,m in involved)!=expected or any(m<=0 or m&~full for c,m in involved):
+                raise ValueError('Malformed cut continuation domains.')
+            inventory=tuple(int(x,16) for x in record['inventory'])
+            support=tuple(int(x,16) for x in record['support'])
+            if len(inventory)!=self.n or len(support)!=self.n or any(x<=0 or x>>self.n for x in inventory) or any(x<0 or x&~full for x in support):
+                raise ValueError('Malformed cut continuation inventory/supports.')
+            if any(_tile_choices(m)!=inventory[c] for c,m in involved):raise ValueError('Cut domains and inventory differ.')
+            limits=dict(involved);completed=set()
+            if len(record['completed'])>8192:raise ValueError('Cut continuation state cap exceeded.')
+            for index,current,crossings in record['completed']:
+                state=tuple((c,int(m,16)) for c,m in current)
+                if (type(index)is not int or not 0<=index<=len(edges) or type(crossings)is not int
+                        or not 0<=crossings<=11*len(edges) or tuple(c for c,m in state)!=expected
+                        or any(m<=0 or m&~limits[c] for c,m in state)):
+                    raise ValueError('Malformed completed cut state.')
+                completed.add((index,state,crossings))
+            restored[(edges,involved,inventory)]={'support':dict(enumerate(support)),'completed':completed}
+        self._cut_pending=restored
 
     def _packed_edge_blocks(self, vertex_count, edges, check):
         # These endpoints originate only from validated tile ports and board
@@ -699,7 +746,14 @@ class AdvancedPruner:
             if product > (max(4096,self.cut_vector_limit) if self.options['wide_cuts'] else self.cut_vector_limit):
                 return None
             tables.append((a, b, tuple((m, left[m], right[m]) for m in masks)))
-        support = dict.fromkeys(range(self.n), 0)
+        resumable=self.options.get('resumable_reasoning',False)
+        pending=self._cut_pending.get(key) if resumable else None
+        if pending is None:
+            pending={'support':dict.fromkeys(range(self.n),0),'completed':set()}
+            if resumable:
+                _put(self._cut_pending,key,pending,4)
+        else:self.stats['cut_continuation_hits']+=1
+        support=pending['support']
         work = 0; support_work = 0; support_capped = False
         def support_step():
             nonlocal support_work
@@ -737,19 +791,24 @@ class AdvancedPruner:
                 _put(self._cut_inventory_cache, rows, allowed, 128)
             if allowed is None:self.stats['cut_global_matching_failures'] += 1
             return allowed
-        completed_states=set()
+        completed_states=pending['completed'] if resumable else set()
         def visit(index, current, crossings):
             check()
+            state=(index,tuple(sorted(current.items())),crossings)
+            if (resumable or self.options['wide_cuts']) and state in completed_states:
+                self.stats['wide_cut_reuses']+=1
+                self.stats['cut_continuation_states_reused']+=int(resumable)
+                return
+            def complete():
+                if (resumable or self.options['wide_cuts']) and len(completed_states)<8192:
+                    completed_states.add(state)
+                    self.stats['cut_continuation_states_saved']+=int(resumable)
             if self.options['conditional_hall']:
                 rows=list(inventory)
                 for c,d in current.items():rows[c]=_tile_choices(d)
                 if self._hall_certificates.impossible(rows,matching_step):
                     self.stats['conditional_hall_hits']+=1
-                    return
-            state=(index,tuple(sorted(current.items())),crossings)
-            if self.options['wide_cuts'] and state in completed_states:
-                self.stats['wide_cut_reuses']+=1
-                return
+                    complete();return
             if index == len(tables):
                 if crossings and crossings % 2 == 0:
                     # Seam masks condition the domains jointly. Hall filtering
@@ -759,11 +818,11 @@ class AdvancedPruner:
                         (_tile_choices(current[cell]) for cell in involved), check)
                     if allowed is None:
                         self.stats['cut_matching_failures'] += 1
-                        return
+                        complete();return
                     conditional = list(inventory)
                     for cell, tiles in zip(involved, allowed):conditional[cell] = tiles
                     globally_allowed = global_supports(tuple(conditional))
-                    if globally_allowed is None:return
+                    if globally_allowed is None:complete();return
                     for cell, tiles in enumerate(globally_allowed):
                         domain = current.get(cell, domains[cell])
                         keep = domain & _orientation_choices(tiles)
@@ -778,7 +837,7 @@ class AdvancedPruner:
                             # Cache all orientations of supported outside tiles;
                             # _apply intersects the caller's current domains.
                             support[cell] |= _orientation_choices(tiles)
-                return
+                complete();return
             a, b, masks = tables[index]
             for mask, left, right in masks:
                 da, db = current[a] & left, current[b] & right
@@ -786,13 +845,16 @@ class AdvancedPruner:
                     narrowed = current.copy()
                     narrowed[a], narrowed[b] = da, db
                     visit(index+1, narrowed, crossings+mask.bit_count())
-            if self.options['wide_cuts'] and len(completed_states)<8192:
-                completed_states.add(state);self.stats['wide_cut_states']+=1
+            complete()
+            if self.options['wide_cuts']:self.stats['wide_cut_states']+=1
         try:visit(0, {cell: domains[cell] for cell in involved}, 0)
         except _Budget:
             self.stats['cut_global_matching_budget_skips'] += 1
             return None
         result = tuple(support.items())
+        if resumable:
+            self._cut_pending.pop(key,None)
+            self.stats['cut_continuation_queries_completed']+=1
         if not support_capped:_put(self._cut_cache, key, result, 32)
         return result
 
@@ -1029,13 +1091,16 @@ class AdvancedPruner:
                     if key.startswith('multi_port_'):self.stats[key]=value
                 for key,value in self.endpoint_supply.stats.items():
                     if key.startswith('endpoint_supply_'):self.stats[key]=value
-        if all(domains) and (self.options.get('hierarchical_regions', False) or self.options.get('extended_regions', False)):
+        if all(domains) and any(self.options.get(k,False) for k in ('hierarchical_regions','extended_regions','symbolic_regions','symbolic_inventory')):
 
             if self.hierarchical is None:
                 self.hierarchical=HierarchicalRegionPruner(self.problem,self.target)
-            if self.options.get('extended_regions',False) and not self.hierarchical.extended_regions:
+            if any(self.options.get(k,False) for k in ('extended_regions','symbolic_regions','symbolic_inventory')) and not self.hierarchical.extended_regions:
                 self.hierarchical.enable_advanced(self.regional_cache_dir)
             if self.before_hierarchical is not None:self.before_hierarchical(domains)
+            if self.hierarchical._network is not None:
+                self.hierarchical._network.direct_diagrams=self.options.get('symbolic_regions',False)
+                self.hierarchical._network.symbolic_inventory=self.options.get('symbolic_inventory',False)
             self.hierarchical.on_narrow=self.on_narrow
             try:
                 changed |= self.hierarchical.prune(domains,check)

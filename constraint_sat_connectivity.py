@@ -18,8 +18,10 @@ from constraint_knowledge import revalidate_witness
 
 class SATConnectivityLimit(Exception):pass
 
+class _TheoryStop(Exception):pass
 
-def gold_propagator(problem,variables,*,run=None,interrupt=lambda:None):
+
+def gold_propagator(problem,variables,*,run=None,interrupt=lambda:None,theory_hall=False,theory_affine=False):
     from pysat.engines import Propagator
     class GoldPropagator(Propagator):
         def __init__(self):
@@ -28,7 +30,14 @@ def gold_propagator(problem,variables,*,run=None,interrupt=lambda:None):
             self.assignments={};self.fixed={};self.level=0;self.trail=[]
             self.pending=deque();self.known=set();self.dirty=True;self.error=None
             self.stats={'sat_external_checks':0,'sat_external_partial_conflicts':0,
-                        'sat_external_model_conflicts':0,'sat_external_clauses':0}
+                        'sat_external_model_conflicts':0,'sat_external_clauses':0,
+                        'sat_external_hall_checks':0,'sat_external_hall_conflicts':0,
+                        'sat_external_affine_checks':0,'sat_external_affine_clauses':0}
+            self.initial=tuple(sum(1<<code for code in row) for row in variables)
+            self.affine=None
+            if theory_affine:
+                from constraint_algebra import AffinePruner
+                self.affine=AffinePruner(problem)
         def on_assignment(self,lit,fixed=False):
             variable=abs(lit);old=self.assignments.get(variable)
             self.assignments[variable]=lit
@@ -65,12 +74,56 @@ def gold_propagator(problem,variables,*,run=None,interrupt=lambda:None):
                 if len(self.known)>4096:self.known.pop()
                 self.stats['sat_external_model_conflicts' if complete else 'sat_external_partial_conflicts']+=1
             return True
+        def _theory_check(self):
+            if run is not None and run.cancelled():raise _TheoryStop()
+
+        def _theory(self):
+            # Every negative placement literal removes an allowed orientation.
+            # Positive assignments restrict their cell to that orientation.
+            domains=list(self.initial);context=[]
+            for variable,lit in self.assignments.items():
+                if variable not in self.decode:continue
+                cell,code=self.decode[variable];context.append(lit)
+                domains[cell]&=(1<<code) if lit>0 else ~(1<<code)
+            if not all(domains):return  # Already owned by ordinary cell CNF.
+            if theory_hall:
+                from constraint_deep import hall_certificate
+                from constraint_pruning import _tile_choices
+                self.stats['sat_external_hall_checks']+=1
+                witness=hall_certificate(tuple(_tile_choices(d) for d in domains),self._theory_check)
+                if witness is not None:
+                    cells=set(witness[0])
+                    antecedents=[lit for lit in context if self.decode[abs(lit)][0] in cells]
+                    clause=tuple(sorted(-lit for lit in antecedents))
+                    if clause not in self.known:
+                        self.pending.append(clause);self.known.add(clause)
+                        self.stats['sat_external_hall_conflicts']+=1
+                    return
+            if self.affine is not None:
+                self.stats['sat_external_affine_checks']+=1
+                reduced=domains.copy();self.affine.prune(reduced,self._theory_check,max_candidates=8)
+                if not all(reduced):clauses=[tuple(sorted(-lit for lit in context))]
+                else:
+                    clauses=[]
+                    for cell,(old,new) in enumerate(zip(domains,reduced)):
+                        removed=old&~new
+                        while removed:
+                            low=removed&-removed;removed^=low;code=low.bit_length()-1
+                            clauses.append(tuple(sorted({*(-lit for lit in context),-variables[cell][code]})))
+                for clause in clauses:
+                    if clause not in self.known:
+                        self.pending.append(clause);self.known.add(clause)
+                        self.stats['sat_external_affine_clauses']+=1
+
         def propagate(self):
             if not self.dirty:return []
             self.dirty=False
             try:
                 if run is not None and run.cancelled():interrupt();return []
                 self._enqueue(self._codes(self.assignments.values()))
+                if theory_hall or theory_affine:self._theory()
+            except _TheoryStop:
+                interrupt()
             except BaseException as exc:
                 self.error=exc
                 if run is not None:run.error=exc

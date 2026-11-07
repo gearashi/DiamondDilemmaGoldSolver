@@ -13,7 +13,9 @@ from validator import reverse_mask
 
 STAT_KEYS=('path_checks','path_pairs_removed','path_prunes','conservation_checks',
  'conservation_prunes','hall_certificate_hits','hall_certificates',
- 'certificate_hits','certificate_checks','explanation_tests','explanation_cells_removed')
+ 'certificate_hits','certificate_checks','explanation_tests','explanation_cells_removed',
+ 'relation_records','relation_hits','relation_prunes','joint_conservation_checks',
+ 'joint_conservation_prunes','capacity_edges')
 
 
 def hall_certificate(rows, check=lambda:None):
@@ -78,8 +80,10 @@ def minimize_failure_scope(before,initial,oracle,check=lambda:None,max_tests=8):
 
 
 class DeepPruner:
-    def __init__(self,problem):
+    def __init__(self,problem,*,retain_relations=False):
         self.problem=problem;self.stats=dict.fromkeys(STAT_KEYS,0)
+        from constraint_relations import ScopedRelations
+        self.relations=ScopedRelations() if retain_relations else None
         self.masks=tuple(tuple(map(int,row)) for row in problem.masks)
         self.links={}
         for a,sa,b,sb in problem.edges:
@@ -122,12 +126,45 @@ class DeepPruner:
         result=[]
         for a in selected:
             keep=sum(1<<x for x in codes[a] if all(relation[a,b][x] for b in selected if a!=b));result.append(keep)
-        check();self.cache[key]=tuple(result)
+        check()
+        if self.relations is not None:
+            scope=tuple(zip(selected,source))
+            for a,b in combinations(selected,2):
+                self.relations.remember(scope,a,b,((x,y) for x,ys in relation[a,b].items() for y in ys))
+            self.stats.update(self.relations.stats)
+        self.cache[key]=tuple(result)
         while len(self.cache)>128:self.cache.popitem(last=False)
         changed=False
         for c,v in zip(selected,result):
             self.stats['path_prunes']+=(domains[c]&~v).bit_count();changed |= domains[c]!=v;domains[c]=v
         return changed
+    def retained_relations(self,domains,check=lambda:None):
+        if self.relations is None:return False
+        changed=self.relations.prune(domains,check);self.stats.update(self.relations.stats)
+        return changed
+
+    def joint_conservation(self,domains,check=lambda:None):
+        """Enforce all unoriented seam-signature capacities simultaneously."""
+        if not self.closed or not all(domains):return False
+        from constraint_relations import capacity_supports
+        self.stats['joint_conservation_checks']+=1
+        capacities={orbit:count//2 for orbit,count in self.orbit_counts.items()}
+        if any(count%2 for count in self.orbit_counts.values()):domains[0]=0;return True
+        masks=[];choices=[]
+        for a,sa,b,sb in self.problem.edges:
+            check()
+            common={self.masks[c][sa] for c in values(domains[a])}&{reverse_mask(self.masks[c][sb]) for c in values(domains[b])}
+            masks.append(common);choices.append({min(m,reverse_mask(m)) for m in common})
+        supported=capacity_supports(choices,capacities,check,self.stats)
+        if supported is None:domains[0]=0;return True
+        current=list(domains)
+        for i,(a,sa,b,sb) in enumerate(self.problem.edges):
+            check();allowed={m for m in masks[i] if min(m,reverse_mask(m)) in supported[i]}
+            current[a]&=sum(1<<c for c in values(domains[a]) if self.masks[c][sa] in allowed)
+            current[b]&=sum(1<<c for c in values(domains[b]) if reverse_mask(self.masks[c][sb]) in allowed)
+        check();self.stats['joint_conservation_prunes']+=sum((a&~b).bit_count() for a,b in zip(domains,current))
+        changed=current!=domains;domains[:]=current;return changed
+
     def conservation(self,domains,check=lambda:None):
         """Global seam-mask multiplicities and total strand count, beyond parity."""
         if not self.closed or not all(domains):return False

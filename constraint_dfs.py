@@ -39,6 +39,10 @@ from constraint_mask_conflicts import VerifiedMaskConflictStore, STAT_KEYS as MA
 from constraint_lookahead import grouped_constructive_lookahead, GROUP_STAT_KEYS
 from constraint_shared_conflicts import VerifiedConflictStore, STAT_KEYS as SHARED_STAT_KEYS, GAUGE_KEYS as SHARED_GAUGES
 
+from constraint_round24 import ResearchPruner, KEYS as RESEARCH_KEYS, STAT_KEYS as RESEARCH_STAT_KEYS
+from constraint_region_oracles import ResidualProofCache, RESIDUAL_STAT_KEYS
+from constraint_branching_round24 import RoutingBranching, CompletionOrdering, LearnedOrdering, LEARNED_ORDERING_WEIGHTS, STAT_KEYS as ROUTING_STAT_KEYS
+
 VERSION = 2
 GUIDANCE_STAT_KEYS = ('failure_guided_choices','failure_weight_updates','lookahead_probes','lookahead_prunes','lookahead_failures','lookahead_aborted',
                       'lookahead_complete_passes','lookahead_common_prunes',
@@ -174,6 +178,9 @@ class _SearchRuntime:
         self.sat=None
         self.ordering=None
         self.pruner_tables=None
+        self.incremental_hall=None
+        self.research=None;self.routing=None;self.completion=None;self.learned=None
+        self.residual=None
         self.lcg=None
         self.gold_oracle=None
         self.probes=CompletedProbeCache()
@@ -426,6 +433,7 @@ def solve(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=None, 
                     # untouched root atomically, retaining its seed/hints/time.
                     current_resume = copy.deepcopy(resume)
                     current_resume['stack'][0]['domains'] = [hex(value) for value in effective]
+                    current_resume['owned_root_domains'] = [hex(value) for value in effective]
                     # Canonical preparation changes the exact verifier root.
                     # Optional prior claims must not cross that scope boundary.
                     current_resume.pop('local_mask_conflicts', None)
@@ -492,7 +500,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
     n, count = problem.n, 3*problem.n
     initial = ([sum(1 << code for code in domain) for domain in problem.domains]
                if _initial_domains is None else list(_initial_domains))
-    stats = dict.fromkeys(BASE_STAT_KEYS + PRUNER_STAT_KEYS + CONFLICT_STAT_KEYS + CONNECTIVITY_STAT_KEYS + NATIVE_STAT_KEYS + GUIDANCE_STAT_KEYS + ADVANCED_STAT_KEYS + EXPLANATION_STAT_KEYS + SCHEDULING_STAT_KEYS + KNOWLEDGE_STAT_KEYS + REASON_STAT_KEYS + SAT_ASSIST_STAT_KEYS + ORDERING_STAT_KEYS + SHARED_STAT_KEYS + BRANCH_STAT_KEYS + LCG_STAT_KEYS + GOLD_ORACLE_STAT_KEYS + NATIVE_SEARCH_STAT_KEYS + NATIVE_LEARNING_STAT_KEYS + GROUP_STAT_KEYS + DEEP_STAT_KEYS + POLICY_STAT_KEYS + MASK_STAT_KEYS + ('lcg_trace_budget_skips',), 0)
+    stats = dict.fromkeys(BASE_STAT_KEYS + PRUNER_STAT_KEYS + CONFLICT_STAT_KEYS + CONNECTIVITY_STAT_KEYS + NATIVE_STAT_KEYS + GUIDANCE_STAT_KEYS + ADVANCED_STAT_KEYS + EXPLANATION_STAT_KEYS + SCHEDULING_STAT_KEYS + KNOWLEDGE_STAT_KEYS + REASON_STAT_KEYS + SAT_ASSIST_STAT_KEYS + ORDERING_STAT_KEYS + SHARED_STAT_KEYS + BRANCH_STAT_KEYS + LCG_STAT_KEYS + GOLD_ORACLE_STAT_KEYS + NATIVE_SEARCH_STAT_KEYS + NATIVE_LEARNING_STAT_KEYS + GROUP_STAT_KEYS + DEEP_STAT_KEYS + POLICY_STAT_KEYS + MASK_STAT_KEYS + RESEARCH_STAT_KEYS + ROUTING_STAT_KEYS + RESIDUAL_STAT_KEYS + ('lcg_trace_budget_skips',), 0)
     nodes, previous_elapsed = 0, 0.0
     if resume is not None:
         if not isinstance(resume, dict) or resume.get('version') != VERSION or resume.get('fingerprint') != problem.fingerprint or resume.get('target') != target:
@@ -514,6 +522,19 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             raise ValueError('Malformed checkpoint elapsed time.')
         if not isinstance(resume['stack'], list) or not resume['stack']:
             raise ValueError('An incomplete checkpoint must retain an unfinished search stack.')
+        # Local nogoods and verifier assumptions belong to the job's owned
+        # root, not the broader puzzle fingerprint. Preserve this scope across
+        # propagation and warm slices. Old v2 snapshots conservatively own only
+        # their first frame; losing a broader cache cannot lose pending work.
+        owned = resume.get('owned_root_domains',resume['stack'][0].get('domains') if isinstance(resume['stack'][0],dict) else None)
+        if not isinstance(owned,list) or len(owned)!=n or any(not isinstance(value,str) for value in owned):
+            raise ValueError('Malformed checkpoint owned root.')
+        try:owned=[int(value,16) for value in owned]
+        except ValueError:raise ValueError('Malformed checkpoint owned root.') from None
+        source=[sum(1<<code for code in row) for row in problem.domains]
+        if any(value<0 or value&~allowed for value,allowed in zip(owned,source)):
+            raise ValueError('Checkpoint owned root exceeds puzzle domains.')
+        initial=[value&allowed for value,allowed in zip(owned,initial)]
         stack = []
         for saved in resume['stack']:
             if not isinstance(saved, dict) or not {'domains', 'cell', 'choices', 'next'} <= saved.keys() or not isinstance(saved['domains'], list) or any(not isinstance(value, str) for value in saved['domains']):
@@ -636,8 +657,9 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         raise ValueError('The private SAT assistance cache has different problem data.')
     if runtime.lcg is not None and (not isinstance(runtime.lcg,LCGStore) or not runtime.lcg.matches(problem.fingerprint,target,initial)):
         raise ValueError('The LCG store belongs to different effective root domains.')
-    if options['deep_paths'] or options['conservation']:
-        if runtime.deep is None:runtime.deep=DeepPruner(problem)
+    if any(options[k] for k in ('deep_paths','conservation','retained_relations','joint_conservation')):
+        if runtime.deep is None or bool(runtime.deep.relations is not None)!=options['retained_relations']:
+            runtime.deep=DeepPruner(problem,retain_relations=options['retained_relations'])
     if options['piece_symmetry'] and runtime.piece_symmetry is None:runtime.piece_symmetry=PieceSymmetry(problem)
     if options['proof_certificates']:
         runtime.certificates=learning_state.get('_certificates') or runtime.certificates or CertificateStore(problem,target)
@@ -647,13 +669,13 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         if resume is not None and resume.get('certificates') is not None:runtime.certificates.load_snapshot(resume['certificates'])
     if options['smart_learning'] and all(initial) and all(problem.domains):
         runtime.mask_conflicts=learning_state.get('_mask_conflicts',runtime.mask_conflicts)
-        if runtime.mask_conflicts is None:runtime.mask_conflicts=VerifiedMaskConflictStore(problem,target)
+        if runtime.mask_conflicts is None:runtime.mask_conflicts=VerifiedMaskConflictStore(problem,target,proof_transport=options['proof_transport'])
         if not isinstance(runtime.mask_conflicts,VerifiedMaskConflictStore) or not runtime.mask_conflicts.matches(problem,target):
             raise ValueError('Mask conflict store differs from original puzzle scope.')
         learning_state['_mask_conflicts']=runtime.mask_conflicts
         if runtime.local_mask_conflicts is None:
-            runtime.local_mask_conflicts=VerifiedMaskConflictStore(problem,target,initial=initial)
-            if resume is not None and resume.get('local_mask_conflicts') is not None:
+            runtime.local_mask_conflicts=VerifiedMaskConflictStore(problem,target,initial=initial,proof_transport=options['proof_transport'])
+            if resume is not None and resume.get('local_mask_conflicts') is not None and 'owned_root_domains' in resume:
                 runtime.local_mask_conflicts.import_snapshot(resume['local_mask_conflicts'])
         elif not runtime.local_mask_conflicts.matches(problem,target,initial):
             raise ValueError('Local proof root changed.')
@@ -665,6 +687,14 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             raise ValueError('The Gold oracle belongs to a different puzzle or effective root.')
         runtime.gold_oracle.begin_slice()
     gold_oracle=runtime.gold_oracle if options['gold_oracle'] else None
+    if options['residual_reuse'] and all(initial):
+        if runtime.residual is None:runtime.residual=ResidualProofCache(problem,target,root_scope=tuple(initial))
+        if (not isinstance(runtime.residual,ResidualProofCache) or runtime.residual.problem is not problem
+                or runtime.residual.target!=target or runtime.residual.root_scope!=tuple(initial)):
+            raise ValueError('Residual proofs differ from the effective puzzle/root scope.')
+    residual=runtime.residual if options['residual_reuse'] else None
+    residual_entry=dict(residual.stats) if residual is not None else dict.fromkeys(RESIDUAL_STAT_KEYS,0)
+    residual_baseline={key:stats[key] for key in RESIDUAL_STAT_KEYS}
     lcg_baseline={key:stats[key] for key in LCG_STAT_KEYS}
     lcg_entry=dict(lcg_store.stats) if lcg_store is not None else dict.fromkeys(LCG_STAT_KEYS,0)
     oracle_baseline={key:stats[key] for key in GOLD_ORACLE_STAT_KEYS}
@@ -682,9 +712,17 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
     deep_baseline={key:stats[key] for key in DEEP_STAT_KEYS}
     mask_entry=dict(runtime.mask_conflicts.stats) if runtime.mask_conflicts is not None else dict.fromkeys(MASK_STAT_KEYS,0)
     mask_baseline={key:stats[key] for key in MASK_STAT_KEYS}
+    research_baseline={key:stats[key] for key in RESEARCH_STAT_KEYS}
+    research_entry=dict(runtime.research.stats) if runtime.research is not None else dict.fromkeys(RESEARCH_STAT_KEYS,0)
     def sync_stats():
+        if residual is not None:
+            for key,value in residual.stats.items():
+                stats[key]=value if key=='residual_closed' else residual_baseline[key]+value-residual_entry[key]
+        if runtime.research is not None:
+            for key,value in runtime.research.stats.items():
+                stats[key]=(max(research_baseline[key],value) if key=='factor_live_piece_width' else research_baseline[key]+value-research_entry[key])
         if runtime.deep is not None:
-            for key in ('path_checks','path_pairs_removed','path_prunes','conservation_checks','conservation_prunes'):stats[key]=deep_baseline[key]+runtime.deep.stats[key]-deep_entry[key]
+            for key in ('path_checks','path_pairs_removed','path_prunes','conservation_checks','conservation_prunes','relation_records','relation_hits','relation_prunes','joint_conservation_checks','joint_conservation_prunes','capacity_edges'):stats[key]=deep_baseline[key]+runtime.deep.stats[key]-deep_entry[key]
         if runtime.mask_conflicts is not None:
             for key in MASK_STAT_KEYS:stats[key]=(runtime.mask_conflicts.stats[key] if key in MASK_GAUGES else mask_baseline[key]+runtime.mask_conflicts.stats[key]-mask_entry[key])
         if pruner is not None:
@@ -866,11 +904,13 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         if native_engine is not None:stack=[from_native_frame(frame) for frame in native_engine.snapshot()]
         sync_stats()
         payload = {'version': VERSION, 'fingerprint': problem.fingerprint, 'target': target,
+                'owned_root_domains':[hex(value) for value in initial],
                 'seed': seed, 'search_options': dict(options), 'hints': {str(cell): codes for cell, codes in normalized_hints.items()},
                 'nodes': nodes, 'stats': dict(stats), 'elapsed_seconds': previous_elapsed + time.monotonic()-began,
                 'stack': [{'domains': [hex(value) for value in frame['domains']], 'cell': frame['cell'],
                            'choices': frame['choices'].copy(), 'next': frame['next'],
                            **({'choice_masks':[hex(value) for value in frame['choice_masks']]} if 'choice_masks' in frame else {})} for frame in stack]}
+        if options['resumable_reasoning'] and advanced is not None:payload['reasoning_continuation']=advanced.reasoning_snapshot()
         if runtime.local_mask_conflicts is not None and options['smart_learning']:payload['local_mask_conflicts']=runtime.local_mask_conflicts.snapshot()
         if runtime.certificates is not None and options['proof_certificates']:payload['certificates']=runtime.certificates.snapshot()
         payload['digest'] = _checkpoint_digest(payload)
@@ -908,18 +948,25 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         # Only immutable construction results survive a slice. Every callback,
         # scheduler wrapper, matching hint and mutable cache is newly owned.
         kwargs = {'tables': runtime.pruner_tables} if runtime.pruner_tables is not None else {}
+        if options['incremental_hall']:kwargs['incremental_hall']=True
         pruner = Pruner(problem, check, native=options['native'], dirty_neighborhood=options['dirty_neighborhood'], parity_root_reuse=options['parity_root_reuse'], **kwargs)
         runtime.pruner_tables = pruner.tables
         advanced_options = tuple(sorted(options.items()))
         if runtime.advanced is not None and not isinstance(runtime.advanced,AdvancedPruner):
             raise ValueError('The in-memory advanced pruning cache is malformed.')
-        if any(options.get(key,True) for key in ('strand_connectivity','multi_seam_cuts','regional_cache','biconnected','separator_regions','hierarchical_regions','extended_regions')):
+        if any(options.get(key,True) for key in ('strand_connectivity','multi_seam_cuts','regional_cache','biconnected','separator_regions','hierarchical_regions','extended_regions','symbolic_regions','symbolic_inventory')):
             if runtime.advanced is None or runtime.advanced_options!=advanced_options:
                 runtime.advanced=AdvancedPruner(problem,target=target,options=options)
                 runtime.advanced_options=advanced_options
             advanced=runtime.advanced
             advanced.regional_cache_dir=learning_state.get('_regional_cache_dir')
+            if options['resumable_reasoning'] and resume is not None and resume.get('reasoning_continuation') is not None and not advanced._cut_pending:
+                advanced.restore_reasoning(resume['reasoning_continuation'])
             advanced_entry=dict(advanced.stats)
+        if options['incremental_hall']:
+            if runtime.incremental_hall is None:runtime.incremental_hall=pruner.incremental_hall
+            else:pruner.incremental_hall=runtime.incremental_hall
+            pruner._incremental_hall_entry=dict(pruner.incremental_hall.stats)
         if target == 'gold':
             connectivity = ConnectivityPruner(problem)
         if support_tables is None:
@@ -929,6 +976,14 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             if runtime.ordering is None or runtime.ordering.tables is not support_tables:
                 runtime.ordering=SupportOrdering(support_tables)
         branching=ConnectionBranching(problem,signature=options['signature_branching']) if options['connection_branching'] or options['signature_branching'] or options['group_lookahead'] else None
+        if any(options[k] for k in RESEARCH_KEYS):
+            if runtime.research is None or runtime.research.options!={k:options[k] for k in RESEARCH_KEYS}:
+                runtime.research=ResearchPruner(problem,target,options)
+                research_entry=dict.fromkeys(RESEARCH_STAT_KEYS,0)
+        if options['dual_piece_branching'] or options['strand_branching']:
+            if runtime.routing is None:runtime.routing=RoutingBranching(problem)
+        if options['completion_ordering'] and runtime.completion is None:runtime.completion=CompletionOrdering(problem)
+        if options['learned_ordering'] and runtime.learned is None:runtime.learned=LearnedOrdering(problem,weights=LEARNED_ORDERING_WEIGHTS)
         tile_bits = support_tables.tile_bits
         arcs, incoming = support_tables.arcs, support_tables.incoming
         filter_arc = _ArcFilter(support_tables)
@@ -940,8 +995,10 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             if native is not None:learning_state['_native'] = native
         native_backend = 'compiled' if native is not None else 'python'
         if options['sat_assist'] and runtime.sat is None:
-            runtime.sat=SatAssist(problem,initial,target)
+            runtime.sat=SatAssist(problem,initial,target,witness_pool=options['witness_pool'],support_cover=options['support_cover'])
 
+        if runtime.sat is not None:
+            runtime.sat.witness_pool=options['witness_pool'];runtime.sat.support_cover=options['support_cover']
         scheduler_options = tuple(sorted(options.items()))
         if runtime.scheduler is not None and not isinstance(runtime.scheduler,PropagationScheduler):
             raise ValueError('The in-memory propagation scheduler is malformed.')
@@ -1111,8 +1168,11 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                     finally:advanced.on_narrow=None;advanced.before_hierarchical=None
                     if any(value == 0 for value in domains): return False
                 if runtime.deep is not None and all(domains):
-                    if options['deep_paths']:bulk(lambda:runtime.deep.paths(domains,check),'three-cell path support')
+                    if options['deep_paths'] or options['retained_relations']:bulk(lambda:runtime.deep.paths(domains,check),'three-cell path support')
+                    if options['retained_relations'] and all(domains):bulk(lambda:runtime.deep.retained_relations(domains,check),'retained pair correlations')
+                    if options['joint_conservation'] and all(domains):bulk(lambda:runtime.deep.joint_conservation(domains,check),'joint seam conservation')
                     if options['conservation'] and all(domains):bulk(lambda:runtime.deep.conservation(domains,check),'integer seam conservation')
+                if runtime.research is not None and any(options[k] for k in RESEARCH_KEYS) and all(domains):runtime.research.prune(domains,check,bulk)
                 if options['piece_symmetry'] and all(domains):
                     old_count=sum(v.bit_count() for v in domains)
                     bulk(lambda:runtime.piece_symmetry.prune(domains),'verified strand symmetry')
@@ -1133,6 +1193,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             while True:
                 check();advance_shared();nodes+=1
                 domains=frame['domains'];decisions=decision_conjunction()
+                residual_input=tuple(domains) if residual is not None and all(domains) else None
                 reason=None;lcg=None
                 if options['reason_tracking'] and decisions is not None:
                     reason=frame.get('_reasons')
@@ -1159,7 +1220,10 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                     if lcg is not None and not lcg.enabled:stats['lcg_trace_budget_skips']+=1
                     why=(reason.failure if reason.failure is not None else reason.contradiction()) if reason is not None else None
                     return {'action':'reject','decisions':decisions,'reason':why,'lcg_clause':clause,
-                            'gold':gold,'codes':codes,'validation':report,'proof_input':proof_input}
+                            'gold':gold,'codes':codes,'validation':report,'proof_input':proof_input,
+                            '_residual_input':residual_input}
+                if residual_input is not None and residual.contains(residual_input):
+                    return failure(cells=range(n))
                 selected=frame.pop('_changed_cell',None);before_propagation=domains.copy()
                 possible=propagate(domains,selected,trace=trace,basic_complete=frame.pop('_native_basic_complete',False))
                 if options['impact_branching'] and selected is not None:
@@ -1223,6 +1287,8 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                 hinted={code:index for index,code in enumerate(normalized_hints.get(cell,[]))}
                 choices=(runtime.ordering.order(cell,domains,list(_values(domains[cell])),hinted,rank,check,stats)
                          if options['value_ordering'] or options['objective_ordering'] else sorted(_values(domains[cell]),key=lambda code:(0,hinted[code]) if code in hinted else (1,rank[code])))
+                if options['completion_ordering']:choices=runtime.completion.order(cell,domains,choices,hinted,rank,check,stats)
+                if options['learned_ordering']:choices=runtime.learned.order(cell,domains,choices,hinted,rank,check,stats)
                 lookahead_plan=branching.choose(domains,cell,check,stats) if options['group_lookahead'] and branching is not None else None
                 if options['lookahead'] and n>=4 and (2<=len(choices)<=4 or lookahead_plan is not None) and not frame.get('_lookahead_done'):
                     before_lookahead=domains.copy()
@@ -1282,7 +1348,8 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                     if domains!=before_lookahead:
                         frame['_propagated']=False
                         continue
-                plan=branching.choose(domains,cell,check,stats) if branching is not None else None
+                plan=(runtime.routing.choose(domains,cell,check,stats,dual_piece=options['dual_piece_branching'],strand=options['strand_branching']) if (options['dual_piece_branching'] or options['strand_branching']) else None)
+                if plan is None:plan=branching.choose(domains,cell,check,stats) if branching is not None else None
                 if plan is not None:
                     frame['choice_masks']=list(plan.masks);cell=plan.cell
                     choices=[(mask&-mask).bit_length()-1 for mask in plan.masks]
@@ -1293,6 +1360,9 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             # Call only after consuming the leaf/failed frame. Optional conflict
             # work and user callbacks must not cause that completed leaf to replay.
             if out['action']=='reject':
+                failed_input=out.get('_residual_input')
+                if residual is not None and failed_input is not None:
+                    residual.remember_completed(failed_input,status='unsatisfiable')
                 stats['backtracks']+=1
                 clause=out.get('lcg_clause');replacement=None
                 if clause is not None:
@@ -1414,7 +1484,10 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                     if out['action']=='solved':return result('solved' if out['validation']['valid'] else 'edge_perfect',out['codes'],out['validation'])
                     continue
             if frame['next']>=len(frame['choices']):
-                decisions=decision_conjunction();stack.pop();stats['backtracks']+=1;learn_failure(decisions)
+                decisions=decision_conjunction();stack.pop();stats['backtracks']+=1
+                if residual is not None and all(frame['domains']):
+                    residual.remember_completed(tuple(frame['domains']),status='unsatisfiable')
+                learn_failure(decisions)
                 continue
             code=frame['choices'][frame['next']];selected_mask=branch_mask(frame,frame['next']);frame['next']+=1
             child=frame['domains'].copy();child[frame['cell']]=selected_mask

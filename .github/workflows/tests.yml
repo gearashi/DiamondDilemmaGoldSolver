@@ -124,6 +124,28 @@ jobs:
           test_gpu_sampling
           test_constraint_search
           test_search_fixtures
+          test_constraint_app_round24
+          test_constraint_continuation
+          test_constraint_coverage_scope_round24
+          test_constraint_hybrid_round24
+          test_constraint_incremental_hall
+          test_constraint_learning_round24
+          test_constraint_portable
+          test_constraint_proof
+          test_constraint_queue_work
+          test_constraint_region_reasoning_round24
+          test_constraint_region_symbolic
+          test_constraint_residual_reuse_round24
+          test_constraint_learned_ordering_round24
+          test_constraint_round24_integration
+          test_constraint_sat_round24
+          test_constraint_sat_session
+          test_constraint_work
+          test_gpu_domain_checkpoint_validation
+          test_gpu_domain_round24
+          test_gpu_domain_runner
+          test_gpu_probe_round24
+          test_gpu_sampling_round24
 
   linux-install:
     name: Linux CUDA package installation (no GPU)
@@ -249,7 +271,7 @@ jobs:
           export XDG_RUNTIME_DIR="$RUNNER_TEMP/diamond-vulkan"
           mkdir -p "$XDG_RUNTIME_DIR"
           chmod 700 "$XDG_RUNTIME_DIR"
-          python -B -m unittest -v test_webgpu test_webgpu_counters test_gpu_sampling test_gpu_gold test_gpu_reasoning test_gpu_hybrid_reasoning
+          python -B -m unittest -v test_webgpu test_webgpu_counters test_gpu_sampling test_gpu_sampling_round24 test_gpu_gold test_gpu_reasoning test_gpu_hybrid_reasoning
 
   source-distribution:
     name: Source package (${{ matrix.target }})

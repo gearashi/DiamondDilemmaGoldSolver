@@ -20,6 +20,7 @@ import time
 
 from validator import reverse_mask
 from constraint_symmetry import canonical_root_domains
+from search_options import normalize_options
 
 SCHEMA = 'diamond-constraint-models-v1'
 
@@ -29,8 +30,9 @@ class _Interrupted(Exception):
 
 
 class _Run:
-    def __init__(self, problem, engine, seconds, seed, target, stop, progress):
+    def __init__(self, problem, engine, seconds, seed, target, stop, progress, options=None):
         self.problem, self.engine, self.seed, self.target = problem, engine, seed, target
+        self.options=normalize_options(options)
         self.started = time.monotonic()
         self.deadline = self.started + seconds
         self.stop, self.progress = stop, progress
@@ -309,11 +311,14 @@ def _sat(run, domains, hints):
                 result=run.finish('unsupported');result['reason']=str(exc);return result
         elif run.target=='gold' and run.engine=='sat-propagator':
             from constraint_sat_connectivity import gold_propagator
-            external=gold_propagator(run.problem,variables,run=run)
+            external=gold_propagator(run.problem,variables,run=run,
+                                     theory_hall=run.options['sat_theory'],
+                                     theory_affine=run.options['sat_theory'])
             solver.connect_propagator(external)
             for row in variables:
                 for literal in row.values():solver.observe(literal)
-            run.stats['connectivity_encoding']='native_partial_proper_loop_conflicts'
+            run.stats['connectivity_encoding']=('native_partial_loop_and_domain_theory' if run.options['sat_theory']
+                                                else 'native_partial_proper_loop_conflicts')
         def cut_clause(cut):
             # A cut containing an unavailable value is already satisfied.
             if all(code in variables[cell] for cell, code in cut):
@@ -517,7 +522,7 @@ def _cp(run, domains, hints):
 
 
 def solve(problem, *, engine='sat', seconds=10, seed=0, target='gold', hints=None,
-          stop=None, progress=None, resume=None):
+          stop=None, progress=None, resume=None, options=None, learning_state=None):
     """Find a validated witness or exhaust the encoded finite problem.
 
     ``seconds`` is a finite total budget, including model construction and cut
@@ -537,7 +542,14 @@ def solve(problem, *, engine='sat', seconds=10, seed=0, target='gold', hints=Non
         raise ValueError('seed must be a nonnegative integer')
     if stop is not None and not callable(stop) and not callable(getattr(stop, 'is_set', None)):
         raise ValueError('stop must be a callback or an Event')
-    run = _Run(problem, engine, seconds, seed, target, stop, progress)
+    from search_options import normalize_options
+    options=normalize_options(options)
+    if engine=='sat' and options['sat_theory'] and options['persistent_sat']:raise ValueError('Choose persistent SAT or SAT theory propagation; combining them is not implemented.')
+    if engine=='sat' and options['sat_theory']:engine='sat-propagator'
+    if engine=='sat' and options['persistent_sat']:
+        from constraint_sat_session import solve as session_solve
+        return session_solve(problem,seconds=seconds,seed=seed,target=target,hints=hints,stop=stop,progress=progress,resume=resume,learning_state=learning_state,options=options)
+    run = _Run(problem, engine, seconds, seed, target, stop, progress, options=options)
     try:
         run.check()
         _resume(run, resume)

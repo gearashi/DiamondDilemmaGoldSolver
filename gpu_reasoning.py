@@ -10,7 +10,7 @@ import json
 import numpy as np
 
 FEATURE_BITS = {'remote_check': 1, 'hall': 2, 'forced': 4, 'dynamic_mrv': 8,
-                'connectivity': 16, 'symmetry': 32, 'shared_gold': 64, 'cpu_probe': 128, 'cpu_endgame': 256}
+                'connectivity': 16, 'symmetry': 32, 'shared_gold': 64, 'cpu_probe': 128, 'cpu_endgame': 256, 'proof_probes':512}
 STACK_FIRST_MASK = STACK_SHIFT_MASK = 4095
 SHARED_LIMIT = 32
 SHARED_WIDTH = 1 + 2*160
@@ -24,6 +24,12 @@ def normalize_features(features=None):
     if any(type(value) is not bool for value in features.values()):
         raise ValueError('GPU reasoning switches must be booleans.')
     return {name: features.get(name, False) for name in FEATURE_BITS}
+
+
+def feature_identity(features):
+    normalized=normalize_features(features)
+    # Preserve pre-round24 policy hashes when the added feature is disabled.
+    return {name:value for name,value in normalized.items() if name!='proof_probes' or value}
 
 
 def feature_bits(features):
@@ -46,7 +52,7 @@ def prepare_policy(engine, features, gold_data):
     engine.dynamic_order = bool(engine.feature_bits & (4 | 8))
     engine.host_policy = np.zeros(POLICY_SIZE, np.uint32)
     engine.host_policy[:160] = 1
-    engine.policy_metadata = {'version': 1, 'features': engine.gpu_features}
+    engine.policy_metadata = {'version': 1, 'features': feature_identity(engine.gpu_features)}
     engine._gold_problem = None
     engine._shared_cuts = []
     engine.cpu_assist = None
@@ -68,11 +74,11 @@ def prepare_policy(engine, features, gold_data):
     if engine.feature_bits:
         identity = json.dumps(engine.policy_metadata, sort_keys=True, separators=(',', ':')).encode()
         engine.fingerprint = hashlib.sha256(bytes.fromhex(engine.fingerprint) + identity).hexdigest()
-    if engine.feature_bits & 384:
+    if engine.feature_bits & (384|512):
         if gold_data is None:raise ValueError('CPU/GPU assistance requires explicit Gold piece data.')
         from gpu_cpu_assist import CPUAssist
         engine.cpu_assist = CPUAssist(gold_data, engine.fingerprint,
-            probe=engine.gpu_features['cpu_probe'], endgame=engine.gpu_features['cpu_endgame'])
+            probe=engine.gpu_features['cpu_probe'] or engine.gpu_features['proof_probes'], endgame=engine.gpu_features['cpu_endgame'], proof_targeted=engine.gpu_features['proof_probes'])
         if not (np.array_equal(engine.cpu_assist.problem.neighbors,engine.neighbors) and np.array_equal(engine.cpu_assist.problem.sides,engine.neighbor_sides)):
             raise ValueError('CPU/GPU assistance geometry differs from its independently constructed problem.')
     if gold_data is not None and (engine.gpu_features['shared_gold'] or engine.gpu_features['connectivity']):

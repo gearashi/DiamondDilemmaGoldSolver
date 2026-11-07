@@ -20,7 +20,7 @@ from geometry import build_board
 from validator import orientation_masks, validate_arrangement
 from dfs_gpu import DFS, fill_order, ensure_disjoint_prefixes
 from gpu_backends import choose_backend
-from gpu_reasoning import normalize_features
+from gpu_reasoning import feature_identity, normalize_features
 from exact_frontier import plan_frontier
 from systematic_jobs import JobLedger
 from checkpoint_writer import CheckpointWriter
@@ -101,7 +101,7 @@ def main():
         parser.error('Seconds must be 0 (unlimited) or positive; checkpoint interval positive, replicas 1..131072, nodes 1..512 required.')
     batches=AdaptiveBatchBudget(args.nodes,adaptive=not args.fixed_nodes)
     run=args.output.resolve(); run.mkdir(parents=True,exist_ok=True)
-    profile=('systematic-'+hashlib.sha256(json.dumps(gpu_features,sort_keys=True,separators=(',',':')).encode()).hexdigest()[:12]) if any(gpu_features.values()) else 'systematic'
+    profile=('systematic-'+hashlib.sha256(json.dumps(feature_identity(gpu_features),sort_keys=True,separators=(',',':')).encode()).hexdigest()[:12]) if any(gpu_features.values()) else 'systematic'
     exact=run/profile; exact.mkdir(exist_ok=True)
     lock=run/'run.lock'
     try: fd=os.open(str(lock),os.O_CREAT|os.O_EXCL|os.O_WRONLY)
@@ -248,7 +248,7 @@ def main():
             ledger.validate(gpu.states.get())
             ledger.validate_prefixes(gpu.prefix_codes,gpu.floors.get(),prefixes,lengths)
             payload=gpu.snapshot_checkpoint(); payload.update(ledger.fields())
-            payload.update(exact_gpu_features=np.array(json.dumps(gpu_features,sort_keys=True)),exact_frontier_sha256=np.array(frontier_hash),exact_data_sha256=np.array(data_sha),
+            payload.update(exact_gpu_features=np.array(json.dumps(feature_identity(gpu_features),sort_keys=True)),exact_frontier_sha256=np.array(frontier_hash),exact_data_sha256=np.array(data_sha),
                            exact_generation=np.array(generation,np.int64),exact_max_depth=np.array(maximum,np.int16),
                            exact_candidates=np.array(checked,np.int64),
                            exact_terminal=np.array(state if state in ('solved','edge_perfect','exhausted') else ''))

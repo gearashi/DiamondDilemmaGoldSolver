@@ -22,8 +22,9 @@ class _SliceExpired(Exception): pass
 
 class CPUAssist:
     def __init__(self, data, fingerprint, *, probe=False, endgame=False, max_open=12,
-                 seconds=.02, interval=64):
+                 seconds=.02, interval=64, proof_targeted=False):
         self.problem = SearchProblem(data)
+        self.proof_targeted=bool(proof_targeted)
         self.fingerprint = fingerprint
         self.probe_enabled, self.endgame_enabled = bool(probe), bool(endgame)
         self.max_open, self.seconds, self.interval = int(max_open), float(seconds), int(interval)
@@ -36,7 +37,7 @@ class CPUAssist:
         self.stats = {'cpu_prefix_probes':0,'cpu_prefix_failures':0,'cpu_prefix_unknown':0,
                       'cpu_prefix_values_removed':0,'cpu_endgame_calls':0,'cpu_endgame_nodes':0,
                       'cpu_endgame_infeasible':0,'cpu_endgame_solutions':0,'cpu_endgame_unknown':0,
-                      'cpu_endgame_held_lanes':0}
+                      'cpu_endgame_held_lanes':0,'cpu_probe_selection_contexts':0,'cpu_probe_hall_targets':0}
         self.signature_codes = [{}, {}, {}]
         for code,row in enumerate(self.problem.masks):
             for side,mask in enumerate(row):
@@ -93,6 +94,36 @@ class CPUAssist:
             self.stats['cpu_prefix_unknown']+=1
             return {'status':'unknown','assignment':list(key),'fingerprint':self.fingerprint}
 
+    def obstruction_priority(self, assignment):
+        from itertools import combinations
+        from constraint_pruning import _tile_choices
+        self.stats['cpu_probe_selection_contexts']+=1
+        used=0
+        for code in assignment:
+            if code>=0:used |= 7<<(3*(code//3))
+        domains=[]
+        for cell,code in enumerate(assignment):
+            if code>=0:continue
+            domain=((1<<480)-1)&~used
+            for side,other in enumerate(self.problem.neighbors[cell]):
+                other=int(other)
+                if other>=0 and assignment[other]>=0:
+                    needed=reverse_mask(self.problem.masks[assignment[other],int(self.problem.sides[cell,side])])
+                    domain &= self.signature_codes[side].get(needed,0)
+            pieces=_tile_choices(domain)
+            domains.append((pieces.bit_count(),cell,pieces))
+        selected=sorted(domains)[:12]
+        shortage=False;minimum_slack=160
+        for size in range(4,min(6,len(selected))+1):
+            for group in combinations(selected,size):
+                union=0
+                for _,_,pieces in group:union|=pieces
+                slack=union.bit_count()-size
+                minimum_slack=min(minimum_slack,slack)
+                if slack<0:shortage=True;break
+            if shortage:break
+        return (int(shortage),-minimum_slack,sum(size<=4 for size,_,_ in selected))
+
     def _entry_lane(self, gpu, entry):
         owner=tuple(entry['owner_prefix'])
         try:lane=gpu.prefixes.index(owner)
@@ -144,7 +175,19 @@ class CPUAssist:
         lanes=[int(lane) for lane in range(gpu.n) if states[lane]==0 and 16<=depths[lane]<160]
         if not lanes:return held
         lane=max(lanes,key=lambda value:int(depths[value]))
-        assignment=list(map(int,gpu.boards[:,lane].get()))
+        assignment=None
+        if self.proof_targeted and self.probe_enabled:
+            candidates=sorted(lanes,key=lambda value:(-int(depths[value]),value))[:8]
+            # Bounded selection only: the chosen obstruction is re-proved by
+            # probe(), and this ranking never rejects a GPU subtree itself.
+            ranked=[]
+            for candidate in candidates:
+                values=list(map(int,gpu.boards[:,candidate].get()))
+                priority=self.obstruction_priority(values)
+                ranked.append((priority,int(depths[candidate]),-candidate,candidate,values))
+            priority,_,_,lane,assignment=max(ranked)
+            if priority[0]:self.stats['cpu_probe_hall_targets']+=1
+        if assignment is None:assignment=list(map(int,gpu.boards[:,lane].get()))
         key=tuple(assignment)
         if self.probe_enabled and key not in self.completed_probes:
             proof=self.probe(assignment)

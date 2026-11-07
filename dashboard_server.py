@@ -7,7 +7,7 @@ from io_utils import read_json_shared
 from gpu_backends import BACKENDS
 from search_algorithms import ALGORITHMS,LABELS
 from search_options import EXACT_ALGORITHMS,normalize_options,validate_workers
-from gpu_reasoning import normalize_features
+from gpu_reasoning import feature_identity, normalize_features
 from runtime_capabilities import runtime_capabilities,validate_runtime_selection
 ROOT=Path(__file__).resolve().parent
 RUNTIME=ROOT/'runtime';RUNTIME.mkdir(exist_ok=True)
@@ -49,7 +49,7 @@ def live_pid():
 def start_solver(body):
     global CHILD,LAUNCH_CONFIG
     if live_pid():raise ValueError('A solver is already running.')
-    seconds=body.get('seconds',3600);replicas=body.get('replicas',131072);seed=body.get('seed',20261007)
+    seconds=body.get('seconds',3600);replicas=body.get('replicas',128 if body.get('algorithm')=='gpu-domains' else 131072);seed=body.get('seed',20261007)
     method=body.get('method','systematic')
     if method not in ('systematic','stochastic','constraint'):raise ValueError('Unknown search method.')
     algorithm=body.get('algorithm','gpu-dfs')
@@ -59,7 +59,7 @@ def start_solver(body):
     constraint=algorithm!='gpu-dfs'
     if constraint:method='constraint'
     elif method!='stochastic':method='systematic'
-    cpu=constraint and algorithm!='hybrid'
+    cpu=constraint and algorithm not in ('hybrid','gpu-domains')
     target='edges' if method=='stochastic' else 'gold'
     if 'target' in body and body['target']!=target:raise ValueError(f'This algorithm searches the {target} target.')
     backend=body.get('backend','auto')
@@ -69,6 +69,7 @@ def start_solver(body):
     if isinstance(seconds,bool) or not isinstance(seconds,(int,float)) or type(replicas)is not int or type(seed)is not int:
         raise ValueError('Duration must be numeric; replicas and seed must be integers.')
     if (seconds!=0 and not 1<=seconds<=86400) or not 128<=replicas<=131072 or not 0<=seed<2**32:raise ValueError('Choose Unlimited (0) or 1..86400 seconds, 128..131072 replicas, and a nonnegative 32-bit seed.')
+    if algorithm=='gpu-domains' and replicas>512:raise ValueError('GPU domain search uses128..512 lanes with a512MiB state budget. Begin with128.')
     workers=validate_workers(body.get('workers',4))
     options=normalize_options(body.get('search_options'))
     gpu_features=normalize_features(body.get('gpu_features'))
@@ -85,7 +86,7 @@ def start_solver(body):
     if method!='stochastic':cmd.extend(['--backend',backend])
     if constraint:cmd.extend(['--algorithm',algorithm])
     if method=='systematic' and any(gpu_features.values()):cmd.extend(['--gpu-features',json.dumps(gpu_features,separators=(',',':'))])
-    if algorithm in EXACT_ALGORITHMS:
+    if algorithm in EXACT_ALGORITHMS or algorithm in ('sat','gpu-domains'):
         cmd.extend(['--search-options',json.dumps(options,separators=(',',':'))])
     if algorithm=='parallel-dfs':cmd.extend(['--workers',str(workers)])
     with (RUNTIME/'solver.log').open('a',encoding='utf-8')as log:
@@ -132,11 +133,14 @@ def startup_status(pid):
     algorithm=status.get('algorithm')
     if status.get('method')=='constraint' or algorithm in ALGORITHMS[1:]:
         status.update(method='constraint',target='gold')
-        cpu=algorithm!='hybrid'
+        cpu=algorithm not in ('hybrid','gpu-domains')
         if cpu:status.update(replicas=0,backend='cpu')
-        restoring=algorithm in ALGORITHMS[1:] and (RUNTIME/'searches'/(algorithm+'-gold')/'checkpoint.json').exists()
+        restoring=False
+        if algorithm in ALGORITHMS[1:]:
+            checkpoint_folder='sat-session-gold' if algorithm=='sat' and status.get('search_options',{}).get('persistent_sat') else algorithm+'-gold'
+            restoring=(RUNTIME/'searches'/checkpoint_folder/'checkpoint.json').exists()
         status['startup_phase']='restoring_checkpoint' if restoring else 'building_model' if cpu else 'initializing_gpu'
-        if algorithm in EXACT_ALGORITHMS:
+        if algorithm in EXACT_ALGORITHMS or algorithm=='gpu-domains' or algorithm=='sat' and status.get('search_options',{}).get('persistent_sat'):
             status['phase_message']='Restoring exact Gold search branches.' if restoring else ('Preparing CPU constraints and exact DFS.' if cpu else 'Preparing GPU sampling and constrained DFS.')
         else:
             status['phase_message']='Loading saved Gold constraints and rebuilding the CPU model.' if restoring else 'Building the CPU Gold constraint model.'
@@ -146,7 +150,7 @@ def startup_status(pid):
         elif status.get('method')=='stochastic':status.setdefault('algorithm','stochastic')
         status.setdefault('target','gold' if systematic else 'edges')
         features=normalize_features(status.get('gpu_features'))
-        profile=('systematic-'+hashlib.sha256(json.dumps(features,sort_keys=True,separators=(',',':')).encode()).hexdigest()[:12]) if any(features.values()) else 'systematic'
+        profile=('systematic-'+hashlib.sha256(json.dumps(feature_identity(features),sort_keys=True,separators=(',',':')).encode()).hexdigest()[:12]) if any(features.values()) else 'systematic'
         restoring=(RUNTIME/(profile+'/checkpoint.npz' if systematic else 'checkpoint.npz')).exists()
         status['startup_phase']='restoring_checkpoint' if restoring else 'initializing_gpu'
         status['phase_message']=('Restoring disjoint branches and saved cursors.' if restoring else 'Preparing disjoint GPU search branches.') if systematic else ('Restoring saved search and validating its cache.' if restoring else 'Preparing the GPU search.')

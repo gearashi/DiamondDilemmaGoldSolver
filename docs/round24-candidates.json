@@ -1,0 +1,716 @@
+{
+  "schema": "diamond-round24-register-v1",
+  "baseline": "a9b1184ed2412687b52a0d86c873d64e8ce69478",
+  "objective": "All 42 proposals implemented/evaluated; retain correct reductions in decisions or repeated reasoning, also measure time; publish validated release.",
+  "evidence_stage": "finite development evidence; final frozen-source release evidence added separately",
+  "default_policy": "New controls are opt-in; no all-options-on recommendation.",
+  "gold_solution_found": false,
+  "candidate_count": 42,
+  "candidates": [
+    {
+      "id": 1,
+      "proposal": "Resume unfinished reasoning",
+      "owner": "root",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_continuation.py"
+      ],
+      "access": "resumable_reasoning",
+      "disposition": "Retained reuse; bounded implementation",
+      "mechanism": "Save unfinished cut-vector enumeration and its private support union; publish a deduction only when the required alternatives finish.",
+      "finite_evidence": "A finite continuation check uses 5 matching checks instead of 8; interruption at every tested checkpoint preserves the exact result.",
+      "limits": "This resumes selected cut reasoning, not every CPU propagator. Direct regional diagrams additionally retain same-process construction sessions (#17).",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 2,
+      "proposal": "Prune queued frontier with verified exclusions",
+      "owner": "root",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_queue_work.py",
+        "test_constraint_work.py"
+      ],
+      "access": "queue_pruning; parallel-dfs, or dfs with shared_coverage",
+      "disposition": "Retained reuse",
+      "mechanism": "Subtract independently verified exclusions from queued domain boxes before launching workers. Exact splitting preserves the remaining disjoint union.",
+      "finite_evidence": "A verified loop excludes a queued job with zero workers started; randomized box subtraction agrees with explicit assignments.",
+      "limits": "Active worker jobs retain their own ownership; a size cap leaves the previous pending cover unchanged.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 3,
+      "proposal": "Transfer completed coverage across policies",
+      "owner": "root",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_work.py",
+        "test_constraint_queue_work.py",
+        "test_constraint_portable.py",
+        "test_gpu_domain_runner.py"
+      ],
+      "access": "shared_coverage; dfs, parallel-dfs, persistent SAT, gpu-domains",
+      "disposition": "Retained reuse",
+      "mechanism": "Store completed infeasible boxes in a scoped SQLite ledger and subtract them when changing compatible policies or engines.",
+      "finite_evidence": "Restart and policy-change checks avoid executing completed work; objective/root mismatch and incomplete/solved entries are rejected.",
+      "limits": "Trusted local progress is not a portable mathematical proof. A completed imported subset does not establish exhaustion of the entire puzzle.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 4,
+      "proposal": "Transfer unfinished frontiers across engines",
+      "owner": "root",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_portable.py",
+        "test_gpu_domain_runner.py"
+      ],
+      "access": "portable_frontier; --work-frontier PATH",
+      "disposition": "Retained transport",
+      "mechanism": "Export the exact unfinished union as disjoint domain boxes; import it into parallel DFS, persistent SAT or CUDA domains.",
+      "finite_evidence": "CPU/SAT and CPU/GPU/CPU round trips preserve unfinished work; overlap, scope and corruption checks reject invalid inputs.",
+      "limits": "Native internal trails or SAT clauses may be rebuilt after transfer. The compact legacy GPU engine is not a general receiver for this format.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 5,
+      "proposal": "General proof-carrying transport",
+      "owner": "root",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_proof.py",
+        "test_constraint_learning_round24.py"
+      ],
+      "access": "proof_transport; automatically enables smart_learning",
+      "disposition": "Retained checked transport; bounded proof producer",
+      "mechanism": "Produce bounded edge-model DPLL refutations and independently check their RUP clauses before accepting transported mask exclusions.",
+      "finite_evidence": "A checked certificate avoids native SAT re-solving; altered proofs/scope fail validation. A child-process test checks clean exit after UNSAT proof generation.",
+      "limits": "Gold-only contradictions outside the edge relaxation still need ordinary verification. Native proof logging was rejected after a Windows crash; the pure bounded producer is used.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 6,
+      "proposal": "Persistent standalone SAT sessions",
+      "owner": "root",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_sat_session.py",
+        "test_constraint_portable.py"
+      ],
+      "access": "persistent_sat with algorithm sat",
+      "disposition": "Retained warm reuse",
+      "mechanism": "Keep one plain-SAT model, learned native state and guarded cube assumptions across warm slices; checkpoint remaining cubes and verified Gold cuts.",
+      "finite_evidence": "Warm slices build the model once; completed cubes stay absent after restart; independently enumerated edge/Gold fixtures agree.",
+      "limits": "Process restart rebuilds native SAT internals and may repeat unfinished inference. This is plain SAT, not a portable checkpoint for every SAT/CP backend.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 7,
+      "proposal": "Cross-context complete support witnesses",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_sat_round24.py",
+        "benchmark_learning_round24.py"
+      ],
+      "access": "witness_pool; automatically enables sat_assist",
+      "disposition": "Retained reuse",
+      "mechanism": "Revalidate complete semantic SAT models in new domain contexts, supplying many placement supports without another solver query.",
+      "finite_evidence": "On 60 finite contexts, identical supported domains require 72 native calls versus 874 for the prior scan.",
+      "limits": "These are edge-relaxation support witnesses; they are not accepted as Gold solutions. The pool and retained work are bounded.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 8,
+      "proposal": "Canonical residual reuse",
+      "owner": "regions",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_region_reasoning_round24.py",
+        "test_constraint_residual_reuse_round24.py"
+      ],
+      "access": "residual_reuse",
+      "disposition": "Retained reuse; contracted labelled states",
+      "mechanism": "Reuse completed negative results when live domains, inventory, exposed masks and contracted path wiring describe the same remaining problem.",
+      "finite_evidence": "Equivalent fixed interiors share a key; the public DFS path reuses a completed proof before propagation. Timeout and wrong-root reuse cannot create exclusions.",
+      "limits": "Actual cell/piece labels remain. Arbitrary graph isomorphism and physical-piece renaming are not implemented; reuse is bound to the owned root.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 9,
+      "proposal": "Incremental Hall SCC maintenance",
+      "owner": "root",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_incremental_hall.py"
+      ],
+      "access": "incremental_hall",
+      "disposition": "Retained incremental reuse",
+      "mechanism": "Repair the piece matching and revisit only affected alternating-graph SCCs when the matching stays valid; reuse exact saved snapshots on rollback.",
+      "finite_evidence": "Random shrink/widen/backtrack sequences match exhaustive assignments. One six-cell example revisits 2 SCC vertices and reuses 4.",
+      "limits": "Matching changes or unrecognized widening trigger a complete pass. Interrupted partial computations are not committed.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 10,
+      "proposal": "Reversible GPU strand connectivity",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_gpu_domain_round24.py"
+      ],
+      "access": "algorithm gpu-domains",
+      "disposition": "Retained alternative CUDA architecture",
+      "mechanism": "Maintain reversible per-lane strand connectivity through assignments and undo operations.",
+      "finite_evidence": "Complete tiny Gold solution sets agree with rebuilding connectivity, with fewer strand joins.",
+      "limits": "NVIDIA CUDA domain engine only; this does not add full reversible state to the compact WebGPU engine.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 11,
+      "proposal": "Retain relational deductions",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_learning_round24.py"
+      ],
+      "access": "retained_relations",
+      "disposition": "Retained relational reuse",
+      "mechanism": "Keep scoped binary path-consistency deductions so later domain restrictions can expose their unary consequences.",
+      "finite_evidence": "An initially non-pruning equality relation later forces its partner; independent enumeration checks narrower/wider contexts.",
+      "limits": "Current extraction is from path consistency, not every constructive-lookahead or SAT relation.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 12,
+      "proposal": "SAT support-cover batches",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_sat_round24.py",
+        "benchmark_learning_round24.py"
+      ],
+      "access": "support_cover; automatically enables sat_assist",
+      "disposition": "Experimental; workload-dependent",
+      "mechanism": "Query a guarded disjunction of uncovered placements and use each returned model to cover multiple supports.",
+      "finite_evidence": "One fixture needs 11 calls versus 20; the wider 60-context corpus needs 965 versus 874. With witness pooling both use 72.",
+      "limits": "Retained as a selectable alternative, not a universal improvement. Selectors are disabled on completion or interruption.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 13,
+      "proposal": "Joint seam-signature conservation",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_learning_round24.py",
+        "benchmark_learning_round24.py"
+      ],
+      "access": "joint_conservation",
+      "disposition": "Experimental deduction",
+      "mechanism": "Solve simultaneous seam-signature capacity constraints with exact matching and support filtering.",
+      "finite_evidence": "A joint shortage passes separate class bounds but fails the combined model; 400 small instances match independent assignments.",
+      "limits": "No additional pruning after the prior fixpoint on the 60-context comparison corpus. Original-board benefit remains unestablished.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 14,
+      "proposal": "Affine and modular invariants",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_learning_round24.py",
+        "benchmark_learning_round24.py"
+      ],
+      "access": "affine_reasoning",
+      "disposition": "Experimental deduction; GF(2) runtime",
+      "mechanism": "Combine affine port-vector constraints in global seam coordinates and reject inconsistent candidates.",
+      "finite_evidence": "All 256 subsets of three-bit vectors match independent affine closure; 80 puzzle contexts preserve all enumerated edge solutions.",
+      "limits": "Runtime propagation uses GF(2). A mod-3 reference experiment exists, but general modular runtime propagation is not implemented; the comparison corpus found no extra pruning.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 15,
+      "proposal": "Learned pseudo-Boolean inequalities",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_learning_round24.py",
+        "benchmark_learning_round24.py"
+      ],
+      "access": "pb_learning",
+      "disposition": "Experimental certified deduction",
+      "mechanism": "Derive exact pseudo-Boolean capacity/seam inequalities through positive integer combinations and gcd rounding, then filter domains.",
+      "finite_evidence": "A contradiction survives primitive rows but is caught by a derived cut; 80 signed-integer systems preserve their complete model sets.",
+      "limits": "Derived cuts are bounded and checked. The 60-context prior-fixpoint comparison found no additional deletion.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 16,
+      "proposal": "Broader SAT theory propagation",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_sat_round24.py"
+      ],
+      "access": "sat_theory with sat-propagator",
+      "disposition": "Experimental native SAT theory",
+      "mechanism": "Explain partial Hall shortages and bounded affine consequences to the native SAT backend.",
+      "finite_evidence": "A partial shortage clause holds for every independently enumerated edge solution.",
+      "limits": "This adds specific theory propagators, not the entire CPU pruning pipeline; it requires the compatible native SAT environment.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 17,
+      "proposal": "Direct symbolic regional diagrams",
+      "owner": "regions",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_region_symbolic.py",
+        "test_constraint_region_network.py",
+        "benchmark_regions_round24.py"
+      ],
+      "access": "symbolic_regions",
+      "disposition": "Retained symbolic reuse; bounded regions",
+      "mechanism": "Compile exact labelled regional histories directly into a memoized frontier DAG and join overlapping DAGs without expanding all rows.",
+      "finite_evidence": "The seven-cell discriminator preserves all 5,040 histories with 889 versus 60,620 candidate trials; sliced construction repeats no trials.",
+      "limits": "Selected regions and hard state/work caps apply. Unfinished DAG sessions survive only in the same process, not as portable disk continuations.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 18,
+      "proposal": "Symbolic inventory families",
+      "owner": "regions",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_region_symbolic.py",
+        "benchmark_regions_round24.py"
+      ],
+      "access": "symbolic_inventory",
+      "disposition": "Retained symbolic reuse",
+      "mechanism": "Represent used-piece subsets with a ZDD and compute exact disjoint products and inventory supports.",
+      "finite_evidence": "Six regional groups retain the same 66 inventories each; 19,033 ZDD primitive operations replace 135,102 explicit inventory alternatives in the discriminator.",
+      "limits": "Primitive operation types differ, so this is not a speed ratio. Node caps yield unknown without eliminating support.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 19,
+      "proposal": "Whole-constraint elimination and resource forgetting",
+      "owner": "regions",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_region_reasoning_round24.py",
+        "benchmark_regions_round24.py"
+      ],
+      "access": "elimination; full/conditioned APIs in constraint_region_elimination",
+      "disposition": "Retained bounded exact factor reasoning",
+      "mechanism": "Eliminate seam/piece factors with inward/outward support messages, forgetting each resource only after its final possible occurrence; provide exact cutset conditioning.",
+      "finite_evidence": "A synthetic 160-cell resource fixture uses 2,080 factor operations at live width 2; independently validated full witnesses cover every retained placement.",
+      "limits": "Full mode covers all cells for seams and inventory. Gold connectivity remains outside this relaxation. Wide original instances can cap; small selected queries are not a full-board completion proof.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 20,
+      "proposal": "Mini-bucket reasoning",
+      "owner": "regions",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_region_reasoning_round24.py",
+        "benchmark_regions_round24.py"
+      ],
+      "access": "mini_buckets",
+      "disposition": "Experimental relaxed deduction",
+      "mechanism": "Split oversized elimination buckets into optimistic subproblems whose completed negatives remain sound.",
+      "finite_evidence": "The bounded K4 three-colour discriminator is possible at width 3 and rejected at width 4.",
+      "limits": "A feasible relaxation is not a solution; budget limits return unknown. Benefit depends on the chosen width and residual graph.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 21,
+      "proposal": "Relaxed diagrams and refinement",
+      "owner": "regions",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_region_reasoning_round24.py",
+        "benchmark_regions_round24.py"
+      ],
+      "access": "relaxed_diagrams",
+      "disposition": "Experimental relaxed deduction",
+      "mechanism": "Merge states by unioning possibilities, then refine still-possible queries through increasing widths.",
+      "finite_evidence": "An odd-XOR triangle survives width 1 and is rejected after refinement; exhaustive checks preserve true solutions.",
+      "limits": "Merging is optimistic. Only a completed negative or exact result can justify a conclusion; caps are unknown.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 22,
+      "proposal": "Representative connectivity families",
+      "owner": "regions",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_region_symbolic.py",
+        "test_constraint_region_reasoning_round24.py",
+        "benchmark_regions_round24.py"
+      ],
+      "access": "representative_connectivity",
+      "disposition": "Retained bounded existence compression",
+      "mechanism": "Use a GF(2) rank basis of connectivity rows inside the same inventory/boundary class.",
+      "finite_evidence": "105 eight-endpoint matching rows reduce to 8 representatives, checked against all 105 outside matchings.",
+      "limits": "Preserves existence, not counts or arbitrary placement supports. Reduction is limited to ten exposed endpoints; larger classes keep all rows.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 23,
+      "proposal": "Exact subset-convolution joins",
+      "owner": "regions",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_region_symbolic.py",
+        "benchmark_regions_round24.py"
+      ],
+      "access": "subset_joins",
+      "disposition": "Retained bounded join alternative",
+      "mechanism": "Use exact integer ranked subset convolution for disjoint inventory joins, evaluating only cardinality layers present.",
+      "finite_evidence": "A ten-piece join replaces 63,504 explicit pair tests with 16,384 transform operations and preserves all 252 joined histories.",
+      "limits": "Different operation types are not directly comparable in time. The generic transform accepts at most 16 pieces; integrated queries default to ten.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 24,
+      "proposal": "Lazy regional master",
+      "owner": "regions",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_region_reasoning_round24.py",
+        "benchmark_regions_round24.py"
+      ],
+      "access": "lazy_regions",
+      "disposition": "Retained bounded lazy master",
+      "mechanism": "Generate regional realizations on demand and memoize only completed failed inventory/strand interfaces.",
+      "finite_evidence": "An eight-cell discriminator requests 2 local rows instead of preparing 3,360 eager rows and returns independently validated Gold.",
+      "limits": "This is a bounded existence query, not a general full-size branch-and-price engine. Capped parent interfaces are never marked failed.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 25,
+      "proposal": "Proof-derived interface formulas",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_learning_round24.py"
+      ],
+      "access": "interface_formulas",
+      "disposition": "Retained bounded checked projection",
+      "mechanism": "Eliminate interior variables from optimistic regional CNF and replay each resolution derivation before retaining interface clauses.",
+      "finite_evidence": "100 finite formulas preserve existential boundary models; puzzle checks preserve every enumerated completion under narrower contexts.",
+      "limits": "Caps publish no formula; widening invalidates scoped use. Arbitrary backend Craig-interpolant extraction is not implemented.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 26,
+      "proposal": "Certified optimization relaxations",
+      "owner": "regions",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_region_reasoning_round24.py",
+        "benchmark_regions_round24.py"
+      ],
+      "access": "certified_relaxation; priced_inventory_master research API",
+      "disposition": "Experimental certified relaxation",
+      "mechanism": "Accept LP negatives only after exact rational Farkas checks; a separate regional DAG pricing prototype generates inventory columns on demand.",
+      "finite_evidence": "A feasible inventory master generates 24 columns from 90 histories; a shortage closes only after complete pricing and exact certification.",
+      "limits": "The pricing master relaxes seams/Gold connectivity, and feasible LPs are not witnesses. Native LP proposals are optional and never proof authority.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 27,
+      "proposal": "Label-consistent simultaneous routing",
+      "owner": "regions",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_region_reasoning_round24.py",
+        "benchmark_regions_round24.py"
+      ],
+      "access": "labelled_routing",
+      "disposition": "Retained bounded necessary connectivity check",
+      "mechanism": "Require simultaneous port-disjoint routes with compatible orientation and physical-piece labels.",
+      "finite_evidence": "Individual routes exist in a discriminator but cannot coexist with consistent labels; exhaustive small puzzle cases retain every Gold solution.",
+      "limits": "A Gold-only necessary condition with query/admission caps, not a general complete routing solver for arbitrary large residual boards.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 28,
+      "proposal": "Dual piece branching",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_hybrid_round24.py"
+      ],
+      "access": "dual_piece_branching",
+      "disposition": "Experimental ordering/partition policy",
+      "mechanism": "Branch on whether a selected physical piece occupies a cell, partitioning that cell domain into present/absent masks.",
+      "finite_evidence": "Every independently enumerated completion belongs to exactly one child.",
+      "limits": "Completeness is preserved; fewer total decisions on the original puzzle is unestablished.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 29,
+      "proposal": "Strand-first branching",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_hybrid_round24.py"
+      ],
+      "access": "strand_branching",
+      "disposition": "Experimental ordering/partition policy",
+      "mechanism": "Partition by continuation of a fixed strand into a neighbouring tile, including alternatives with identical seam masks.",
+      "finite_evidence": "A discriminator distinguishes internal partners even when side masks agree; child masks cover the original domain exactly.",
+      "limits": "This changes the order/partition of exact work, not the feasibility conditions.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 30,
+      "proposal": "Completion-count ordering",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_hybrid_round24.py"
+      ],
+      "access": "completion_ordering",
+      "disposition": "Experimental bounded ordering",
+      "mechanism": "Count exact local seam/inventory extensions in a small star and use completed counts to rank values.",
+      "finite_evidence": "Counts agree with independent local enumeration; a capped count still retains every choice.",
+      "limits": "Local counts are a relaxation of the whole board. They never remove candidates or imply a global completion count.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 31,
+      "proposal": "Learned branching or repair policy",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_learned_ordering_round24.py",
+        "benchmark_learned_ordering_round24.py"
+      ],
+      "access": "learned_ordering",
+      "disposition": "Retained optional fitted ordering; limited evidence",
+      "mechanism": "Use frozen five-feature ridge weights trained on completed child-search work to order values.",
+      "finite_evidence": "46 completed labels on six training seeds; twelve disjoint ten-cell tests use 119 versus 133 nodes, with 7 wins, 2 ties and 3 losses.",
+      "limits": "Six further forty-cell pairs all cap and remain inconclusive. No original-board generalization or learned repair policy is claimed; predictions never prune.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 32,
+      "proposal": "Verified obstruction discovery",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_learning_round24.py",
+        "benchmark_learning_round24.py"
+      ],
+      "access": "obstruction_rules",
+      "disposition": "Experimental verified discovery",
+      "mechanism": "Mine mixed seam/inventory incompatibility cliques and odd cycles, then verify their exact at-most bounds.",
+      "finite_evidence": "Generated rules are rechecked; 45 puzzle contexts preserve every enumerated edge solution. Dominated rules do not inflate retained-rule counts.",
+      "limits": "Discovery is limited to these templates; no unrestricted theorem synthesis. No additional pruning in the 60-context prior-fixpoint comparison.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 33,
+      "proposal": "GPU explanation learning and backjumping",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_gpu_domain_round24.py",
+        "test_gpu_domain_checkpoint_validation.py"
+      ],
+      "access": "algorithm gpu-domains",
+      "disposition": "Retained alternative CUDA reasoning",
+      "mechanism": "Keep lane-local reasons and learned placement clauses; jump back to the relevant decision rather than undoing every intervening choice.",
+      "finite_evidence": "A completed Hall UNSAT fixture uses 42 decisions/757 support checks with learning versus 166/2,852 without.",
+      "limits": "Clauses are scoped to their lane root. This is the new CUDA domain architecture, not a change to every legacy GPU lane.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 34,
+      "proposal": "GPU reversible domains",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_gpu_domain_round24.py",
+        "test_gpu_domain_runner.py",
+        "test_gpu_domain_checkpoint_validation.py"
+      ],
+      "access": "algorithm gpu-domains",
+      "disposition": "Retained alternative CUDA architecture",
+      "mechanism": "Store complete reversible domains, removals, reasons and unfinished propagation scans in durable lane state.",
+      "finite_evidence": "Tiny exhaustive comparisons and checkpoint/restore tests preserve pending work; 160-cell-deep fixtures check remaining branch volumes.",
+      "limits": "The full-state engine supports 128–512 lanes within its memory budget, not 131,072. Batch lanes are not yet refilled dynamically.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 35,
+      "proposal": "Proof-targeted CPU probes",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_gpu_probe_round24.py"
+      ],
+      "access": "GPU DFS feature proof_probes",
+      "disposition": "Retained proof-targeted scheduling",
+      "mechanism": "Rank bounded CPU probes by signs of a physical-piece shortage, then require the CPU to prove failure independently.",
+      "finite_evidence": "A 160-cell discriminator selects four cells competing for three pieces; the selected query proves infeasible.",
+      "limits": "Ranking alone never rejects a branch; this extends CPU assistance for the compact GPU DFS engine.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 36,
+      "proposal": "Core-guided minimum-change repair",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_hybrid_round24.py"
+      ],
+      "access": "core_repair in hybrid",
+      "disposition": "Retained bounded exact repair",
+      "mechanism": "Use infeasible assumption cores and an exact hitting-set master to seek a minimum number of changed cells.",
+      "finite_evidence": "Tiny complete enumeration confirms the minimum Hamming distance; cancellation and invalid seed assumptions are checked.",
+      "limits": "Minimum-change claims require completed optimization. Budget exhaustion and unavailable native dependencies are unknown.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 37,
+      "proposal": "Connectivity-directed trades",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_hybrid_round24.py"
+      ],
+      "access": "loop_trades in hybrid",
+      "disposition": "Retained bounded repair neighbourhood",
+      "mechanism": "Enumerate exact patch trades preserving all outside placements while seeking fewer loop components.",
+      "finite_evidence": "A two-cell trade merges three loops into independently validated Gold.",
+      "limits": "Requires an edge-perfect legal input; it does not make a failed patch proof apply to other outside arrangements.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 38,
+      "proposal": "Fragment crossover",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_hybrid_round24.py"
+      ],
+      "access": "fragment_crossover in hybrid",
+      "disposition": "Experimental constructive repair",
+      "mechanism": "Pack compatible matched fragments from an archive, then complete physical inventory and the Gold circuit exactly.",
+      "finite_evidence": "A small crossover uses material from both parents and independently validates its Gold result.",
+      "limits": "Bounded archive/fragment/query sizes apply. This is a proposal heuristic followed by exact validation, not exhaustive global coverage.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 39,
+      "proposal": "Repair-context learned exclusions",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_hybrid_round24.py"
+      ],
+      "access": "repair_learning; smart_learning for DFS reuse",
+      "disposition": "Retained scoped proof reuse",
+      "mechanism": "Record completed feasibility failures under explicit outside assumptions; send candidate exclusions through independent original-root verification.",
+      "finite_evidence": "A transport discriminator offers one true and one false claim; only the true exclusion is admitted.",
+      "limits": "Optimization failure, a capped query or an unverified exported core cannot prune DFS.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 40,
+      "proposal": "Ejection chains",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_gpu_sampling_round24.py",
+        "benchmark_hybrid_round24.py"
+      ],
+      "access": "ejection_chains in hybrid sampling",
+      "disposition": "Experimental heuristic; benefit pending",
+      "mechanism": "Propose closed three-to-six-cell relocation chains with independent rotations.",
+      "finite_evidence": "All nonempty combinations of the three new sampling controls preserve inventory/fixed cells and independently recalculated scores on CUDA and D3D12 tests.",
+      "limits": "Heuristic sampling does not prove coverage and can revisit boards. This chain path currently rescans the full score.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 41,
+      "proposal": "Move tabu",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_gpu_sampling_round24.py",
+        "benchmark_hybrid_round24.py"
+      ],
+      "access": "move_tabu in hybrid sampling",
+      "disposition": "Experimental heuristic; benefit pending",
+      "mechanism": "Keep short move-attribute tabu memory, allowing aspiration when a move improves that lane’s best.",
+      "finite_evidence": "The sampling combinations pass independent current/best-board and score checks, including with Gold scoring enabled.",
+      "limits": "Tabu discourages selected recent moves; it does not guarantee distinct complete boards or establish a faster original solve.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    },
+    {
+      "id": 42,
+      "proposal": "Replica exchange",
+      "owner": "gpu_hybrid",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_gpu_sampling_round24.py",
+        "benchmark_hybrid_round24.py"
+      ],
+      "access": "replica_exchange in hybrid sampling",
+      "disposition": "Experimental heuristic; benefit pending",
+      "mechanism": "Exchange current boards/scores between fixed-temperature lanes using Metropolis acceptance, keeping lane RNG/iteration and best archives in place.",
+      "finite_evidence": "Equal-energy cases verify actual board exchange without moving temperature-lane state; combined sampling modes pass invariant checks.",
+      "limits": "This is diversification, not an exact search-space reduction. Compare equal proposals, time and solution quality across seeds.",
+      "original_puzzle_gain": "not established by these finite results",
+      "release_validation": "pending coordinator final run"
+    }
+  ]
+}

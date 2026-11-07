@@ -62,6 +62,22 @@ class RunnerTests(unittest.TestCase):
         self.assertFalse((self.run/'run.lock').exists())
         self.assertEqual(self.handlers, {sig: signal.getsignal(sig) for sig in self.handlers})
 
+    @requires_sat
+    def test_persistent_sat_public_runner_saves_progress_and_final_frontiers(self):
+        self.data,self.problem=pair_problem(multiple_loops=True)
+        self.model.return_value=self.problem
+        self.input.write_text(json.dumps(self.data),encoding='utf-8')
+        runner.main(self.args('sat','--search-options',json.dumps({'persistent_sat':True})))
+        state=self.read('status.json')
+        self.assertEqual(state['state'],'exhausted')
+        self.assertEqual(state['stats']['engine'],'sat-session')
+        writes=[call.args[1]['payload'] for call in self.write.call_args_list if Path(call.args[0]).name=='checkpoint.json']
+        self.assertGreaterEqual(len(writes),2)
+        self.assertTrue(all(row['schema']=='diamond-sat-session-v1' for row in writes))
+        self.assertEqual(self.read('searches/sat-session-gold/checkpoint.json')['payload']['frontier']['boxes'],[])
+        self.assertTrue(any(row.get('phase')=='searching' for row in self.statuses))
+        self.assert_released()
+
     @requires_ortools
     def test_direct_circuit_route_runs_and_snapshots_its_model(self):
         runner.main(self.args('cp-sat-circuit'))

@@ -19,7 +19,9 @@ STAT_KEYS = ('region_network_checks', 'region_network_cache_hits', 'region_netwo
     'region_network_budget_skips', 'region_triple_checks',
     'region_inventory_checks', 'region_outside_path_rejections',
     'region_overlap_checks', 'region_overlap_prunes',
-    'region_diagram_nodes', 'region_diagram_rows', 'region_component_joins')
+    'region_diagram_nodes', 'region_diagram_rows', 'region_component_joins',
+    'region_symbolic_states', 'region_symbolic_hits', 'region_inventory_zdd_nodes',
+    'region_inventory_zdd_operations', 'region_inventory_subset_operations')
 
 
 def joined_signature(owner, left, ls, right, rs, domains, check):
@@ -182,6 +184,10 @@ class RegionNetwork:
         self.inventories = True
         self.outside_paths = True
         self.last = None
+        self.direct_diagrams = False
+        self.symbolic_inventory = False
+        self.subset_inventory = False
+        self._diagram_sessions = OrderedDict()
         self.stats = dict.fromkeys(STAT_KEYS, 0)
 
     def _publish(self, domains, supports, check, overlap=False):
@@ -298,24 +304,34 @@ class RegionNetwork:
                     # suffixes are memoized; masks are not split into tile unions.
                     self.stats['region_inventory_checks'] += 1
                     groups = [set(s[0] for s in row) for row in active]
-                    supported = [set() for _ in groups]
-                    memo = {}
-                    def allocate(index,used):
-                        self._tick(check)
-                        cache_key = index,used
-                        if cache_key in memo:
-                            return memo[cache_key]
-                        if index == len(groups):
-                            return True
-                        feasible = False
-                        for inventory in sorted(groups[index]):
-                            if inventory & used:
-                                continue
-                            if allocate(index+1,used|inventory):
-                                supported[index].add(inventory); feasible = True
-                        memo[cache_key] = feasible
-                        return feasible
-                    allocate(0,0)
+                    if self.subset_inventory:
+                        from constraint_region_symbolic import subset_inventory_supports
+                        supported,work=subset_inventory_supports(groups,check)
+                        self.stats['region_inventory_subset_operations']+=work['operations']
+                    elif self.symbolic_inventory:
+                        from constraint_region_symbolic import inventory_supports
+                        supported,work=inventory_supports(groups,check,max_nodes=self.max_steps)
+                        self.stats['region_inventory_zdd_nodes']+=work['nodes']
+                        self.stats['region_inventory_zdd_operations']+=work['operations']
+                    else:
+                        supported = [set() for _ in groups]
+                        memo = {}
+                        def allocate(index,used):
+                            self._tick(check)
+                            cache_key = index,used
+                            if cache_key in memo:
+                                return memo[cache_key]
+                            if index == len(groups):
+                                return True
+                            feasible = False
+                            for inventory in sorted(groups[index]):
+                                if inventory & used:
+                                    continue
+                                if allocate(index+1,used|inventory):
+                                    supported[index].add(inventory); feasible = True
+                            memo[cache_key] = feasible
+                            return feasible
+                        allocate(0,0)
                     for index,allowed in enumerate(supported):
                         selected = {s for s in active[index] if s[0] in allowed}
                         if selected != active[index]:
@@ -347,6 +363,25 @@ class RegionNetwork:
                 self.cache.popitem(last=False)
         return self._publish(domains,supports,check)
 
+    def _direct_diagram(self,cells,domains,check):
+        from constraint_region_symbolic import DirectRegionDiagram,DirectRegionSession
+        key=(tuple(cells),tuple(domains))
+        session=self._diagram_sessions.get(key)
+        if session is None:
+            session=DirectRegionSession(self.owner,cells,domains,self.max_rows,self.max_steps)
+            self._diagram_sessions[key]=session
+            while len(self._diagram_sessions)>4:self._diagram_sessions.popitem(last=False)
+        self._diagram_sessions.move_to_end(key)
+        try:
+            while not session.advance(256,check):pass
+        except _Budget:
+            self._diagram_sessions.pop(key,None)
+            raise
+        # Cancellation leaves the suspended session available for the identical
+        # immutable query on the next work slice. Only complete DAGs escape.
+        diagram=object.__new__(DirectRegionDiagram);diagram.__dict__.update(session.result())
+        return diagram
+
     def prune_overlap(self, domains, left, right, check=lambda:None):
         if not all(domains):
             return False
@@ -356,25 +391,35 @@ class RegionNetwork:
             return False
         self.stats['region_overlap_checks'] += 1; self._steps = 0
         try:
-            ld = ExactRegionDiagram(self.owner,left,domains,check,self.max_rows,self.max_steps)
-            rd = ExactRegionDiagram(self.owner,right,domains,check,self.max_rows,self.max_steps)
-            self.stats['region_diagram_nodes'] += len(ld.nodes)+len(rd.nodes)
-            self.stats['region_diagram_rows'] += ld.rows+rd.rows
-            index = {}
-            shared = tuple(sorted(overlap))
-            lo = tuple(left.index(c) for c in shared); ro = tuple(right.index(c) for c in shared)
-            for codes,signature in rd.histories(check):
-                index.setdefault(tuple(codes[i] for i in ro), []).append(codes)
-            supports = {c:0 for c in set(left)|set(right)}
-            members = tuple(sorted(supports))
-            for lc,_ in ld.histories(check):
-                for rc in index.get(tuple(lc[i] for i in lo), ()):
-                    self._tick(check)
-                    chosen = dict(zip(left,lc)); chosen.update(zip(right,rc))
-                    codes = tuple(chosen[c] for c in members)
-                    if assignment_signature(self.owner,members,codes,domains,check) is not None:
-                        for cell,code in chosen.items():
-                            supports[cell] |= 1 << code
+            if self.direct_diagrams:
+                from constraint_region_symbolic import DirectRegionDiagram,join_diagrams
+                ld=self._direct_diagram(left,domains,check)
+                rd=self._direct_diagram(right,domains,check)
+                supports,work=join_diagrams(self.owner,ld,rd,domains,check,self.max_steps)
+                self.stats['region_symbolic_states']+=ld.states+rd.states+work['states']
+                self.stats['region_symbolic_hits']+=ld.memo_hits+rd.memo_hits+work['memo_hits']
+                self.stats['region_diagram_nodes']+=len(ld.nodes)+len(rd.nodes)
+                self.stats['region_diagram_rows']+=ld.rows+rd.rows
+            else:
+                ld = ExactRegionDiagram(self.owner,left,domains,check,self.max_rows,self.max_steps)
+                rd = ExactRegionDiagram(self.owner,right,domains,check,self.max_rows,self.max_steps)
+                self.stats['region_diagram_nodes'] += len(ld.nodes)+len(rd.nodes)
+                self.stats['region_diagram_rows'] += ld.rows+rd.rows
+                index = {}
+                shared = tuple(sorted(overlap))
+                lo = tuple(left.index(c) for c in shared); ro = tuple(right.index(c) for c in shared)
+                for codes,signature in rd.histories(check):
+                    index.setdefault(tuple(codes[i] for i in ro), []).append(codes)
+                supports = {c:0 for c in set(left)|set(right)}
+                members = tuple(sorted(supports))
+                for lc,_ in ld.histories(check):
+                    for rc in index.get(tuple(lc[i] for i in lo), ()):
+                        self._tick(check)
+                        chosen = dict(zip(left,lc)); chosen.update(zip(right,rc))
+                        codes = tuple(chosen[c] for c in members)
+                        if assignment_signature(self.owner,members,codes,domains,check) is not None:
+                            for cell,code in chosen.items():
+                                supports[cell] |= 1 << code
         except _Budget:
             self.stats['region_network_budget_skips'] += 1
             return False

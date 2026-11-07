@@ -34,7 +34,14 @@ def terminal_digest(record):
 
 
 def run_solver(problem, algorithm, **kwargs):
-    if algorithm == 'dfs':
+    if algorithm == 'gpu-domains':
+        from gpu_domain_runner import solve
+        if isinstance(kwargs.get('resume'),dict) and kwargs['resume'].get('work_version')==1:
+            kwargs['work_frontier']=kwargs.pop('resume')
+    elif algorithm == 'dfs' and (kwargs.get('options',{}).get('shared_coverage') or isinstance(kwargs.get('resume'),dict) and 'parallel_version' in kwargs['resume']):
+        from constraint_parallel import solve
+        kwargs['workers']=1
+    elif algorithm == 'dfs':
         from constraint_dfs import solve
     elif algorithm == 'parallel-dfs':
         from constraint_parallel import solve
@@ -43,15 +50,15 @@ def run_solver(problem, algorithm, **kwargs):
     else:
         from constraint_models import solve
         kwargs['engine'] = algorithm
-    if algorithm != 'hybrid':
+    if algorithm not in ('hybrid','gpu-domains'):
         kwargs.pop('replicas', None)
         kwargs.pop('backend', None)
         kwargs.pop('seed_board', None)
-    if algorithm != 'parallel-dfs':
+    if algorithm != 'hybrid':kwargs.pop('seed_board',None)
+    if algorithm != 'parallel-dfs' and not (algorithm=='dfs' and (kwargs.get('options',{}).get('shared_coverage') or isinstance(kwargs.get('resume'),dict) and 'parallel_version' in kwargs['resume'])):
         kwargs.pop('workers', None)
-    if algorithm not in EXACT_ALGORITHMS:
+    if algorithm not in EXACT_ALGORITHMS and algorithm not in ('sat','gpu-domains'):
         kwargs.pop('learning_state', None)
-        kwargs.pop('options', None)
     return solve(problem, **kwargs)
 
 
@@ -91,15 +98,19 @@ def main(argv=None):
     parser.add_argument('--algorithm', choices=ALGORITHMS[1:], default=RECOMMENDED)
     parser.add_argument('--seconds', type=float, default=3600, help='0 means unlimited.')
     parser.add_argument('--seed', type=int, default=20261007)
-    parser.add_argument('--replicas', type=int, default=4096, help='GPU sampling batch size, hybrid only.')
+    parser.add_argument('--replicas', type=int, default=None, help='GPU replicas: hybrid defaults4096; experimental gpu-domains defaults128 (max512,512MiB cap).' )
     parser.add_argument('--backend', choices=('auto', 'cuda', 'webgpu'), default='auto')
     parser.add_argument('--workers', type=int, default=4, help='Parallel DFS worker processes, 1..64.')
     parser.add_argument('--search-options', type=json.loads, default=None, help='JSON exact-search controls.')
+    parser.add_argument('--work-frontier',type=Path,help='Import a scoped remaining-work JSON into GPU domains, parallel DFS, or persistent SAT.')
     parser.add_argument('--resume', action='store_true')
     parser.add_argument('--stop-file-initialized', action='store_true')
     parser.add_argument('--data', type=Path, default=ROOT/'data/tiles.json')
     parser.add_argument('--output', type=Path, default=ROOT/'runtime')
     args = parser.parse_args(argv)
+    if args.replicas is None:args.replicas=128 if args.algorithm=='gpu-domains' else 4096
+    if args.algorithm=='gpu-domains' and args.replicas>512:parser.error('GPU domain search permits128..512 replicas with a512MiB state cap; begin with128.')
+    if args.work_frontier and args.algorithm not in ('gpu-domains','parallel-dfs','sat'):parser.error('Portable frontier import requires GPU domains, parallel DFS, or persistent SAT.')
     if not math.isfinite(args.seconds) or args.seconds < 0 or not 128 <= args.replicas <= 131072 or not 0 <= args.seed < 2**32:
         parser.error('Use finite nonnegative seconds, 128..131072 replicas, and a 32-bit seed.')
     try:
@@ -108,6 +119,8 @@ def main(argv=None):
         validate_runtime_selection(args.algorithm, args.backend, options)
     except ValueError as exc:
         parser.error(str(exc))
+    persistent_sat=args.algorithm=='sat' and options['persistent_sat']
+    if args.algorithm=='sat' and (args.work_frontier or options['portable_frontier']) and not persistent_sat:parser.error('SAT frontier import/export requires persistent_sat.')
     run = args.output.resolve()
     run.mkdir(parents=True, exist_ok=True)
     lock = run/'run.lock'
@@ -118,7 +131,7 @@ def main(argv=None):
 
     started = time.monotonic()
     run_id = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
-    folder = run/'searches'/(args.algorithm+'-gold')
+    folder = run/'searches'/('sat-session-gold' if persistent_sat else args.algorithm+'-gold')
     checkpoint_path, live_path = folder/'checkpoint.json', run/'live.json'
     evidence = run/'runs'/run_id
     stopfile = run/'stop.request'
@@ -141,11 +154,12 @@ def main(argv=None):
         'state': 'starting', 'phase': 'loading_input', 'phase_message': 'Loading puzzle data',
         'method': 'constraint', 'algorithm': args.algorithm, 'target': 'gold', 'pid': os.getpid(),
         'workers': args.workers if args.algorithm == 'parallel-dfs' else 1, 'search_options': options,
-        'run_id': run_id, 'replicas': args.replicas if args.algorithm == 'hybrid' else 0,
-        'backend': args.backend if args.algorithm == 'hybrid' else 'cpu',
-        'gpu': LABELS[args.algorithm]+' Â· '+('GPU + CPU' if args.algorithm == 'hybrid' else 'CPU'),
+        'run_id': run_id, 'replicas': args.replicas if args.algorithm in ('hybrid','gpu-domains') else 0,
+        'backend': args.backend if args.algorithm in ('hybrid','gpu-domains') else 'cpu',
+        'gpu': LABELS[args.algorithm]+' Â· '+('GPU + CPU' if args.algorithm in ('hybrid','gpu-domains') else 'CPU'),
         'time_limit_seconds': args.seconds, 'nodes_checked': 0, 'stats': {}, 'checkpoint': {},
-        'resume_scope': ('Disjoint CPU jobs with exact pending branches' if args.algorithm == 'parallel-dfs' else 'Exact DFS branch stack' if args.algorithm in ('dfs', 'hybrid')
+        'work_scope':{'kind':'original_puzzle'},
+        'resume_scope': ('Durable CUDA domains, reasoning trail, and disjoint remaining cubes' if args.algorithm=='gpu-domains' else 'Disjoint CPU jobs with exact pending branches' if args.algorithm == 'parallel-dfs' else 'Warm native SAT with durable remaining cubes' if persistent_sat else 'Disjoint CPU jobs with exact pending branches' if args.algorithm=='dfs' and options['shared_coverage'] else 'Exact DFS branch stack' if args.algorithm in ('dfs', 'hybrid')
                          else 'Saved Gold cuts/hints; native internal search restarts'),
     }
 
@@ -160,11 +174,24 @@ def main(argv=None):
         if cancel.is_set():
             state.update(state='stopping', phase_message='Stopping and saving search progress')
 
+    def restore_work_scope(payload):
+        scope=payload.get('work_scope',{'kind':'original_puzzle'})
+        if not isinstance(scope,dict) or scope.get('kind') not in ('original_puzzle','imported_frontier'):
+            raise ValueError('Invalid search ownership metadata.')
+        expected={'kind'} if scope['kind']=='original_puzzle' else {'kind','frontier_digest'}
+        if set(scope)!=expected or scope['kind']=='imported_frontier' and (not isinstance(scope['frontier_digest'],str) or len(scope['frontier_digest'])!=64 or any(c not in '0123456789abcdef' for c in scope['frontier_digest'])):
+            raise ValueError('Malformed imported frontier identity.')
+        state['work_scope']=dict(scope)
+
     def save_checkpoint(payload):
         if payload is None:
             return
-        envelope = {'version': 1, 'algorithm': args.algorithm, 'target': 'gold', 'binding': binding, 'payload': payload}
+        envelope = {'version': 1, 'algorithm': args.algorithm, 'target': 'gold', 'binding': binding, 'payload': payload, 'work_scope':dict(state['work_scope'])}
         atomic_json(checkpoint_path, envelope)
+        if args.algorithm=='gpu-domains' and payload.get('frontier') is not None:atomic_json(folder/'remaining-work.json',payload['frontier'])
+        elif options['portable_frontier'] and args.algorithm in ('dfs','parallel-dfs','sat'):
+            from constraint_portable import export_frontier
+            atomic_json(folder/'remaining-work.json',export_frontier(problem,payload,'gold',options))
         state['checkpoint'] = {'phase': 'idle', 'saved_at': datetime.datetime.now(datetime.timezone.utc).isoformat(),
                                'file_bytes': checkpoint_path.stat().st_size}
 
@@ -265,12 +292,12 @@ def main(argv=None):
                     return
                 # Parallel DFS commits the whole queue internally; keep its workers
                 # alive instead of rebuilding them at every outer 30-second slice.
-                budget = min(30, remaining) if args.algorithm in ('dfs', 'hybrid') else remaining
+                budget = min(30, remaining) if args.algorithm=='hybrid' or args.algorithm=='dfs' and not options['shared_coverage'] or persistent_sat else remaining
                 result = run_solver(problem, args.algorithm, seconds=budget, seed=args.seed, target='gold', resume=checkpoint,
                                     stop=cancel.is_set, progress=progress, replicas=args.replicas, backend=args.backend,
                                     learning_state=learning_state, seed_board=seed_board, workers=args.workers, options=options)
                 checkpoint = result.get('checkpoint', checkpoint)
-                if (result['status'] != 'timeout' or args.algorithm not in EXACT_ALGORITHMS or cancel.is_set()
+                if (result['status'] != 'timeout' or (args.algorithm not in EXACT_ALGORITHMS and not persistent_sat) or cancel.is_set()
                         or (args.seconds and time.monotonic()-started >= args.seconds)):
                     # The consumer always flushes the final result after joining
                     # this producer. Avoid enqueueing the same final checkpoint
@@ -415,6 +442,7 @@ def main(argv=None):
         raw = args.data.read_bytes()
         data = json.loads(raw.decode('utf-8-sig'))
         problem = SearchProblem(data)
+        if options['shared_coverage'] and args.algorithm in ('dfs','parallel-dfs','sat','gpu-domains'):learning_state['_coverage_path']=str(run/'completed-coverage.sqlite3')
         input_sha = hashlib.sha256(raw).hexdigest()
         if args.algorithm in EXACT_ALGORITHMS and options['persistent_learning']:
             from constraint_knowledge import KnowledgeStore, load, MAX_BYTES
@@ -461,7 +489,7 @@ def main(argv=None):
                 verification_reason=disk_conflicts.reason,rejected=disk_conflicts.stats['shared_conflicts_rejected'])
         if args.algorithm in EXACT_ALGORITHMS and options.get('smart_learning'):
             from constraint_mask_conflicts import VerifiedMaskConflictStore,MAX_BYTES as MASK_BYTES
-            disk_masks=VerifiedMaskConflictStore(problem,'gold');runtime_masks=VerifiedMaskConflictStore(problem,'gold')
+            disk_masks=VerifiedMaskConflictStore(problem,'gold',proof_transport=options['proof_transport']);runtime_masks=VerifiedMaskConflictStore(problem,'gold',proof_transport=options['proof_transport'])
             if masks_path.exists():
                 try:
                     if masks_path.stat().st_size>MASK_BYTES:raise ValueError('Saved mask conflicts exceed file bound.')
@@ -499,7 +527,13 @@ def main(argv=None):
                      'constraint_shared_conflicts.py', 'constraint_branching.py', 'constraint_gold_oracle.py', 'constraint_lcg.py', 'constraint_native_search.py', 'constraint_native_search.c', 'constraint_native_learning.py', 'constraint_lookahead.py', 'search_options.py', 'runtime_capabilities.py', 'sampling_kernels.wgsl',
                      'search_algorithms.py', 'validator.py', 'geometry.py', 'constraint_mask_conflicts.py',
                      'constraint_sat_connectivity.py', 'constraint_region_models.py','constraint_region_network.py',
-                     'constraint_region_store.py','constraint_region_cuts.py','constraint_policies.py','constraint_deep.py'):
+                     'constraint_region_store.py','constraint_region_cuts.py','constraint_policies.py','constraint_deep.py',
+                     'gpu_domain_runner.py','gpu_domain_round24.py','domain_search_round24.cu',
+                     'constraint_branching_round24.py','constraint_repair_round24.py','sampling_round24.cu','sampling_round24.wgsl',
+                     'constraint_work.py','constraint_portable.py','constraint_round24.py','constraint_incremental_hall.py',
+                     'constraint_sat_session.py','constraint_proof.py','constraint_relations.py','constraint_algebra.py',
+                     'constraint_pb.py','constraint_interface.py','constraint_region_symbolic.py','constraint_region_elimination.py',
+                     'constraint_region_master.py','constraint_region_oracles.py','constraint_region_research.py'):
             path = ROOT/name
             if path.exists():
                 source = path.read_bytes()
@@ -515,6 +549,7 @@ def main(argv=None):
             if (saved.get('version') != 1 or saved.get('binding') != binding
                     or saved.get('algorithm') != args.algorithm or saved.get('target') != 'gold'):
                 raise ValueError('Checkpoint belongs to different data, algorithm, or target.')
+            restore_work_scope(saved)
             checkpoint = saved['payload']
         elif args.resume and args.algorithm == 'parallel-dfs':
             # Import the exact pending DFS tree once; the original file stays intact.
@@ -525,8 +560,17 @@ def main(argv=None):
                 if (saved.get('version') != 1 or saved.get('binding') != expected
                         or saved.get('algorithm') != 'dfs' or saved.get('target') != 'gold'):
                     raise ValueError('The DFS checkpoint cannot be imported: input or target differs.')
+                restore_work_scope(saved)
                 checkpoint = saved['payload']
                 state['imported_checkpoint'] = str(source_path)
+        if args.work_frontier:
+            if (folder/'completed-search.json').exists():raise ValueError('Completed work already exists; import the new frontier into a separate output directory.')
+            if checkpoint is not None:raise ValueError('A native checkpoint exists; import the portable frontier into a separate output directory.')
+            from constraint_work import WorkScope,restore_frontier
+            checkpoint=read_json_shared(args.work_frontier)
+            restore_frontier(checkpoint,WorkScope.for_problem(problem,'gold'))
+            state['imported_checkpoint']=str(args.work_frontier)
+            state['work_scope']={'kind':'imported_frontier','frontier_digest':checkpoint['digest']}
         terminal_path = folder/'completed-search.json'
         if terminal_path.exists():
             if not args.resume:
@@ -541,7 +585,9 @@ def main(argv=None):
             if (not isinstance(recorded, dict) or recorded.get('status') != 'infeasible'
                     or recorded.get('complete') is not True or recorded.get('codes') is not None):
                 raise ValueError('Malformed completed Gold search result.')
-            state.update(state='exhausted', phase='finished', phase_message='Previously exhausted Gold search restored',
+            restore_work_scope(terminal)
+            state['full_puzzle_exhausted']=state['work_scope']['kind']=='original_puzzle'
+            state.update(state='exhausted', phase='finished', phase_message=('Previously exhausted Gold search restored' if state['full_puzzle_exhausted'] else 'Imported work exhausted; full puzzle remains unproven'),
                          complete=True, nodes_checked=recorded.get('nodes', 0), stats=recorded.get('stats', {}),
                          resumed_complete=True, source_result_run_id=terminal.get('run_id'),
                          terminal_evidence=str(terminal_path))
@@ -606,17 +652,23 @@ def main(argv=None):
                           'solved': 'solved', 'error': 'error', 'unsupported': 'error'}[status]
         if cancel.is_set() and status == 'timeout':
             state['state'] = 'stopped'
+        result['work_scope']=dict(state['work_scope'])
+        state['full_puzzle_exhausted']=status=='infeasible' and state['work_scope']['kind']=='original_puzzle'
         state['complete'] = bool(result.get('complete', False))
         state['phase'] = 'finished'
         state['phase_message'] = {'time_limit': 'Time limit reached; progress saved', 'stopped': 'Stopped; progress saved',
                                   'solved': 'Gold solution verified', 'exhausted': 'Gold search exhausted',
                                   'error': 'Search failed'}[state['state']]
+        if state['state']=='exhausted' and not state['full_puzzle_exhausted']:state['phase_message']='Imported work exhausted; full puzzle remains unproven'
         atomic_json(folder/'last-result.json', result)
         if status == 'infeasible':
+            if options['portable_frontier'] or (folder/'remaining-work.json').exists():
+                from constraint_work import WorkScope,frontier_snapshot
+                if all(problem.domains):atomic_json(folder/'remaining-work.json',frontier_snapshot(WorkScope.for_problem(problem,'gold'),[]))
             if result.get('complete') is not True:
                 raise RuntimeError('An infeasible result must represent completed search.')
             terminal = {'version': 1, 'binding': binding, 'algorithm': args.algorithm, 'target': 'gold',
-                        'run_id': run_id, 'source_sha256': source_hashes, 'result': result}
+                        'run_id': run_id, 'source_sha256': source_hashes, 'result': result, 'work_scope':dict(state['work_scope'])}
             terminal['sha256'] = terminal_digest(terminal)
             atomic_json(terminal_path, terminal)
             state['terminal_evidence'] = str(terminal_path)
@@ -632,6 +684,7 @@ def main(argv=None):
         if thread is not None and thread.is_alive():
             thread.join()
         try:
+            if learning_state.get('_sat_session') is not None:learning_state['_sat_session'].close()
             if disk_conflicts is not None:disk_conflicts.close()
             if learning_state.get('_shared_conflicts') is not None:learning_state['_shared_conflicts'].close()
             if disk_masks is not None:disk_masks.close()

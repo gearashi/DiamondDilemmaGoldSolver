@@ -34,7 +34,7 @@ def runtime_capabilities():
     return {
         'python': platform.python_version(), 'detection': 'installed_packages',
         'algorithms': {'dfs': feature(True, ''), 'parallel-dfs': feature(True, ''),
-                       'gpu-dfs': dict(gpu), 'hybrid': dict(gpu),
+                       'gpu-dfs': dict(gpu), 'hybrid': dict(gpu), 'gpu-domains':dict(cuda),
                        'cp': dict(cp), 'cp-sat': dict(cp), 'cp-sat-circuit': dict(cp),
                        'sat': dict(sat), 'sat-propagator':dict(sat),
                        'sat-channel':dict(sat),'cp-sat-regions':dict(cp)},
@@ -49,13 +49,16 @@ def validate_runtime_selection(algorithm, backend='auto', options=None, *,
     """Reject explicitly selected missing engines before changing search files."""
     caps = runtime_capabilities() if capabilities is None else capabilities
     selections = [('algorithms', algorithm)]
+    if algorithm=='gpu-domains':
+        if backend=='webgpu':raise ValueError('GPU domain search currently requires CUDA.')
+        selections.append(('backends','cuda'))
     if stochastic:
         selections.append(('backends', 'cuda'))
     elif algorithm in ('gpu-dfs', 'hybrid'):
         selections.append(('backends', backend))
     if algorithm in EXACT_ALGORITHMS:
         selections.extend(('options', key) for key, enabled in (options or {}).items()
-                          if enabled and key in caps['options'])
+                          if enabled and key in caps['options'] and not (key=='smart_learning' and (options or {}).get('proof_transport')))
     for category, name in selections:
         item = caps.get(category, {}).get(name)
         if item is None:

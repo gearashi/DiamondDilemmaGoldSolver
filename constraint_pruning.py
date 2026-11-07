@@ -18,6 +18,7 @@ from functools import lru_cache
 
 from validator import reverse_mask
 from constraint_native import select_hall
+from constraint_incremental_hall import IncrementalHall, STAT_KEYS as INCREMENTAL_HALL_KEYS
 from constraint_explanations import removal_witness, failure_witness
 from constraint_parity import ParityPruner, STAT_KEYS as PARITY_STAT_KEYS
 
@@ -26,7 +27,7 @@ STAT_KEYS = ('pruner_table_builds', 'pruner_table_reuses', 'hall_checks', 'hall_
              'cluster_checks', 'cluster_prunes', 'cluster_failures',
              'cluster_embeddings', 'forced_bonds', 'forced_clusters',
              'neighborhood_checks', 'neighborhood_prunes', 'neighborhood_failures',
-             'neighborhood_signature_skips', 'neighborhood_dirty_certificates', 'neighborhood_dirty_invalidations') + PARITY_STAT_KEYS
+             'neighborhood_signature_skips', 'neighborhood_dirty_certificates', 'neighborhood_dirty_invalidations') + PARITY_STAT_KEYS + INCREMENTAL_HALL_KEYS
 
 
 def values(bits):
@@ -185,7 +186,7 @@ class Pruner:
     """
     def __init__(self, problem, check=lambda: None, *, regions=None, neighborhood=True,
                  neighborhood_limit=24, parity=True, native='python', tables=None,
-                 dirty_neighborhood=False, parity_root_reuse=False):
+                 dirty_neighborhood=False, parity_root_reuse=False, incremental_hall=False):
         self.problem, self.n, self.check = problem, problem.n, check
         if neighborhood_limit is not None and (type(neighborhood_limit) is not int or neighborhood_limit < 1):
             raise ValueError('neighborhood_limit must be positive or None for unrestricted checks.')
@@ -203,6 +204,8 @@ class Pruner:
         self._hall_cache = {}
         self._neighborhood_cache = {}
         self.native_hall,self.native_hall_reason=select_hall(native)
+        self.incremental_hall = IncrementalHall() if incremental_hall else None
+        self._incremental_hall_entry=dict.fromkeys(INCREMENTAL_HALL_KEYS,0)
         self._inventory_cache = {}
         self.stats = dict.fromkeys(STAT_KEYS, 0)
         def rows(source):
@@ -428,8 +431,11 @@ class Pruner:
         signature = tuple(rows)
         allowed = self._hall_cache.get(signature)
         if allowed is None:
-            if self.native_hall is not None:
-                filtered,matching,failed=self.native_hall.filter(rows,self._matching,self.check)
+            if self.incremental_hall is not None or self.native_hall is not None:
+                engine = self.incremental_hall if self.incremental_hall is not None else self.native_hall
+                try:filtered,matching,failed=engine.filter(rows,self._matching,self.check)
+                finally:
+                    if self.incremental_hall is not None:self.stats.update({k:v-self._incremental_hall_entry[k] for k,v in self.incremental_hall.stats.items()})
                 if filtered is None:
                     witness=failure_witness(rows,self.check) if self.on_narrow is not None else None
                     return self._fail(domains,failed,'hall',witness)

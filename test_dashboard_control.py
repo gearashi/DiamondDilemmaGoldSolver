@@ -225,7 +225,7 @@ if (-not $Failed -or $script:Calls.Count -ne 1) { throw 'Missing environment mus
             state=dashboard.state_payload()['status']
             self.assertEqual(state['gpu_features'],features)
             self.assertEqual(state['startup_phase'],'initializing_gpu')
-            profile='systematic-'+hashlib.sha256(json.dumps(features,sort_keys=True,separators=(',',':')).encode()).hexdigest()[:12]
+            profile='systematic-'+hashlib.sha256(json.dumps(dashboard.feature_identity(features),sort_keys=True,separators=(',',':')).encode()).hexdigest()[:12]
             folder=self.directory/profile;folder.mkdir();(folder/'checkpoint.npz').write_bytes(b'presence')
             self.assertEqual(dashboard.state_payload()['status']['startup_phase'],'restoring_checkpoint')
         with patch.object(dashboard,'live_pid',return_value=None),patch.object(dashboard.subprocess,'Popen') as spawn:
@@ -357,6 +357,23 @@ if (-not $Failed -or $script:Calls.Count -ne 1) { throw 'Missing environment mus
         self.assertEqual(result['backend'], 'cpu')
         self.assertEqual(result['replicas'], 0)
         self.assertEqual(Path(spawn.call_args.args[0][1]).name, 'constraint_search.py')
+
+    def test_persistent_sat_startup_uses_its_own_checkpoint_directory(self):
+        config={'pid':4242,'algorithm':'sat','method':'constraint','search_options':{'persistent_sat':True}}
+        path=self.directory/'run-config.json'
+        path.write_text(json.dumps(config),encoding='utf-8')
+        plain=self.directory/'searches'/'sat-gold';plain.mkdir(parents=True)
+        (plain/'checkpoint.json').write_text('{}',encoding='utf-8')
+        self.assertEqual(dashboard.startup_status(4242)['startup_phase'],'building_model')
+        session=self.directory/'searches'/'sat-session-gold';session.mkdir(parents=True)
+        (session/'checkpoint.json').write_text('{}',encoding='utf-8')
+        active=dashboard.startup_status(4242)
+        self.assertEqual(active['startup_phase'],'restoring_checkpoint')
+        self.assertIn('exact Gold search branches',active['phase_message'])
+        (plain/'checkpoint.json').unlink()
+        config['search_options']['persistent_sat']=False
+        path.write_text(json.dumps(config),encoding='utf-8')
+        self.assertEqual(dashboard.startup_status(4242)['startup_phase'],'building_model')
 
     def test_constraint_child_arguments_restore_algorithm_specific_status(self):
         self.status(pid=111, method='systematic', backend='cuda')
@@ -790,6 +807,7 @@ assert.equal(JSON.stringify(storage.values),originalStorage);
 // An idle edit replaces only the next-run preference; later active settings do not.
 element('lookaheadInput').checked=false;element('lookaheadBudgetInput').value='400';element('nativeInput').value='auto';element('workersInput').value='4';element('lookaheadInput').listeners.change();
 const edited={...saved,lookahead:false,lookahead_ms:400,native:'auto',ordering_goal:'auto',gold_oracle:false,connection_branching:false,lcg:false,native_search:false,"smart_learning":false,"group_lookahead":false,"deep_paths":false,"conservation":false,"signature_branching":false,"impact_branching":false,"objective_ordering":false,"frontier_restarts":false,"worker_portfolio":false,"limited_discrepancy":false,"compact_explanations":false,"conditional_hall":false,"wide_cuts":false,"piece_symmetry":false,"proof_certificates":false,"rotated_learning":false,"extended_regions":false,"gpu_gold_sampling":false,"dependency_repair":false,"dirty_neighborhood":false,"parity_root_reuse":false};
+for(const key of vm.runInContext('round24Keys',context))edited[key]=false;
 assert.deepEqual(JSON.parse(storage.values['diamond.searchOptions']),edited);assert.equal(storage.values['diamond.workers'],'4');
 render("state.process_running=true;state.status.workers=1;state.status.search_options={failure_guided:true,lookahead:true,strand_connectivity:true,multi_seam_cuts:true,regional_cache:true,native:'python'}");
 assert.equal(element('nativeInput').value,'python');assert.equal(element('workersInput').value,'1');assert.equal(element('lookaheadInput').checked,true);

@@ -140,6 +140,9 @@ def solver_command(hours=1, unlimited=False, replicas=4096, seed=20261007, backe
         raise ValueError('Choose GPU backend auto, cuda, or webgpu.')
     if algorithm in ('gpu-dfs', 'hybrid'):
         choose_backend(backend)
+    if algorithm=='gpu-domains':
+        if backend=='webgpu' or replicas>512:raise ValueError('GPU domain search requires CUDA and128..512 lanes; use --replicas128 initially.')
+        choose_backend('cuda')
     script = 'systematic_search.py' if algorithm == 'gpu-dfs' else 'constraint_search.py'
     command = [str(venv_python()), str(ROOT / script),
                '--seconds', str(0 if unlimited else hours * 3600),
@@ -148,7 +151,7 @@ def solver_command(hours=1, unlimited=False, replicas=4096, seed=20261007, backe
         command.extend(['--gpu-features', json.dumps(features,separators=(',',':'))])
     if algorithm != 'gpu-dfs':
         command.extend(['--algorithm', algorithm])
-    if algorithm in EXACT_ALGORITHMS:
+    if algorithm in EXACT_ALGORITHMS or algorithm in ('sat','gpu-domains'):
         command.extend(['--search-options', json.dumps(options,separators=(',',':'))])
     if algorithm == 'parallel-dfs':
         command.extend(['--workers', str(workers)])

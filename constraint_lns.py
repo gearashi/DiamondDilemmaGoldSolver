@@ -241,7 +241,7 @@ def _solve_patch(problem, current, patch, *, cp_model, control, seconds, seed, t
 
 def repair(problem, codes, *, seconds=10, seed=0, target='gold', stop=None, progress=None,
            patch_sizes=(8,16,24,40), per_attempt_seconds=2, max_attempts=64,
-           candidate_boards=None, archive_size=8, adaptive=True, cache_attempts=True, loop_aware=True, dependency_chains=False):
+           candidate_boards=None, archive_size=8, adaptive=True, cache_attempts=True, loop_aware=True, dependency_chains=False, experiments=None):
     """Return the best checked board; an inconclusive patch never proves UNSAT.
 
     ``codes`` may come from GPU sampling or a saved full-board hint. It must be
@@ -258,6 +258,11 @@ def repair(problem, codes, *, seconds=10, seed=0, target='gold', stop=None, prog
         raise ValueError('Repair attempt limits must be positive and finite.')
     if stop is not None and not callable(stop) and not callable(getattr(stop, 'is_set', None)):
         raise ValueError('stop must be a callback or Event.')
+    allowed_experiments={'core_repair','loop_trades','fragment_crossover','repair_learning'}
+    experiments={} if experiments is None else experiments
+    if not isinstance(experiments,dict) or set(experiments)-allowed_experiments or any(type(value) is not bool for value in experiments.values()):
+        raise ValueError('Invalid exact repair experiment switches.')
+    experimental_reports=[]
     control = _Control(seconds, stop)
     current = list(codes.tolist() if hasattr(codes,'tolist') else codes)
     metrics = score(problem, current)
@@ -292,6 +297,7 @@ def repair(problem, codes, *, seconds=10, seed=0, target='gold', stop=None, prog
                   'best_objective':best_metrics['objective'], 'domain_violations':best_metrics['domain_violations'],
                   'validation':best_validation, 'elapsed_seconds':time.monotonic()-control.began, 'stats':snapshot_stats(),
                   'candidate_archive':[{**item,'codes':item['codes'].copy()} for item in archive]}
+        if experimental_reports:result['experimental_repair']=experimental_reports
         if reason is not None: result['reason'] = reason
         return result
     def solved(report, values):
@@ -313,6 +319,34 @@ def repair(problem, codes, *, seconds=10, seed=0, target='gold', stop=None, prog
             emit('repair_skipped', reason=result['reason'])
             return result
         rng = random.Random(seed)
+        if any(experiments.values()) and target=='gold':
+            from constraint_repair_round24 import core_guided_repair,loop_merge_trade,fragment_crossover,scoped_repair_failure
+            enabled=[name for name in ('core_repair','loop_trades','fragment_crossover','repair_learning') if experiments.get(name)]
+            for index,name in enumerate(enabled):
+                control.check()
+                # Every enabled experiment gets a bounded share; leave an equal
+                # final share for the existing neighborhood repair fallback.
+                budget=max(0.0,(control.deadline-time.monotonic())/(len(enabled)-index+1))
+                if name=='core_repair':trial=core_guided_repair(problem,current,seconds=budget,stop=stop)
+                elif name=='fragment_crossover':trial=fragment_crossover(problem,[item['codes'] for item in archive],seconds=budget,stop=stop)
+                else:
+                    patch=_select_patch(problem,current,metrics,patch_sizes[0],rng,target,dependency_chains=dependency_chains)
+                    if name=='repair_learning':trial=scoped_repair_failure(problem,current,patch,seconds=budget,stop=stop)
+                    elif metrics['matched_edges']==len(problem.edges) and not metrics['domain_violations']:
+                        trial=loop_merge_trade(problem,current,patch,seconds=budget,stop=stop)
+                    else:trial={'status':'inapplicable','reason':'Loop trades require an edge-perfect board.'}
+                experimental_reports.append({'proposal':name,**trial})
+                candidate=trial.get('best_board',trial.get('codes'))
+                if candidate is not None:
+                    candidate_metrics=score(problem,candidate);candidate_validation=problem.validate(candidate)
+                    stats['candidates_checked']+=1
+                    if candidate_metrics['objective']>=metrics['objective']:
+                        current=list(candidate);metrics=candidate_metrics
+                        best,best_metrics,best_validation=current.copy(),metrics,candidate_validation
+                        archive=diverse_archive([*archive,{'codes':current.copy(),**metrics}],capacity=archive_size)
+                    if solved(candidate_validation,candidate_metrics):
+                        best,best_metrics,best_validation=list(candidate),candidate_metrics,candidate_validation
+                        emit('candidate');return finish('solved')
         for attempt in range(max_attempts):
             control.check()
             chosen_size = patch_sizes[size_index] if adaptive else patch_sizes[attempt % len(patch_sizes)]

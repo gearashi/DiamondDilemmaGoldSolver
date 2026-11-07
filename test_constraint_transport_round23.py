@@ -30,7 +30,7 @@ class TransportTests(unittest.TestCase):
             def send(self,item):self.sent.append(item)
             def close(self):pass
         connection=Connection();states=[];stores=[]
-        def factory(p,target):return VerifiedMaskConflictStore(p,target,factory=lambda:GoldFixtureOracle(p,initial))
+        def factory(p,target,**kwargs):return VerifiedMaskConflictStore(p,target,factory=lambda:GoldFixtureOracle(p,initial),**kwargs)
         def fake_solve(p,**kwargs):
             state=kwargs['learning_state'];states.append(state);store=state['_mask_conflicts'];stores.append(store)
             if len(states)==1:
@@ -169,10 +169,15 @@ class CanonicalMaskResumeTests(unittest.TestCase):
         self.assertEqual(ready,source)
         self.assertEqual(validated['stack'],ready['stack'])
         self.assertEqual(validated['local_mask_conflicts'],ready['local_mask_conflicts'])
-        # Parallel validation and partitioning must preserve this exact scoped
-        # optional payload while assigning disjoint descendants of the frontier.
+        # Descendants retain optional claims, but each must bind to its own
+        # root and independently verify them. Parent certificates are not relabelled.
         children=parallel.partition_checkpoint(problem,validated,parts=2,options=options)
         self.assertEqual(len(children),2)
         for child in children:
-            self.assertEqual(child['local_mask_conflicts'],ready['local_mask_conflicts'])
-            dfs.solve(problem,seconds=0,options=options,resume=child)
+            self.assertEqual(child['local_mask_conflicts']['initial'],child['owned_root_domains'])
+            self.assertEqual(child['local_mask_conflicts']['records'],ready['local_mask_conflicts']['records'])
+            checked=dfs.solve(problem,seconds=0,options=options,resume=child)['checkpoint']
+            consumer=VerifiedMaskConflictStore(problem,initial=[int(v,16) for v in child['owned_root_domains']])
+            self.addCleanup(consumer.close)
+            consumer.import_snapshot(checked['local_mask_conflicts'])
+            self.assertFalse(consumer.records())

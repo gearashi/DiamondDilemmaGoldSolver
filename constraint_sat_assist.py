@@ -19,10 +19,15 @@ STAT_KEYS=('sat_assist_build_steps','sat_assist_clauses','sat_assist_calls','sat
            'sat_assist_domain_forced','sat_assist_mask_cores','sat_assist_mask_core_hits',
            'sat_assist_mask_core_literals_saved','sat_assist_domain_resumes',
            'sat_assist_domain_completed_skips','sat_assist_model_supports',
-           'sat_assist_model_invalid','sat_assist_mask_calls','sat_assist_mask_unsat')
+           'sat_assist_model_invalid','sat_assist_mask_calls','sat_assist_mask_unsat',
+           'sat_assist_witness_pool_hits','sat_assist_witness_pool_checks',
+           'sat_assist_support_cover_calls','sat_assist_support_cover_prunes')
 class SatAssist:
-    def __init__(self,problem,initial,target='gold',*,factory=None):
+    def __init__(self,problem,initial,target='gold',*,factory=None,witness_pool=False,
+                 support_cover=False,capture_clauses=False):
         self.problem,self.initial,self.target=problem,tuple(initial),target
+        self.witness_pool=bool(witness_pool);self.support_cover=bool(support_cover)
+        self._witnesses=OrderedDict();self._captured=[] if capture_clauses else None
         if len(self.initial)!=problem.n or any(type(value)is not int or value<0 or value>>(3*problem.n) for value in self.initial):
             raise ValueError('SAT initial domains must be valid orientation bitsets.')
         self._original_domains=tuple(tuple(sorted(set(row))) for row in problem.domains)
@@ -87,7 +92,9 @@ class SatAssist:
             self.close();self.pending=None;self.status='unsupported'
             self.reason='SAT assistance exceeded its one-million-clause limit.'
             return False
-        self.solver.add_clause([-self.variables[cell][code] for cell,code in record])
+        clause=[-self.variables[cell][code] for cell,code in record]
+        self.solver.add_clause(clause)
+        if self._captured is not None:self._captured.append(tuple(clause))
         self.clauses+=1;self.stats['sat_assist_clauses']=self.clauses
         self.stats['sat_assist_gold_clauses']+=1
         # Strengthening can invalidate SAT answers, but never a proved UNSAT.
@@ -168,7 +175,9 @@ class SatAssist:
                 if self.clauses>=1000000:
                     self.close();self.pending=None;self.status='unsupported';self.reason='SAT assistance exceeded its one-million-clause limit.'
                     return False
-                self.solver.add_clause(clause);self.clauses+=1;self.stats['sat_assist_clauses']=self.clauses
+                self.solver.add_clause(clause)
+                if self._captured is not None:self._captured.append(tuple(clause))
+                self.clauses+=1;self.stats['sat_assist_clauses']=self.clauses
         return False
     def _domain_call(self,operation,check,deadline,*,conflicts):
         """Return a completed native answer or None; never accept interrupted work."""
@@ -313,7 +322,80 @@ class SatAssist:
                        for a,sa,b,sb in self.problem.edges)
                 or any(all(codes[c]==code for c,code in clause) for clause in self._gold_known)):
             self.stats['sat_assist_model_invalid']+=1;return None
+        witness=tuple(codes)
+        if self.witness_pool:
+            self._witnesses[witness]=None;self._witnesses.move_to_end(witness)
+            while len(self._witnesses)>128:self._witnesses.popitem(last=False)
         return tuple(1<<code for code in codes)
+
+    def proof_base(self):
+        """Immutable deterministic CNF snapshot; temporary cover clauses are excluded.
+
+        Capture must be explicitly enabled before construction.  The encoded
+        domain/seam/inventory theory and independently verified Gold witnesses
+        form an optimistic Gold model, so UNSAT is sufficient for Gold UNSAT.
+        """
+        if self._captured is None or not self.ready:
+            raise ValueError('Proof capture requires a completely prepared captured model.')
+        return {'clauses':tuple(self._captured),
+                'variables':tuple(tuple(sorted(row.items())) for row in self.variables),
+                'initial':self.initial,'target':self.target,
+                'fingerprint':self.problem.fingerprint,
+                'gold':tuple(sorted(self._gold_known))}
+
+    def _pool_supports(self,domains,supported,check):
+        # Never trust context identity: each vector is checked against all
+        # current domain restrictions and the current verified Gold clauses.
+        for witness in tuple(self._witnesses):
+            check();self.stats['sat_assist_witness_pool_checks']+=1
+            if (any(not mask&(1<<code) for mask,code in zip(domains,witness))
+                    or any(all(witness[c]==code for c,code in clause) for clause in self._gold_known)):
+                continue
+            gained=sum(not old&(1<<code) for old,code in zip(supported,witness))
+            if gained:
+                self.stats['sat_assist_witness_pool_hits']+=1
+                self.stats['sat_assist_model_supports']+=gained
+                for cell,code in enumerate(witness):supported[cell]|=1<<code
+
+    def _cover_supports(self,current,session,assumptions,check,deadline,conflicts,maximum):
+        """Cover all unsupported placements with model-producing SAT queries.
+
+        Every temporary disjunction is guarded by a fresh activation variable.
+        Its UNSAT answer applies to the ENTIRE disjunction, not just one value.
+        A selector is permanently disabled in finally, including on Stop.
+        """
+        for _ in range(maximum):
+            check()
+            if time.monotonic()>=deadline:return
+            uncovered=[(cell,code,lit) for cell,row in enumerate(self.variables)
+                       for code,lit in row.items()
+                       if current[cell].bit_count()>1 and current[cell]&(1<<code) and not session['supported'][cell]&(1<<code)]
+            if not uncovered:return
+            selector=self.fresh()
+            self.solver.add_clause([-selector,*(lit for _,_,lit in uncovered)])
+            self.stats['sat_assist_support_cover_calls']+=1
+            self.stats['sat_assist_domain_calls']+=1
+            try:
+                trial=[*assumptions,selector]
+                answer=self._domain_call(lambda:self.solver.solve_limited(assumptions=trial,expect_interrupt=True),
+                                         check,deadline,conflicts=conflicts)
+                if answer is False:
+                    # The guard is an auxiliary literal and cannot be treated
+                    # as a placement assumption by the mask-core decoder.
+                    for cell,code,_ in uncovered:current[cell]&=~(1<<code)
+                    self.stats['sat_assist_support_cover_prunes']+=len(uncovered)
+                    self.stats['sat_assist_domain_unsat']+=1
+                    return
+                if answer is None:
+                    self.stats['sat_assist_domain_unknown']+=1;return
+                witness=self._model_supports(current,trial,check)
+                if witness is None:return
+                gained=sum((mask&~old).bit_count() for mask,old in zip(witness,session['supported']))
+                if not gained:return  # Defensive against an invalid/incomplete backend model.
+                self.stats['sat_assist_model_supports']+=gained
+                for cell,mask in enumerate(witness):session['supported'][cell]|=mask
+            finally:
+                self.solver.add_clause([-selector])
 
     def filter_domains(self,domains,check=lambda:None,*,seconds=.01,conflicts=256,max_candidates=16):
         """Completed scoped consequences, resumable probes and witness reuse.
@@ -347,6 +429,7 @@ class SatAssist:
             self.stats['sat_assist_domain_forced']+=sum(a.bit_count()>1 and b.bit_count()==1 for a,b in zip(original,result))
             return result
         if not all(current):return finish()
+        if self.witness_pool:self._pool_supports(current,session['supported'],check)
         assumptions=self._domain_assumptions(current,check,deadline)
         if assumptions is None:return finish()
         propagate=getattr(self.solver,'propagate',None)
@@ -367,6 +450,9 @@ class SatAssist:
                     cell,code=pair;current[cell]&=(1<<code) if literal>0 else ~(1<<code)
                 if not all(current):
                     self.stats['sat_assist_domain_unsat']+=1;return finish()
+        if self.support_cover:
+            self._cover_supports(current,session,assumptions,check,deadline,conflicts,max_candidates)
+            return finish()
         candidates=[(cell,code) for cell in sorted(range(self.problem.n),key=lambda c:(original[c].bit_count(),c))
                     for code in self.variables[cell] if original[cell]&(1<<code)]
         tested=visited=0;total=len(candidates)

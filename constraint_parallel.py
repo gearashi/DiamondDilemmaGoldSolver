@@ -25,9 +25,10 @@ from constraint_dfs import solve as dfs_solve, _checkpoint_digest, _NogoodStore
 from search_options import normalize_options, validate_workers
 from constraint_knowledge import KnowledgeStore
 from constraint_shared_conflicts import VerifiedConflictStore, GAUGE_KEYS as SHARED_GAUGES
-from constraint_mask_conflicts import VerifiedMaskConflictStore, GAUGE_KEYS as MASK_GAUGES
+from constraint_mask_conflicts import VerifiedMaskConflictStore, GAUGE_KEYS as MASK_GAUGES, _digest as _mask_digest, MAX_RECORDS as MASK_MAX_RECORDS, MAX_LITERALS as MASK_MAX_LITERALS
 from constraint_deep import CertificateStore
 from constraint_policies import reorder_frontier,worker_options
+from constraint_work import WorkScope,CoverageLedger,checkpoint_boxes,exclusion_box,subtract_many
 
 VERSION=1
 SLICE_SECONDS=.75
@@ -65,9 +66,63 @@ def _validate_dfs(problem,checkpoint,target,options):
     return checked['checkpoint']
 
 
+def _restricted_mask_claims(payload,domains):
+    """Restrict optional parent claims, never transport proof authority.
+
+    A parent-root negative conjunction remains a useful *candidate* under a
+    descendant root. Intersect its literals with the child, drop conjunctions
+    already impossible there and reverify every retained claim in the child.
+    Root-bound certificates cannot be relabelled and are deliberately omitted.
+    """
+    if not isinstance(payload,dict) or payload.get('digest')!=_mask_digest(payload):
+        raise ValueError('Malformed parent mask-claim payload.')
+    version=payload.get('mask_conflicts_version')
+    keys={'mask_conflicts_version','fingerprint','target','original','initial','records','digest'}
+    if version==2:keys.add('certificates')
+    if type(version)is not int or version not in (1,2) or set(payload)!=keys:
+        raise ValueError('Malformed parent mask-claim payload.')
+    original=payload['original'];parent=payload['initial'];records=payload['records']
+    if (not isinstance(original,list) or not isinstance(parent,list) or len(parent)!=len(domains)
+            or len(original)!=len(domains) or any(not isinstance(v,str) for v in original+parent)):
+        raise ValueError('Malformed parent mask-claim scope.')
+    try:parent=[int(v,16) for v in parent];original=[int(v,16) for v in original]
+    except ValueError:raise ValueError('Malformed parent mask-claim scope.') from None
+    if any(type(child)is not int or child<=0 or child&~old or old<=0 or old&~source
+           for child,old,source in zip(domains,parent,original)):
+        raise ValueError('Child mask-claim scope must narrow its parent.')
+    if not isinstance(records,list) or len(records)>MASK_MAX_RECORDS:
+        raise ValueError('Malformed parent mask-claim records.')
+    narrowed=[]
+    for record in records:
+        if not isinstance(record,list) or len(record)>MASK_MAX_LITERALS:
+            raise ValueError('Malformed parent mask-claim record.')
+        cells=set();result=[];impossible=False
+        for item in record:
+            if (not isinstance(item,list) or len(item)!=2 or type(item[0])is not int
+                    or not 0<=item[0]<len(domains) or item[0] in cells or not isinstance(item[1],str)):
+                raise ValueError('Malformed parent mask-claim literal.')
+            cell,encoded=item;cells.add(cell)
+            try:mask=int(encoded,16)
+            except ValueError:raise ValueError('Malformed parent mask-claim literal.') from None
+            if mask<=0 or mask&~parent[cell]:raise ValueError('Parent mask claim exceeds its scope.')
+            mask&=domains[cell]
+            if not mask:impossible=True
+            elif mask!=domains[cell]:result.append([cell,hex(mask)])
+        if not impossible:narrowed.append(result)
+    result=copy.deepcopy(payload);result['initial']=[hex(v) for v in domains];result['records']=narrowed
+    if version==2:result['certificates']=[]
+    result['digest']=_mask_digest(result)
+    return result
+
+
 def _root_copy(checkpoint,domains):
     result=copy.deepcopy(checkpoint)
-    result.update(nodes=0,stats={key:0 for key in result['stats']},elapsed_seconds=0.0,
+    claims=result.pop('local_mask_conflicts',None)
+    if claims is not None and all(domains):
+        if not isinstance(claims,dict) or claims.get('fingerprint')!=checkpoint.get('fingerprint') or claims.get('target')!=checkpoint.get('target'):
+            raise ValueError('Parent mask-claim puzzle or objective differs.')
+        result['local_mask_conflicts']=_restricted_mask_claims(claims,domains)
+    result.update(owned_root_domains=[hex(value) for value in domains],nodes=0,stats={key:0 for key in result['stats']},elapsed_seconds=0.0,
                   stack=[{'domains':[hex(value) for value in domains],'cell':-1,'choices':[],'next':0}])
     result['digest']=_checkpoint_digest(result)
     return result
@@ -122,7 +177,8 @@ class _WorkerCaches:
     def support_key(self,request):
         if not self.binding.matches(self.problem,'edges'):raise ValueError('Worker source domains changed.')
         return (self.problem.fingerprint,self.binding.domains_sha256,request['target'],
-                json.dumps(request['checkpoint'].get('root_symmetry'),sort_keys=True,separators=(',',':')))
+                json.dumps(request['checkpoint'].get('root_symmetry'),sort_keys=True,separators=(',',':')),
+                tuple(request['checkpoint'].get('owned_root_domains',request['checkpoint'].get('stack',[{}])[0].get('domains',()))))
     def get(self,request):
         key=self.key(request)
         if not self.binding.matches(self.problem,'edges'):raise ValueError('Worker source domains changed.')
@@ -256,7 +312,7 @@ def _worker(problem,connection,cancel):
                     if payload is not None:shared_conflicts.import_snapshot(payload)
                     learning['_shared_conflicts']=shared_conflicts
                 if request['options'].get('smart_learning'):
-                    if mask_conflicts is None:mask_conflicts=VerifiedMaskConflictStore(problem,request['target'])
+                    if mask_conflicts is None:mask_conflicts=VerifiedMaskConflictStore(problem,request['target'],proof_transport=request['options'].get('proof_transport',False))
                     payload=request.get('mask_conflicts')
                     if payload is not None:mask_conflicts.import_snapshot(payload)
                     learning['_mask_conflicts']=mask_conflicts
@@ -372,7 +428,7 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
     if mask_conflicts is not None and (not isinstance(mask_conflicts,VerifiedMaskConflictStore) or not mask_conflicts.matches(problem,target)):
         raise ValueError('Parallel mask conflicts differ from original domains or target.')
     if mask_conflicts is None and options.get('smart_learning'):
-        mask_conflicts=VerifiedMaskConflictStore(problem,target);learning_state['_mask_conflicts']=mask_conflicts
+        mask_conflicts=VerifiedMaskConflictStore(problem,target,proof_transport=options['proof_transport']);learning_state['_mask_conflicts']=mask_conflicts
     certificates=learning_state.get('_certificates')
     if certificates is not None and (not isinstance(certificates,CertificateStore)
             or certificates.problem.fingerprint!=problem.fingerprint or certificates.target!=target
@@ -385,6 +441,10 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
         hint=(hints.get(cell) if isinstance(hints,dict) else hints[cell] if isinstance(hints,(list,tuple)) and cell<len(hints) else None)
         if isinstance(hint,(list,tuple)):hint=next((v for v in hint if v in row),None)
         preferred.append(hint if type(hint)is int and hint in row else 3*cell if 3*cell in row else min(row,default=0))
+    coverage_scope=WorkScope.for_problem(problem,target) if all(problem.domains) else None
+    coverage=None
+    queue_proof_checks=queue_proof_retirements=queue_proof_splits=0
+    queue_proof_seen={}
     deadline=began+seconds
     jobs={};queue=[];active={};slots=[];started_workers=0;error=None;terminal=None
     previous_elapsed=0.;retired_nodes=0;retired_stats={};next_id=0;completed=0;splits=0;replayed=0
@@ -400,7 +460,10 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
         job={'id':next_id,'region':list(region if region is not None else checkpoint['stack'][0]['domains']),
              'checkpoint':copy.deepcopy(checkpoint)}
         jobs[next_id]=job;queue.append(next_id);waiting_since[next_id]=0;next_id+=1
-    if isinstance(resume,dict) and 'parallel_version' in resume:
+    if isinstance(resume,dict) and resume.get('work_version')==1:
+        from constraint_portable import dfs_roots
+        for first in dfs_roots(problem,resume,target,seed,options):add(first)
+    elif isinstance(resume,dict) and 'parallel_version' in resume:
         if (type(resume.get('parallel_version')) is not int or resume.get('parallel_version')!=VERSION or resume.get('fingerprint')!=problem.fingerprint
                 or resume.get('target')!=target or resume.get('input_domains_sha256')!=_domain_hash(problem)):
             raise ValueError('Parallel checkpoint version, puzzle, domains or target differs.')
@@ -441,7 +504,13 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
     else:
         first=dfs_solve(problem,seconds=0,seed=seed,target=target,hints=hints,resume=resume,options=options)['checkpoint']
         seed=first['seed'];root_symmetry=copy.deepcopy(first.get('root_symmetry'));previous_elapsed=first.get('elapsed_seconds',0.)
-        add(first,[hex(sum(1<<code for code in set(row))) for row in problem.domains])
+        # A standalone checkpoint may be an exported restricted subtree. Its
+        # fingerprint identifies the puzzle, not ownership of the entire original
+        # root. Previously consumed choices within its first frame were proved
+        # closed by that DFS history; choices outside that frame were never owned.
+        add(first,first['stack'][0]['domains'])
+    if coverage_scope is not None and options.get('shared_coverage') and learning_state.get('_coverage_path'):
+        coverage=CoverageLedger(learning_state['_coverage_path'],coverage_scope)
     def merge_knowledge(payload):
         if payload is not None and knowledge is not None and options.get('persistent_learning',True):
             knowledge.merge_snapshot(payload)
@@ -488,6 +557,8 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
             stats.update(shared_conflicts.stats)
         if mask_conflicts is not None and options.get('smart_learning'):stats.update(mask_conflicts.stats)
         if certificates is not None and options.get('proof_certificates'):stats['portable_certificates']=len(certificates.records)
+        stats.update(queue_proof_checks=queue_proof_checks,queue_proof_retirements=queue_proof_retirements,queue_proof_splits=queue_proof_splits)
+        if coverage is not None:stats.update(coverage.stats)
         for key in ('job_cache_hits','job_cache_misses','job_cache_evictions','support_reuses'):
             stats['parallel_'+key]=sum(cache.get(key,0) for cache in worker_caches.values())
         return nodes,stats
@@ -538,6 +609,8 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
             result={**result,'validation':report};retire(job_id,result);terminal=result;completed+=1;frontier_advances+=1
         elif status=='infeasible':
             if not result.get('complete'):raise ValueError('Worker did not certify exhausted job.')
+            if coverage is not None:
+                coverage.record_completed(tuple(int(x,16) for x in jobs[job_id]['region']),status='infeasible',complete=True)
             retire(job_id,result);completed+=1;frontier_advances+=1
         elif status in ('timeout','stopped'):
             candidate={**jobs[job_id],'checkpoint':result.get('checkpoint')}
@@ -547,6 +620,38 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
             jobs[job_id]=copy.deepcopy(candidate);queue.append(job_id)
             root_symmetry=copy.deepcopy(candidate['checkpoint'].get('root_symmetry'))
         else:raise ValueError('Worker returned an unknown or incomplete state.')
+    def prune_queued():
+        nonlocal completed,queue_proof_checks,queue_proof_retirements,queue_proof_splits
+        exclusions=[]
+        if coverage_scope is None:return
+        if options.get('queue_pruning'):
+            if mask_conflicts is not None:
+                exclusions.extend(exclusion_box(record,coverage_scope.original) for record in mask_conflicts.records())
+            if knowledge is not None:
+                exclusions.extend(exclusion_box(tuple((c,1<<code) for c,code in record),coverage_scope.original) for record in knowledge.records())
+        if coverage is not None:exclusions.extend(coverage.exclusions())
+        if not exclusions:return
+        revision=hash(tuple(exclusions))
+        for job_id in list(queue):
+            checkpoint=jobs[job_id]['checkpoint']
+            if checkpoint.get('root_symmetry',{}).get('state')=='pending':continue
+            stamp=(checkpoint['digest'],revision)
+            if queue_proof_seen.get(job_id)==stamp:continue
+            old=checkpoint_boxes(checkpoint);queue_proof_checks+=1
+            def check():
+                if _stopped(stop) or time.monotonic()>=deadline:raise VerificationStopped()
+            try:remaining,complete=subtract_many(old,exclusions,max_boxes=2048,check=check)
+            except VerificationStopped:return
+            queue_proof_seen[job_id]=stamp
+            if not complete or remaining==old:continue
+            if coverage is not None and not remaining:
+                coverage.record_completed(tuple(int(x,16) for x in jobs[job_id]['region']),status='infeasible',complete=True)
+            queue.remove(job_id);retire(job_id,checkpoint);queue_proof_seen.pop(job_id,None)
+            if not remaining:completed+=1;queue_proof_retirements+=1
+            else:
+                for domains in remaining:add(_root_copy(checkpoint,domains))
+                queue_proof_splits+=1
+
     def distribute():
         nonlocal splits,retired_nodes
         if len(jobs)>=2*workers:return
@@ -586,13 +691,14 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
     cancel=None;stopping_at=None
     try:
         if jobs and terminal is None and time.monotonic()<deadline and not _stopped(stop):
-            distribute();context=mp.get_context('spawn');cancel=context.Event()
-            for _ in range(min(workers,max(1,len(jobs)))):
+            prune_queued();distribute();context=mp.get_context('spawn');cancel=context.Event()
+            for _ in range(min(workers,len(jobs))):
                 parent,child=context.Pipe();yield_event=context.Event();yield_events[len(slots)]=yield_event
                 signal=_WorkerSignal(cancel,yield_event)
                 process=context.Process(target=_worker,args=(problem,child,signal),daemon=True)
                 process.start();child.close();slots.append((process,parent));started_workers+=1
             while jobs and terminal is None:
+                prune_queued()
                 requested=_stopped(stop)
                 if requested or time.monotonic()>=deadline or error is not None:
                     if stopping_at is None:stopping_at=time.monotonic();cancel.set()
@@ -720,6 +826,7 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
             process.join(timeout=.5)
             if process.is_alive():process.terminate();process.join(timeout=1)
             connection.close()
+        if coverage is not None:coverage.close()
     nodes,stats=totals()
     if terminal is not None:
         value={**terminal,'nodes':nodes,'stats':stats}
