@@ -121,7 +121,7 @@ fn sample_search(@builtin(global_invocation_id) id:vec3<u32>) {
   for(var count=p.free_count;count>1u;count--){let a=table[25u*p.n+count-1u];let b=table[25u*p.n+random_next()%count];let code=at(a,lane);boards[a*r+lane]=at(b,lane);boards[b*r+lane]=code;}
   for(var i=0u;i<p.free_count;i++){let cell=table[25u*p.n+i];boards[cell*r+lane]=3u*(at(cell,lane)/3u)+random_next()%3u;}
   let initial=u32(total(lane)*i32(p.gold_total+1u)+i32(p.gold_total)-loops(lane,-1,-1));lane_data[r+lane]=initial;lane_data[2u*r+lane]=initial;
-  for(var row=3u;row<select(18u,22u,(flags&8u)!=0u);row++){lane_data[row*r+lane]=0u;}save_best(lane);
+  for(var row=3u;row<select(select(18u,22u,(flags&8u)!=0u),28u,(flags&16u)!=0u);row++){lane_data[row*r+lane]=0u;}save_best(lane);
  } else if p.free_count>0u {
   var score=i32(lane_data[r+lane]);var best_score=i32(lane_data[2u*r+lane]);var iteration=lane_data[3u*r+lane];
   for(var step=0u;step<p.steps;step++){
@@ -141,17 +141,39 @@ fn sample_search(@builtin(global_invocation_id) id:vec3<u32>) {
    }
    for(var i=0u;i<count;i++){next[i]=3u*(old[(i+1u)%count]/3u)+random_next()%3u;}
    }
-   let before=total(lane);let old_loops=loops(lane,-1,-1);
+   // Integer quotient/remainder recover S=B*(T+1)+T-L exactly.
+   let lazy=(flags&16u)!=0u;var before:i32;var old_loops:i32;
+   if lazy {
+    before=score/i32(p.gold_total+1u);old_loops=i32(p.gold_total)-score%i32(p.gold_total+1u);
+    lane_data[22u*r+lane]++;if p.gold_total>0u {lane_data[23u*r+lane]++;}
+   } else {before=total(lane);old_loops=loops(lane,-1,-1);}
    for(var i=0u;i<count;i++){boards[cells[i]*r+lane]=next[i];}
-   let base_delta=total(lane)-before;if guided && base_delta>0 {lane_data[21u*r+lane]++;}
-   let loop_delta=old_loops-loops(lane,-1,-1);
-   let delta=base_delta*i32(p.gold_total+1u)+loop_delta;var tabu=false;
+   let candidate_base=total(lane);let base_delta=candidate_base-before;
+   if guided && base_delta>0 {lane_data[21u*r+lane]++;}
+   var tabu=false;
    if (flags&2u)!=0u {for(var i=0u;i<count;i++){for(var k=0u;k<4u;k++){
     if lane_data[(5u+k)*r+lane]==cells[i]*(3u*p.n)+next[i] && i32(lane_data[(9u+k)*r+lane]-iteration)>0 {tabu=true;}
    }}}
-   var heat=0.25+1.25*(1.0-f32(iteration%4096u)/4096.0);var acceptance=f32(select(base_delta,loop_delta,base_delta==0));
-   if (flags&4u)!=0u {heat=0.2*pow(1.5,f32(lane%8u));acceptance=f32(delta)/f32(p.gold_total+1u);}
-   let accept=(!tabu||score+delta>best_score)&&(acceptance>=0.0||f32(random_next()%1000000u)<1000000.0*exp(acceptance/heat));
+   var heat=0.25+1.25*(1.0-f32(iteration%4096u)/4096.0);
+   if (flags&4u)!=0u {heat=0.2*pow(1.5,f32(lane%8u));}
+   var accept=false;var skip=false;var predrawn=false;var delta:i32=0;
+   // Lnew>=0 bounds aspiration by an integer. Equality still rejects;
+   // a tabu failure must not consume a Metropolis random number.
+   if lazy && tabu && candidate_base*i32(p.gold_total+1u)+i32(p.gold_total)<=best_score {
+    skip=true;if p.gold_total>0u {lane_data[25u*r+lane]++;}
+   } else if lazy && !tabu && (flags&4u)==0u && base_delta<0 {
+    predrawn=true;lane_data[27u*r+lane]++;
+    accept=f32(random_next()%1000000u)<1000000.0*exp(f32(base_delta)/heat);
+    if !accept {skip=true;if p.gold_total>0u {lane_data[26u*r+lane]++;}}
+   }
+   if !skip {
+    let loop_delta=old_loops-loops(lane,-1,-1);
+    if lazy && p.gold_total>0u {lane_data[24u*r+lane]++;}
+    delta=base_delta*i32(p.gold_total+1u)+loop_delta;
+    var acceptance=f32(select(base_delta,loop_delta,base_delta==0));
+    if (flags&4u)!=0u {acceptance=f32(delta)/f32(p.gold_total+1u);}
+    if !predrawn {accept=(!tabu||score+delta>best_score)&&(acceptance>=0.0||f32(random_next()%1000000u)<1000000.0*exp(acceptance/heat));}
+   }
    if tabu&&!accept {lane_data[14u*r+lane]++;}iteration++;
    if accept {
     score+=delta;lane_data[13u*r+lane]++;

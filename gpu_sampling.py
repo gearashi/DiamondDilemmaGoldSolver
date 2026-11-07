@@ -212,7 +212,7 @@ class _CUDA:
         self.cp, self.n, self.r, self.f, self.e = cp, problem.n, replicas, free, len(problem.edges)
         self._poisoned=False
         self.input_binding=_injection_binding(problem)
-        self.flags=sampling_flags(experiments);self.meta_rows=22 if self.flags&8 else (18 if self.flags else 4)
+        self.flags=sampling_flags(experiments);self.meta_rows=28 if self.flags&16 else (22 if self.flags&8 else (18 if self.flags else 4))
         base=25*self.n+free+3*self.n*self.n
         self.gold_total=int(table[base]) if len(table)>base else 0
         name = cp.cuda.runtime.getDeviceProperties(cp.cuda.Device().id)['name']
@@ -287,7 +287,7 @@ class _WebGPU:
         self.wgpu, self.n, self.r, self.f, self.e = wgpu, problem.n, replicas, free, len(problem.edges)
         self._poisoned=False
         self.input_binding=_injection_binding(problem)
-        self.flags=sampling_flags(experiments);self.meta_rows=22 if self.flags&8 else (18 if self.flags else 4)
+        self.flags=sampling_flags(experiments);self.meta_rows=28 if self.flags&16 else (22 if self.flags&8 else (18 if self.flags else 4))
         base=25*self.n+free+3*self.n*self.n
         self.gold_total=int(table[base]) if len(table)>base else 0
         adapter = wgpu.gpu.request_adapter_sync(power_preference='high-performance', force_fallback_adapter=False)
@@ -398,17 +398,19 @@ class _WebGPU:
         self.params.destroy(); self.gpu.destroy()
 
 
-SAMPLING_EXPERIMENTS=('ejection_chains','move_tabu','replica_exchange','obstruction_chains','cycle_crossover')
+SAMPLING_EXPERIMENTS=('ejection_chains','move_tabu','replica_exchange','obstruction_chains','cycle_crossover','lazy_gold_scoring')
 SAMPLING_COUNTERS=('accepted_moves','tabu_rejections','chain_proposals','exchange_attempts','exchange_accepts',
-                   'guided_proposals','guided_candidate_checks','guided_obstruction_starts','guided_base_improvements')
+                   'guided_proposals','guided_candidate_checks','guided_obstruction_starts','guided_base_improvements',
+                   'gold_old_base_scans_saved','gold_old_loop_traces_saved','gold_candidate_loop_traces',
+                   'gold_tabu_traces_skipped','gold_metropolis_traces_skipped','gold_early_metropolis_draws')
 
 def sampling_flags(experiments=None):
     experiments={} if experiments is None else experiments
-    names={'ejection_chains':1,'move_tabu':2,'replica_exchange':4,'obstruction_chains':8,'cycle_crossover':0}
+    names={'ejection_chains':1,'move_tabu':2,'replica_exchange':4,'obstruction_chains':8,'cycle_crossover':0,'lazy_gold_scoring':16}
     if not isinstance(experiments,dict) or set(experiments)-set(names) or any(type(value) is not bool for value in experiments.values()):
         raise ValueError('Invalid sampling experiment switches.')
     flags=sum(bit for name,bit in names.items() if experiments.get(name,False))
-    return flags|1 if flags&8 else flags
+    return flags|1 if flags&(8|16) else flags
 
 def _make_sampler(problem, table, free, replicas, seed, backend, *, allow_software=False, experiments=None, initialize=True):
     extra={'experiments':experiments} if sampling_flags(experiments) else {}

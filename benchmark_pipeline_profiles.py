@@ -12,6 +12,8 @@ HYBRID_PROFILES = {
 }
 HYBRID_PROFILES['crossover'] = {'durable_hybrid': True, 'cycle_crossover': True}
 HYBRID_PROFILES['gold-sampling'] = {'durable_hybrid': True, 'gpu_gold_sampling': True}
+HYBRID_PROFILES['gold-ejection'] = {**HYBRID_PROFILES['gold-sampling'], 'ejection_chains': True}
+HYBRID_PROFILES['lazy-gold'] = {**HYBRID_PROFILES['gold-ejection'], 'lazy_gold_scoring': True}
 HYBRID_PROFILES['guided'] = {'durable_hybrid': True, 'ejection_chains': True, 'obstruction_chains': True}
 HYBRID_PROFILES['combined'] = {**HYBRID_PROFILES['legacy-sampling'], **HYBRID_PROFILES['repair']}
 HYBRID_PROFILES['cpu-reuse'] = {'durable_hybrid': True, 'resumable_reasoning': True,

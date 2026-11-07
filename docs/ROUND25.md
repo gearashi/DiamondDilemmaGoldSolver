@@ -6,13 +6,13 @@ This round implements and evaluates the 37 proposals below in their original ord
 
 ## Current checkpoint
 
-Proposals **1–35** are implemented, have focused correctness tests and finite discriminators, and have passed independent review. They remain optional; a successful finite case does not establish a useful default for the original puzzle. Several mechanisms trade extra checking or setup work for fewer repeated queries, and some have measured adverse cases.
+Proposals **1–36** are implemented, have focused correctness tests and finite discriminators, and have passed independent review. They remain optional; a successful finite case does not establish a useful default for the original puzzle. Several mechanisms trade extra checking or setup work for fewer repeated queries, and some have measured adverse cases.
 
 The first-34 [cross-platform preflight](https://github.com/gearashi/DiamondDilemmaGoldSolver/actions/runs/42366157306) passed all 26 jobs at `effb29b1431b14fb364b6ec248ccc3ff3f9ecd1a`, including Python 3.15 and the four source packages. The first-25 source checkpoint is `b3048ecf2df6b8eb4528b8985307e4459660eb66`. Its [cross-platform preflight](https://github.com/gearashi/DiamondDilemmaGoldSolver/actions/runs/42348120844) passed all 26 jobs, including the Python 3.12/3.15 CPU matrix, package installation, supported native SAT proof checks, WGSL checks and four source packages. The earlier [first-15 preflight](https://github.com/gearashi/DiamondDilemmaGoldSolver/actions/runs/42342504337) passed at `89a724e815f907cca2404b63f87a8d00d720f866`. These development checkpoints are **not the final release gate**.
 
-Proposals **36–37 remain pending completion and evaluation**. The [GPU report](ROUND25_GPU.md) records the completed focused gates for 26–35, including their additional verification and bookkeeping work. Final frozen-source comparisons, combined-feature regressions, measured hardware recommendations and the release build are also outstanding. The [machine-readable register](round25-candidates.json) is the per-proposal status authority; pending entries are not implemented or validated claims.
+Proposal **37 remains pending completion and evaluation**. The [GPU report](ROUND25_GPU.md) records the completed focused gates for 26–36, including their additional verification and bookkeeping work. Final frozen-source comparisons, combined-feature regressions, measured hardware recommendations and the release build are also outstanding. The [machine-readable register](round25-candidates.json) is the per-proposal status authority; pending entries are not implemented or validated claims.
 
-## Implemented scope through proposal 35
+## Implemented scope through proposal 36
 
 | Proposals | Retained mechanism | Boundary that matters |
 | --- | --- | --- |
@@ -30,6 +30,7 @@ Proposals **36–37 remain pending completion and evaluation**. The [GPU report]
 | 33 | Durable sampler trajectory and completed repair/controller state | Same-runtime native sampling can resume exactly. An interrupted native CP-SAT query retries; completed scoped queries and controller progress survive. Heuristic progress never proves exhaustion. |
 | 34 | Build ejection chains from actual conflicts | Small independently enumerated fixtures need fewer proposals, with additional donor/rotation checks. This remains a heuristic, not pruning or a demonstrated original-puzzle improvement. |
 | 35 | Inventory-preserving cycle crossover and bounded exact parent/child history | Gains are conditional on useful supplied parents. A separate eight-parent pool preserves nearby boards; every child is independently scored, and partial native writes poison the sampler rather than allowing a checkpoint. |
+| 36 | Recover current scores exactly and avoid unnecessary loop traces | Same experimental proposals, RNG and boards in paired native tests. Bounded original-puzzle runs use fewer full score passes; this is not fewer proposals or a timing/solution result. |
 
 The [CPU learning report](ROUND25_LEARNING.md) records access flags, dependencies, tested configurations and exact scope for proposals 1–13. The [regional report](ROUND25_REGIONS.md) does the same for 14–25, including adverse comparisons and separate compilation, export and verification costs. Their numerical examples are **development evidence**, not final release measurements. The separate full hybrid pipeline benchmark records GPU proposals, repair queries and DFS decisions without adding those different units or claiming exhausted Cartesian volume.
 

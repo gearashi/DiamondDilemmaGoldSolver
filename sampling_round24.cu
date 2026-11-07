@@ -84,7 +84,7 @@ extern "C" __global__ void sample_search(unsigned*b,unsigned*best,unsigned*m,con
   for(int count=f;count>1;count--){int a=t[25*n+count-1],d=t[25*n+rnd(random)%count];unsigned old=b[a*r+lane];b[a*r+lane]=b[d*r+lane];b[d*r+lane]=old;}
   for(int i=0;i<f;i++){int c=t[25*n+i];b[c*r+lane]=3*(b[c*r+lane]/3)+rnd(random)%3;}
   m[r+lane]=m[2*r+lane]=total(t,b,n,r,f,edges,lane)*(gold_total+1)+gold_total-loops(t,b,n,r,f,-1,-1,lane,gold_total);
-  for(int row=3;row<((flags&8)?22:18);row++)m[row*r+lane]=0;
+  for(int row=3;row<((flags&16)?28:((flags&8)?22:18));row++)m[row*r+lane]=0;
   for(int c=0;c<n;c++)best[c*r+lane]=b[c*r+lane];
  }else if(f>0){
   int score=m[r+lane],bestscore=m[2*r+lane];unsigned iteration=m[3*r+lane];
@@ -105,17 +105,38 @@ extern "C" __global__ void sample_search(unsigned*b,unsigned*best,unsigned*m,con
    }
    for(int i=0;i<count;i++)next[i]=3*(old[(i+1)%count]/3)+rnd(random)%3;
    }
-   int before=total(t,b,n,r,f,edges,lane),oldloops=loops(t,b,n,r,f,-1,-1,lane,gold_total);
+   // S=B*(T+1)+T-L, with 0<=L<=T: quotient/remainder recover the
+   // exact old domain/seam score and proper-loop count without retracing.
+   bool lazy=flags&16;int before,oldloops;
+   if(lazy){before=score/(gold_total+1);oldloops=gold_total-score%(gold_total+1);
+    m[22*r+lane]++;if(gold_total)m[23*r+lane]++;
+   }else {before=total(t,b,n,r,f,edges,lane);oldloops=loops(t,b,n,r,f,-1,-1,lane,gold_total);}
    for(int i=0;i<count;i++)b[cells[i]*r+lane]=next[i];
-   int base_delta=total(t,b,n,r,f,edges,lane)-before;
+   int candidate_base=total(t,b,n,r,f,edges,lane),base_delta=candidate_base-before;
    if(guided&&base_delta>0)m[21*r+lane]++;
-   int loop_delta=oldloops-loops(t,b,n,r,f,-1,-1,lane,gold_total);
-   int delta=base_delta*(gold_total+1)+loop_delta;bool tabu=false;
+   bool tabu=false;
    if(flags&2)for(int i=0;i<count;i++)for(int k=0;k<4;k++)
     if(m[(5+k)*r+lane]==unsigned(cells[i]*(3*n)+next[i])&&int(m[(9+k)*r+lane]-iteration)>0)tabu=true;
    float heat=(flags&4)?(.2f*powf(1.5f,float(lane%8))):(.25f+1.25f*(1.f-float(iteration%4096)/4096.f));
-   float acceptance=(flags&4)?float(delta)/float(gold_total+1):float(base_delta?base_delta:loop_delta);
-   bool accept=(!tabu||score+delta>bestscore)&&(acceptance>=0||float(rnd(random)%1000000)<1000000.f*expf(acceptance/heat));
+   bool accept=false,skip=false,predrawn=false;int delta=0;
+   // Lnew>=0 makes this an integer upper bound. Tabu aspiration is
+   // strictly greater than personal best, and this path consumes no RNG.
+   if(lazy&&tabu&&candidate_base*(gold_total+1)+gold_total<=bestscore){skip=true;if(gold_total)m[25*r+lane]++;}
+   // Without exchange the negative base difference is the EXACT legacy
+   // Metropolis input, independent of loops. Never predraw while tabu:
+   // uncertain aspiration could short-circuit the legacy RNG entirely.
+   else if(lazy&&!tabu&&!(flags&4)&&base_delta<0){
+    predrawn=true;m[27*r+lane]++;
+    accept=float(rnd(random)%1000000)<1000000.f*expf(float(base_delta)/heat);
+    if(!accept){skip=true;if(gold_total)m[26*r+lane]++;}
+   }
+   if(!skip){
+    int loop_delta=oldloops-loops(t,b,n,r,f,-1,-1,lane,gold_total);
+    if(lazy&&gold_total)m[24*r+lane]++;
+    delta=base_delta*(gold_total+1)+loop_delta;
+    float acceptance=(flags&4)?float(delta)/float(gold_total+1):float(base_delta?base_delta:loop_delta);
+    if(!predrawn)accept=(!tabu||score+delta>bestscore)&&(acceptance>=0||float(rnd(random)%1000000)<1000000.f*expf(acceptance/heat));
+   }
    if(tabu&&!accept)m[14*r+lane]++;
    iteration++;
    if(accept){

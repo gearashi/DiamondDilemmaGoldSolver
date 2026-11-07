@@ -616,10 +616,22 @@
       "id": 36,
       "proposal": "Reject hopeless sampling moves before tracing every loop",
       "owner": "gpu_hybrid",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "sampling_round24.cu",
+        "sampling_round24.wgsl",
+        "gpu_sampling.py",
+        "test_gpu_gold_scoring_round25.py",
+        "test_gpu_gold_scoring_reference_round25.py",
+        "benchmark_gpu_gold_scoring_round25.py",
+        "test_benchmark_gpu_gold_scoring_round25.py",
+        "docs/ROUND25_GPU.md"
+      ],
+      "disposition": "Retained opt-in: exact lazy Gold scoring preserves the trajectory while avoiding repeated complete score passes",
+      "original_puzzle_gain": "Fewer complete score passes observed in bounded original-input sampling; no solution or time-to-Gold gain established",
+      "access": "lazy_gold_scoring; hybrid CUDA and native WebGPU; app implies gpu_gold_sampling and ejection_chains",
+      "finite_evidence": "20 focused checks pass. Both backends preserve all old native state after each fixed chunk. Original160:2176proposals, base passes4352 to2176, loop passes4352 to2022; synthetic/planted160 also omit passes. Pure reference10000control-flow cases; native Gold on/off x8policy matrix and160cell injection/exchange/Stop/resume.",
+      "limits": "Same proposal/acceptance trajectory; no proposal reduction or pruning. Counts full passes, not variable segment visits. Integer tabu bound and exact nonexchange predraw only; no float probability bound. T0 supported. Native uint32 telemetry remains modular;28row source/policy-bound state."
     },
     {
       "id": 37,

@@ -344,6 +344,11 @@ def worker(args):
      provenance=provenance,options=options,profile_overrides=overrides,
      solver_seed_effect='not used; repeated measurements on original input' if args.engine in ('gpu','sat') else 'seeded search ordering',
      fixture_seed_effect='none on original input' if args.case=='original' else 'seed changes the generated finite fixture',
+     node_interpretation={
+      'cpu':'Search-node evaluations in the shared Python/native controller, including native fast rejections; not a count of all CPU operations.',
+      'hybrid':'Exact DFS search-node evaluations only; GPU proposals and repair work are reported separately.',
+      'gpu':'Native GPU-domain branch decisions; not comparable directly with CPU evaluation counts.',
+      'sat':'Native SAT search and independent core-verification decisions; see the separate SAT work counters.'}[args.engine],
      evidence_scope='Worker result only; frozen claims require its unchanged-source coordinator report.',
      benchmark_state={'directory':str(state_dir),'coverage_enabled':bool(options.get('shared_coverage')),
                       'coverage_file_created':coverage_path.exists(),'regional_directory_supplied':args.engine in ('cpu','hybrid')},

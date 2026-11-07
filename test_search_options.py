@@ -49,6 +49,15 @@ class OptionsTests(unittest.TestCase):
             validate_algorithm_options('sat',normalize_options({'persistent_sat':True,'sat_theory':True}))
         validate_algorithm_options('sat',normalize_options({'persistent_sat':True,'symbolic_coverage':True}))
 
+    def test_lazy_gold_scoring_implies_gold_and_chain_generator(self):
+        options=normalize_options({'lazy_gold_scoring':True,'gpu_gold_sampling':False,'ejection_chains':False})
+        validate_algorithm_options('hybrid',options)
+        self.assertTrue(options['gpu_gold_sampling']);self.assertTrue(options['ejection_chains'])
+        for engine in ('dfs','parallel-dfs','gpu-domains','sat','cp-sat','cp'):
+            with self.assertRaises(ValueError):validate_algorithm_options(engine,options)
+        self.assertFalse(normalize_options()['lazy_gold_scoring'])
+        with self.assertRaises(ValueError):normalize_options({'lazy_gold_scoring':1})
+
     def test_cycle_crossover_is_boolean_default_off_and_hybrid_only(self):
         options=normalize_options({'cycle_crossover':True})
         validate_algorithm_options('hybrid',options)

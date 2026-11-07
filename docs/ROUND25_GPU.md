@@ -253,3 +253,28 @@ The finite native comparison deliberately supplies parents derived from known sy
 Both native backends give the same recorded results. The two small fixtures have complete independently enumerated Gold sets. The160-cell case verifies one planted witness and is unrelated to solving the supplied Diamond Dilemma tile set. Finished resume allocates no new GPU; replaying the same parents after controller restore scores0new children but still rescores2parents. CPU child evaluations and GPU proposals are different work units, so these results are not a timing or total-primitive-work comparison.
 
 Reproduce with `python benchmark_gpu_crossover_round25.py --backend cuda --output audit/optimization-round25/crossover-cuda-new.json` and the corresponding WebGPU command. Full source/runtime/Git guards, exact prepared inputs, caps, independent certificates and bounded replay evidence are recorded. `--evidence-stage frozen` requires a clean committed checkout. Development receipts are `gpu35-cuda-finite-01.json` and `gpu35-webgpu-finite-01.json`. No original-puzzle gain, global deduplication or new exact pruning is claimed.
+
+
+## 36. Exact lazy Gold scoring
+
+`lazy_gold_scoring` is optional for hybrid sampling on CUDA and native WebGPU. The app enables `gpu_gold_sampling` and `ejection_chains` with it; the chain dependency keeps the same experimental proposal generator. Direct sampler callers retain their explicit objective, including the zero-segment score case. The feature changes repeated scoring work, not proposed boards or acceptance.
+
+With segment count `T`, domain/seam score `B` and proper closed-loop count `L`, the stored objective is `S = B*(T+1) + T-L`, where `0 <= L <= T`. Integer quotient/remainder recover the old base score and loop count exactly. Every candidate still receives a complete base evaluation. A tabu candidate skips loop tracing if its integer upper score `Bnew*(T+1)+T` cannot strictly exceed the personal best. Equality rejects and consumes no RNG. For a non-tabu negative-base candidate with exchange disabled, the existing Metropolis input depends only on that base difference. The identical draw can precede tracing: rejection skips the trace; acceptance traces once and reuses the draw. Uncertain aspiration and exchange acceptance retain complete candidate scoring. There is no floating probability-bound shortcut.
+
+Enabled native state has 28 metadata rows; other policies keep their 4/18/22-row layouts. Checked crossover injection, exchange and native/controller resume preserve exact stored scores. Counters under `gpu_sampling.sampling_experiments` are `gold_old_base_scans_saved`, `gold_old_loop_traces_saved`, `gold_candidate_loop_traces`, `gold_tabu_traces_skipped`, `gold_metropolis_traces_skipped` and `gold_early_metropolis_draws`. Loop counters increment only for `T>0`. Complete loop passes have varying segment-visit counts, so these are not all primitive operations.
+
+Twenty focused checks pass: ten host/native, eight independent control-flow and two evidence-accounting tests. Native checks compare boards, best boards, RNG, iteration, tabu and every old counter after each chunk for all eight tabu/exchange/guidance combinations with Gold scoring on/off. Further checks cover temperature wrap at4096, fixed/no-free/one-cell cases, actual160-cell injection/exchange and both native and controller Stop/resume. The pure reference covers10,000 control-flow cases, strict aspiration equality, one-draw success/failure, best-tie RNG, zero uniforms, threshold/underflow, high integer scores and `T=0`. Pure float tests do not claim cross-backend exp identity; native equivalence is checked within each backend.
+
+Source-bound comparisons use equal native initial populations and fixed chunks of1,7,64,64 proposals per lane. Both backends produce these results:
+
+| Input and paired cases | Lane proposals per policy | Base passes baseline to lazy | Loop passes baseline to lazy |
+| --- | ---: | ---: | ---: |
+| Four-cell synthetic,8cases | 17,408 | 34,816 to17,408 | 34,816 to11,287 |
+| Planted160-cell,4cases | 2,176 | 4,352 to2,176 | 4,352 to1,973 |
+| Supplied original160-cell tiles,4cases | 2,176 | 4,352 to2,176 | 4,352 to2,022 |
+
+Baseline counts follow one old and one candidate pass per proposal; initialization is excluded. All old native state matches after every chunk, and current/best scores pass independent checks. Fixed work deliberately continues after any synthetic Gold. This demonstrates fewer repeated score passes on bounded original-input samples as well as synthetic inputs, not fewer proposals, faster time to Gold, a solved original puzzle or exact pruning.
+
+Native experimental counters remain32-bit per lane; host sums are modular snapshots, not unlimited cumulative counters. Guidance adds at most243 orientation checks per proposal; each new scoring counter adds at most one. The app sampling phase remains capped at30seconds even when the whole run is unlimited. Direct long-running callers must account for counter wrap; all finite evidence is well below it.
+
+Reproduce using `python benchmark_gpu_gold_scoring_round25.py --backend cuda --output audit/optimization-round25/gold-scoring-cuda-new.json` and the WebGPU equivalent. `--evidence-stage frozen` requires clean committed sources. Development receipts `gpu36-cuda-finite-01.json` and `gpu36-webgpu-finite-01.json` bind complete source/runtime/Git identities and original input bytes. Independent source, correctness and evidence review cleared this bounded implementation.
