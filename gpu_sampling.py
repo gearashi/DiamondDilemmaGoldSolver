@@ -188,7 +188,7 @@ class _CUDA:
     def __init__(self, problem, table, free, replicas, seed, *, experiments=None, initialize=True):
         import cupy as cp
         self.cp, self.n, self.r, self.f, self.e = cp, problem.n, replicas, free, len(problem.edges)
-        self.flags=sampling_flags(experiments);self.meta_rows=18 if self.flags else 4
+        self.flags=sampling_flags(experiments);self.meta_rows=22 if self.flags&8 else (18 if self.flags else 4)
         base=25*self.n+free+3*self.n*self.n
         self.gold_total=int(table[base]) if len(table)>base else 0
         name = cp.cuda.runtime.getDeviceProperties(cp.cuda.Device().id)['name']
@@ -220,8 +220,8 @@ class _CUDA:
         self.cp.cuda.get_current_stream().synchronize()
     def experiment_stats(self):
         if not self.flags:return {}
-        counts=self.meta[13:18].sum(axis=1,dtype=self.cp.uint64).get()
-        return dict(zip(('accepted_moves','tabu_rejections','chain_proposals','exchange_attempts','exchange_accepts'),map(int,counts)))
+        counts=self.meta[13:self.meta_rows].sum(axis=1,dtype=self.cp.uint64).get()
+        return dict(zip(SAMPLING_COUNTERS,map(int,counts)))
     def top(self, count=32):
         scores = self.meta[2].get()
         ids = _top_ids(scores, count)
@@ -244,7 +244,7 @@ class _WebGPU:
     def __init__(self, problem, table, free, replicas, seed, *, allow_software=False, experiments=None, initialize=True):
         import wgpu
         self.wgpu, self.n, self.r, self.f, self.e = wgpu, problem.n, replicas, free, len(problem.edges)
-        self.flags=sampling_flags(experiments);self.meta_rows=18 if self.flags else 4
+        self.flags=sampling_flags(experiments);self.meta_rows=22 if self.flags&8 else (18 if self.flags else 4)
         base=25*self.n+free+3*self.n*self.n
         self.gold_total=int(table[base]) if len(table)>base else 0
         adapter = wgpu.gpu.request_adapter_sync(power_preference='high-performance', force_fallback_adapter=False)
@@ -322,20 +322,26 @@ class _WebGPU:
         compute.dispatch_workgroups((self.r+127)//128);compute.end();self.queue.submit([encoder.finish()])
     def experiment_stats(self):
         if not self.flags:return {}
-        counts=np.frombuffer(self.queue.read_buffer(self.buffers[2],13*self.r*4,5*self.r*4),np.uint32).reshape(5,self.r).sum(axis=1,dtype=np.uint64)
-        return dict(zip(('accepted_moves','tabu_rejections','chain_proposals','exchange_attempts','exchange_accepts'),map(int,counts)))
+        rows=self.meta_rows-13
+        counts=np.frombuffer(self.queue.read_buffer(self.buffers[2],13*self.r*4,rows*self.r*4),np.uint32).reshape(rows,self.r).sum(axis=1,dtype=np.uint64)
+        return dict(zip(SAMPLING_COUNTERS,map(int,counts)))
     def close(self):
         if self.gather_buffer is not None: self.gather_buffer.destroy()
         for buffer in self.buffers: buffer.destroy()
         self.params.destroy(); self.gpu.destroy()
 
 
+SAMPLING_EXPERIMENTS=('ejection_chains','move_tabu','replica_exchange','obstruction_chains')
+SAMPLING_COUNTERS=('accepted_moves','tabu_rejections','chain_proposals','exchange_attempts','exchange_accepts',
+                   'guided_proposals','guided_candidate_checks','guided_obstruction_starts','guided_base_improvements')
+
 def sampling_flags(experiments=None):
     experiments={} if experiments is None else experiments
-    names={'ejection_chains':1,'move_tabu':2,'replica_exchange':4}
+    names={'ejection_chains':1,'move_tabu':2,'replica_exchange':4,'obstruction_chains':8}
     if not isinstance(experiments,dict) or set(experiments)-set(names) or any(type(value) is not bool for value in experiments.values()):
         raise ValueError('Invalid sampling experiment switches.')
-    return sum(bit for name,bit in names.items() if experiments.get(name,False))
+    flags=sum(bit for name,bit in names.items() if experiments.get(name,False))
+    return flags|1 if flags&8 else flags
 
 def _make_sampler(problem, table, free, replicas, seed, backend, *, allow_software=False, experiments=None, initialize=True):
     extra={'experiments':experiments} if sampling_flags(experiments) else {}
@@ -496,7 +502,7 @@ def solve(problem, *, seconds=10, seed=0, target='gold', replicas=128, backend='
         sampling_report = sample(problem, seconds=min(30.0,seconds*sampling_fraction,remaining()), seed=seed,
                                  replicas=replicas, backend=backend, stop=stop, progress=phase_progress('sampling'),
                                  **({'gold_aware':True} if options and options.get('gpu_gold_sampling') and target=='gold' else {}),
-                                 **({'experiments':{name:True for name in ('ejection_chains','move_tabu','replica_exchange') if options.get(name)}} if options and any(options.get(name) for name in ('ejection_chains','move_tabu','replica_exchange')) else {}))
+                                 **({'experiments':{name:True for name in SAMPLING_EXPERIMENTS if options.get(name)}} if options and any(options.get(name) for name in SAMPLING_EXPERIMENTS) else {}))
         samples = sampling_report.get('top_samples', [])
         if not samples and sampling_report.get('top_board') is not None:
             samples = [{'codes':sampling_report['top_board']}]

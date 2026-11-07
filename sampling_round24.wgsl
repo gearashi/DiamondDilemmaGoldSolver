@@ -63,6 +63,55 @@ fn loops(lane:u32,a:i32,b:i32)->i32 {
     }
     return result;
 }
+// Guidance scores the unchanged board; only the complete closed permutation
+// and its independently recomputed total/loop score control acceptance.
+fn local_candidate(cell:u32,code:u32,lane:u32)->i32 {
+    var value=i32(table[25u*p.n+p.free_count+cell*3u*p.n+code])*i32(p.edges+1u);
+    for(var side=0u;side<3u;side++) {
+        let nb=neighbor(cell,side);
+        if nb<p.n {
+            value+=select(0,1,table[code*3u+side]==table[9u*p.n+at(nb,lane)*3u+table[21u*p.n+cell*3u+side]]);
+        }
+    }
+    return value;
+}
+fn guided_cycle(lane:u32,count:u32,score:i32,cells:ptr<function,array<u32,6>>,old:ptr<function,array<u32,6>>,next:ptr<function,array<u32,6>>) {
+    lane_data[18u*p.replicas+lane]++;
+    let start=random_next()%p.free_count;var first=table[25u*p.n+start];
+    let full_base=i32(p.n*(p.edges+1u)+p.edges);
+    let closed_obstruction=p.gold_total>0u && score/i32(p.gold_total+1u)==full_base && score<full_base*i32(p.gold_total+1u)+i32(p.gold_total);
+    for(var offset=0u;offset<p.free_count;offset++) {
+        let cell=table[25u*p.n+(start+offset)%p.free_count];var bad=legal(cell,lane)==0;
+        for(var side=0u;side<3u;side++) {if neighbor(cell,side)<p.n && edge(cell,side,lane)==0 {bad=true;}}
+        if !bad && closed_obstruction {
+            for(var port=0u;port<33u;port++) {if partner(at(cell,lane),port)<33u {bad=true;break;}}
+        }
+        if bad {first=cell;lane_data[20u*p.replicas+lane]++;break;}
+    }
+    (*cells)[0]=first;(*old)[0]=at(first,lane);
+    for(var i=0u;i<count-1u;i++) {
+        let begin=random_next()%p.free_count;let rotation=random_next()%3u;
+        var inspected=0u;var best_value=-1;var donor=0u;var chosen_code=0u;
+        for(var offset=0u;offset<p.free_count && inspected<16u;offset++) {
+            let candidate=table[25u*p.n+(begin+offset)%p.free_count];var used=false;
+            for(var j=0u;j<=i;j++) {if (*cells)[j]==candidate {used=true;}}
+            if used {continue;}inspected++;
+            let tile=at(candidate,lane)/3u;
+            for(var k=0u;k<3u;k++) {
+                let code=tile*3u+(rotation+k)%3u;lane_data[19u*p.replicas+lane]++;
+                let value=local_candidate((*cells)[i],code,lane);
+                if value>best_value {best_value=value;donor=candidate;chosen_code=code;}
+            }
+        }
+        (*cells)[i+1u]=donor;(*old)[i+1u]=at(donor,lane);(*next)[i]=chosen_code;
+    }
+    let rotation=random_next()%3u;var best_value=-1;
+    for(var k=0u;k<3u;k++) {
+        let code=3u*((*old)[0]/3u)+(rotation+k)%3u;lane_data[19u*p.replicas+lane]++;
+        let value=local_candidate((*cells)[count-1u],code,lane);
+        if value>best_value {best_value=value;(*next)[count-1u]=code;}
+    }
+}
 fn save_best(lane:u32) { for(var cell=0u;cell<p.n;cell++) { best_boards[cell*p.replicas+lane]=at(cell,lane); } }
 @compute @workgroup_size(64)
 fn sample_search(@builtin(global_invocation_id) id:vec3<u32>) {
@@ -72,22 +121,30 @@ fn sample_search(@builtin(global_invocation_id) id:vec3<u32>) {
   for(var count=p.free_count;count>1u;count--){let a=table[25u*p.n+count-1u];let b=table[25u*p.n+random_next()%count];let code=at(a,lane);boards[a*r+lane]=at(b,lane);boards[b*r+lane]=code;}
   for(var i=0u;i<p.free_count;i++){let cell=table[25u*p.n+i];boards[cell*r+lane]=3u*(at(cell,lane)/3u)+random_next()%3u;}
   let initial=u32(total(lane)*i32(p.gold_total+1u)+i32(p.gold_total)-loops(lane,-1,-1));lane_data[r+lane]=initial;lane_data[2u*r+lane]=initial;
-  for(var row=3u;row<18u;row++){lane_data[row*r+lane]=0u;}save_best(lane);
+  for(var row=3u;row<select(18u,22u,(flags&8u)!=0u);row++){lane_data[row*r+lane]=0u;}save_best(lane);
  } else if p.free_count>0u {
   var score=i32(lane_data[r+lane]);var best_score=i32(lane_data[2u*r+lane]);var iteration=lane_data[3u*r+lane];
   for(var step=0u;step<p.steps;step++){
    var cells:array<u32,6>;var old:array<u32,6>;var next:array<u32,6>;var count=1u;
-   if (flags&1u)!=0u && p.free_count>=3u && random_next()%4u!=0u {count=3u+random_next()%(min(6u,p.free_count)-2u);lane_data[15u*r+lane]++;}
+   var guided=false;if (flags&8u)!=0u {guided=random_next()%4u!=0u;}
+   if guided {
+    count=p.free_count;if p.free_count>=3u {count=3u+random_next()%(min(6u,p.free_count)-2u);}lane_data[15u*r+lane]++;
+   }
+   else if (flags&1u)!=0u && p.free_count>=3u && random_next()%4u!=0u {count=3u+random_next()%(min(6u,p.free_count)-2u);lane_data[15u*r+lane]++;}
    else if p.free_count>=2u {count=1u+random_next()%2u;}
+   if guided {guided_cycle(lane,count,score,&cells,&old,&next);}
+   else {
    for(var i=0u;i<count;i++){
     var chosen=table[25u*p.n+random_next()%p.free_count];var duplicate=true;
     while duplicate {duplicate=false;for(var j=0u;j<i;j++){if cells[j]==chosen {duplicate=true;}}if duplicate {chosen=table[25u*p.n+random_next()%p.free_count];}}
     cells[i]=chosen;old[i]=at(chosen,lane);
    }
    for(var i=0u;i<count;i++){next[i]=3u*(old[(i+1u)%count]/3u)+random_next()%3u;}
+   }
    let before=total(lane);let old_loops=loops(lane,-1,-1);
    for(var i=0u;i<count;i++){boards[cells[i]*r+lane]=next[i];}
-   let base_delta=total(lane)-before;let loop_delta=old_loops-loops(lane,-1,-1);
+   let base_delta=total(lane)-before;if guided && base_delta>0 {lane_data[21u*r+lane]++;}
+   let loop_delta=old_loops-loops(lane,-1,-1);
    let delta=base_delta*i32(p.gold_total+1u)+loop_delta;var tabu=false;
    if (flags&2u)!=0u {for(var i=0u;i<count;i++){for(var k=0u;k<4u;k++){
     if lane_data[(5u+k)*r+lane]==cells[i]*(3u*p.n)+next[i] && i32(lane_data[(9u+k)*r+lane]-iteration)>0 {tabu=true;}

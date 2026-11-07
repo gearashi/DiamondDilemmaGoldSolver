@@ -40,6 +40,43 @@ __device__ int loops(const unsigned*t,const unsigned*b,int n,int r,int f,int a,i
  }
  }}return result;
 }
+// Heuristic placement scores never exclude search work. The complete proposed
+// permutation is still evaluated by total()/loops() before acceptance.
+__device__ int local_candidate(const unsigned*t,const unsigned*b,int n,int r,int f,int edges,int cell,unsigned code,int lane){
+ int value=int(t[25*n+f+cell*3*n+code])*(edges+1);
+ for(int side=0;side<3;side++){unsigned nb=t[18*n+cell*3+side];if(nb<unsigned(n))
+  value+=int(t[code*3+side]==t[9*n+b[nb*r+lane]*3+t[21*n+cell*3+side]]);}
+ return value;
+}
+__device__ void guided_cycle(const unsigned*t,const unsigned*b,unsigned*m,int n,int r,int f,int edges,int gold_total,int score,int lane,
+                             unsigned &random,int count,int*cells,int*old,int*next){
+ m[18*r+lane]++;unsigned start=rnd(random)%f;int first=t[25*n+start];
+ bool closed_obstruction=gold_total>0&&score/(gold_total+1)==n*(edges+1)+edges&&score<(n*(edges+1)+edges)*(gold_total+1)+gold_total;
+ for(int offset=0;offset<f;offset++){
+  int cell=t[25*n+(start+offset)%f];bool bad=!legal(t,b,n,r,f,cell,lane);
+  for(int side=0;side<3;side++)if(t[18*n+cell*3+side]<unsigned(n)&&!edge(t,b,n,r,cell,side,lane))bad=true;
+  if(!bad&&closed_obstruction)for(int port=0;port<33;port++)if(partner(t,n,f,b[cell*r+lane],port)<33){bad=true;break;}
+  if(bad){first=cell;m[20*r+lane]++;break;}
+ }
+ cells[0]=first;old[0]=b[first*r+lane];
+ for(int i=0;i<count-1;i++){
+  unsigned begin=rnd(random)%f,rotation=rnd(random)%3;int inspected=0,best_value=-1,donor=-1,chosen_code=0;
+  for(int offset=0;offset<f&&inspected<16;offset++){
+   int candidate=t[25*n+(begin+offset)%f];bool used=false;for(int j=0;j<=i;j++)if(cells[j]==candidate)used=true;
+   if(used)continue;inspected++;unsigned tile=b[candidate*r+lane]/3;
+   for(int k=0;k<3;k++){unsigned code=tile*3+(rotation+k)%3;m[19*r+lane]++;
+    int value=local_candidate(t,b,n,r,f,edges,cells[i],code,lane);
+    if(value>best_value){best_value=value;donor=candidate;chosen_code=code;}
+   }
+  }
+  cells[i+1]=donor;old[i+1]=b[donor*r+lane];next[i]=chosen_code;
+ }
+ unsigned rotation=rnd(random)%3;int best_value=-1;
+ for(int k=0;k<3;k++){unsigned code=3*(old[0]/3)+(rotation+k)%3;m[19*r+lane]++;
+  int value=local_candidate(t,b,n,r,f,edges,cells[count-1],code,lane);
+  if(value>best_value){best_value=value;next[count-1]=code;}
+ }
+}
 extern "C" __global__ void sample_search(unsigned*b,unsigned*best,unsigned*m,const unsigned*t,int n,int r,int f,int steps,int phase,int edges,int gold_total,int flags){
  int lane=blockIdx.x*blockDim.x+threadIdx.x;if(lane>=r)return;unsigned random=m[lane];
  if(phase==0){
@@ -47,25 +84,31 @@ extern "C" __global__ void sample_search(unsigned*b,unsigned*best,unsigned*m,con
   for(int count=f;count>1;count--){int a=t[25*n+count-1],d=t[25*n+rnd(random)%count];unsigned old=b[a*r+lane];b[a*r+lane]=b[d*r+lane];b[d*r+lane]=old;}
   for(int i=0;i<f;i++){int c=t[25*n+i];b[c*r+lane]=3*(b[c*r+lane]/3)+rnd(random)%3;}
   m[r+lane]=m[2*r+lane]=total(t,b,n,r,f,edges,lane)*(gold_total+1)+gold_total-loops(t,b,n,r,f,-1,-1,lane,gold_total);
-  for(int row=3;row<18;row++)m[row*r+lane]=0;
+  for(int row=3;row<((flags&8)?22:18);row++)m[row*r+lane]=0;
   for(int c=0;c<n;c++)best[c*r+lane]=b[c*r+lane];
  }else if(f>0){
   int score=m[r+lane],bestscore=m[2*r+lane];unsigned iteration=m[3*r+lane];
   for(int step=0;step<steps;step++){
    int cells[6],old[6],next[6],count=1;
-   if((flags&1)&&f>=3&&rnd(random)%4!=0){count=3+rnd(random)%(min(6,f)-2);m[15*r+lane]++;}
+   bool guided=(flags&8)&&rnd(random)%4!=0;
+   if(guided){count=f>=3?3+rnd(random)%(min(6,f)-2):f;m[15*r+lane]++;}
+   else if((flags&1)&&f>=3&&rnd(random)%4!=0){count=3+rnd(random)%(min(6,f)-2);m[15*r+lane]++;}
    else if(f>=2)count=1+rnd(random)%2;
    // Select distinct positions, then relocate the displaced pieces around
    // the closed chain. Every proposal remains a physical-piece permutation.
+   if(guided)guided_cycle(t,b,m,n,r,f,edges,gold_total,score,lane,random,count,cells,old,next);
+   else {
    for(int i=0;i<count;i++){
     int chosen=t[25*n+rnd(random)%f];bool duplicate=true;
     while(duplicate){duplicate=false;for(int j=0;j<i;j++)if(cells[j]==chosen)duplicate=true;if(duplicate)chosen=t[25*n+rnd(random)%f];}
     cells[i]=chosen;old[i]=b[chosen*r+lane];
    }
    for(int i=0;i<count;i++)next[i]=3*(old[(i+1)%count]/3)+rnd(random)%3;
+   }
    int before=total(t,b,n,r,f,edges,lane),oldloops=loops(t,b,n,r,f,-1,-1,lane,gold_total);
    for(int i=0;i<count;i++)b[cells[i]*r+lane]=next[i];
    int base_delta=total(t,b,n,r,f,edges,lane)-before;
+   if(guided&&base_delta>0)m[21*r+lane]++;
    int loop_delta=oldloops-loops(t,b,n,r,f,-1,-1,lane,gold_total);
    int delta=base_delta*(gold_total+1)+loop_delta;bool tabu=false;
    if(flags&2)for(int i=0;i<count;i++)for(int k=0;k<4;k++)

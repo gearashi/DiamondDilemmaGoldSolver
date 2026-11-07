@@ -574,10 +574,22 @@
       "id": 34,
       "proposal": "Choose ejection chains from the actual obstruction",
       "owner": "gpu_hybrid",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "sampling_round24.cu",
+        "sampling_round24.wgsl",
+        "gpu_sampling.py",
+        "test_gpu_chains_reference_round25.py",
+        "test_gpu_chains_round25.py",
+        "benchmark_gpu_chains_round25.py",
+        "test_benchmark_gpu_chains_round25.py",
+        "docs/ROUND25_GPU.md"
+      ],
+      "disposition": "Retained opt-in after independent review; bounded obstruction-guided inventory-preserving ejection cycles",
+      "original_puzzle_gain": "not established",
+      "access": "obstruction_chains implies ejection_chains; legacy/durable hybrid CUDA and native WebGPU",
+      "finite_evidence": "17focused checks plus4harness checks pass;512compiled-helper/reference lane cases and160-cell22-row exact resume. Both native backends: eachfixture12of12guided vs9of12baseline solved by64rounds; both-solved9pairs tetra1640to272 and singleton2048to152 lane proposals. Two initialGold seeds cost0. Extraorientation6054/2688 over12pairs.",
+      "limits": "Heuristic only, no pruning or coverage; local donor scores are not bounds on full moves. Atmost16donors x3rotations perreceiver,6cells,243orientationevaluations; obstruction scans/neighborchecks additional. Extra16bytes/replica. Finite synthetic results not original-puzzle gain or total primitive-work/time improvement."
     },
     {
       "id": 35,

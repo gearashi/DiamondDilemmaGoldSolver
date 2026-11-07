@@ -1,5 +1,6 @@
 """Durable hybrid controller regressions; native trajectory checks opt in."""
 from copy import deepcopy
+from types import SimpleNamespace
 import json,os,unittest
 from unittest.mock import patch
 import numpy as np
@@ -9,6 +10,7 @@ from test_constraint_dfs import double_face,multiple_loops,tetrahedron_tiles
 from gpu_sampling_resume_round25 import SamplerSession
 from constraint_lns_resume_round25 import RepairSession
 import gpu_sampling as sampling
+import gpu_backends as backends
 import gpu_hybrid_resume_round25 as hybrid
 
 EXPERIMENTS={'ejection_chains':True,'move_tabu':True,'replica_exchange':True}
@@ -16,11 +18,16 @@ def problem():return SearchProblem(multiple_loops(),double_face())
 def copied(value):return json.loads(json.dumps(value))
 def rehash(value):value['digest']=digest({k:v for k,v in value.items() if k!='digest'});return value
 
+def fake_backend(name='auto'):
+    """Host-only selection paired with FakeSampler; it never probes a driver."""
+    if name not in ('auto','cuda','webgpu'):raise ValueError('Invalid fake backend.')
+    return 'cuda' if name=='auto' else name
+
 class FakeSampler:
     instances=[]
     def __init__(self,p,table,free,r,seed,backend,*,experiments=None,initialize=True,allow_software=False):
         self.problem=p;self.n=p.n;self.r=r;self.f=free;self.flags=sampling.sampling_flags(experiments);self.gold_total=0;self.meta_rows=18 if self.flags else 4
-        self.device='finite fake';self.closed=False;self.initialized=initialize;self.launches=0
+        self.device='finite fake';self.backend=backend;self.closed=False;self.initialized=initialize;self.launches=0
         self.arrays=[np.tile(np.arange(self.n,dtype=np.uint32)[:,None]*3,(1,r)) for _ in range(2)]+[np.zeros((self.meta_rows,r),np.uint32)]
         self.arrays[2][0]=np.arange(r,dtype=np.uint32)+1
         self.instances.append(self)
@@ -28,7 +35,7 @@ class FakeSampler:
         self.launches+=1;self.arrays[2][3]+=1;self.arrays[0][0]=self.arrays[0][0]//3*3+(self.arrays[0][0]+1)%3;self.arrays[1]=self.arrays[0].copy()
     def exchange(self,parity):self.arrays[2][-1]+=parity+1
     def experiment_stats(self):return {'exchange_attempts':int(self.arrays[2][-1].sum())} if self.flags else {}
-    def runtime_identity(self):return {'backend':'cuda','device':self.device,'runtime':'fake'}
+    def runtime_identity(self):return {'backend':self.backend,'device':self.device,'runtime':'fake'}
     def snapshot_arrays(self):return [a.copy() for a in self.arrays]
     def restore_arrays(self,arrays):self.arrays=[a.copy() for a in arrays]
     def top(self):
@@ -36,8 +43,10 @@ class FakeSampler:
     def close(self):self.closed=True
 
 class HostSamplerTests(unittest.TestCase):
-    def setUp(self):FakeSampler.instances=[];self.p=problem();self.mock=patch.object(sampling,'_make_sampler',side_effect=FakeSampler);self.mock.start()
-    def tearDown(self):self.mock.stop()
+    def setUp(self):
+        FakeSampler.instances=[];self.p=problem()
+        self.enterContext(patch.object(sampling,'_make_sampler',side_effect=FakeSampler))
+        self.backend_choice=self.enterContext(patch.object(backends,'choose_backend',side_effect=fake_backend))
     def session(self,**kw):return SamplerSession(self.p,replicas=4,backend='cuda',**kw)
     def test_complete_state_and_exchange_cadence_resume(self):
         a=self.session(experiments=EXPERIMENTS);a.advance(20,max_dispatches=18);a.finish_phase();expected=a.snapshot();a.close()
@@ -51,7 +60,7 @@ class HostSamplerTests(unittest.TestCase):
         for call in (b.snapshot,b.finish_phase,lambda:b.advance(1)):
             with self.assertRaisesRegex(RuntimeError,'closed'):call()
     def test_immediate_stop_allocates_nothing(self):
-        a=self.session();a.advance(20,stop=lambda:True);self.assertEqual(FakeSampler.instances,[]);self.assertIsNone(a.snapshot()['native']);a.close()
+        a=self.session();a.advance(20,stop=lambda:True);self.assertEqual(FakeSampler.instances,[]);self.assertIsNone(a.snapshot()['native']);self.backend_choice.assert_not_called();a.close()
     def test_changed_live_input_cannot_publish_old_scope(self):
         a=self.session();self.p.domains[0]=self.p.domains[0][1:]
         with self.assertRaisesRegex(ValueError,'input/source changed'):a.snapshot()
@@ -59,14 +68,34 @@ class HostSamplerTests(unittest.TestCase):
         a.close()
     def test_wrong_replica_policy_and_backend_rejected(self):
         a=self.session();a.advance(20,max_dispatches=1);saved=a.snapshot();a.close()
-        for kw in ({'replicas':8,'backend':'cuda'},{'replicas':4,'backend':'webgpu'}):
-            with self.assertRaises(ValueError):SamplerSession(self.p,resume=saved,**kw)
+        for kw,reason in (({'replicas':8,'backend':'cuda'},'policy'),({'replicas':4,'backend':'webgpu'},'saved backend')):
+            with self.assertRaisesRegex(ValueError,reason):SamplerSession(self.p,resume=saved,**kw)
+    def test_host_fake_on_darwin_never_selects_or_constructs_native_device(self):
+        with patch.object(backends,'sys',SimpleNamespace(platform='darwin')),patch.object(backends,'_automatic_backend',side_effect=AssertionError('native auto selection')) as automatic,patch.object(sampling,'_CUDA',side_effect=AssertionError('native CUDA')) as cuda,patch.object(sampling,'_WebGPU',side_effect=AssertionError('native WebGPU')) as webgpu:
+            a=self.session()
+            try:
+                a.advance(20,max_dispatches=1);saved=copied(a.snapshot())
+                self.assertEqual(saved['selected'],'cuda');self.assertEqual(saved['launches'],1)
+            finally:a.close()
+            self.backend_choice.assert_called_once_with('cuda')
+            automatic.assert_not_called();cuda.assert_not_called();webgpu.assert_not_called()
+
     def test_corrupt_native_does_not_write_device(self):
         a=self.session();a.advance(20,max_dispatches=1);saved=a.snapshot();a.close()
         saved['native']['compressed']='AAAA';rehash(saved['native']);rehash(saved)
         b=self.session(resume=saved)
         with self.assertRaises(ValueError):b.advance(10,max_dispatches=1)
         self.assertTrue(FakeSampler.instances[-1].closed);b.close()
+
+class BackendSelectionIsolationTests(unittest.TestCase):
+    def test_actual_darwin_cuda_policy_rejects_before_native_factory(self):
+        # The host fake must not weaken the real platform policy test.
+        with patch.object(backends,'sys',SimpleNamespace(platform='darwin')),patch.object(sampling,'_make_sampler',side_effect=AssertionError('native factory')) as factory:
+            session=SamplerSession(problem(),replicas=4,backend='cuda')
+            try:
+                with self.assertRaisesRegex(ValueError,'CUDA is unavailable on macOS'):session.advance(1,max_dispatches=1)
+            finally:session.close()
+            factory.assert_not_called()
 
 class DurableRepairTests(unittest.TestCase):
     def session(self,**kw):return RepairSession(problem(),[0,3],phase_seconds=30,patch_sizes=(2,),max_attempts=4,**kw)
@@ -151,8 +180,9 @@ class HybridTests(unittest.TestCase):
         def progress(event):
             events.append(copied(event))
             if event.get('event')=='phase' and event.get('phase')=='repair':stopped[0]=True
-        with patch.object(hybrid,'SamplerSession',DoneSampler),patch.object(sampling,'_make_sampler',side_effect=FakeSampler):
+        with patch.object(hybrid,'SamplerSession',DoneSampler),patch.object(sampling,'_make_sampler',side_effect=FakeSampler),patch.object(backends,'choose_backend',side_effect=fake_backend) as selected,patch.object(backends,'sys',SimpleNamespace(platform='darwin')),patch.object(sampling,'_CUDA',side_effect=AssertionError('native CUDA')) as cuda,patch.object(sampling,'_WebGPU',side_effect=AssertionError('native WebGPU')) as webgpu:
             first=sampling.solve(problem(),seconds=10,replicas=4,backend='cuda',stop=lambda:stopped[0],progress=progress,options={'durable_hybrid':True})
+            selected.assert_called_once_with('cuda');cuda.assert_not_called();webgpu.assert_not_called()
         saved=copied(first['checkpoint']);self.assertEqual(saved['phase'],'repair');self.assertIsNone(saved['sampler_state'])
         commits=[e for e in events if e['event']=='checkpoint'];self.assertEqual(commits[-1]['payload']['phase'],'repair');self.assertEqual(saved['sampling']['dispatches'],8)
         with patch.object(hybrid,'SamplerSession',side_effect=AssertionError('sampling repeated')):

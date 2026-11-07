@@ -49,6 +49,15 @@ class OptionsTests(unittest.TestCase):
             validate_algorithm_options('sat',normalize_options({'persistent_sat':True,'sat_theory':True}))
         validate_algorithm_options('sat',normalize_options({'persistent_sat':True,'symbolic_coverage':True}))
 
+    def test_obstruction_chains_enable_ejection_chains_for_hybrid_only(self):
+        options=normalize_options({'obstruction_chains':True,'ejection_chains':False})
+        self.assertTrue(options['ejection_chains']);self.assertFalse(options['durable_hybrid'])
+        validate_algorithm_options('hybrid',options)
+        for algorithm in ('dfs','parallel-dfs','sat','gpu-domains'):
+            with self.subTest(algorithm=algorithm),self.assertRaises(ValueError):validate_algorithm_options(algorithm,options)
+        self.assertFalse(normalize_options()['obstruction_chains'])
+        with self.assertRaises(ValueError):normalize_options({'obstruction_chains':1})
+
     def test_invalid_controls_fail_before_search(self):
         for value in ([], True, {'unexpected': True}, {'lookahead': 1}, {'native': 'gpu'}, {'regional_cache': None}):
             with self.subTest(value=value), self.assertRaises(ValueError):

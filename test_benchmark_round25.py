@@ -237,6 +237,19 @@ class BenchmarkCleanupTests(unittest.TestCase):
    launch.assert_called_once();cleanup.assert_called_once_with(child)
 
 
+ def test_malformed_exited_child_still_cleans_owned_group_and_keeps_original_error(self):
+  for cleanup_fails in (False,True):
+   with self.subTest(cleanup_fails=cleanup_fails),tempfile.TemporaryDirectory(prefix='benchmark-malformed-',dir=benchmark.ROOT) as directory:
+    output=Path(directory)/'matrix';argv=['benchmark_round25.py','--output',str(output),'--suite','finite','--profiles','baseline']
+    def fake(command,**kw):
+     Path(command[command.index('--output')+1]).write_text('invalid-json',encoding='utf-8')
+     return SimpleNamespace(pid=424242,returncode=0,poll=lambda:0,communicate=lambda **kw:('native output',''))
+    with patch.object(benchmark.sys,'argv',argv),patch.object(benchmark,'source_hashes',return_value={}),patch.object(benchmark,'runtime_snapshot',return_value={}),patch.object(benchmark,'repository_snapshot',return_value={}),patch.object(benchmark.subprocess,'Popen',side_effect=fake) as launch,patch.object(benchmark,'terminate_tree',side_effect=RuntimeError('cleanup failure') if cleanup_fails else None) as cleanup:
+     with self.assertRaises(json.JSONDecodeError) as caught:benchmark.main()
+    launch.assert_called_once();cleanup.assert_called_once()
+    if cleanup_fails:self.assertIn('cleanup failure',caught.exception.__notes__[0])
+    self.assertFalse((output/'report.json').exists())
+
 class GPUBenchmarkTests(unittest.TestCase):
  def test_gpu_profiles_forward_effective_policy_after_no_search_warmup(self):
   for name,overrides in benchmark.GPU_PROFILES.items():
@@ -445,5 +458,138 @@ class SATBenchmarkMatrixTests(unittest.TestCase):
     result=subprocess.run([sys.executable,'-B','-O',str(benchmark.ROOT/filename),'--output',str(output),*extra],cwd=benchmark.ROOT,capture_output=True,text=True,timeout=20)
     self.assertNotEqual(result.returncode,0);self.assertIn('assert',result.stderr.lower());self.assertFalse(output.exists())
 
+
+
+class HybridPipelineBenchmarkTests(unittest.TestCase):
+ def checkpoint(self,problem,phase='sampling'):
+  from constraint_work import digest
+  payload={'hybrid_version':3,'scope':{'fingerprint':problem.fingerprint,'domains':[list(row) for row in problem.domains],
+      'fixed':[[int(c),int(v)] for c,v in sorted(problem.fixed.items())],'target':'gold'},'phase':phase,'cursor':1}
+  payload['digest']=digest(payload);return payload
+ def args(self,folder,profile='combined'):
+  return SimpleNamespace(case='small',seed=817,free_cells=8,engine='hybrid',workers=1,seconds=.01,
+      profile=profile,replicas=4096,hybrid_backend='webgpu',output=Path(folder)/'case.json')
+ def test_profiles_share_durable_contract_and_validate_for_hybrid_only(self):
+  from search_options import normalize_options,validate_algorithm_options
+  for name,profile in benchmark.HYBRID_PROFILES.items():
+   self.assertIs(profile['durable_hybrid'],True);validate_algorithm_options('hybrid',normalize_options(profile))
+  self.assertEqual(tuple(benchmark.DEFAULT_HYBRID_PROFILES),('baseline','legacy-sampling','repair','combined'))
+  self.assertFalse(any(name in benchmark.HYBRID_PROFILES['baseline'] for name in ('ejection_chains','core_repair','hall_rematch')))
+  self.assertTrue(benchmark.HYBRID_PROFILES['combined-cpu']['hall_rematch'])
+ def test_worker_uses_pipeline_not_portable_coverage_and_hashes_v3_artifact(self):
+  with tempfile.TemporaryDirectory(prefix='benchmark-hybrid-',dir=benchmark.ROOT) as directory:
+   args=self.args(directory);calls=[]
+   def fake(problem,**kw):
+    calls.append(kw);self.assertIsNone(kw['resume']);self.assertNotIn('work_frontier',kw)
+    self.assertEqual(kw['learning_state']['_hybrid_run_seconds'],args.seconds)
+    self.assertTrue(kw['options']['durable_hybrid']);self.assertTrue(kw['options']['core_repair'])
+    self.assertEqual(kw['replicas'],4096);self.assertEqual(kw['backend'],'webgpu')
+    checkpoint=self.checkpoint(problem,'repair');kw['progress']({'event':'checkpoint','payload':checkpoint})
+    return {'status':'stopped','complete':False,'phase':'repair','nodes':0,'stats':{},'checkpoint':checkpoint,
+      'gpu_sampling':{'initial_boards':4096,'move_proposals':262144,'dispatches':1,'sampling_experiments':{'guided_candidate_checks':17}},
+      'local_repair':{'stats':{'attempts':1,'repair_native_calls':3},'experimental_repair':[]}}
+   with (patch('gpu_sampling.solve',side_effect=fake),patch.object(benchmark,'initial_frontier',side_effect=AssertionError('portable root')),
+        patch.object(benchmark,'pending_frontier',side_effect=AssertionError('coverage metric')),contextlib.redirect_stdout(io.StringIO())):
+    benchmark.worker(args)
+    with self.assertRaises(FileExistsError):benchmark.worker(args)
+   report=json.loads(args.output.read_text());self.assertEqual(len(calls),1)
+   for key in ('raw_space','initial_frontier','same_full_original_root','checkpoint'):self.assertNotIn(key,report)
+   self.assertEqual(report['solver_engine'],'hybrid');self.assertEqual(report['replicas'],4096)
+   work=report['pipeline_work'];self.assertEqual(work['gpu_sampling']['move_proposals'],262144);self.assertEqual(work['sampling_experiments']['guided_candidate_checks'],17)
+   self.assertEqual(work['local_repair']['stats']['repair_native_calls'],3);self.assertEqual(work['exact_dfs']['nodes'],0)
+   artifact=report['checkpoint_artifact'];raw=Path(artifact['path']).read_bytes()
+   self.assertEqual(artifact['sha256'],benchmark.hashlib.sha256(raw).hexdigest());self.assertEqual(json.loads(raw)['hybrid_version'],3)
+   self.assertEqual(report['checkpoint_publication']['published_count'],2)
+   self.assertFalse((args.output.with_suffix('.state')/'initial-frontier.json').exists())
+   self.assertIn('symmetry',json.loads(Path(report['pipeline_input']['path']).read_text())['search_contract'])
+ def test_slices_keep_same_state_and_whole_budget_and_close_each_owner_once(self):
+  from search_problem import SearchProblem
+  from test_constraint_dfs import tetrahedron_tiles
+  problem=SearchProblem(*tetrahedron_tiles());calls=[];closed=[];state={};queued=[]
+  publication=SimpleNamespace(progress=lambda event:None,publish=queued.append,failed=lambda:False)
+  owner=SimpleNamespace(close=lambda:closed.append(True))
+  def fake(p,**kw):
+   calls.append(kw);self.assertIs(kw['learning_state'],state);self.assertEqual(state['_hybrid_run_seconds'],61)
+   state['_shared_sat']=owner;state['_mask_conflicts']=owner
+   return {'status':'timeout' if len(calls)<3 else 'stopped','complete':False,'phase':'exact_dfs','nodes':len(calls),
+      'stats':{},'checkpoint':self.checkpoint(p,'exact_dfs')}
+  with patch('gpu_sampling.solve',side_effect=fake),patch.object(benchmark.time,'monotonic',side_effect=[0,30,60]):
+   result=benchmark.run_hybrid(problem,seconds=61,seed=71,replicas=128,backend='cuda',options={'durable_hybrid':True},learning_state=state,publication=publication)
+  self.assertEqual([row['seconds'] for row in calls],[30,30,1]);self.assertIsNone(calls[0]['resume']);self.assertEqual(len(queued),3)
+  self.assertIs(calls[1]['resume'],queued[0]);self.assertEqual(closed,[True]);self.assertEqual(result['benchmark_hybrid_slices'],3)
+ def test_failure_closes_helpers_and_preserves_original_error(self):
+  state={};closed=[];publication=SimpleNamespace(progress=lambda e:None,publish=lambda p:None,failed=lambda:False)
+  def fake(*a,**kw):
+   state['_mask_conflicts']=SimpleNamespace(close=lambda:closed.append(True));raise RuntimeError('native failure')
+  with patch('gpu_sampling.solve',side_effect=fake):
+   with self.assertRaisesRegex(RuntimeError,'native failure'):
+    benchmark.run_hybrid(None,seconds=1,seed=0,replicas=128,backend='auto',options={'durable_hybrid':True},learning_state=state,publication=publication)
+  self.assertEqual(closed,[True])
+ def test_incomplete_and_heuristic_infeasible_results_are_rejected(self):
+  publication=SimpleNamespace(progress=lambda e:None,publish=lambda p:None,failed=lambda:False)
+  from search_problem import SearchProblem
+  from test_constraint_dfs import tetrahedron_tiles
+  problem=SearchProblem(*tetrahedron_tiles())
+  for result in ({'status':'timeout','complete':False},{'status':'infeasible','complete':False,'phase':'exact_dfs'},
+                 {'status':'infeasible','complete':True,'phase':'repair'}):
+   with self.subTest(result=result),patch('gpu_sampling.solve',return_value=result):
+    with self.assertRaises(ValueError):benchmark.run_hybrid(problem,seconds=1,seed=0,replicas=128,backend='auto',options={'durable_hybrid':True},learning_state={},publication=publication)
+  saved=self.checkpoint(problem);saved['scope']['domains'][0]=[]
+  with patch('gpu_sampling.solve',return_value={'status':'stopped','complete':False,'checkpoint':saved}):
+   with self.assertRaisesRegex(ValueError,'continuation'):benchmark.run_hybrid(problem,seconds=1,seed=0,replicas=128,backend='auto',options={'durable_hybrid':True},learning_state={},publication=publication)
+ def test_gold_result_independently_validates_and_missing_or_invalid_witness_fails(self):
+  from search_fixtures import planted_gold
+  reference=planted_gold(817,size=1,extra_edges=3)[2]
+  for mode in ('valid','missing','invalid'):
+   with self.subTest(mode=mode),tempfile.TemporaryDirectory(prefix='benchmark-hybrid-gold-',dir=benchmark.ROOT) as directory:
+    args=self.args(directory,'baseline')
+    def fake(problem,**kw):
+     result={'status':'solved','complete':True,'phase':'sampling','nodes':0,'stats':{}}
+     if mode!='missing':result['codes']=list(reference) if mode=='valid' else [0]*problem.n
+     return result
+    with patch('gpu_sampling.solve',side_effect=fake),contextlib.redirect_stdout(io.StringIO()):
+     if mode=='valid':benchmark.worker(args)
+     else:
+      with self.assertRaises(ValueError):benchmark.worker(args)
+    if mode=='valid':self.assertTrue(json.loads(args.output.read_text())['independent_validation']['valid'])
+    else:self.assertFalse(args.output.exists())
+ def test_matrix_is_opt_in_dedupes_bounds_and_reverses_second_seed(self):
+  with tempfile.TemporaryDirectory(prefix='benchmark-hybrid-matrix-',dir=benchmark.ROOT) as directory:
+   folder=Path(directory);data=folder/'data.json';data.write_text('{}');jobs=[]
+   argv=['benchmark_round25.py','--output',str(folder/'matrix'),'--data',str(data),'--suite','hybrid',
+     '--hybrid-cases','small','residual','original','small','--hybrid-profiles','baseline','repair','baseline',
+     '--hybrid-replica-counts','128','131072','128','--hybrid-backend','webgpu','--free-cell-counts','8','16','8',
+     '--finite-seconds','3','--seconds','7','--evidence-stage','frozen']
+   def fake(command,**kw):
+    value=lambda key:command[command.index(key)+1]
+    self.assertEqual(value('--engine'),'hybrid');self.assertEqual(value('--hybrid-backend'),'webgpu')
+    case=value('--case');depth=int(value('--free-cells')) if case=='residual' else None
+    jobs.append((int(value('--seed')),case,depth,value('--profile'),int(value('--replicas')),float(value('--seconds'))))
+    result={'status':'infeasible','complete':True}
+    if case=='original':result['provenance']={'input_sha256':benchmark.hashlib.sha256(data.read_bytes()).hexdigest()}
+    Path(value('--output')).write_text(json.dumps(result));return SimpleNamespace(returncode=0,poll=lambda:0,communicate=lambda **kw:('',''))
+   with patch.object(benchmark.sys,'argv',argv),patch.object(benchmark,'source_hashes',return_value={}),patch.object(benchmark,'runtime_snapshot',return_value={}),patch.object(benchmark,'repository_snapshot',return_value={'commit':'abc','dirty':False}),patch.object(benchmark.subprocess,'Popen',side_effect=fake),contextlib.redirect_stdout(io.StringIO()):benchmark.main()
+   first=[(case,depth,profile,lanes,3.) for case,depth in [('small',None),('residual',8),('residual',16)] for lanes in (128,131072) for profile in ('baseline','repair')]
+   originals=[('original',None,profile,lanes,7.) for lanes in (128,131072) for profile in ('baseline','repair')]
+   self.assertEqual(jobs,[(817,*row) for row in first]+[(291,*row) for row in reversed(first)]+[(71,*row) for row in originals]+[(197,*row) for row in reversed(originals)])
+   report=json.loads((folder/'matrix/report.json').read_text());self.assertEqual(report['planned_cases'],32)
+   self.assertEqual(report['hybrid_replica_counts'],[128,131072]);self.assertEqual(report['hybrid_backend'],'webgpu')
+   self.assertTrue(all(row['replicas'] in (128,131072) for row in report['results']))
+ def test_all_suite_does_not_silently_add_hybrid_and_bad_limits_fail_before_launch(self):
+  with tempfile.TemporaryDirectory(prefix='benchmark-hybrid-optin-',dir=benchmark.ROOT) as directory:
+   folder=Path(directory);data=folder/'data.json';data.write_text('{}');engines=[]
+   def fake(command,**kw):
+    engine=command[command.index('--engine')+1];engines.append(engine)
+    Path(command[command.index('--output')+1]).write_text(json.dumps({'status':'infeasible','complete':True,'provenance':{'input_sha256':benchmark.hashlib.sha256(data.read_bytes()).hexdigest()}}))
+    return SimpleNamespace(returncode=0,poll=lambda:0,communicate=lambda **kw:('',''))
+   argv=['benchmark_round25.py','--output',str(folder/'matrix'),'--data',str(data),'--suite','all','--profiles','baseline','--finite-cases','small']
+   with patch.object(benchmark.sys,'argv',argv),patch.object(benchmark,'source_hashes',return_value={}),patch.object(benchmark,'runtime_snapshot',return_value={}),patch.object(benchmark,'repository_snapshot',return_value={}),patch.object(benchmark.subprocess,'Popen',side_effect=fake),contextlib.redirect_stdout(io.StringIO()):benchmark.main()
+   self.assertTrue(engines);self.assertNotIn('hybrid',engines)
+  for extra in (['--hybrid-replica-counts','0'],['--hybrid-replica-counts','131073'],['--replicas','131073'],['--finite-seconds','nan']):
+   with tempfile.TemporaryDirectory(prefix='benchmark-hybrid-bound-',dir=benchmark.ROOT) as directory:
+    argv=['benchmark_round25.py','--output',directory,'--suite','hybrid',*extra]
+    with patch.object(benchmark.sys,'argv',argv),patch.object(benchmark.subprocess,'Popen') as launch,contextlib.redirect_stderr(io.StringIO()):
+     with self.assertRaises(SystemExit):benchmark.main()
+    launch.assert_not_called()
 
 if __name__=='__main__':unittest.main()

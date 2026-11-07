@@ -13,7 +13,7 @@ KEYS=('sat_core_lifting','shared_sat_assistant','resumable_proof_checking',
       'native_sat_persistence','conflict_pb','integer_lattice','hall_rematch','reversible_gold_graph',
       'incremental_regions','durable_regions','compact_factors','gold_elimination',
       'separator_search','selective_refinement','joint_symbolic_regions','algebraic_connectivity','residual_isomorphism','gold_pricing',
-      'multichain_routing','region_certificates','gpu_joint_support','gpu_propagated_forks','gpu_event_propagation','gpu_precise_reasons','gpu_shared_clauses','gpu_lane_balance','gpu_incremental_checkpoint','durable_hybrid')
+      'multichain_routing','region_certificates','gpu_joint_support','gpu_propagated_forks','gpu_event_propagation','gpu_precise_reasons','gpu_shared_clauses','gpu_lane_balance','gpu_incremental_checkpoint','durable_hybrid','obstruction_chains')
 HARNESS=r"""
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const elements=new Map();
@@ -57,6 +57,19 @@ class Round25Controls(unittest.TestCase):
                               cwd=ROOT,capture_output=True,text=True,timeout=30)
         self.assertEqual(result.returncode,0,result.stdout+result.stderr)
         return result.stdout
+
+    def test_obstruction_chain_scope_dependency_and_work_counters(self):
+        self.node(r"""
+assert.equal(element('r25_obstruction_chains').disabled,true);
+select('hybrid');edit('obstruction_chains',true);
+element('seconds').value='0';element('seedInput').value='17';run("command('start')");
+const opts=JSON.parse(context.fetchCalls.at(-1)[1].body).search_options;
+assert.equal(opts.obstruction_chains,true);assert.equal(opts.ejection_chains,true);
+assert.equal(opts.durable_hybrid,false,'Guided moves do not require checkpoint continuation');
+idle();select('dfs');assert.equal(element('startBtn').disabled,true);edit('obstruction_chains',false);
+run("state={process_running:true,status:{state:'running',method:'constraint',algorithm:'hybrid',gpu_sampling:{sampling_experiments:{guided_proposals:7,guided_candidate_checks:900,guided_obstruction_starts:6,guided_base_improvements:3}}},history:[]};renderState();");
+for(const[id,n]of [['r25GuidedProposals',7],['r25GuidedChecks',900],['r25GuidedStarts',6],['r25GuidedImprovements',3]])assert.equal(element(id).textContent,String(n));
+""")
 
     def test_durable_hybrid_control_and_observation_counters(self):
         self.node(r"""
