@@ -1,4 +1,4 @@
-import itertools,json,unittest,time
+import itertools,json,unittest,time,threading
 from unittest.mock import patch
 from constraint_sat_session import PersistentSatSession,solve
 from constraint_work import WorkScope,restore_frontier,frontier_snapshot,digest
@@ -94,11 +94,15 @@ class SessionScopeTests(unittest.TestCase):
     def test_completed_false_survives_stop_unknown_does_not(self):
         from constraint_sat_session import SessionInterrupted
         class FakeNative:
-            def __init__(self,answer):self.answer=answer
-            def clear_interrupt(self):pass
+            def __init__(self,answer):self.answer=answer;self.interrupted=threading.Event()
+            def clear_interrupt(self):self.interrupted.clear()
             def conf_budget(self,n):pass
-            def interrupt(self):pass
-            def solve_limited(self,**kwargs):time.sleep(.04);return self.answer
+            def interrupt(self):self.interrupted.set()
+            def solve_limited(self,**kwargs):
+                # Exercise a delivered callback, independent of thread scheduling
+                # speed on loaded CI runners; do not assume a fixed sleep suffices.
+                if not self.interrupted.wait(2):raise AssertionError('Monitor never delivered the expected interrupt')
+                return self.answer
             def accum_stats(self):return {'decisions':7}
         p=SearchProblem(simple_tiles(),double_face());session=PersistentSatSession(p,WorkScope.for_problem(p))
         def stop():raise SessionInterrupted('stopped')

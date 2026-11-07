@@ -62,12 +62,14 @@ class BenchmarkCleanupTests(unittest.TestCase):
   child=SimpleNamespace(pid=424242,returncode=17,poll=lambda:17,communicate=lambda **kw:('partial output','native failure'))
   with tempfile.TemporaryDirectory(prefix='benchmark-failed-',dir=benchmark.ROOT) as directory:
    output=Path(directory)/'matrix';argv=['benchmark_round25.py','--output',str(output),'--suite','finite','--profiles','baseline']
+   # platform.platform may itself spawn a subprocess on POSIX; keep that
+   # unrelated introspection outside this coordinator-process mock.
    def cleanup(owned):
     self.assertIs(owned,child)
     self.assertTrue((output/'report.json').exists(),'Partial report precedes cleanup')
     self.assertTrue((output/'00-cpu-small-baseline-817.stderr.txt').exists())
     return 'Descendant cleanup cannot be confirmed.'
-   with patch.object(benchmark.sys,'argv',argv),patch.object(benchmark,'source_hashes',return_value={}),patch.object(benchmark.subprocess,'Popen',return_value=child) as launch,patch.object(benchmark,'terminate_tree',side_effect=cleanup),contextlib.redirect_stdout(io.StringIO()):
+   with patch.object(benchmark.sys,'argv',argv),patch.object(benchmark,'source_hashes',return_value={}),patch.object(benchmark.subprocess,'Popen',return_value=child) as launch,patch.object(benchmark,'terminate_tree',side_effect=cleanup),patch.object(benchmark.platform,'platform',return_value='test-platform'),contextlib.redirect_stdout(io.StringIO()):
     with self.assertRaisesRegex(RuntimeError,'remaining matrix was not started'):benchmark.main()
    launch.assert_called_once();report=json.loads((output/'report.json').read_text())
    self.assertTrue(report['aborted_after_child_failure']);self.assertEqual(report['completed_cases'],1)

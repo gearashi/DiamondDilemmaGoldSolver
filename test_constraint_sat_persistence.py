@@ -115,9 +115,15 @@ class PurePersistenceTests(unittest.TestCase):
         finally:stream.seek(old)
 
     def test_windows_explicit_logger_rejected_before_factory_creation(self):
-        with patch.object(persistence.sys,'platform','win32'),patch('pysat.solvers.Glucose4') as native:
+        # Capability rejection must precede even importing the optional native
+        # package, including on Python versions where it is not installed.
+        original_import=__import__
+        def guarded_import(name,*args,**kwargs):
+            if name=='pysat' or name.startswith('pysat.'):
+                raise AssertionError('Native SAT import occurred before capability rejection')
+            return original_import(name,*args,**kwargs)
+        with patch.object(persistence.sys,'platform','win32'),patch('builtins.__import__',side_effect=guarded_import):
             with self.assertRaisesRegex(ValueError,'Windows'):example().create_solver(((1,2),),logging=True)
-            native.assert_not_called()
         with patch.object(persistence.sys,'platform','linux'),patch.object(persistence.platform,'machine',return_value='x86_64'),patch.object(persistence.platform,'python_implementation',return_value='CPython'),patch.object(persistence.sys,'version_info',(3,12)),patch.object(persistence.importlib.metadata,'version',return_value='future'):
             self.assertFalse(persistence.capability()[0])
 
