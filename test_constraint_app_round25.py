@@ -13,7 +13,7 @@ class ApplicationRound25Tests(unittest.TestCase):
         data,problem=pair_problem();scope=WorkScope.for_problem(problem)
         for enabled in (False,True):
             with self.subTest(enabled=enabled),tempfile.TemporaryDirectory(prefix='r25-app-') as directory:
-                root=Path(directory);source=root/'tiles.json';output=root/'runtime';source.write_text(json.dumps(data),encoding='utf-8')
+                root=Path(directory).resolve();source=root/'tiles.json';output=root/'runtime';source.write_text(json.dumps(data),encoding='utf-8')
                 stores=[];executed=[]
                 def create(*args,**kwargs):
                     store=VerifiedConflictStore(*args,**kwargs);stores.append(store);return store
@@ -42,7 +42,7 @@ class ApplicationRound25Tests(unittest.TestCase):
         from gpu_checkpoint_round25 import CheckpointStore,is_reference
         data,problem=pair_problem();scope=WorkScope.for_problem(problem)
         with tempfile.TemporaryDirectory(prefix='r25-app-reference-') as directory:
-            root=Path(directory);source=root/'tiles.json';output=root/'runtime';source.write_text(json.dumps(data),encoding='utf-8')
+            root=Path(directory).resolve();source=root/'tiles.json';output=root/'runtime';source.write_text(json.dumps(data),encoding='utf-8')
             folder=output/'searches/gpu-domains-gold';plain={'version':1,'scope':scope.payload(),'queue':[[hex(x) for x in scope.root]],'native':None,
                 'totals':dict.fromkeys(COUNTERS,0),'completed_lanes':0,'active_stats':{},'frontier':frontier_snapshot(scope,[scope.root])}
             plain['digest']=digest(plain);calls=[];references=[]
@@ -79,7 +79,7 @@ class ApplicationRound25Tests(unittest.TestCase):
         from gpu_checkpoint_round25 import CheckpointStore
         data,problem=pair_problem();scope=WorkScope.for_problem(problem)
         with tempfile.TemporaryDirectory(prefix='r25-app-corrupt-') as directory:
-            root=Path(directory);source=root/'tiles.json';output=root/'runtime';source.write_text(json.dumps(data),encoding='utf-8')
+            root=Path(directory).resolve();source=root/'tiles.json';output=root/'runtime';source.write_text(json.dumps(data),encoding='utf-8')
             folder=output/'searches/gpu-domains-gold';refs=[]
             def fake(actual,algorithm,**kwargs):
                 plain={'version':1,'scope':scope.payload(),'queue':[[hex(x) for x in scope.root]],'native':None,

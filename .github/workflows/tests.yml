@@ -143,6 +143,7 @@ jobs:
           test_constraint_lattice_round25
           test_constraint_regions_round25
           test_benchmark_round25
+          test_benchmark_sat_evidence
           test_benchmark_gpu_profiles
           test_benchmark_checkpoint_publication
           test_benchmark_checkpoint_artifacts
@@ -312,9 +313,9 @@ jobs:
       - name: Install diagnostic dependencies
         run: python -m pip install -r requirements-dev.txt
       - name: Probe isolated SAT backends
-        run: python -B benchmark_sat_capabilities_round25.py --output audit/sat-capabilities.json
+        run: python -B benchmark_sat_capabilities_round25.py --output audit/sat-capabilities.json --evidence-stage frozen
       - name: Check bounded clause persistence and completed fresh-process comparisons
-        run: python -B benchmark_sat_persistence_round25.py --output audit/sat-persistence.json
+        run: python -B benchmark_sat_persistence_round25.py --output audit/sat-persistence.json --evidence-stage frozen
       - name: Upload capability and persistence evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
