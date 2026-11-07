@@ -6,7 +6,7 @@ A CPU and GPU search tool for the **Gold Challenge** of Diamond Dilemma on Windo
 
 The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaapsch.net/puzzles/diamdil.htm).
 
-The newest work is documented in the [complete round 24 register of 42 proposals](docs/ROUND24.md), including implemented scope, controls, finite evidence and remaining limitations. New controls are opt-in; fewer repeated steps and sound deductions are evaluated separately from speed. The [round 23 register](docs/ROUND23.md) retains the earlier 52-proposal evaluation.
+The newest work is documented in the [complete round 24 register of 42 proposals](docs/ROUND24.md), including implemented scope, controls, finite evidence and remaining limitations. New controls are opt-in; fewer repeated steps and sound deductions are evaluated separately from speed. The [round 23 register](docs/ROUND23.md) retains the earlier 52-proposal evaluation. See the [measured results and hardware settings](docs/ROUND24_RESULTS.md) for the release comparisons and recommended starting configuration.
 
 ## Requirements
 

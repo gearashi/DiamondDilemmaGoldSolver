@@ -53,7 +53,7 @@ not enter that ledger. Enumeration acknowledgements exist only for finite tests.
 |28|Physical-piece present/absent domain partitions; independently enumerated completions belong to exactly one child.|Ordering/partition policy; no assumption that rarer pieces always solve sooner.|
 |29|Continuation branches distinguish internal strand destinations even when every side mask is identical.|Exact exhaustive mask partitions; optional CPU DFS.|
 |30|Small-region exact completion counts reorder choices; counts match independent enumeration.|Capped counting retains every uncounted choice; no pruning.|
-|31|Five-feature ridge ranking implementation and validation.|Frozen weights fitted on 46 completed child searches. Disjoint tiny held-out tier: 133 baseline versus 119 learned nodes; larger capped fixtures inconclusive. Optional only; see ROUND24_ORDERING.md.|
+|31|Five-feature ridge ranking implementation and validation.|Frozen weights fitted on 46 completed child searches. Disjoint tiny held-out tier: 136 baseline versus 120 learned nodes; larger capped fixtures inconclusive. Optional only; see ROUND24_ORDERING.md.|
 |33|Lane-local reason masks, learned placement clauses and nonchronological backjumping.|Finite Hall instance: 42 decisions / 757 support checks with learning versus 166 / 2852 without; both complete UNSAT. Clauses stay within their lane root.|
 |34|Complete durable domains, code-removal trail, reason snapshots and resumable propagation scans.|Memory-bounded alternative architecture; not 131072 full-domain lanes.|
 |35|Bounded CPU-probe ranking by piece-shortage evidence.|160-cell discriminator isolates four cells competing for three pieces; selected CPU query independently proves failure. Ranking itself never prunes.|
@@ -111,3 +111,10 @@ These timings were correctness/startup smoke under concurrent CPU activity, not
 a controlled throughput benchmark. The full 512-lane checkpoint took 2.80 s and
 restore 4.02 s in that smoke. Live preview copies only board rows, not the whole
 460 MiB reasoning state.
+
+The final original-input checkpoint follow-up eliminated duplicate unchanged-state
+saves: two requested 60-second, 512-lane runs fell from 116.97/116.33 seconds to
+75.06/75.86 seconds. Private snapshots are invalidated on dispatch and work-owner
+changes; callback payloads remain independent copies. This is less repeated
+checkpoint work, not a claim of fewer Gold-search decisions. See
+[the final results](ROUND24_RESULTS.md) for full limits and sampling comparisons.

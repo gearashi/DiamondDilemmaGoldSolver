@@ -13,8 +13,8 @@ support and domain size; the target is log1p(completed DFS nodes). The frozen
 coefficients, training seeds and exact label-data hash live in
 `constraint_branching_round24.py`; the app uses those coefficients explicitly.
 
-The original disjoint twelve-seed ten-cell test tier found validated Gold
-solutions in every comparison: baseline133 versus learned119 DFS nodes,
+The frozen-source disjoint twelve-seed ten-cell rerun found validated Gold
+solutions in every comparison: baseline136 versus learned120 DFS nodes,
 seven wins, two ties and three losses. This finite result supports exposing the
 option, not selecting it as the default. Existing adaptive propagation uses
 time budgets, so repeated node counts can vary slightly. Six additional,

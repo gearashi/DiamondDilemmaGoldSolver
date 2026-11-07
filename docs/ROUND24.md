@@ -99,7 +99,7 @@ optional native engines do not silently become proof sources. See the
 | **28. Dual piece branching** | `dual_piece_branching`. Branch on whether a selected physical piece occupies a cell, partitioning that cell domain into present/absent masks. | Every independently enumerated completion belongs to exactly one child. [hybrid_round24](../test_constraint_hybrid_round24.py). | **Experimental ordering/partition policy.** Completeness is preserved; fewer total decisions on the original puzzle is unestablished. |
 | **29. Strand-first branching** | `strand_branching`. Partition by continuation of a fixed strand into a neighbouring tile, including alternatives with identical seam masks. | A discriminator distinguishes internal partners even when side masks agree; child masks cover the original domain exactly. [hybrid_round24](../test_constraint_hybrid_round24.py). | **Experimental ordering/partition policy.** This changes the order/partition of exact work, not the feasibility conditions. |
 | **30. Completion-count ordering** | `completion_ordering`. Count exact local seam/inventory extensions in a small star and use completed counts to rank values. | Counts agree with independent local enumeration; a capped count still retains every choice. [hybrid_round24](../test_constraint_hybrid_round24.py). | **Experimental bounded ordering.** Local counts are a relaxation of the whole board. They never remove candidates or imply a global completion count. |
-| **31. Learned branching or repair policy** | `learned_ordering`. Use frozen five-feature ridge weights trained on completed child-search work to order values. | 46 completed labels on six training seeds; twelve disjoint ten-cell tests use 119 versus 133 nodes, with 7 wins, 2 ties and 3 losses. [learned_ordering_round24](../test_constraint_learned_ordering_round24.py); [benchmark: learned_ordering_round24](../benchmark_learned_ordering_round24.py). | **Retained optional fitted ordering; limited evidence.** Six further forty-cell pairs all cap and remain inconclusive. No original-board generalization or learned repair policy is claimed; predictions never prune. |
+| **31. Learned branching or repair policy** | `learned_ordering`. Use frozen five-feature ridge weights trained on completed child-search work to order values. | 46 completed labels on six training seeds; twelve disjoint ten-cell tests use 120 versus 136 nodes, with 7 wins, 2 ties and 3 losses. [learned_ordering_round24](../test_constraint_learned_ordering_round24.py); [benchmark: learned_ordering_round24](../benchmark_learned_ordering_round24.py). | **Retained optional fitted ordering; limited evidence.** Six further forty-cell pairs all cap and remain inconclusive. No original-board generalization or learned repair policy is claimed; predictions never prune. |
 | **32. Verified obstruction discovery** | `obstruction_rules`. Mine mixed seam/inventory incompatibility cliques and odd cycles, then verify their exact at-most bounds. | Generated rules are rechecked; 45 puzzle contexts preserve every enumerated edge solution. Dominated rules do not inflate retained-rule counts. [learning_round24](../test_constraint_learning_round24.py); [benchmark: learning_round24](../benchmark_learning_round24.py). | **Experimental verified discovery.** Discovery is limited to these templates; no unrestricted theorem synthesis. No additional pruning in the 60-context prior-fixpoint comparison. |
 
 ## GPU reasoning and exact hybrid repair
@@ -118,11 +118,15 @@ optional native engines do not silently become proof sources. See the
 
 | # / proposal | Access and implemented mechanism | Finite evidence | Disposition and scope limit |
 | --- | --- | --- | --- |
-| **40. Ejection chains** | `ejection_chains in hybrid sampling`. Propose closed three-to-six-cell relocation chains with independent rotations. | All nonempty combinations of the three new sampling controls preserve inventory/fixed cells and independently recalculated scores on CUDA and D3D12 tests. [gpu_sampling_round24](../test_gpu_sampling_round24.py); [benchmark: hybrid_round24](../benchmark_hybrid_round24.py). | **Experimental heuristic; benefit pending.** Heuristic sampling does not prove coverage and can revisit boards. This chain path currently rescans the full score. |
-| **41. Move tabu** | `move_tabu in hybrid sampling`. Keep short move-attribute tabu memory, allowing aspiration when a move improves that lane’s best. | The sampling combinations pass independent current/best-board and score checks, including with Gold scoring enabled. [gpu_sampling_round24](../test_gpu_sampling_round24.py); [benchmark: hybrid_round24](../benchmark_hybrid_round24.py). | **Experimental heuristic; benefit pending.** Tabu discourages selected recent moves; it does not guarantee distinct complete boards or establish a faster original solve. |
-| **42. Replica exchange** | `replica_exchange in hybrid sampling`. Exchange current boards/scores between fixed-temperature lanes using Metropolis acceptance, keeping lane RNG/iteration and best archives in place. | Equal-energy cases verify actual board exchange without moving temperature-lane state; combined sampling modes pass invariant checks. [gpu_sampling_round24](../test_gpu_sampling_round24.py); [benchmark: hybrid_round24](../benchmark_hybrid_round24.py). | **Experimental heuristic; benefit pending.** This is diversification, not an exact search-space reduction. Compare equal proposals, time and solution quality across seeds. |
+| **40. Ejection chains** | `ejection_chains in hybrid sampling`. Propose closed three-to-six-cell relocation chains with independent rotations. | All nonempty combinations of the three new sampling controls preserve inventory/fixed cells and independently recalculated scores on CUDA and D3D12 tests. [gpu_sampling_round24](../test_gpu_sampling_round24.py); [benchmark: hybrid_round24](../benchmark_hybrid_round24.py). | **Experimental heuristic; paired sampling measured.** Heuristic sampling does not prove coverage and can revisit boards. This chain path currently rescans the full score. |
+| **41. Move tabu** | `move_tabu in hybrid sampling`. Keep short move-attribute tabu memory, allowing aspiration when a move improves that lane’s best. | The sampling combinations pass independent current/best-board and score checks, including with Gold scoring enabled. [gpu_sampling_round24](../test_gpu_sampling_round24.py); [benchmark: hybrid_round24](../benchmark_hybrid_round24.py). | **Experimental heuristic; paired sampling measured.** Tabu discourages selected recent moves; it does not guarantee distinct complete boards or establish a faster original solve. |
+| **42. Replica exchange** | `replica_exchange in hybrid sampling`. Exchange current boards/scores between fixed-temperature lanes using Metropolis acceptance, keeping lane RNG/iteration and best archives in place. | Equal-energy cases verify actual board exchange without moving temperature-lane state; combined sampling modes pass invariant checks. [gpu_sampling_round24](../test_gpu_sampling_round24.py); [benchmark: hybrid_round24](../benchmark_hybrid_round24.py). | **Experimental heuristic; paired sampling measured.** This is diversification, not an exact search-space reduction. Compare equal proposals, time and solution quality across seeds. |
 
 ## Ownership and proof boundaries
+
+Stop the exporting run before continuing from its imported frontier. Starting
+two independent runs from the same exported frontier repeats work; simultaneous
+CPU/GPU searches need explicitly disjoint partitions.
 
 A checkpoint now records its stable `owned_root_domains`. Local nogoods,
 SAT/LCG assumptions and mask verifiers bind to that actual subtree, not merely
@@ -162,10 +166,11 @@ particular:
   need separate paired-seed comparisons; heuristic repeats are not exhausted
   exact branches.
 
-The release coordinator adds final frozen-source validation and original-input
-benchmark outcomes after those runs finish. No final suite total or best profile
-is claimed here before that evidence exists. The public JSON register reserves
-`release_validation` for that update.
+The [release evidence](round24-results.json) records the completed finite tests,
+serial whole-board comparisons, sampling combinations and hardware checks. The
+[results and settings guide](ROUND24_RESULTS.md) explains their practical limits
+and the recommended starting configuration for the tested machine. Every
+candidate's `release_validation` field now points to that evidence.
 
 Reproduction scripts include `benchmark_round24.py` for whole-board profiles,
 `benchmark_learning_round24.py` for finite deduction/query counts,

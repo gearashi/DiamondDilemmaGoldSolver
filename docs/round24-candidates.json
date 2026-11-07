@@ -2,7 +2,7 @@
   "schema": "diamond-round24-register-v1",
   "baseline": "a9b1184ed2412687b52a0d86c873d64e8ce69478",
   "objective": "All 42 proposals implemented/evaluated; retain correct reductions in decisions or repeated reasoning, also measure time; publish validated release.",
-  "evidence_stage": "finite development evidence; final frozen-source release evidence added separately",
+  "evidence_stage": "Completed finite comparisons, serial full-board and sampling benchmarks, hardware checks and cross-platform CI; see round24-results.json",
   "default_policy": "New controls are opt-in; no all-options-on recommendation.",
   "gold_solution_found": false,
   "candidate_count": 42,
@@ -21,7 +21,7 @@
       "finite_evidence": "A finite continuation check uses 5 matching checks instead of 8; interruption at every tested checkpoint preserves the exact result.",
       "limits": "This resumes selected cut reasoning, not every CPU propagator. Direct regional diagrams additionally retain same-process construction sessions (#17).",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 2,
@@ -38,7 +38,7 @@
       "finite_evidence": "A verified loop excludes a queued job with zero workers started; randomized box subtraction agrees with explicit assignments.",
       "limits": "Active worker jobs retain their own ownership; a size cap leaves the previous pending cover unchanged.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 3,
@@ -57,7 +57,7 @@
       "finite_evidence": "Restart and policy-change checks avoid executing completed work; objective/root mismatch and incomplete/solved entries are rejected.",
       "limits": "Trusted local progress is not a portable mathematical proof. A completed imported subset does not establish exhaustion of the entire puzzle.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 4,
@@ -74,7 +74,7 @@
       "finite_evidence": "CPU/SAT and CPU/GPU/CPU round trips preserve unfinished work; overlap, scope and corruption checks reject invalid inputs.",
       "limits": "Native internal trails or SAT clauses may be rebuilt after transfer. The compact legacy GPU engine is not a general receiver for this format.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 5,
@@ -91,7 +91,7 @@
       "finite_evidence": "A checked certificate avoids native SAT re-solving; altered proofs/scope fail validation. A child-process test checks clean exit after UNSAT proof generation.",
       "limits": "Gold-only contradictions outside the edge relaxation still need ordinary verification. Native proof logging was rejected after a Windows crash; the pure bounded producer is used.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 6,
@@ -108,7 +108,7 @@
       "finite_evidence": "Warm slices build the model once; completed cubes stay absent after restart; independently enumerated edge/Gold fixtures agree.",
       "limits": "Process restart rebuilds native SAT internals and may repeat unfinished inference. This is plain SAT, not a portable checkpoint for every SAT/CP backend.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 7,
@@ -125,7 +125,7 @@
       "finite_evidence": "On 60 finite contexts, identical supported domains require 72 native calls versus 874 for the prior scan.",
       "limits": "These are edge-relaxation support witnesses; they are not accepted as Gold solutions. The pool and retained work are bounded.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 8,
@@ -142,7 +142,7 @@
       "finite_evidence": "Equivalent fixed interiors share a key; the public DFS path reuses a completed proof before propagation. Timeout and wrong-root reuse cannot create exclusions.",
       "limits": "Actual cell/piece labels remain. Arbitrary graph isomorphism and physical-piece renaming are not implemented; reuse is bound to the owned root.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 9,
@@ -158,7 +158,7 @@
       "finite_evidence": "Random shrink/widen/backtrack sequences match exhaustive assignments. One six-cell example revisits 2 SCC vertices and reuses 4.",
       "limits": "Matching changes or unrecognized widening trigger a complete pass. Interrupted partial computations are not committed.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 10,
@@ -174,7 +174,7 @@
       "finite_evidence": "Complete tiny Gold solution sets agree with rebuilding connectivity, with fewer strand joins.",
       "limits": "NVIDIA CUDA domain engine only; this does not add full reversible state to the compact WebGPU engine.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 11,
@@ -190,7 +190,7 @@
       "finite_evidence": "An initially non-pruning equality relation later forces its partner; independent enumeration checks narrower/wider contexts.",
       "limits": "Current extraction is from path consistency, not every constructive-lookahead or SAT relation.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 12,
@@ -207,7 +207,7 @@
       "finite_evidence": "One fixture needs 11 calls versus 20; the wider 60-context corpus needs 965 versus 874. With witness pooling both use 72.",
       "limits": "Retained as a selectable alternative, not a universal improvement. Selectors are disabled on completion or interruption.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 13,
@@ -224,7 +224,7 @@
       "finite_evidence": "A joint shortage passes separate class bounds but fails the combined model; 400 small instances match independent assignments.",
       "limits": "No additional pruning after the prior fixpoint on the 60-context comparison corpus. Original-board benefit remains unestablished.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 14,
@@ -241,7 +241,7 @@
       "finite_evidence": "All 256 subsets of three-bit vectors match independent affine closure; 80 puzzle contexts preserve all enumerated edge solutions.",
       "limits": "Runtime propagation uses GF(2). A mod-3 reference experiment exists, but general modular runtime propagation is not implemented; the comparison corpus found no extra pruning.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 15,
@@ -258,7 +258,7 @@
       "finite_evidence": "A contradiction survives primitive rows but is caught by a derived cut; 80 signed-integer systems preserve their complete model sets.",
       "limits": "Derived cuts are bounded and checked. The 60-context prior-fixpoint comparison found no additional deletion.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 16,
@@ -274,7 +274,7 @@
       "finite_evidence": "A partial shortage clause holds for every independently enumerated edge solution.",
       "limits": "This adds specific theory propagators, not the entire CPU pruning pipeline; it requires the compatible native SAT environment.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 17,
@@ -292,7 +292,7 @@
       "finite_evidence": "The seven-cell discriminator preserves all 5,040 histories with 889 versus 60,620 candidate trials; sliced construction repeats no trials.",
       "limits": "Selected regions and hard state/work caps apply. Unfinished DAG sessions survive only in the same process, not as portable disk continuations.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 18,
@@ -309,7 +309,7 @@
       "finite_evidence": "Six regional groups retain the same 66 inventories each; 19,033 ZDD primitive operations replace 135,102 explicit inventory alternatives in the discriminator.",
       "limits": "Primitive operation types differ, so this is not a speed ratio. Node caps yield unknown without eliminating support.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 19,
@@ -326,7 +326,7 @@
       "finite_evidence": "A synthetic 160-cell resource fixture uses 2,080 factor operations at live width 2; independently validated full witnesses cover every retained placement.",
       "limits": "Full mode covers all cells for seams and inventory. Gold connectivity remains outside this relaxation. Wide original instances can cap; small selected queries are not a full-board completion proof.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 20,
@@ -343,7 +343,7 @@
       "finite_evidence": "The bounded K4 three-colour discriminator is possible at width 3 and rejected at width 4.",
       "limits": "A feasible relaxation is not a solution; budget limits return unknown. Benefit depends on the chosen width and residual graph.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 21,
@@ -360,7 +360,7 @@
       "finite_evidence": "An odd-XOR triangle survives width 1 and is rejected after refinement; exhaustive checks preserve true solutions.",
       "limits": "Merging is optimistic. Only a completed negative or exact result can justify a conclusion; caps are unknown.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 22,
@@ -378,7 +378,7 @@
       "finite_evidence": "105 eight-endpoint matching rows reduce to 8 representatives, checked against all 105 outside matchings.",
       "limits": "Preserves existence, not counts or arbitrary placement supports. Reduction is limited to ten exposed endpoints; larger classes keep all rows.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 23,
@@ -395,7 +395,7 @@
       "finite_evidence": "A ten-piece join replaces 63,504 explicit pair tests with 16,384 transform operations and preserves all 252 joined histories.",
       "limits": "Different operation types are not directly comparable in time. The generic transform accepts at most 16 pieces; integrated queries default to ten.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 24,
@@ -412,7 +412,7 @@
       "finite_evidence": "An eight-cell discriminator requests 2 local rows instead of preparing 3,360 eager rows and returns independently validated Gold.",
       "limits": "This is a bounded existence query, not a general full-size branch-and-price engine. Capped parent interfaces are never marked failed.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 25,
@@ -428,7 +428,7 @@
       "finite_evidence": "100 finite formulas preserve existential boundary models; puzzle checks preserve every enumerated completion under narrower contexts.",
       "limits": "Caps publish no formula; widening invalidates scoped use. Arbitrary backend Craig-interpolant extraction is not implemented.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 26,
@@ -445,7 +445,7 @@
       "finite_evidence": "A feasible inventory master generates 24 columns from 90 histories; a shortage closes only after complete pricing and exact certification.",
       "limits": "The pricing master relaxes seams/Gold connectivity, and feasible LPs are not witnesses. Native LP proposals are optional and never proof authority.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 27,
@@ -462,7 +462,7 @@
       "finite_evidence": "Individual routes exist in a discriminator but cannot coexist with consistent labels; exhaustive small puzzle cases retain every Gold solution.",
       "limits": "A Gold-only necessary condition with query/admission caps, not a general complete routing solver for arbitrary large residual boards.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 28,
@@ -478,7 +478,7 @@
       "finite_evidence": "Every independently enumerated completion belongs to exactly one child.",
       "limits": "Completeness is preserved; fewer total decisions on the original puzzle is unestablished.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 29,
@@ -494,7 +494,7 @@
       "finite_evidence": "A discriminator distinguishes internal partners even when side masks agree; child masks cover the original domain exactly.",
       "limits": "This changes the order/partition of exact work, not the feasibility conditions.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 30,
@@ -510,7 +510,7 @@
       "finite_evidence": "Counts agree with independent local enumeration; a capped count still retains every choice.",
       "limits": "Local counts are a relaxation of the whole board. They never remove candidates or imply a global completion count.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 31,
@@ -524,10 +524,10 @@
       "access": "learned_ordering",
       "disposition": "Retained optional fitted ordering; limited evidence",
       "mechanism": "Use frozen five-feature ridge weights trained on completed child-search work to order values.",
-      "finite_evidence": "46 completed labels on six training seeds; twelve disjoint ten-cell tests use 119 versus 133 nodes, with 7 wins, 2 ties and 3 losses.",
+      "finite_evidence": "46 completed labels on six training seeds; twelve disjoint ten-cell tests use 120 versus 136 nodes, with 7 wins, 2 ties and 3 losses.",
       "limits": "Six further forty-cell pairs all cap and remain inconclusive. No original-board generalization or learned repair policy is claimed; predictions never prune.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 32,
@@ -544,7 +544,7 @@
       "finite_evidence": "Generated rules are rechecked; 45 puzzle contexts preserve every enumerated edge solution. Dominated rules do not inflate retained-rule counts.",
       "limits": "Discovery is limited to these templates; no unrestricted theorem synthesis. No additional pruning in the 60-context prior-fixpoint comparison.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 33,
@@ -561,7 +561,7 @@
       "finite_evidence": "A completed Hall UNSAT fixture uses 42 decisions/757 support checks with learning versus 166/2,852 without.",
       "limits": "Clauses are scoped to their lane root. This is the new CUDA domain architecture, not a change to every legacy GPU lane.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 34,
@@ -577,9 +577,9 @@
       "disposition": "Retained alternative CUDA architecture",
       "mechanism": "Store complete reversible domains, removals, reasons and unfinished propagation scans in durable lane state.",
       "finite_evidence": "Tiny exhaustive comparisons and checkpoint/restore tests preserve pending work; 160-cell-deep fixtures check remaining branch volumes.",
-      "limits": "The full-state engine supports 128–512 lanes within its memory budget, not 131,072. Batch lanes are not yet refilled dynamically.",
+      "limits": "The full-state engine supports 128\u2013512 lanes within its memory budget, not 131,072. Batch lanes are not yet refilled dynamically.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 35,
@@ -595,7 +595,7 @@
       "finite_evidence": "A 160-cell discriminator selects four cells competing for three pieces; the selected query proves infeasible.",
       "limits": "Ranking alone never rejects a branch; this extends CPU assistance for the compact GPU DFS engine.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 36,
@@ -611,7 +611,7 @@
       "finite_evidence": "Tiny complete enumeration confirms the minimum Hamming distance; cancellation and invalid seed assumptions are checked.",
       "limits": "Minimum-change claims require completed optimization. Budget exhaustion and unavailable native dependencies are unknown.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 37,
@@ -627,7 +627,7 @@
       "finite_evidence": "A two-cell trade merges three loops into independently validated Gold.",
       "limits": "Requires an edge-perfect legal input; it does not make a failed patch proof apply to other outside arrangements.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 38,
@@ -643,7 +643,7 @@
       "finite_evidence": "A small crossover uses material from both parents and independently validates its Gold result.",
       "limits": "Bounded archive/fragment/query sizes apply. This is a proposal heuristic followed by exact validation, not exhaustive global coverage.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 39,
@@ -659,7 +659,7 @@
       "finite_evidence": "A transport discriminator offers one true and one false claim; only the true exclusion is admitted.",
       "limits": "Optimization failure, a capped query or an unverified exported core cannot prune DFS.",
       "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI."
     },
     {
       "id": 40,
@@ -671,12 +671,21 @@
         "benchmark_hybrid_round24.py"
       ],
       "access": "ejection_chains in hybrid sampling",
-      "disposition": "Experimental heuristic; benefit pending",
+      "disposition": "Experimental heuristic; paired sampling measured; no Gold-work benefit established",
       "mechanism": "Propose closed three-to-six-cell relocation chains with independent rotations.",
       "finite_evidence": "All nonempty combinations of the three new sampling controls preserve inventory/fixed cells and independently recalculated scores on CUDA and D3D12 tests.",
       "limits": "Heuristic sampling does not prove coverage and can revisit boards. This chain path currently rescans the full score.",
-      "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "original_puzzle_gain": "Partial scores measured in two-cycle paired-seed tests; fewer steps to an actual Gold solution remain unestablished.",
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI.",
+      "two_cycle_standalone_comparison": {
+        "contexts": 4,
+        "higher_partial_edges": 0,
+        "equal_partial_edges": 0,
+        "lower_partial_edges": 4,
+        "steps_per_replica": 8192,
+        "replicas": 4096,
+        "scope": "Partial candidate quality only; no Gold witness or exact coverage reduction."
+      }
     },
     {
       "id": 41,
@@ -688,12 +697,21 @@
         "benchmark_hybrid_round24.py"
       ],
       "access": "move_tabu in hybrid sampling",
-      "disposition": "Experimental heuristic; benefit pending",
-      "mechanism": "Keep short move-attribute tabu memory, allowing aspiration when a move improves that lane’s best.",
+      "disposition": "Experimental heuristic; paired sampling measured; no Gold-work benefit established",
+      "mechanism": "Keep short move-attribute tabu memory, allowing aspiration when a move improves that lane\u2019s best.",
       "finite_evidence": "The sampling combinations pass independent current/best-board and score checks, including with Gold scoring enabled.",
       "limits": "Tabu discourages selected recent moves; it does not guarantee distinct complete boards or establish a faster original solve.",
-      "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "original_puzzle_gain": "Partial scores measured in two-cycle paired-seed tests; fewer steps to an actual Gold solution remain unestablished.",
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI.",
+      "two_cycle_standalone_comparison": {
+        "contexts": 4,
+        "higher_partial_edges": 0,
+        "equal_partial_edges": 0,
+        "lower_partial_edges": 4,
+        "steps_per_replica": 8192,
+        "replicas": 4096,
+        "scope": "Partial candidate quality only; no Gold witness or exact coverage reduction."
+      }
     },
     {
       "id": 42,
@@ -705,12 +723,22 @@
         "benchmark_hybrid_round24.py"
       ],
       "access": "replica_exchange in hybrid sampling",
-      "disposition": "Experimental heuristic; benefit pending",
+      "disposition": "Experimental heuristic; paired sampling measured; no Gold-work benefit established",
       "mechanism": "Exchange current boards/scores between fixed-temperature lanes using Metropolis acceptance, keeping lane RNG/iteration and best archives in place.",
       "finite_evidence": "Equal-energy cases verify actual board exchange without moving temperature-lane state; combined sampling modes pass invariant checks.",
       "limits": "This is diversification, not an exact search-space reduction. Compare equal proposals, time and solution quality across seeds.",
-      "original_puzzle_gain": "not established by these finite results",
-      "release_validation": "pending coordinator final run"
+      "original_puzzle_gain": "Partial scores measured in two-cycle paired-seed tests; fewer steps to an actual Gold solution remain unestablished.",
+      "release_validation": "Validated in the frozen release audit; docs/round24-results.json records suite, hardware, finite and bounded original-input evidence. Final tag additionally requires complete passing CI.",
+      "two_cycle_standalone_comparison": {
+        "contexts": 4,
+        "higher_partial_edges": 4,
+        "equal_partial_edges": 0,
+        "lower_partial_edges": 0,
+        "steps_per_replica": 8192,
+        "replicas": 4096,
+        "scope": "Partial candidate quality only; no Gold witness or exact coverage reduction."
+      }
     }
-  ]
+  ],
+  "gold_solution_found_scope": "Original Gold Challenge only; synthetic validated Gold fixtures are not an original-puzzle solution."
 }
