@@ -124,42 +124,102 @@ class SharedSATServiceTests(unittest.TestCase):
     @unittest.skipUnless(HAS_SAT,'optional python-sat unavailable')
     def test_gold_cut_rpc_is_pollable_and_pending_completion_is_reused(self):
         problem=SearchProblem(multiple_loops(),double_face());backend=_Backend(problem,'gold')
-        class Slow:
+        entered=threading.Event();release=threading.Event()
+        class Blocked:
             calls=0
             def add_cuts(self,records):
-                self.calls+=1;time.sleep(.04);return backend.add_cuts(records)
-        proxy=Slow();client=SATServiceClient(proxy,backend.identity(),backend.root);source=KnowledgeStore(problem)
-        source.add(list(enumerate(brute(problem,'edges')[0])));calls=0
+                self.calls+=1;entered.set()
+                if not release.wait(5):raise RuntimeError('Test did not release Gold RPC.')
+                return backend.add_cuts(records)
+        proxy=Blocked();client=SATServiceClient(proxy,backend.identity(),backend.root);source=KnowledgeStore(problem)
+        source.add(list(enumerate(brute(problem,'edges')[0])))
         def stop():
-            nonlocal calls
-            calls+=1
-            if calls==5:raise InterruptedError('stop')
+            if entered.is_set():release.set();raise InterruptedError('stop')
         try:
             with self.assertRaises(InterruptedError):client.add_gold_witnesses(source,stop)
             self.assertEqual(client.add_gold_witnesses(source),1);self.assertEqual(proxy.calls,1)
             self.assertEqual(client.stats['sat_assist_gold_verified'],1)
             self.assertEqual(client.service_stats['sat_service_models'],1)
-        finally:client.close();backend.close()
+        finally:release.set();client.close();backend.close()
+
+    @staticmethod
+    def response():
+        delta=dict.fromkeys(STAT_KEYS,0);delta['sat_assist_calls']=1
+        return {'binding':('p','edges',(3,3)),'answers':[{'outcome':'unsat','core':((0,1),)}],
+                'ready':True,'status':'ready','reason':None,'sat_delta':delta,'clauses':3}
 
     def test_cancelled_client_retains_bounded_pending_result_but_never_returns_it_to_stop(self):
-        class Slow:
+        entered=threading.Event();release=threading.Event();response=self.response()
+        class Blocked:
             calls=0
             def request(self,requests,seconds,conflicts):
-                self.calls+=1;time.sleep(.04)
-                return {'binding':('p','edges',(3,3)),'answers':[{'outcome':'unsat','core':((0,1),)}],
-                    'ready':True,'status':'ready','reason':None,'sat_delta':dict.fromkeys(STAT_KEYS,0),'clauses':3}
-        proxy=Slow();client=SATServiceClient(proxy,('p','edges',(3,3)),(3,3));calls=0
+                self.calls+=1;entered.set()
+                if not release.wait(5):raise RuntimeError('Test did not release query RPC.')
+                return response
+        proxy=Blocked();client=SATServiceClient(proxy,('p','edges',(3,3)),(3,3))
         def stop():
-            nonlocal calls
-            calls+=1
-            if calls==5:raise InterruptedError('stop')
+            if entered.is_set():release.set();raise InterruptedError('stop')
         try:
             with self.assertRaises(InterruptedError):client.query_masks([(0,1)],stop,seconds=.2)
-            self.assertEqual(client.last_outcome,'not_ready')
+            self.assertEqual(client.last_outcome,'not_ready');self.assertEqual(client.stats['sat_assist_calls'],0)
             self.assertEqual(client.query_masks([(0,1)],seconds=.2),((0,1),));self.assertEqual(proxy.calls,1)
+            self.assertEqual(client.stats['sat_assist_calls'],1)
             client.close()
             with self.assertRaises(RuntimeError):client.prepare()
-        finally:client.close()
+        finally:release.set();client.close()
+
+    def completed_client(self, *, error=None):
+        from concurrent.futures import Future
+        from types import SimpleNamespace
+        future=Future()
+        if error is None:future.set_result(self.response())
+        else:future.set_exception(error)
+        client=SATServiceClient(SimpleNamespace(),('p','edges',(3,3)),(3,3))
+        client._executor=SimpleNamespace(shutdown=lambda **kw:None) # No submit API: resubmission must fail.
+        client._future=future
+        request={'kind':'query','domains':(1,3),'max_candidates':16}
+        client._key=json.dumps(['request',[request],.2,256],sort_keys=True)
+        self.addCleanup(client.close)
+        return client,future
+
+    def test_stop_after_completed_result_keeps_future_and_unapplied_deltas(self):
+        client,future=self.completed_client();checks=0
+        def stop():
+            nonlocal checks
+            checks+=1
+            if checks==3:raise InterruptedError('Stop at completed-result publication')
+        with self.assertRaisesRegex(InterruptedError,'publication'):client.query_masks([(0,1)],stop,seconds=.2)
+        self.assertIs(client._future,future);self.assertIsNotNone(client._key)
+        self.assertEqual(client.stats['sat_assist_calls'],0);self.assertEqual(client.last_outcome,'not_ready')
+        self.assertEqual(client.query_masks([(0,1)],seconds=.2),((0,1),))
+        self.assertIsNone(client._future);self.assertEqual(client.stats['sat_assist_calls'],1)
+
+    def test_completed_gold_cut_response_is_returned_once_after_stop(self):
+        from concurrent.futures import Future
+        from types import SimpleNamespace
+        problem=SearchProblem(multiple_loops(),double_face());source=KnowledgeStore(problem)
+        source.add(list(enumerate(brute(problem,'edges')[0])))
+        binding=(problem.fingerprint,'gold',tuple(sum(1<<v for v in row) for row in problem.domains))
+        client=SATServiceClient(SimpleNamespace(),binding,binding[2]);self.addCleanup(client.close)
+        response=self.response();response.update(binding=binding,added=1)
+        future=Future();future.set_result(response);client._future=future
+        client._key=json.dumps(['add_cuts',source.records()],sort_keys=True)
+        client._executor=SimpleNamespace(shutdown=lambda **kw:None)
+        checks=0
+        def stop():
+            nonlocal checks
+            checks+=1
+            if checks==4:raise InterruptedError('completed cut publication')
+        with self.assertRaisesRegex(InterruptedError,'cut publication'):client.add_gold_witnesses(source,stop)
+        self.assertIs(client._future,future);self.assertEqual(client.stats['sat_assist_calls'],0)
+        self.assertEqual(client.add_gold_witnesses(source),1)
+        self.assertEqual(client.stats['sat_assist_calls'],1);self.assertIsNone(client._future)
+
+    def test_rpc_timeout_error_is_not_polled_as_an_unfinished_wait(self):
+        error=TimeoutError('RPC itself failed');client,_=self.completed_client(error=error)
+        with self.assertRaisesRegex(TimeoutError,'RPC itself failed'):client.query_masks([(0,1)],seconds=.2)
+        self.assertIsNone(client._future);self.assertIsNone(client._key)
+        self.assertEqual(client.stats['sat_assist_calls'],0)
 
 
 

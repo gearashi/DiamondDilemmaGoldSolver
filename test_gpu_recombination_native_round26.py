@@ -1,9 +1,11 @@
 """App-controller and actual-native lifecycle for optimized recombination."""
 from copy import deepcopy
+from types import SimpleNamespace
 import json,os,unittest
 from unittest.mock import patch
 import numpy as np
 import gpu_sampling as sampling
+import gpu_backends as backends
 from gpu_sampling_resume_round25 import SamplerSession,_SamplingInterrupted
 from test_gpu_recombination_round26 import interacting_fixture
 from test_gpu_sampling_round25 import FakeSampler
@@ -31,7 +33,8 @@ class OptimizerIntegrationHostTests(unittest.TestCase):
                 return np.array(parents),np.array([sampling.score_board(problem,row)['objective'] for row in parents])
         kwargs=dict(replicas=8,seed=2616,backend='cuda',experiments=OPT)
         session=tail=None
-        with patch.object(sampling,'_make_sampler',side_effect=Parents):
+        # Backend selection belongs to the fake native boundary in this host test.
+        with patch.object(backends,'choose_backend',return_value='cuda') as selected,patch.object(sampling,'_make_sampler',side_effect=Parents):
             try:
                 session=SamplerSession(problem,**kwargs);session._ensure_engine()
                 def check():
@@ -42,9 +45,14 @@ class OptimizerIntegrationHostTests(unittest.TestCase):
                 tail=SamplerSession(problem,resume=saved,**kwargs);tail._ensure_engine();tail.collect()
                 self.assertEqual(tail.engine.top_calls,0);self.assertEqual(tail.counts['archive_checks'],checks)
                 self.assertGreaterEqual(tail.crossover.stats['recombination_nodes'],nodes);self.assertTrue(problem.validate(tail.solution)['valid'])
+                selected.assert_called_once_with('cuda')
             finally:
                 if session:session.close()
                 if tail:tail.close()
+    def test_host_continuation_on_darwin_never_constructs_a_native_device(self):
+        with patch.object(backends,'sys',SimpleNamespace(platform='darwin')),patch.object(backends,'_automatic_backend',side_effect=AssertionError('native automatic selection')) as automatic,patch.object(sampling,'_CUDA',side_effect=AssertionError('native CUDA')) as cuda,patch.object(sampling,'_WebGPU',side_effect=AssertionError('native WebGPU')) as webgpu:
+            self.test_stop_retains_completed_collection_and_optimizer_work()
+            automatic.assert_not_called();cuda.assert_not_called();webgpu.assert_not_called()
     def test_legacy_solve_forwards_optimal(self):
         problem,_=interacting_fixture()
         with patch.object(sampling,'sample',return_value={'top_samples':[]}) as sample,patch('constraint_dfs.solve',return_value={'status':'timeout','complete':False,'stats':{},'nodes':0,'elapsed_seconds':0.}):

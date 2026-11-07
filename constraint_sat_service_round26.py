@@ -177,12 +177,23 @@ class SATServiceClient:
         while self._future is not None:
             check()
             try:result=self._future.result(timeout=.01)
-            except TimeoutError:continue
+            except TimeoutError:
+                # Future.result uses the same exception type for an unfinished
+                # wait and for an RPC that itself failed with TimeoutError.
+                # Re-read a completed future to distinguish that race exactly.
+                if not self._future.done():continue
+                try:result=self._future.result()
+                except BaseException:
+                    self._future=None;self._key=None;raise
             except BaseException:
                 self._future=None;self._key=None;raise
-            old=self._key;self._future=None;self._key=None
+            old=self._key
+            # Stop at the publication boundary must preserve the completed
+            # response and its unapplied deltas for the next identical request.
+            if old==key:check()
+            self._future=None;self._key=None
             self._receive(result)
-            if old==key:check();return result
+            if old==key:return result
         self._key=key;self._future=self._executor.submit(getattr(self.proxy,method),*args)
         return self._call(method,args,key,check)
     def _rpc(self,requests,check,seconds,conflicts):
