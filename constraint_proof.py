@@ -7,6 +7,7 @@ objectives. Gold-only claims without such a proof retain ordinary revalidation.
 """
 from __future__ import annotations
 import hashlib,json,time
+from collections import OrderedDict
 from constraint_sat_assist import SatAssist
 
 
@@ -149,9 +150,11 @@ class MaskProofContext:
             raise ValueError('Proof root escapes original domains.')
         self._binding=self._current_binding()
         self.encoder=SatAssist(problem,self.initial,'edges',capture_clauses=True,factory=_CaptureSink)
-        self.base=None;self.variables=None
+        self.base=None;self.variables=None;self._verification_cursors=OrderedDict();self.last_verification_status=None
+        self._verification_base=None
         self.stats={'proof_native_calls':0,'proof_checks':0,'proof_imports':0,'proof_unknown':0,
-                    'proof_dpll_decisions':0,'proof_dpll_visits':0,'proof_emitted_clauses':0}
+                    'proof_dpll_decisions':0,'proof_dpll_visits':0,'proof_emitted_clauses':0,
+                    'proof_cursor_visits':0,'proof_cursor_resumptions':0}
 
     def _current_binding(self):
         return (self.problem.fingerprint,
@@ -230,4 +233,45 @@ class MaskProofContext:
         if valid:self.stats['proof_imports']+=1
         return valid
 
-    def close(self):self.encoder.close()
+    def verify_incremental(self,certificate,check=lambda:None,*,ticks=256):
+        """Resume only a locally held exact certificate; imported cursors do not exist."""
+        from constraint_proof_cursor import ResumableRUPChecker,_ValidatedRUPBase
+        self._check();self.last_verification_status='invalid'
+        if not isinstance(certificate,dict) or set(certificate)!={'proof_format','fingerprint','target','initial','record','base_sha256','proof'}:return False
+        if certificate.get('proof_format')!='diamond-rup-mask-v1':return False
+        proof=certificate.get('proof')
+        if (not isinstance(proof,(list,tuple)) or len(proof)>MAX_PROOF_STEPS
+                or any(not isinstance(line,str) or len(line)>16384 for line in proof)
+                or sum(map(len,proof))>MAX_PROOF_BYTES):return False
+        try:
+            if len(json.dumps(certificate))>MAX_PROOF_BYTES:return False
+            record=self.normalize([(c,int(m,16)) for c,m in certificate['record']])
+        except (KeyError,TypeError,ValueError):return False
+        if not self.prepare(check,seconds=1):
+            self.last_verification_status='pending';return None
+        if any(certificate.get(k)!=v for k,v in self.binding(record).items()):return False
+        # The exact tuple key prevents mutated/replaced proof bytes from borrowing
+        # a checked prefix. All root/base bindings above are checked on each call.
+        key=(record,tuple(proof));cursor=self._verification_cursors.get(key)
+        if cursor is None:
+            if self._verification_base is None:self._verification_base=_ValidatedRUPBase(self.base)
+            assumptions=tuple(tuple(lit for code,lit in self.variables[cell].items() if mask>>code&1) for cell,mask in record)
+            cursor=ResumableRUPChecker(self._verification_base,proof,extra_clauses=assumptions)
+            self._verification_cursors[key]=cursor;self.stats['proof_checks']+=1
+            while len(self._verification_cursors)>8:self._verification_cursors.popitem(last=False)
+        self._verification_cursors.move_to_end(key)
+        before=cursor.stats.copy();was_finished=cursor.finished;self.last_verification_status='pending'
+        try:valid=cursor.advance(check,ticks=ticks)
+        finally:
+            self.stats['proof_cursor_visits']+=cursor.stats['proof_clause_visits']-before['proof_clause_visits']
+            self.stats['proof_cursor_resumptions']+=cursor.stats['proof_resumptions']-before['proof_resumptions']
+        if cursor.limited:
+            self.last_verification_status='limited'
+            if not was_finished:self.stats['proof_unknown']+=1
+        elif cursor.finished:
+            self.last_verification_status='valid' if valid else 'invalid'
+            if valid and not was_finished:self.stats['proof_imports']+=1
+        return valid
+
+    def close(self):
+        self._verification_cursors.clear();self._verification_base=None;self.encoder.close()

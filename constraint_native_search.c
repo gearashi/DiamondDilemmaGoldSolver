@@ -17,13 +17,16 @@
 #define MAX_TRAIL 4194304u
 #define MAX_ARCS 960
 #define STATS_COUNT 18
+#define MAX_REASONS 131072
 /* Callback process return: -1 interrupted, 0 reject, 1 branch, 2 solved. */
 typedef int (*poll_fn)(void *);
 typedef int (*process_fn)(void *,uint64_t *,int *,uint64_t *,int *,int *);
 typedef int (*event_fn)(void *,int);
 typedef struct { size_t index; uint64_t old; } Change;
+typedef struct { int kind,cell,other,sa,sb,tile; uint64_t removed[8]; } Reason;
 typedef struct {
     size_t restore_mark,node_mark;
+    int reason_mark;
     int cell,count,next;
     uint64_t *choices;
     /* Private certificate only: imports never trust serialized domains. */
@@ -36,6 +39,8 @@ typedef struct {
     uint64_t *domains,*work,*choices,*filtered;
     Frame *frames;
     Change *trail;
+    Reason *reasons;
+    int reasons_enabled,reasons_valid,reason_count,reason_capacity,failed_reason_count,reason_limit;
     uint64_t stats[STATS_COUNT];
     int arc_count,*arcs,*witnesses;
     uint64_t *support;
@@ -75,7 +80,7 @@ static void undo(Search *s,size_t mark) {
     while(s->trail_count>mark) { Change c=s->trail[--s->trail_count];s->domains[c.index]=c.old;s->stats[4]++; }
 }
 static void pop(Search *s) {
-    Frame *f=&s->frames[--s->depth];undo(s,f->restore_mark);free(f->choices);memset(f,0,sizeof(*f));s->stats[2]++;
+    Frame *f=&s->frames[--s->depth];undo(s,f->restore_mark);s->reason_count=f->reason_mark;free(f->choices);memset(f,0,sizeof(*f));s->stats[2]++;
 }
 static int partition(Search *s,const uint64_t *d,int cell,const uint64_t *choices,int count) {
     int c,w;uint64_t seen[8]={0};
@@ -133,6 +138,65 @@ static void enqueue_incoming(Search *s,int cell,ArcQueue *q) {
     }
 }
 static void mark_dirty(Frame *f,int cell) { f->dirty[cell/64]|=UINT64_C(1)<<(cell%64); }
+/* Optional justification log. Allocation/cap failures only disable learning. */
+static void record_reason(Search *s,int kind,int cell,int other,int sa,int sb,int tile,const uint64_t *removed) {
+    Reason *r,*grown;int i,capacity;
+    if(!s->reasons_enabled||!s->reasons_valid)return;
+    if(s->reason_count>=s->reason_limit){s->reasons_valid=0;return;}
+    if(s->reason_count==s->reason_capacity) {
+        capacity=s->reason_capacity?s->reason_capacity*2:1024;
+        if(capacity>MAX_REASONS)capacity=MAX_REASONS;
+        grown=(Reason *)realloc(s->reasons,(size_t)capacity*sizeof(Reason));
+        if(!grown){s->reasons_valid=0;return;}
+        s->reasons=grown;s->reason_capacity=capacity;
+    }
+    r=&s->reasons[s->reason_count++];
+    r->kind=kind;r->cell=cell;r->other=other;r->sa=sa;r->sb=sb;r->tile=tile;
+    for(i=0;i<8;i++)r->removed[i]=(removed&&i<s->words)?removed[i]:0;
+}
+static int explained_tile(Search *s,uint64_t *d,int cell,int tile,int keep,int owner) {
+    uint64_t before[8],removed[8];int w,changed;
+    if(!s->reasons_enabled)return restrict_tile(s,d,tile,keep);
+    for(w=0;w<s->words;w++)before[w]=d[w];
+    changed=restrict_tile(s,d,tile,keep);
+    if(changed&&s->reasons_enabled) {
+        for(w=0;w<s->words;w++)removed[w]=before[w]&~d[w];
+        record_reason(s,keep?3:2,cell,owner,0,0,tile,removed);
+    }
+    return changed;
+}
+API int dd_search_explanations(void *ptr,int enabled) {
+    Search *s=(Search *)ptr;
+    if(!s||s->active||(enabled!=0&&enabled!=1))return -1;
+    if(s->reasons_enabled!=enabled) {
+        int i;s->reason_count=0;for(i=0;i<s->depth;i++)s->frames[i].reason_mark=0;
+        s->reasons_enabled=enabled;s->reasons_valid=1;s->failed_reason_count=-1;
+    }
+    return 0;
+}
+API int dd_search_reason_limit(void *ptr,int limit) {
+    Search *s=(Search *)ptr;int i;
+    if(!s||s->active||limit<0||limit>MAX_REASONS)return -1;
+    if(s->reason_limit!=limit) {
+        s->reason_limit=limit;s->reason_count=0;s->reasons_valid=1;s->failed_reason_count=-1;
+        for(i=0;i<s->depth;i++)s->frames[i].reason_mark=0;
+    }
+    return 0;
+}
+API int dd_search_reason_count(void *ptr) {
+    Search *s=(Search *)ptr;
+    return s&&s->reasons_enabled&&s->reasons_valid?s->failed_reason_count:-1;
+}
+API int dd_search_copy_reasons(void *ptr,int *metadata,uint64_t *removed,int count) {
+    Search *s=(Search *)ptr;int i,w;
+    if(!s||count<0||count!=dd_search_reason_count(ptr)||!metadata||!removed)return -1;
+    for(i=0;i<count;i++) {
+        Reason *r=&s->reasons[i];int *m=metadata+(size_t)i*6;
+        m[0]=r->kind;m[1]=r->cell;m[2]=r->other;m[3]=r->sa;m[4]=r->sb;m[5]=r->tile;
+        for(w=0;w<s->words;w++)removed[(size_t)i*s->words+w]=r->removed[w];
+    }
+    return 0;
+}
 /* Work is scratch. No domain, frame cursor, or consumed-node statistic commits
  * until propagation and the Python callback finish, preserving Stop semantics. */
 static int fast_propagate(Search *s,Frame *f,poll_fn poll,void *context) {
@@ -165,7 +229,11 @@ static int fast_propagate(Search *s,Frame *f,poll_fn poll,void *context) {
                 if(keep[w]!=source[w])revised=1;
             }
             if(revised) {
-                uint64_t any=0;for(w=0;w<s->words;w++) {source[w]=keep[w];any|=keep[w];}
+                uint64_t any=0,removed[8];if(s->reasons_enabled) {
+                    for(w=0;w<s->words;w++)removed[w]=source[w]&~keep[w];
+                    record_reason(s,1,edge[0],edge[2],edge[1],edge[3],0,removed);
+                }
+                for(w=0;w<s->words;w++) {source[w]=keep[w];any|=keep[w];}
                 s->stats[10]++;if(!any)return 0;enqueue_incoming(s,edge[0],&queue);
             }
         }
@@ -188,15 +256,15 @@ static int fast_propagate(Search *s,Frame *f,poll_fn poll,void *context) {
                 }
             }
             if(!num)return 0;
-            if(num==1) {if(owner[last]>=0)return 0;owner[last]=cell;}
+            if(num==1) {if(owner[last]>=0){record_reason(s,4,cell,owner[last],0,0,last,NULL);return 0;}owner[last]=cell;}
         }
         changed=0;
         for(tile=0;tile<s->n;tile++) {
-            if(!occurrence[tile])return 0;
-            if(owner[tile]>=0)for(cell=0;cell<s->n;cell++)if(cell!=owner[tile]&&restrict_tile(s,d+(size_t)cell*s->words,tile,0)) {
+            if(!occurrence[tile]){record_reason(s,5,0,0,0,0,tile,NULL);return 0;}
+            if(owner[tile]>=0)for(cell=0;cell<s->n;cell++)if(cell!=owner[tile]&&explained_tile(s,d+(size_t)cell*s->words,cell,tile,0,owner[tile])) {
                 changed=1;s->stats[10]++;enqueue_incoming(s,cell,&queue);
             }
-            if(occurrence[tile]==1&&restrict_tile(s,d+(size_t)sole[tile]*s->words,tile,1)) {
+            if(occurrence[tile]==1&&explained_tile(s,d+(size_t)sole[tile]*s->words,sole[tile],tile,1,-1)) {
                 changed=1;s->stats[10]++;enqueue_incoming(s,sole[tile],&queue);
             }
         }
@@ -231,7 +299,7 @@ API void *dd_search_create(int n,int count,int max_depth) {
     Search *s;
     if(n<1||n>MAX_CELLS||count<1||count>MAX_CODES||max_depth<1||max_depth>MAX_DEPTH)return NULL;
     s=(Search *)calloc(1,sizeof(Search));if(!s)return NULL;
-    s->n=n;s->count=count;s->words=(count+63)/64;s->max_depth=max_depth;s->size=(size_t)n*s->words;
+    s->n=n;s->reason_limit=MAX_REASONS;s->count=count;s->words=(count+63)/64;s->max_depth=max_depth;s->size=(size_t)n*s->words;
     s->domains=(uint64_t *)calloc(s->size,sizeof(uint64_t));s->work=(uint64_t *)malloc(s->size*sizeof(uint64_t));
     s->filtered=(uint64_t *)malloc(s->size*sizeof(uint64_t));
     s->choices=(uint64_t *)malloc((size_t)count*s->words*sizeof(uint64_t));s->frames=(Frame *)calloc(max_depth,sizeof(Frame));
@@ -241,7 +309,7 @@ API void *dd_search_create(int n,int count,int max_depth) {
 API void dd_search_destroy(void *ptr) {
     Search *s=(Search *)ptr;int i;if(!s)return;
     for(i=0;i<s->depth;i++)free(s->frames[i].choices);
-    free(s->domains);free(s->work);free(s->filtered);free(s->choices);free(s->frames);free(s->trail);free(s->support);free(s->arcs);free(s->witnesses);free(s);
+    free(s->domains);free(s->work);free(s->filtered);free(s->choices);free(s->frames);free(s->trail);free(s->support);free(s->arcs);free(s->witnesses);free(s->reasons);free(s);
 }
 API int dd_search_add_frame(void *ptr,const uint64_t *d,int cell,const uint64_t *choices,int count,int next) {
     Search *s=(Search *)ptr;Frame *f;uint64_t *copy=NULL;size_t i;
@@ -255,7 +323,7 @@ API int dd_search_add_frame(void *ptr,const uint64_t *d,int cell,const uint64_t 
         if(!reserve(s,s->size))return -2;
     }
     if(count) {copy=(uint64_t *)malloc((size_t)count*s->words*sizeof(uint64_t));if(!copy)return -2;memcpy(copy,choices,(size_t)count*s->words*sizeof(uint64_t));}
-    f=&s->frames[s->depth];f->restore_mark=s->trail_count;
+    f=&s->frames[s->depth];f->restore_mark=s->trail_count;f->reason_mark=s->reason_count;
     if(!s->depth)memcpy(s->domains,d,s->size*sizeof(uint64_t));else for(i=0;i<s->size;i++)write_domain(s,i,d[i]);
     f->node_mark=s->trail_count;f->cell=cell;f->count=count;f->next=next;f->choices=copy;s->depth++;
     if((uint64_t)s->depth>s->stats[6])s->stats[6]=s->depth;
@@ -291,22 +359,23 @@ API int dd_search_run(void *ptr,process_fn process,poll_fn poll,event_fn event,v
         Frame *f=&s->frames[s->depth-1];
         if((max_steps&&steps>=max_steps)||poll(context)) {s->status=3;break;}
         if(f->cell<0) {
-            int cell=-1,count=0,jump=-1,action,fast=1;uint64_t *copy=NULL;size_t i;
+            int cell=-1,count=0,jump=-1,action,fast=1,reason_before=s->reason_count;uint64_t *copy=NULL;size_t i;
+            s->failed_reason_count=-1;
             memcpy(s->work,s->domains,s->size*sizeof(uint64_t));
             if(s->support)fast=fast_propagate(s,f,poll,context);
-            if(fast<0) {s->status=3;break;}
+            if(fast<0) {s->reason_count=reason_before;s->status=3;break;}
             s->basic_ready=s->support&&fast;
             if(s->basic_ready)memcpy(s->filtered,s->work,s->size*sizeof(uint64_t));
             action=fast?process(context,s->work,&cell,s->choices,&count,&jump):0;
             s->basic_ready=0;
-            if(action<0) {s->status=3;break;}
+            if(action<0) {s->reason_count=reason_before;s->status=3;break;}
             if(action>2||jump< -1||jump>s->depth-1) {rc=-3;break;}
             if(action==1) {
                 if(jump!=-1||!valid_domains(s,s->work)||!partition(s,s->work,cell,s->choices,count)){rc=-3;break;}
                 for(i=0;i<s->size;i++)if(s->work[i]&~s->domains[i]){rc=-3;break;}
                 if(rc)break;
                 copy=(uint64_t *)malloc((size_t)count*s->words*sizeof(uint64_t));
-                if(!copy||!reserve(s,s->size)) {free(copy);s->status=4;break;}
+                if(!copy||!reserve(s,s->size)) {free(copy);s->reason_count=reason_before;s->status=4;break;}
                 memcpy(copy,s->choices,(size_t)count*s->words*sizeof(uint64_t));
                 for(i=0;i<s->size;i++)write_domain(s,i,s->work[i]);
                 f->node_mark=s->trail_count;f->cell=cell;f->count=count;f->next=0;f->choices=copy;
@@ -314,6 +383,7 @@ API int dd_search_run(void *ptr,process_fn process,poll_fn poll,event_fn event,v
                 if(f->seeded)for(i=0;i<s->size;i++)if(s->work[i]!=s->filtered[i])mark_dirty(f,(int)(i/s->words));
             } else {
                 if(action==2&&jump!=-1){rc=-3;break;}
+                if(!fast)s->failed_reason_count=s->reason_count;
                 pop(s);if(action==0&&jump>=0)while(s->depth>jump)pop(s);
                 if(action==2)s->status=2;else if(!s->depth)s->status=1;
             }
@@ -329,7 +399,7 @@ API int dd_search_run(void *ptr,process_fn process,poll_fn poll,event_fn event,v
             if(s->depth>=s->max_depth||!reserve(s,s->words)){s->status=4;break;}
             for(w=0;w<s->words;w++)write_domain(s,(size_t)f->cell*s->words+w,f->choices[(size_t)f->next*s->words+w]);
             f->next++;child=&s->frames[s->depth++];memset(child,0,sizeof(*child));
-            child->restore_mark=mark;child->node_mark=s->trail_count;child->cell=-1;
+            child->restore_mark=mark;child->node_mark=s->trail_count;child->cell=-1;child->reason_mark=s->reason_count;
             child->seeded=f->seeded;memcpy(child->dirty,f->dirty,sizeof(child->dirty));mark_dirty(child,f->cell);
             s->stats[1]++;if((uint64_t)s->depth>s->stats[6])s->stats[6]=s->depth;
             steps++;s->stats[7]++;

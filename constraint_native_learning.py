@@ -13,7 +13,9 @@ from constraint_pruning import _tile_choices, values
 
 STAT_KEYS=('native_learning_replays','native_learning_checks',
            'native_learning_eliminated','native_learning_conflicts',
-           'native_learning_clauses','native_learning_incomplete','native_learning_jumps')
+           'native_learning_clauses','native_learning_incomplete','native_learning_jumps',
+           'native_reason_attempts','native_reason_checks','native_reason_eliminated',
+           'native_reason_clauses','native_reason_incomplete','native_reason_fallbacks')
 
 class _ReplayLimit(Exception):
     pass
@@ -107,3 +109,106 @@ def replay_fast_failure(failure, *, initial, tables, fingerprint, target='gold',
     except BaseException:
         stats['native_learning_incomplete']+=1
         raise
+
+
+def verify_native_reasons(failure, *, initial, tables, fingerprint, target='gold',
+                          stats=None, check=lambda:None, max_work=100000):
+    """Check recorded removals, without scanning for additional propagation.
+
+    Initial domains and active decisions are the ONLY assumptions. Unexplained
+    inherited Python reductions can make a trace unusable; they cannot become
+    axioms. The caller may then use the prior independent replay fallback.
+    """
+    if not isinstance(failure,FastFailure):raise ValueError('Expected a captured native failure.')
+    if type(max_work)is not int or max_work<0:raise ValueError('Invalid explanation work limit.')
+    initial=tuple(initial);n=len(initial)
+    if (not n or any(type(x)is not int or x<=0 or x.bit_length()>3*n for x in initial)
+            or len(failure.domains)!=n or any(type(x)is not int or x<=0 or x&~root
+                                            for x,root in zip(failure.domains,initial))):
+        raise ValueError('Native explanation has invalid root domains.')
+    state=LCGState(initial,fingerprint,target)
+    for pair in failure.decisions:
+        if not isinstance(pair,(tuple,list)) or len(pair)!=2:raise ValueError('Invalid native decision.')
+        state=state.fork(*pair)
+    if any(value&~root for value,root in zip(failure.domains,state.domains)):
+        raise ValueError('Native failure escaped its decisions.')
+    if stats is None:stats={}
+    for key in STAT_KEYS:stats.setdefault(key,0)
+    records=failure.reasons
+    if records is None:return None
+    stats['native_reason_attempts']+=1
+    if not isinstance(records,tuple) or len(records)>131072:
+        stats['native_reason_incomplete']+=1;return None
+    domains=state.domains.copy();arcs=set(tables.arcs);work=0
+    def tick():
+        nonlocal work
+        if work>=max_work:raise _ReplayLimit()
+        work+=1;stats['native_reason_checks']+=1
+        if work%64==1:check()
+    def finish(cells=None):
+        check()
+        clause=state.first_uip(cells)
+        if clause is None:stats['native_reason_incomplete']+=1
+        else:stats['native_reason_clauses']+=1
+        return clause
+    def unsupported():
+        stats['native_reason_incomplete']+=1
+        return None
+    try:
+        check()
+        for record in records:
+            tick()
+            if (not isinstance(record,tuple) or len(record)!=7
+                    or any(type(x)is not int for x in record)):return unsupported()
+            kind,cell,other,sa,sb,tile,removed=record
+            if not (1<=kind<=5 and 0<=cell<n and 0<=sa<3 and 0<=sb<3
+                    and 0<=tile<n and removed>=0 and removed.bit_length()<=3*n):
+                return unsupported()
+            if kind in (1,2,4) and not 0<=other<n:return unsupported()
+            bits=7<<(3*tile)
+            if kind==4:
+                if (cell==other or not domains[cell] or not domains[other]
+                        or domains[cell]&~bits or domains[other]&~bits):return unsupported()
+                return finish((cell,other))
+            if kind==5:
+                for domain in domains:
+                    tick()
+                    if domain&bits:return unsupported()
+                return finish(range(n))
+            effective=removed&domains[cell]
+            if not effective:continue
+            if kind==1:
+                if (cell,sa,other,sb) not in arcs:return unsupported()
+                for code in values(effective):
+                    tick()
+                    if tables.compatible[sa][sb][code]&domains[other]:return unsupported()
+                dependencies=(other,)
+            elif kind==2:
+                if (cell==other or effective&~bits or not domains[other]
+                        or domains[other]&~bits):return unsupported()
+                dependencies=(other,)
+            elif kind==3:
+                if effective&bits:return unsupported()
+                for host,domain in enumerate(domains):
+                    tick()
+                    if host!=cell and domain&bits:return unsupported()
+                dependencies=range(n)
+            state.record_cell(cell,domains[cell]&~effective,dependencies,'checked native reason')
+            domains[cell]&=~effective
+            stats['native_reason_eliminated']+=effective.bit_count()
+            if not domains[cell]:return finish()
+        return unsupported()
+    except _ReplayLimit:
+        return unsupported()
+    except BaseException:
+        stats['native_reason_incomplete']+=1
+        raise
+
+
+def explain_fast_failure(failure, **kwargs):
+    """Prefer a checked native derivation; preserve the safe replay fallback."""
+    clause=verify_native_reasons(failure,**kwargs)
+    if clause is not None:return clause
+    stats=kwargs.get('stats')
+    if stats is not None:stats['native_reason_fallbacks']=stats.get('native_reason_fallbacks',0)+1
+    return replay_fast_failure(failure,**kwargs)

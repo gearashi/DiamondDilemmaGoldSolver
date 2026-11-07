@@ -8,7 +8,7 @@ candidate is merely unknown. All arithmetic is exact GF(2).
 from collections import OrderedDict
 from constraint_relations import bits
 
-STAT_KEYS=('affine_checks', 'affine_builds', 'affine_equations', 'affine_candidates', 'affine_xors', 'affine_prunes', 'affine_cache_hits')
+STAT_KEYS=('affine_checks', 'affine_builds', 'affine_equations', 'affine_candidates', 'affine_xors', 'affine_prunes', 'affine_cache_hits', 'affine_incremental_builds', 'affine_full_builds', 'affine_reused_cells')
 
 
 def add_equation(basis, mask, rhs, check=lambda:None, stats=None):
@@ -78,10 +78,12 @@ def modular_affine_equations(patterns,width,prime):
 
 
 class AffinePruner:
-    def __init__(self,problem):
-        self.problem=problem;self.cache=OrderedDict()
-        self.stats=dict.fromkeys(('affine_checks','affine_builds','affine_equations','affine_candidates',
-                                 'affine_xors','affine_prunes','affine_cache_hits'),0)
+    def __init__(self,problem,*,incremental=False):
+        if type(incremental)is not bool:raise ValueError('Incremental affine policy must be boolean.')
+        self.problem=problem;self.cache=OrderedDict();self.incremental=incremental
+        self.original=tuple(sum(1<<code for code in set(row)) for row in problem.domains) if incremental else ()
+        self.binding=self._binding() if incremental else None
+        self.stats=dict.fromkeys(STAT_KEYS,0)
         self.patterns=tuple(sum(int(mask)<<(11*side) for side,mask in enumerate(row)) for row in problem.masks)
         self.coordinates=[[None]*33 for _ in range(problem.n)]
         for edge,(a,sa,b,sb) in enumerate(problem.edges):
@@ -90,9 +92,33 @@ class AffinePruner:
                 self.coordinates[b][11*sb+10-port]=11*edge+port
         self.enabled=all(all(v is not None for v in row) for row in self.coordinates)
 
+    def _binding(self):
+        return (self.problem.fingerprint,tuple(tuple(row) for row in self.problem.domains),
+                tuple(tuple(map(int,row)) for row in self.problem.masks),tuple(self.problem.edges))
+
     def _build(self,domains,check):
-        basis={};self.stats['affine_builds']+=1
-        for cell,domain in enumerate(domains):
+        self.stats['affine_builds']+=1
+        ancestor=None;cost=None
+        if self.incremental:
+            # A wider saved box proves equations valid in every narrower box.
+            # Siblings/widening may reuse only a genuine covering ancestor.
+            for prior,session in self.cache.items():
+                check()
+                if all(not current&~old for current,old in zip(domains,prior)):
+                    candidate=(sum(current!=old for current,old in zip(domains,prior)),
+                               sum((old&~current).bit_count() for current,old in zip(domains,prior)))
+                    if cost is None or candidate<cost:ancestor=(prior,session);cost=candidate
+        if ancestor is None:
+            basis={};changed=range(len(domains));self.stats['affine_full_builds']+=1
+        else:
+            prior,session=ancestor;self.stats['affine_incremental_builds']+=1
+            changed=[c for c in range(len(domains)) if prior[c]!=domains[c]]
+            self.stats['affine_reused_cells']+=len(domains)-len(changed)
+            if session['basis'] is None:return None
+            # Never mutate an ancestor: exact cached snapshots implement undo.
+            basis=session['basis'].copy()
+        for cell in changed:
+            domain=domains[cell]
             check()
             local=affine_equations((self.patterns[code] for code in bits(domain)),33)
             for mask,rhs in local:
@@ -104,6 +130,10 @@ class AffinePruner:
 
     def prune(self,domains,check=lambda:None,*,max_candidates=128):
         if type(max_candidates)is not int or max_candidates<0:raise ValueError('Invalid affine candidate budget.')
+        if self.incremental:
+            if self._binding()!=self.binding:raise ValueError('Incremental affine puzzle binding changed.')
+            if len(domains)!=len(self.original) or any(type(mask)is not int or mask<0 or mask&~old for mask,old in zip(domains,self.original)):
+                raise ValueError('Incremental affine domains escape the original root.')
         if not self.enabled or not all(domains):return False
         self.stats['affine_checks']+=1;key=tuple(domains)
         session=self.cache.get(key)

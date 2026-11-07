@@ -192,13 +192,16 @@ class CoverageLedger:
     A narrow/symmetry root cannot prove anything outside that root. Checksums
     detect corruption only. User-edited databases are not external certificates.
     """
-    def __init__(self,path,scope):
+    def __init__(self,path,scope,*,symbolic=False,max_symbolic_nodes=200000):
         self.scope=scope;self.path=Path(path)
+        self.symbolic=bool(symbolic);self.max_symbolic_nodes=max_symbolic_nodes;self._symbolic_state=None;self._symbolic_additions=[]
         self.path.parent.mkdir(parents=True,exist_ok=True)
         self.db=sqlite3.connect(str(self.path),timeout=10)
         self.db.execute('PRAGMA journal_mode=WAL')
         self.db.execute('CREATE TABLE IF NOT EXISTS closed (identity TEXT PRIMARY KEY, scope TEXT NOT NULL, box TEXT NOT NULL, evidence TEXT NOT NULL, checksum TEXT NOT NULL)')
-        self.stats={'coverage_records_added':0,'coverage_hits':0,'coverage_boxes_removed':0}
+        self.stats={'coverage_records_added':0,'coverage_records_checked':0,'coverage_hits':0,'coverage_boxes_removed':0,
+                    'coverage_symbolic_builds':0,'coverage_symbolic_reuses':0,'coverage_symbolic_nodes':0,
+                    'coverage_symbolic_apply_steps':0,'coverage_symbolic_caps':0,'coverage_symbolic_extensions':0}
 
     def record_completed(self,box,*,status,complete,source_scope=None,evidence=None):
         source=self.scope if source_scope is None else source_scope
@@ -211,14 +214,21 @@ class CoverageLedger:
         with self.db:
             cursor=self.db.execute('INSERT OR IGNORE INTO closed VALUES (?,?,?,?,?)',(identity,json.dumps(body['scope']),json.dumps(body['box']),json.dumps(body['evidence']),digest(body)))
         self.stats['coverage_records_added']+=cursor.rowcount
+        if cursor.rowcount and self._symbolic_state is not None:
+            self._symbolic_additions.append(box)
+            if len(self._symbolic_additions)>4096:self._symbolic_state=None;self._symbolic_additions=[]
         return bool(cursor.rowcount)
 
-    def exclusions(self,target_scope=None):
+    def exclusions(self,target_scope=None,*,check=lambda:None):
+        return tuple(self.iter_exclusions(target_scope,check=check))
+
+    def iter_exclusions(self,target_scope=None,*,check=lambda:None):
+        """Stream independently checked local records; no unbounded eager copy."""
         target=self.scope if target_scope is None else target_scope
         if (target.fingerprint,target.target,target.original)!=(self.scope.fingerprint,self.scope.target,self.scope.original):
             raise ValueError('Coverage target differs from bound puzzle/objective.')
-        out=[]
         for scope_json,box_json,evidence_json,checksum in self.db.execute('SELECT scope,box,evidence,checksum FROM closed'):
+            check();self.stats['coverage_records_checked']+=1
             body={'scope':json.loads(scope_json),'box':json.loads(box_json),'evidence':json.loads(evidence_json)}
             if digest(body)!=checksum:raise ValueError('Completed coverage is corrupted.')
             source=WorkScope.restore(body['scope'])
@@ -226,13 +236,52 @@ class CoverageLedger:
             row=cube((int(x,16) for x in body['box']),len(target.root))
             if not contains(source.root,row):raise ValueError('Stored closed box escapes its root.')
             clipped=intersect(row,target.root)
-            if clipped is not None:out.append(clipped)
-        return tuple(out)
+            if clipped is not None:yield clipped
 
     def remaining(self,boxes,*,target_scope=None,max_boxes=65536,check=lambda:None):
-        source=tuple(boxes);result,done=subtract_many(source,self.exclusions(target_scope),max_boxes=max_boxes,check=check)
+        source=tuple(cube(row) for row in boxes)
+        if self.symbolic:return self._remaining_symbolic(source,target_scope,max_boxes,check)
+        result,done=subtract_many(source,self.iter_exclusions(target_scope,check=check),max_boxes=max_boxes,check=check)
         if done and result!=source:self.stats['coverage_hits']+=1
         return result,done
+
+    def _remaining_symbolic(self,source,target_scope,max_boxes,check):
+        from constraint_symbolic_work import DomainDiagram,DiagramLimit
+        target=self.scope if target_scope is None else target_scope
+        if (target.fingerprint,target.target,target.original)!=(self.scope.fingerprint,self.scope.target,self.scope.original):
+            raise ValueError('Coverage target differs from bound puzzle/objective.')
+        for row in source:
+            if len(row)!=len(target.root) or not contains(target.root,row):raise ValueError('Remaining work escapes target root.')
+        check()
+        version=(self.db.execute('PRAGMA data_version').fetchone()[0],self.db.total_changes)
+        key=(target,version,self.max_symbolic_nodes);state=self._symbolic_state;diagram=None;before=0
+        try:
+            extend=(state is not None and state[0][0]==target and state[0][2]==self.max_symbolic_nodes
+                    and state[0][1][0]==version[0] and state[0][1][1]+len(self._symbolic_additions)==version[1])
+            if state is not None and (state[0]==key or extend):
+                _,diagram,closed=state;before=diagram.stats['symbolic_apply_steps']
+                for row in self._symbolic_additions:
+                    check();clipped=intersect(row,target.root)
+                    if clipped is not None:closed=diagram.apply('union',closed,diagram.from_cube(clipped),check)
+                check();self._symbolic_state=(key,diagram,closed)
+                self.stats['coverage_symbolic_extensions']+=len(self._symbolic_additions)
+                self._symbolic_additions=[];self.stats['coverage_symbolic_reuses']+=1
+            else:
+                diagram=DomainDiagram(target.root,max_nodes=self.max_symbolic_nodes)
+                closed=diagram.union(self.iter_exclusions(target,check=check),check)
+                check();self._symbolic_state=(key,diagram,closed);self._symbolic_additions=[];self.stats['coverage_symbolic_builds']+=1
+            original_pending=diagram.union(source,check)
+            pending=diagram.apply('difference',original_pending,closed,check)
+            result=diagram.boxes(pending,max_boxes=max_boxes,check=check);check()
+            if pending!=original_pending:self.stats['coverage_hits']+=1
+            return result,True
+        except DiagramLimit:
+            self._symbolic_state=None;self._symbolic_additions=[];self.stats['coverage_symbolic_caps']+=1
+            return source,False
+        finally:
+            if diagram is not None:
+                self.stats['coverage_symbolic_apply_steps']+=diagram.stats['symbolic_apply_steps']-before
+                self.stats['coverage_symbolic_nodes']=diagram.stats['symbolic_nodes']
 
     def close(self):self.db.close()
     def __enter__(self):return self

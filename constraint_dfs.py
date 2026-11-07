@@ -29,9 +29,11 @@ from constraint_reasons import ReasonState, STAT_KEYS as REASON_STAT_KEYS
 from constraint_lcg import LCGState, LCGStore, LearnedClause, STAT_KEYS as LCG_STAT_KEYS
 from constraint_gold_oracle import GoldOracle, STAT_KEYS as GOLD_ORACLE_STAT_KEYS, GAUGE_KEYS as GOLD_ORACLE_GAUGE_KEYS
 from constraint_native_search import select_native_search, STAT_KEYS as NATIVE_SEARCH_STAT_KEYS
-from constraint_native_learning import replay_fast_failure, STAT_KEYS as NATIVE_LEARNING_STAT_KEYS
+from constraint_native_learning import replay_fast_failure, explain_fast_failure, STAT_KEYS as NATIVE_LEARNING_STAT_KEYS
 from constraint_lookahead import CompletedProbeCache, paired_lookahead, CACHE_STAT_KEYS, PAIR_STAT_KEYS
 from constraint_sat_assist import SatAssist, STAT_KEYS as SAT_ASSIST_STAT_KEYS
+from constraint_job_sat import SharedSatAssistant, JobSatAssist
+from constraint_higher_relations import ProjectedRelations, STAT_KEYS as HIGHER_STAT_KEYS
 from constraint_ordering import SupportOrdering, STAT_KEYS as ORDERING_STAT_KEYS
 from constraint_deep import DeepPruner, CertificateStore, rotate_gold_clause, minimize_failure_scope, STAT_KEYS as DEEP_STAT_KEYS
 from constraint_policies import ImpactPolicy, PieceSymmetry, STAT_KEYS as POLICY_STAT_KEYS
@@ -175,7 +177,7 @@ class _SearchRuntime:
         self.advanced,self.advanced_options=None,None
         self.scheduler,self.scheduler_options=None,None
         self.explanation_misses,self.explanation_cooldown=0,0
-        self.sat=None
+        self.sat=None;self.higher=None
         self.ordering=None
         self.pruner_tables=None
         self.incremental_hall=None
@@ -362,8 +364,8 @@ def solve(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=None, 
             raise ValueError('learning_state must be a trusted in-memory dict, not a serialized checkpoint.')
         if learning_state:
             store = learning_state.get('_nogoods')
-            if (not set(learning_state) <= {'_nogoods', '_support', '_native', '_runtime', '_knowledge', '_shared_conflicts', '_mask_conflicts', '_certificates', '_regional_cache_dir'}
-                    or ('_nogoods' not in learning_state and not set(learning_state)<={'_knowledge','_shared_conflicts','_mask_conflicts','_certificates','_regional_cache_dir'})
+            if (not set(learning_state) <= {'_nogoods', '_support', '_native', '_runtime', '_knowledge', '_shared_conflicts', '_mask_conflicts', '_certificates', '_regional_cache_dir', '_shared_sat'}
+                    or ('_nogoods' not in learning_state and not set(learning_state)<={'_knowledge','_shared_conflicts','_mask_conflicts','_certificates','_regional_cache_dir', '_shared_sat'})
                     or (store is not None and (not isinstance(store, _NogoodStore)
                         or store.fingerprint != problem.fingerprint or store.target != target))):
                 raise ValueError('The in-memory learning cache has different puzzle, target, or effective domains, or is malformed.')
@@ -373,6 +375,8 @@ def solve(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=None, 
             if '_shared_conflicts' in learning_state and (not isinstance(learning_state['_shared_conflicts'],VerifiedConflictStore)
                     or not learning_state['_shared_conflicts'].matches(problem,target)):
                 raise ValueError('Shared conflicts differ from the original puzzle domains or target.')
+            if '_shared_sat' in learning_state and (not isinstance(learning_state['_shared_sat'],SharedSatAssistant) or not learning_state['_shared_sat'].matches(problem,target)):
+                raise ValueError('The shared SAT assistant differs from the original puzzle/domains/objective.')
             if '_runtime' in learning_state and not isinstance(learning_state['_runtime'],_SearchRuntime):
                 raise ValueError('The in-memory search runtime cache is malformed.')
             if '_native' in learning_state and not isinstance(learning_state['_native'], NativePropagation):
@@ -500,7 +504,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
     n, count = problem.n, 3*problem.n
     initial = ([sum(1 << code for code in domain) for domain in problem.domains]
                if _initial_domains is None else list(_initial_domains))
-    stats = dict.fromkeys(BASE_STAT_KEYS + PRUNER_STAT_KEYS + CONFLICT_STAT_KEYS + CONNECTIVITY_STAT_KEYS + NATIVE_STAT_KEYS + GUIDANCE_STAT_KEYS + ADVANCED_STAT_KEYS + EXPLANATION_STAT_KEYS + SCHEDULING_STAT_KEYS + KNOWLEDGE_STAT_KEYS + REASON_STAT_KEYS + SAT_ASSIST_STAT_KEYS + ORDERING_STAT_KEYS + SHARED_STAT_KEYS + BRANCH_STAT_KEYS + LCG_STAT_KEYS + GOLD_ORACLE_STAT_KEYS + NATIVE_SEARCH_STAT_KEYS + NATIVE_LEARNING_STAT_KEYS + GROUP_STAT_KEYS + DEEP_STAT_KEYS + POLICY_STAT_KEYS + MASK_STAT_KEYS + RESEARCH_STAT_KEYS + ROUTING_STAT_KEYS + RESIDUAL_STAT_KEYS + ('lcg_trace_budget_skips',), 0)
+    stats = dict.fromkeys(BASE_STAT_KEYS + PRUNER_STAT_KEYS + CONFLICT_STAT_KEYS + CONNECTIVITY_STAT_KEYS + NATIVE_STAT_KEYS + GUIDANCE_STAT_KEYS + ADVANCED_STAT_KEYS + EXPLANATION_STAT_KEYS + SCHEDULING_STAT_KEYS + KNOWLEDGE_STAT_KEYS + REASON_STAT_KEYS + SAT_ASSIST_STAT_KEYS + ORDERING_STAT_KEYS + SHARED_STAT_KEYS + BRANCH_STAT_KEYS + LCG_STAT_KEYS + GOLD_ORACLE_STAT_KEYS + NATIVE_SEARCH_STAT_KEYS + NATIVE_LEARNING_STAT_KEYS + GROUP_STAT_KEYS + DEEP_STAT_KEYS + POLICY_STAT_KEYS + MASK_STAT_KEYS + RESEARCH_STAT_KEYS + ROUTING_STAT_KEYS + RESIDUAL_STAT_KEYS + HIGHER_STAT_KEYS + ('lcg_trace_budget_skips',), 0)
     nodes, previous_elapsed = 0, 0.0
     if resume is not None:
         if not isinstance(resume, dict) or resume.get('version') != VERSION or resume.get('fingerprint') != problem.fingerprint or resume.get('target') != target:
@@ -595,11 +599,11 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         learning_state = {}
     if not isinstance(learning_state, dict):
         raise ValueError('learning_state must be a trusted in-memory dict, not a serialized checkpoint.')
-    if not set(learning_state) <= {'_nogoods', '_support', '_native', '_runtime', '_knowledge', '_shared_conflicts', '_mask_conflicts', '_certificates', '_regional_cache_dir'}:
+    if not set(learning_state) <= {'_nogoods', '_support', '_native', '_runtime', '_knowledge', '_shared_conflicts', '_mask_conflicts', '_certificates', '_regional_cache_dir', '_shared_sat'}:
         raise ValueError('The in-memory learning cache is malformed.')
     if '_nogoods' in learning_state:
         store = learning_state.get('_nogoods')
-        if (not {'_nogoods'} <= set(learning_state) <= {'_nogoods', '_support', '_native', '_runtime', '_knowledge', '_shared_conflicts', '_mask_conflicts', '_certificates', '_regional_cache_dir'}
+        if (not {'_nogoods'} <= set(learning_state) <= {'_nogoods', '_support', '_native', '_runtime', '_knowledge', '_shared_conflicts', '_mask_conflicts', '_certificates', '_regional_cache_dir', '_shared_sat'}
                 or not isinstance(store, _NogoodStore)
                 or store.fingerprint != problem.fingerprint or store.target != target
                 or store.initial_domains != tuple(initial)):
@@ -653,7 +657,18 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         learning_state['_runtime'] = runtime
     elif not isinstance(runtime,_SearchRuntime) or not runtime.valid(problem.fingerprint,target,initial,n):
         raise ValueError('The in-memory search runtime cache has different effective problem data or is malformed.')
-    if runtime.sat is not None and (not isinstance(runtime.sat,SatAssist) or runtime.sat.initial!=tuple(initial) or runtime.sat.problem.fingerprint!=problem.fingerprint or runtime.sat.target!=target):
+    shared_sat=learning_state.get('_shared_sat')
+    if shared_sat is not None and (not isinstance(shared_sat,SharedSatAssistant) or not shared_sat.matches(problem,target)):
+        raise ValueError('The shared SAT assistant differs from the original puzzle/domains/objective.')
+    if options['shared_sat_assistant']:
+        if shared_sat is None:
+            shared_sat=SharedSatAssistant(problem,target);learning_state['_shared_sat']=shared_sat
+        if not isinstance(runtime.sat,JobSatAssist) or runtime.sat.owner is not shared_sat:
+            if runtime.sat is not None:runtime.sat.close()
+            runtime.sat=shared_sat.view(initial)
+    elif isinstance(runtime.sat,JobSatAssist):
+        runtime.sat=SatAssist(problem,initial,target,witness_pool=options['witness_pool'],support_cover=options['support_cover'])
+    if runtime.sat is not None and (not isinstance(runtime.sat,(SatAssist,JobSatAssist)) or runtime.sat.initial!=tuple(initial) or runtime.sat.problem.fingerprint!=problem.fingerprint or runtime.sat.target!=target):
         raise ValueError('The private SAT assistance cache has different problem data.')
     if runtime.lcg is not None and (not isinstance(runtime.lcg,LCGStore) or not runtime.lcg.matches(problem.fingerprint,target,initial)):
         raise ValueError('The LCG store belongs to different effective root domains.')
@@ -669,16 +684,23 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         if resume is not None and resume.get('certificates') is not None:runtime.certificates.load_snapshot(resume['certificates'])
     if options['smart_learning'] and all(initial) and all(problem.domains):
         runtime.mask_conflicts=learning_state.get('_mask_conflicts',runtime.mask_conflicts)
-        if runtime.mask_conflicts is None:runtime.mask_conflicts=VerifiedMaskConflictStore(problem,target,proof_transport=options['proof_transport'])
+        if runtime.mask_conflicts is None:runtime.mask_conflicts=VerifiedMaskConflictStore(problem,target,proof_transport=options['proof_transport'],resumable_proof_checking=options.get('resumable_proof_checking',False),mixed_proof_dag=options.get('mixed_proof_dag',False))
         if not isinstance(runtime.mask_conflicts,VerifiedMaskConflictStore) or not runtime.mask_conflicts.matches(problem,target):
             raise ValueError('Mask conflict store differs from original puzzle scope.')
         learning_state['_mask_conflicts']=runtime.mask_conflicts
         if runtime.local_mask_conflicts is None:
-            runtime.local_mask_conflicts=VerifiedMaskConflictStore(problem,target,initial=initial,proof_transport=options['proof_transport'])
+            runtime.local_mask_conflicts=VerifiedMaskConflictStore(problem,target,initial=initial,proof_transport=options['proof_transport'],resumable_proof_checking=options.get('resumable_proof_checking',False),mixed_proof_dag=options.get('mixed_proof_dag',False))
             if resume is not None and resume.get('local_mask_conflicts') is not None and 'owned_root_domains' in resume:
                 runtime.local_mask_conflicts.import_snapshot(resume['local_mask_conflicts'])
         elif not runtime.local_mask_conflicts.matches(problem,target,initial):
             raise ValueError('Local proof root changed.')
+    for mask_store in (runtime.mask_conflicts,runtime.local_mask_conflicts):
+        if mask_store is not None:
+            mask_store.configure_policy(proof_transport=options['proof_transport'],
+                resumable_proof_checking=options['resumable_proof_checking'],mixed_proof_dag=options['mixed_proof_dag'])
+    if options['mixed_proof_dag'] and knowledge is not None:
+        for mask_store in (runtime.mask_conflicts,runtime.local_mask_conflicts):
+            if mask_store is not None:mask_store.add_gold_witnesses(knowledge.records())
     if options['lcg'] and runtime.lcg is None:runtime.lcg=LCGStore(problem.fingerprint,target,initial)
     lcg_store=runtime.lcg if options['lcg'] else None
     if options['gold_oracle']:
@@ -708,6 +730,8 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
     sat_baseline={key:stats[key] for key in SAT_ASSIST_STAT_KEYS}
     sat_entry=dict(runtime.sat.stats) if runtime.sat is not None else dict.fromkeys(SAT_ASSIST_STAT_KEYS,0)
 
+    higher_entry=dict(runtime.higher.stats) if runtime.higher is not None else dict.fromkeys(HIGHER_STAT_KEYS,0)
+    higher_baseline={key:stats[key] for key in HIGHER_STAT_KEYS}
     deep_entry=dict(runtime.deep.stats) if runtime.deep is not None else dict.fromkeys(DEEP_STAT_KEYS,0)
     deep_baseline={key:stats[key] for key in DEEP_STAT_KEYS}
     mask_entry=dict(runtime.mask_conflicts.stats) if runtime.mask_conflicts is not None else dict.fromkeys(MASK_STAT_KEYS,0)
@@ -715,6 +739,8 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
     research_baseline={key:stats[key] for key in RESEARCH_STAT_KEYS}
     research_entry=dict(runtime.research.stats) if runtime.research is not None else dict.fromkeys(RESEARCH_STAT_KEYS,0)
     def sync_stats():
+        if runtime.higher is not None:
+            for key in HIGHER_STAT_KEYS:stats[key]=higher_baseline[key]+runtime.higher.stats[key]-higher_entry[key]
         if residual is not None:
             for key,value in residual.stats.items():
                 stats[key]=value if key=='residual_closed' else residual_baseline[key]+value-residual_entry[key]
@@ -816,6 +842,9 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         if gold_assignments is not None:
             explanation = problem.gold_nogood(gold_assignments)
             learn(explanation, stats)
+            if options.get('mixed_proof_dag'):
+                for mask_store in (runtime.mask_conflicts,runtime.local_mask_conflicts):
+                    if mask_store is not None:mask_store.add_gold_witnesses([explanation])
             if knowledge is not None and options.get('persistent_learning',True):
                 try:knowledge.add(explanation)
                 except ValueError:pass  # A generic fallback cut need not prove a proper loop.
@@ -949,6 +978,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         # scheduler wrapper, matching hint and mutable cache is newly owned.
         kwargs = {'tables': runtime.pruner_tables} if runtime.pruner_tables is not None else {}
         if options['incremental_hall']:kwargs['incremental_hall']=True
+        if options.get('hall_rematch',False):kwargs['hall_rematch']=True
         pruner = Pruner(problem, check, native=options['native'], dirty_neighborhood=options['dirty_neighborhood'], parity_root_reuse=options['parity_root_reuse'], **kwargs)
         runtime.pruner_tables = pruner.tables
         advanced_options = tuple(sorted(options.items()))
@@ -966,6 +996,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         if options['incremental_hall']:
             if runtime.incremental_hall is None:runtime.incremental_hall=pruner.incremental_hall
             else:pruner.incremental_hall=runtime.incremental_hall
+            pruner.incremental_hall.rematch_reuse=options.get('hall_rematch',False)
             pruner._incremental_hall_entry=dict(pruner.incremental_hall.stats)
         if target == 'gold':
             connectivity = ConnectivityPruner(problem)
@@ -980,6 +1011,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             if runtime.research is None or runtime.research.options!={k:options[k] for k in RESEARCH_KEYS}:
                 runtime.research=ResearchPruner(problem,target,options)
                 research_entry=dict.fromkeys(RESEARCH_STAT_KEYS,0)
+            runtime.research.configure_cache_dir(learning_state.get('_regional_cache_dir'))
         if options['dual_piece_branching'] or options['strand_branching']:
             if runtime.routing is None:runtime.routing=RoutingBranching(problem)
         if options['completion_ordering'] and runtime.completion is None:runtime.completion=CompletionOrdering(problem)
@@ -999,6 +1031,8 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
 
         if runtime.sat is not None:
             runtime.sat.witness_pool=options['witness_pool'];runtime.sat.support_cover=options['support_cover']
+        if options['higher_order_relations'] and all(initial) and runtime.higher is None:
+            runtime.higher=ProjectedRelations(problem,initial,target)
         scheduler_options = tuple(sorted(options.items()))
         if runtime.scheduler is not None and not isinstance(runtime.scheduler,PropagationScheduler):
             raise ValueError('The in-memory propagation scheduler is malformed.')
@@ -1167,6 +1201,8 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                                       complete=lambda:budgets==sum(value for key,value in advanced.stats.items() if key.endswith('budget_skips')),proof_yield=lambda:advanced.stats.get('conditional_hall_certificates',0)+advanced.stats.get('hierarchical_cache_entries',0)),'advanced regions and topology')
                     finally:advanced.on_narrow=None;advanced.before_hierarchical=None
                     if any(value == 0 for value in domains): return False
+                if options['higher_order_relations'] and runtime.higher is not None and all(domains):
+                    bulk(lambda:runtime.higher.prune(domains,runtime.sat,check),'complete higher-order projection')
                 if runtime.deep is not None and all(domains):
                     if options['deep_paths'] or options['retained_relations']:bulk(lambda:runtime.deep.paths(domains,check),'three-cell path support')
                     if options['retained_relations'] and all(domains):bulk(lambda:runtime.deep.retained_relations(domains,check),'retained pair correlations')
@@ -1410,7 +1446,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             if not all(all(frame['domains']) for frame in stack):
                 search_loop_reason='A saved zero-domain frame is completed through Python validation.'
             else:
-                native_engine,search_loop_reason=select_native_search(n,count,mode=options['native'])
+                native_engine,search_loop_reason=select_native_search(n,count,mode='compiled' if options['native_explanations'] else options['native'])
                 if native_engine is not None and len(stack)>native_engine.max_depth:
                     native_engine.close();native_engine=None
                     search_loop_reason='Saved stack exceeds native depth capacity; exact pending branches continued in Python.'
@@ -1420,6 +1456,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                 # path below; committed early contradictions get bounded
                 # independent replay before optional learning.
                 native_engine.configure_propagation(support_tables)
+                if options['native_explanations']:native_engine.configure_explanations(True)
                 search_loop_backend='compiled'
                 def native_process(domains,decisions):
                     nonlocal native_path
@@ -1434,7 +1471,8 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                         # later Stop must preserve that committed rejection.
                         nodes+=1;stats['backtracks']+=1;stats['propagations']+=1
                         if lcg_store is not None:
-                            clause=replay_fast_failure(out['native_failure'],initial=initial,
+                            explain=explain_fast_failure if options['native_explanations'] else replay_fast_failure
+                            clause=explain(out['native_failure'],initial=initial,
                                 tables=support_tables,fingerprint=problem.fingerprint,target=target,
                                 stats=stats,check=check)
                             if clause is not None:

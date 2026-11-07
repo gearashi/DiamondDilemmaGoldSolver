@@ -349,7 +349,16 @@ class NativeStrandTests(unittest.TestCase):
                 domains=[sum(1<<c for c in set(rng.sample(range(3*problem.n),min(size,3*problem.n)))|{known[cell]}) for cell in range(problem.n)]
                 for trial in range(2):
                     a,b=domains.copy(),domains.copy()
-                    self.assertEqual(compiled.prune_strands(a),python.prune_strands(b));self.assertEqual(a,b);self.assertEqual(compiled.stats,python.stats)
+                    cached=tuple(domains) in python._strand_cache
+                    previous_seam_tests=python.stats['gold_graph_seam_tests']
+                    self.assertEqual(compiled.prune_strands(a),python.prune_strands(b));self.assertEqual(a,b)
+                    # This counter measures the Python graph-assembly loop;
+                    # fused native traversal does not execute that loop.
+                    self.assertEqual({k:v for k,v in compiled.stats.items() if k!='gold_graph_seam_tests'},
+                                     {k:v for k,v in python.stats.items() if k!='gold_graph_seam_tests'})
+                    self.assertEqual(compiled.stats['gold_graph_seam_tests'],0)
+                    self.assertEqual(python.stats['gold_graph_seam_tests']-previous_seam_tests,
+                                     0 if cached else 11*len(problem.edges))
                     self.assertTrue(all(v&(1<<c) for v,c in zip(a,known)))
                     self.assertEqual(compiled._strand_cache[tuple(domains)],python._strand_cache[tuple(domains)])
             self.assertIsNotNone(compiled._native_strands)

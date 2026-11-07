@@ -11,6 +11,7 @@ from constraint_region_symbolic import inventory_supports,subset_inventory_suppo
 from constraint_region_master import LazyRegionMaster,CertifiedRelaxationPruner
 from constraint_region_oracles import LabelledRoutingPruner
 from constraint_separator import _Budget
+from constraint_region_incremental import IncrementalRegionCache, STAT_KEYS as RESTRICT_STATS
 
 
 STAT_KEYS=('regional_research_queries','regional_research_completed','regional_research_unknown',
@@ -19,11 +20,11 @@ STAT_KEYS=('regional_research_queries','regional_research_completed','regional_r
     'regional_research_rank_steps','factor_queries','factor_steps','factor_prunes','factor_cache_hits',
     'factor_unknown','factor_dd_merges','factor_live_piece_width','factor_forgotten_resources',
     'certified_lp_queries','certified_lp_failures','certified_lp_unknown','certified_lp_unverified_duals',
-    'labelled_queries','labelled_steps','labelled_unknown','labelled_failures','labelled_admission_skips')
+    'labelled_queries','labelled_steps','labelled_unknown','labelled_failures','labelled_admission_skips') + RESTRICT_STATS
 
 
 class RegionalResearchPruner:
-    KEYS=('elimination','mini_buckets','relaxed_diagrams','representative_connectivity',
+    KEYS=('durable_regions','incremental_regions','elimination','mini_buckets','relaxed_diagrams','representative_connectivity',
           'subset_joins','lazy_regions','certified_relaxation','labelled_routing')
     def __init__(self,problem,target='gold',options=None,max_steps=50000):
         self.problem=problem;self.target=target;self.options=dict(options or {});self.max_steps=max_steps
@@ -31,7 +32,11 @@ class RegionalResearchPruner:
         self.factors=EliminationPruner(problem,max_steps=max_steps)
         self.linear=CertifiedRelaxationPruner(problem)
         self.routing=LabelledRoutingPruner(problem,max_steps=max_steps)
+        self.incremental=IncrementalRegionCache(self.owner,durable=bool(self.options.get('durable_regions')))
         self.stats=dict.fromkeys(STAT_KEYS,0)
+
+    def configure_cache_dir(self,directory):
+        self.incremental.configure_cache_dir(directory)
 
     def _cells(self,domains):
         eligible={c for c,d in enumerate(domains) if 0<d.bit_count()<=8}
@@ -62,6 +67,11 @@ class RegionalResearchPruner:
                 changed|=self.factors.prune(domains,check,mode=mode,width=4,full=full)
                 if not all(domains):break
         cells=self._cells(domains) if all(domains) else ()
+        if self.options.get('incremental_regions') and all(domains):
+            if cells:
+                try:changed|=self.incremental.prune(cells,domains,check,max_steps=self.max_steps)
+                finally:self.stats.update(self.incremental.stats)
+            else:self.stats['regional_research_admission_skips']+=1
         if self.options.get('certified_relaxation') and all(domains):
             changed|=self.linear.prune(domains,check,full=full)
         if self.options.get('labelled_routing') and self.target=='gold' and all(domains):

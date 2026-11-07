@@ -502,8 +502,10 @@ def solve(problem, *, seconds=10, seed=0, target='gold', replicas=128, backend='
             from constraint_mask_conflicts import VerifiedMaskConflictStore
             store=learning_state.get('_mask_conflicts')
             if store is None:
-                store=VerifiedMaskConflictStore(problem,target,proof_transport=options.get('proof_transport',False))
+                store=VerifiedMaskConflictStore(problem,target,proof_transport=options.get('proof_transport',False),resumable_proof_checking=options.get('resumable_proof_checking',False),mixed_proof_dag=options.get('mixed_proof_dag',False))
                 learning_state['_mask_conflicts']=store
+            store.configure_policy(proof_transport=options.get('proof_transport',False),
+                resumable_proof_checking=options.get('resumable_proof_checking',False),mixed_proof_dag=options.get('mixed_proof_dag',False))
             offered=0
             for trial in repair_report.get('experimental_repair',[]):
                 payload=trial.get('exclusions',{})

@@ -186,7 +186,7 @@ class Pruner:
     """
     def __init__(self, problem, check=lambda: None, *, regions=None, neighborhood=True,
                  neighborhood_limit=24, parity=True, native='python', tables=None,
-                 dirty_neighborhood=False, parity_root_reuse=False, incremental_hall=False):
+                 dirty_neighborhood=False, parity_root_reuse=False, incremental_hall=False, hall_rematch=False):
         self.problem, self.n, self.check = problem, problem.n, check
         if neighborhood_limit is not None and (type(neighborhood_limit) is not int or neighborhood_limit < 1):
             raise ValueError('neighborhood_limit must be positive or None for unrestricted checks.')
@@ -204,7 +204,7 @@ class Pruner:
         self._hall_cache = {}
         self._neighborhood_cache = {}
         self.native_hall,self.native_hall_reason=select_hall(native)
-        self.incremental_hall = IncrementalHall() if incremental_hall else None
+        self.incremental_hall = IncrementalHall(rematch_reuse=hall_rematch) if incremental_hall or hall_rematch else None
         self._incremental_hall_entry=dict.fromkeys(INCREMENTAL_HALL_KEYS,0)
         self._inventory_cache = {}
         self.stats = dict.fromkeys(STAT_KEYS, 0)

@@ -6,7 +6,7 @@ A CPU and GPU search tool for the **Gold Challenge** of Diamond Dilemma on Windo
 
 The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaapsch.net/puzzles/diamdil.htm).
 
-The newest work is documented in the [complete round 24 register of 42 proposals](docs/ROUND24.md), including implemented scope, controls, finite evidence and remaining limitations. New controls are opt-in; fewer repeated steps and sound deductions are evaluated separately from speed. The [round 23 register](docs/ROUND23.md) retains the earlier 52-proposal evaluation. See the [measured results and hardware settings](docs/ROUND24_RESULTS.md) for the release comparisons and recommended starting configuration.
+The latest work is tracked in the [round 25 register of 37 proposals](docs/ROUND25.md), with an explicit status, implemented scope, controls and evidence for every candidate. New controls are opt-in; fewer repeated steps and sound deductions are evaluated separately from speed. The earlier [round 24 register](docs/ROUND24.md) covers 42 proposals, and [round 23](docs/ROUND23.md) retains the 52-proposal evaluation. The [round 24 measurements and starting settings](docs/ROUND24_RESULTS.md) remain historical evidence; the round 25 register identifies what has been evaluated since then.
 
 ## Requirements
 
@@ -25,6 +25,8 @@ Python 3.15 uses a separate dependency profile: dashboard, data preparation, Pyt
 WebGPU here uses a native `wgpu` compute library; it does not run the search inside the browser. macOS does not use CUDA. Setup installs Python packages, not graphics drivers. Use a native ARM64 Python on Apple Silicon and x86_64 Python on Intel Macs.
 
 The CUDA implementation has been tested on an **RTX 2060 with 6 GB VRAM**. Bounded WebGPU enumeration and checkpoint tests have also passed on that NVIDIA GPU through Vulkan and DX12. AMD GPU and macOS Metal execution have not been hardware-tested in this project; package installation and CPU checks do not establish that hardware coverage. CPU tests need no GPU or source diagrams. The DFS, SAT, CP-SAT, and CP modes run on the CPU without a GPU. GPU DFS and hybrid sampling require a compatible GPU. More replicas increase resource use and do not guarantee a faster solution.
+
+The optional native SAT clause-subset persistence feature is supported on the tested Linux x86-64 and macOS x86-64/ARM64 Python 3.12 builds. Windows proof production remains disabled; importing a saved subset still independently checks its clauses with logging off. This preserves a bounded verified clause subset, not the entire native SAT search state. See [the tested scope and tradeoffs](docs/ROUND25_LEARNING.md).
 
 ## Quick start
 
@@ -80,7 +82,7 @@ Setup keeps an existing compatible environment and rejects a requested version t
 
 ### Search controls
 
-Choose a **Search algorithm** and duration, then select **Start search**. GPU replicas apply only to GPU DFS and hybrid sampling. The dashboard starts with **DFS with constraint pruning**; see the bounded [algorithm comparison](docs/ALGORITHM_COMPARISON.md) for the evidence and limitations. Drag the diamond to rotate it and use the mouse wheel to zoom. **Live placement** shows a real partial assignment when the engine exposes one; native SAT/CP engines can work internally without publishing a partial board. Empty cells have not yet been filled. Closing the browser leaves the solver running.
+Choose a **Search algorithm** and duration, then select **Start search**. GPU replicas apply to GPU DFS, CUDA domains and hybrid sampling; the engines have different memory requirements and replica limits. The dashboard starts with **DFS with constraint pruning**; see the bounded [algorithm comparison](docs/ALGORITHM_COMPARISON.md) for the evidence and limitations. Drag the diamond to rotate it and use the mouse wheel to zoom. **Live placement** shows a real partial assignment when the engine exposes one; native SAT/CP engines can work internally without publishing a partial board. Empty cells have not yet been filled. Closing the browser leaves the solver running.
 
 Expand **Exact-search optimizations** to control loop-bottleneck pruning, regional boundary summaries, conflict backjumping, incremental checks, adaptive scheduling, and persistent verified loop exclusions. Experimental unchecked options add support-based placement ordering, deduction reasons, persistent SAT assistance within a running job, independently verified shared conflicts, and exact joins of regions up to 16 cells. The automatic compiled core also accelerates tile-competition and loop-bottleneck checks. Parallel CPU DFS retains warm job caches and a resumable disjoint job queue. These features have bounded correctness checks; they do not establish a solve-time guarantee. See [the optimization details](docs/OPTIMIZATIONS.md).
 

@@ -156,7 +156,7 @@ def main(argv=None):
         'workers': args.workers if args.algorithm == 'parallel-dfs' else 1, 'search_options': options,
         'run_id': run_id, 'replicas': args.replicas if args.algorithm in ('hybrid','gpu-domains') else 0,
         'backend': args.backend if args.algorithm in ('hybrid','gpu-domains') else 'cpu',
-        'gpu': LABELS[args.algorithm]+' Â· '+('GPU + CPU' if args.algorithm in ('hybrid','gpu-domains') else 'CPU'),
+        'gpu': LABELS[args.algorithm]+' ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· '+('GPU + CPU' if args.algorithm in ('hybrid','gpu-domains') else 'CPU'),
         'time_limit_seconds': args.seconds, 'nodes_checked': 0, 'stats': {}, 'checkpoint': {},
         'work_scope':{'kind':'original_puzzle'},
         'resume_scope': ('Durable CUDA domains, reasoning trail, and disjoint remaining cubes' if args.algorithm=='gpu-domains' else 'Disjoint CPU jobs with exact pending branches' if args.algorithm == 'parallel-dfs' else 'Warm native SAT with durable remaining cubes' if persistent_sat else 'Disjoint CPU jobs with exact pending branches' if args.algorithm=='dfs' and options['shared_coverage'] else 'Exact DFS branch stack' if args.algorithm in ('dfs', 'hybrid')
@@ -356,7 +356,7 @@ def main(argv=None):
         if report.get('backend') in ('cuda', 'webgpu'):
             state['backend'] = report['backend']
         if report.get('device'):
-            state['gpu'] = report['device']+' Â· GPU sampling + repair + CPU DFS'
+            state['gpu'] = report['device']+' ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· GPU sampling + repair + CPU DFS'
         if show_sample and report.get('top_board') is not None:
             write_live(report['top_board'], kind='gpu_sample', sample_metrics={
                 key: report.get(key) for key in ('best_score', 'best_objective', 'domain_violations', 'samples_considered')})
@@ -489,7 +489,7 @@ def main(argv=None):
                 verification_reason=disk_conflicts.reason,rejected=disk_conflicts.stats['shared_conflicts_rejected'])
         if args.algorithm in EXACT_ALGORITHMS and options.get('smart_learning'):
             from constraint_mask_conflicts import VerifiedMaskConflictStore,MAX_BYTES as MASK_BYTES
-            disk_masks=VerifiedMaskConflictStore(problem,'gold',proof_transport=options['proof_transport']);runtime_masks=VerifiedMaskConflictStore(problem,'gold',proof_transport=options['proof_transport'])
+            disk_masks=VerifiedMaskConflictStore(problem,'gold',proof_transport=options['proof_transport'],resumable_proof_checking=options.get('resumable_proof_checking',False),mixed_proof_dag=options.get('mixed_proof_dag',False));runtime_masks=VerifiedMaskConflictStore(problem,'gold',proof_transport=options['proof_transport'],resumable_proof_checking=options.get('resumable_proof_checking',False),mixed_proof_dag=options.get('mixed_proof_dag',False))
             if masks_path.exists():
                 try:
                     if masks_path.stat().st_size>MASK_BYTES:raise ValueError('Saved mask conflicts exceed file bound.')
@@ -513,12 +513,12 @@ def main(argv=None):
             learning_state['_certificates']=runtime_certificates
             certificates_saved_digest=terminal_digest(disk_certificates.snapshot())
             state['certificates']={'records':len(disk_certificates.records),'path':str(certificates_path)}
-        if args.algorithm in EXACT_ALGORITHMS and options.get('extended_regions'):
+        if args.algorithm in EXACT_ALGORITHMS and (options.get('extended_regions') or options.get('durable_regions')):
             learning_state['_regional_cache_dir']=str(run/'regional-tables')
         binding = hashlib.sha256(raw+args.algorithm.encode()+b':gold:v1').hexdigest()
         (evidence/'tiles.json').write_bytes(raw)
         source_hashes = {}
-        for name in ('constraint_search.py', 'search_problem.py', 'constraint_dfs.py', 'constraint_models.py', 'constraint_circuit.py', 'constraint_residual.py',
+        source_names = ('constraint_search.py', 'search_problem.py', 'constraint_dfs.py', 'constraint_models.py', 'constraint_circuit.py', 'constraint_residual.py',
                      'gpu_sampling.py', 'constraint_pruning.py', 'constraint_parity.py', 'constraint_symmetry.py',
                      'constraint_lns.py', 'constraint_connectivity.py', 'constraint_advanced.py', 'constraint_parallel.py',
                      'constraint_native.py', 'build_native.py', 'constraint_native.c', 'constraint_knowledge.py',
@@ -533,7 +533,12 @@ def main(argv=None):
                      'constraint_work.py','constraint_portable.py','constraint_round24.py','constraint_incremental_hall.py',
                      'constraint_sat_session.py','constraint_proof.py','constraint_relations.py','constraint_algebra.py',
                      'constraint_pb.py','constraint_interface.py','constraint_region_symbolic.py','constraint_region_elimination.py',
-                     'constraint_region_master.py','constraint_region_oracles.py','constraint_region_research.py'):
+                     'constraint_region_master.py','constraint_region_oracles.py','constraint_region_research.py')
+        # New reasoning modules must travel with each run's reproducible source snapshot.
+        source_names = set(source_names) | {p.name for p in ROOT.iterdir()
+            if p.is_file() and p.suffix in ('.py','.c','.cu','.wgsl')
+            and p.name.startswith(('constraint_','gpu_','domain_','sampling_','dfs_'))}
+        for name in sorted(source_names):
             path = ROOT/name
             if path.exists():
                 source = path.read_bytes()
@@ -687,6 +692,7 @@ def main(argv=None):
             thread.join()
         try:
             if learning_state.get('_sat_session') is not None:learning_state['_sat_session'].close()
+            if learning_state.get('_shared_sat') is not None:learning_state['_shared_sat'].close()
             if disk_conflicts is not None:disk_conflicts.close()
             if learning_state.get('_shared_conflicts') is not None:learning_state['_shared_conflicts'].close()
             if disk_masks is not None:disk_masks.close()

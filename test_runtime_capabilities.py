@@ -113,6 +113,8 @@ const assert=require('assert');
 const controls={};
 function $(id){return controls[id]??= {checked:false,disabled:false,title:'',value:'',textContent:'',classList:{toggle(){}}}}
 const optionIds={gold_oracle:'oracle',sat_assist:'sat'};
+function readSearchOptions(){return Object.fromEntries(Object.entries(optionIds).map(([key,id])=>[key,$(id).checked]));}
+function searchOptionIssues(){return [];} // Full dependency/scoping integration is tested in test_constraint_ui_round25.
 let commandBusy=false;
 let state={capabilities:JSON.parse(process.argv[1])};
 $('algorithmInput').options=Object.keys(state.capabilities.algorithms).map(value=>({value}));

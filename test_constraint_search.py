@@ -131,6 +131,9 @@ class RunnerTests(unittest.TestCase):
         snapshot = Path(live['input_snapshot'])
         self.assertEqual(snapshot.read_bytes(), self.input.read_bytes())
         self.assertTrue((snapshot.parent/'sampling_kernels.wgsl').is_file())
+        for name in ('constraint_gold_graph.py','constraint_lattice.py','constraint_sat_persistence.py'):
+            self.assertEqual((snapshot.parent/name).read_bytes(),(runner.ROOT/name).read_bytes())
+        self.assertFalse((snapshot.parent/'test_constraint_lattice_round25.py').exists())
         self.assertFalse((snapshot.parent/'gpu_sampling.wgsl').exists())
         checkpoint_writes = [call.args[1]['payload'] for call in self.write.call_args_list
                              if Path(call.args[0]).name == 'checkpoint.json']
@@ -770,6 +773,17 @@ class RunnerTests(unittest.TestCase):
         evidence=self.run/'runs'/self.read('status.json')['run_id']
         for name in ('constraint_ordering.py','constraint_explanations.py','constraint_shared_conflicts.py'):
             self.assertEqual((evidence/name).read_bytes(),(runner.ROOT/name).read_bytes())
+        self.assert_released()
+
+    def test_durable_regions_receives_run_local_cache_path_without_extended_regions(self):
+        def solve(problem,algorithm,**kwargs):
+            self.assertEqual(kwargs['learning_state']['_regional_cache_dir'],str(self.run/'regional-tables'))
+            self.assertTrue(kwargs['options']['durable_regions'])
+            self.assertTrue(kwargs['options']['incremental_regions'])
+            self.assertFalse(kwargs['options']['extended_regions'])
+            return self.terminal('stopped')
+        with patch.object(runner,'run_solver',side_effect=solve):
+            runner.main(self.args('dfs','--search-options',json.dumps({'durable_regions':True})))
         self.assert_released()
 
     def test_parallel_keeps_workers_for_full_remaining_run_budget(self):

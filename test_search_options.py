@@ -1,5 +1,5 @@
 import unittest
-from search_options import DEFAULT_OPTIONS, normalize_options, validate_workers
+from search_options import DEFAULT_OPTIONS, normalize_options, validate_workers, validate_algorithm_options
 
 
 class OptionsTests(unittest.TestCase):
@@ -32,6 +32,22 @@ class OptionsTests(unittest.TestCase):
         for value in (1,20,100,1000):
             self.assertEqual(normalize_options({'lookahead_ms':value})['lookahead_ms'],value)
         with self.assertRaises(ValueError):normalize_options({'pair_lookahead':1})
+
+    def test_round25_controls_require_an_engine_that_executes_them(self):
+        for algorithm,key in (('dfs','sat_core_lifting'),('hybrid','symbolic_coverage'),
+                              ('sat','mixed_proof_dag'),('gpu-domains','symbolic_coverage')):
+            with self.subTest(algorithm=algorithm,key=key),self.assertRaises(ValueError):
+                validate_algorithm_options(algorithm,normalize_options({key:True}))
+        for algorithm,key in (('sat','sat_core_lifting'),('dfs','symbolic_coverage'),
+                              ('hybrid','mixed_proof_dag'),('parallel-dfs','shared_sat_assistant')):
+            validate_algorithm_options(algorithm,normalize_options({key:True}))
+        with self.assertRaises(ValueError):
+            validate_algorithm_options('dfs',normalize_options({'native_explanations':True,'native':'python'}))
+        with self.assertRaises(ValueError):
+            validate_algorithm_options('sat',normalize_options({'symbolic_coverage':True}))
+        with self.assertRaises(ValueError):
+            validate_algorithm_options('sat',normalize_options({'persistent_sat':True,'sat_theory':True}))
+        validate_algorithm_options('sat',normalize_options({'persistent_sat':True,'symbolic_coverage':True}))
 
     def test_invalid_controls_fail_before_search(self):
         for value in ([], True, {'unexpected': True}, {'lookahead': 1}, {'native': 'gpu'}, {'regional_cache': None}):

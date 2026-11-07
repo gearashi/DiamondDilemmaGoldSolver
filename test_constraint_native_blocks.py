@@ -195,7 +195,16 @@ class NativeBlockTests(unittest.TestCase):
                 domains=[sum(1<<c for c in {known[cell],*rng.sample(range(3*problem.n),count)}) for cell in range(problem.n)]
                 for trial in range(2):
                     a,b=domains.copy(),domains.copy()
-                    self.assertEqual(compiled.prune_biconnected(a),python.prune_biconnected(b));self.assertEqual(a,b);self.assertEqual(compiled.stats,python.stats)
+                    cached=tuple(domains) in python._biconnected_cache
+                    previous_seam_tests=python.stats['gold_graph_seam_tests']
+                    self.assertEqual(compiled.prune_biconnected(a),python.prune_biconnected(b));self.assertEqual(a,b)
+                    # This counter measures the Python graph-assembly loop;
+                    # fused native traversal does not execute that loop.
+                    self.assertEqual({k:v for k,v in compiled.stats.items() if k!='gold_graph_seam_tests'},
+                                     {k:v for k,v in python.stats.items() if k!='gold_graph_seam_tests'})
+                    self.assertEqual(compiled.stats['gold_graph_seam_tests'],0)
+                    self.assertEqual(python.stats['gold_graph_seam_tests']-previous_seam_tests,
+                                     0 if cached else 11*len(problem.edges))
                     self.assertEqual(compiled._biconnected_cache[tuple(domains)],python._biconnected_cache[tuple(domains)])
                     self.assertTrue(all(d&(1<<c) for d,c in zip(a,known)))
             self.assertIsNotNone(compiled._native_biconnected)

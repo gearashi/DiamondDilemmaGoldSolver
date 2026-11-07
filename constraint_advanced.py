@@ -17,6 +17,7 @@ from constraint_pruning import values, _tile_choices, _orientation_choices
 from search_options import normalize_options
 from validator import reverse_mask
 from constraint_native import select_graph_helpers
+from constraint_gold_graph import PossibleGoldGraph, STAT_KEYS as GOLD_GRAPH_STATS
 from constraint_separator import SeparatorPruner, STAT_KEYS as SEPARATOR_STAT_KEYS
 from constraint_regions import HierarchicalRegionPruner, STAT_KEYS as HIERARCHICAL_STAT_KEYS
 from constraint_region_network import STAT_KEYS as NETWORK_STAT_KEYS
@@ -35,7 +36,7 @@ STAT_KEYS = ('strand_checks', 'strand_prunes', 'strand_failures',
              'regional_cache_hits', 'regional_cache_entries',
              'regional_assignments', 'regional_budget_skips',
              'biconnected_checks', 'biconnected_prunes', 'biconnected_failures') + SEPARATOR_STAT_KEYS + HIERARCHICAL_STAT_KEYS + NETWORK_STAT_KEYS + REGION_CUT_STAT_KEYS + (
-    'region_plan_hits','region_plan_alternatives','regional_disk_hits','regional_disk_writes','regional_disk_rejections')
+    'region_plan_hits','region_plan_alternatives','regional_disk_hits','regional_disk_writes','regional_disk_rejections') + GOLD_GRAPH_STATS
 
 
 class _Budget(Exception):
@@ -370,6 +371,7 @@ class AdvancedPruner:
                                                 if (a in region) != (b in region)))
                                  for region in sorted(regions))
         self._local_ports, self._strand_cache = {}, {}
+        self._possible_gold=PossibleGoldGraph(problem) if self.options.get('reversible_gold_graph',False) else None
         self._native_forests = None
         self._native_strands = None
         self._native_biconnected = None
@@ -460,6 +462,13 @@ class AdvancedPruner:
                     break
         return changed
 
+    def _possible_allowed(self,domains,kind,check):
+        try:
+            state=self._possible_gold.update(domains,check)
+            if kind=='strand':return self._possible_gold.strands(state,check)
+            return self._possible_gold.blocks(state,self._cyclic_edge_blocks,check)
+        finally:self.stats.update(self._possible_gold.stats)
+
     def _local_forest(self, domain, check):
         cached = self._local_ports.get(domain)
         if cached is not None:
@@ -502,6 +511,8 @@ class AdvancedPruner:
         self.stats['strand_checks'] += 1
         key = tuple(domains)
         allowed = self._strand_cache.get(key)
+        if allowed is None and self._possible_gold is not None:
+            allowed=self._possible_allowed(domains,'strand',check);_put(self._strand_cache,key,allowed,4)
         # Full native setup amortizes on Diamond boards (at least ten cells);
         # tiny standalone fixtures retain the cheaper existing local path.
         if allowed is None and self.n>=10 and getattr(self.native_graph,'supports_strands',False) is True:
@@ -527,6 +538,7 @@ class AdvancedPruner:
             for a, sa, b, sb in self.problem.edges:
                 check()
                 for p in range(11):
+                    self.stats['gold_graph_seam_tests']+=1
                     u, v = 11*sa+p, 11*sb+10-p
                     if used[a] >> u & 1 and used[b] >> v & 1:
                         if dsu is None:
@@ -634,6 +646,8 @@ class AdvancedPruner:
             return False
         self.stats['biconnected_checks'] += 1
         key=tuple(domains);allowed=self._biconnected_cache.get(key)
+        if allowed is None and self._possible_gold is not None:
+            allowed=self._possible_allowed(domains,'biconnected',check);_put(self._biconnected_cache,key,allowed,4)
         if allowed is None and self.n>=10 and getattr(self.native_graph,'supports_biconnected',False) is True:
             if self._native_biconnected is None:
                 self._native_biconnected=self.native_graph.prepare_biconnected(self.n,self.segments,self.problem.edges,check)
@@ -664,6 +678,7 @@ class AdvancedPruner:
             for a,sa,b,sb in self.problem.edges:
                 check()
                 for p in range(11):
+                    self.stats['gold_graph_seam_tests']+=1
                     u,v=11*sa+p,11*sb+10-p
                     if used[a]>>u&1 and used[b]>>v&1:
                         if native:

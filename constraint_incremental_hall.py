@@ -1,13 +1,15 @@
 """Incremental exact AllDifferent SCC filtering with rollback snapshot reuse.
 
-Matching repairs may change the residual graph globally and force a full pass.
+Optional rematch reuse verifies that repaired owners stay inside old SCCs.
+Under narrowing, a perfect matching cannot use an old unsupported cross-SCC
+edge, so repaired components may split but cannot merge.
 With an unchanged matching, edge deletion can only split existing SCCs: only
 components losing an internal edge need another traversal. Widening without an
 exact saved snapshot also uses a full pass. Partial passes never publish state.
 """
 from collections import OrderedDict,deque
 
-STAT_KEYS=('hall_scc_vertices','hall_scc_reused_vertices','hall_scc_full_passes','hall_scc_partial_passes','hall_scc_snapshot_hits','hall_matching_edge_tests')
+STAT_KEYS=('hall_scc_vertices','hall_scc_reused_vertices','hall_scc_full_passes','hall_scc_partial_passes','hall_scc_snapshot_hits','hall_matching_edge_tests','hall_scc_rematched_partial_passes')
 
 
 def bits(value):
@@ -45,7 +47,9 @@ def components(graph,selected,check,stats):
 
 
 class IncrementalHall:
-    def __init__(self,limit=32):
+    def __init__(self,limit=32,*,rematch_reuse=False):
+        if type(rematch_reuse)is not bool:raise ValueError('Rematch reuse must be boolean.')
+        self.rematch_reuse=rematch_reuse
         self.limit=limit;self.snapshots=OrderedDict();self.previous=None;self.stats=dict.fromkeys(STAT_KEYS,0)
 
     def filter(self,rows,previous_matching=None,check=lambda:None):
@@ -80,7 +84,18 @@ class IncrementalHall:
         matched=tuple(matched)
         graph=tuple(sum(1<<owner[tile] for tile in bits(row)) for row in rows)
         old=self.previous
-        if old is not None and old['matching']==matched and len(old['rows'])==n and all(not new&~prior for new,prior in zip(rows,old['rows'])):
+        narrowing=old is not None and len(old['rows'])==n and all(not new&~prior for new,prior in zip(rows,old['rows']))
+        same_matching=narrowing and old['matching']==matched
+        safe_rematch=False
+        if narrowing and self.rematch_reuse and not same_matching:
+            labels=[-1]*n;old_owner=[-1]*n
+            for index,group in enumerate(old['groups']):
+                for cell in group:labels[cell]=index
+            for cell,tile in enumerate(old['matching']):old_owner[tile]=cell
+            # A new matching belongs to the previous feasible graph. Explicitly
+            # check that its alternating cycles stay inside old components.
+            safe_rematch=all(labels[cell]==labels[old_owner[tile]] for cell,tile in enumerate(matched))
+        if same_matching or safe_rematch:
             groups=[]
             for group in old['groups']:
                 mask=sum(1<<x for x in group)
@@ -89,6 +104,7 @@ class IncrementalHall:
                 else:
                     groups.append(group);self.stats['hall_scc_reused_vertices']+=len(group)
             self.stats['hall_scc_partial_passes']+=1
+            self.stats['hall_scc_rematched_partial_passes']+=int(safe_rematch)
         else:
             groups=list(components(graph,range(n),check,self.stats));self.stats['hall_scc_full_passes']+=1
         allowed=list(rows)

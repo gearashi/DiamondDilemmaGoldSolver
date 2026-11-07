@@ -52,15 +52,45 @@ def derive_rows(base,check=lambda:None,*,max_pairs=128,max_new=64):
     return tuple(rows),tuple(steps),min(examined,max_pairs)
 
 
-def verify_derivation(base,steps):
-    rows=list(dict.fromkeys(base))
+def is_integer_row(value,*,max_bits=None):
+    """Check canonical PB row types without coercing imported numbers.
+
+    Python considers 1, 1.0 and True equal. A proof row must retain actual
+    integers throughout later combinations and lower-bound evaluation.
+    """
+    if (type(value)is not tuple or len(value)!=2 or type(value[0])is not tuple
+            or type(value[1])is not int):return False
+    if max_bits is not None and value[1].bit_length()>max_bits:return False
+    previous=None
+    for term in value[0]:
+        if (type(term)is not tuple or len(term)!=3 or any(type(x)is not int for x in term)
+                or term[0]<0 or term[1]<0 or not term[2]):return False
+        if max_bits is not None and any(x.bit_length()>max_bits for x in term):return False
+        key=term[:2]
+        if previous is not None and key<=previous:return False
+        previous=key
+    return True
+
+
+def verify_derivation(base,steps,check=lambda:None):
+    if not isinstance(base,(tuple,list)) or not isinstance(steps,(tuple,list)):return False
     try:
-        for left,right,a,b,claimed in steps:
+        for item in base:
+            check()
+            if not is_integer_row(item):return False
+        rows=list(dict.fromkeys(base))
+        for step in steps:
+            check()
+            if not isinstance(step,(tuple,list)) or len(step)!=5:return False
+            left,right,a,b,claimed=step
             if type(left)is not int or type(right)is not int or not 0<=left<len(rows) or not 0<=right<len(rows):return False
-            if combine(rows[left],rows[right],a,b)!=claimed:return False
-            rows.append(claimed)
+            if not is_integer_row(claimed):return False
+            expected=combine(rows[left],rows[right],a,b)
+            if expected!=claimed:return False
+            # Future ancestors are the independently computed exact row.
+            rows.append(expected)
         return True
-    except (ValueError,TypeError,IndexError):return False
+    except (ValueError,TypeError,IndexError,OverflowError):return False
 
 
 def filter_rows(domains,rows,check=lambda:None,*,max_passes=4):

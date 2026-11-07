@@ -18,8 +18,13 @@ STAT_KEYS=('mask_conflicts_offered','mask_conflicts_verified','mask_conflicts_re
            'mask_conflicts_unknown','mask_conflicts_duplicates','mask_conflicts_prunes',
            'mask_conflicts_hits','mask_conflicts_calls','mask_conflicts_entries',
            'mask_conflicts_pending','mask_conflicts_loaded','mask_proofs_verified',
-           'mask_proofs_generated','mask_proofs_rejected','mask_proofs_unknown')
+           'mask_proofs_generated','mask_proofs_rejected','mask_proofs_unknown',
+           'mask_proof_clause_visits','mask_proof_resumptions','mixed_proof_nodes_checked','mixed_proof_nodes_reused')
 GAUGE_KEYS=('mask_conflicts_entries','mask_conflicts_pending')
+_PROOF_COUNTERS={'mask_proof_clause_visits':'proof_cursor_visits',
+                 'mask_proof_resumptions':'proof_cursor_resumptions',
+                 'mixed_proof_nodes_checked':'mixed_nodes_checked',
+                 'mixed_proof_nodes_reused':'mixed_nodes_reused'}
 
 
 def _digest(payload):
@@ -33,7 +38,7 @@ def _subsumes(left,right):
 
 
 class VerifiedMaskConflictStore:
-    def __init__(self,problem,target='gold',*,initial=None,factory=None,proof_transport=False):
+    def __init__(self,problem,target='gold',*,initial=None,factory=None,proof_transport=False,resumable_proof_checking=False,mixed_proof_dag=False):
         if target not in ('gold','edges'):raise ValueError('Unknown mask-conflict target.')
         self.problem,self.target=problem,target
         self.original=tuple(sum(1<<code for code in sorted(set(row))) for row in problem.domains)
@@ -44,9 +49,58 @@ class VerifiedMaskConflictStore:
         self.binding=(problem.fingerprint,target,self.original,self.initial)
         self._records=[];self._pending=OrderedDict();self._discarded=OrderedDict()
         self._oracle=None;self._factory=factory;self._closed=False
-        self.proof_transport=bool(proof_transport);self._proof_context=None
+        self.mixed_proof_dag=bool(mixed_proof_dag)
+        self.resumable_proof_checking=bool(resumable_proof_checking or self.mixed_proof_dag)
+        self.proof_transport=bool(proof_transport or self.resumable_proof_checking);self._proof_context=None
         self._certificates=OrderedDict();self._certificate_pending=OrderedDict();self._proof_queue=OrderedDict()
         self.stats=dict.fromkeys(STAT_KEYS,0);self.status='idle';self.reason=None
+        self._proof_offsets=dict.fromkeys(_PROOF_COUNTERS,0)
+
+    def _sync_proof_stats(self):
+        for public,local in _PROOF_COUNTERS.items():
+            current=0 if self._proof_context is None else self._proof_context.stats.get(local,0)
+            self.stats[public]=self._proof_offsets[public]+current
+
+    def configure_policy(self,*,proof_transport=False,resumable_proof_checking=False,mixed_proof_dag=False):
+        """Change future proof work without revoking same-process deductions.
+
+        Verified records and the ordinary SAT oracle survive. Incompatible
+        checker contexts/cursors are closed; unverified bytes remain claims.
+        Disabling a feature retains deductions already proved under this root.
+        """
+        self._check()
+        if self._closed:raise ValueError('A closed mask-conflict store cannot be reconfigured.')
+        if any(type(value)is not bool for value in (proof_transport,resumable_proof_checking,mixed_proof_dag)):
+            raise ValueError('Proof policies must be booleans.')
+        resumable_proof_checking=bool(resumable_proof_checking or mixed_proof_dag)
+        proof_transport=bool(proof_transport or resumable_proof_checking)
+        new=(proof_transport,resumable_proof_checking,mixed_proof_dag)
+        old=(self.proof_transport,self.resumable_proof_checking,self.mixed_proof_dag)
+        if old==new:return False
+        self._sync_proof_stats()
+        self._proof_offsets={key:self.stats[key] for key in _PROOF_COUNTERS}
+        if self._proof_context is not None:self._proof_context.close();self._proof_context=None
+        self.proof_transport,self.resumable_proof_checking,self.mixed_proof_dag=new
+        # An edge-SAT answer only made the old verifier unable to prove the
+        # claim. Stronger Gold reasoning may now establish that same claim.
+        reconsider=list(self._discarded) if mixed_proof_dag and not old[2] else []
+        if reconsider:self._discarded.clear()
+        for record in (*self._certificate_pending,*reconsider):
+            if record not in self._discarded and not any(_subsumes(prior,record) for prior in self._records):
+                self._pending.setdefault(record,0)
+        while len(self._pending)>MAX_RECORDS:self._pending.popitem(last=False)
+        if not proof_transport:
+            self._certificate_pending.clear();self._proof_queue.clear()
+        else:
+            for record,(certificate,_) in tuple(self._certificate_pending.items()):
+                if certificate.get('proof_format')=='diamond-mixed-mask-v1' and not mixed_proof_dag:
+                    self._certificate_pending.pop(record,None)
+                else:self._certificate_pending[record]=(certificate,0)
+            self._proof_queue=OrderedDict((record,tries) for record,tries in self._proof_queue.items() if record in self._records)
+            for record in self._records:
+                if record not in self._certificates:self._proof_queue.setdefault(record,0)
+        self.status='idle';self.reason=None;self._refresh()
+        return True
 
     def matches(self,problem,target='gold',initial=None):
         source=tuple(sum(1<<code for code in sorted(set(row))) for row in problem.domains)
@@ -90,8 +144,14 @@ class VerifiedMaskConflictStore:
     def _proofs(self):
         if self._proof_context is None:
             from constraint_proof import MaskProofContext
-            self._proof_context=MaskProofContext(self.problem,self.initial,self.target)
+            if self.mixed_proof_dag:
+                from constraint_mixed_proof import MixedProofContext
+                self._proof_context=MixedProofContext(self.problem,self.initial,self.target)
+            else:self._proof_context=MaskProofContext(self.problem,self.initial,self.target)
         return self._proof_context
+
+    def add_gold_witnesses(self,records):
+        if self.mixed_proof_dag:self._proofs().add_gold_witnesses(records)
 
     def _admit_verified(self,core):
         if any(_subsumes(old,core) for old in self._records):return False
@@ -140,13 +200,20 @@ class VerifiedMaskConflictStore:
                 def proof_check():
                     check()
                     if time.monotonic()>=deadline:raise ProofLimit('Import proof time budget reached.')
-                try:valid=context.verify(certificate,proof_check)
+                try:
+                    valid=(context.verify_incremental(certificate,proof_check) if self.resumable_proof_checking
+                           else context.verify(certificate,proof_check))
                 except ProofLimit:
                     self.stats['mask_proofs_unknown']+=1
                     # A large proof may be unsuitable for tiny work leases.
                     # Keep its ordinary claim so it can use existing SAT verification.
+                    if self.resumable_proof_checking:return 0
                     if tries<2:self._certificate_pending[record]=(certificate,tries+1)
                     else:self._certificate_pending.pop(record,None)
+                    return 0
+                if valid is None:
+                    self.stats['mask_proofs_unknown']+=1
+                    if context.last_verification_status=='limited':self._certificate_pending.pop(record,None)
                     return 0
                 self._certificate_pending.pop(record,None)
                 if valid:
@@ -154,6 +221,12 @@ class VerifiedMaskConflictStore:
                     if record in self._records:self._certificates[record]=certificate
                     self.stats['mask_proofs_verified']+=1
                 else:self.stats['mask_proofs_rejected']+=1
+            if self.mixed_proof_dag and self._pending and time.monotonic()<deadline:
+                record=next(iter(self._pending))
+                certificate=self._proofs().prove(record,check,seconds=max(0,deadline-time.monotonic()),conflicts=conflicts)
+                if certificate is not None:
+                    added+=self._admit_verified(record);self._pending.pop(record,None)
+                    self._certificates[record]=certificate;self.stats['mask_proofs_generated']+=1
             if self._pending and time.monotonic()<deadline:
                 if self._oracle is None:self._oracle=SatAssist(self.problem,self.initial,self.target,factory=self._factory)
                 if not self._oracle.prepare(check,seconds=max(0,deadline-time.monotonic())):
@@ -195,6 +268,7 @@ class VerifiedMaskConflictStore:
             return added
         finally:
             if self._oracle is not None:self.stats['mask_conflicts_calls']=self._oracle.stats['sat_assist_mask_calls']
+            self._sync_proof_stats()
             self._refresh()
 
     def records(self):
@@ -293,6 +367,8 @@ class VerifiedMaskConflictStore:
         return self.import_snapshot(json.loads(raw))
 
     def close(self):
+        self._sync_proof_stats()
+        self._proof_offsets={key:self.stats[key] for key in _PROOF_COUNTERS}
         if self._oracle is not None:self._oracle.close()
         if self._proof_context is not None:self._proof_context.close()
         self._oracle=None;self._proof_context=None;self._closed=True;self.status='closed'

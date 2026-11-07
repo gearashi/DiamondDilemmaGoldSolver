@@ -30,6 +30,7 @@ class FastFailure:
     """Private in-memory prefilter input from an already consumed native node."""
     domains: tuple
     decisions: tuple
+    reasons: tuple | None = None
 
 def load_library(directory=None):
     directory=Path(directory or ROOT/'.native')
@@ -49,6 +50,10 @@ def load_library(directory=None):
     if lib.dd_search_abi()!=1:raise RuntimeError('Native search library ABI differs.')
     lib.dd_search_create.argtypes=[C.c_int,C.c_int,C.c_int];lib.dd_search_create.restype=C.c_void_p
     lib.dd_search_configure.argtypes=[C.c_void_p,_U64,_I32,C.c_int];lib.dd_search_configure.restype=C.c_int
+    lib.dd_search_explanations.argtypes=[C.c_void_p,C.c_int];lib.dd_search_explanations.restype=C.c_int
+    lib.dd_search_reason_limit.argtypes=[C.c_void_p,C.c_int];lib.dd_search_reason_limit.restype=C.c_int
+    lib.dd_search_reason_count.argtypes=[C.c_void_p];lib.dd_search_reason_count.restype=C.c_int
+    lib.dd_search_copy_reasons.argtypes=[C.c_void_p,_I32,_U64,C.c_int];lib.dd_search_copy_reasons.restype=C.c_int
     lib.dd_search_destroy.argtypes=[C.c_void_p];lib.dd_search_destroy.restype=None
     lib.dd_search_add_frame.argtypes=[C.c_void_p,_U64,C.c_int,_U64,C.c_int,C.c_int];lib.dd_search_add_frame.restype=C.c_int
     lib.dd_search_copy_frame.argtypes=[C.c_void_p,C.c_int,_U64,_I32,_U64,_I32,_I32];lib.dd_search_copy_frame.restype=C.c_int
@@ -99,7 +104,7 @@ class NativeSearch:
         self.signature=(self.metadata['source_sha256'],self.metadata['library_sha256'],self.metadata['abi'],self.metadata['platform'],self.metadata['machine'])
         self.n=n;self.count=count;self.words=(count+63)//64;self.width=self.words*8;self.max_depth=max_depth
         self._handle=None;self._active=False;self.last_result=None;self._propagation=None
-        self._loaded_root=()
+        self._loaded_root=();self._explanations=False;self._reason_limit=131072
         self._stats_base={key:0 for key in STAT_KEYS}
         self._domain_buffer=(C.c_uint64*(n*self.words))()
         self._choice_buffer=(C.c_uint64*(count*self.words))()
@@ -113,6 +118,29 @@ class NativeSearch:
         self._handle=self.lib.dd_search_create(self.n,self.count,self.max_depth)
         if not self._handle:raise RuntimeError('Unable to allocate the bounded native search workspace.')
         if self._propagation is not None:self._configure(*self._propagation)
+        if self._explanations:
+            self.lib.dd_search_explanations(self._handle,1);self.lib.dd_search_reason_limit(self._handle,self._reason_limit)
+
+    def configure_explanations(self,enabled=True,*,max_records=131072):
+        if type(enabled)is not bool or self._active:raise ValueError('Invalid native explanation configuration.')
+        if type(max_records)is not int or not 0<=max_records<=131072:raise ValueError('Invalid native explanation cap.')
+        if self.lib.dd_search_explanations(self._handle,int(enabled)):raise RuntimeError('Native explanations unavailable.')
+        if self.lib.dd_search_reason_limit(self._handle,max_records):raise RuntimeError('Native explanation cap unavailable.')
+        self._explanations=enabled;self._reason_limit=max_records
+
+    def _failure_reasons(self,check=lambda:None):
+        count=self.lib.dd_search_reason_count(self._handle)
+        if count<0:return None
+        if count>131072:raise RuntimeError('Malformed native explanation count.')
+        check()
+        metadata=(C.c_int*(count*6))();masks=(C.c_uint64*(count*self.words))()
+        if self.lib.dd_search_copy_reasons(self._handle,metadata,masks,count):raise RuntimeError('Native explanations unavailable.')
+        removed=self._unpack(masks,count)
+        records=[]
+        for i in range(count):
+            if i%128==0:check()
+            records.append((*map(int,metadata[i*6:i*6+6]),removed[i]))
+        return tuple(records)
 
     def _configure(self,support,arcs,arc_count):
         result=self.lib.dd_search_configure(self._handle,support,arcs,arc_count)
@@ -222,7 +250,7 @@ class NativeSearch:
         if length<0:raise RuntimeError('Native search decisions are malformed.')
         return list(zip(self._decision_cells[:length],self._unpack(self._decision_masks,length)))
 
-    def _consumed_fast_failure(self):
+    def _consumed_fast_failure(self,check=lambda:None):
         """Recover the failed input after C has popped its unexpanded frame.
 
         The surviving parent still retains its just-consumed choice at next-1.
@@ -233,7 +261,7 @@ class NativeSearch:
         depth=self.lib.dd_search_depth(self._handle)
         if not depth:
             if not self._loaded_root:raise RuntimeError('Consumed native root is unavailable.')
-            return FastFailure(self._loaded_root,())
+            return FastFailure(self._loaded_root,(),self._failure_reasons(check))
         cell=C.c_int();count=C.c_int();offset=C.c_int()
         if self.lib.dd_search_copy_frame(self._handle,depth-1,self._domain_buffer,C.byref(cell),self._choice_buffer,C.byref(count),C.byref(offset)):
             raise RuntimeError('Consumed native parent is unavailable.')
@@ -243,7 +271,7 @@ class NativeSearch:
         choices=self._unpack(self._choice_buffer,count.value)
         choice=choices[offset.value-1]
         domains[cell.value]&=choice
-        return FastFailure(tuple(domains),tuple(self.decisions())+((cell.value,choice),))
+        return FastFailure(tuple(domains),tuple(self.decisions())+((cell.value,choice),),self._failure_reasons(check))
 
     @property
     def basic_propagated(self):
@@ -280,6 +308,8 @@ class NativeSearch:
             if self._propagation is not None:
                 result=self.lib.dd_search_configure(replacement,*self._propagation)
                 if result:raise RuntimeError('Replacement native propagation configuration failed ('+str(result)+').')
+            if self._explanations:
+                self.lib.dd_search_explanations(replacement,1);self.lib.dd_search_reason_limit(replacement,self._reason_limit)
             self._fill_handle(replacement,validated)
             accumulated=self.stats()
         except BaseException:
@@ -335,7 +365,7 @@ class NativeSearch:
             try:
                 if on_event is not None:
                     payload={'action':'reject','native_fast_reject':True} if code==4 else pending[0] if code!=1 else None
-                    if code==4 and capture_fast_reject:payload['native_failure']=self._consumed_fast_failure()
+                    if code==4 and capture_fast_reject:payload['native_failure']=self._consumed_fast_failure(check)
                     response=on_event(('reject','backtrack','expanded','solved','fast_reject')[code],payload)
                     if response is not None:
                         if not isinstance(response,dict) or set(response)!={'replace_stack'}:

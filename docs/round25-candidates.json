@@ -1,0 +1,471 @@
+{
+  "schema": "diamond-round25-register-v1",
+  "baseline": "30483db81894359ef9030493e45d192a36f66c98",
+  "objective": "Implement and evaluate proposals 1-37 in order, prioritize fewer decisions and repeated operations, retain useful sound changes, publish a validated release and measured hardware settings.",
+  "status": "in_progress",
+  "candidate_count": 37,
+  "gold_solution_found": false,
+  "candidates": [
+    {
+      "id": 1,
+      "proposal": "Use one SAT failure to eliminate more branches",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_learning_round25.py",
+        "benchmark_learning_round25.py"
+      ],
+      "disposition": "Retained opt-in; broader verified SAT exclusions",
+      "original_puzzle_gain": "not established",
+      "access": "sat_core_lifting; persistent SAT",
+      "finite_evidence": "12 queued cubes: 12 total SAT calls reduced to 2 including independent verification; finite randomized queue checks preserve completions.",
+      "limits": "Unknown verification keeps queued work. Decision counters include verifier work; frozen release measurements pending."
+    },
+    {
+      "id": 2,
+      "proposal": "Keep one SAT assistant across related jobs",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_job_sat.py",
+        "constraint_job_sat.py"
+      ],
+      "disposition": "Retained opt-in; original-root SAT model shared within a worker",
+      "original_puzzle_gain": "not established",
+      "access": "shared_sat_assistant; DFS/parallel DFS",
+      "finite_evidence": "20 alternating four-cell jobs: model builds20\u21921, constructionsteps7410\u2192438, native supportcalls400\u219243; identical supported placements.80 randomized domain/decision cases preserve independently enumerated solutions.",
+      "limits": "Same-process per-worker native model reuse. Does not persist native SAT internals acrossrestart; original-puzzle gain unestablished.",
+      "regressions": "89 DFS/parallel/SAT tests passed with1 optionalnative skip;8 focused post-reviewtests passed."
+    },
+    {
+      "id": 3,
+      "proposal": "Resume interrupted proof verification",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_proof_cursor.py",
+        "test_constraint_learning_round25.py"
+      ],
+      "disposition": "Retained opt-in; trusted same-process proof-check continuation",
+      "original_puzzle_gain": "not established",
+      "access": "resumable_proof_checking",
+      "finite_evidence": "32 short leases: restarting checker used288clause visits and stayed incomplete; retained cursor finished in172visits. Truth-table, byte-binding, cancellation and mask-admission regressions pass.",
+      "limits": "Retains checked prefix and unfinished unit scan in memory; process restart rechecks saved certificate bytes."
+    },
+    {
+      "id": 4,
+      "proposal": "Generate explanations directly inside the native CPU solver",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "test_constraint_native_reasons.py",
+        "constraint_native_learning.py",
+        "constraint_native_search.c"
+      ],
+      "disposition": "Retained opt-in; independently checked native removal records",
+      "original_puzzle_gain": "not established",
+      "access": "native_explanations; compiled native_search and LCG",
+      "finite_evidence": "Complete4cell case preserves all152solutions and245nodes; explanation checker operations650\u2192281,11directclauses,0fallbacks.73native/regression tests pass including enabled-log Stop/resume and capfallback.",
+      "limits": "Bounded seam/inventory reason logs only. Unexplained inherited Python deductions or incomplete logs use the prior safe replay. Checker counters exclude C record generation/copy and LCG analysis."
+    },
+    {
+      "id": 5,
+      "proposal": "Preserve native SAT learning across application restarts",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_sat_persistence.py",
+        "test_constraint_sat_persistence.py",
+        "benchmark_sat_persistence_round25.py",
+        "benchmark_sat_capabilities_round25.py"
+      ],
+      "disposition": "Retained opt-in verified clause-subset persistence on the tested Linux/macOS builds; Windows producer disabled",
+      "original_puzzle_gain": "not established",
+      "access": "native_sat_persistence; SAT only; implies persistent_sat",
+      "finite_evidence": "24 tests passed on each of Linux x86-64, macOS x86-64 and macOS ARM64. Fresh-process inventory decisions 8957->4473 and 1724->1509; independent verification costs 732969 and 3966599 clause visits. All 72 finite-puzzle boards preserved, but its decisions worsened 495->596.",
+      "limits": "Bounded verified original-CNF clause subset, including stable auxiliaries, not full native state. Default off and workload dependent. CPython3.12/python-sat1.9.dev15 supported producer matrix; Windows may recheck/import snapshots with logging disabled. No original-puzzle gain established.",
+      "linux_capability": {
+        "status": "bounded_interrupted_prefix_and_fresh_process_checks_passed",
+        "run": "https://github.com/gearashi/DiamondDilemmaGoldSolver/actions/runs/42335996814",
+        "commit": "b3169a0537592f4b591bf9393576bd5462bb69e0",
+        "platform": "Ubuntu24.04/Python3.12",
+        "clean_rup_backends": [
+          "gluecard3",
+          "gluecard4",
+          "glucose3",
+          "glucose4",
+          "glucose42",
+          "lingeling",
+          "maplechrono"
+        ],
+        "scope": "Earlier capability and prefix tests; final implemented-feature evidence is linked in supported_ci.",
+        "platforms": [
+          "Linux x86-64",
+          "macOS x86-64",
+          "macOS ARM64"
+        ]
+      },
+      "supported_ci": "https://github.com/gearashi/DiamondDilemmaGoldSolver/actions/runs/42338512332"
+    },
+    {
+      "id": 6,
+      "proposal": "Represent completed and unfinished search regions symbolically",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_symbolic_work.py",
+        "test_constraint_learning_round25.py",
+        "benchmark_learning_round25.py"
+      ],
+      "disposition": "Retained opt-in; exact symbolic coverage and incremental local extensions",
+      "original_puzzle_gain": "not established",
+      "access": "symbolic_coverage",
+      "finite_evidence": "Eight 160-cell queries: 176800 flat cube subtraction checks versus 509 diagram operations including compilation; identical remaining cube. Growing ledger: one build, twelve incremental extensions, avoids 78 repeated record reads.",
+      "limits": "Different logical operation units, not a speed ratio. Cached union is scope/cap/database-version bound; unknown/cap returns original remaining work. Public frontiers remain flat cubes."
+    },
+    {
+      "id": 7,
+      "proposal": "Share a common graph of verified deductions",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_mixed_proof.py",
+        "test_constraint_mixed_proof.py",
+        "benchmark_learning_round25.py"
+      ],
+      "disposition": "Retained opt-in; shared independently checked deduction graph",
+      "original_puzzle_gain": "not established",
+      "access": "mixed_proof_dag",
+      "finite_evidence": "Two two-cell Gold refutations check 41 nodes from cold contexts versus 21 with shared completed nodes. Independent enumeration finds 18 edge arrangements and no Gold loop. Thirty proof and PB regressions pass after exact-integer and strand-binding review fixes.",
+      "limits": "Bounded Hall, proper-loop, affine, exact-integer PB and RUP nodes. Native-free transport rechecks all imported nodes; live completed nodes can be reused. No original-puzzle gain established."
+    },
+    {
+      "id": 8,
+      "proposal": "Retain relationships involving several choices",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_higher_relations.py",
+        "test_constraint_learning_round25.py",
+        "benchmark_learning_round25.py"
+      ],
+      "disposition": "Retained opt-in; completed scoped three/four-cell projection tables",
+      "original_puzzle_gain": "not established",
+      "access": "higher_order_relations",
+      "finite_evidence": "135 contexts after ordinary propagation: native queries51->28 including16compilation+12ordinary queries; native decisions178->162; equal SAT-model construction and identical supported placements/completions. Both policies enable witness_pool/support_cover.37focused tests pass.",
+      "limits": "Incomplete/capped tables never prune; reuse covering ancestor relations. Recompiling every descendant used275projectionqueries by80contexts and was rejected. Bounded live tables only; original-puzzle gain unestablished."
+    },
+    {
+      "id": 9,
+      "proposal": "Update the parity-equation basis incrementally",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_algebra.py",
+        "test_constraint_affine_round25.py",
+        "benchmark_learning_round25.py"
+      ],
+      "disposition": "Retained opt-in; covering-ancestor affine basis reuse",
+      "original_puzzle_gain": "not established",
+      "access": "incremental_affine; implies affine_reasoning",
+      "finite_evidence": "13nestedconsistentcontexts: equationinsertions1222->376; Gaussian rowwork3282->1168.180differential narrowing/widening contexts preserve exact filtering and enumerated completions.10new+legacytestsPASS, independentreviewclear.",
+      "limits": "Basis reuse is exact under componentwise narrowing; widening needs an exact cached state or covering ancestor, otherwise rebuild. Fourlive snapshots. Counts exclude binding checks/copies; no original-puzzle search-node gain established."
+    },
+    {
+      "id": 10,
+      "proposal": "Learn weighted constraints from actual conflicts",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_conflict_pb.py",
+        "test_constraint_learning_round25.py",
+        "benchmark_learning_round25.py"
+      ],
+      "disposition": "Retained opt-in stronger scoped weighted-constraint deductions",
+      "original_puzzle_gain": "not established",
+      "access": "conflict_pb; implies pb_learning",
+      "finite_evidence": "Two extra choices removed after ordinary and static-PB fixpoints, preserving all 15 edge and 6 Gold completions. 33 trials, 65960 row combinations, 1084925 scored terms; 5 focused and 24 existing tests pass.",
+      "limits": "Additional arithmetic work for stronger pruning, not a speed or total-work improvement claim. Bounded retained cuts have independently replayed exact-integer proofs. 512-combination variant found no cut; 2048 and 8192 found the same two cuts; 2048 retained."
+    },
+    {
+      "id": 11,
+      "proposal": "Use exact integer divisibility constraints during search",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_lattice.py",
+        "test_constraint_lattice_round25.py",
+        "benchmark_learning_round25.py"
+      ],
+      "disposition": "Retained opt-in exact bounded integer seam/inventory lattice",
+      "original_puzzle_gain": "not established",
+      "access": "integer_lattice",
+      "finite_evidence": "Three extra choices removed after ordinary/GF2/static-PB fixpoints, preserving 6 edge and 4 Gold completions. 4000 exact rational-coordinate membership checks, 100 complete-solution contexts, cancellation/cap tests and a full160-cell near-completion test pass.",
+      "limits": "Actual puzzle exclusions also follow from rational-span consistency; no integer-only puzzle gain found in a 3000-context follow-up. Determinant3 arithmetic test verifies integer-specific strength separately. All cells contribute; caps are unknown and cached only as optional-work limits. No original-puzzle gain established."
+    },
+    {
+      "id": 12,
+      "proposal": "Repair only affected piece-matching components",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_incremental_hall.py",
+        "test_constraint_learning_round25.py",
+        "benchmark_learning_round25.py"
+      ],
+      "disposition": "Retained opt-in; reuse unaffected alternating-graph SCC components after rematching",
+      "original_puzzle_gain": "not established",
+      "access": "hall_rematch; implies incremental_hall",
+      "finite_evidence": "Finite rematching comparison: SCC vertices revisited6->2 with4 reused; identical supports. Public/warm and legacyHall/DFS tests pass. Independent review cleared narrowing, widening, rollback and Stop handling.",
+      "limits": "Matching edge tests are unchanged. Reuse requires unchanged induced adjacency and a rematching that preserves the old component quotient; otherwise recompute."
+    },
+    {
+      "id": 13,
+      "proposal": "Maintain the CPU's possible Gold connections reversibly",
+      "owner": "learning",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_gold_graph.py",
+        "constraint_advanced.py",
+        "test_constraint_learning_round25.py",
+        "benchmark_learning_round25.py"
+      ],
+      "disposition": "Retained opt-in; reversible shared possible Gold graph",
+      "original_puzzle_gain": "not established",
+      "access": "reversible_gold_graph; implies strand_connectivity and biconnected",
+      "finite_evidence": "Sixteen ten-cell contexts: seam-port tests5280->561;234support updates and10491edge materializations also reported. All exact graphs/filter outputs agree.75focused/advanced/DFS tests pass including120random contexts and23Stop boundaries.",
+      "limits": "Shares graph construction and updates support counts; connectivity traversals still run fully. No total-work or speed improvement claim."
+    },
+    {
+      "id": 14,
+      "proposal": "Incrementally restrict and restore regional diagrams",
+      "owner": "regions",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_region_incremental.py",
+        "test_constraint_regions_round25.py",
+        "benchmark_regions_round25.py"
+      ],
+      "disposition": "Retained opt-in; exact regional envelope restriction and undo",
+      "original_puzzle_gain": "not established",
+      "access": "incremental_regions",
+      "finite_evidence": "Fifteen narrowing/undo contexts: compiler states1479->128; transitions10206->889; counted transitions/index/update/support-edge work15141->6412. Six focused tests and22legacy tests pass; full160-cell planted Gold witness preserved.",
+      "limits": "Requires unchanged outside assumptions and inside domains within the compiled envelope. Copies1792nodecounts and15source checks reported separately. Unknown or interrupted compilation never prunes."
+    },
+    {
+      "id": 15,
+      "proposal": "Save unfinished regional calculations",
+      "owner": "regions",
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_region_cursor.py",
+        "constraint_region_incremental.py",
+        "test_constraint_regions_round25.py",
+        "benchmark_regions_round25.py"
+      ],
+      "disposition": "Retained opt-in; bounded trusted-local regional compiler checkpoints",
+      "original_puzzle_gain": "not established",
+      "access": "durable_regions; implies incremental_regions; run-local regional cache directory",
+      "finite_evidence": "Three process restarts: transition attempts1303->889, zero repeated completed transitions and all5040histories preserved. Nine focused tests pass, including concurrent spawned writers and actual public DFS. Four atomic writes total247901actualbytes.",
+      "limits": "Local checkpoints are trusted computation state, not externally verified mathematical certificates. Strict source/root/query/cap binding, checksum, bounded structural validation and atomic writes. Crashes before a successful save can repeat work; JSON verification/copy/I/O costs are additional."
+    },
+    {
+      "id": 16,
+      "proposal": "Build compact constraint factors directly",
+      "owner": "regions",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 17,
+      "proposal": "Include Gold connectivity throughout whole-problem elimination",
+      "owner": "regions",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 18,
+      "proposal": "Make automatic decomposition drive the search",
+      "owner": "regions",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 19,
+      "proposal": "Refine diagrams where a false candidate exposes missing information",
+      "owner": "regions",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 20,
+      "proposal": "Compress inventory and boundary connectivity together",
+      "owner": "regions",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 21,
+      "proposal": "Construct connectivity representatives algebraically",
+      "owner": "regions",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 22,
+      "proposal": "Reuse proofs across verified equivalent residual problems",
+      "owner": "regions",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 23,
+      "proposal": "Extend regional pricing to seams and the single Gold loop",
+      "owner": "regions",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 24,
+      "proposal": "Check several unfinished chains jointly",
+      "owner": "regions",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 25,
+      "proposal": "Certify the completeness of regional results",
+      "owner": "regions",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 26,
+      "proposal": "Combine seam and inventory support in CUDA domains",
+      "owner": "gpu_hybrid",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 27,
+      "proposal": "Fork GPU branches after propagating their common parent",
+      "owner": "gpu_hybrid",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 28,
+      "proposal": "Make CUDA propagation respond only to affected constraints",
+      "owner": "gpu_hybrid",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 29,
+      "proposal": "Track more precise GPU failure explanations",
+      "owner": "gpu_hybrid",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 30,
+      "proposal": "Share verified general GPU clauses between lanes",
+      "owner": "gpu_hybrid",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 31,
+      "proposal": "Refill individual lanes in the newer CUDA domain engine",
+      "owner": "gpu_hybrid",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 32,
+      "proposal": "Use incremental, shared checkpoint representations",
+      "owner": "gpu_hybrid",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 33,
+      "proposal": "Resume sampling and repair phases exactly",
+      "owner": "gpu_hybrid",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 34,
+      "proposal": "Choose ejection chains from the actual obstruction",
+      "owner": "gpu_hybrid",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 35,
+      "proposal": "Combine parent boards through inventory-preserving cycles",
+      "owner": "gpu_hybrid",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 36,
+      "proposal": "Reject hopeless sampling moves before tracing every loop",
+      "owner": "gpu_hybrid",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    },
+    {
+      "id": 37,
+      "proposal": "Adapt replica-exchange temperatures from measured behavior",
+      "owner": "gpu_hybrid",
+      "status": "pending",
+      "evidence": [],
+      "disposition": null,
+      "original_puzzle_gain": "not established"
+    }
+  ]
+}

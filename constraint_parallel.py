@@ -168,9 +168,21 @@ def partition_checkpoint(problem,checkpoint,*,parts=2,options=None):
 class _WorkerCaches:
     """Bounded job-local mutable state plus separately scoped immutable tables."""
     def __init__(self,problem,limit=JOB_CACHE_LIMIT):
-        self.problem,self.limit=problem,limit;self.jobs=OrderedDict();self.support=OrderedDict()
+        self.problem,self.limit=problem,limit;self.jobs=OrderedDict();self.support=OrderedDict();self.sat_assistants={}
         self.binding=KnowledgeStore(problem,target='edges')
-        self.stats={'job_cache_hits':0,'job_cache_misses':0,'job_cache_evictions':0,'support_reuses':0}
+        self.stats={'job_cache_hits':0,'job_cache_misses':0,'job_cache_evictions':0,'support_reuses':0,'shared_sat_models':0,'shared_sat_job_views':0,'shared_sat_clauses':0}
+    def close(self):
+        for helper in self.sat_assistants.values():helper.close()
+        self.sat_assistants.clear()
+    def attach_shared_sat(self,state,request):
+        if request['options'].get('shared_sat_assistant'):
+            from constraint_job_sat import SharedSatAssistant
+            target=request['target']
+            if target not in self.sat_assistants:
+                self.sat_assistants[target]=SharedSatAssistant(self.problem,target)
+                self.stats['shared_sat_models']+=1
+            state['_shared_sat']=self.sat_assistants[target]
+        return state
     def key(self,request):
         return (request['id'],request.get('region_key'),request['target'],
                 json.dumps(request['options'],sort_keys=True,separators=(',',':')))
@@ -183,7 +195,7 @@ class _WorkerCaches:
         key=self.key(request)
         if not self.binding.matches(self.problem,'edges'):raise ValueError('Worker source domains changed.')
         if key in self.jobs:
-            self.stats['job_cache_hits']+=1;state=self.jobs.pop(key);self.jobs[key]=state;return state
+            self.stats['job_cache_hits']+=1;state=self.jobs.pop(key);self.jobs[key]=state;return self.attach_shared_sat(state,request)
         self.stats['job_cache_misses']+=1;state={};support_key=self.support_key(request)
         if support_key in self.support:
             table=self.support.pop(support_key);self.support[support_key]=table
@@ -192,8 +204,10 @@ class _WorkerCaches:
             self.stats['support_reuses']+=1
         self.jobs[key]=state
         while len(self.jobs)>self.limit:self.jobs.popitem(last=False);self.stats['job_cache_evictions']+=1
-        return state
+        return self.attach_shared_sat(state,request)
     def remember(self,request,state):
+        self.stats['shared_sat_job_views']=sum(owner.views for owner in self.sat_assistants.values())
+        self.stats['shared_sat_clauses']=sum(owner.helper.stats['sat_assist_clauses'] for owner in self.sat_assistants.values())
         table=state.get('_support')
         if table is not None:
             key=self.support_key(request);self.support[key]=table;self.support.move_to_end(key)
@@ -312,7 +326,9 @@ def _worker(problem,connection,cancel):
                     if payload is not None:shared_conflicts.import_snapshot(payload)
                     learning['_shared_conflicts']=shared_conflicts
                 if request['options'].get('smart_learning'):
-                    if mask_conflicts is None:mask_conflicts=VerifiedMaskConflictStore(problem,request['target'],proof_transport=request['options'].get('proof_transport',False))
+                    if mask_conflicts is None:mask_conflicts=VerifiedMaskConflictStore(problem,request['target'],proof_transport=request['options'].get('proof_transport',False),resumable_proof_checking=request['options'].get('resumable_proof_checking',False),mixed_proof_dag=request['options'].get('mixed_proof_dag',False))
+                    mask_conflicts.configure_policy(proof_transport=request['options'].get('proof_transport',False),
+                        resumable_proof_checking=request['options'].get('resumable_proof_checking',False),mixed_proof_dag=request['options'].get('mixed_proof_dag',False))
                     payload=request.get('mask_conflicts')
                     if payload is not None:mask_conflicts.import_snapshot(payload)
                     learning['_mask_conflicts']=mask_conflicts
@@ -321,7 +337,7 @@ def _worker(problem,connection,cancel):
                     payload=request.get('certificates')
                     if payload is not None:certificates.load_snapshot(payload)
                     learning['_certificates']=certificates
-                if request['options'].get('extended_regions') and request.get('regional_cache_dir') is not None:
+                if (request['options'].get('extended_regions') or request['options'].get('durable_regions')) and request.get('regional_cache_dir') is not None:
                     learning['_regional_cache_dir']=request['regional_cache_dir']
                 result=dfs_solve(problem,seconds=request['seconds'],target=request['target'],
                                  resume=request['checkpoint'],stop=cancel.is_set,progress=progress,
@@ -339,6 +355,7 @@ def _worker(problem,connection,cancel):
     except (EOFError,BrokenPipeError,OSError):
         return
     finally:
+        caches.close()
         if shared_conflicts is not None:shared_conflicts.close()
         if mask_conflicts is not None:mask_conflicts.close()
         connection.close()
@@ -428,7 +445,10 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
     if mask_conflicts is not None and (not isinstance(mask_conflicts,VerifiedMaskConflictStore) or not mask_conflicts.matches(problem,target)):
         raise ValueError('Parallel mask conflicts differ from original domains or target.')
     if mask_conflicts is None and options.get('smart_learning'):
-        mask_conflicts=VerifiedMaskConflictStore(problem,target,proof_transport=options['proof_transport']);learning_state['_mask_conflicts']=mask_conflicts
+        mask_conflicts=VerifiedMaskConflictStore(problem,target,proof_transport=options['proof_transport'],resumable_proof_checking=options.get('resumable_proof_checking',False),mixed_proof_dag=options.get('mixed_proof_dag',False));learning_state['_mask_conflicts']=mask_conflicts
+    if mask_conflicts is not None:
+        mask_conflicts.configure_policy(proof_transport=options['proof_transport'],
+            resumable_proof_checking=options['resumable_proof_checking'],mixed_proof_dag=options['mixed_proof_dag'])
     certificates=learning_state.get('_certificates')
     if certificates is not None and (not isinstance(certificates,CertificateStore)
             or certificates.problem.fingerprint!=problem.fingerprint or certificates.target!=target
@@ -510,7 +530,7 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
         # closed by that DFS history; choices outside that frame were never owned.
         add(first,first['stack'][0]['domains'])
     if coverage_scope is not None and options.get('shared_coverage') and learning_state.get('_coverage_path'):
-        coverage=CoverageLedger(learning_state['_coverage_path'],coverage_scope)
+        coverage=CoverageLedger(learning_state['_coverage_path'],coverage_scope,symbolic=options.get('symbolic_coverage',False))
     def merge_knowledge(payload):
         if payload is not None and knowledge is not None and options.get('persistent_learning',True):
             knowledge.merge_snapshot(payload)
@@ -527,6 +547,7 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
     class VerificationStopped(Exception):pass
     def verify_shared():
         nonlocal next_verification
+        if options.get('mixed_proof_dag') and mask_conflicts is not None and knowledge is not None:mask_conflicts.add_gold_witnesses(knowledge.records())
         verifiers=[store for enabled,store in ((options.get('shared_conflicts'),shared_conflicts),
                    (options.get('smart_learning'),mask_conflicts)) if enabled and store is not None and store.pending_count]
         if not verifiers or time.monotonic()<next_verification:return
@@ -559,8 +580,10 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
         if certificates is not None and options.get('proof_certificates'):stats['portable_certificates']=len(certificates.records)
         stats.update(queue_proof_checks=queue_proof_checks,queue_proof_retirements=queue_proof_retirements,queue_proof_splits=queue_proof_splits)
         if coverage is not None:stats.update(coverage.stats)
-        for key in ('job_cache_hits','job_cache_misses','job_cache_evictions','support_reuses'):
+        for key in ('job_cache_hits','job_cache_misses','job_cache_evictions','support_reuses','shared_sat_models','shared_sat_job_views'):
             stats['parallel_'+key]=sum(cache.get(key,0) for cache in worker_caches.values())
+        if options.get('shared_sat_assistant'):
+            stats['sat_assist_clauses']=sum(cache.get('shared_sat_clauses',0) for cache in worker_caches.values())
         return nodes,stats
     def parallel_info():
         return {'workers':workers,'pending_jobs':len(jobs),'queued_jobs':len(queue),'active_jobs':len(active),'completed_jobs':completed,'replayed_jobs':replayed}
