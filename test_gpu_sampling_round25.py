@@ -222,6 +222,80 @@ class HybridTests(unittest.TestCase):
             result=sampling.solve(p,seconds=10,options={'durable_hybrid':True,'native':'python'})
         self.assertTrue(result['complete']);self.assertEqual(result['phase'],'exact_dfs');self.assertEqual(result['status'],'infeasible')
         self.assertEqual(result['gpu_sampling']['status'],'skipped')
+    def test_real_exact_handoff_preserves_warm_caches_and_controller_metadata(self):
+        import constraint_dfs
+        from constraint_knowledge import KnowledgeStore
+        p=problem();knowledge=KnowledgeStore(p,target='gold')
+        marker=(object(),'retained report');coverage='unused-hybrid-coverage.sqlite'
+        shared={'_hybrid_run_seconds':200,'_hybrid_offered_claims':marker,
+                '_coverage_path':coverage,'_knowledge':knowledge}
+        real=constraint_dfs.solve;seen=[]
+        def first_slice(problem,**kw):
+            inner=kw['learning_state'];seen.append(inner)
+            self.assertIs(inner['_knowledge'],knowledge)
+            self.assertFalse({'_hybrid_run_seconds','_hybrid_offered_claims','_coverage_path'}&set(inner))
+            # Stop only after actual DFS has constructed its reusable support cache.
+            kw['stop']=lambda:'_support' in inner
+            return real(problem,**kw)
+        options={'durable_hybrid':True,'native':'python'}
+        with patch.object(sampling,'_make_sampler',side_effect=AssertionError('GPU allocated')),patch('gpu_backends.choose_backend',side_effect=AssertionError('GPU selected')):
+            with patch.object(constraint_dfs,'solve',side_effect=first_slice):
+                first=sampling.solve(p,seconds=5,sampling_fraction=0,repair_fraction=0,options=options,learning_state=shared)
+            self.assertEqual(first['status'],'stopped');self.assertEqual(first['phase'],'exact_dfs')
+            owners={key:shared[key] for key in ('_nogoods','_runtime','_support','_knowledge')}
+            resumed=sampling.solve(p,seconds=5,resume=copied(first['checkpoint']),options=options,learning_state=shared)
+        self.assertEqual(resumed['status'],'infeasible');self.assertTrue(resumed['complete'])
+        for key,value in owners.items():self.assertIs(shared[key],value)
+        self.assertIs(shared['_hybrid_offered_claims'],marker)
+        self.assertEqual(shared['_hybrid_run_seconds'],200);self.assertEqual(shared['_coverage_path'],coverage)
+        self.assertIsNot(seen[0],shared)
+
+    def test_real_exact_guard_still_rejects_unknown_malformed_and_wrong_scope(self):
+        from constraint_knowledge import KnowledgeStore
+        for bad in ({'_unexpected_cache':object()},{'_runtime':object()},
+                    {'_knowledge':KnowledgeStore(problem(),target='edges')}):
+            with self.subTest(keys=list(bad)):
+                shared={'_hybrid_run_seconds':200,'_coverage_path':'unused.sqlite',**bad}
+                before=dict(shared)
+                with patch.object(sampling,'_make_sampler',side_effect=AssertionError('GPU allocated')):
+                    with self.assertRaises(ValueError):
+                        sampling.solve(problem(),seconds=5,sampling_fraction=0,repair_fraction=0,
+                                       options={'durable_hybrid':True,'native':'python'},learning_state=shared)
+                self.assertEqual(set(shared),set(before))
+                for key,value in before.items():self.assertIs(shared[key],value)
+
+    def test_exact_exception_hands_back_real_created_cache_resources(self):
+        import constraint_dfs
+        real=constraint_dfs.solve;created={};shared={'_hybrid_run_seconds':200}
+        def failing(problem,**kw):
+            inner=kw['learning_state'];kw['stop']=lambda:'_support' in inner
+            answer=real(problem,**kw);self.assertEqual(answer['status'],'stopped')
+            created.update(inner)
+            raise RuntimeError('failure after real cache creation')
+        with patch.object(sampling,'_make_sampler',side_effect=AssertionError('GPU allocated')),patch.object(constraint_dfs,'solve',side_effect=failing):
+            with self.assertRaisesRegex(RuntimeError,'after real cache'):
+                sampling.solve(problem(),seconds=5,sampling_fraction=0,repair_fraction=0,
+                               options={'durable_hybrid':True,'native':'python'},learning_state=shared)
+        self.assertIn('_runtime',created);self.assertIn('_support',created)
+        for key,value in created.items():self.assertIs(shared[key],value)
+        self.assertEqual(shared['_hybrid_run_seconds'],200)
+
+    def test_exact_handoff_mirrors_removals_even_on_exception(self):
+        old=object();new=object();marker=object()
+        shared={'_hybrid_run_seconds':200,'_hybrid_offered_claims':marker,
+                '_coverage_path':'unused.sqlite','_knowledge':old}
+        def failing(problem,**kw):
+            inner=kw['learning_state'];self.assertIs(inner.pop('_knowledge'),old)
+            inner['_runtime']=new
+            raise RuntimeError('ownership boundary failure')
+        with patch.object(sampling,'_make_sampler',side_effect=AssertionError('GPU allocated')),patch('constraint_dfs.solve',side_effect=failing):
+            with self.assertRaisesRegex(RuntimeError,'ownership boundary'):
+                sampling.solve(problem(),seconds=5,sampling_fraction=0,repair_fraction=0,
+                               options={'durable_hybrid':True,'native':'python'},learning_state=shared)
+        self.assertNotIn('_knowledge',shared);self.assertIs(shared['_runtime'],new)
+        self.assertIs(shared['_hybrid_offered_claims'],marker);self.assertEqual(shared['_hybrid_run_seconds'],200)
+        self.assertEqual(shared['_coverage_path'],'unused.sqlite')
+
     def test_saved_valid_gold_solution_returns_before_gpu(self):
         tiles,board=tetrahedron_tiles();p=SearchProblem(tiles,board)
         with patch.object(sampling,'_make_sampler',side_effect=AssertionError('allocated')):

@@ -171,8 +171,19 @@ def solve(problem,*,seconds=10,seed=0,target='gold',replicas=128,backend='auto',
             repair=None;state['repair_state']=None;offer_claims();transition('exact_dfs')
         if stop() or not remaining():return interrupted()
         offer_claims() # A fresh process must requeue saved claims before exact verification.
-        result=exact_solve(problem,seconds=remaining(),seed=seed,target=target,hints=state['hints'],stop=stop,progress=emit,
-                           resume=state['dfs'],options=options,learning_state=learning_state)
+        # The outer scheduler owns these controls, not the exact-search cache.
+        # Preserve every other key so DFS still rejects unknown/malformed stores.
+        coordinator_keys={'_hybrid_run_seconds','_hybrid_offered_claims','_coverage_path'}
+        dfs_learning={key:value for key,value in learning_state.items() if key not in coordinator_keys}
+        try:
+            result=exact_solve(problem,seconds=remaining(),seed=seed,target=target,hints=state['hints'],stop=stop,progress=emit,
+                               resume=state['dfs'],options=options,learning_state=dfs_learning)
+        finally:
+            # Keep real cache owners warm and visible to existing outer cleanup,
+            # including resources created before an exception and removed entries.
+            for key in tuple(learning_state):
+                if key not in coordinator_keys and key not in dfs_learning:del learning_state[key]
+            learning_state.update(dfs_learning)
         result['stats']['gpu_candidates_checked']=state['checked'];result['dfs_elapsed_seconds']=result['elapsed_seconds']
         result['elapsed_seconds']=time.monotonic()-began;result.update(telemetry(),method='gpu_sampling_dfs')
         if 'checkpoint' in result:state['dfs']=result['checkpoint'];result['checkpoint']=snapshot()
