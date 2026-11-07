@@ -52,23 +52,48 @@ class RegionalParallelTests(unittest.TestCase):
 
     def test_spawned_workers_recheck_completed_certificates_without_other_disk_options(self):
         from pathlib import Path
+        import hashlib
         import tempfile
-        from test_constraint_separator import ring
-        problem=ring(5)
+        from test_constraint_dfs import board,brute
+        # Every legal orientation preserves two independent wires around this
+        # ring. Exhausting an infeasible fixture forces all queued jobs to finish.
+        # A satisfiable ring stops at the first worker's solution: a different
+        # winner on the second run can legitimately visit only uncached queries.
+        problem=SearchProblem([{'id':cell,'segments':[[[0,2],[1,10]],[[0,10],[1,2]]]}
+                               for cell in range(5)],board(5,[(cell,1,(cell+1)%5,0) for cell in range(5)]))
+        edge_solutions=brute(problem,'edges')
+        self.assertEqual(len(edge_solutions),120)
+        self.assertFalse(brute(problem,'gold'))
+        self.assertTrue(all(problem.validate(codes)['line_components']==2 for codes in edge_solutions))
         with tempfile.TemporaryDirectory(prefix='regional-certificate-workers-') as folder:
-            results=[]
+            results=[];saved_hashes={}
             for attempt in range(2):
                 result=solve(problem,seconds=20,workers=2,resume=legacy_root(problem),
                     options={**OPTIONS,'region_certificates':True,'durable_regions':False,'extended_regions':False},
                     learning_state={'_regional_cache_dir':folder})
-                self.assertEqual(result['status'],'solved',result.get('error'))
-                self.assertTrue(problem.validate(result['codes'])['valid'])
+                self.assertEqual(result['status'],'infeasible',result.get('error'))
+                self.assertTrue(result['complete'])
+                self.assertIsNone(result['codes'])
+                self.assertEqual(result['parallel']['pending_jobs'],0)
+                self.assertEqual(result['parallel']['queued_jobs'],0)
+                self.assertEqual(result['parallel']['active_jobs'],0)
+                self.assertGreater(result['stats']['parallel_jobs_completed'],0)
                 self.assertGreater(result['stats']['parallel_workers_started'],0)
                 self.assertGreater(result['stats']['region_certificate_verified_states'],0)
+                self.assertEqual(result['stats']['region_certificate_rejected'],0)
+                self.assertEqual(result['stats']['region_certificate_write_failures'],0)
                 results.append(result)
+                files=list((Path(folder)/'regional-certificates-v1').glob('*.json'))
+                self.assertTrue(files)
+                if not attempt:
+                    saved_hashes={path:hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
+                else:
+                    # The second set of fresh worker processes rechecks existing
+                    # proof bytes; optional additional queries may create files.
+                    for path,expected in saved_hashes.items():
+                        self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(),expected)
             self.assertGreater(results[0]['stats']['region_certificate_saves'],0)
             self.assertGreater(results[1]['stats']['region_certificate_loads'],0)
-            self.assertTrue(list((Path(folder)/'regional-certificates-v1').glob('*.json')))
 
 
 class CrashProblem(SearchProblem):
