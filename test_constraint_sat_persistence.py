@@ -245,6 +245,34 @@ class NativePersistenceTests(unittest.TestCase):
         self.assertLess(results[1]['conflicts'],results[0]['conflicts'],results)
         print(json.dumps({'native_persistence_restart':results,'projected':len(restored.projected),'verification_visits':restored.stats['session_persist_verification_visits']}),flush=True)
 
+    def test_public_timeout_after_real_native_call_keeps_tail_for_fresh_restore(self):
+        problem,_=fixture();scope=WorkScope.for_problem(problem,'edges')
+        session=PersistentSatSession(problem,scope,core_lifting=True,native_persistence=True)
+        try:
+            original=session._solve_once
+            def timeout_after_call(check,deadline):
+                original(check,deadline)
+                raise SessionInterrupted('timeout')
+            with patch.object(session,'_solve_once',side_effect=timeout_after_call):
+                answer=session.advance(seconds=5)
+            self.assertEqual(answer['status'],'timeout')
+            self.assertEqual(answer['stats']['session_persist_verified_clauses'],0)
+            self.assertTrue(answer['checkpoint']['native_clauses']['claims'])
+            saved=json.loads(json.dumps(answer['checkpoint']))
+        finally:session.close()
+        restored=PersistentSatSession.restore(problem,saved,'edges',native_persistence=False)
+        try:
+            for _ in range(100):
+                if restored.prepare(lambda:None,5):break
+            self.assertGreater(restored.persistence.stats['session_persist_imported_clauses'],0)
+            seen=[]
+            while restored.solver.solve():
+                model={lit for lit in restored.solver.get_model() if lit>0}
+                codes=tuple(next(code for code,lit in row.items() if lit in model) for row in restored.variables)
+                seen.append(codes);restored.solver.add_clause([-restored.variables[c][code] for c,code in enumerate(codes)])
+            self.assertEqual(sorted(seen),sorted(brute(problem,'edges')));self.assertEqual(len(seen),72)
+        finally:restored.close()
+
     def test_actual_session_logging_and_finite_solution_preservation(self):
         problem,_=fixture();scope=WorkScope.for_problem(problem,'edges');session=PersistentSatSession(problem,scope,native_persistence=True)
         try:

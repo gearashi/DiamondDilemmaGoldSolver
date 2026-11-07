@@ -105,13 +105,15 @@ class PersistentSatSession:
             from constraint_sat_persistence import VerifiedNativeClauses
             if self.persistence is None:self.persistence=VerifiedNativeClauses(self._base_clauses,self.variables,
                 fingerprint=self.problem.fingerprint,target=self.scope.target,initial=self.scope.root)
+            if self.persistence.disable_reason is not None:
+                self.native_persistence=True;return
             replacement=self.persistence.create_solver(self._base_clauses,logging=True)
             try:
                 for record in self.gold_cuts:
                     if all(code in self.variables[cell] for cell,code in record):replacement.add_clause([-self.variables[cell][code] for cell,code in record])
             except BaseException:replacement.delete();raise
             prior=self.solver;self._prior_decisions+=int(prior.accum_stats().get('decisions',0))
-            self.solver=replacement;self._native_logging=True;self.persistence.offset=0;self.persistence.buffer=b''
+            self.solver=replacement;self._native_logging=True;self.persistence.offset=0;self.persistence.buffer=b'';self.persistence.discard_line=False
             self.selector=None;self._guard_domains={};self.next_id=max((abs(lit) for row in self._base_clauses for lit in row),default=0)
             self.stats['session_model_builds']+=1;prior.delete()
         self.native_persistence=enabled
