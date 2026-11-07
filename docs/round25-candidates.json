@@ -2,7 +2,7 @@
   "schema": "diamond-round25-register-v1",
   "baseline": "30483db81894359ef9030493e45d192a36f66c98",
   "objective": "Implement and evaluate proposals 1-37 in order, prioritize fewer decisions and repeated operations, retain useful sound changes, publish a validated release and measured hardware settings.",
-  "status": "in_progress",
+  "status": "evaluation_complete",
   "candidate_count": 37,
   "gold_solution_found": false,
   "candidates": [
@@ -10,7 +10,7 @@
       "id": 1,
       "proposal": "Use one SAT failure to eliminate more branches",
       "owner": "learning",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "test_constraint_learning_round25.py",
         "benchmark_learning_round25.py"
@@ -18,14 +18,38 @@
       "disposition": "Retained opt-in; broader verified SAT exclusions",
       "original_puzzle_gain": "not established",
       "access": "sat_core_lifting; persistent SAT",
-      "finite_evidence": "12 queued cubes: 12 total SAT calls reduced to 2 including independent verification; finite randomized queue checks preserve completions.",
-      "limits": "Unknown verification keeps queued work. Decision counters include verifier work; frozen release measurements pending."
+      "finite_evidence": "SAT queries 12 -> 2, including verification.",
+      "limits": "One extra verifier model; decisions are zero in both cases.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "12 queued cubes: 12 total SAT calls reduced to 2 including independent verification; finite randomized queue checks preserve completions.",
+        "limits": "Unknown verification keeps queued work. Decision counters include verifier work; frozen release measurements pending."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/01-learning/report.json",
+            "sha256": "a5a583be40e77c4a07eca999ac0300324eb6e07bfa8c301f7d4ceb84dbe14d02",
+            "bytes": 144550
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_learning_round25.py --candidate 1 --evidence-stage frozen --output audit/reproduce-round25-01.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "sat"
+      ]
     },
     {
       "id": 2,
       "proposal": "Keep one SAT assistant across related jobs",
       "owner": "learning",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "test_constraint_job_sat.py",
         "constraint_job_sat.py"
@@ -33,15 +57,41 @@
       "disposition": "Retained opt-in; original-root SAT model shared within a worker",
       "original_puzzle_gain": "not established",
       "access": "shared_sat_assistant; DFS/parallel DFS",
-      "finite_evidence": "20 alternating four-cell jobs: model builds20\u21921, constructionsteps7410\u2192438, native supportcalls400\u219243; identical supported placements.80 randomized domain/decision cases preserve independently enumerated solutions.",
-      "limits": "Same-process per-worker native model reuse. Does not persist native SAT internals acrossrestart; original-puzzle gain unestablished.",
-      "regressions": "89 DFS/parallel/SAT tests passed with1 optionalnative skip;8 focused post-reviewtests passed."
+      "finite_evidence": "20 jobs: models 20 -> 1; support calls 400 -> 43.",
+      "limits": "Same-process worker reuse; native state is not persisted.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "20 alternating four-cell jobs: model builds20→1, constructionsteps7410→438, native supportcalls400→43; identical supported placements.80 randomized domain/decision cases preserve independently enumerated solutions.",
+        "regressions": "89 DFS/parallel/SAT tests passed with1 optionalnative skip;8 focused post-reviewtests passed.",
+        "limits": "Same-process per-worker native model reuse. Does not persist native SAT internals acrossrestart; original-puzzle gain unestablished."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/02-learning/report.json",
+            "sha256": "c0330d00f99a5747bad1ce6e3badfe5c62422cbeeaf8c626fbe5304c445421a4",
+            "bytes": 145708
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_learning_round25.py --candidate 2 --evidence-stage frozen --output audit/reproduce-round25-02.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 3,
       "proposal": "Resume interrupted proof verification",
       "owner": "learning",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_proof_cursor.py",
         "test_constraint_learning_round25.py"
@@ -49,14 +99,40 @@
       "disposition": "Retained opt-in; trusted same-process proof-check continuation",
       "original_puzzle_gain": "not established",
       "access": "resumable_proof_checking",
-      "finite_evidence": "32 short leases: restarting checker used288clause visits and stayed incomplete; retained cursor finished in172visits. Truth-table, byte-binding, cancellation and mask-admission regressions pass.",
-      "limits": "Retains checked prefix and unfinished unit scan in memory; process restart rechecks saved certificate bytes."
+      "finite_evidence": "32 leases: retained checker completes in 172 visits; restart uses 288 and remains incomplete.",
+      "limits": "Warm-process cursor only; baseline has not completed.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "32 short leases: restarting checker used288clause visits and stayed incomplete; retained cursor finished in172visits. Truth-table, byte-binding, cancellation and mask-admission regressions pass.",
+        "limits": "Retains checked prefix and unfinished unit scan in memory; process restart rechecks saved certificate bytes."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/03-learning/report.json",
+            "sha256": "3c2988ffbd63925a7bfc565f7e90ab7ee06d5c7ce5b6f8d238364ff50f13bf38",
+            "bytes": 141898
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_learning_round25.py --candidate 3 --evidence-stage frozen --output audit/reproduce-round25-03.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 4,
       "proposal": "Generate explanations directly inside the native CPU solver",
       "owner": "learning",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "test_constraint_native_reasons.py",
         "constraint_native_learning.py",
@@ -65,14 +141,40 @@
       "disposition": "Retained opt-in; independently checked native removal records",
       "original_puzzle_gain": "not established",
       "access": "native_explanations; compiled native_search and LCG",
-      "finite_evidence": "Complete4cell case preserves all152solutions and245nodes; explanation checker operations650\u2192281,11directclauses,0fallbacks.73native/regression tests pass including enabled-log Stop/resume and capfallback.",
-      "limits": "Bounded seam/inventory reason logs only. Unexplained inherited Python deductions or incomplete logs use the prior safe replay. Checker counters exclude C record generation/copy and LCG analysis."
+      "finite_evidence": "Same 152 solutions/245 nodes; Python checker work 650 -> 281.",
+      "limits": "Native trace production is additional work.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Complete4cell case preserves all152solutions and245nodes; explanation checker operations650→281,11directclauses,0fallbacks.73native/regression tests pass including enabled-log Stop/resume and capfallback.",
+        "limits": "Bounded seam/inventory reason logs only. Unexplained inherited Python deductions or incomplete logs use the prior safe replay. Checker counters exclude C record generation/copy and LCG analysis."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/04-learning/report.json",
+            "sha256": "9822cdf0705e62ffa2f3e5fb3382709aba47bfc763ab73e9140a0861e7494900",
+            "bytes": 145000
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_learning_round25.py --candidate 4 --evidence-stage frozen --output audit/reproduce-round25-04.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 5,
       "proposal": "Preserve native SAT learning across application restarts",
       "owner": "learning",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_sat_persistence.py",
         "test_constraint_sat_persistence.py",
@@ -82,36 +184,61 @@
       "disposition": "Retained opt-in verified clause-subset persistence on the tested Linux/macOS builds; Windows producer disabled",
       "original_puzzle_gain": "not established",
       "access": "native_sat_persistence; SAT only; implies persistent_sat",
-      "finite_evidence": "24 tests passed on each of Linux x86-64, macOS x86-64 and macOS ARM64. Fresh-process inventory decisions 8957->4473 and 1724->1509; independent verification costs 732969 and 3966599 clause visits. All 72 finite-puzzle boards preserved, but its decisions worsened 495->596.",
-      "limits": "Bounded verified original-CNF clause subset, including stable auxiliaries, not full native state. Default off and workload dependent. CPython3.12/python-sat1.9.dev15 supported producer matrix; Windows may recheck/import snapshots with logging disabled. No original-puzzle gain established.",
-      "linux_capability": {
-        "status": "bounded_interrupted_prefix_and_fresh_process_checks_passed",
-        "run": "https://github.com/gearashi/DiamondDilemmaGoldSolver/actions/runs/42335996814",
-        "commit": "b3169a0537592f4b591bf9393576bd5462bb69e0",
-        "platform": "Ubuntu24.04/Python3.12",
-        "clean_rup_backends": [
-          "gluecard3",
-          "gluecard4",
-          "glucose3",
-          "glucose4",
-          "glucose42",
-          "lingeling",
-          "maplechrono"
-        ],
-        "scope": "Earlier capability and prefix tests; final implemented-feature evidence is linked in supported_ci.",
-        "platforms": [
-          "Linux x86-64",
-          "macOS x86-64",
-          "macOS ARM64"
-        ]
+      "finite_evidence": "Verified clause-subset restart mechanism; three supported-platform CI jobs pass.",
+      "limits": "Windows producer disabled; older numerical comparisons remain historical.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "24 tests passed on each of Linux x86-64, macOS x86-64 and macOS ARM64. Fresh-process inventory decisions 8957->4473 and 1724->1509; independent verification costs 732969 and 3966599 clause visits. All 72 finite-puzzle boards preserved, but its decisions worsened 495->596.",
+        "limits": "Bounded verified original-CNF clause subset, including stable auxiliaries, not full native state. Default off and workload dependent. CPython3.12/python-sat1.9.dev15 supported producer matrix; Windows may recheck/import snapshots with logging disabled. No original-puzzle gain established.",
+        "supported_ci": "https://github.com/gearashi/DiamondDilemmaGoldSolver/actions/runs/42338512332",
+        "linux_capability": {
+          "status": "bounded_interrupted_prefix_and_fresh_process_checks_passed",
+          "run": "https://github.com/gearashi/DiamondDilemmaGoldSolver/actions/runs/42335996814",
+          "commit": "b3169a0537592f4b591bf9393576bd5462bb69e0",
+          "platform": "Ubuntu24.04/Python3.12",
+          "clean_rup_backends": [
+            "gluecard3",
+            "gluecard4",
+            "glucose3",
+            "glucose4",
+            "glucose42",
+            "lingeling",
+            "maplechrono"
+          ],
+          "scope": "Earlier capability and prefix tests; final implemented-feature evidence is linked in supported_ci.",
+          "platforms": [
+            "Linux x86-64",
+            "macOS x86-64",
+            "macOS ARM64"
+          ]
+        }
       },
-      "supported_ci": "https://github.com/gearashi/DiamondDilemmaGoldSolver/actions/runs/42338512332"
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/proposal05-platform-reference.json",
+            "sha256": "a344f97e1026120239a504c87bd87ae593291867e16eed45327f3642c5cdc2ff",
+            "bytes": 6494
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_sat_capabilities_round25.py --evidence-stage frozen --output audit/reproduce-round25-05-capabilities.json",
+          "python -B benchmark_sat_persistence_round25.py --evidence-stage frozen --output audit/reproduce-round25-05-persistence.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "sat"
+      ]
     },
     {
       "id": 6,
       "proposal": "Represent completed and unfinished search regions symbolically",
       "owner": "learning",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_symbolic_work.py",
         "test_constraint_learning_round25.py",
@@ -120,14 +247,40 @@
       "disposition": "Retained opt-in; exact symbolic coverage and incremental local extensions",
       "original_puzzle_gain": "not established",
       "access": "symbolic_coverage",
-      "finite_evidence": "Eight 160-cell queries: 176800 flat cube subtraction checks versus 509 diagram operations including compilation; identical remaining cube. Growing ledger: one build, twelve incremental extensions, avoids 78 repeated record reads.",
-      "limits": "Different logical operation units, not a speed ratio. Cached union is scope/cap/database-version bound; unknown/cap returns original remaining work. Public frontiers remain flat cubes."
+      "finite_evidence": "176,800 flat checks versus 509 DAG operations; 12 insertions avoid 78 rereads.",
+      "limits": "Different units; Cartesian assignments are not legal-board counts.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Eight 160-cell queries: 176800 flat cube subtraction checks versus 509 diagram operations including compilation; identical remaining cube. Growing ledger: one build, twelve incremental extensions, avoids 78 repeated record reads.",
+        "limits": "Different logical operation units, not a speed ratio. Cached union is scope/cap/database-version bound; unknown/cap returns original remaining work. Public frontiers remain flat cubes."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/06-learning/report.json",
+            "sha256": "7debebabe724e0e2a989576e2c860b21653e4c125cbd4998b00c23c8bbe2c17e",
+            "bytes": 143043
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_learning_round25.py --candidate 6 --evidence-stage frozen --output audit/reproduce-round25-06.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "sat"
+      ]
     },
     {
       "id": 7,
       "proposal": "Share a common graph of verified deductions",
       "owner": "learning",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_mixed_proof.py",
         "test_constraint_mixed_proof.py",
@@ -136,14 +289,40 @@
       "disposition": "Retained opt-in; shared independently checked deduction graph",
       "original_puzzle_gain": "not established",
       "access": "mixed_proof_dag",
-      "finite_evidence": "Two two-cell Gold refutations check 41 nodes from cold contexts versus 21 with shared completed nodes. Independent enumeration finds 18 edge arrangements and no Gold loop. Thirty proof and PB regressions pass after exact-integer and strand-binding review fixes.",
-      "limits": "Bounded Hall, proper-loop, affine, exact-integer PB and RUP nodes. Native-free transport rechecks all imported nodes; live completed nodes can be reused. No original-puzzle gain established."
+      "finite_evidence": "Two refutations: checked proof nodes 41 -> 21.",
+      "limits": "Producer/other checker work is additional; bounded proof rules.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Two two-cell Gold refutations check 41 nodes from cold contexts versus 21 with shared completed nodes. Independent enumeration finds 18 edge arrangements and no Gold loop. Thirty proof and PB regressions pass after exact-integer and strand-binding review fixes.",
+        "limits": "Bounded Hall, proper-loop, affine, exact-integer PB and RUP nodes. Native-free transport rechecks all imported nodes; live completed nodes can be reused. No original-puzzle gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/07-learning/report.json",
+            "sha256": "d9521da63d7eab187a3c9e46ea883693ee968f9b19c76528eac1b343775a9eba",
+            "bytes": 142416
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_learning_round25.py --candidate 7 --evidence-stage frozen --output audit/reproduce-round25-07.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 8,
       "proposal": "Retain relationships involving several choices",
       "owner": "learning",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_higher_relations.py",
         "test_constraint_learning_round25.py",
@@ -152,14 +331,40 @@
       "disposition": "Retained opt-in; completed scoped three/four-cell projection tables",
       "original_puzzle_gain": "not established",
       "access": "higher_order_relations",
-      "finite_evidence": "135 contexts after ordinary propagation: native queries51->28 including16compilation+12ordinary queries; native decisions178->162; equal SAT-model construction and identical supported placements/completions. Both policies enable witness_pool/support_cover.37focused tests pass.",
-      "limits": "Incomplete/capped tables never prune; reuse covering ancestor relations. Recompiling every descendant used275projectionqueries by80contexts and was rejected. Bounded live tables only; original-puzzle gain unestablished."
+      "finite_evidence": "Compilation included: SAT calls 51 -> 28; decisions 178 -> 162.",
+      "limits": "Adds 2,040 table checks and more witness checks.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "135 contexts after ordinary propagation: native queries51->28 including16compilation+12ordinary queries; native decisions178->162; equal SAT-model construction and identical supported placements/completions. Both policies enable witness_pool/support_cover.37focused tests pass.",
+        "limits": "Incomplete/capped tables never prune; reuse covering ancestor relations. Recompiling every descendant used275projectionqueries by80contexts and was rejected. Bounded live tables only; original-puzzle gain unestablished."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/08-learning/report.json",
+            "sha256": "fa8e8a0c80e9ddef63c55cdc48945f13f556ccbd0d91c544ca62de449e1f8045",
+            "bytes": 145604
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_learning_round25.py --candidate 8 --evidence-stage frozen --output audit/reproduce-round25-08.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 9,
       "proposal": "Update the parity-equation basis incrementally",
       "owner": "learning",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_algebra.py",
         "test_constraint_affine_round25.py",
@@ -168,14 +373,40 @@
       "disposition": "Retained opt-in; covering-ancestor affine basis reuse",
       "original_puzzle_gain": "not established",
       "access": "incremental_affine; implies affine_reasoning",
-      "finite_evidence": "13nestedconsistentcontexts: equationinsertions1222->376; Gaussian rowwork3282->1168.180differential narrowing/widening contexts preserve exact filtering and enumerated completions.10new+legacytestsPASS, independentreviewclear.",
-      "limits": "Basis reuse is exact under componentwise narrowing; widening needs an exact cached state or covering ancestor, otherwise rebuild. Fourlive snapshots. Counts exclude binding checks/copies; no original-puzzle search-node gain established."
+      "finite_evidence": "13 contexts: equations 1,222 -> 376; row operations 3,282 -> 1,168.",
+      "limits": "Construction reuse; no extra pruning measured.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "13nestedconsistentcontexts: equationinsertions1222->376; Gaussian rowwork3282->1168.180differential narrowing/widening contexts preserve exact filtering and enumerated completions.10new+legacytestsPASS, independentreviewclear.",
+        "limits": "Basis reuse is exact under componentwise narrowing; widening needs an exact cached state or covering ancestor, otherwise rebuild. Fourlive snapshots. Counts exclude binding checks/copies; no original-puzzle search-node gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/09-learning/report.json",
+            "sha256": "1b96ea5a04fc93c902a22d46546fcf854991c4e57f72932ef6af8492160e32a2",
+            "bytes": 143040
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_learning_round25.py --candidate 9 --evidence-stage frozen --output audit/reproduce-round25-09.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 10,
       "proposal": "Learn weighted constraints from actual conflicts",
       "owner": "learning",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_conflict_pb.py",
         "test_constraint_learning_round25.py",
@@ -184,14 +415,40 @@
       "disposition": "Retained opt-in stronger scoped weighted-constraint deductions",
       "original_puzzle_gain": "not established",
       "access": "conflict_pb; implies pb_learning",
-      "finite_evidence": "Two extra choices removed after ordinary and static-PB fixpoints, preserving all 15 edge and 6 Gold completions. 33 trials, 65960 row combinations, 1084925 scored terms; 5 focused and 24 existing tests pass.",
-      "limits": "Additional arithmetic work for stronger pruning, not a speed or total-work improvement claim. Bounded retained cuts have independently replayed exact-integer proofs. 512-combination variant found no cut; 2048 and 8192 found the same two cuts; 2048 retained."
+      "finite_evidence": "Two extra candidate deletions; repeat filtering adds no cut combinations.",
+      "limits": "Costs 65,960 combinations and 1,084,925 scored terms.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Two extra choices removed after ordinary and static-PB fixpoints, preserving all 15 edge and 6 Gold completions. 33 trials, 65960 row combinations, 1084925 scored terms; 5 focused and 24 existing tests pass.",
+        "limits": "Additional arithmetic work for stronger pruning, not a speed or total-work improvement claim. Bounded retained cuts have independently replayed exact-integer proofs. 512-combination variant found no cut; 2048 and 8192 found the same two cuts; 2048 retained."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/10-learning/report.json",
+            "sha256": "513aed57c470aed4287d29da5b8eb45fd4d43954d8e0491c7683e2cd1a234d10",
+            "bytes": 146333
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_learning_round25.py --candidate 10 --evidence-stage frozen --output audit/reproduce-round25-10.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 11,
       "proposal": "Use exact integer divisibility constraints during search",
       "owner": "learning",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_lattice.py",
         "test_constraint_lattice_round25.py",
@@ -200,14 +457,40 @@
       "disposition": "Retained opt-in exact bounded integer seam/inventory lattice",
       "original_puzzle_gain": "not established",
       "access": "integer_lattice",
-      "finite_evidence": "Three extra choices removed after ordinary/GF2/static-PB fixpoints, preserving 6 edge and 4 Gold completions. 4000 exact rational-coordinate membership checks, 100 complete-solution contexts, cancellation/cap tests and a full160-cell near-completion test pass.",
-      "limits": "Actual puzzle exclusions also follow from rational-span consistency; no integer-only puzzle gain found in a 3000-context follow-up. Determinant3 arithmetic test verifies integer-specific strength separately. All cells contribute; caps are unknown and cached only as optional-work limits. No original-puzzle gain established."
+      "finite_evidence": "Three extra deletions preserve all 6 edge/4 Gold completions.",
+      "limits": "Adds 2,650 integer operations; puzzle gains also follow from rational span.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Three extra choices removed after ordinary/GF2/static-PB fixpoints, preserving 6 edge and 4 Gold completions. 4000 exact rational-coordinate membership checks, 100 complete-solution contexts, cancellation/cap tests and a full160-cell near-completion test pass.",
+        "limits": "Actual puzzle exclusions also follow from rational-span consistency; no integer-only puzzle gain found in a 3000-context follow-up. Determinant3 arithmetic test verifies integer-specific strength separately. All cells contribute; caps are unknown and cached only as optional-work limits. No original-puzzle gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/11-learning/report.json",
+            "sha256": "99484e3d10dc84c262d3c7075389d2fe92142a46b1823c1c995dac335a11031b",
+            "bytes": 143133
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_learning_round25.py --candidate 11 --evidence-stage frozen --output audit/reproduce-round25-11.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 12,
       "proposal": "Repair only affected piece-matching components",
       "owner": "learning",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_incremental_hall.py",
         "test_constraint_learning_round25.py",
@@ -216,14 +499,40 @@
       "disposition": "Retained opt-in; reuse unaffected alternating-graph SCC components after rematching",
       "original_puzzle_gain": "not established",
       "access": "hall_rematch; implies incremental_hall",
-      "finite_evidence": "Finite rematching comparison: SCC vertices revisited6->2 with4 reused; identical supports. Public/warm and legacyHall/DFS tests pass. Independent review cleared narrowing, widening, rollback and Stop handling.",
-      "limits": "Matching edge tests are unchanged. Reuse requires unchanged induced adjacency and a rematching that preserves the old component quotient; otherwise recompute."
+      "finite_evidence": "After rematching, SCC vertices revisited 6 -> 2.",
+      "limits": "Matching-edge tests remain 2 in both policies.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Finite rematching comparison: SCC vertices revisited6->2 with4 reused; identical supports. Public/warm and legacyHall/DFS tests pass. Independent review cleared narrowing, widening, rollback and Stop handling.",
+        "limits": "Matching edge tests are unchanged. Reuse requires unchanged induced adjacency and a rematching that preserves the old component quotient; otherwise recompute."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/12-learning/report.json",
+            "sha256": "f3b3bf540b34d2f21aa3d7c8cc5f0d6e5e8cb170a7e69935089a03249ab37881",
+            "bytes": 142939
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_learning_round25.py --candidate 12 --evidence-stage frozen --output audit/reproduce-round25-12.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 13,
       "proposal": "Maintain the CPU's possible Gold connections reversibly",
       "owner": "learning",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_gold_graph.py",
         "constraint_advanced.py",
@@ -233,14 +542,40 @@
       "disposition": "Retained opt-in; reversible shared possible Gold graph",
       "original_puzzle_gain": "not established",
       "access": "reversible_gold_graph; implies strand_connectivity and biconnected",
-      "finite_evidence": "Sixteen ten-cell contexts: seam-port tests5280->561;234support updates and10491edge materializations also reported. All exact graphs/filter outputs agree.75focused/advanced/DFS tests pass including120random contexts and23Stop boundaries.",
-      "limits": "Shares graph construction and updates support counts; connectivity traversals still run fully. No total-work or speed improvement claim."
+      "finite_evidence": "16 contexts: seam tests 5,280 -> 561.",
+      "limits": "Still 234 support updates, 10,491 edge materializations and full traversals.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Sixteen ten-cell contexts: seam-port tests5280->561;234support updates and10491edge materializations also reported. All exact graphs/filter outputs agree.75focused/advanced/DFS tests pass including120random contexts and23Stop boundaries.",
+        "limits": "Shares graph construction and updates support counts; connectivity traversals still run fully. No total-work or speed improvement claim."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/13-learning/report.json",
+            "sha256": "01a76e1eadf04022cf9c8fc749ba8db2cd4800e2df7969cd837f4d0c3e121ca2",
+            "bytes": 142999
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_learning_round25.py --candidate 13 --evidence-stage frozen --output audit/reproduce-round25-13.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 14,
       "proposal": "Incrementally restrict and restore regional diagrams",
       "owner": "regions",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_region_incremental.py",
         "test_constraint_regions_round25.py",
@@ -249,14 +584,40 @@
       "disposition": "Retained opt-in; exact regional envelope restriction and undo",
       "original_puzzle_gain": "not established",
       "access": "incremental_regions",
-      "finite_evidence": "Fifteen narrowing/undo contexts: compiler states1479->128; transitions10206->889; counted transitions/index/update/support-edge work15141->6412. Six focused tests and22legacy tests pass; full160-cell planted Gold witness preserved.",
-      "limits": "Requires unchanged outside assumptions and inside domains within the compiled envelope. Copies1792nodecounts and15source checks reported separately. Unknown or interrupted compilation never prunes."
+      "finite_evidence": "Compiler transitions 10,206 -> 889; counted edge work 15,141 -> 6,412.",
+      "limits": "Also 1,792 copied counts and 15 binding checks; unchanged outside scope required.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Fifteen narrowing/undo contexts: compiler states1479->128; transitions10206->889; counted transitions/index/update/support-edge work15141->6412. Six focused tests and22legacy tests pass; full160-cell planted Gold witness preserved.",
+        "limits": "Requires unchanged outside assumptions and inside domains within the compiled envelope. Copies1792nodecounts and15source checks reported separately. Unknown or interrupted compilation never prunes."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/14-regional/report.json",
+            "sha256": "8fac0fcc4ff90169a142442a1ada4720abd4be0c95717857e9d9de3fe2f1c13e",
+            "bytes": 146674
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_regions_round25.py --candidate 14 --evidence-stage frozen --output audit/reproduce-round25-14.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 15,
       "proposal": "Save unfinished regional calculations",
       "owner": "regions",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_region_cursor.py",
         "constraint_region_incremental.py",
@@ -266,14 +627,40 @@
       "disposition": "Retained opt-in; bounded trusted-local regional compiler checkpoints",
       "original_puzzle_gain": "not established",
       "access": "durable_regions; implies incremental_regions; run-local regional cache directory",
-      "finite_evidence": "Three process restarts: transition attempts1303->889, zero repeated completed transitions and all5040histories preserved. Nine focused tests pass, including concurrent spawned writers and actual public DFS. Four atomic writes total247901actualbytes.",
-      "limits": "Local checkpoints are trusted computation state, not externally verified mathematical certificates. Strict source/root/query/cap binding, checksum, bounded structural validation and atomic writes. Crashes before a successful save can repeat work; JSON verification/copy/I/O costs are additional."
+      "finite_evidence": "Three restarts: attempts 1,303 -> 889; no completed transitions repeated.",
+      "limits": "Four writes/247,901 bytes; trusted local state, not an imported proof.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Three process restarts: transition attempts1303->889, zero repeated completed transitions and all5040histories preserved. Nine focused tests pass, including concurrent spawned writers and actual public DFS. Four atomic writes total247901actualbytes.",
+        "limits": "Local checkpoints are trusted computation state, not externally verified mathematical certificates. Strict source/root/query/cap binding, checksum, bounded structural validation and atomic writes. Crashes before a successful save can repeat work; JSON verification/copy/I/O costs are additional."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/15-regional/report.json",
+            "sha256": "676fea7be94363be117be0549d38c380de1dd60034765b689356e7405c0916a4",
+            "bytes": 146171
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_regions_round25.py --candidate 15 --evidence-stage frozen --output audit/reproduce-round25-15.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 16,
       "proposal": "Build compact constraint factors directly",
       "owner": "regions",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_region_compact.py",
         "test_constraint_regions_round25.py",
@@ -282,14 +669,40 @@
       "disposition": "Retained opt-in; direct whole-constraint seam and physical-resource factors",
       "original_puzzle_gain": "not established",
       "access": "compact_factors",
-      "finite_evidence": "Controlled160-cell query:504direct transitions and169states; old pairwise construction requires2160entries and capsat1000. Additional480pattern preparations,587seam tests and168backward edges reported. Five focused tests include full160-cell and publicDFS routes.",
-      "limits": "All cells, seams and physical resources participate. Piece usage is forgotten only after its last possible occurrence and mandatory use check. State, placement, width, resource and transition caps returnunknown. This stage enforces edge/inventory constraints; Gold connectivity is proposal17."
+      "finite_evidence": "Controlled 160 cells: direct compile completes in 504 transitions; pair-table construction caps.",
+      "limits": "2,160 table entries and 504 transitions are different units; edge/inventory only.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Controlled160-cell query:504direct transitions and169states; old pairwise construction requires2160entries and capsat1000. Additional480pattern preparations,587seam tests and168backward edges reported. Five focused tests include full160-cell and publicDFS routes.",
+        "limits": "All cells, seams and physical resources participate. Piece usage is forgotten only after its last possible occurrence and mandatory use check. State, placement, width, resource and transition caps returnunknown. This stage enforces edge/inventory constraints; Gold connectivity is proposal17."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/16-regional/report.json",
+            "sha256": "538d20857a9e556404032c861aa8ebc050cb76e33fad3fd88f1cda6773b586b2",
+            "bytes": 149050
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_regions_round25.py --candidate 16 --evidence-stage frozen --output audit/reproduce-round25-16.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 17,
       "proposal": "Include Gold connectivity throughout whole-problem elimination",
       "owner": "regions",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_region_compact.py",
         "test_constraint_regions_round25.py",
@@ -298,14 +711,40 @@
       "disposition": "Retained opt-in; exact Gold connectivity inside bounded whole-board elimination",
       "original_puzzle_gain": "not established",
       "access": "gold_elimination; implies compact_factors",
-      "finite_evidence": "80 small exact Gold support/count/witness comparisons. A known 160-cell one-loop case completes with 504 transitions and 370 pairing splices; identical seam masks rewired into multiple loops are rejected after 213 transitions and 142 splices. Public DFS accepts an independently validated witness at one node, with no further branch.",
-      "limits": "Bounded whole-board queries, including a 128 exposed-port cap. Caps are unknown. Stale witnesses outside current domains are ignored; invalid in-domain witnesses error. No original Gold solution or performance gain established."
+      "finite_evidence": "Controlled Gold retained; rewired two-loop 160-cell case rejected after 213 transitions.",
+      "limits": "Bounded whole-board elimination on controlled inputs.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "80 small exact Gold support/count/witness comparisons. A known 160-cell one-loop case completes with 504 transitions and 370 pairing splices; identical seam masks rewired into multiple loops are rejected after 213 transitions and 142 splices. Public DFS accepts an independently validated witness at one node, with no further branch.",
+        "limits": "Bounded whole-board queries, including a 128 exposed-port cap. Caps are unknown. Stale witnesses outside current domains are ignored; invalid in-domain witnesses error. No original Gold solution or performance gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/17-regional/report.json",
+            "sha256": "0dd8601ba91d1ba346ed7bbb6e33a240a5f49be88510ed248efb011da27eb5e4",
+            "bytes": 147561
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_regions_round25.py --candidate 17 --evidence-stage frozen --output audit/reproduce-round25-17.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 18,
       "proposal": "Make automatic decomposition drive the search",
       "owner": "regions",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_region_andor.py",
         "test_constraint_regions_round25.py",
@@ -314,14 +753,40 @@
       "disposition": "Retained opt-in; exact resource-aware separator search with reusable conditional component relations",
       "original_puzzle_gain": "not established",
       "access": "separator_search; DFS modes",
-      "finite_evidence": "Five focused tests cover 60 independently enumerated contexts, caps, Stop, source scope and full 160-cell fixed-path interfaces. A complete eight-cell negative fixture accounts for 72 edge arrangements and no Gold completion. Reusing components reduces builds from 4 to 2, compiler transitions from 84 to 42, and counted work ticks from 609 to 487. Public Gold witness returns after one DFS node.",
-      "limits": "Bounded automatic decomposition and exact inventory/seam/pairing composition. Incomplete component compilation or joins remain unknown. Comparison isolates component reuse within the same separator planner, not dominance over the existing whole-board engine. No original Gold gain established."
+      "finite_evidence": "Component builds 4 -> 2, transitions 84 -> 42, ticks 609 -> 487.",
+      "limits": "Same bounded separator planner; no general engine dominance.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Five focused tests cover 60 independently enumerated contexts, caps, Stop, source scope and full 160-cell fixed-path interfaces. A complete eight-cell negative fixture accounts for 72 edge arrangements and no Gold completion. Reusing components reduces builds from 4 to 2, compiler transitions from 84 to 42, and counted work ticks from 609 to 487. Public Gold witness returns after one DFS node.",
+        "limits": "Bounded automatic decomposition and exact inventory/seam/pairing composition. Incomplete component compilation or joins remain unknown. Comparison isolates component reuse within the same separator planner, not dominance over the existing whole-board engine. No original Gold gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/18-regional/report.json",
+            "sha256": "46f97a43edb808c230e409ae33ac564e589b7806f8844e7b5bd1c61656e23c85",
+            "bytes": 146858
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_regions_round25.py --candidate 18 --evidence-stage frozen --output audit/reproduce-round25-18.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 19,
       "proposal": "Refine diagrams where a false candidate exposes missing information",
       "owner": "regions",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_region_refinement.py",
         "test_constraint_regions_round25.py",
@@ -330,14 +795,40 @@
       "disposition": "Retained opt-in; refine violated factor coordinates and reuse unchanged prefix layers",
       "original_puzzle_gain": "not established",
       "access": "selective_refinement; independent DFS option",
-      "finite_evidence": "Five focused tests cover 150 independently enumerated factor systems, 40 puzzle contexts, caps, Stop, widening and the full 160-cell projection/public DFS route. A finite puzzle case removes 12 unsupported placements. Nine reused prefix layers reduce transitions from 52 to 34 and work ticks from 116 to 89 versus rebuilding under the same refinement policy.",
-      "limits": "Seam and inventory factors provide a necessary relaxation for Gold; a positive factor witness is not a Gold solution. An empty completed overapproximation can reject a query; unfinished work remains unknown. The reported cumulative 24 prune applications include replay of the same 12 deletions, not 24 distinct choices. No original-puzzle gain established."
+      "finite_evidence": "Prefix reuse: transitions 52 -> 34; puzzle fixture removes 12 choices.",
+      "limits": "24 prune applications repeat those 12 removals; positive relaxation is not Gold.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Five focused tests cover 150 independently enumerated factor systems, 40 puzzle contexts, caps, Stop, widening and the full 160-cell projection/public DFS route. A finite puzzle case removes 12 unsupported placements. Nine reused prefix layers reduce transitions from 52 to 34 and work ticks from 116 to 89 versus rebuilding under the same refinement policy.",
+        "limits": "Seam and inventory factors provide a necessary relaxation for Gold; a positive factor witness is not a Gold solution. An empty completed overapproximation can reject a query; unfinished work remains unknown. The reported cumulative 24 prune applications include replay of the same 12 deletions, not 24 distinct choices. No original-puzzle gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/19-regional/report.json",
+            "sha256": "ddeb9a4b23d5dbd1071039316640201988a539bc5e667e8a01c313fdc7414508",
+            "bytes": 148458
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_regions_round25.py --candidate 19 --evidence-stage frozen --output audit/reproduce-round25-19.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 20,
       "proposal": "Compress inventory and boundary connectivity together",
       "owner": "regions",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_region_joint.py",
         "test_constraint_regions_round25.py",
@@ -346,14 +837,40 @@
       "disposition": "Retained opt-in; correlated symbolic inventory families within exact boundary interfaces",
       "original_puzzle_gain": "not established",
       "access": "joint_symbolic_regions; independent DFS option",
-      "finite_evidence": "Four focused tests preserve independently enumerated Gold and edge supports, distinguish strand pairings, and cover caps, Stop, widening, full 160-cell and public solver routes. Nine-cell ring counted work falls from 38328 to 33166 including compilation and symbolic inventory overhead. Seven-cell case increases from 4388 to 5467.",
-      "limits": "Exact two-region join covering the whole board, not arbitrary partial-region support pruning. Inventory, seam, cycle and endpoint correlations remain exact; incomplete work cannot publish supports. Mixed finite work results justify an optional setting, not universal dominance or original-puzzle gain."
+      "finite_evidence": "Nine-cell symbolic join: counted ticks 38,328 -> 33,166.",
+      "limits": "Seven-cell regression 4,388 -> 5,467; two whole-board regions only.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Four focused tests preserve independently enumerated Gold and edge supports, distinguish strand pairings, and cover caps, Stop, widening, full 160-cell and public solver routes. Nine-cell ring counted work falls from 38328 to 33166 including compilation and symbolic inventory overhead. Seven-cell case increases from 4388 to 5467.",
+        "limits": "Exact two-region join covering the whole board, not arbitrary partial-region support pruning. Inventory, seam, cycle and endpoint correlations remain exact; incomplete work cannot publish supports. Mixed finite work results justify an optional setting, not universal dominance or original-puzzle gain."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/20-regional/report.json",
+            "sha256": "a67bc8c63fe213ae4ba760ecac2f9aad10489df5c114b5d264ab912747cb788e",
+            "bytes": 148661
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_regions_round25.py --candidate 20 --evidence-stage frozen --output audit/reproduce-round25-20.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 21,
       "proposal": "Construct connectivity representatives algebraically",
       "owner": "regions",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_region_rank.py",
         "test_constraint_regions_round25.py",
@@ -362,14 +879,40 @@
       "disposition": "Retained opt-in; bounded cut-incidence basis preserving Gold extension existence",
       "original_puzzle_gain": "not established",
       "access": "algebraic_connectivity; independent DFS option",
-      "finite_evidence": "Four tests include 120 matching families checked against every outside matching on four, six and eight endpoints, plus actual puzzle contexts, caps, Stop, cache and public solver checks. On 105 eight-endpoint matchings, explicit construction takes 11401 counted operations and keeps 8 rows; cut incidence uses 840 cut entries and 833 XORs but keeps 35 rows. Actual regional fixture basis/join work is 142 versus 1176 ticks, keeping 11 versus 5 of 12 rows.",
-      "limits": "Preserves existence only, not per-placement support, multiplicity or history counts. Exact inventory, seam, cycle and endpoint buckets remain separate. Sixteen-endpoint cap. More retained representatives can increase later joins; shared table construction is excluded from displayed basis counts. No original-puzzle or universal runtime gain established."
+      "finite_evidence": "App basis/join work 1,176 -> 142 ticks.",
+      "limits": "Keeps 11 rather than 5 rows; existence only; shared compilation excluded.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Four tests include 120 matching families checked against every outside matching on four, six and eight endpoints, plus actual puzzle contexts, caps, Stop, cache and public solver checks. On 105 eight-endpoint matchings, explicit construction takes 11401 counted operations and keeps 8 rows; cut incidence uses 840 cut entries and 833 XORs but keeps 35 rows. Actual regional fixture basis/join work is 142 versus 1176 ticks, keeping 11 versus 5 of 12 rows.",
+        "limits": "Preserves existence only, not per-placement support, multiplicity or history counts. Exact inventory, seam, cycle and endpoint buckets remain separate. Sixteen-endpoint cap. More retained representatives can increase later joins; shared table construction is excluded from displayed basis counts. No original-puzzle or universal runtime gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/21-regional/report.json",
+            "sha256": "27fa716bfeb898f1d0331ca0e1de69b05debea0a16854f846b9e5552ab0b9726",
+            "bytes": 147333
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_regions_round25.py --candidate 21 --evidence-stage frozen --output audit/reproduce-round25-21.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 22,
       "proposal": "Reuse proofs across verified equivalent residual problems",
       "owner": "regions",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_region_isomorphism.py",
         "test_constraint_regions_round25.py",
@@ -378,14 +921,40 @@
       "disposition": "Retained opt-in; independently verified residual-graph equivalence transports completed supports",
       "original_puzzle_gain": "not established",
       "access": "residual_isomorphism; independent DFS option",
-      "finite_evidence": "Four focused tests cover 80 exact Gold-support contexts, structural near misses, caps, Stop, a controlled actual 160-cell polyhedron and public DFS. Three equivalent residuals of a separate controlled 160-cell ring reduce complete compilations from 3 to 1, transitions from 497 to 165, and total counted work including graph checks from 5956 to 2955. Seven-cell work increases from 448 to 507.",
-      "limits": "Every mapped vertex, color and edge is replayed before transporting complete results. Piece interchangeability is not presumed; partial or capped queries cannot prune. The gain discriminator uses a synthetic ring topology, distinct from the actual polyhedron correctness case. Whole unrestricted queries remain capped. No original Gold performance claim."
+      "finite_evidence": "Three 160-cell ring residuals: compilations 3 -> 1; ticks 5,956 -> 2,955.",
+      "limits": "Synthetic ring topology; seven-cell regression 448 -> 507 ticks.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Four focused tests cover 80 exact Gold-support contexts, structural near misses, caps, Stop, a controlled actual 160-cell polyhedron and public DFS. Three equivalent residuals of a separate controlled 160-cell ring reduce complete compilations from 3 to 1, transitions from 497 to 165, and total counted work including graph checks from 5956 to 2955. Seven-cell work increases from 448 to 507.",
+        "limits": "Every mapped vertex, color and edge is replayed before transporting complete results. Piece interchangeability is not presumed; partial or capped queries cannot prune. The gain discriminator uses a synthetic ring topology, distinct from the actual polyhedron correctness case. Whole unrestricted queries remain capped. No original Gold performance claim."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/22-regional/report.json",
+            "sha256": "848b2d060f7423766a786e4863d99ffe78404c97fabef0035ac087eb7b57abe4",
+            "bytes": 148234
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_regions_round25.py --candidate 22 --evidence-stage frozen --output audit/reproduce-round25-22.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 23,
       "proposal": "Extend regional pricing to seams and the single Gold loop",
       "owner": "regions",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_region_pricing.py",
         "test_constraint_regions_round25.py",
@@ -394,14 +963,40 @@
       "disposition": "Retained opt-in; exact rational Gold/seam-aware regional pricing certificates",
       "original_puzzle_gain": "not established",
       "access": "gold_pricing; independent DFS option requiring OR-Tools for app use",
-      "finite_evidence": "Five tests include 30 independent weighted-history pricing comparisons, full-history certificate replay, 30 Gold-support contexts, dependency absence, malformed duals, caps, Stop, controlled original 160-cell geometry and public DFS. An eight-cell negative left possible by inventory-only pricing is proved infeasible in three rounds and four generated history columns; 208 priced DAG edges include exact certificate replay. Complete compilation adds 88 transitions and 34 states.",
-      "limits": "Bounded two-region fractional relaxation, not unrestricted branch-and-price. Floating LP output only suggests duals. Exact Farkas checks and a second complete pricing replay are required before pruning. Fractional feasible results do not establish a Gold solution. Missing dependency or incomplete work remains unknown for direct callers. No original-puzzle gain established."
+      "finite_evidence": "Gold-aware master rejects a case left possible by inventory-only pricing.",
+      "limits": "208 pricing edges plus 88 compile transitions; bounded fractional relaxation.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Five tests include 30 independent weighted-history pricing comparisons, full-history certificate replay, 30 Gold-support contexts, dependency absence, malformed duals, caps, Stop, controlled original 160-cell geometry and public DFS. An eight-cell negative left possible by inventory-only pricing is proved infeasible in three rounds and four generated history columns; 208 priced DAG edges include exact certificate replay. Complete compilation adds 88 transitions and 34 states.",
+        "limits": "Bounded two-region fractional relaxation, not unrestricted branch-and-price. Floating LP output only suggests duals. Exact Farkas checks and a second complete pricing replay are required before pruning. Fractional feasible results do not establish a Gold solution. Missing dependency or incomplete work remains unknown for direct callers. No original-puzzle gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/23-regional/report.json",
+            "sha256": "1b75cef6bfa4319398c1955962f822a2a0977200c887bc0459ba399e03d97bb6",
+            "bytes": 146485
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_regions_round25.py --candidate 23 --evidence-stage frozen --output audit/reproduce-round25-23.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 24,
       "proposal": "Check several unfinished chains jointly",
       "owner": "regions",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_region_multichain.py",
         "test_constraint_regions_round25.py",
@@ -410,14 +1005,40 @@
       "disposition": "Retained opt-in; exhaustive joint linkage through mandatory fixed Gold chains",
       "original_puzzle_gain": "not established",
       "access": "multichain_routing; independent DFS option",
-      "finite_evidence": "Four tests cover all 15 six-port matchings under four domains, shared-label conflicts, multiple strands of one tile, caps, Stop, caches, controlled original 160-cell geometry and public DFS. A four-cell three-chain conflict passes the older individual-chain check but is rejected jointly in 12 routing steps plus 83 graph-work ticks. The positive center tile admits all three independently validated Gold rotations.",
-      "limits": "At most 16 initially unfixed cells, eight mandatory chains, 128 route ports and 768 residual incidence vertices. Cached negatives require complete failed states. Positive linkage is a necessary relaxation and does not establish one full Gold loop; unknown work never prunes. No original-puzzle runtime gain established."
+      "finite_evidence": "Joint linkage rejects a contradiction missed by individual-chain checks.",
+      "limits": "12 route steps plus 83 graph ticks; positive linkage is only necessary.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Four tests cover all 15 six-port matchings under four domains, shared-label conflicts, multiple strands of one tile, caps, Stop, caches, controlled original 160-cell geometry and public DFS. A four-cell three-chain conflict passes the older individual-chain check but is rejected jointly in 12 routing steps plus 83 graph-work ticks. The positive center tile admits all three independently validated Gold rotations.",
+        "limits": "At most 16 initially unfixed cells, eight mandatory chains, 128 route ports and 768 residual incidence vertices. Cached negatives require complete failed states. Positive linkage is a necessary relaxation and does not establish one full Gold loop; unknown work never prunes. No original-puzzle runtime gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/24-regional/report.json",
+            "sha256": "55d1ffec0d9cd2430d06aa11be3ff716d3f6f92439cbbaa6500271e52024420e",
+            "bytes": 147132
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_regions_round25.py --candidate 24 --evidence-stage frozen --output audit/reproduce-round25-24.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 25,
       "proposal": "Certify the completeness of regional results",
       "owner": "regions",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "constraint_region_certificate.py",
         "test_constraint_regions_round25.py",
@@ -427,14 +1048,40 @@
       "disposition": "Retained opt-in; independently verified completeness certificates for a separate completed regional cache",
       "original_puzzle_gain": "not established",
       "access": "region_certificates; independent DFS option with run-local certificate store",
-      "finite_evidence": "Six focused tests check every transition including legal dead children, exact terminal semantics, reachability, counts and supports, malformed proofs, caps, callback cancellation, independently enumerated partial regions and controlled original 160-cell geometry. Real spawned-worker save/reload also passes. A seven-cell 5040-history relation has 128 states and 889 transitions; first production costs 889 compile plus 889 export plus 889 verify transitions. Import uses zero compile/export transitions and verifies all 889 again; serialized proof is 78870 bytes.",
-      "limits": "Independent checker derives rotated segments and uses separate DSU semantics. Only completed verified proofs can supply imported deductions. Verification/export add work; no universal total-work reduction is claimed. This completed-certificate store is separate from proposal 15 trusted unfinished local cursors. No original-puzzle gain established."
+      "finite_evidence": "Import avoids 889 compiler and 889 export transitions.",
+      "limits": "Still verifies all 889 transitions; first production pays all three stages.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Six focused tests check every transition including legal dead children, exact terminal semantics, reachability, counts and supports, malformed proofs, caps, callback cancellation, independently enumerated partial regions and controlled original 160-cell geometry. Real spawned-worker save/reload also passes. A seven-cell 5040-history relation has 128 states and 889 transitions; first production costs 889 compile plus 889 export plus 889 verify transitions. Import uses zero compile/export transitions and verifies all 889 again; serialized proof is 78870 bytes.",
+        "limits": "Independent checker derives rotated segments and uses separate DSU semantics. Only completed verified proofs can supply imported deductions. Verification/export add work; no universal total-work reduction is claimed. This completed-certificate store is separate from proposal 15 trusted unfinished local cursors. No original-puzzle gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/25-regional/report.json",
+            "sha256": "1c09289f5791fe66b00627c74fa07899d10b85737bd576a7cfa165705fbd28a8",
+            "bytes": 147265
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_regions_round25.py --candidate 25 --evidence-stage frozen --output audit/reproduce-round25-25.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "dfs",
+        "parallel-dfs",
+        "hybrid"
+      ]
     },
     {
       "id": 26,
       "proposal": "Combine seam and inventory support in CUDA domains",
       "owner": "gpu_hybrid",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "test_gpu_domain_round25.py",
         "benchmark_gpu_round25.py",
@@ -443,14 +1090,38 @@
       "disposition": "Retained opt-in after independent review; joint neighboring seam and inventory support",
       "original_puzzle_gain": "not established",
       "access": "gpu_joint_support; experimental gpu-domains CUDA engine",
-      "finite_evidence": "Independent full enumeration preserved: six edge completions with decisions 13 to 9; repeated-seam infeasibility decisions 3 to 0. All 4368 bounded support-cap matching systems agree; controlled 160-cell planted Gold witness preserved.",
-      "limits": "Five separate added-work counters; 40 additional state bytes per lane. No original-puzzle gain established. Enabled native v2 policy changes reconstruct scratch from portable remaining cubes."
+      "finite_evidence": "Two finite cases reduce decisions 13 -> 9 and 3 -> 0.",
+      "limits": "Other cases are neutral with added Hall/support work.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Independent full enumeration preserved: six edge completions with decisions 13 to 9; repeated-seam infeasibility decisions 3 to 0. All 4368 bounded support-cap matching systems agree; controlled 160-cell planted Gold witness preserved.",
+        "limits": "Five separate added-work counters; 40 additional state bytes per lane. No original-puzzle gain established. Enabled native v2 policy changes reconstruct scratch from portable remaining cubes."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/26-cuda-domain/report.json",
+            "sha256": "9aad78b5f5c412a44e891b0ad94743ef243a0d89597a8f6dae3d356547c40ca2",
+            "bytes": 154361
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_gpu_round25.py --proposal 26 --evidence-stage frozen --output audit/reproduce-round25-26.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "gpu-domains"
+      ]
     },
     {
       "id": 27,
       "proposal": "Fork GPU branches after propagating their common parent",
       "owner": "gpu_hybrid",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "test_gpu_domain_round25.py",
         "benchmark_gpu_round25.py",
@@ -459,14 +1130,38 @@
       "disposition": "Retained opt-in after independent review; propagate once before cloning root facts",
       "original_puzzle_gain": "not established",
       "access": "gpu_propagated_forks; experimental gpu-domains CUDA engine",
-      "finite_evidence": "Two controlled Gold completions preserved; inclusive strand joins 44 to17 with candidate checks46 to60. Six edge completions preserve decisions6 while removals25 to18/checks103 to98. Stop/native resume and deferred original-parent coverage verified.",
-      "limits": "Preparation is serial per parent. Neutral eighteen-solution case adds candidate checks621 to643. No original-puzzle gain established. One temporary parent allocation accompanies the child batch."
+      "finite_evidence": "Prepared-parent reuse reduces strand joins 44 -> 17.",
+      "limits": "Same case adds checks 46 -> 60; another adds 621 -> 643.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Two controlled Gold completions preserved; inclusive strand joins 44 to17 with candidate checks46 to60. Six edge completions preserve decisions6 while removals25 to18/checks103 to98. Stop/native resume and deferred original-parent coverage verified.",
+        "limits": "Preparation is serial per parent. Neutral eighteen-solution case adds candidate checks621 to643. No original-puzzle gain established. One temporary parent allocation accompanies the child batch."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/27-cuda-domain/report.json",
+            "sha256": "2280ea1fbb005c21dc906ddfca7ce35ee0701c7d1d1375d79cdc05ce4d36cec5",
+            "bytes": 156103
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_gpu_round25.py --proposal 27 --evidence-stage frozen --output audit/reproduce-round25-27.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "gpu-domains"
+      ]
     },
     {
       "id": 28,
       "proposal": "Make CUDA propagation respond only to affected constraints",
       "owner": "gpu_hybrid",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "test_gpu_domain_round25.py",
         "benchmark_gpu_round25.py",
@@ -475,14 +1170,38 @@
       "disposition": "Retained opt-in after independent review; deduplicated dependency-driven CUDA propagation",
       "original_puzzle_gain": "not established",
       "access": "gpu_event_propagation; experimental gpu-domains CUDA engine",
-      "finite_evidence": "112 target/joint/learning/strand configurations preserve independent complete solution sets. Four finite cases reduce candidate visits64 to46,117 to108,640 to346,326 to171 with unchanged decisions; added queue/index work counted separately.",
-      "limits": "60extra state bytes per lane at160cells and3200-byte static table. Rollback conservatively schedules all cells. No original-puzzle gain established; exact nativev3 queue/cursor resume and policy-change portable restart."
+      "finite_evidence": "Four cases reduce candidate visits; controlled 160 cells: 326 -> 171.",
+      "limits": "Decisions unchanged; queue/index operations are additional.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "112 target/joint/learning/strand configurations preserve independent complete solution sets. Four finite cases reduce candidate visits64 to46,117 to108,640 to346,326 to171 with unchanged decisions; added queue/index work counted separately.",
+        "limits": "60extra state bytes per lane at160cells and3200-byte static table. Rollback conservatively schedules all cells. No original-puzzle gain established; exact nativev3 queue/cursor resume and policy-change portable restart."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/28-cuda-domain/report.json",
+            "sha256": "dab7af1574ca84bbba2d7e4ad975db2b79877e0a9685739c607f8d0a1aa932c6",
+            "bytes": 154462
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_gpu_round25.py --proposal 28 --evidence-stage frozen --output audit/reproduce-round25-28.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "gpu-domains"
+      ]
     },
     {
       "id": 29,
       "proposal": "Track more precise GPU failure explanations",
       "owner": "gpu_hybrid",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "test_gpu_domain_round25.py",
         "benchmark_gpu_round25.py",
@@ -491,14 +1210,38 @@
       "disposition": "Retained opt-in after independent review; bounded precise removal explanations with conservative fallback",
       "original_puzzle_gain": "not established",
       "access": "gpu_precise_reasons; experimental gpu-domains CUDA engine",
-      "finite_evidence": "Independently found six-cell prism: both edge/Gold decisions21 to17, clauses20 to16; candidate checks509 to458 edge and497 to446 Gold.56 complete-enumeration configurations preserve solutions. Tiny8-slot saturation safely restores baseline work.",
-      "limits": "Bounded2048-slot cache,<=32probes, half occupancy; misses use conservative cell reasons. Full160 all-current-features1010844bytes/lane;512lanes493.58MiB.25focused checks including independent remaining-solution entailment, collisions/redeletion/native scope. No original-puzzle gain established."
+      "finite_evidence": "Six-cell prism: decisions 21 -> 17; learned clauses 20 -> 16.",
+      "limits": "Small-cache saturation loses gain; hash/support costs remain.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Independently found six-cell prism: both edge/Gold decisions21 to17, clauses20 to16; candidate checks509 to458 edge and497 to446 Gold.56 complete-enumeration configurations preserve solutions. Tiny8-slot saturation safely restores baseline work.",
+        "limits": "Bounded2048-slot cache,<=32probes, half occupancy; misses use conservative cell reasons. Full160 all-current-features1010844bytes/lane;512lanes493.58MiB.25focused checks including independent remaining-solution entailment, collisions/redeletion/native scope. No original-puzzle gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/29-cuda-domain/report.json",
+            "sha256": "ab1aaca78aa12f7a71a6d923200e3bab134b55a14f7fc380ab513409bedfbbcb",
+            "bytes": 159079
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_gpu_round25.py --proposal 29 --evidence-stage frozen --output audit/reproduce-round25-29.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "gpu-domains"
+      ]
     },
     {
       "id": 30,
       "proposal": "Share verified general GPU clauses between lanes",
       "owner": "gpu_hybrid",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "gpu_shared_round25.py",
         "test_gpu_domain_round25.py",
@@ -509,14 +1252,38 @@
       "disposition": "Retained opt-in after independent review; original-root-verified GPU clause sharing",
       "original_puzzle_gain": "not established",
       "access": "gpu_shared_clauses; experimental gpu-domains plus python-sat",
-      "finite_evidence": "Actual producer yields one global claim accepted and one lane-only claim rejected. Three disjoint recipient cubes preserve4completions while decisions4 to2/checks87 to64; producerprefix5decisions54checks and verifier2queries88clauses reported separately.26focused checks pass.",
-      "limits": "Only independently verified original-domain cuts broadcast; pending/unknown/discarded states carry no proof authority. Bounded128pending128tombstones,32literals,1MiB pendingtransport;8short cuts refresh existing lane rings. Native SAT search may retry after restart. No original-puzzle gain established."
+      "finite_evidence": "Recipient decisions 4 -> 2 and checks 87 -> 64; same four completions.",
+      "limits": "Producer unfinished; costs 5 decisions/54 checks plus 2 verifier queries.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Actual producer yields one global claim accepted and one lane-only claim rejected. Three disjoint recipient cubes preserve4completions while decisions4 to2/checks87 to64; producerprefix5decisions54checks and verifier2queries88clauses reported separately.26focused checks pass.",
+        "limits": "Only independently verified original-domain cuts broadcast; pending/unknown/discarded states carry no proof authority. Bounded128pending128tombstones,32literals,1MiB pendingtransport;8short cuts refresh existing lane rings. Native SAT search may retry after restart. No original-puzzle gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/30-cuda-domain/report.json",
+            "sha256": "afb281eae778c1b1398a0cc99c82124751f93563be94a2f84397e6aa10b1961f",
+            "bytes": 150827
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_gpu_round25.py --proposal 30 --evidence-stage frozen --output audit/reproduce-round25-30.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "gpu-domains"
+      ]
     },
     {
       "id": 31,
       "proposal": "Refill individual lanes in the newer CUDA domain engine",
       "owner": "gpu_hybrid",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "gpu_lane_pool_round25.py",
         "test_gpu_domain_round25.py",
@@ -526,14 +1293,38 @@
       "disposition": "Retained opt-in after independent review; exact queued refill and bounded donor reconstruction with durable owner accounting",
       "original_puzzle_gain": "not established",
       "access": "gpu_lane_balance; experimental gpu-domains CUDA engine",
-      "finite_evidence": "Complete independently infeasible prism with12roots/4lanes: fixedwork1/8/17/64 dispatches559 to393,70 to53,34 to26,10 to7. Decisions can increase21 to23 atwork17; extra reconstruction/checks reported.73related plus9finalfocused tests pass.",
-      "limits": "Only donor/idle selected columns reconstruct; untouched native state preserved. Original owner exhausts only after all live/queued descendants. No new per-lane arrays; up to2 temporary replacement columns. Queue donation cap4096; policy change retains exact portable remainder. No original-puzzle gain established."
+      "finite_evidence": "Four budgets use fewer dispatches; budget 64: 10 -> 7.",
+      "limits": "Budget 17 increases decisions 21 -> 23 and checks 898 -> 947.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "Complete independently infeasible prism with12roots/4lanes: fixedwork1/8/17/64 dispatches559 to393,70 to53,34 to26,10 to7. Decisions can increase21 to23 atwork17; extra reconstruction/checks reported.73related plus9finalfocused tests pass.",
+        "limits": "Only donor/idle selected columns reconstruct; untouched native state preserved. Original owner exhausts only after all live/queued descendants. No new per-lane arrays; up to2 temporary replacement columns. Queue donation cap4096; policy change retains exact portable remainder. No original-puzzle gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/31-cuda-domain/report.json",
+            "sha256": "0d1f779aa2ff41a133dd86e021ba15b497e4bcb289f8138bac63bb22ccbdf695",
+            "bytes": 164054
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_gpu_round25.py --proposal 31 --evidence-stage frozen --output audit/reproduce-round25-31.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "gpu-domains"
+      ]
     },
     {
       "id": 32,
       "proposal": "Use incremental, shared checkpoint representations",
       "owner": "gpu_hybrid",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "gpu_checkpoint_codec_round25.py",
         "gpu_checkpoint_round25.py",
@@ -544,14 +1335,38 @@
       "disposition": "Retained opt-in after independent review; one frozen native snapshot, bounded shared live-prefix generations and safe complete recovery",
       "original_puzzle_gain": "not established",
       "access": "gpu_incremental_checkpoint; experimental gpu-domains CUDA engine",
-      "finite_evidence": "37focused checks including every-primitive canonical continuation phases0-4,160activeframes,owner donation/refill/Stop,delayedconsumer andpublication failures. Four completed snapshot continuations: controlled160x4 raw4043216bytes to249766packed,compressed27695 to22791,nextgeneration1of4chunksreused and146789logicalwritebytes vs165028legacyJSON.",
-      "limits": "512MiB logical retention plus32768files; noGC, requiresappsinglewriter. Delayedrefsretained; cap/IOfailure currentstate selfcontainedlegacyfallback. Onlyexplicitknownorigin/predecessor recovery, strictnormalresume. Deadpaddingnormalizeszero; actualnativeprocessstate trusted, notproof. Smallfixturemetadata canincreasefiles. Nooriginalpuzzlegainestablished."
+      "finite_evidence": "One snapshot supplies encoding/frontier/stats; controlled 160 cells omit 3,793,836 padding bytes.",
+      "limits": "Small compressed payloads grow; retained generations and filesystem overhead cost space.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "37focused checks including every-primitive canonical continuation phases0-4,160activeframes,owner donation/refill/Stop,delayedconsumer andpublication failures. Four completed snapshot continuations: controlled160x4 raw4043216bytes to249766packed,compressed27695 to22791,nextgeneration1of4chunksreused and146789logicalwritebytes vs165028legacyJSON.",
+        "limits": "512MiB logical retention plus32768files; noGC, requiresappsinglewriter. Delayedrefsretained; cap/IOfailure currentstate selfcontainedlegacyfallback. Onlyexplicitknownorigin/predecessor recovery, strictnormalresume. Deadpaddingnormalizeszero; actualnativeprocessstate trusted, notproof. Smallfixturemetadata canincreasefiles. Nooriginalpuzzlegainestablished."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/32-cuda-domain/report.json",
+            "sha256": "97166d8414eb9cb204d24ab3c391272da98123681620e3ac96b5008645307b95",
+            "bytes": 147377
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_gpu_round25.py --proposal 32 --evidence-stage frozen --output audit/reproduce-round25-32.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "gpu-domains"
+      ]
     },
     {
       "id": 33,
       "proposal": "Resume sampling and repair phases exactly",
       "owner": "gpu_hybrid",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "gpu_hybrid_resume_round25.py",
         "gpu_sampling_resume_round25.py",
@@ -567,14 +1382,89 @@
       "disposition": "Retained opt-in after independent review; durable same-runtime sampler trajectory and bounded repair/controller reuse",
       "original_puzzle_gain": "not established",
       "access": "durable_hybrid; hybrid engine, CUDA and native WebGPU",
-      "finite_evidence": "28 focused checks pass including actual CUDA/WebGPU9+9 versus18 dispatch state equality and flag-off hybrid resume. Original160 fresh-process two-policy smoke matches147456 proposals without completed dispatch replay. Six finite repair cases preserve outcomes: ordinary54vs72/54vs55 native solves, core4vs5,fragment4vs5,scoped1vs2,trade5transitions retained.",
-      "limits": "Heuristic continuation and scoped query reuse carry no global exclusion authority. Native CP-SAT active queries retry; completed masters/cuts/controllers persist. Exact sampler trajectory requires same device/runtime/policy/source and replica count. Version3 adopts saved phase even flagoff; legacy1/2 stay exactDFS-only. Native bytes256MiB and repair snapshot64MiB bounds. No original-puzzle gain established."
+      "finite_evidence": "Completed ordinary repair prefix: 54 versus 72 native calls; controller work also survives.",
+      "limits": "Interrupted native queries retry; local completion does not prove global infeasibility.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "28 focused checks pass including actual CUDA/WebGPU9+9 versus18 dispatch state equality and flag-off hybrid resume. Original160 fresh-process two-policy smoke matches147456 proposals without completed dispatch replay. Six finite repair cases preserve outcomes: ordinary54vs72/54vs55 native solves, core4vs5,fragment4vs5,scoped1vs2,trade5transitions retained.",
+        "limits": "Heuristic continuation and scoped query reuse carry no global exclusion authority. Native CP-SAT active queries retry; completed masters/cuts/controllers persist. Exact sampler trajectory requires same device/runtime/policy/source and replica count. Version3 adopts saved phase even flagoff; legacy1/2 stay exactDFS-only. Native bytes256MiB and repair snapshot64MiB bounds. No original-puzzle gain established."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/33-repair/report.json",
+            "sha256": "1d8511d3c687b96886812c34a5dd26ce85def83f7a3aa0f42c7304a13d6a2630",
+            "bytes": 208607
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_repair_round25.py --evidence-stage frozen --output audit/reproduce-round25-33.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "hybrid"
+      ],
+      "handoff_patch": {
+        "commit": "4af1d003bf14284050bf980e14e33a57ff0ee64e",
+        "reason": "Fix coordinator metadata crossing the exact DFS cache boundary; retains actual store objects and cleanup. This is a correctness/integration repair, not another search-efficiency gain.",
+        "fresh_evidence": {
+          "source_commit": "4af1d003bf14284050bf980e14e33a57ff0ee64e",
+          "hardware": {
+            "tests": 34,
+            "skipped": 0,
+            "failures": 0,
+            "errors": 0,
+            "report": {
+              "path": "audit/optimization-round25/gpu-handoff-final01/results.json",
+              "bytes": 2511,
+              "sha256": "2ac8522a528ad6c7f907ca450ffea8584325be98b75774386d4ae2171a07ad32",
+              "source_commit": "4af1d003bf14284050bf980e14e33a57ff0ee64e"
+            },
+            "audit": {
+              "path": "audit/optimization-round25/gpu-handoff-final01/manifest.json",
+              "bytes": 90696,
+              "sha256": "4d9f828aeba5b82b1624e4447c4504d8a60a5239ce8ccd01de4e666909bbbd8a",
+              "source_commit": "4af1d003bf14284050bf980e14e33a57ff0ee64e"
+            }
+          },
+          "repair": {
+            "completed_cases": 6,
+            "report": {
+              "path": "audit/optimization-round25/repair-handoff-final01.json",
+              "bytes": 208403,
+              "sha256": "7d913396cb6a3d4dc6b7df464191b0f1f9275c00215b9fa7c85b73a30eceee68",
+              "source_commit": "4af1d003bf14284050bf980e14e33a57ff0ee64e"
+            }
+          },
+          "full_hybrid": {
+            "completed_cases": 4,
+            "reported_statuses": [
+              "timeout",
+              "timeout",
+              "timeout",
+              "timeout"
+            ],
+            "handoff_observed": true,
+            "report": {
+              "path": "audit/optimization-round25/hybrid-original-patched01/report.json",
+              "bytes": 69603485,
+              "sha256": "1dc0bcf336a984c5f33f3196bdd225d3ff616f05ffa2e695b5f2c6e13f239499",
+              "source_commit": "4af1d003bf14284050bf980e14e33a57ff0ee64e"
+            }
+          },
+          "scope": "Fresh affected correctness and full-pipeline checks; old finite/CPU/GPU measurements retain their own base revision."
+        }
+      }
     },
     {
       "id": 34,
       "proposal": "Choose ejection chains from the actual obstruction",
       "owner": "gpu_hybrid",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "sampling_round24.cu",
         "sampling_round24.wgsl",
@@ -588,14 +1478,44 @@
       "disposition": "Retained opt-in after independent review; bounded obstruction-guided inventory-preserving ejection cycles",
       "original_puzzle_gain": "not established",
       "access": "obstruction_chains implies ejection_chains; legacy/durable hybrid CUDA and native WebGPU",
-      "finite_evidence": "17focused checks plus4harness checks pass;512compiled-helper/reference lane cases and160-cell22-row exact resume. Both native backends: eachfixture12of12guided vs9of12baseline solved by64rounds; both-solved9pairs tetra1640to272 and singleton2048to152 lane proposals. Two initialGold seeds cost0. Extraorientation6054/2688 over12pairs.",
-      "limits": "Heuristic only, no pruning or coverage; local donor scores are not bounds on full moves. Atmost16donors x3rotations perreceiver,6cells,243orientationevaluations; obstruction scans/neighborchecks additional. Extra16bytes/replica. Finite synthetic results not original-puzzle gain or total primitive-work/time improvement."
+      "finite_evidence": "Each synthetic fixture: guided solves 12/12 versus 9/12 by the cap.",
+      "limits": "Adds 6,054/2,688 orientation checks; successful-pair totals exclude capped runs.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "17focused checks plus4harness checks pass;512compiled-helper/reference lane cases and160-cell22-row exact resume. Both native backends: eachfixture12of12guided vs9of12baseline solved by64rounds; both-solved9pairs tetra1640to272 and singleton2048to152 lane proposals. Two initialGold seeds cost0. Extraorientation6054/2688 over12pairs.",
+        "limits": "Heuristic only, no pruning or coverage; local donor scores are not bounds on full moves. Atmost16donors x3rotations perreceiver,6cells,243orientationevaluations; obstruction scans/neighborchecks additional. Extra16bytes/replica. Finite synthetic results not original-puzzle gain or total primitive-work/time improvement."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/34-cuda/report.json",
+            "sha256": "aa5517840fd31100d1313b7e731e6425b4fcd565567b02d284dc71082192614e",
+            "bytes": 192918
+          },
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/34-webgpu/report.json",
+            "sha256": "9fd7062fd4e2946d71b78c3dd9f38c42983bc5d9bdfd936b49bd66237697312a",
+            "bytes": 213088
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_gpu_chains_round25.py --backend cuda --evidence-stage frozen --output audit/reproduce-round25-34-cuda.json",
+          "python -B benchmark_gpu_chains_round25.py --backend webgpu --evidence-stage frozen --output audit/reproduce-round25-34-webgpu.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "hybrid"
+      ]
     },
     {
       "id": 35,
       "proposal": "Combine parent boards through inventory-preserving cycles",
       "owner": "gpu_hybrid",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "sampling_crossover_round25.py",
         "gpu_sampling.py",
@@ -609,14 +1529,44 @@
       "disposition": "Retained opt-in after independent review; bounded inventory-preserving archive crossover with actual native lane injection",
       "original_puzzle_gain": "not established",
       "access": "cycle_crossover; legacy/durable hybrid CUDA and native WebGPU",
-      "finite_evidence": "27focused plus4harness checks pass. Given explicit nonGold synthetic parents, eachbackend recovers4physical+4rotation Goldcases with2parent+2childscorings each and0GPUproposals. Physicalbaseline2finish/212proposals and2cap;rotationbaseline4cap. Controlled160singleplantedwitness recovered. Savedchildhistory rescoringdelta0 stillcosts2parentrescoring.",
-      "limits": "Supplied-parent acquisition not measured; synthetic witness recovery is not original puzzle progress. Separate8parentpool,4pairs/16newchildren percollection,256exactchildFIFO; evictions can repeat optional work. Native4/18/22row injection preservesRNG/betterbest/otherlanes; partialwritepoisons session andrequiresfreshrestore. Enabledsamplersubstatev2 savespool/scheduler/history; no pruning or globalcoverage authority."
+      "finite_evidence": "Supplied parents: two parent plus two child scores recover Gold with zero GPU proposals.",
+      "limits": "Parent discovery unmeasured; planted examples and bounded history only.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "27focused plus4harness checks pass. Given explicit nonGold synthetic parents, eachbackend recovers4physical+4rotation Goldcases with2parent+2childscorings each and0GPUproposals. Physicalbaseline2finish/212proposals and2cap;rotationbaseline4cap. Controlled160singleplantedwitness recovered. Savedchildhistory rescoringdelta0 stillcosts2parentrescoring.",
+        "limits": "Supplied-parent acquisition not measured; synthetic witness recovery is not original puzzle progress. Separate8parentpool,4pairs/16newchildren percollection,256exactchildFIFO; evictions can repeat optional work. Native4/18/22row injection preservesRNG/betterbest/otherlanes; partialwritepoisons session andrequiresfreshrestore. Enabledsamplersubstatev2 savespool/scheduler/history; no pruning or globalcoverage authority."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/35-cuda/report.json",
+            "sha256": "0ae6dcdeccbf97c361fa3b82606385d5835d660d836ddca13889d6061dbe7f60",
+            "bytes": 169951
+          },
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/35-webgpu/report.json",
+            "sha256": "ed7b8d9db86490429675e2dae8906205c3e4cac5087b92ca2b738b24460f71be",
+            "bytes": 173741
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_gpu_crossover_round25.py --backend cuda --evidence-stage frozen --output audit/reproduce-round25-35-cuda.json",
+          "python -B benchmark_gpu_crossover_round25.py --backend webgpu --evidence-stage frozen --output audit/reproduce-round25-35-webgpu.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "hybrid"
+      ]
     },
     {
       "id": 36,
       "proposal": "Reject hopeless sampling moves before tracing every loop",
       "owner": "gpu_hybrid",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "sampling_round24.cu",
         "sampling_round24.wgsl",
@@ -630,14 +1580,44 @@
       "disposition": "Retained opt-in: exact lazy Gold scoring preserves the trajectory while avoiding repeated complete score passes",
       "original_puzzle_gain": "Fewer complete score passes observed in bounded original-input sampling; no solution or time-to-Gold gain established",
       "access": "lazy_gold_scoring; hybrid CUDA and native WebGPU; app implies gpu_gold_sampling and ejection_chains",
-      "finite_evidence": "20 focused checks pass. Both backends preserve all old native state after each fixed chunk. Original160:2176proposals, base passes4352 to2176, loop passes4352 to2022; synthetic/planted160 also omit passes. Pure reference10000control-flow cases; native Gold on/off x8policy matrix and160cell injection/exchange/Stop/resume.",
-      "limits": "Same proposal/acceptance trajectory; no proposal reduction or pruning. Counts full passes, not variable segment visits. Integer tabu bound and exact nonexchange predraw only; no float probability bound. T0 supported. Native uint32 telemetry remains modular;28row source/policy-bound state."
+      "finite_evidence": "Original input, 2,176 proposals: base passes 4,352 -> 2,176; loop passes 4,352 -> 2,022.",
+      "limits": "Same trajectory, not fewer proposals; passes are not total instructions or solve-time evidence.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "20 focused checks pass. Both backends preserve all old native state after each fixed chunk. Original160:2176proposals, base passes4352 to2176, loop passes4352 to2022; synthetic/planted160 also omit passes. Pure reference10000control-flow cases; native Gold on/off x8policy matrix and160cell injection/exchange/Stop/resume.",
+        "limits": "Same proposal/acceptance trajectory; no proposal reduction or pruning. Counts full passes, not variable segment visits. Integer tabu bound and exact nonexchange predraw only; no float probability bound. T0 supported. Native uint32 telemetry remains modular;28row source/policy-bound state."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/36-cuda/report.json",
+            "sha256": "25f93420960f39d65eac08f6f44307e2a63256d52d87c0f62aa435d8a704d43b",
+            "bytes": 177212
+          },
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/36-webgpu/report.json",
+            "sha256": "8f92a67dd38729758261593c5c96486409a797ef502aeb76f6c4691d69177d20",
+            "bytes": 183622
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_gpu_gold_scoring_round25.py --backend cuda --evidence-stage frozen --output audit/reproduce-round25-36-cuda.json",
+          "python -B benchmark_gpu_gold_scoring_round25.py --backend webgpu --evidence-stage frozen --output audit/reproduce-round25-36-webgpu.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "hybrid"
+      ]
     },
     {
       "id": 37,
       "proposal": "Adapt replica-exchange temperatures from measured behavior",
       "owner": "gpu_hybrid",
-      "status": "implemented_evaluated_finite",
+      "status": "evaluation_complete",
       "evidence": [
         "sampling_temperatures_round25.py",
         "sampling_round24.cu",
@@ -654,8 +1634,45 @@
       "disposition": "Retained opt-in after independent review; bounded measured exchange-rate ladder redistribution with adverse cases disclosed",
       "original_puzzle_gain": "not established",
       "access": "adaptive_temperatures; hybrid CUDA/native WebGPU; implies replica_exchange; direct sampler minimum8replicas",
-      "finite_evidence": "26focused checks pass. Bothbackends24paired synthetic10cellcases:20static/21adaptive solved;20bothsolved cost966656 to667648 laneproposals,7wins4losses9ties;1adaptive-onlysolution,3bothcapped. All8positive cases afteractualadjustment. Adversefixture17 cost126976 to139264. Allburn-in included, pairedinitial/preadaptationstate, independentGoldvalidation.",
-      "limits": "Heuristic only, no original-puzzle/universal/stationary-distribution/coverage claim. Every16dispatches,8eligiblewindows thenfreeze, fixedendpoints andfloat32checkedpositivegaps.29native rows, workstats excludefloatbits; controller16KiB bound andsamplerv3 source/policy/native binding. Partialwritepoisons session. Hostfeedback/transferwork separate fromproposal counts."
+      "finite_evidence": "24 pairs/backend: 20 versus 21 solve; both-solved proposals 966,656 -> 667,648.",
+      "limits": "7 wins/4 losses/9 ties; adverse fixture 126,976 -> 139,264; host work extra.",
+      "development_evidence": {
+        "classification": "historical development evidence",
+        "finite_evidence": "26focused checks pass. Bothbackends24paired synthetic10cellcases:20static/21adaptive solved;20bothsolved cost966656 to667648 laneproposals,7wins4losses9ties;1adaptive-onlysolution,3bothcapped. All8positive cases afteractualadjustment. Adversefixture17 cost126976 to139264. Allburn-in included, pairedinitial/preadaptationstate, independentGoldvalidation.",
+        "limits": "Heuristic only, no original-puzzle/universal/stationary-distribution/coverage claim. Every16dispatches,8eligiblewindows thenfreeze, fixedendpoints andfloat32checkedpositivegaps.29native rows, workstats excludefloatbits; controller16KiB bound andsamplerv3 source/policy/native binding. Partialwritepoisons session. Hostfeedback/transferwork separate fromproposal counts."
+      },
+      "evaluation_scope": "Reviewed frozen finite evaluation; bounded retained mechanism.",
+      "default_enabled": false,
+      "frozen_evidence": {
+        "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+        "reports": [
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/37-cuda/report.json",
+            "sha256": "5c22f93561bca31af47b50fb88e2eb6f5e8fcb2194e58bce157f0eafb6a10592",
+            "bytes": 219701
+          },
+          {
+            "path": "audit/optimization-round25/frozen-candidates-final01/37-webgpu/report.json",
+            "sha256": "46e75bf9815dfedef296a0a0cf3c9f62d2ae71d2818afd5fadbbb604f42ecb51",
+            "bytes": 239870
+          }
+        ],
+        "reproduce_commands": [
+          "python -B benchmark_gpu_temperatures_round25.py --backend cuda --evidence-stage frozen --output audit/reproduce-round25-37-cuda.json",
+          "python -B benchmark_gpu_temperatures_round25.py --backend webgpu --evidence-stage frozen --output audit/reproduce-round25-37-webgpu.json"
+        ],
+        "results": "round25-results.json"
+      },
+      "available_algorithms": [
+        "hybrid"
+      ]
     }
-  ]
+  ],
+  "status_scope": "Proposal implementation/evaluation; publication is a separate gate.",
+  "source_commit": "1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4",
+  "patched_controller_commit": "4af1d003bf14284050bf980e14e33a57ff0ee64e",
+  "results": "ROUND25_RESULTS.md",
+  "results_json": "round25-results.json",
+  "all_new_controls_default_off": true,
+  "release_gate": "Exact final-main/tag CI required at publication; release notes retain its receipt."
 }

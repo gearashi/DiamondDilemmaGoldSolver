@@ -4,13 +4,13 @@ Baseline: `v1.5.0` (`30483db81894359ef9030493e45d192a36f66c98`).
 
 This round implements and evaluates the 37 proposals below in their original order. Fewer decisions and repeated reasoning take priority over elapsed time. Each proposal must preserve valid solutions, handle cancellation and limits conservatively, and demonstrate a useful bounded effect before it is retained. A completed Gold witness still requires all 160 tiles, all 240 matched seams and one loop. **The original unrestricted Gold challenge remains unsolved.**
 
-## Current checkpoint
+## Completed evaluation
 
-Proposals **1–37** are implemented, have focused correctness tests and finite discriminators, and have passed independent review. They remain optional; a successful finite case does not establish a useful default for the original puzzle. Several mechanisms trade extra checking or setup work for fewer repeated queries, and some have measured adverse cases.
+All **37 proposals** are implemented, independently reviewed and evaluated. New controls remain default off. The [final frozen results and measured settings](ROUND25_RESULTS.md) separate fewer decisions/repeated operations from runtime, include adverse cases and preserve bounded scope. The original unrestricted Gold puzzle remains unsolved.
 
-The first-34 [cross-platform preflight](https://github.com/gearashi/DiamondDilemmaGoldSolver/actions/runs/42366157306) passed all 26 jobs at `effb29b1431b14fb364b6ec248ccc3ff3f9ecd1a`, including Python 3.15 and the four source packages. The first-25 source checkpoint is `b3048ecf2df6b8eb4528b8985307e4459660eb66`. Its [cross-platform preflight](https://github.com/gearashi/DiamondDilemmaGoldSolver/actions/runs/42348120844) passed all 26 jobs, including the Python 3.12/3.15 CPU matrix, package installation, supported native SAT proof checks, WGSL checks and four source packages. The earlier [first-15 preflight](https://github.com/gearashi/DiamondDilemmaGoldSolver/actions/runs/42342504337) passed at `89a724e815f907cca2404b63f87a8d00d720f866`. These development checkpoints are **not the final release gate**.
+Frozen source `1b82e48930ed8bba12d31d01ee7c3c0a5132dfe4` completed 42 finite evidence commands, the local CPU/native and GPU suites, and [all 26 preflight CI jobs](https://github.com/gearashi/DiamondDilemmaGoldSolver/actions/runs/42370266775). Earlier first-15, first-25 and first-34 checkpoints are historical development evidence. Publication requires successful CI on the exact final main commit and `v1.6.0` tag; see the [release](https://github.com/gearashi/DiamondDilemmaGoldSolver/releases/tag/v1.6.0) for its exact CI receipt. Feature-source preflight is not that release gate.
 
-All **37 individual implementation and evaluation gates are complete**. The [GPU report](ROUND25_GPU.md) records the completed focused gates for 26–37, including their additional verification and bookkeeping work. Final frozen-source comparisons, combined-feature regressions, measured hardware recommendations and the release build are also outstanding. The [machine-readable register](round25-candidates.json) is the per-proposal status authority; pending entries are not implemented or validated claims.
+The [machine-readable register](round25-candidates.json) records completed evaluation, retained options and frozen report references for all 37 proposals. The final results distinguish the original frozen evidence from the reviewed two-file hybrid handoff correction at `4af1d003bf14284050bf980e14e33a57ff0ee64e` and its fresh affected checks; old measurements are not relabelled.
 
 ## Implemented scope through proposal 37
 
@@ -33,7 +33,7 @@ All **37 individual implementation and evaluation gates are complete**. The [GPU
 | 36 | Recover current scores exactly and avoid unnecessary loop traces | Same experimental proposals, RNG and boards in paired native tests. Bounded original-puzzle runs use fewer full score passes; this is not fewer proposals or a timing/solution result. |
 | 37 | Bounded adaptation of replica-exchange temperature spacing | Native and host temperature state resume together. Paired synthetic cases include wins, losses and capped runs; the feature remains optional and does not establish improvement on the unrestricted puzzle. |
 
-The [CPU learning report](ROUND25_LEARNING.md) records access flags, dependencies, tested configurations and exact scope for proposals 1–13. The [regional report](ROUND25_REGIONS.md) does the same for 14–25, including adverse comparisons and separate compilation, export and verification costs. Their numerical examples are **development evidence**, not final release measurements. The separate full hybrid pipeline benchmark records GPU proposals, repair queries and DFS decisions without adding those different units or claiming exhausted Cartesian volume.
+The [CPU learning report](ROUND25_LEARNING.md) records access flags, dependencies, tested configurations and exact scope for proposals 1–13. The [regional report](ROUND25_REGIONS.md) does the same for 14–25, including adverse comparisons and separate compilation, export and verification costs. Their numerical examples remain **development evidence**; the [final results](ROUND25_RESULTS.md) provide the separate frozen measurements. The separate full hybrid pipeline benchmark records GPU proposals, repair queries and DFS decisions without adding those different units or claiming exhausted Cartesian volume.
 
 ## Ordered proposal register
 
@@ -77,17 +77,17 @@ The [CPU learning report](ROUND25_LEARNING.md) records access flags, dependencie
 | 36 | Reject hopeless sampling moves before tracing every loop |
 | 37 | Adapt replica-exchange temperatures from measured behavior |
 
-## Validation and remaining work
+## Validation and release gate
 
 A capped, interrupted, unavailable or uncertified computation returns unknown and preserves unproved work. Positive relaxation results do not become Gold solutions. Imported deductions remain bound to the puzzle, original domains, objective and applicable query scope. Full witnesses are independently validated before the app reports a solution.
 
 The native SAT persistence producer has been checked with CPython 3.12 and python-sat 1.9.dev15 on Linux x86-64 and macOS x86-64/ARM64. Windows logging remains disabled; ordinary independently verified import is distinct from logging support. Gold-aware pricing needs OR-Tools/GLOP, and the app rejects an unavailable explicit selection with an explanation. These capabilities must not be inferred merely from general OS or Python compatibility.
 
-The completed first-25 gates cover independent finite enumeration, narrowing and widening, scoped reuse, malformed proofs, cancellation, resource caps, public solver integration, and relevant spawned-worker paths. Final comparisons will test retained combinations on identical inputs and seeds, with all setup, checking and replay work reported separately where the operation types differ. Longer runs are reserved for unresolved discriminators; extra runtime cannot turn an unknown result into a proof.
+The completed 37-proposal gates cover finite enumeration, scope changes, malformed inputs/proofs, cancellation, caps, public solver integration and relevant native/spawned-worker paths. Frozen comparisons report complete outcomes and capped original-input runs separately, and keep setup, checking and replay operations in their own units. See the [final results](ROUND25_RESULTS.md) for tested combinations and measured tradeoffs. A cap never certifies exhaustion.
 
-Reproduction entrypoints are `benchmark_learning_round25.py --candidate N --output PATH` for CPU learning evidence and `benchmark_regions_round25.py --candidate N --output PATH` for regional evidence. The regional runner's `--evidence-stage frozen` requires a readable clean Git commit, unchanged repository identity, and matching before/after source and runtime provenance. Development receipts remain in the ignored audit directory until the release-wide frozen rerun supplies final evidence.
+Per-proposal reproduction commands and full report hashes are in [round25-results.json](round25-results.json). Frozen runs require a clean committed checkout and unchanged source/runtime/input bindings. Raw local audit reports are not bundled in source archives; public summaries preserve their relative identities and exact hashes. Development records remain historical.
 
-After proposals 33–37 finish, the remaining gates are frozen benchmarks and combination decisions, full platform/setup checks, measured starting settings for the target hardware, and CI on the exact proposed release tag. Completion of this documented candidate set cannot establish that no future algorithmic improvement exists.
+All 37 implementation/evaluation gates and the frozen comparisons are complete. Publication requires CI on the exact release tag and main commit; its final receipt belongs to the [release notes](https://github.com/gearashi/DiamondDilemmaGoldSolver/releases/tag/v1.6.0). Completing this documented candidate set cannot establish that no future algorithmic improvement exists.
 
 ### Benchmark accounting
 

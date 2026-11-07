@@ -6,7 +6,7 @@ A CPU and GPU search tool for the **Gold Challenge** of Diamond Dilemma on Windo
 
 The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaapsch.net/puzzles/diamdil.htm).
 
-The latest work is tracked in the [round 25 register of 37 proposals](docs/ROUND25.md), with an explicit status, implemented scope, controls and evidence for every candidate. New controls are opt-in; fewer repeated steps and sound deductions are evaluated separately from speed. The earlier [round 24 register](docs/ROUND24.md) covers 42 proposals, and [round 23](docs/ROUND23.md) retains the 52-proposal evaluation. The [round 24 measurements and starting settings](docs/ROUND24_RESULTS.md) remain historical evidence; the round 25 register identifies what has been evaluated since then.
+The [Round 25 results and hardware settings](docs/ROUND25_RESULTS.md) cover all 37 new optional improvements, frozen comparisons and adverse cases. The [37-proposal register](docs/ROUND25.md) records implemented scope and controls; all new options default off. Fewer decisions and repeated reasoning are assessed separately from speed. Earlier [Round 24](docs/ROUND24.md) and [Round 23](docs/ROUND23.md) registers retain the 42- and 52-proposal evaluations as historical evidence.
 
 ## Requirements
 
@@ -90,7 +90,7 @@ Select **Stop** to finish the current work and save progress. Wait until the sta
 
 ## Command line
 
-**Recommended setup:** choose **DFS with constraint pruning**, **Unlimited**, and resume the existing search. This uses the exact pruning rules and retains completed branch coverage; GPU replicas do not apply. To try GPU guidance on a separate hybrid search, choose **Experimental GPU sampling + repair + DFS**, **Automatic** backend, and **4,096 replicas** as a starting point. It uses the saved best board when helpful, spends a bounded initial period sampling and repairing, then searches the complete DFS tree. No real-puzzle speed winner has been established. Both modes accept only a verified single Gold loop. See [implemented optimizations and their limits](docs/OPTIMIZATIONS.md).
+**Recommended starting settings for the tested i7-4790 / 16 GiB / RTX 2060:** resume existing DFS progress with **Unlimited** duration and **Automatic** CPU propagation. For **Parallel CPU DFS**, start with **4 workers** for resource efficiency, or use **8** for a dedicated run with greater measured bounded throughput. For an experimental hybrid run, use **NVIDIA CUDA**, **4,096 replicas**, and **Resume GPU sampling and completed repair work**. Leave the other new experimental controls off initially. No configuration has established the fewest total steps to the original Gold solution. See [the measured settings and limitations](docs/ROUND25_RESULTS.md).
 
 For compatibility, the command-line launcher defaults to the existing GPU DFS. GPU DFS now also searches for a single Gold loop. Select `dfs`, `parallel-dfs`, `cp`, `cp-sat`, `cp-sat-circuit`, `cp-sat-regions`, `sat`, `sat-propagator`, `sat-channel`, or `hybrid` to use another engine. The dashboard and launcher resume the selected algorithm's compatible saved state.
 

@@ -1,5 +1,7 @@
 # Round 25 regional reasoning work
 
+Final frozen measurements, adverse comparisons and measured settings are in [Round 25 results](ROUND25_RESULTS.md). Numerical examples below retain their stated development scope.
+
 The stages below remain opt-in. Exact finite tests establish their stated scope; they do not solve the original Gold puzzle or imply a universal runtime improvement. Development counts will be superseded by frozen-source release validation.
 
 ## 14. Reversible exact regional DAG restriction — retained
@@ -79,7 +81,7 @@ Four focused tests cover 80 independently enumerated Gold/edge contexts, a six-c
 
 ## 21. Algebraic connectivity representatives
 
-Opt-in `algebraic_connectivity` replaces explicit enumeration of all outside perfect matchings with a bounded cut-incidence basis over GF(2). A matching is incident to an anchored cut when each of its edges stays inside one side. Two incidence rows have inner product one exactly when the union of the matchings is connected: the number of shared cuts is two to the number of components minus one. A row basis therefore preserves whether any member can complete one cycle against any outside matching. Exact inventory, seam masks, cycle count and endpoint buckets remain separate. This preserves existence only, never all histories, counts or placement supports. The app applies it to its existing bounded selected regional tables; it is not a full-board connectivity solver. Maximum endpoint count is 16.
+Opt-in `algebraic_connectivity` replaces explicit enumeration of all outside perfect matchings with a bounded cut-incidence basis over GF(2). A matching is incident to an anchored cut when each of its edges stays inside one side. The number of shared anchored cuts is `2**(components - 1)`, where `components` counts connected components in the union of the two matchings. Their incidence rows therefore have inner product one over GF(2) exactly when that union is connected. A row basis therefore preserves whether any member can complete one cycle against any outside matching. Exact inventory, seam masks, cycle count and endpoint buckets remain separate. This preserves existence only, never all histories, counts or placement supports. The app applies it to its existing bounded selected regional tables; it is not a full-board connectivity solver. Maximum endpoint count is 16.
 
 Four focused tests include 120 random matching families against every outside matching on four, six and eight endpoints, an actual eight-cell/four-strand puzzle with 30 narrowed contexts and independently checked Gold completions, Stop/caps/malformed inputs/source binding, basis reuse and public DFS. On all 105 eight-endpoint matchings, explicit connectivity-matrix construction takes 11,401 counted operations and retains eight representatives; cut incidence takes 840 cut entries plus 833 XORs but retains 35 representatives. This compression tradeoff is real. In the actual app fixture, the new route retains 11 of 12 rows with 142 basis/join work ticks, versus five retained rows and 1,176 ticks for the existing method. Shared table construction is excluded from both displayed basis comparisons; no total search or runtime dominance is claimed. Evidence: `audit/optimization-round25/regions-21-finite.json`.
 
