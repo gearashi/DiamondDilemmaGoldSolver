@@ -11,6 +11,7 @@ from constraint_interface import InterfaceProjector, STAT_KEYS as INTERFACE_STAT
 from constraint_region_research import RegionalResearchPruner, STAT_KEYS as REGION_STATS
 
 STAT_KEYS = AFFINE_STATS + PB_STATS + INTERFACE_STATS + REGION_STATS + CONFLICT_PB_STATS + LATTICE_STATS
+MAX_GAUGE_KEYS = frozenset(('factor_live_piece_width','compact_factor_frontier_width','compact_factor_live_resources','compact_gold_port_peak'))
 KEYS = ('integer_lattice','conflict_pb','incremental_affine','affine_reasoning','pb_learning','obstruction_rules','interface_formulas') + RegionalResearchPruner.KEYS
 
 class ResearchPruner:
@@ -29,6 +30,13 @@ class ResearchPruner:
         for _,stage in self.stages:
             configure=getattr(stage,'configure_cache_dir',None)
             if configure is not None:configure(path)
+
+    @property
+    def solution(self):
+        for _,stage in self.stages:
+            candidate=getattr(stage,'solution',None)
+            if candidate is not None:return candidate
+        return None
 
     @property
     def stats(self):

@@ -513,7 +513,7 @@ def main(argv=None):
             learning_state['_certificates']=runtime_certificates
             certificates_saved_digest=terminal_digest(disk_certificates.snapshot())
             state['certificates']={'records':len(disk_certificates.records),'path':str(certificates_path)}
-        if args.algorithm in EXACT_ALGORITHMS and (options.get('extended_regions') or options.get('durable_regions')):
+        if args.algorithm in EXACT_ALGORITHMS and (options.get('extended_regions') or options.get('durable_regions') or options.get('region_certificates')):
             learning_state['_regional_cache_dir']=str(run/'regional-tables')
         binding = hashlib.sha256(raw+args.algorithm.encode()+b':gold:v1').hexdigest()
         (evidence/'tiles.json').write_bytes(raw)

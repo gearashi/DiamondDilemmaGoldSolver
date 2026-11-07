@@ -19,6 +19,58 @@ def legacy_root(problem,hints=None):
     checkpoint['digest']=_checkpoint_digest(checkpoint)
     return checkpoint
 
+class RegionalParallelTests(unittest.TestCase):
+    def test_peak_widths_remain_maxima_when_jobs_are_retired(self):
+        from constraint_parallel import _add_stats
+        retired={}
+        _add_stats(retired,{'factor_live_piece_width':6,'compact_factor_frontier_width':5,
+            'compact_factor_live_resources':4,'factor_steps':20},retiring=True)
+        live=retired.copy()
+        _add_stats(live,{'factor_live_piece_width':3,'compact_factor_frontier_width':7,
+            'compact_factor_live_resources':2,'factor_steps':11})
+        self.assertEqual(live,{'factor_live_piece_width':6,'compact_factor_frontier_width':7,
+            'compact_factor_live_resources':4,'factor_steps':31})
+        _add_stats(retired,{'factor_live_piece_width':3,'compact_factor_frontier_width':7,
+            'compact_factor_live_resources':2,'factor_steps':11},retiring=True)
+        self.assertEqual(retired,live)
+
+    def test_spawned_workers_save_regional_cursors_without_extended_tables(self):
+        from pathlib import Path
+        import tempfile
+        from test_constraint_separator import ring
+        problem=ring(5)
+        with tempfile.TemporaryDirectory(prefix='regional-workers-') as folder:
+            result=solve(problem,seconds=15,workers=2,resume=legacy_root(problem),
+                options={**OPTIONS,'durable_regions':True,'extended_regions':False},
+                learning_state={'_regional_cache_dir':folder})
+            self.assertEqual(result['status'],'solved',result.get('error'))
+            self.assertTrue(problem.validate(result['codes'])['valid'])
+            self.assertGreater(result['stats']['parallel_workers_started'],0)
+            self.assertGreater(result['stats']['region_cursor_writes'],0)
+            self.assertTrue(list((Path(folder)/'regional-cursors-v1').glob('*.json')))
+
+
+    def test_spawned_workers_recheck_completed_certificates_without_other_disk_options(self):
+        from pathlib import Path
+        import tempfile
+        from test_constraint_separator import ring
+        problem=ring(5)
+        with tempfile.TemporaryDirectory(prefix='regional-certificate-workers-') as folder:
+            results=[]
+            for attempt in range(2):
+                result=solve(problem,seconds=20,workers=2,resume=legacy_root(problem),
+                    options={**OPTIONS,'region_certificates':True,'durable_regions':False,'extended_regions':False},
+                    learning_state={'_regional_cache_dir':folder})
+                self.assertEqual(result['status'],'solved',result.get('error'))
+                self.assertTrue(problem.validate(result['codes'])['valid'])
+                self.assertGreater(result['stats']['parallel_workers_started'],0)
+                self.assertGreater(result['stats']['region_certificate_verified_states'],0)
+                results.append(result)
+            self.assertGreater(results[0]['stats']['region_certificate_saves'],0)
+            self.assertGreater(results[1]['stats']['region_certificate_loads'],0)
+            self.assertTrue(list((Path(folder)/'regional-certificates-v1').glob('*.json')))
+
+
 class CrashProblem(SearchProblem):
     def validate(self,codes):
         os._exit(29)

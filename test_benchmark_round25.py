@@ -47,6 +47,26 @@ class BenchmarkAccountingTests(unittest.TestCase):
    self.assertTrue(report['benchmark_state']['coverage_enabled']);self.assertEqual(len(report['domains_sha256']),64)
 
 
+class BenchmarkProvenanceTests(unittest.TestCase):
+ def test_fixture_dependency_and_native_bytes_are_frozen_with_correct_line_endings(self):
+  from benchmark_provenance import source_snapshot
+  with tempfile.TemporaryDirectory(prefix='benchmark-provenance-',dir=benchmark.ROOT) as directory:
+   root=Path(directory);(root/'.native').mkdir();(root/'runtime').mkdir()
+   (root/'test_fixture.py').write_bytes(b'fixture=1\r\n')
+   (root/'kernel.c').write_bytes(b'kernel\n')
+   (root/'.native/library.dll').write_bytes(b'\x00\r\n')
+   (root/'runtime/live.json').write_text('{}',encoding='utf-8')
+   before=source_snapshot(root)
+   self.assertEqual(set(before),{'test_fixture.py','kernel.c','.native/library.dll'})
+   self.assertNotIn('lf_sha256',before['.native/library.dll'])
+   (root/'test_fixture.py').write_bytes(b'fixture=1\n')
+   after=source_snapshot(root)
+   self.assertEqual(before['test_fixture.py']['lf_sha256'],after['test_fixture.py']['lf_sha256'])
+   self.assertNotEqual(before['test_fixture.py']['raw_sha256'],after['test_fixture.py']['raw_sha256'])
+   (root/'.native/library.dll').write_bytes(b'\x00\n')
+   self.assertNotEqual(after['.native/library.dll'],source_snapshot(root)['.native/library.dll'])
+
+
 class BenchmarkCleanupTests(unittest.TestCase):
  def test_windows_tree_failure_aborts_instead_of_starting_another_case(self):
   child=SimpleNamespace(pid=424242,poll=lambda:None,wait=lambda **kw:None)
@@ -69,7 +89,7 @@ class BenchmarkCleanupTests(unittest.TestCase):
     self.assertTrue((output/'report.json').exists(),'Partial report precedes cleanup')
     self.assertTrue((output/'00-cpu-small-baseline-817.stderr.txt').exists())
     return 'Descendant cleanup cannot be confirmed.'
-   with patch.object(benchmark.sys,'argv',argv),patch.object(benchmark,'source_hashes',return_value={}),patch.object(benchmark.subprocess,'Popen',return_value=child) as launch,patch.object(benchmark,'terminate_tree',side_effect=cleanup),patch.object(benchmark.platform,'platform',return_value='test-platform'),contextlib.redirect_stdout(io.StringIO()):
+   with patch.object(benchmark.sys,'argv',argv),patch.object(benchmark,'source_hashes',return_value={}),patch.object(benchmark,'repository_snapshot',return_value={}),patch.object(benchmark.subprocess,'Popen',return_value=child) as launch,patch.object(benchmark,'terminate_tree',side_effect=cleanup),patch.object(benchmark.platform,'platform',return_value='test-platform'),contextlib.redirect_stdout(io.StringIO()):
     with self.assertRaisesRegex(RuntimeError,'remaining matrix was not started'):benchmark.main()
    launch.assert_called_once();report=json.loads((output/'report.json').read_text())
    self.assertTrue(report['aborted_after_child_failure']);self.assertEqual(report['completed_cases'],1)
@@ -83,7 +103,7 @@ class BenchmarkCleanupTests(unittest.TestCase):
   child.communicate=interrupted
   with tempfile.TemporaryDirectory(prefix='benchmark-cancel-',dir=benchmark.ROOT) as directory:
    argv=['benchmark_round25.py','--output',str(Path(directory)/'matrix'),'--suite','finite','--profiles','baseline']
-   with patch.object(benchmark.sys,'argv',argv),patch.object(benchmark,'source_hashes',return_value={}),patch.object(benchmark.subprocess,'Popen',return_value=child) as launch,patch.object(benchmark,'terminate_tree') as cleanup:
+   with patch.object(benchmark.sys,'argv',argv),patch.object(benchmark,'source_hashes',return_value={}),patch.object(benchmark,'repository_snapshot',return_value={}),patch.object(benchmark.subprocess,'Popen',return_value=child) as launch,patch.object(benchmark,'terminate_tree') as cleanup:
     with self.assertRaises(KeyboardInterrupt):benchmark.main()
    launch.assert_called_once();cleanup.assert_called_once_with(child)
 

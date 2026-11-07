@@ -10,17 +10,20 @@ universal orphan guarantee or starts another case after that ownership failure.
 from __future__ import annotations
 import argparse,hashlib,json,math,os,platform,signal,subprocess,sys,time
 from pathlib import Path
+from benchmark_provenance import source_snapshot, runtime_snapshot, repository_snapshot
 ROOT=Path(__file__).resolve().parent
 PROFILES={
  'baseline':{},
  'reuse':dict(resumable_reasoning=True,incremental_hall=True,hall_rematch=True,reversible_gold_graph=True,shared_coverage=True,symbolic_coverage=True,queue_pruning=True),
  'sat-learning':dict(resumable_reasoning=True,sat_assist=True,witness_pool=True,retained_relations=True,shared_sat_assistant=True,higher_order_relations=True),
  'arithmetic':dict(joint_conservation=True,affine_reasoning=True,incremental_affine=True,pb_learning=True,conflict_pb=True,integer_lattice=True),
- 'regional':dict(symbolic_regions=True,symbolic_inventory=True,elimination=True,mini_buckets=True,relaxed_diagrams=True,representative_connectivity=True,subset_joins=True,lazy_regions=True,certified_relaxation=True,labelled_routing=True),
+ 'regional-v24':dict(symbolic_regions=True,symbolic_inventory=True,elimination=True,mini_buckets=True,relaxed_diagrams=True,representative_connectivity=True,subset_joins=True,lazy_regions=True,certified_relaxation=True,labelled_routing=True),
+ 'regional':dict(incremental_regions=True,durable_regions=True,compact_factors=True,gold_elimination=True,separator_search=True,selective_refinement=True,joint_symbolic_regions=True,algebraic_connectivity=True,residual_isomorphism=True,gold_pricing=True,multichain_routing=True,region_certificates=True),
 }
+PROFILES['combined']={**PROFILES['reuse'],**PROFILES['sat-learning'],**PROFILES['arithmetic'],**PROFILES['regional'],
+                      'native_explanations':True,'mixed_proof_dag':True}
 
-def source_hashes():
- return {p.name:{'raw_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'lf_sha256':hashlib.sha256(p.read_bytes().replace(b'\r\n',b'\n')).hexdigest()} for p in ROOT.iterdir() if p.is_file() and p.suffix in ('.py','.c','.cu','.wgsl','.html')}
+def source_hashes():return source_snapshot(ROOT)
 def volume(rows):return sum(math.prod(x.bit_count() for x in row) for row in rows)
 def pending_frontier(scope,result,engine):
  """Validate committed ownership before counting any removed assignments."""
@@ -139,7 +142,7 @@ def main():
  if not 0<args.seconds<=3600:parser.error('Use a bounded positive per-case budget of at most one hour.')
  if not 1<=args.free_cells<=160:parser.error('free-cells must be1..160.')
  if args.worker:return worker(args)
- args.output.mkdir(parents=True,exist_ok=True);before=source_hashes();records=[]
+ args.output.mkdir(parents=True,exist_ok=True);before=source_hashes();runtime_before=runtime_snapshot();repository=repository_snapshot(ROOT);records=[]
  jobs=[]
  if args.suite in ('finite','all'):
   jobs += [('cpu',case,profile,seed,120,1) for case in ('small','residual') for seed in (817,291) for profile in (args.profiles if seed==817 else list(reversed(args.profiles)))]
@@ -174,9 +177,9 @@ def main():
   # Do not launch another case after an unexpected coordinator exit or any
   # failed search. Even an exited coordinator may have left descendants.
   if record['status'] in ('process_error','hard_timeout','error'):break
- after=source_hashes();input_after=hashlib.sha256(args.data.read_bytes()).hexdigest() if input_before is not None else None
+ after=source_hashes();runtime_after=runtime_snapshot();input_after=hashlib.sha256(args.data.read_bytes()).hexdigest() if input_before is not None else None
  input_unchanged=input_before==input_after and all(row.get('provenance',{}).get('input_sha256')==input_before for row in records if row['case']=='original' and row['status'] not in ('process_error','hard_timeout','error'))
- report={'python':sys.version,'platform':platform.platform(),'source_before':before,'source_after':after,'source_unchanged':before==after,'input_sha256':input_before,'input_after_sha256':input_after,'input_unchanged':input_unchanged,'profiles':{name:PROFILES[name] for name in args.profiles},'suite':args.suite,'planned_cases':len(jobs),'completed_cases':len(records),
+ report={'repository':repository,'python':sys.version,'platform':platform.platform(),'runtime_before':runtime_before,'runtime_after':runtime_after,'runtime_unchanged':runtime_before==runtime_after,'source_before':before,'source_after':after,'source_unchanged':before==after,'input_sha256':input_before,'input_after_sha256':input_after,'input_unchanged':input_unchanged,'profiles':{name:PROFILES[name] for name in args.profiles},'suite':args.suite,'planned_cases':len(jobs),'completed_cases':len(records),
          'aborted_after_child_failure':any(row['status'] in ('process_error','hard_timeout','error') for row in records),
          'cleanup_scope':'Owned POSIX group or live Windows task tree only. An exited Windows coordinator has no retained tree handle; escaped/orphan descendants are not universally tracked. No further case starts after a failure.',
          'free_cells':args.free_cells,'source_convention':'Raw local hashes plus canonical LF hashes; Git normalizes line endings.','cpu_workers':args.workers,'replicas':args.replicas,'results':records,'non_claim':'Bounded original searches are incomplete unless independently validated. These metrics do not identify a universally fastest solver.'}
@@ -191,5 +194,6 @@ def main():
    (args.output/'report.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
   raise RuntimeError('A benchmark child failed; the remaining matrix was not started.')
  if not input_unchanged:raise RuntimeError('Original puzzle inputs changed during the benchmark; results must not be used as final evidence.')
+ if runtime_before!=runtime_after:raise RuntimeError('Runtime dependencies changed during the benchmark; results must not be used as final evidence.')
  if before!=after:raise RuntimeError('Sources changed during the benchmark; results must not be used as final evidence.')
 if __name__=='__main__':main()

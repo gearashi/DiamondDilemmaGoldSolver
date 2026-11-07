@@ -41,13 +41,13 @@ from constraint_mask_conflicts import VerifiedMaskConflictStore, STAT_KEYS as MA
 from constraint_lookahead import grouped_constructive_lookahead, GROUP_STAT_KEYS
 from constraint_shared_conflicts import VerifiedConflictStore, STAT_KEYS as SHARED_STAT_KEYS, GAUGE_KEYS as SHARED_GAUGES
 
-from constraint_round24 import ResearchPruner, KEYS as RESEARCH_KEYS, STAT_KEYS as RESEARCH_STAT_KEYS
+from constraint_round24 import ResearchPruner, KEYS as RESEARCH_KEYS, STAT_KEYS as RESEARCH_STAT_KEYS, MAX_GAUGE_KEYS as RESEARCH_MAX_GAUGES
 from constraint_region_oracles import ResidualProofCache, RESIDUAL_STAT_KEYS
 from constraint_branching_round24 import RoutingBranching, CompletionOrdering, LearnedOrdering, LEARNED_ORDERING_WEIGHTS, STAT_KEYS as ROUTING_STAT_KEYS
 
 VERSION = 2
 GUIDANCE_STAT_KEYS = ('failure_guided_choices','failure_weight_updates','lookahead_probes','lookahead_prunes','lookahead_failures','lookahead_aborted',
-                      'lookahead_complete_passes','lookahead_common_prunes',
+                      'lookahead_complete_passes','lookahead_common_prunes','regional_solutions_validated',
                       'lookahead_probe_propagations','lookahead_probe_arc_revisions') + CACHE_STAT_KEYS + PAIR_STAT_KEYS
 KNOWLEDGE_STAT_KEYS = ('loop_witnesses',)
 EXPLANATION_STAT_KEYS = ('explanation_probes', 'explanation_literals_removed', 'explanation_aborted', 'explanation_skipped', 'explanation_time_ns', 'backjumps', 'backjump_levels', 'native_basic_passes_skipped')
@@ -746,7 +746,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                 stats[key]=value if key=='residual_closed' else residual_baseline[key]+value-residual_entry[key]
         if runtime.research is not None:
             for key,value in runtime.research.stats.items():
-                stats[key]=(max(research_baseline[key],value) if key=='factor_live_piece_width' else research_baseline[key]+value-research_entry[key])
+                stats[key]=(max(research_baseline[key],value) if key in RESEARCH_MAX_GAUGES else research_baseline[key]+value-research_entry[key])
         if runtime.deep is not None:
             for key in ('path_checks','path_pairs_removed','path_prunes','conservation_checks','conservation_prunes','relation_records','relation_hits','relation_prunes','joint_conservation_checks','joint_conservation_prunes','capacity_edges'):stats[key]=deep_baseline[key]+runtime.deep.stats[key]-deep_entry[key]
         if runtime.mask_conflicts is not None:
@@ -1266,6 +1266,18 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                     runtime.impact.observe(selected,before_propagation,domains,failed=not possible);stats['impact_observations']+=1
                 if not possible:return failure(proof_input=before_propagation)
                 frame['_propagated']=True
+                if target=='gold' and runtime.research is not None and any(options[k] for k in RESEARCH_KEYS):
+                    candidate=runtime.research.solution
+                    # Research may also run on trial or sibling domains. A
+                    # cached witness is only an answer inside this owned frame.
+                    if candidate is not None and len(candidate)==n and all(
+                            type(code) is int and code>=0 and code<mask.bit_length()
+                            and mask&(1<<code) for code,mask in zip(candidate,domains)):
+                        report=problem.validate(candidate)
+                        if not report['valid']:
+                            raise ValueError('Regional Gold witness failed independent validation')
+                        stats['regional_solutions_validated']+=1
+                        return {'action':'solved','codes':list(candidate),'validation':report,'via_regional':True}
                 if options['sat_assist'] and (nodes==1 or nodes%8==0):
                     if target=='gold' and options.get('persistent_learning',True) and knowledge is not None:
                         runtime.sat.add_gold_witnesses(knowledge,check,max_records=8)

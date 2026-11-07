@@ -10,7 +10,10 @@ from search_options import ROUND25_OPTIONS, normalize_options
 ROOT=Path(__file__).resolve().parent
 KEYS=('sat_core_lifting','shared_sat_assistant','resumable_proof_checking',
       'native_explanations','symbolic_coverage','mixed_proof_dag','higher_order_relations','incremental_affine',
-      'native_sat_persistence','conflict_pb','integer_lattice','hall_rematch','reversible_gold_graph')
+      'native_sat_persistence','conflict_pb','integer_lattice','hall_rematch','reversible_gold_graph',
+      'incremental_regions','durable_regions','compact_factors','gold_elimination',
+      'separator_search','selective_refinement','joint_symbolic_regions','algebraic_connectivity','residual_isomorphism','gold_pricing',
+      'multichain_routing','region_certificates')
 HARNESS=r"""
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const elements=new Map();
@@ -64,6 +67,8 @@ class Round25Controls(unittest.TestCase):
                {'hall_rematch':True,'incremental_hall':False},
                {'reversible_gold_graph':True,'strand_connectivity':False,'biconnected':False},
                {'integer_lattice':True,'affine_reasoning':False,'incremental_affine':False},
+               {'durable_regions':True,'incremental_regions':False},
+               {'gold_elimination':True,'compact_factors':False},
                {'symbolic_coverage':True,'shared_coverage':False},
                {'witness_pool':True,'sat_assist':False}]
         code='const cases='+json.dumps(cases)+';\n'
@@ -178,6 +183,76 @@ for(const key of ['hall_rematch','reversible_gold_graph']){
  edit(key,false);assert.equal(element('r25_'+key).disabled,true);
 }
 assert.equal(element('startBtn').disabled,false);
+""")
+
+    def test_regional_options_dependencies_scope_and_save_failure_stats(self):
+        self.node(r"""
+for(const algorithm of ['dfs','parallel-dfs','hybrid']){
+ select(algorithm);
+ for(const key of ['incremental_regions','durable_regions','compact_factors','gold_elimination'])assert.equal(element('r25_'+key).disabled,false);
+}
+edit('durable_regions',true);edit('gold_elimination',true);
+assert.equal(element('r25_incremental_regions').checked,true);
+assert.equal(element('r25_compact_factors').checked,true);
+element('seconds').value='0';element('replicaInput').value='128';element('seedInput').value='17';
+run("command('start')");
+const sent=JSON.parse(context.fetchCalls.at(-1)[1].body);
+for(const key of ['durable_regions','incremental_regions','compact_factors','gold_elimination'])assert.equal(sent.search_options[key],true,key);
+idle();select('sat');assert.equal(element('startBtn').disabled,true);
+for(const key of ['durable_regions','incremental_regions','gold_elimination','compact_factors'])edit(key,false);
+select('parallel-dfs');
+run("state.status={state:'stopped',method:'constraint',algorithm:'parallel-dfs',stats:{region_restrict_reuses:7,region_cursor_writes:4,region_cursor_loads:3,region_cursor_write_failures:2,compact_factor_completed:1,regional_solutions_validated:1}};renderState();");
+for(const [id,value] of [['r25RegionReuse','7'],['r25RegionWrites','4'],['r25RegionLoads','3'],['r25RegionWriteFailures','2'],['r25WholeComplete','1'],['r25GoldAccepted','1']])assert.equal(element(id).textContent,value,id);
+assert.match(element('smartSearchHint').textContent,/could not be saved/);
+""")
+
+    def test_new_regional_stages_are_independent_scoped_and_report_reuse(self):
+        self.node(r"""
+const keys=['separator_search','selective_refinement','joint_symbolic_regions','algebraic_connectivity','residual_isomorphism','gold_pricing'];
+for(const algorithm of ['dfs','parallel-dfs','hybrid']){
+ select(algorithm);for(const key of keys)assert.equal(element('r25_'+key).disabled,false,key);
+}
+for(const key of keys)edit(key,true);
+for(const key of ['elimination','relaxed_diagrams','representative_connectivity','residual_reuse'])assert.equal(element('r24_'+key).checked,false,key);
+element('seconds').value='0';element('replicaInput').value='128';element('seedInput').value='17';
+run("command('start')");const sent=JSON.parse(context.fetchCalls.at(-1)[1].body);
+for(const key of keys)assert.equal(sent.search_options[key],true,key);
+idle();select('sat');assert.equal(element('startBtn').disabled,true);
+for(const key of keys)edit(key,false);
+select('parallel-dfs');
+run("state.status={state:'stopped',method:'constraint',algorithm:'parallel-dfs',stats:{andor_component_reuses:7,selective_dd_reused_layers:9,joint_region_cache_hits:3,algebraic_connectivity_basis_hits:4,isomorphic_hits:2,gold_pricing_failures:1}};renderState();");
+for(const[id,value]of [['r25SeparatorReuse','7'],['r25RefinementReuse','9'],['r25JointReuse','3'],['r25BasisReuse','4'],['r25EquivalentReuse','2'],['r25PricingFailures','1']])assert.equal(element(id).textContent,value,id);
+run("state.capabilities={algorithms:{'parallel-dfs':{available:true}},options:{gold_pricing:{available:false,reason:'Requires OR-Tools in this Python environment.'}},features:{},backends:{}};renderState();");
+assert.equal(element('r25_gold_pricing').disabled,true);
+edit('gold_pricing',true);assert.equal(element('r25_gold_pricing').disabled,false);assert.equal(element('startBtn').disabled,true);
+assert.match(element('runtimeHint').textContent,/OR-Tools/);
+const before=context.fetchCalls.length;run("command('start')");assert.equal(context.fetchCalls.length,before);
+edit('gold_pricing',false);assert.equal(element('startBtn').disabled,false);
+""")
+
+    def test_joint_chain_and_completed_certificate_controls_and_counters(self):
+        self.node(r"""
+select('parallel-dfs');edit('multichain_routing',true);edit('region_certificates',true);
+for(const id of ['r25_durable_regions','r23_extended_regions'])assert.equal(element(id).checked,false,id);
+element('seconds').value='0';element('replicaInput').value='128';element('seedInput').value='17';
+run("command('start')");const sent=JSON.parse(context.fetchCalls.at(-1)[1].body);
+assert.equal(sent.search_options.multichain_routing,true);assert.equal(sent.search_options.region_certificates,true);
+idle();select('gpu-domains');assert.equal(element('startBtn').disabled,true);
+edit('multichain_routing',false);edit('region_certificates',false);select('parallel-dfs');
+run("state.status={state:'stopped',method:'constraint',algorithm:'parallel-dfs',stats:{multichain_failures:1,region_certificate_saves:2,region_certificate_loads:3,region_certificate_verified_transitions:889,region_certificate_rejected:4,region_certificate_write_failures:1}};renderState();");
+for(const[id,value]of [['r25JointChainFailures','1'],['r25CertificateSaves','2'],['r25CertificateLoads','3'],['r25CertificateTransitions','889'],['r25CertificateRejected','4'],['r25CertificateWriteFailures','1']])assert.equal(element(id).textContent,value,id);
+assert.match(element('smartSearchHint').textContent,/could not be saved/);
+""")
+
+    def test_missing_native_build_blocks_start_but_saved_choice_is_clearable(self):
+        self.node(r"""
+run("state.capabilities={algorithms:{dfs:{available:true}},options:{native_explanations:{available:false,reason:'Run python build_native.py first.'}},features:{},backends:{}};renderState();");
+assert.equal(element('r25_native_explanations').disabled,true);
+edit('native_explanations',true);
+assert.equal(element('r25_native_explanations').disabled,false);
+assert.equal(element('startBtn').disabled,true);assert.match(element('runtimeHint').textContent,/build_native/);
+const before=context.fetchCalls.length;run("command('start')");assert.equal(context.fetchCalls.length,before);
+edit('native_explanations',false);assert.equal(element('startBtn').disabled,false);
 """)
 
     def test_capability_gating_native_core_and_active_preferences(self):

@@ -6,6 +6,8 @@ This register tracks the 37 requested proposals in their original order. Impleme
 
 The machine-readable status is in [round25-candidates.json](round25-candidates.json). Pending entries are not implemented or validated claims. Any unavailable or rejected capability must retain its exact reason and evidence. Longer benchmarks are reserved for discriminating unresolved candidates, with identical inputs, explicit seeds and preserved source hashes.
 
+The current implementation checkpoint covers proposals **1–25**, each with focused tests and independent review. A combined 96-test regional, UI, capability, benchmark-accounting and worker-process check passed after proposal 25. The earlier committed first-15 preflight passed all 26 cross-platform CI jobs. Proposals 26–37 are still pending; these checkpoints are not the final release gate. Final comparisons will rerun with frozen source and runtime provenance. [Regional scope and measured tradeoffs](ROUND25_REGIONS.md) cover proposals 14–25.
+
 | ID | Proposal |
 | --- | --- |
 | 1 | Use one SAT failure to eliminate more branches |

@@ -273,91 +273,162 @@
       "id": 16,
       "proposal": "Build compact constraint factors directly",
       "owner": "regions",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_region_compact.py",
+        "test_constraint_regions_round25.py",
+        "benchmark_regions_round25.py"
+      ],
+      "disposition": "Retained opt-in; direct whole-constraint seam and physical-resource factors",
+      "original_puzzle_gain": "not established",
+      "access": "compact_factors",
+      "finite_evidence": "Controlled160-cell query:504direct transitions and169states; old pairwise construction requires2160entries and capsat1000. Additional480pattern preparations,587seam tests and168backward edges reported. Five focused tests include full160-cell and publicDFS routes.",
+      "limits": "All cells, seams and physical resources participate. Piece usage is forgotten only after its last possible occurrence and mandatory use check. State, placement, width, resource and transition caps returnunknown. This stage enforces edge/inventory constraints; Gold connectivity is proposal17."
     },
     {
       "id": 17,
       "proposal": "Include Gold connectivity throughout whole-problem elimination",
       "owner": "regions",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_region_compact.py",
+        "test_constraint_regions_round25.py",
+        "benchmark_regions_round25.py"
+      ],
+      "disposition": "Retained opt-in; exact Gold connectivity inside bounded whole-board elimination",
+      "original_puzzle_gain": "not established",
+      "access": "gold_elimination; implies compact_factors",
+      "finite_evidence": "80 small exact Gold support/count/witness comparisons. A known 160-cell one-loop case completes with 504 transitions and 370 pairing splices; identical seam masks rewired into multiple loops are rejected after 213 transitions and 142 splices. Public DFS accepts an independently validated witness at one node, with no further branch.",
+      "limits": "Bounded whole-board queries, including a 128 exposed-port cap. Caps are unknown. Stale witnesses outside current domains are ignored; invalid in-domain witnesses error. No original Gold solution or performance gain established."
     },
     {
       "id": 18,
       "proposal": "Make automatic decomposition drive the search",
       "owner": "regions",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_region_andor.py",
+        "test_constraint_regions_round25.py",
+        "benchmark_regions_round25.py"
+      ],
+      "disposition": "Retained opt-in; exact resource-aware separator search with reusable conditional component relations",
+      "original_puzzle_gain": "not established",
+      "access": "separator_search; DFS modes",
+      "finite_evidence": "Five focused tests cover 60 independently enumerated contexts, caps, Stop, source scope and full 160-cell fixed-path interfaces. A complete eight-cell negative fixture accounts for 72 edge arrangements and no Gold completion. Reusing components reduces builds from 4 to 2, compiler transitions from 84 to 42, and counted work ticks from 609 to 487. Public Gold witness returns after one DFS node.",
+      "limits": "Bounded automatic decomposition and exact inventory/seam/pairing composition. Incomplete component compilation or joins remain unknown. Comparison isolates component reuse within the same separator planner, not dominance over the existing whole-board engine. No original Gold gain established."
     },
     {
       "id": 19,
       "proposal": "Refine diagrams where a false candidate exposes missing information",
       "owner": "regions",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_region_refinement.py",
+        "test_constraint_regions_round25.py",
+        "benchmark_regions_round25.py"
+      ],
+      "disposition": "Retained opt-in; refine violated factor coordinates and reuse unchanged prefix layers",
+      "original_puzzle_gain": "not established",
+      "access": "selective_refinement; independent DFS option",
+      "finite_evidence": "Five focused tests cover 150 independently enumerated factor systems, 40 puzzle contexts, caps, Stop, widening and the full 160-cell projection/public DFS route. A finite puzzle case removes 12 unsupported placements. Nine reused prefix layers reduce transitions from 52 to 34 and work ticks from 116 to 89 versus rebuilding under the same refinement policy.",
+      "limits": "Seam and inventory factors provide a necessary relaxation for Gold; a positive factor witness is not a Gold solution. An empty completed overapproximation can reject a query; unfinished work remains unknown. The reported cumulative 24 prune applications include replay of the same 12 deletions, not 24 distinct choices. No original-puzzle gain established."
     },
     {
       "id": 20,
       "proposal": "Compress inventory and boundary connectivity together",
       "owner": "regions",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_region_joint.py",
+        "test_constraint_regions_round25.py",
+        "benchmark_regions_round25.py"
+      ],
+      "disposition": "Retained opt-in; correlated symbolic inventory families within exact boundary interfaces",
+      "original_puzzle_gain": "not established",
+      "access": "joint_symbolic_regions; independent DFS option",
+      "finite_evidence": "Four focused tests preserve independently enumerated Gold and edge supports, distinguish strand pairings, and cover caps, Stop, widening, full 160-cell and public solver routes. Nine-cell ring counted work falls from 38328 to 33166 including compilation and symbolic inventory overhead. Seven-cell case increases from 4388 to 5467.",
+      "limits": "Exact two-region join covering the whole board, not arbitrary partial-region support pruning. Inventory, seam, cycle and endpoint correlations remain exact; incomplete work cannot publish supports. Mixed finite work results justify an optional setting, not universal dominance or original-puzzle gain."
     },
     {
       "id": 21,
       "proposal": "Construct connectivity representatives algebraically",
       "owner": "regions",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_region_rank.py",
+        "test_constraint_regions_round25.py",
+        "benchmark_regions_round25.py"
+      ],
+      "disposition": "Retained opt-in; bounded cut-incidence basis preserving Gold extension existence",
+      "original_puzzle_gain": "not established",
+      "access": "algebraic_connectivity; independent DFS option",
+      "finite_evidence": "Four tests include 120 matching families checked against every outside matching on four, six and eight endpoints, plus actual puzzle contexts, caps, Stop, cache and public solver checks. On 105 eight-endpoint matchings, explicit construction takes 11401 counted operations and keeps 8 rows; cut incidence uses 840 cut entries and 833 XORs but keeps 35 rows. Actual regional fixture basis/join work is 142 versus 1176 ticks, keeping 11 versus 5 of 12 rows.",
+      "limits": "Preserves existence only, not per-placement support, multiplicity or history counts. Exact inventory, seam, cycle and endpoint buckets remain separate. Sixteen-endpoint cap. More retained representatives can increase later joins; shared table construction is excluded from displayed basis counts. No original-puzzle or universal runtime gain established."
     },
     {
       "id": 22,
       "proposal": "Reuse proofs across verified equivalent residual problems",
       "owner": "regions",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_region_isomorphism.py",
+        "test_constraint_regions_round25.py",
+        "benchmark_regions_round25.py"
+      ],
+      "disposition": "Retained opt-in; independently verified residual-graph equivalence transports completed supports",
+      "original_puzzle_gain": "not established",
+      "access": "residual_isomorphism; independent DFS option",
+      "finite_evidence": "Four focused tests cover 80 exact Gold-support contexts, structural near misses, caps, Stop, a controlled actual 160-cell polyhedron and public DFS. Three equivalent residuals of a separate controlled 160-cell ring reduce complete compilations from 3 to 1, transitions from 497 to 165, and total counted work including graph checks from 5956 to 2955. Seven-cell work increases from 448 to 507.",
+      "limits": "Every mapped vertex, color and edge is replayed before transporting complete results. Piece interchangeability is not presumed; partial or capped queries cannot prune. The gain discriminator uses a synthetic ring topology, distinct from the actual polyhedron correctness case. Whole unrestricted queries remain capped. No original Gold performance claim."
     },
     {
       "id": 23,
       "proposal": "Extend regional pricing to seams and the single Gold loop",
       "owner": "regions",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_region_pricing.py",
+        "test_constraint_regions_round25.py",
+        "benchmark_regions_round25.py"
+      ],
+      "disposition": "Retained opt-in; exact rational Gold/seam-aware regional pricing certificates",
+      "original_puzzle_gain": "not established",
+      "access": "gold_pricing; independent DFS option requiring OR-Tools for app use",
+      "finite_evidence": "Five tests include 30 independent weighted-history pricing comparisons, full-history certificate replay, 30 Gold-support contexts, dependency absence, malformed duals, caps, Stop, controlled original 160-cell geometry and public DFS. An eight-cell negative left possible by inventory-only pricing is proved infeasible in three rounds and four generated history columns; 208 priced DAG edges include exact certificate replay. Complete compilation adds 88 transitions and 34 states.",
+      "limits": "Bounded two-region fractional relaxation, not unrestricted branch-and-price. Floating LP output only suggests duals. Exact Farkas checks and a second complete pricing replay are required before pruning. Fractional feasible results do not establish a Gold solution. Missing dependency or incomplete work remains unknown for direct callers. No original-puzzle gain established."
     },
     {
       "id": 24,
       "proposal": "Check several unfinished chains jointly",
       "owner": "regions",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_region_multichain.py",
+        "test_constraint_regions_round25.py",
+        "benchmark_regions_round25.py"
+      ],
+      "disposition": "Retained opt-in; exhaustive joint linkage through mandatory fixed Gold chains",
+      "original_puzzle_gain": "not established",
+      "access": "multichain_routing; independent DFS option",
+      "finite_evidence": "Four tests cover all 15 six-port matchings under four domains, shared-label conflicts, multiple strands of one tile, caps, Stop, caches, controlled original 160-cell geometry and public DFS. A four-cell three-chain conflict passes the older individual-chain check but is rejected jointly in 12 routing steps plus 83 graph-work ticks. The positive center tile admits all three independently validated Gold rotations.",
+      "limits": "At most 16 initially unfixed cells, eight mandatory chains, 128 route ports and 768 residual incidence vertices. Cached negatives require complete failed states. Positive linkage is a necessary relaxation and does not establish one full Gold loop; unknown work never prunes. No original-puzzle runtime gain established."
     },
     {
       "id": 25,
       "proposal": "Certify the completeness of regional results",
       "owner": "regions",
-      "status": "pending",
-      "evidence": [],
-      "disposition": null,
-      "original_puzzle_gain": "not established"
+      "status": "implemented_evaluated_finite",
+      "evidence": [
+        "constraint_region_certificate.py",
+        "test_constraint_regions_round25.py",
+        "test_constraint_parallel.py",
+        "benchmark_regions_round25.py"
+      ],
+      "disposition": "Retained opt-in; independently verified completeness certificates for a separate completed regional cache",
+      "original_puzzle_gain": "not established",
+      "access": "region_certificates; independent DFS option with run-local certificate store",
+      "finite_evidence": "Six focused tests check every transition including legal dead children, exact terminal semantics, reachability, counts and supports, malformed proofs, caps, callback cancellation, independently enumerated partial regions and controlled original 160-cell geometry. Real spawned-worker save/reload also passes. A seven-cell 5040-history relation has 128 states and 889 transitions; first production costs 889 compile plus 889 export plus 889 verify transitions. Import uses zero compile/export transitions and verifies all 889 again; serialized proof is 78870 bytes.",
+      "limits": "Independent checker derives rotated segments and uses separate DSU semantics. Only completed verified proofs can supply imported deductions. Verification/export add work; no universal total-work reduction is claimed. This completed-certificate store is separate from proposal 15 trusted unfinished local cursors. No original-puzzle gain established."
     },
     {
       "id": 26,

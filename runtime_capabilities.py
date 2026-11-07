@@ -1,10 +1,13 @@
 """Installed-package availability, without importing solvers or probing GPU drivers.
 
-An available package is not a guarantee of a working device or native library.
+Native explanation availability additionally checks local build metadata and hashes.
+An available package/build is not a guarantee of a working device or native library.
 The chosen engine still validates those when its search starts.
 """
 from __future__ import annotations
 import importlib.util
+import hashlib,json
+from pathlib import Path
 from importlib.metadata import version as package_version, PackageNotFoundError
 import platform
 import sys
@@ -17,6 +20,24 @@ def _installed(module):
         return importlib.util.find_spec(module) is not None
     except (ImportError, ValueError):
         return False
+
+
+def _native_explanation_build(root=None):
+    """Check the required local build without loading executable native code."""
+    root=Path(root) if root is not None else Path(__file__).resolve().parent
+    reason='Native explanations require a matching local compiled search library. Run python build_native.py in this installation first.'
+    try:
+        folder=root/'.native'
+        metadata=json.loads((folder/'search-build.json').read_text(encoding='utf-8'))
+        name=metadata.get('library')
+        if (metadata.get('abi')!=1 or metadata.get('platform')!=sys.platform
+                or metadata.get('machine')!=platform.machine()
+                or not isinstance(name,str) or not name or Path(name).name!=name):
+            return {'available':False,'reason':reason,'detection':'native_build_metadata'}
+        available=(metadata.get('source_sha256')==hashlib.sha256((root/'constraint_native_search.c').read_bytes()).hexdigest()
+                   and metadata.get('library_sha256')==hashlib.sha256((folder/name).read_bytes()).hexdigest())
+    except (OSError,ValueError,TypeError,AttributeError):available=False
+    return {'available':bool(available),'reason':'' if available else reason,'detection':'native_build_metadata'}
 
 
 def runtime_capabilities():
@@ -46,7 +67,7 @@ def runtime_capabilities():
                        'sat': dict(sat), 'sat-propagator':dict(sat),
                        'sat-channel':dict(sat),'cp-sat-regions':dict(cp)},
         'backends': {'auto': gpu, 'cuda': cuda, 'webgpu': webgpu},
-        'options': {'sat_assist': dict(sat), 'gold_oracle': dict(cp), 'smart_learning':dict(sat), 'shared_sat_assistant':dict(sat), 'higher_order_relations':dict(sat), 'native_sat_persistence':sat_persistence},
+        'options': {'sat_assist': dict(sat), 'gold_oracle': dict(cp), 'gold_pricing':dict(cp), 'smart_learning':dict(sat), 'shared_sat_assistant':dict(sat), 'higher_order_relations':dict(sat), 'native_sat_persistence':sat_persistence,'native_explanations':_native_explanation_build()},
         'features': {'repair': dict(cp)},
     }
 

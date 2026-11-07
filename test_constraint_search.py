@@ -786,6 +786,17 @@ class RunnerTests(unittest.TestCase):
             runner.main(self.args('dfs','--search-options',json.dumps({'durable_regions':True})))
         self.assert_released()
 
+    def test_region_certificates_get_cache_path_without_other_regional_disk_options(self):
+        def solve(problem,algorithm,**kwargs):
+            self.assertEqual(kwargs['learning_state']['_regional_cache_dir'],str(self.run/'regional-tables'))
+            self.assertTrue(kwargs['options']['region_certificates'])
+            self.assertFalse(kwargs['options']['durable_regions'])
+            self.assertFalse(kwargs['options']['extended_regions'])
+            return self.terminal('stopped')
+        with patch.object(runner,'run_solver',side_effect=solve):
+            runner.main(self.args('dfs','--search-options',json.dumps({'region_certificates':True})))
+        self.assert_released()
+
     def test_parallel_keeps_workers_for_full_remaining_run_budget(self):
         def solve(problem,algorithm,**kwargs):
             self.assertGreater(kwargs['seconds'],80)

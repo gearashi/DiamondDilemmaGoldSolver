@@ -23,6 +23,7 @@ import time
 import traceback
 from constraint_dfs import solve as dfs_solve, _checkpoint_digest, _NogoodStore
 from search_options import normalize_options, validate_workers
+from constraint_round24 import MAX_GAUGE_KEYS as RESEARCH_MAX_GAUGES
 from constraint_knowledge import KnowledgeStore
 from constraint_shared_conflicts import VerifiedConflictStore, GAUGE_KEYS as SHARED_GAUGES
 from constraint_mask_conflicts import VerifiedMaskConflictStore, GAUGE_KEYS as MASK_GAUGES, _digest as _mask_digest, MAX_RECORDS as MASK_MAX_RECORDS, MAX_LITERALS as MASK_MAX_LITERALS
@@ -337,7 +338,7 @@ def _worker(problem,connection,cancel):
                     payload=request.get('certificates')
                     if payload is not None:certificates.load_snapshot(payload)
                     learning['_certificates']=certificates
-                if (request['options'].get('extended_regions') or request['options'].get('durable_regions')) and request.get('regional_cache_dir') is not None:
+                if (request['options'].get('extended_regions') or request['options'].get('durable_regions') or request['options'].get('region_certificates')) and request.get('regional_cache_dir') is not None:
                     learning['_regional_cache_dir']=request['regional_cache_dir']
                 result=dfs_solve(problem,seconds=request['seconds'],target=request['target'],
                                  resume=request['checkpoint'],stop=cancel.is_set,progress=progress,
@@ -392,6 +393,9 @@ def _backend_label(backends):
 
 def _add_stats(destination,source,*,retiring=False):
     for key,value in source.items():
+        if key in RESEARCH_MAX_GAUGES:
+            destination[key]=max(destination.get(key,0),value)
+            continue
         if retiring and (key in SHARED_GAUGES or key in MASK_GAUGES or key.endswith('_entries') or key in ('forced_bonds','forced_clusters','loop_witnesses','sat_assist_clauses',
                             'hierarchical_subtable_states','hierarchical_subtable_support_slots','hierarchical_cached_summaries','hierarchical_cached_support_slots','gold_oracle_template_bytes')):continue
         destination[key]=destination.get(key,0)+value

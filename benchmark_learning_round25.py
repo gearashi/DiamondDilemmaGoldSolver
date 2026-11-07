@@ -1,10 +1,11 @@
 """Finite logical-work reports for ordered learning proposals; not speed claims."""
 import argparse,hashlib,json,platform,subprocess,importlib.metadata
 from pathlib import Path
-from test_constraint_learning_round25 import run_core_fixture,run_proof_cursor_fixture,run_symbolic_fixture,run_growing_symbolic_fixture,run_higher_fixture
+from benchmark_provenance import source_snapshot, runtime_snapshot, repository_snapshot
 
 
 def core_lifting():
+    from test_constraint_learning_round25 import run_core_fixture
     baseline=run_core_fixture(False);candidate=run_core_fixture(True)
     assert baseline['status']==candidate['status']=='infeasible'
     assert baseline['checkpoint']['frontier']['boxes']==candidate['checkpoint']['frontier']['boxes']==[]
@@ -35,6 +36,7 @@ def native_explanations():
 
 
 def resumable_proof():
+    from test_constraint_learning_round25 import run_proof_cursor_fixture
     report=run_proof_cursor_fixture()
     assert report['resumed_completed'] and not report['baseline_completed']
     assert report['resumed_clause_visits']<report['baseline_clause_visits']
@@ -43,6 +45,7 @@ def resumable_proof():
 
 
 def symbolic_coverage():
+    from test_constraint_learning_round25 import run_symbolic_fixture,run_growing_symbolic_fixture
     report=run_symbolic_fixture()
     assert report['coverage_symbolic_builds']==1 and report['coverage_symbolic_reuses']==7
     assert report['coverage_symbolic_apply_steps']<report['baseline_subtraction_checks']
@@ -60,6 +63,7 @@ def mixed_proofs():
 
 
 def higher_relations():
+    from test_constraint_learning_round25 import run_higher_fixture
     report=run_higher_fixture()
     assert report['candidate_total_queries']<report['baseline']['sat_assist_domain_calls']
     assert report['candidate_native_decisions']<=report['baseline_native_decisions']
@@ -150,8 +154,11 @@ def main():
     if args.candidate==11:paths+=['constraint_lattice.py','constraint_algebra.py','constraint_pb.py','constraint_round24.py','search_options.py','test_constraint_lattice_round25.py','test_constraint_sat_domains.py','test_constraint_dfs.py']
     if args.candidate==12:paths+=['constraint_incremental_hall.py','constraint_pruning.py','constraint_dfs.py','search_options.py','test_constraint_incremental_hall.py']
     if args.candidate==13:paths+=['constraint_gold_graph.py','constraint_advanced.py','constraint_pruning.py','constraint_dfs.py','search_options.py','search_fixtures.py','geometry.py','test_constraint_advanced.py','test_constraint_sat_domains.py']
+    frozen_before=source_snapshot(root);runtime_before=runtime_snapshot();repository=repository_snapshot(root)
     before=hashes();result={1:core_lifting,2:shared_assistant,3:resumable_proof,4:native_explanations,6:symbolic_coverage,7:mixed_proofs,8:higher_relations,9:incremental_affine,10:conflict_pb,11:integer_lattice,12:hall_rematch,13:reversible_gold_graph}[args.candidate]();after=hashes();assert before==after
-    result.update(python=platform.python_version(),commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),source_sha256=before,inputs_unchanged=before==after)
+    frozen_after=source_snapshot(root);runtime_after=runtime_snapshot()
+    assert frozen_before==frozen_after and runtime_before==runtime_after
+    result.update(source_before=frozen_before,source_after=frozen_after,runtime_before=runtime_before,runtime_after=runtime_after,source_unchanged=frozen_before==frozen_after,runtime_unchanged=runtime_before==runtime_after,python=platform.python_version(),commit=repository.get('commit'),repository=repository,source_sha256=before,inputs_unchanged=before==after)
     if args.candidate in (1,2,8):result['sat_backend']=sat_provenance()
     args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     print(json.dumps({'proposal':args.candidate,'inputs_unchanged':True,**{k:result[k] for k in ('total_queries','baseline_clause_visits','resumed_clause_visits','slices','baseline_subtraction_checks','coverage_symbolic_apply_steps','coverage_symbolic_nodes') if k in result}}))

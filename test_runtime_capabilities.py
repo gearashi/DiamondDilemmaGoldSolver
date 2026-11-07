@@ -31,6 +31,41 @@ class RuntimeCapabilityTests(unittest.TestCase):
         self.assertTrue(result['algorithms']['dfs']['available'])
         self.assertFalse(result['algorithms']['cp-sat']['available'])
 
+    def test_native_explanation_probe_checks_build_identity_without_loading_library(self):
+        import hashlib,platform,sys
+        with tempfile.TemporaryDirectory(prefix='native-capability-',dir=ROOT) as directory:
+            root=Path(directory);folder=root/'.native';folder.mkdir()
+            self.assertFalse(runtime._native_explanation_build(root)['available'])
+            source=root/'constraint_native_search.c';library=folder/'example.dll'
+            source.write_bytes(b'finite source');library.write_bytes(b'not an executable')
+            metadata={'abi':1,'platform':sys.platform,'machine':platform.machine(),'library':library.name,
+                      'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),
+                      'library_sha256':hashlib.sha256(library.read_bytes()).hexdigest()}
+            manifest=folder/'search-build.json'
+            manifest.write_text(json.dumps(metadata),encoding='utf-8')
+            with patch('ctypes.CDLL',side_effect=AssertionError('No native code loading during availability detection')):
+                self.assertTrue(runtime._native_explanation_build(root)['available'])
+                for key,value in [('abi',2),('platform','foreign'),('machine','foreign'),('library','../outside.dll')]:
+                    manifest.write_text(json.dumps({**metadata,key:value}),encoding='utf-8')
+                    self.assertFalse(runtime._native_explanation_build(root)['available'])
+                manifest.write_text(json.dumps(metadata),encoding='utf-8')
+                library.write_bytes(b'changed')
+                self.assertFalse(runtime._native_explanation_build(root)['available'])
+                library.write_bytes(b'not an executable');source.write_bytes(b'changed')
+                self.assertFalse(runtime._native_explanation_build(root)['available'])
+                manifest.write_text('[]',encoding='utf-8')
+                self.assertFalse(runtime._native_explanation_build(root)['available'])
+
+    def test_missing_native_explanation_build_fails_before_launch_and_keeps_preferences(self):
+        missing={'available':False,'reason':'Run python build_native.py first.'}
+        with patch.object(runtime,'_native_explanation_build',return_value=missing):
+            caps=capabilities('wgpu')
+        options={'native_explanations':True,'native':'auto'};before=dict(options)
+        with self.assertRaisesRegex(ValueError,'build_native.py'):
+            runtime.validate_runtime_selection('dfs',options=options,capabilities=caps)
+        self.assertEqual(options,before)
+        runtime.validate_runtime_selection('dfs',options={'native_explanations':False},capabilities=caps)
+
     def test_webgpu_profile_supports_exact_dfs_and_gpu_without_optional_solvers(self):
         caps = capabilities('wgpu')
         for algorithm in ('dfs', 'parallel-dfs', 'gpu-dfs', 'hybrid'):
@@ -47,7 +82,7 @@ class RuntimeCapabilityTests(unittest.TestCase):
 
     def test_explicit_optional_flags_fail_without_changing_preferences(self):
         caps = capabilities('wgpu')
-        for key in ('gold_oracle', 'sat_assist'):
+        for key in ('gold_oracle', 'sat_assist', 'gold_pricing'):
             options = {key: True, 'native_search': True}
             original = dict(options)
             with self.subTest(key=key), self.assertRaisesRegex(ValueError, key):
