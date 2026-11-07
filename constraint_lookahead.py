@@ -19,8 +19,10 @@ class CompletedProbeCache:
             raise ValueError('Probe cache bounds must be nonnegative integers.')
         self.limit,self.max_slots=limit,max_slots
         self.entries=OrderedDict();self.slots=0
+        from constraint_probe_plans_round26 import ProbePlans
+        self.plans=ProbePlans();self.partial=OrderedDict()
 
-    def run(self,context,domains,selected,probe,check,stats):
+    def run(self,context,domains,selected,probe,check,stats,*,resume_partial=False,recoverable=()):
         """Run or reuse a complete probe, publishing before a caller Stop poll.
 
         Older completed supports may be weaker after additional valid learning;
@@ -54,7 +56,17 @@ class CompletedProbeCache:
             if not all(current):return False
             if current!=list(before):selected=None  # Several cells may change.
             break
-        possible=probe(domains,selected)
+        if type(resume_partial)is not bool or not isinstance(recoverable,tuple) or any(not isinstance(kind,type) or not issubclass(kind,BaseException) for kind in recoverable):raise ValueError('Invalid partial-probe policy.')
+        if resume_partial and key in self.partial:
+            domains[:]=[a&b for a,b in zip(domains,self.partial[key])];selected=None
+            self.plans.stats['probe_partial_resumes']+=1
+        try:possible=probe(domains,selected)
+        except recoverable:
+            if resume_partial and len(domains)==len(before) and all(type(m)is int and m>=0 and not m&~old for m,old in zip(domains,before)):
+                self.partial[key]=tuple(domains);self.partial.move_to_end(key);self.plans.stats['probe_partial_saves']+=1
+                while self.partial and (len(self.partial)>min(self.limit,16) or sum(len(row) for row in self.partial.values())>self.max_slots):self.partial.popitem(last=False)
+            raise
+        self.partial.pop(key,None)
         if type(possible)is not bool:raise ValueError('A probe must return a boolean.')
         narrowed=tuple(domains) if possible else ()
         if possible and (len(narrowed)!=len(before) or any(type(x)is not int or x<=0 or x&~old for x,old in zip(narrowed,before))):

@@ -22,7 +22,7 @@ MAX_CALLS_PER_ADVANCE=4
 MAX_SECONDS_PER_ADVANCE=.25
 STAT_KEYS=('shared_conflicts_offered','shared_conflicts_verified','shared_conflicts_rejected',
            'shared_conflicts_unknown','shared_conflicts_duplicates','shared_conflicts_evictions',
-           'shared_conflicts_pending_dropped','shared_conflicts_calls','shared_conflicts_entries',
+           'shared_conflicts_pending_dropped','shared_conflicts_pending_reused','shared_conflicts_calls','shared_conflicts_entries',
            'shared_conflicts_pending','shared_conflicts_clauses')
 GAUGE_KEYS=('shared_conflicts_entries','shared_conflicts_pending','shared_conflicts_clauses')
 
@@ -92,6 +92,19 @@ class VerifiedConflictStore:
         while len(self._pending)>MAX_PENDING:
             self._pending.popitem(last=False);self.stats['shared_conflicts_pending_dropped']+=1
         self._refresh();return record in self._pending
+    def admit_deduction_chain(self,certificate,check=lambda:None,*,max_clauses=64,stats=None):
+        """Replay structural evidence before exposing singleton GPU clauses."""
+        from constraint_deduction_chain_round26 import verify_chain,expand_placement_conflicts
+        self._assert_binding()
+        record=verify_chain(self.problem,certificate,target=self.target,check=check,stats=stats)
+        rows=expand_placement_conflicts(record,limit=max_clauses)
+        if rows is None:return 0
+        normalized=[self._normalize(row) for row in rows]
+        if any(len(row)>MAX_LITERALS for row in normalized):return 0
+        self._assert_binding();check()
+        added=sum(self._insert_verified(row) for row in normalized)
+        self._refresh();return added
+
     def _remember_discard(self,record):
         self._discarded[record]=None
         while len(self._discarded)>MAX_PENDING:self._discarded.popitem(last=False)
@@ -106,6 +119,9 @@ class VerifiedConflictStore:
             victim=max(range(len(self._records)),key=lambda index:(len(self._records[index]),-index))
             self._records.pop(victim);self.stats['shared_conflicts_evictions']+=1
         if record in self._records:
+            for pending in tuple(self._pending):
+                if values<=frozenset(pending):
+                    self._pending.pop(pending);self.stats['shared_conflicts_pending_reused']+=1
             self.stats['shared_conflicts_verified']+=1;return True
         return False
     def advance(self,check=lambda:None,*,seconds=.01,attempts=2,conflicts=128):

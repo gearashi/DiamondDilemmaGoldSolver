@@ -361,7 +361,7 @@ def worker(args):
  write_artifact(args.output,result)
  print(json.dumps({k:result.get(k) for k in ('case','engine','profile','seed','status','nodes','wall_seconds')}),flush=True)
 
-def main():
+def main(*,entry_path=None):
  require_assertions()
  parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);parser.add_argument('--data',type=Path,default=ROOT/'data/tiles.json')
  parser.add_argument('--worker',action='store_true');parser.add_argument('--engine',choices=['cpu','gpu','sat','hybrid'],default='cpu');parser.add_argument('--case',choices=['original','planted','small','residual'],default='original');parser.add_argument('--profile',choices=tuple(dict.fromkeys((*PROFILES,*SAT_PROFILES,*GPU_PROFILES,*HYBRID_PROFILES))),default='baseline')
@@ -436,7 +436,7 @@ def main():
  for number,(engine,case,profile,seed,budget,workers,free_cells,replicas) in enumerate(jobs):
   case_label=case+(f'-free{free_cells}' if case=='residual' else '')
   path=args.output/f'{number:02d}-{engine}-{case_label}-{profile}-{seed}.json'
-  command=[sys.executable,'-B',str(Path(__file__).resolve()),'--worker','--output',str(path.resolve()),'--data',str(args.data.resolve()),'--engine',engine,'--case',case,'--profile',profile,'--seed',str(seed),'--seconds',str(budget),'--workers',str(workers),'--replicas',str(replicas),'--free-cells',str(free_cells if free_cells is not None else args.free_cells)]
+  command=[sys.executable,'-B',str(Path(entry_path).resolve() if entry_path is not None else Path(__file__).resolve()),'--worker','--output',str(path.resolve()),'--data',str(args.data.resolve()),'--engine',engine,'--case',case,'--profile',profile,'--seed',str(seed),'--seconds',str(budget),'--workers',str(workers),'--replicas',str(replicas),'--free-cells',str(free_cells if free_cells is not None else args.free_cells)]
   if engine=='hybrid':command.extend(['--hybrid-backend',args.hybrid_backend])
   started_at=datetime.datetime.now(datetime.timezone.utc).isoformat()
   tick=time.monotonic();child=None;cleanup_result=None;cleanup_attempted=False

@@ -45,6 +45,7 @@ class _Run:
         self.cuts = []
         self.last_codes = None
         self.root_symmetry = None
+        self.regional_cache_dir = None
         self.stats = {'engine': engine, 'seed': seed, 'target': target,
                       'candidates_checked': 0, 'gold_cuts': 0,
                       'resumed': False, 'resumption_mode': 'restart_with_revalidated_gold_cuts'}
@@ -302,6 +303,12 @@ def _sat(run, domains, hints):
                     support = [variables[cell][code] for code in codes]
                     clause([-signature, *support])
                     for literal in support: clause([-literal, signature])
+        if run.options['regional_compiler']:
+            from types import SimpleNamespace
+            from constraint_region_models import add_regional_dags
+            run.stats.update(add_regional_dags(run.problem,domains,backend='sat',
+                solver=SimpleNamespace(add_clause=clause),literal=lambda cell,code:variables[cell][code],
+                new_variable=fresh,target=run.target,check=run.check,stats_sink=run.stats,cache_dir=run.regional_cache_dir))
         external=None
         if run.target=='gold' and run.engine=='sat-reachability':
             from constraint_sat_connectivity import add_reachability,SATConnectivityLimit
@@ -390,7 +397,10 @@ def _cpsat(run, domains, hints):
     for cut in run.cuts: add_cut(cut)
     for cell, code in hints.items(): model.add_hint(codes[cell], code)
     model.add_decision_strategy(codes, cp_model.CHOOSE_MIN_DOMAIN_SIZE, cp_model.SELECT_MIN_VALUE)
-    if run.engine=='cp-sat-regions':
+    if run.options['regional_compiler']:
+        from constraint_region_models import add_regional_dags
+        run.stats.update(add_regional_dags(run.problem,domains,backend='cp-sat',model=model,codes=codes,target=run.target,check=run.check,stats_sink=run.stats,cache_dir=run.regional_cache_dir))
+    elif run.engine=='cp-sat-regions':
         from constraint_region_models import add_regional_alternatives
         run.stats.update(add_regional_alternatives(run.problem,domains,model,codes,target=run.target,check=run.check))
     solver = cp_model.CpSolver()
@@ -435,6 +445,9 @@ def _cpsat_circuit(run,domains,hints):
         result=run.finish('unsupported');result['reason']=str(exc)
         return result
     model,codes=built.model,built.codes
+    if run.options['regional_compiler']:
+        from constraint_region_models import add_regional_dags
+        run.stats.update(add_regional_dags(run.problem,domains,backend='cp-sat',model=model,codes=codes,target=run.target,check=run.check,stats_sink=run.stats,cache_dir=run.regional_cache_dir))
     run.stats.update(built.stats)
     for cut in run.cuts:
         run.check()
@@ -544,12 +557,15 @@ def solve(problem, *, engine='sat', seconds=10, seed=0, target='gold', hints=Non
         raise ValueError('stop must be a callback or an Event')
     from search_options import normalize_options
     options=normalize_options(options)
-    if engine=='sat' and options['sat_theory'] and options['persistent_sat']:raise ValueError('Choose persistent SAT or SAT theory propagation; combining them is not implemented.')
-    if engine=='sat' and options['sat_theory']:engine='sat-propagator'
+    if engine=='sat' and options['sat_theory'] and options['persistent_sat'] and not options['persistent_theory']:raise ValueError('Choose persistent SAT or SAT theory propagation; combining them is not implemented.')
+    if engine=='sat' and options['sat_theory'] and not options['persistent_theory']:engine='sat-propagator'
     if engine=='sat' and options['persistent_sat']:
         from constraint_sat_session import solve as session_solve
         return session_solve(problem,seconds=seconds,seed=seed,target=target,hints=hints,stop=stop,progress=progress,resume=resume,learning_state=learning_state,options=options)
     run = _Run(problem, engine, seconds, seed, target, stop, progress, options=options)
+    if learning_state is not None:
+        if not isinstance(learning_state,dict):raise ValueError('Model learning state must be a trusted dictionary.')
+        run.regional_cache_dir=learning_state.get('_regional_cache_dir')
     try:
         run.check()
         _resume(run, resume)

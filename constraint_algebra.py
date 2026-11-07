@@ -5,7 +5,7 @@ Global seam coordinates identify paired ports. Every actual board satisfies
 this system. A candidate inconsistent with it is impossible; a consistent
 candidate is merely unknown. All arithmetic is exact GF(2).
 """
-from collections import OrderedDict
+from collections import OrderedDict,deque
 from constraint_relations import bits
 
 STAT_KEYS=('affine_checks', 'affine_builds', 'affine_equations', 'affine_candidates', 'affine_xors', 'affine_prunes', 'affine_cache_hits', 'affine_incremental_builds', 'affine_full_builds', 'affine_reused_cells')
@@ -78,12 +78,16 @@ def modular_affine_equations(patterns,width,prime):
 
 
 class AffinePruner:
-    def __init__(self,problem,*,incremental=False):
+    def __init__(self,problem,*,incremental=False,explain=False):
         if type(incremental)is not bool:raise ValueError('Incremental affine policy must be boolean.')
+        if type(explain)is not bool:raise ValueError('Invalid affine explanation policy.')
+        self.explain=explain;self.pending=deque(maxlen=128)
         self.problem=problem;self.cache=OrderedDict();self.incremental=incremental
         self.original=tuple(sum(1<<code for code in set(row)) for row in problem.domains) if incremental else ()
         self.binding=self._binding() if incremental else None
         self.stats=dict.fromkeys(STAT_KEYS,0)
+        from constraint_affine_reasons_round26 import STAT_KEYS as REASON_KEYS
+        self.reason_stats=dict.fromkeys(REASON_KEYS,0)
         self.patterns=tuple(sum(int(mask)<<(11*side) for side,mask in enumerate(row)) for row in problem.masks)
         self.coordinates=[[None]*33 for _ in range(problem.n)]
         for edge,(a,sa,b,sb) in enumerate(problem.edges):
@@ -128,6 +132,26 @@ class AffinePruner:
                 if not add_equation(basis,global_mask,rhs,check,self.stats):return None
         return basis
 
+    def _explain(self,domains,cell,code,check):
+        if not self.explain:return
+        from constraint_affine_reasons_round26 import produce_affine_conflict
+        trial=list(domains)
+        if cell is not None:trial[cell]=1<<code
+        certificate=produce_affine_conflict(self.problem,trial,check,stats=self.reason_stats)
+        if certificate is not None:self.pending.append((tuple(domains),cell,code,certificate))
+
+    def drain_deduction_chains(self,target='gold',limit=8):
+        from copy import deepcopy
+        from constraint_deduction_chain_round26 import FORMAT
+        if target not in ('gold','edges') or type(limit)is not int or not 0<=limit<=128:raise ValueError('Invalid affine export policy.')
+        emitted=0;original=[hex(sum(1<<code for code in row)) for row in self.problem.domains]
+        while self.pending and emitted<limit:
+            item=self.pending[0];root,cell,code,certificate=item
+            yield deepcopy({'format':FORMAT,'fingerprint':self.problem.fingerprint,'target':target,'original':original,'root':list(map(hex,root)),
+                'decisions':[] if cell is None else [[cell,hex(1<<code)]],'events':[],'terminal':{'rule':'affine','data':{'certificate':certificate}}})
+            if self.pending and self.pending[0] is item:self.pending.popleft()
+            emitted+=1
+
     def prune(self,domains,check=lambda:None,*,max_candidates=128):
         if type(max_candidates)is not int or max_candidates<0:raise ValueError('Invalid affine candidate budget.')
         if self.incremental:
@@ -144,7 +168,7 @@ class AffinePruner:
             while len(self.cache)>4:self.cache.popitem(last=False)
         else:self.stats['affine_cache_hits']+=1;self.cache.move_to_end(key)
         if session['basis'] is None:
-            check();domains[0]=0;return True
+            self._explain(key,None,None,check);check();domains[0]=0;return True
         current=list(session['reduced'])
         candidates=[(cell,code) for cell in sorted(range(len(domains)),key=lambda c:(domains[c].bit_count(),c))
                     for code in bits(domains[cell]) if domains[cell].bit_count()>1]
@@ -155,7 +179,8 @@ class AffinePruner:
             for port,variable in enumerate(self.coordinates[cell]):
                 if not add_equation(basis,1<<variable,(pattern>>port)&1,check,self.stats):consistent=False;break
             # Commit a cursor only after the complete exact check.
-            if not consistent:current[cell]&=~(1<<code)
+            if not consistent:
+                self._explain(key,cell,code,check);current[cell]&=~(1<<code)
             session['cursor']+=1;session['reduced']=tuple(current)
             self.stats['affine_candidates']+=1;examined+=1
         check();self.stats['affine_prunes']+=sum((a&~b).bit_count() for a,b in zip(domains,current))

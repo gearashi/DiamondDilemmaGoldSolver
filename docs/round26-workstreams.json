@@ -1,0 +1,1107 @@
+{
+  "schema": "diamond-optimization-workstream-scope-v1",
+  "baseline_commit": "82ea1002c2c0347e2cd3a5af6dcd2c94ef5eb4b3",
+  "baseline_release": "v1.6.0",
+  "purpose": "Consolidate all currently identified downstream extensions instead of repeatedly relisting predictable increments.",
+  "scope_status": "implementation_complete_final_evidence_pending",
+  "families": [
+    {
+      "id": "F01",
+      "name": "Symbolic work management",
+      "status": "implemented_correctness_passed_pending_frozen_evaluation",
+      "scope": [
+        {
+          "id": "F01.01",
+          "description": "Keep pending work as a DAG throughout scheduling, splitting, subtraction and ownership",
+          "status": "implemented_correctness_passed_pending_frozen_evaluation",
+          "disposition": "retained_opt_in"
+        },
+        {
+          "id": "F01.02",
+          "description": "Compact variable ordering, node reuse and garbage collection",
+          "status": "implemented_correctness_passed_pending_frozen_evaluation",
+          "disposition": "retained_opt_in"
+        },
+        {
+          "id": "F01.03",
+          "description": "Checkpoint shared nodes and resume without flattening into duplicated jobs",
+          "status": "implemented_correctness_passed_pending_frozen_evaluation",
+          "disposition": "retained_opt_in"
+        },
+        {
+          "id": "F01.04",
+          "description": "Exchange the exact unfinished set across compatible engines",
+          "status": "implemented_correctness_passed_pending_frozen_evaluation",
+          "disposition": "retained_opt_in"
+        }
+      ],
+      "owner": "root",
+      "tests": [
+        "test_symbolic_frontier_round26",
+        "test_symbolic_transfer_round26",
+        "test_shared_snapshot_round26",
+        "test_coordinator_round26",
+        "test_context_policy_round26",
+        "test_exchange_round26",
+        "test_round26_integration"
+      ],
+      "limitations": [
+        "Raw Cartesian volume is not legal-board exhaustion or percentage solved.",
+        "Committed lease ownership is exact; failed uncommitted worker slices may replay.",
+        "Native internal cursors are reused only by compatible backends; transfer retains semantic unfinished scope.",
+        "CPU, SAT and GPU logical work counters are distinct. Context profiles train on completed residuals only."
+      ]
+    },
+    {
+      "id": "F02",
+      "name": "Durable CPU reasoning",
+      "status": "assessed_pending_consolidated_frozen_gate",
+      "scope": [
+        {
+          "id": "F02.01",
+          "description": "Retain job-local learned clauses and checked reason dependencies",
+          "status": "implemented_bounded",
+          "disposition": "Source/root/path-bound local LCG clauses, pruning cursor and first-UIP reason ancestry; optional oversized graphs skip caching. Loaded historical counters are subtracted.",
+          "evidence": "test_constraint_durable_round26; test_round26_integration"
+        },
+        {
+          "id": "F02.02",
+          "description": "Resume singleton, pair and constructive probes and unfinished propagator phases",
+          "status": "implemented_bounded",
+          "disposition": "Completed singleton/pair/constructive plans and private partial domains; explicit Python arc/inventory cursor; named strong-stage continuation. Native basic and opaque strong calls retry the interrupted call conservatively; no unavailable native instruction stack is claimed.",
+          "evidence": "test_constraint_probe_plans_round26; test_constraint_propagation_cursor_round26; application cold native/Python restart tests"
+        },
+        {
+          "id": "F02.03",
+          "description": "Persist proof-checker progress and reusable intermediate results under exact source/root bindings",
+          "status": "implemented_bounded",
+          "disposition": "Exact CNF/proof/assumption/source-bound indexed checker state and checked intermediate-prefix sharing. External proof import still independently checks authority.",
+          "evidence": "test_constraint_proof_indexed_round26; test_constraint_proof_reuse_round26; test_constraint_durable_round26"
+        },
+        {
+          "id": "F02.04",
+          "description": "Incremental atomic snapshots, selective invalidation, migration and bounded eviction; distinguish trusted local state from imported proofs",
+          "status": "implemented_with_safe_fallback",
+          "disposition": "Atomic component records and unchanged-write suppression, selective invalidation, bounded global/context eviction, stale private-temp cleanup. Unknown schema/source migration is deliberately cold reconstruction; no unsafe relabelling or general semantic migration.",
+          "evidence": "test_constraint_durable_round26; default global optional cache512MiB/4096records"
+        }
+      ],
+      "owner": "learning"
+    },
+    {
+      "id": "F03",
+      "name": "Shared SAT and witness service",
+      "status": "assessed_pending_consolidated_frozen_gate",
+      "scope": [
+        {
+          "id": "F03.01",
+          "description": "Share model lifetime and deduplicate guarded queries across worker processes",
+          "status": "implemented_bounded",
+          "disposition": "Parent-owned cross-process service; strict job views and one native model per affinity instance; identical completed queries deduplicated.",
+          "evidence": "test_constraint_sat_service_round26; benchmark F03 two spawned workers"
+        },
+        {
+          "id": "F03.02",
+          "description": "Batch requests, retain checked results and use multiple affinity-based service instances if required",
+          "status": "implemented_bounded",
+          "disposition": "Batches<=16, one to eight affinity owners, bounded native leases, polling Stop, exact completed warm query cache and once-attributed response deltas. Native restart rebuilds; it does not serialize native stacks or warm negative RPC cache.",
+          "evidence": "test_constraint_sat_service_round26; finite16queries cold16models/calls to1model/call+15hits"
+        },
+        {
+          "id": "F03.03",
+          "description": "Save semantic support witnesses, independently validate loads, index affected domains/cuts and retain witnesses by useful coverage",
+          "status": "implemented_bounded",
+          "disposition": "Raw-segment validated semantic support boards, domain indexes, checked Gold-cut invalidation and coverage retention; independently validated disk loads. Relaxation witnesses are not Gold successes.",
+          "evidence": "3969-domain-pair independent witness oracle and malformed/scope tests"
+        },
+        {
+          "id": "F03.04",
+          "description": "Transport witnesses only through verified symmetry mappings",
+          "status": "implemented_bounded",
+          "disposition": "Explicit verified oriented cell automorphisms plus physical-piece bijections/rotation offsets; complete raw pairing and every domain checked. Automatic equivalent-piece expansion capped at4; arbitrary unverified equal-mask transport rejected.",
+          "evidence": "PhysicalWitnessTransportTests; symmetry near-miss and domain tests"
+        }
+      ],
+      "owner": "learning"
+    },
+    {
+      "id": "F04",
+      "name": "Complete explanations and proof reuse",
+      "status": "assessed_pending_consolidated_frozen_gate",
+      "scope": [
+        {
+          "id": "F04.01",
+          "description": "Checked reasons for every retained seam, Hall, affine, lattice, PB, Gold and regional propagator",
+          "status": "implemented_checked_or_reproved",
+          "disposition": "Independent seam/boundary/Hall/Gold/GF2/lattice/PB chain rules. F11/F12 consume checked regional reasons; F09/F10/F13 regenerate bounded complete DSU certificates. Capped compact proof retains conservative local context reasoning, not a portable negative.",
+          "evidence": "test_constraint_deduction_chain_round26; affine/arithmetic/lattice tests; test_regional_proof_bridge_round26"
+        },
+        {
+          "id": "F04.02",
+          "description": "Carry reasons through Python/native boundaries, rollback, job transfer and restart",
+          "status": "implemented_bounded",
+          "disposition": "Native ancestry and local archives preserve exact job/path ownership; external deductions replay at original-root receiving store. Producer proof handoff now leases evidence until completed consumer checking; Stop retains pending proof.",
+          "evidence": "test_constraint_deduction_handoff_round26; native reasons/DFS and shared mask suites"
+        },
+        {
+          "id": "F04.03",
+          "description": "Direct justified SAT literal propagation and persistent theory integration",
+          "status": "implemented_neutral_finite_root_owned",
+          "disposition": "Persistent CaDiCaL theory with immutable justified unit reasons, clause/direct modes, checked semantic restart. Four complete cases+193 narrowed queries showed neutral decision counts, so not recommended from finite evidence.",
+          "evidence": "constraint_sat_theory_round26; benchmark_theory_round26.py; root finite review/test evidence"
+        },
+        {
+          "id": "F04.04",
+          "description": "Hinted or watched proof checking, shared checked subproofs, streaming and compaction",
+          "status": "implemented_bounded",
+          "disposition": "Hinted/two-watch explicit checker, durable local cursor, exact checked-prefix pool and independently rechecked dependency compaction. Additional index construction/compactor verification charged.",
+          "evidence": "benchmark F04; 1212scan visits\u21927indexed/6hinted plus810indexliterals;65checkedprefix lines reused;33\u21923prooflines with twochecks"
+        },
+        {
+          "id": "F04.05",
+          "description": "Export checked GPU deduction chains, discharge root assumptions and share Gold-only consequences",
+          "status": "implemented_bounded_gpu_owned",
+          "disposition": "GPU bounded failure-chain reconstruction, independent root-guard widening/decision discharge, durable certificate/minimizer state and Gold-only shared consequences. Native reason bits alone never admit; unsupported dependencies cap to unknown.",
+          "evidence": "GPU F14 producer/cache/checker lifecycle and proof-sharing finite evidence"
+        }
+      ],
+      "owner": "learning"
+    },
+    {
+      "id": "F05",
+      "name": "SAT lifecycle and simplification",
+      "status": "assessed_pending_consolidated_frozen_gate",
+      "scope": [
+        {
+          "id": "F05.01",
+          "description": "Intern reusable domain assumption guards instead of creating new guards for every cube",
+          "status": "implemented_finite",
+          "disposition": "Intern exact domain guards per native owner; omission unconstrained; cap fallback direct excluded literals; native rebuild reconstructs IDs safely.",
+          "evidence": "benchmark F05;36completecubes108\u219212addedclauses,54\u219254calls,36\u219236decisions"
+        },
+        {
+          "id": "F05.02",
+          "description": "Checked equivalence substitution, bounded variable elimination and safe formula simplification",
+          "status": "implemented_mixed_finite",
+          "disposition": "Checked binary equivalences, bounded non-growing variable elimination and subsumption. Optional; native decisions sometimes regress.",
+          "evidence": "benchmark_sat_simplify_round26.py wrapped by F05; rings improve decisions while tetra376\u2192449"
+        },
+        {
+          "id": "F05.03",
+          "description": "Exact placement-model reconstruction and preservation of assumption semantics",
+          "status": "implemented_finite",
+          "disposition": "Placement variables protected; reverse auxiliary reconstruction checks every original clause. No elimination pins when original auxiliary learned-clause persistence exists. Regional IDs reserved; policy toggle rebuilds while retaining pending cubes.",
+          "evidence": "160exhaustive CNF projection cases, actual native/session/guard/regional interaction tests"
+        },
+        {
+          "id": "F05.04",
+          "description": "Proof-capable alternative backend evaluation, including a safe Windows producer if supported; no assumption of native-state portability",
+          "status": "implemented_optional_root_owned",
+          "disposition": "Unsafe Windows native proof logging remains disabled. Optional isolated Linux/WSL child must exit0; host independently checks bounded returned RUP. Startup/reply timeout/Stop and unavailable setup remain unknown. No native-state portability.",
+          "evidence": "benchmark_isolated_proof_round26.py; root PHP7to6 proof beyond bounded DPLL; deployment verify-only"
+        }
+      ],
+      "owner": "learning"
+    },
+    {
+      "id": "F06",
+      "name": "Higher-order relations",
+      "status": "assessed_pending_consolidated_frozen_gate",
+      "scope": [
+        {
+          "id": "F06.01",
+          "description": "Semijoin overlapping complete SAT tables and maintain tuple-support indexes",
+          "status": "implemented_finite",
+          "disposition": "Exact live-tuple semijoin fixpoint and literal indexes over complete allowed covers; narrow reuse, wide reset.",
+          "evidence": "benchmark F06 actual4cell117rows:2extraorientations removed, all15edgecompletions preserved;121compilequeries charged"
+        },
+        {
+          "id": "F06.02",
+          "description": "Choose projection cells/predicates from cores, missing supports and spurious combinations",
+          "status": "implemented_guidance_only",
+          "disposition": "Bounded3to8cell selection combines checked core participation, missing semantic supports and observed spurious semijoin pressure. This only prioritizes reasoning; no measured universal heuristic gain claimed.",
+          "evidence": "test_constraint_relational_round26 guidance-source and cap tests"
+        },
+        {
+          "id": "F06.03",
+          "description": "Compress larger relations and reuse unchanged compilation work",
+          "status": "implemented_bounded",
+          "disposition": "Canonical tuple indexes and actual memoized suffix-DAG projection operators; retained completed ancestor tables and unchanged scopes. Native projection blockers/caches remain bounded with poisoned commit handling.",
+          "evidence": "DAG projection exact explicit-row oracle; semijoin native compilation and repeated-context tests"
+        },
+        {
+          "id": "F06.04",
+          "description": "Persist complete tables with checked completeness certificates and positive witnesses",
+          "status": "implemented_checked_restart",
+          "disposition": "Each row has raw-validated full edge witness; independent RUP proves no omitted still-possible row under reconstructed base/current declared valid Gold cuts. Extra rows from older Gold theory are safe allowed cover, not exact newest projection. All loads reverify.",
+          "evidence": "test_constraint_projection_certificate_round26; ring4cold thirdowner0nativequeries with proof/witnesscheck cost"
+        },
+        {
+          "id": "F06.05",
+          "description": "Retain separately proved partial consequences without calling an unfinished table complete",
+          "status": "implemented_bounded",
+          "disposition": "Durable observed positive rows block only guarded enumeration, never imply completeness. Separate ordinary selector-free support probes establish partial negative consequences. Native and bounded DPLL producer calls retry on interruption/cap.",
+          "evidence": "ring4threeprefix+21resumedmodels=24vs27coldrepeat; support discriminator explicitly completes boundedleases"
+        }
+      ],
+      "owner": "learning"
+    },
+    {
+      "id": "F07",
+      "name": "Arithmetic reasoning",
+      "status": "assessed_pending_consolidated_frozen_gate",
+      "scope": [
+        {
+          "id": "F07.01",
+          "description": "Checked PB division, rounding, normalization, saturation, weakening and lifted-cover rules",
+          "status": "evaluated_inactive_no_gain",
+          "disposition": "Exact division/rounding, normalization, saturation, weakening, additive and lifted-cover rule replay passes exhaustive finite Boolean implications. Extra-rule discovery found0additionaldeletions over160postordinary/affine/staticPB contexts; not wired into app.",
+          "evidence": "test_constraint_arithmetic_round26; benchmark F07 rule_discovery, all attempted work recorded"
+        },
+        {
+          "id": "F07.02",
+          "description": "Conflict-guided cut construction, incremental propagation and compatible-context proof reuse",
+          "status": "implemented_bounded",
+          "disposition": "Existing conflict-guided cuts retained; same-row indexed queue/context reuse plus actual derivation export for plain/conflictPB. Queue noextra-pruning claim; less repeat row evaluation.",
+          "evidence": "benchmark F07:74rows24contexts1776\u21921064rowvisits,3604cellminima,342queueskips,5exactcontextreuse,0prunesboth"
+        },
+        {
+          "id": "F07.03",
+          "description": "Reversible integer-lattice contribution trees and shared leave-one-cell-out bases",
+          "status": "implemented_mixed_work",
+          "disposition": "Exact contribution-tree integer bases, changed domains/origins, shared leave-one-cell-out siblings and bounded warm caches; no rational-span substitution.",
+          "evidence": "benchmark F07 compares24actualcontexts and independent edgecompletions; fewer vectors/integerops,morebasisbuilds"
+        },
+        {
+          "id": "F07.04",
+          "description": "Exact origin changes, modular/divisibility explanations and transfer into SAT/PB learning",
+          "status": "implemented_checked_transfer",
+          "disposition": "Independent modular/equality functionals check every allowed placement column; affine equations and PB axioms replay exactly. Guarded checked mask conclusions enter shared learning. All separator/checker work separately charged.",
+          "evidence": "1920exact vector queries;70actualcontexts;full160controlledwitness; test_constraint_deduction_handoff_round26"
+        }
+      ],
+      "owner": "learning"
+    },
+    {
+      "id": "F08",
+      "name": "Adaptive integrated search allocation",
+      "status": "implemented_correctness_passed_pending_frozen_evaluation",
+      "scope": [
+        {
+          "id": "F08.01",
+          "description": "Dynamic cube-and-conquer rather than fixed initial partitions",
+          "status": "implemented_correctness_passed_pending_frozen_evaluation",
+          "disposition": "retained_opt_in"
+        },
+        {
+          "id": "F08.02",
+          "description": "One ownership-aware scheduler for simultaneous compatible CPU, SAT and GPU jobs",
+          "status": "implemented_correctness_passed_pending_frozen_evaluation",
+          "disposition": "retained_opt_in"
+        },
+        {
+          "id": "F08.03",
+          "description": "Fair reallocation of unfinished work and validated cross-engine deductions",
+          "status": "implemented_correctness_passed_pending_frozen_evaluation",
+          "disposition": "retained_opt_in"
+        },
+        {
+          "id": "F08.04",
+          "description": "Context-dependent propagation and branching selection beyond static fitted weights and cooldowns",
+          "status": "implemented_correctness_passed_pending_frozen_evaluation",
+          "disposition": "retained_opt_in"
+        },
+        {
+          "id": "F08.05",
+          "description": "Train/evaluate on completed residual work with held-out cases; predictions guide priorities only",
+          "status": "implemented_correctness_passed_pending_frozen_evaluation",
+          "disposition": "retained_opt_in"
+        }
+      ],
+      "owner": "root",
+      "tests": [
+        "test_symbolic_frontier_round26",
+        "test_symbolic_transfer_round26",
+        "test_shared_snapshot_round26",
+        "test_coordinator_round26",
+        "test_context_policy_round26",
+        "test_exchange_round26",
+        "test_round26_integration"
+      ],
+      "limitations": [
+        "Raw Cartesian volume is not legal-board exhaustion or percentage solved.",
+        "Committed lease ownership is exact; failed uncommitted worker slices may replay.",
+        "Native internal cursors are reused only by compatible backends; transfer retains semantic unfinished scope.",
+        "CPU, SAT and GPU logical work counters are distinct. Context profiles train on completed residuals only."
+      ]
+    },
+    {
+      "id": "F09",
+      "name": "Reusable Gold-aware regional compiler",
+      "status": "implemented_correctness_passed_pending_frozen_evaluation",
+      "scope": [
+        {
+          "id": "F09.01",
+          "description": "Optimize cell order jointly for live inventory, seam masks and Gold endpoints",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "OrderedCompilerTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_compiler_round26.py"
+            }
+          ],
+          "implementation": "Greedy/reverse/natural joint live-resource/seam/port order comparison; not global minimum width."
+        },
+        {
+          "id": "F09.02",
+          "description": "Apply valid connectivity representative reduction during frontier construction",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "OrderedCompilerTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_compiler_round26.py"
+            }
+          ],
+          "implementation": "Per-layer GF2 basis only within identical inventory/seam/endpoint buckets; existence-only."
+        },
+        {
+          "id": "F09.03",
+          "description": "Boundary-parametric envelopes supporting outside-domain and chain changes",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "OrderedCompilerTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_compiler_round26.py"
+            }
+          ],
+          "implementation": "Inside-only parametric DAG supports outside widening/narrowing and changed fixed chains."
+        },
+        {
+          "id": "F09.04",
+          "description": "Direct regional DAG/path encoding in SAT and CP-SAT without enumerating all histories",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "OrderedCompilerTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_compiler_round26.py"
+            }
+          ],
+          "implementation": "Actual SAT/CP-SAT flow encoding; retained compile cursor; rebuilt native encodings count partial work."
+        },
+        {
+          "id": "F09.05",
+          "description": "Separate existence compression from exact counts and all-value support; durable construction and witness reconstruction",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "OrderedCompilerTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_compiler_round26.py"
+            }
+          ],
+          "implementation": "Exact supports/counts separate from rank mode; validated witness, durable bounded cursors."
+        }
+      ],
+      "owner": "regions",
+      "control": "regional_compiler",
+      "frozen_receipt": null,
+      "reproduce": "python benchmark_regions_round26.py --family F09 --output audit/optimization-round26/F09-frozen.json --evidence-stage frozen"
+    },
+    {
+      "id": "F10",
+      "name": "Recursive decomposition and messages",
+      "status": "implemented_correctness_passed_pending_frozen_evaluation",
+      "scope": [
+        {
+          "id": "F10.01",
+          "description": "Repeated separator conditioning and descendant re-decomposition",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "ParametricTreeTests/SymbolicRegionalMessageTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_tree_round26.py"
+            }
+          ],
+          "implementation": "Recursive conditioning/re-decomposition with exact balanced fallback and explicit work caps."
+        },
+        {
+          "id": "F10.02",
+          "description": "Durable AND/OR frontier with exact resource and Gold dependencies",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "ParametricTreeTests/SymbolicRegionalMessageTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_tree_round26.py"
+            }
+          ],
+          "implementation": "Durable task/leaf/join graph; completed shared descendants retain global resource/Gold dependencies."
+        },
+        {
+          "id": "F10.03",
+          "description": "Multiway correlated symbolic inventory/Gold messages over decomposition trees",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "ParametricTreeTests/SymbolicRegionalMessageTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_tree_round26.py"
+            }
+          ],
+          "implementation": "Full interface geometry buckets plus canonical inventory ZDD products and persistent enumeration."
+        },
+        {
+          "id": "F10.04",
+          "description": "Overlapping-separator consistency, inward/outward supports and incremental message invalidation",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "ParametricTreeTests/SymbolicRegionalMessageTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_tree_round26.py"
+            }
+          ],
+          "implementation": "Exact paired-DAG overlap; compatible joins propagate root supports; scoped message invalidation."
+        }
+      ],
+      "owner": "regions",
+      "control": "recursive_regions",
+      "frozen_receipt": null,
+      "reproduce": "python benchmark_regions_round26.py --family F10 --output audit/optimization-round26/F10-frozen.json --evidence-stage frozen"
+    },
+    {
+      "id": "F11",
+      "name": "General regional proof reuse",
+      "status": "implemented_correctness_passed_pending_frozen_evaluation",
+      "scope": [
+        {
+          "id": "F11.01",
+          "description": "Extract independently checked small Gold/inventory boundary failure cores",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "RegionalProofTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_proof_round26.py"
+            }
+          ],
+          "implementation": "Independent legal-transition completeness and full outside strand reconstruction for Gold/inventory cores."
+        },
+        {
+          "id": "F11.02",
+          "description": "Index proofs by sufficient assumptions rather than exact whole-query identity",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "RegionalProofTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_proof_round26.py"
+            }
+          ],
+          "implementation": "Generalized sufficient assumptions with anchor index; identical verified import skips repeat checker."
+        },
+        {
+          "id": "F11.03",
+          "description": "Verify monotone residual inclusion beyond equal-size isomorphisms",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "RegionalProofTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_proof_round26.py"
+            }
+          ],
+          "implementation": "Monotone domain inclusion permits smaller active residuals; widened assumptions reject reuse."
+        },
+        {
+          "id": "F11.04",
+          "description": "Assess checked contraction mappings only with completion-preserving justification",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "RegionalProofTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_proof_round26.py"
+            }
+          ],
+          "implementation": "Completion-preserving forced outside contractions implemented; arbitrary active contractions rejected without proof mapping."
+        },
+        {
+          "id": "F11.05",
+          "description": "Transport, persist and evict certificates without changing search coverage",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "RegionalProofTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_proof_round26.py"
+            }
+          ],
+          "implementation": "Detached bounded verified artifact store; atomic persistence and eviction never affect coverage."
+        }
+      ],
+      "owner": "regions",
+      "control": "regional_proof_reuse",
+      "frozen_receipt": null,
+      "reproduce": "python benchmark_regions_round26.py --family F11 --output audit/optimization-round26/F11-frozen.json --evidence-stage frozen"
+    },
+    {
+      "id": "F12",
+      "name": "Complete connectivity obligations",
+      "status": "implemented_correctness_passed_pending_frozen_evaluation",
+      "scope": [
+        {
+          "id": "F12.01",
+          "description": "Maximum-weight injective piece-assignment endpoint-capacity bounds",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "ConnectivityObligationTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_connectivity_round26.py"
+            }
+          ],
+          "implementation": "Exact Hungarian maximum-weight injection and independently checked integer assignment dual."
+        },
+        {
+          "id": "F12.02",
+          "description": "Joint component demands with exact certificates",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "ConnectivityObligationTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_connectivity_round26.py"
+            }
+          ],
+          "implementation": "Orientation-correlated supply DP with independent recursive negative replay."
+        },
+        {
+          "id": "F12.03",
+          "description": "Gold-aware counterexample refinement of lost chain/pairing information",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "ConnectivityObligationTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_connectivity_round26.py"
+            }
+          ],
+          "implementation": "Refine optimistic labelled routes by omitted strands required by chosen orientations."
+        },
+        {
+          "id": "F12.04",
+          "description": "Activate every strand implied by an orientation during joint labelled routing",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "ConnectivityObligationTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_connectivity_round26.py"
+            }
+          ],
+          "implementation": "All strands of each selected orientation required together; same-tile different strands allowed."
+        },
+        {
+          "id": "F12.05",
+          "description": "Maintain reversible possible-graph component, bridge and cyclic-block certificates",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "ConnectivityObligationTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_connectivity_round26.py"
+            }
+          ],
+          "implementation": "Exact edge deltas invalidate affected components only; reversible block/bridge snapshots."
+        },
+        {
+          "id": "F12.06",
+          "description": "Generate scoped reasons while treating positive relaxations as necessary conditions",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "ConnectivityObligationTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_connectivity_round26.py"
+            }
+          ],
+          "implementation": "Scope-bound reason replay; no automatic trust for diagnostic record; positive results necessary-only."
+        }
+      ],
+      "owner": "regions",
+      "control": "connectivity_obligations",
+      "frozen_receipt": null,
+      "reproduce": "python benchmark_regions_round26.py --family F12 --output audit/optimization-round26/F12-frozen.json --evidence-stage frozen"
+    },
+    {
+      "id": "F13",
+      "name": "Integer regional branch-and-price",
+      "status": "implemented_correctness_passed_pending_frozen_evaluation",
+      "scope": [
+        {
+          "id": "F13.01",
+          "description": "Multi-region integer master with exact inventory and Gold obligations",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "IntegerRegionalTests/BranchPriceTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_integer_round26.py"
+            }
+          ],
+          "implementation": "Actual integral multiregion master with full inventory/Gold signatures."
+        },
+        {
+          "id": "F13.02",
+          "description": "Branch-compatible pricing and connectivity separation",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "IntegerRegionalTests/BranchPriceTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_integer_round26.py"
+            }
+          ],
+          "implementation": "Node-local restricted LP column generation, exact omitted-path pricing, conditional occupied-anchor Gold cuts."
+        },
+        {
+          "id": "F13.03",
+          "description": "Reuse columns, certified bounds, dual information and weighted boundary cuts",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "IntegerRegionalTests/BranchPriceTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_integer_round26.py"
+            }
+          ],
+          "implementation": "Validated columns, complete bounds, dual proposals and universal valid weighted/Gold cuts reused across nodes/queries."
+        },
+        {
+          "id": "F13.04",
+          "description": "Candidate fixing from certified bounds and durable completed pricing work",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "IntegerRegionalTests/BranchPriceTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_integer_round26.py"
+            }
+          ],
+          "implementation": "Certified candidate fixing and persistent completed native output/pricing cursor; unknown native retry counted."
+        },
+        {
+          "id": "F13.05",
+          "description": "Independently checked witnesses/termination; incomplete pricing never proves exhaustion",
+          "status": "implemented_bounded_exact_or_sound_necessary_scope",
+          "evidence": [
+            {
+              "kind": "development_correctness",
+              "module": "test_constraint_regions_round26.py",
+              "classes": "IntegerRegionalTests/BranchPriceTests"
+            },
+            {
+              "kind": "production_module",
+              "path": "constraint_region_integer_round26.py"
+            }
+          ],
+          "implementation": "Independent positive validation and separate exhaustive signature-closure audit; incomplete work unknown."
+        }
+      ],
+      "owner": "regions",
+      "control": "integer_regional_master",
+      "frozen_receipt": null,
+      "reproduce": "python benchmark_regions_round26.py --family F13 --output audit/optimization-round26/F13-frozen.json --evidence-stage frozen"
+    },
+    {
+      "id": "F14",
+      "name": "Complete GPU exact-reasoning extension",
+      "status": "independent_correctness_clear_final_cooperative_speed_gate_pending",
+      "scope": [
+        {
+          "id": "F14.01",
+          "description": "Support witnesses for seam, repeated-neighbor and joint inventory queries",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in",
+          "evidence": [
+            "support witness finite enumeration and real fork/refill/resume checks passed",
+            "isolated development snapshot: 22 finite rows passed; actual lifecycle47 tests passed before final bounded proof-cache refinement",
+            "Independent support/watch/matching/proof and native cooperative-layout review clear; final committed-source suite pending."
+          ]
+        },
+        {
+          "id": "F14.02",
+          "description": "Watched local/imported clauses across domain changes, backjumps, eviction and lane reuse",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in",
+          "evidence": [
+            "isolated development snapshot: 22 finite rows passed; actual lifecycle47 tests passed before final bounded proof-cache refinement",
+            "Independent support/watch/matching/proof and native cooperative-layout review clear; final committed-source suite pending."
+          ]
+        },
+        {
+          "id": "F14.03",
+          "description": "Global piece matching, unsupported-edge filtering and incremental matching-component repair",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in",
+          "evidence": [
+            "24 seam/Gold configurations and160-cell witness passed; Hall/filter/component fixtures and all7stage resume passed",
+            "isolated development snapshot: 22 finite rows passed; actual lifecycle47 tests passed before final bounded proof-cache refinement",
+            "Independent support/watch/matching/proof and native cooperative-layout review clear; final committed-source suite pending."
+          ]
+        },
+        {
+          "id": "F14.04",
+          "description": "Precise Hall/seam/Gold explanations connected to F04",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in",
+          "evidence": [
+            "isolated development snapshot: 22 finite rows passed; actual lifecycle47 tests passed before final bounded proof-cache refinement",
+            "Independent support/watch/matching/proof and native cooperative-layout review clear; final committed-source suite pending."
+          ]
+        },
+        {
+          "id": "F14.05",
+          "description": "Thread-per-lane versus cooperative-group execution, data layout and deterministic reductions",
+          "status": "implemented_correctness_passed",
+          "disposition": "pending_controlled_speed_gate",
+          "evidence": [
+            "isolated development snapshot: 22 finite rows passed; actual lifecycle47 tests passed before final bounded proof-cache refinement",
+            "Independent support/watch/matching/proof and native cooperative-layout review clear; final committed-source suite pending."
+          ]
+        },
+        {
+          "id": "F14.06",
+          "description": "Include forks, rebasing, checkpoint caches, cache sizing and backend capability/fallback decisions",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in",
+          "evidence": [
+            "isolated development snapshot: 22 finite rows passed; actual lifecycle47 tests passed before final bounded proof-cache refinement",
+            "Independent support/watch/matching/proof and native cooperative-layout review clear; final committed-source suite pending."
+          ]
+        }
+      ],
+      "owner": "gpu_hybrid"
+    },
+    {
+      "id": "F15",
+      "name": "Incremental sampling scores",
+      "status": "retained_opt_in_independent_gate_clear",
+      "scope": [
+        {
+          "id": "F15.01",
+          "description": "Exact changed-seam and strand-component updates for rotations, swaps and chains",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in",
+          "evidence": [
+            "14new correctness checks across CUDA/WGSL;12paired finite cases/backend, exact trajectories and separately charged scorer/cache work; tiny combined case adverse",
+            "Learning independent final CUDA/WGSL lifecycle/evidence review CLEAR; no universal timing/proposal claim"
+          ]
+        },
+        {
+          "id": "F15.02",
+          "description": "Cover guided chains, crossover injection, replica exchange and both objectives",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in",
+          "evidence": [
+            "14new correctness checks across CUDA/WGSL;12paired finite cases/backend, exact trajectories and separately charged scorer/cache work; tiny combined case adverse",
+            "Learning independent final CUDA/WGSL lifecycle/evidence review CLEAR; no universal timing/proposal claim"
+          ]
+        },
+        {
+          "id": "F15.03",
+          "description": "Transactional acceptance, connectivity splits, restore validation and durable summaries",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in",
+          "evidence": [
+            "14new correctness checks across CUDA/WGSL;12paired finite cases/backend, exact trajectories and separately charged scorer/cache work; tiny combined case adverse",
+            "Learning independent final CUDA/WGSL lifecycle/evidence review CLEAR; no universal timing/proposal claim"
+          ]
+        },
+        {
+          "id": "F15.04",
+          "description": "CUDA/WebGPU implementations with explicit full-score fallback for large changes",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in",
+          "evidence": [
+            "14new correctness checks across CUDA/WGSL;12paired finite cases/backend, exact trajectories and separately charged scorer/cache work; tiny combined case adverse",
+            "Learning independent final CUDA/WGSL lifecycle/evidence review CLEAR; no universal timing/proposal claim"
+          ]
+        },
+        {
+          "id": "F15.05",
+          "description": "Preserve scores, RNG, acceptance and trajectories when the policy is unchanged",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in",
+          "evidence": [
+            "14new correctness checks across CUDA/WGSL;12paired finite cases/backend, exact trajectories and separately charged scorer/cache work; tiny combined case adverse",
+            "Learning independent final CUDA/WGSL lifecycle/evidence review CLEAR; no universal timing/proposal claim"
+          ]
+        }
+      ],
+      "owner": "gpu_hybrid"
+    },
+    {
+      "id": "F16",
+      "name": "Complete recombination neighborhood evaluation",
+      "status": "independent_host_and_native_integration_clear_finite_work_report_by_regions",
+      "scope": [
+        {
+          "id": "F16.01",
+          "description": "Optimize interacting subsets of parental permutation cycles and rotation-only differences",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in_pending_final_frozen_evidence",
+          "evidence": [
+            "Regions exact-neighborhood host tests and GPU agent six CPU/CUDA/WebGPU integration checks passed. Independent host and integration review clear."
+          ]
+        },
+        {
+          "id": "F16.02",
+          "description": "Evaluate bounded multi-parent and enlarged neighborhoods within this same workstream",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in_pending_final_frozen_evidence",
+          "evidence": [
+            "Regions exact-neighborhood host tests and GPU agent six CPU/CUDA/WebGPU integration checks passed. Independent host and integration review clear."
+          ]
+        },
+        {
+          "id": "F16.03",
+          "description": "Exact seam factors, Gold cuts and independent candidate validation",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in_pending_final_frozen_evidence",
+          "evidence": [
+            "Regions exact-neighborhood host tests and GPU agent six CPU/CUDA/WebGPU integration checks passed. Independent host and integration review clear."
+          ]
+        },
+        {
+          "id": "F16.04",
+          "description": "Reuse pair models, optimizer progress and duplicate-child records",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in_pending_final_frozen_evidence",
+          "evidence": [
+            "Regions exact-neighborhood host tests and GPU agent six CPU/CUDA/WebGPU integration checks passed. Independent host and integration review clear."
+          ]
+        },
+        {
+          "id": "F16.05",
+          "description": "Select useful parent pairs and adapt neighborhood size using measured completed outcomes",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in_pending_final_frozen_evidence",
+          "evidence": [
+            "Regions exact-neighborhood host tests and GPU agent six CPU/CUDA/WebGPU integration checks passed. Independent host and integration review clear."
+          ]
+        }
+      ],
+      "owner": "gpu_hybrid",
+      "integration_evidence": "audit/optimization-round26/f16-native02.log: all6PASS; exact native and retained optimizer semantic continuation; rebuild/source verification counters explicitly separate"
+    },
+    {
+      "id": "F17",
+      "name": "Retained repair optimization",
+      "status": "implemented_correctness_and_independent_review_passed_final_frozen_work_pending",
+      "scope": [
+        {
+          "id": "F17.01",
+          "description": "Guarded incremental model across patches, outside assignments and objective bounds",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in_pending_final_frozen_evidence",
+          "evidence": [
+            "Ordinary guarded repair and retained Gold feasibility/master pools implemented, including completed bounds/cores, adaptive allocation, rebuild/eviction and durable pending queries. Independent ordinary-service and Gold-pool reviews clear. Combined new/legacy host regression: 103 tests passed, no skips; final frozen work comparison coordinated by root."
+          ]
+        },
+        {
+          "id": "F17.02",
+          "description": "Cover ordinary improvement, minimum-change repair, fragment completion and scoped feasibility",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in_pending_final_frozen_evidence",
+          "evidence": [
+            "Ordinary guarded repair and retained Gold feasibility/master pools implemented, including completed bounds/cores, adaptive allocation, rebuild/eviction and durable pending queries. Independent ordinary-service and Gold-pool reviews clear. Combined new/legacy host regression: 103 tests passed, no skips; final frozen work comparison coordinated by root."
+          ]
+        },
+        {
+          "id": "F17.03",
+          "description": "Reuse completed bounds, cores and compatible model learning",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in_pending_final_frozen_evidence",
+          "evidence": [
+            "Ordinary guarded repair and retained Gold feasibility/master pools implemented, including completed bounds/cores, adaptive allocation, rebuild/eviction and durable pending queries. Independent ordinary-service and Gold-pool reviews clear. Combined new/legacy host regression: 103 tests passed, no skips; final frozen work comparison coordinated by root."
+          ]
+        },
+        {
+          "id": "F17.04",
+          "description": "Assess patch-size and repair-policy allocation within this workstream",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in_pending_final_frozen_evidence",
+          "evidence": [
+            "Ordinary guarded repair and retained Gold feasibility/master pools implemented, including completed bounds/cores, adaptive allocation, rebuild/eviction and durable pending queries. Independent ordinary-service and Gold-pool reviews clear. Combined new/legacy host regression: 103 tests passed, no skips; final frozen work comparison coordinated by root."
+          ]
+        },
+        {
+          "id": "F17.05",
+          "description": "Eviction, rebuild, widening invalidation, cancellation and durable pending queries; count unavoidable native retries",
+          "status": "implemented_correctness_passed",
+          "disposition": "retained_opt_in_pending_final_frozen_evidence",
+          "evidence": [
+            "Ordinary guarded repair and retained Gold feasibility/master pools implemented, including completed bounds/cores, adaptive allocation, rebuild/eviction and durable pending queries. Independent ordinary-service and Gold-pool reviews clear. Combined new/legacy host regression: 103 tests passed, no skips; final frozen work comparison coordinated by root."
+          ]
+        }
+      ],
+      "owner": "gpu_hybrid",
+      "integration_evidence": "audit/optimization-round26/f17-and-bridge-legacy01.log: 103 tests passed; Gold-cut incumbent invalidation, guarded upper-bound reuse, MODEL_BUDGET fallback, source/geometry binding, owner cleanup and JSON continuation covered."
+    }
+  ],
+  "acceptance": [
+    "Preserve independently checked solutions and exact pending work through rollback, cancellation, restart and context changes.",
+    "Demonstrate additional sound deductions, fewer completed search decisions, or avoided repeated reasoning against the current full baseline; report construction, checking and failed attempts separately.",
+    "A slower improvement can qualify through stronger deductions or less repeated work.",
+    "Assess applicable lifecycle and backend variants inside the family rather than announcing them later as new proposals.",
+    "Record retained, rejected, already-covered, unsupported and inconclusive subscopes explicitly. Timeout alone does not reject or finish a candidate.",
+    "Do not claim a family exhausted while a documented foreseeable extension is merely omitted; reopening requires a specific new reason."
+  ],
+  "testing_sequence": [
+    "Dependency and mathematical-validity audit before implementation.",
+    "Small independent exhaustive discriminator and interruption/scope checks.",
+    "Completed representative residual searches including adverse configurations.",
+    "Interaction testing as dependent interfaces stabilize.",
+    "Long original-input comparison only when it can answer a specific remaining question.",
+    "One frozen final integrated release matrix; repeat affected checks after changes rather than unrelated full suites after each increment."
+  ],
+  "dependencies": {
+    "F08": [
+      "F01",
+      "F03",
+      "F04"
+    ],
+    "F10": [
+      "F09"
+    ],
+    "F11": [
+      "F04",
+      "F09"
+    ],
+    "F12": [
+      "F04",
+      "F09"
+    ],
+    "F13": [
+      "F09",
+      "F10",
+      "F11",
+      "F12"
+    ],
+    "F14": [
+      "F04"
+    ],
+    "F16": [
+      "F15"
+    ],
+    "F17": [
+      "F03",
+      "F04"
+    ]
+  },
+  "boundary": "This register records currently identified options, not a proof that future algorithms cannot add others.",
+  "baseline_tests": "v1.6.0 exact-tag CI42382703725: all26; final local CPU1843/159skip/0fail and source-bound GPU evidence. No redundant baseline suite planned."
+}

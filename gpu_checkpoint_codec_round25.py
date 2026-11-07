@@ -20,6 +20,10 @@ def _ranges(engine,data,lane):
     lengths={'trail':trail,'assign_log':assigned,'union_child':unions,'union_parent':unions,'union_size':unions,
              'frame_cell':depth,'frame_code':depth,'frame_trail':depth,'frame_assign':depth,'frame_union':depth,
              'frame_remaining':depth*w,'frame_reason':depth*n*rw,'frame_failure':depth*rw}
+    if getattr(engine,'proof_transport',False) and (int(data[0,lane])==2 or int(data[6,lane])==3):
+        proof_depth=int(data[engine.offsets['proof_meta'],lane])
+        if not 0<=proof_depth<=n:raise ValueError('Invalid proof failure prefix.')
+        lengths['frame_cell']=lengths['frame_code']=max(depth,proof_depth)
     fields=sorted(engine.offsets.items(),key=lambda item:item[1]);ranges=[]
     for pos,(name,start) in enumerate(fields):
         full=(fields[pos+1][1] if pos+1<len(fields) else engine.rows)-start

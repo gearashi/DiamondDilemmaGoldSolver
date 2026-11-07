@@ -53,3 +53,6 @@ Thumbs.db
 
 # Locally compiled optional CPU propagation library
 /.native/
+
+# Optional isolated Linux proof environment
+/.venv-wsl-proof/

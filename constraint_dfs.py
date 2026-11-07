@@ -24,15 +24,26 @@ from constraint_native import NativePropagation, select_native, STAT_KEYS as NAT
 from search_options import normalize_options
 from constraint_advanced import AdvancedPruner, STAT_KEYS as ADVANCED_STAT_KEYS
 from constraint_scheduling import PropagationScheduler, STAT_KEYS as SCHEDULING_STAT_KEYS
+from constraint_regions_round26 import RegionalWorkstreams, KEYS as REGION26_OPTIONS, STAT_KEYS as REGION26_STATS
+from constraint_reasoning_store_round26 import STAT_KEYS as ARCHIVE_STATS
+from constraint_cpu_archive_round26 import CPUReasoningArchive
+from pathlib import Path
 from constraint_knowledge import KnowledgeStore
 from constraint_reasons import ReasonState, STAT_KEYS as REASON_STAT_KEYS
 from constraint_lcg import LCGState, LCGStore, LearnedClause, STAT_KEYS as LCG_STAT_KEYS
 from constraint_gold_oracle import GoldOracle, STAT_KEYS as GOLD_ORACLE_STAT_KEYS, GAUGE_KEYS as GOLD_ORACLE_GAUGE_KEYS
 from constraint_native_search import select_native_search, STAT_KEYS as NATIVE_SEARCH_STAT_KEYS
 from constraint_native_learning import replay_fast_failure, explain_fast_failure, STAT_KEYS as NATIVE_LEARNING_STAT_KEYS
+from constraint_probe_plans_round26 import STAT_KEYS as PROBE_PLAN_STATS
+from constraint_propagation_cursor_round26 import PropagationCursor, STAT_KEYS as PROPAGATION_CURSOR_STATS
 from constraint_lookahead import CompletedProbeCache, paired_lookahead, CACHE_STAT_KEYS, PAIR_STAT_KEYS
 from constraint_sat_assist import SatAssist, STAT_KEYS as SAT_ASSIST_STAT_KEYS
 from constraint_job_sat import SharedSatAssistant, JobSatAssist
+from constraint_sat_service_round26 import SATServiceClient, STAT_KEYS as SERVICE_STATS
+from constraint_witness_round26 import STAT_KEYS as WITNESS_STATS
+from constraint_relational_round26 import STAT_KEYS as RELATIONAL_STATS
+from constraint_projection_certificate_round26 import STAT_KEYS as RELATION_CERTIFICATE_STATS
+from constraint_service_lifecycle_round26 import view as service_view
 from constraint_higher_relations import ProjectedRelations, STAT_KEYS as HIGHER_STAT_KEYS
 from constraint_ordering import SupportOrdering, STAT_KEYS as ORDERING_STAT_KEYS
 from constraint_deep import DeepPruner, CertificateStore, rotate_gold_clause, minimize_failure_scope, STAT_KEYS as DEEP_STAT_KEYS
@@ -41,6 +52,7 @@ from constraint_mask_conflicts import VerifiedMaskConflictStore, STAT_KEYS as MA
 from constraint_lookahead import grouped_constructive_lookahead, GROUP_STAT_KEYS
 from constraint_shared_conflicts import VerifiedConflictStore, STAT_KEYS as SHARED_STAT_KEYS, GAUGE_KEYS as SHARED_GAUGES
 
+from constraint_deduction_chain_round26 import CHAIN_STAT_KEYS
 from constraint_round24 import ResearchPruner, KEYS as RESEARCH_KEYS, STAT_KEYS as RESEARCH_STAT_KEYS, MAX_GAUGE_KEYS as RESEARCH_MAX_GAUGES
 from constraint_region_oracles import ResidualProofCache, RESIDUAL_STAT_KEYS
 from constraint_branching_round24 import RoutingBranching, CompletionOrdering, LearnedOrdering, LEARNED_ORDERING_WEIGHTS, STAT_KEYS as ROUTING_STAT_KEYS
@@ -48,10 +60,10 @@ from constraint_branching_round24 import RoutingBranching, CompletionOrdering, L
 VERSION = 2
 GUIDANCE_STAT_KEYS = ('failure_guided_choices','failure_weight_updates','lookahead_probes','lookahead_prunes','lookahead_failures','lookahead_aborted',
                       'lookahead_complete_passes','lookahead_common_prunes','regional_solutions_validated',
-                      'lookahead_probe_propagations','lookahead_probe_arc_revisions') + CACHE_STAT_KEYS + PAIR_STAT_KEYS
+                      'lookahead_probe_propagations','lookahead_probe_arc_revisions') + CACHE_STAT_KEYS + PAIR_STAT_KEYS + PROBE_PLAN_STATS
 KNOWLEDGE_STAT_KEYS = ('loop_witnesses',)
 EXPLANATION_STAT_KEYS = ('explanation_probes', 'explanation_literals_removed', 'explanation_aborted', 'explanation_skipped', 'explanation_time_ns', 'backjumps', 'backjump_levels', 'native_basic_passes_skipped')
-BASE_STAT_KEYS = ('propagations', 'arc_revisions', 'tile_prunes', 'loop_prunes', 'leaves', 'backtracks')
+BASE_STAT_KEYS = ('propagations', 'arc_revisions', 'tile_prunes', 'loop_prunes', 'leaves', 'backtracks') + CHAIN_STAT_KEYS + PROPAGATION_CURSOR_STATS + RELATION_CERTIFICATE_STATS
 CONFLICT_STAT_KEYS = ('conflicts_learned', 'conflicts_subsumed', 'conflict_evictions',
                       'conflict_checks', 'conflict_prunes', 'conflict_hits', 'conflict_cache_entries')
 
@@ -177,17 +189,28 @@ class _SearchRuntime:
         self.advanced,self.advanced_options=None,None
         self.scheduler,self.scheduler_options=None,None
         self.explanation_misses,self.explanation_cooldown=0,0
-        self.sat=None;self.higher=None
+        self.sat=None;self.higher=None;self.higher_directory=None;self.higher_sat=None;self.service_view=None;self.semantic_pool=None;self.semantic_path=None;self.semantic_saved=None
         self.ordering=None
         self.pruner_tables=None
         self.incremental_hall=None
         self.research=None;self.routing=None;self.completion=None;self.learned=None
         self.residual=None
+        self.regional26=None;self.regional26_options=None
+        self.reasoning_archive=None;self.reasoning_directory=None
         self.lcg=None
         self.gold_oracle=None
-        self.probes=CompletedProbeCache()
+        self.probes=CompletedProbeCache();self.propagation_cursors={}
         self.deep=None;self.impact=ImpactPolicy(n);self.piece_symmetry=None
         self.certificates=None;self.mask_conflicts=None;self.local_mask_conflicts=None
+
+    def close(self):
+        # Retire projection guards before closing their local SAT helper.
+        seen=set()
+        for name in ('higher','sat','higher_sat','gold_oracle','mask_conflicts','local_mask_conflicts'):
+            value=getattr(self,name,None)
+            if value is None or id(value) in seen:continue
+            seen.add(id(value));close=getattr(value,'close',None)
+            if callable(close):close()
 
     def valid(self,fingerprint,target,initial_domains,n):
         return (self.fingerprint==fingerprint and self.target==target
@@ -342,7 +365,7 @@ def _values(bits):
         bits ^= low
 
 
-def solve(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=None, progress=None, resume=None, learning_state=None, options=None):
+def _solve_public(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=None, progress=None, resume=None, learning_state=None, options=None):
     """Apply verified fresh-root symmetry, then run the exact resumable search.
 
     Metadata-free v2 checkpoints retain their original search space. A pending
@@ -364,8 +387,8 @@ def solve(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=None, 
             raise ValueError('learning_state must be a trusted in-memory dict, not a serialized checkpoint.')
         if learning_state:
             store = learning_state.get('_nogoods')
-            if (not set(learning_state) <= {'_nogoods', '_support', '_native', '_runtime', '_knowledge', '_shared_conflicts', '_mask_conflicts', '_certificates', '_regional_cache_dir', '_shared_sat'}
-                    or ('_nogoods' not in learning_state and not set(learning_state)<={'_knowledge','_shared_conflicts','_mask_conflicts','_certificates','_regional_cache_dir', '_shared_sat'})
+            if (not set(learning_state) <= {'_nogoods', '_support', '_native', '_runtime', '_knowledge', '_shared_conflicts', '_mask_conflicts', '_certificates', '_regional_cache_dir', '_shared_sat', '_reasoning_cache_dir', '_sat_service'}
+                    or ('_nogoods' not in learning_state and not set(learning_state)<={'_knowledge','_shared_conflicts','_mask_conflicts','_certificates','_regional_cache_dir', '_shared_sat', '_reasoning_cache_dir', '_sat_service'})
                     or (store is not None and (not isinstance(store, _NogoodStore)
                         or store.fingerprint != problem.fingerprint or store.target != target))):
                 raise ValueError('The in-memory learning cache has different puzzle, target, or effective domains, or is malformed.')
@@ -504,7 +527,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
     n, count = problem.n, 3*problem.n
     initial = ([sum(1 << code for code in domain) for domain in problem.domains]
                if _initial_domains is None else list(_initial_domains))
-    stats = dict.fromkeys(BASE_STAT_KEYS + PRUNER_STAT_KEYS + CONFLICT_STAT_KEYS + CONNECTIVITY_STAT_KEYS + NATIVE_STAT_KEYS + GUIDANCE_STAT_KEYS + ADVANCED_STAT_KEYS + EXPLANATION_STAT_KEYS + SCHEDULING_STAT_KEYS + KNOWLEDGE_STAT_KEYS + REASON_STAT_KEYS + SAT_ASSIST_STAT_KEYS + ORDERING_STAT_KEYS + SHARED_STAT_KEYS + BRANCH_STAT_KEYS + LCG_STAT_KEYS + GOLD_ORACLE_STAT_KEYS + NATIVE_SEARCH_STAT_KEYS + NATIVE_LEARNING_STAT_KEYS + GROUP_STAT_KEYS + DEEP_STAT_KEYS + POLICY_STAT_KEYS + MASK_STAT_KEYS + RESEARCH_STAT_KEYS + ROUTING_STAT_KEYS + RESIDUAL_STAT_KEYS + HIGHER_STAT_KEYS + ('lcg_trace_budget_skips',), 0)
+    stats = dict.fromkeys(BASE_STAT_KEYS + PRUNER_STAT_KEYS + CONFLICT_STAT_KEYS + CONNECTIVITY_STAT_KEYS + NATIVE_STAT_KEYS + GUIDANCE_STAT_KEYS + ADVANCED_STAT_KEYS + EXPLANATION_STAT_KEYS + SCHEDULING_STAT_KEYS + KNOWLEDGE_STAT_KEYS + REASON_STAT_KEYS + SAT_ASSIST_STAT_KEYS + ORDERING_STAT_KEYS + SHARED_STAT_KEYS + BRANCH_STAT_KEYS + LCG_STAT_KEYS + GOLD_ORACLE_STAT_KEYS + NATIVE_SEARCH_STAT_KEYS + NATIVE_LEARNING_STAT_KEYS + GROUP_STAT_KEYS + DEEP_STAT_KEYS + POLICY_STAT_KEYS + MASK_STAT_KEYS + RESEARCH_STAT_KEYS + ROUTING_STAT_KEYS + RESIDUAL_STAT_KEYS + HIGHER_STAT_KEYS + REGION26_STATS + ARCHIVE_STATS + SERVICE_STATS + WITNESS_STATS + RELATIONAL_STATS + ('lcg_trace_budget_skips',), 0)
     nodes, previous_elapsed = 0, 0.0
     if resume is not None:
         if not isinstance(resume, dict) or resume.get('version') != VERSION or resume.get('fingerprint') != problem.fingerprint or resume.get('target') != target:
@@ -599,11 +622,11 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         learning_state = {}
     if not isinstance(learning_state, dict):
         raise ValueError('learning_state must be a trusted in-memory dict, not a serialized checkpoint.')
-    if not set(learning_state) <= {'_nogoods', '_support', '_native', '_runtime', '_knowledge', '_shared_conflicts', '_mask_conflicts', '_certificates', '_regional_cache_dir', '_shared_sat'}:
+    if not set(learning_state) <= {'_nogoods', '_support', '_native', '_runtime', '_knowledge', '_shared_conflicts', '_mask_conflicts', '_certificates', '_regional_cache_dir', '_shared_sat', '_reasoning_cache_dir', '_sat_service'}:
         raise ValueError('The in-memory learning cache is malformed.')
     if '_nogoods' in learning_state:
         store = learning_state.get('_nogoods')
-        if (not {'_nogoods'} <= set(learning_state) <= {'_nogoods', '_support', '_native', '_runtime', '_knowledge', '_shared_conflicts', '_mask_conflicts', '_certificates', '_regional_cache_dir', '_shared_sat'}
+        if (not {'_nogoods'} <= set(learning_state) <= {'_nogoods', '_support', '_native', '_runtime', '_knowledge', '_shared_conflicts', '_mask_conflicts', '_certificates', '_regional_cache_dir', '_shared_sat', '_reasoning_cache_dir', '_sat_service'}
                 or not isinstance(store, _NogoodStore)
                 or store.fingerprint != problem.fingerprint or store.target != target
                 or store.initial_domains != tuple(initial)):
@@ -657,10 +680,33 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         learning_state['_runtime'] = runtime
     elif not isinstance(runtime,_SearchRuntime) or not runtime.valid(problem.fingerprint,target,initial,n):
         raise ValueError('The in-memory search runtime cache has different effective problem data or is malformed.')
+    archive_was_loaded=False
+    reasoning_path=learning_state.get('_reasoning_cache_dir')
+    if reasoning_path is not None and not isinstance(reasoning_path,(str,Path)):
+        raise ValueError('Reasoning cache directory must be a local path.')
+    if options['durable_reasoning'] and reasoning_path is not None and seconds>0:
+        directory=str(Path(reasoning_path).resolve())
+        if runtime.reasoning_archive is None or runtime.reasoning_directory!=directory:
+            runtime.reasoning_archive=CPUReasoningArchive(directory,problem.fingerprint,target,initial,
+                original=[sum(1<<code for code in row) for row in problem.domains])
+            runtime.reasoning_directory=directory
+            archive_was_loaded=True
+            if runtime.lcg is None:runtime.lcg=runtime.reasoning_archive.load_lcg()
+            if not runtime.probes.entries:
+                restored_probes=runtime.reasoning_archive.load_probes()
+                if restored_probes is not None:runtime.probes=restored_probes
+    archive=runtime.reasoning_archive if options['durable_reasoning'] else None
     shared_sat=learning_state.get('_shared_sat')
     if shared_sat is not None and (not isinstance(shared_sat,SharedSatAssistant) or not shared_sat.matches(problem,target)):
         raise ValueError('The shared SAT assistant differs from the original puzzle/domains/objective.')
-    if options['shared_sat_assistant']:
+    shared_service=learning_state.get('_sat_service')
+    if options['shared_sat_service'] and shared_service is not None:
+        if runtime.service_view is not shared_service or not isinstance(runtime.sat,SATServiceClient):
+            if runtime.sat is not None:runtime.sat.close()
+            runtime.sat=service_view(shared_service,problem,target,initial);runtime.service_view=shared_service
+    elif isinstance(runtime.sat,SATServiceClient):
+        runtime.sat.close();runtime.sat=None;runtime.service_view=None
+    if options['shared_sat_assistant'] and not (options['shared_sat_service'] and shared_service is not None):
         if shared_sat is None:
             shared_sat=SharedSatAssistant(problem,target);learning_state['_shared_sat']=shared_sat
         if not isinstance(runtime.sat,JobSatAssist) or runtime.sat.owner is not shared_sat:
@@ -668,7 +714,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             runtime.sat=shared_sat.view(initial)
     elif isinstance(runtime.sat,JobSatAssist):
         runtime.sat=SatAssist(problem,initial,target,witness_pool=options['witness_pool'],support_cover=options['support_cover'])
-    if runtime.sat is not None and (not isinstance(runtime.sat,(SatAssist,JobSatAssist)) or runtime.sat.initial!=tuple(initial) or runtime.sat.problem.fingerprint!=problem.fingerprint or runtime.sat.target!=target):
+    if runtime.sat is not None and not isinstance(runtime.sat,SATServiceClient) and (not isinstance(runtime.sat,(SatAssist,JobSatAssist)) or runtime.sat.initial!=tuple(initial) or runtime.sat.problem.fingerprint!=problem.fingerprint or runtime.sat.target!=target):
         raise ValueError('The private SAT assistance cache has different problem data.')
     if runtime.lcg is not None and (not isinstance(runtime.lcg,LCGStore) or not runtime.lcg.matches(problem.fingerprint,target,initial)):
         raise ValueError('The LCG store belongs to different effective root domains.')
@@ -684,12 +730,12 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         if resume is not None and resume.get('certificates') is not None:runtime.certificates.load_snapshot(resume['certificates'])
     if options['smart_learning'] and all(initial) and all(problem.domains):
         runtime.mask_conflicts=learning_state.get('_mask_conflicts',runtime.mask_conflicts)
-        if runtime.mask_conflicts is None:runtime.mask_conflicts=VerifiedMaskConflictStore(problem,target,proof_transport=options['proof_transport'],resumable_proof_checking=options.get('resumable_proof_checking',False),mixed_proof_dag=options.get('mixed_proof_dag',False))
+        if runtime.mask_conflicts is None:runtime.mask_conflicts=VerifiedMaskConflictStore(problem,target,proof_transport=options['proof_transport'],resumable_proof_checking=options.get('resumable_proof_checking',False),mixed_proof_dag=options.get('mixed_proof_dag',False),proof_indexing=options.get('proof_indexing',False))
         if not isinstance(runtime.mask_conflicts,VerifiedMaskConflictStore) or not runtime.mask_conflicts.matches(problem,target):
             raise ValueError('Mask conflict store differs from original puzzle scope.')
         learning_state['_mask_conflicts']=runtime.mask_conflicts
         if runtime.local_mask_conflicts is None:
-            runtime.local_mask_conflicts=VerifiedMaskConflictStore(problem,target,initial=initial,proof_transport=options['proof_transport'],resumable_proof_checking=options.get('resumable_proof_checking',False),mixed_proof_dag=options.get('mixed_proof_dag',False))
+            runtime.local_mask_conflicts=VerifiedMaskConflictStore(problem,target,initial=initial,proof_transport=options['proof_transport'],resumable_proof_checking=options.get('resumable_proof_checking',False),mixed_proof_dag=options.get('mixed_proof_dag',False),proof_indexing=options.get('proof_indexing',False))
             if resume is not None and resume.get('local_mask_conflicts') is not None and 'owned_root_domains' in resume:
                 runtime.local_mask_conflicts.import_snapshot(resume['local_mask_conflicts'])
         elif not runtime.local_mask_conflicts.matches(problem,target,initial):
@@ -697,7 +743,9 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
     for mask_store in (runtime.mask_conflicts,runtime.local_mask_conflicts):
         if mask_store is not None:
             mask_store.configure_policy(proof_transport=options['proof_transport'],
-                resumable_proof_checking=options['resumable_proof_checking'],mixed_proof_dag=options['mixed_proof_dag'])
+                resumable_proof_checking=options['resumable_proof_checking'],mixed_proof_dag=options['mixed_proof_dag'],proof_indexing=options['proof_indexing'])
+            mask_store.configure_isolated_producer(options['isolated_proof_producer'])
+            if options['durable_reasoning'] and reasoning_path is not None:mask_store.configure_local_cache(reasoning_path)
     if options['mixed_proof_dag'] and knowledge is not None:
         for mask_store in (runtime.mask_conflicts,runtime.local_mask_conflicts):
             if mask_store is not None:mask_store.add_gold_witnesses(knowledge.records())
@@ -738,7 +786,38 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
     mask_baseline={key:stats[key] for key in MASK_STAT_KEYS}
     research_baseline={key:stats[key] for key in RESEARCH_STAT_KEYS}
     research_entry=dict(runtime.research.stats) if runtime.research is not None else dict.fromkeys(RESEARCH_STAT_KEYS,0)
+    regional26_baseline={key:stats[key] for key in REGION26_STATS}
+    regional26_entry=runtime.regional26.stats if runtime.regional26 is not None else dict.fromkeys(REGION26_STATS,0)
+    archive_baseline={key:stats[key] for key in ARCHIVE_STATS}
+    archive_entry=dict(archive.local.stats) if archive is not None and not archive_was_loaded else dict.fromkeys(ARCHIVE_STATS,0)
+    service_baseline={key:stats[key] for key in SERVICE_STATS}
+    service_entry=dict(runtime.sat.service_stats) if isinstance(runtime.sat,SATServiceClient) else dict.fromkeys(SERVICE_STATS,0)
+    witness_baseline={key:stats[key] for key in WITNESS_STATS}
+    witness_entry=(dict(runtime.sat.witness_stats) if isinstance(runtime.sat,SATServiceClient) else
+                   dict(runtime.semantic_pool.stats) if runtime.semantic_pool is not None else dict.fromkeys(WITNESS_STATS,0))
+    relational_baseline={key:stats[key] for key in RELATIONAL_STATS}
+    relational_entry=dict(runtime.higher.relations.stats) if runtime.higher is not None else dict.fromkeys(RELATIONAL_STATS,0)
+    certificate_baseline={key:stats[key] for key in RELATION_CERTIFICATE_STATS}
+    certificate_entry=(dict(runtime.higher.certificates.stats) if runtime.higher is not None and runtime.higher.certificates is not None else dict.fromkeys(RELATION_CERTIFICATE_STATS,0))
+    probe_plan_baseline={key:stats[key] for key in PROBE_PLAN_STATS}
+    probe_plan_entry=dict(runtime.probes.plans.stats)
     def sync_stats():
+        if runtime.higher is not None and runtime.higher.certificates is not None:
+            for key in RELATION_CERTIFICATE_STATS:stats[key]=certificate_baseline[key]+runtime.higher.certificates.stats[key]-certificate_entry[key]
+        for key in PROBE_PLAN_STATS:stats[key]=probe_plan_baseline[key]+runtime.probes.plans.stats[key]-probe_plan_entry[key]
+        if isinstance(runtime.sat,SATServiceClient):
+            for key in SERVICE_STATS:stats[key]=service_baseline[key]+runtime.sat.service_stats[key]-service_entry[key]
+        witness_current=(runtime.sat.witness_stats if isinstance(runtime.sat,SATServiceClient) else
+                         runtime.semantic_pool.stats if runtime.semantic_pool is not None else None)
+        if witness_current is not None:
+            for key in WITNESS_STATS:stats[key]=witness_baseline[key]+witness_current[key]-witness_entry[key]
+        if runtime.higher is not None:
+            for key in RELATIONAL_STATS:stats[key]=relational_baseline[key]+runtime.higher.relations.stats[key]-relational_entry[key]
+        if runtime.regional26 is not None:
+            current=runtime.regional26.stats
+            for key in REGION26_STATS:stats[key]=regional26_baseline[key]+current[key]-regional26_entry[key]
+        if archive is not None:
+            for key in ARCHIVE_STATS:stats[key]=archive_baseline[key]+archive.local.stats[key]-archive_entry[key]
         if runtime.higher is not None:
             for key in HIGHER_STAT_KEYS:stats[key]=higher_baseline[key]+runtime.higher.stats[key]-higher_entry[key]
         if residual is not None:
@@ -928,8 +1007,29 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         if probe_deadline is not None and now >= probe_deadline:
             raise ProbeBudget
 
-    def snapshot():
+    def flush_reasoning():
+        if options['relation_certificates'] and runtime.higher is not None:runtime.higher.flush()
+        if options['semantic_witnesses'] and runtime.semantic_pool is not None and runtime.semantic_path is not None:
+            saved=runtime.semantic_pool.snapshot()['digest']
+            if saved!=runtime.semantic_saved:
+                try:
+                    runtime.semantic_path.parent.mkdir(parents=True,exist_ok=True)
+                    runtime.semantic_pool.save(runtime.semantic_path);runtime.semantic_saved=saved
+                except OSError:pass
+        if archive is None:return
+        if runtime.lcg is not None:archive.save_lcg(runtime.lcg)
+        archive.save_probes(runtime.probes)
+        path=[]
+        for frame in stack:
+            reason=frame.get('_lcg')
+            if reason is not None and reason.enabled and reason.domains==frame['domains']:
+                archive.save_reason((tuple(frame['domains']),tuple(path),reason.max_facts),reason)
+            if frame['cell']>=0 and frame['next']>0:
+                path.append((frame['cell'],branch_mask(frame,frame['next']-1)))
+
+    def snapshot(*,persist=True):
         nonlocal stack
+        if persist:flush_reasoning()
         if native_engine is not None:stack=[from_native_frame(frame) for frame in native_engine.snapshot()]
         sync_stats()
         payload = {'version': VERSION, 'fingerprint': problem.fingerprint, 'target': target,
@@ -946,6 +1046,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         return payload
 
     def result(status, codes=None, report=None):
+        flush_reasoning()
         sync_stats()
         value = {'status': status, 'codes': codes, 'elapsed_seconds': time.monotonic()-began,
                  'nodes': nodes, 'complete': status in ('solved', 'edge_perfect', 'infeasible'), 'stats': dict(stats),
@@ -957,7 +1058,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         if runtime.local_mask_conflicts is not None and options['smart_learning']:value['local_mask_conflicts']=runtime.local_mask_conflicts.snapshot()
         if runtime.certificates is not None and options['proof_certificates']:value['certificates']=runtime.certificates.snapshot()
         if report is not None: value['validation'] = report
-        if status in ('timeout', 'stopped'): value['checkpoint'] = snapshot()
+        if status in ('timeout', 'stopped'): value['checkpoint'] = snapshot(persist=False)
         return value
 
     def notify(event, **extra):
@@ -1006,6 +1107,13 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         if options['value_ordering'] or options['objective_ordering']:
             if runtime.ordering is None or runtime.ordering.tables is not support_tables:
                 runtime.ordering=SupportOrdering(support_tables)
+        if any(options[key] for key in REGION26_OPTIONS):
+            signature=tuple(options[key] for key in (*REGION26_OPTIONS,'smart_learning'))
+            if runtime.regional26 is None or runtime.regional26_options!=signature:
+                runtime.regional26=RegionalWorkstreams(problem,target,options)
+                runtime.regional26_options=signature
+                regional26_entry=dict.fromkeys(REGION26_STATS,0)
+            runtime.regional26.configure_cache_dir(learning_state.get('_regional_cache_dir'))
         branching=ConnectionBranching(problem,signature=options['signature_branching']) if options['connection_branching'] or options['signature_branching'] or options['group_lookahead'] else None
         if any(options[k] for k in RESEARCH_KEYS):
             if runtime.research is None or runtime.research.options!={k:options[k] for k in RESEARCH_KEYS}:
@@ -1029,15 +1137,39 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         if options['sat_assist'] and runtime.sat is None:
             runtime.sat=SatAssist(problem,initial,target,witness_pool=options['witness_pool'],support_cover=options['support_cover'])
 
+        if options['semantic_witnesses'] and isinstance(runtime.sat,SatAssist):
+            from constraint_witness_round26 import SemanticWitnessPool
+            if runtime.semantic_pool is None:runtime.semantic_pool=SemanticWitnessPool(problem)
+            identity=hashlib.sha256(json.dumps([problem.fingerprint,problem.domains],separators=(',',':')).encode()).hexdigest()
+            desired=None if reasoning_path is None else Path(reasoning_path)/'semantic-witnesses'/(identity+'.json')
+            if desired!=runtime.semantic_path:
+                runtime.semantic_path=desired;runtime.semantic_saved=None
+                if desired is not None:
+                    try:runtime.semantic_pool.load(desired,check)
+                    except (OSError,ValueError,TypeError):pass
+            runtime.sat.semantic_witnesses=runtime.semantic_pool
+        elif isinstance(runtime.sat,SatAssist):runtime.sat.semantic_witnesses=None
+        if options['higher_order_relations'] and isinstance(runtime.sat,SATServiceClient) and runtime.higher_sat is None:
+            runtime.higher_sat=SatAssist(problem,initial,target,witness_pool=options['witness_pool'],support_cover=options['support_cover'])
         if runtime.sat is not None:
             runtime.sat.witness_pool=options['witness_pool'];runtime.sat.support_cover=options['support_cover']
-        if options['higher_order_relations'] and all(initial) and runtime.higher is None:
-            runtime.higher=ProjectedRelations(problem,initial,target)
+        if options['higher_order_relations'] and all(initial):
+            rebuild=runtime.higher is None or (runtime.higher.certificates is not None)!=options['relation_certificates']
+            if rebuild:
+                if runtime.higher is not None:runtime.higher.close()
+                runtime.higher=ProjectedRelations(problem,initial,target,semijoins=options['relational_consistency'],
+                    guided=options['relational_consistency'],certificates=options['relation_certificates'],partial=options['relation_partial'])
+                higher_entry=dict.fromkeys(HIGHER_STAT_KEYS,0);relational_entry=dict.fromkeys(RELATIONAL_STATS,0)
+                certificate_entry=dict.fromkeys(RELATION_CERTIFICATE_STATS,0);runtime.higher_directory=None
+            runtime.higher.semijoins=options['relational_consistency'];runtime.higher.guided=options['relational_consistency'];runtime.higher.partial=options['relation_partial']
+            desired=None if reasoning_path is None else str(Path(reasoning_path).resolve())
+            if runtime.higher.certificates is not None and (rebuild or desired!=runtime.higher_directory):
+                runtime.higher.configure_cache_dir(desired,check);runtime.higher_directory=desired
         scheduler_options = tuple(sorted(options.items()))
         if runtime.scheduler is not None and not isinstance(runtime.scheduler,PropagationScheduler):
             raise ValueError('The in-memory propagation scheduler is malformed.')
         if runtime.scheduler is None or runtime.scheduler_options != scheduler_options:
-            runtime.scheduler = PropagationScheduler(incremental=options.get('incremental',True),adaptive=options.get('adaptive',True))
+            runtime.scheduler = PropagationScheduler(incremental=options.get('incremental',True),adaptive=options.get('adaptive',True),contextual=options.get('contextual_propagation',False))
             runtime.scheduler_options = scheduler_options
         scheduler=runtime.scheduler
         proof_context=[False]
@@ -1114,6 +1246,97 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                 direct(cell,value,range(n) if dependencies is None else dependencies,rule)
                 enqueue(cell)
                 return True
+            clause_reason=(lambda cell,value,deps:direct(cell,value,deps,'learned clause')) if trace is not None else None
+            def stage_clauses(values):
+                bulk(lambda:store.prune(domains, stats, check,reason=clause_reason),'learned clauses')
+                if options['proof_certificates']:
+                    bulk(lambda:runtime.certificates.prune(domains,check),'portable certificate')
+                if options['smart_learning'] and runtime.mask_conflicts is not None:
+                    bulk(lambda:runtime.mask_conflicts.prune(domains,check),'verified mask conflicts')
+                    bulk(lambda:runtime.local_mask_conflicts.prune(domains,check),'root-scoped verified masks')
+                if lcg_store is not None and all(domains):
+                    bulk(lambda:lcg_store.prune(domains,check,reason=clause_reason),'LCG clauses')
+                if any(value == 0 for value in domains): return False
+            def stage_inventory(values):
+                proof_context[0]=proof
+                pruner.on_narrow=(lambda cell,value,deps:direct(cell,value,deps,'Hall set')) if trace is not None else None
+                try:bulk(lambda:pruner.prune(domains),'inventory and regions')
+                finally:proof_context[0]=False;pruner.on_narrow=None
+                if any(value == 0 for value in domains): return False
+            def stage_connectivity(values):
+                if connectivity is not None:
+                    bulk(lambda:scheduler.run('connectivity',domains,lambda:connectivity.prune(domains,check),stats,optional=True,force=proof,
+                                  signature=connectivity_signature(domains)),'Gold connectivity')
+                    if any(value == 0 for value in domains): return False
+            def stage_advanced(values):
+                if advanced is not None:
+                    if options['smart_learning']:
+                        advanced.region_node_limit=int(scheduler.budget('advanced',4096,minimum=1024,maximum=16384))
+                    budgets = sum(value for key,value in advanced.stats.items() if key.endswith('budget_skips'))
+                    advanced.on_narrow=(lambda cell,value,deps:direct(cell,value,deps,'regional table')) if trace is not None else None
+                    advanced.before_hierarchical=(lambda current:record(range(n),'earlier global rules')) if trace is not None else None
+                    try:
+                        bulk(lambda:scheduler.run('advanced',domains,lambda:advanced.prune(domains,check),stats,optional=True,force=proof,
+                                      complete=lambda:budgets==sum(value for key,value in advanced.stats.items() if key.endswith('budget_skips')),proof_yield=lambda:advanced.stats.get('conditional_hall_certificates',0)+advanced.stats.get('hierarchical_cache_entries',0)),'advanced regions and topology')
+                    finally:advanced.on_narrow=None;advanced.before_hierarchical=None
+                    if any(value == 0 for value in domains): return False
+            def stage_higher(values):
+                if options['higher_order_relations'] and runtime.higher is not None and all(domains):
+                    bulk(lambda:runtime.higher.prune(domains,runtime.higher_sat if isinstance(runtime.sat,SATServiceClient) else runtime.sat,check),'complete higher-order projection')
+            def stage_deep(values):
+                if runtime.deep is not None and all(domains):
+                    if options['deep_paths'] or options['retained_relations']:bulk(lambda:runtime.deep.paths(domains,check),'three-cell path support')
+                    if options['retained_relations'] and all(domains):bulk(lambda:runtime.deep.retained_relations(domains,check),'retained pair correlations')
+                    if options['joint_conservation'] and all(domains):bulk(lambda:runtime.deep.joint_conservation(domains,check),'joint seam conservation')
+                    if options['conservation'] and all(domains):bulk(lambda:runtime.deep.conservation(domains,check),'integer seam conservation')
+            def stage_research(values):
+                if runtime.research is not None and any(options[k] for k in RESEARCH_KEYS) and all(domains):
+                    runtime.research.prune(domains,check,bulk)
+                    if options['smart_learning'] and runtime.mask_conflicts is not None:
+                        for claim in runtime.research.drain_deduction_chains(target,limit=8):
+                            runtime.mask_conflicts.admit_deduction_chain(claim,check,stats=stats)
+            def stage_regional(values):
+                if runtime.regional26 is not None and any(options[k] for k in REGION26_OPTIONS) and all(domains):
+                    bulk(lambda:runtime.regional26.prune(domains,check),'compiled regional and connectivity reasoning')
+                    if options['smart_learning'] and runtime.mask_conflicts is not None:
+                        for claim in runtime.regional26.drain_deduction_chains(check,limit=8):
+                            runtime.mask_conflicts.admit_deduction_chain(claim,check,stats=stats)
+            def stage_symmetry(values):
+                if options['piece_symmetry'] and all(domains):
+                    old_count=sum(v.bit_count() for v in domains)
+                    bulk(lambda:runtime.piece_symmetry.prune(domains),'verified strand symmetry')
+                    stats['piece_symmetry_prunes']+=old_count-sum(v.bit_count() for v in domains)
+            actions=(('clauses',stage_clauses),('inventory',stage_inventory),('connectivity',stage_connectivity),('advanced',stage_advanced),('higher',stage_higher),('deep',stage_deep),('research',stage_research),('regional',stage_regional),('symmetry',stage_symmetry))
+            if options['durable_reasoning'] and not proof:
+                names=tuple(name for name,_ in actions)
+                context=(tuple(decision_facts()),tuple(sorted(options.items())))
+                key=(context,tuple(domains));cursor=runtime.propagation_cursors.pop(key,None)
+                if cursor is None and archive is not None:
+                    cursor=archive.load_propagation(key,arcs,incoming,tile_bits,names,check)
+                if cursor is None:
+                    cursor=PropagationCursor(domains,arcs,incoming,tile_bits,names,
+                        starting=_starting_arcs(len(arcs),incoming,changed_cell))
+                    stats['propagation_cursor_builds']+=1
+                else:
+                    stats['propagation_cursor_resumes']+=1
+                    stats['propagation_cursor_stage_skips']+=cursor.stage if cursor.phase=='strong' else 0
+                cursor.attach(domains);prior_retries=cursor.stats['propagation_cursor_opaque_retries']
+                def retained_native(values,queued):
+                    kwargs={'reason':lambda cell,value,neighbor:direct(cell,value,[neighbor],'native seam')} if trace is not None else {}
+                    return bulk(lambda:native.propagate(values,queued,check,stats,**kwargs),'native seams')
+                try:
+                    possible=cursor.advance(filter_arc,actions,check,direct,stats,
+                        native_basic=retained_native if native is not None else None)
+                    if not possible and cursor.basic.failed is not None:fail(cursor.basic.failed)
+                    return possible
+                finally:
+                    stats['propagation_cursor_opaque_retries']+=cursor.stats['propagation_cursor_opaque_retries']-prior_retries
+                    if not cursor.done:
+                        saved_key=(context,tuple(domains));runtime.propagation_cursors[saved_key]=cursor
+                        while len(runtime.propagation_cursors)>16:
+                            del runtime.propagation_cursors[next(iter(runtime.propagation_cursors))]
+                            stats['propagation_cursor_evictions']+=1
+                        if archive is not None:archive.save_propagation(saved_key,cursor)
             while True:
                 check()
                 if any(value == 0 for value in domains): return False
@@ -1171,48 +1394,8 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                 # fixpoint as seam propagation. Only unexpanded frame domains
                 # reach this function, so stored sibling choices stay complete.
                 before = domains.copy()
-                clause_reason=(lambda cell,value,deps:direct(cell,value,deps,'learned clause')) if trace is not None else None
-                bulk(lambda:store.prune(domains, stats, check,reason=clause_reason),'learned clauses')
-                if options['proof_certificates']:
-                    bulk(lambda:runtime.certificates.prune(domains,check),'portable certificate')
-                if options['smart_learning'] and runtime.mask_conflicts is not None:
-                    bulk(lambda:runtime.mask_conflicts.prune(domains,check),'verified mask conflicts')
-                    bulk(lambda:runtime.local_mask_conflicts.prune(domains,check),'root-scoped verified masks')
-                if lcg_store is not None and all(domains):
-                    bulk(lambda:lcg_store.prune(domains,check,reason=clause_reason),'LCG clauses')
-                if any(value == 0 for value in domains): return False
-                proof_context[0]=proof
-                pruner.on_narrow=(lambda cell,value,deps:direct(cell,value,deps,'Hall set')) if trace is not None else None
-                try:bulk(lambda:pruner.prune(domains),'inventory and regions')
-                finally:proof_context[0]=False;pruner.on_narrow=None
-                if any(value == 0 for value in domains): return False
-                if connectivity is not None:
-                    bulk(lambda:scheduler.run('connectivity',domains,lambda:connectivity.prune(domains,check),stats,optional=True,force=proof,
-                                  signature=connectivity_signature(domains)),'Gold connectivity')
-                    if any(value == 0 for value in domains): return False
-                if advanced is not None:
-                    if options['smart_learning']:
-                        advanced.region_node_limit=int(scheduler.budget('advanced',4096,minimum=1024,maximum=16384))
-                    budgets = sum(value for key,value in advanced.stats.items() if key.endswith('budget_skips'))
-                    advanced.on_narrow=(lambda cell,value,deps:direct(cell,value,deps,'regional table')) if trace is not None else None
-                    advanced.before_hierarchical=(lambda current:record(range(n),'earlier global rules')) if trace is not None else None
-                    try:
-                        bulk(lambda:scheduler.run('advanced',domains,lambda:advanced.prune(domains,check),stats,optional=True,force=proof,
-                                      complete=lambda:budgets==sum(value for key,value in advanced.stats.items() if key.endswith('budget_skips')),proof_yield=lambda:advanced.stats.get('conditional_hall_certificates',0)+advanced.stats.get('hierarchical_cache_entries',0)),'advanced regions and topology')
-                    finally:advanced.on_narrow=None;advanced.before_hierarchical=None
-                    if any(value == 0 for value in domains): return False
-                if options['higher_order_relations'] and runtime.higher is not None and all(domains):
-                    bulk(lambda:runtime.higher.prune(domains,runtime.sat,check),'complete higher-order projection')
-                if runtime.deep is not None and all(domains):
-                    if options['deep_paths'] or options['retained_relations']:bulk(lambda:runtime.deep.paths(domains,check),'three-cell path support')
-                    if options['retained_relations'] and all(domains):bulk(lambda:runtime.deep.retained_relations(domains,check),'retained pair correlations')
-                    if options['joint_conservation'] and all(domains):bulk(lambda:runtime.deep.joint_conservation(domains,check),'joint seam conservation')
-                    if options['conservation'] and all(domains):bulk(lambda:runtime.deep.conservation(domains,check),'integer seam conservation')
-                if runtime.research is not None and any(options[k] for k in RESEARCH_KEYS) and all(domains):runtime.research.prune(domains,check,bulk)
-                if options['piece_symmetry'] and all(domains):
-                    old_count=sum(v.bit_count() for v in domains)
-                    bulk(lambda:runtime.piece_symmetry.prune(domains),'verified strand symmetry')
-                    stats['piece_symmetry_prunes']+=old_count-sum(v.bit_count() for v in domains)
+                for _,action in actions:
+                    if action(domains) is False:return False
                 if not all(domains):return False
                 for cell, (old, new) in enumerate(zip(before, domains)):
                     if old != new:
@@ -1239,6 +1422,12 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                     reason.failure=None
                 if lcg_store is not None:
                     lcg=frame.get('_lcg')
+                    if lcg is None and archive is not None:
+                        cached=archive.load_reason((tuple(domains),tuple(decision_facts()),8192))
+                        if (cached is not None and cached.enabled and cached.domains==domains
+                                and cached.binding==(problem.fingerprint,target,tuple(initial))
+                                and cached.level==len(decision_facts())):
+                            lcg=cached;frame['_lcg']=cached
                     if lcg is None or lcg.domains!=domains or not lcg.enabled:
                         lcg=LCGState.reconstruct(initial,domains,decision_facts(),fingerprint=problem.fingerprint,target=target)
                         frame['_lcg']=lcg;stats['lcg_rebases']+=1
@@ -1276,6 +1465,14 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                         report=problem.validate(candidate)
                         if not report['valid']:
                             raise ValueError('Regional Gold witness failed independent validation')
+                        stats['regional_solutions_validated']+=1
+                        return {'action':'solved','codes':list(candidate),'validation':report,'via_regional':True}
+                if runtime.regional26 is not None and any(options[k] for k in REGION26_OPTIONS):
+                    candidate=runtime.regional26.solution
+                    if candidate is not None and len(candidate)==n and all(type(code) is int and 0<=code<3*n and domains[cell]>>code&1 for cell,code in enumerate(candidate)):
+                        report=problem.validate(candidate)
+                        if not (report['valid'] or target=='edges' and report['unique_tiles'] and report['matched_edges']==report['total_edges']):
+                            raise ValueError('Compiled regional witness failed independent validation.')
                         stats['regional_solutions_validated']+=1
                         return {'action':'solved','codes':list(candidate),'validation':report,'via_regional':True}
                 if options['sat_assist'] and (nodes==1 or nodes%8==0):
@@ -1356,10 +1553,10 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                             stats[prefix+'_propagations']+=stats['propagations']-before_propagations
                             stats[prefix+'_arc_revisions']+=stats['arc_revisions']-before_arcs
                     def probe(trial,selected):
-                        return runtime.probes.run(context,trial,selected,raw_probe,check,stats)
+                        return runtime.probes.run(context,trial,selected,raw_probe,check,stats,resume_partial=options['durable_reasoning'],recoverable=(ProbeBudget,Interrupted))
                     def pair_probe(trial,selected):
                         return runtime.probes.run(context,trial,selected,
-                            lambda values,cell:raw_probe(values,cell,pair=True),check,stats)
+                            lambda values,cell:raw_probe(values,cell,pair=True),check,stats,resume_partial=options['durable_reasoning'],recoverable=(ProbeBudget,Interrupted))
                     def failed_probe(code):
                         if decisions is not None:learn([*decisions,(cell,code)],stats)
                         weight_failure([cell])
@@ -1372,13 +1569,15 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                         weight_failure([first,second])
                     try:
                         if lookahead_plan is not None:
-                            grouped_constructive_lookahead(domains,lookahead_plan.cell,lookahead_plan.masks,probe,check,lambda mask:None,stats)
+                            if options['durable_reasoning']:runtime.probes.plans.constructive(context,domains,lookahead_plan.cell,lookahead_plan.masks,probe,check,lambda mask:None,stats,grouped=True)
+                            else:grouped_constructive_lookahead(domains,lookahead_plan.cell,lookahead_plan.masks,probe,check,lambda mask:None,stats)
                         else:
-                            _constructive_lookahead(domains,cell,choices,probe,check,failed_probe,stats)
+                            if options['durable_reasoning']:runtime.probes.plans.constructive(context,domains,cell,tuple(1<<code for code in choices),probe,check,failed_probe,stats)
+                            else:_constructive_lookahead(domains,cell,choices,probe,check,failed_probe,stats)
                         if lookahead_plan is None and options['pair_lookahead'] and decisions is not None and all(domains) and domains==before_lookahead:
                             pair_phase=True
-                            paired_lookahead(domains,cell,choices,probe,pair_probe,check,failed_pair,failed_probe,stats,
-                                             neighbors=problem.neighbors[cell],max_pairs=16)
+                            if options['durable_reasoning']:runtime.probes.plans.pairs(context,domains,cell,choices,probe,pair_probe,check,failed_pair,failed_probe,stats,neighbors=tuple(map(int,problem.neighbors[cell])),max_pairs=16)
+                            else:paired_lookahead(domains,cell,choices,probe,pair_probe,check,failed_pair,failed_probe,stats,neighbors=problem.neighbors[cell],max_pairs=16)
                     except ProbeBudget:
                         stats['lookahead_aborted']+=1
                         if pair_phase:stats['pair_lookahead_aborted']+=1
@@ -1572,3 +1771,10 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         return result(exc.status)
     finally:
         if native_engine is not None:native_engine.close()
+
+
+def solve(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=None, progress=None, resume=None, learning_state=None, options=None):
+    from constraint_service_lifecycle_round26 import run
+    normalized=normalize_options(resume.get('search_options') if options is None and isinstance(resume,dict) else options)
+    return run(_solve_public,problem,dict(seconds=seconds,seed=seed,target=target,hints=hints,
+        stop=stop,progress=progress,resume=resume,learning_state=learning_state,options=normalized))

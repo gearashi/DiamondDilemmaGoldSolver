@@ -13,9 +13,11 @@ STAT_KEYS = ('propagation_runs', 'propagation_unchanged_skips',
 
 
 class PropagationScheduler:
-    def __init__(self, *, incremental=True, adaptive=True, clock=perf_counter_ns):
+    def __init__(self, *, incremental=True, adaptive=True, clock=perf_counter_ns, contextual=False):
         self.incremental, self.adaptive, self.clock = incremental, adaptive, clock
         self.records = {}
+        from constraint_context_policy_round26 import ContextualPropagation
+        self.contextual = ContextualPropagation() if contextual else None
 
     def run(self, name, domains, action, stats, *, optional=False, complete=None, force=False, signature=None, proof_yield=None):
         record = self.records.setdefault(name, {'unchanged': deque(maxlen=8),
@@ -26,7 +28,10 @@ class PropagationScheduler:
         if not force and self.incremental and signature in record['unchanged']:
             stats['propagation_unchanged_skips'] += 1
             return False
-        if not force and optional and self.adaptive and record['cooldown']:
+        if not force and optional and self.contextual is not None and not self.contextual.allow(name,before):
+            stats['propagation_adaptive_skips'] += 1
+            return False
+        if not force and optional and self.contextual is None and self.adaptive and record['cooldown']:
             record['cooldown'] -= 1
             stats['propagation_adaptive_skips'] += 1
             return False
@@ -48,6 +53,7 @@ class PropagationScheduler:
             record['unchanged'].append(signature)
         removed=sum((a & ~b).bit_count() for a,b in zip(before,domains))
         proofs=max(0,(proof_yield() if proof_yield is not None else 0)-prior_proofs)
+        if self.contextual is not None:self.contextual.observe(name,before,removed=removed,proofs=proofs,complete=completed)
         stats['propagation_values_removed']+=removed
         stats['propagation_proofs_produced']+=proofs
         if completed:

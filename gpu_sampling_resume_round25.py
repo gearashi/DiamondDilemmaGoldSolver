@@ -5,6 +5,8 @@ import hashlib,math,time
 from pathlib import Path
 from constraint_work import digest
 
+class _SamplingInterrupted(InterruptedError):pass
+
 class SamplerSession:
     def __init__(self,problem,*,seed=0,replicas=128,backend='auto',target='gold',gold_aware=False,experiments=None,resume=None,allow_software=False):
         from gpu_sampling import _inputs,sampling_flags
@@ -12,15 +14,22 @@ class SamplerSession:
             raise ValueError('Invalid durable sampler configuration.')
         if target not in ('gold','edges') or type(gold_aware)is not bool:raise ValueError('Invalid durable sampling objective.')
         self.problem=problem;self.inputs=None if any(not row for row in problem.domains) else _inputs(problem,gold_aware=gold_aware);self.flags=sampling_flags(experiments)
+        from gpu_incremental_sampling_round26 import validate_capacity
+        validate_capacity(problem.n,replicas,problem.total_segments if gold_aware else 0,self.flags)
         if self.flags&32 and replicas<8:raise ValueError('Adaptive exchange requires at least eight replicas.')
         self.config={'fingerprint':problem.fingerprint,'domains':[list(row) for row in problem.domains],'fixed':[[int(c),int(v)] for c,v in sorted(problem.fixed.items())],
                      'replicas':replicas,'seed':seed,'target':target,'gold_aware':gold_aware,'flags':self.flags,'controller_version':1,
-                     'sources':{name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('gpu_sampling_resume_round25.py','gpu_sampling_state_round25.py','gpu_sampling.py','constraint_lns.py','search_problem.py','validator.py')}}
+                     'sources':{name:hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in ('gpu_sampling_resume_round25.py','gpu_sampling_state_round25.py','gpu_sampling.py','gpu_incremental_sampling_round26.py','constraint_lns.py','search_problem.py','validator.py')}}
         self.experiments={} if experiments is None else dict(experiments);self.backend=backend;self.allow_software=allow_software
-        self.crossover=None;self.crossover_parents=[];self.temperatures=None
-        if self.experiments.get('cycle_crossover'):
+        self.crossover=None;self.crossover_parents=[];self.temperatures=None;self.crossover_due=False;self.optimal=bool(self.experiments.get('optimal_crossover'))
+        if self.experiments.get('cycle_crossover') or self.optimal:
             from sampling_crossover_round25 import CycleCrossover
-            self.crossover=CycleCrossover(problem,gold_aware=gold_aware)
+            if self.optimal:
+                from sampling_crossover_round26 import OptimizingCrossover
+                self.crossover=OptimizingCrossover(problem,gold_aware=gold_aware)
+                self.config['optimal_crossover']=True
+                self.config['sources']['sampling_crossover_round26.py']=hashlib.sha256((Path(__file__).parent/'sampling_crossover_round26.py').read_bytes()).hexdigest()
+            else:self.crossover=CycleCrossover(problem,gold_aware=gold_aware)
             self.config['controller_version']=2;self.config['cycle_crossover']=True
             self.config['sources']['sampling_crossover_round25.py']=hashlib.sha256((Path(__file__).parent/'sampling_crossover_round25.py').read_bytes()).hexdigest()
         if self.flags&32:
@@ -42,7 +51,8 @@ class SamplerSession:
         expected={'sampler_session_version','config','selected','device','native','archive','launches','last_collected','elapsed','done','solution','counts','experiment_stats','digest'}
         if self.crossover is not None:expected.update(('crossover','crossover_parents'))
         if self.temperatures is not None:expected.add('temperatures')
-        if (not isinstance(value,dict) or set(value)!=expected or type(value['sampler_session_version'])is not int or value['sampler_session_version']!=(3 if self.temperatures is not None else (2 if self.crossover is not None else 1))
+        if self.optimal:expected.add('crossover_due')
+        if (not isinstance(value,dict) or set(value)!=expected or type(value['sampler_session_version'])is not int or value['sampler_session_version']!=(4 if self.optimal else (3 if self.temperatures is not None else (2 if self.crossover is not None else 1)))
                 or value['digest']!=digest({k:v for k,v in value.items() if k!='digest'}) or value['config']!=self.config):raise ValueError('Durable sampler input or policy differs.')
         if value['selected'] not in (None,'cuda','webgpu') or self.backend!='auto' and value['selected'] not in (None,self.backend):raise ValueError('Unfinished sampler requires the saved backend.')
         if (type(value['launches'])is not int or value['launches']<0 or type(value['last_collected'])is not int or not -1<=value['last_collected']<=value['launches']
@@ -73,7 +83,10 @@ class SamplerSession:
         self.launches=value['launches'];self.last_collected=value['last_collected'];self.elapsed=float(value['elapsed']);self.done=value['done'];self.solution=deepcopy(solution)
         if self.crossover is not None:
             from sampling_crossover_round25 import CycleCrossover
-            self.crossover=CycleCrossover(self.problem,gold_aware=self.config['gold_aware'],resume=value['crossover'])
+            if self.optimal:
+                from sampling_crossover_round26 import OptimizingCrossover
+                self.crossover=OptimizingCrossover(self.problem,gold_aware=self.config['gold_aware'],resume=value['crossover'])
+            else:self.crossover=CycleCrossover(self.problem,gold_aware=self.config['gold_aware'],resume=value['crossover'])
             parents=value['crossover_parents']
             if not isinstance(parents,list) or len(parents)>8:raise ValueError('Invalid bounded crossover parent pool.')
             for row in parents:
@@ -86,6 +99,9 @@ class SamplerSession:
             self.temperatures=AdaptiveTemperatures(resume=value['temperatures'])
             if (self.temperatures.last_dispatch>self.launches or not self.temperatures.frozen and self.temperatures.last_dispatch!=16*(self.launches//16)):
                 raise ValueError('Adaptive temperature cadence differs from native dispatch progress.')
+        if self.optimal:
+            if type(value['crossover_due'])is not bool or value['crossover_due'] and (self.native is None or self.last_collected!=self.launches):raise ValueError('Invalid pending recombination collection.')
+            self.crossover_due=value['crossover_due']
         self.counts=dict(counts);self.last_experiments=dict(value['experiment_stats'])
     def _ensure_engine(self):
         if self.closed:raise RuntimeError("Sampler session is closed.")
@@ -105,31 +121,35 @@ class SamplerSession:
                     raise ValueError('Native temperature ladder differs from saved controller.')
             self.engine=engine;self.selected=selected;self.device=engine.device
         except BaseException:self.poisoned=True;engine.close();raise
-    def collect(self,*,inject=True):
+    def collect(self,*,inject=True,check=lambda:None):
         self._healthy()
-        if self.engine is None or self.last_collected==self.launches:return
+        if self.engine is None or self.last_collected==self.launches and not self.crossover_due:return
         from gpu_sampling import gold_score,score_board,_verification_view
         from constraint_lns import diverse_archive
-        boards,scores=self.engine.top();verification=_verification_view(self.problem,len(boards));checked=[];observed={tuple(row['codes']) for row in self.archive}
-        for codes,objective in zip(boards,scores):
-            metrics=gold_score(self.problem,codes) if self.config['gold_aware'] else score_board(verification,codes)
-            if metrics['gold_objective' if self.config['gold_aware'] else 'objective']!=int(objective):raise RuntimeError('Resumed GPU sample failed independent scoring.')
-            values=list(map(int,codes));key=tuple(values);self.counts['archive_checks']+=1
-            if key in observed:self.counts['archive_repeated_observations']+=1
-            observed.add(key);checked.append({'codes':values,**metrics})
-            if not metrics['domain_violations'] and metrics['matched_edges']==len(self.problem.edges):
-                report=self.problem.validate(values)
-                if report['valid'] or self.config['target']=='edges':self.solution=values;self.done=True
-        self.archive=diverse_archive([*self.archive,*checked],capacity=8,rank_key='gold_objective' if self.config['gold_aware'] else 'objective')
+        checked=[]
+        if self.last_collected!=self.launches:
+            boards,scores=self.engine.top();verification=_verification_view(self.problem,len(boards));checked=[];observed={tuple(row['codes']) for row in self.archive}
+            for codes,objective in zip(boards,scores):
+                metrics=gold_score(self.problem,codes) if self.config['gold_aware'] else score_board(verification,codes)
+                if metrics['gold_objective' if self.config['gold_aware'] else 'objective']!=int(objective):raise RuntimeError('Resumed GPU sample failed independent scoring.')
+                values=list(map(int,codes));key=tuple(values);self.counts['archive_checks']+=1
+                if key in observed:self.counts['archive_repeated_observations']+=1
+                observed.add(key);checked.append({'codes':values,**metrics})
+                if not metrics['domain_violations'] and metrics['matched_edges']==len(self.problem.edges):
+                    report=self.problem.validate(values)
+                    if report['valid'] or self.config['target']=='edges':self.solution=values;self.done=True
+            self.archive=diverse_archive([*self.archive,*checked],capacity=8,rank_key='gold_objective' if self.config['gold_aware'] else 'objective')
+            if self.optimal:self.last_collected=self.launches;self.crossover_due=not self.done and self.crossover is not None
         if not self.done and self.crossover is not None:
             from gpu_sampling import _crossover_step,_crossover_parent_pool
             try:
                 self.crossover_parents=_crossover_parent_pool([*self.crossover_parents,*checked,*self.archive],gold_aware=self.config['gold_aware'])
-                self.archive,solution=_crossover_step(self.problem,self.crossover,self.archive,self.engine,gold_aware=self.config['gold_aware'],target=self.config['target'],inject=inject,parents=self.crossover_parents)
+                self.archive,solution=_crossover_step(self.problem,self.crossover,self.archive,self.engine,gold_aware=self.config['gold_aware'],target=self.config['target'],inject=inject,parents=self.crossover_parents,check=check)
                 self.crossover_parents=_crossover_parent_pool([*self.crossover_parents,*self.archive],gold_aware=self.config['gold_aware'])
+            except _SamplingInterrupted:raise
             except BaseException:self.poisoned=True;raise
             if solution is not None:self.solution=solution;self.done=True
-        self.last_collected=self.launches
+        self.last_collected=self.launches;self.crossover_due=False
     def _account(self):
         if self._active_since is not None:
             now=time.monotonic();self.elapsed+=now-self._active_since;self._active_since=now
@@ -140,10 +160,13 @@ class SamplerSession:
         if type(seconds)not in (int,float) or not math.isfinite(seconds) or seconds<0:raise ValueError('Invalid sampler slice budget.')
         if max_dispatches is not None and (type(max_dispatches)is not int or max_dispatches<0):raise ValueError('Invalid dispatch bound.')
         began=time.monotonic();last_progress=began;count=0;self._active_since=began
+        def check():
+            if stop() or time.monotonic()-began>=seconds:raise _SamplingInterrupted()
         try:
             if self.done or stop() or seconds==0 or max_dispatches==0:return
             if self.inputs is None:self.done=True;return
             self._ensure_engine()
+            if self.crossover_due:self.collect(check=check)
             if not self.inputs[1]:self.collect();self.done=True;return
             while time.monotonic()-began<seconds and not stop() and not self.done and (max_dispatches is None or count<max_dispatches):
                 self.engine.launch(64);self.launches+=1;count+=1
@@ -152,14 +175,15 @@ class SamplerSession:
                     from gpu_sampling import _temperature_step
                     _temperature_step(self.temperatures,self.engine,self.launches)
                 self.counts['move_proposals']+=self.config['replicas']*64;self.counts['samples_considered']+=self.config['replicas']*64
-                if self.launches%8==0:self.collect()
+                if self.launches%8==0:self.collect(check=check)
                 if progress is not None and time.monotonic()-last_progress>=1:
                     progress({'event':'sampling_progress',**self.report()});last_progress=time.monotonic()
+        except _SamplingInterrupted:pass
         finally:self._account();self._active_since=None
     def finish_phase(self):
         self._healthy()
         if self.closed:raise RuntimeError("Sampler session is closed.")
-        if self.engine is None and self.native is not None and self.last_collected!=self.launches:self._ensure_engine()
+        if self.engine is None and self.native is not None and (self.last_collected!=self.launches or self.crossover_due):self._ensure_engine()
         if self.engine is not None:self.collect(inject=False)
         self.done=True
     def report(self):
@@ -174,6 +198,7 @@ class SamplerSession:
             'best_objective':top['objective'] if top else None,'domain_violations':top['domain_violations'] if top else None,
             'archive_capacity':8,'archive_unique_boards':len(self.archive),'gold_aware':self.config['gold_aware'],
             'sampling_experiments':{**self.experiments,**experiments,**(self.crossover.stats if self.crossover is not None else {}),**(self.temperatures.stats if self.temperatures is not None else {})},'dispatches':self.launches,
+            'restore_validation_work':dict(getattr(self.engine,'validation_work',{})) if self.engine is not None else {},
             'hint_scope':'Heuristic samples only; no exclusions or coverage. Same-runtime native continuation.'}
     def snapshot(self):
         self._healthy()
@@ -183,11 +208,12 @@ class SamplerSession:
         from gpu_sampling_state_round25 import encode
         native=encode(self.problem,self.inputs[0],self.engine) if self.engine is not None else deepcopy(self.native)
         experiments=self.engine.experiment_stats() if self.engine is not None else self.last_experiments
-        value={'sampler_session_version':3 if self.temperatures is not None else (2 if self.crossover is not None else 1),'config':deepcopy(self.config),'selected':self.selected,'device':self.device,'native':native,
+        value={'sampler_session_version':4 if self.optimal else (3 if self.temperatures is not None else (2 if self.crossover is not None else 1)),'config':deepcopy(self.config),'selected':self.selected,'device':self.device,'native':native,
             'archive':deepcopy(self.archive),'launches':self.launches,'last_collected':self.last_collected,'elapsed':self.elapsed,'done':self.done,
             'solution':deepcopy(self.solution),'counts':dict(self.counts),'experiment_stats':dict(experiments)}
         if self.crossover is not None:value['crossover']=self.crossover.snapshot();value['crossover_parents']=deepcopy(self.crossover_parents)
         if self.temperatures is not None:value['temperatures']=self.temperatures.snapshot()
+        if self.optimal:value['crossover_due']=self.crossover_due
         value['digest']=digest(value);return value
     def close(self):
         try:

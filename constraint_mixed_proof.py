@@ -25,8 +25,8 @@ def tuples(value):
 
 
 class MixedProofContext(MaskProofContext):
-    def __init__(self,problem,initial,target='gold'):
-        super().__init__(problem,initial,target)
+    def __init__(self,problem,initial,target='gold',*,indexed=False):
+        super().__init__(problem,initial,target,indexed=indexed)
         self.nodes=OrderedDict();self.cursors=OrderedDict();self._gold_sources=OrderedDict()
         self.stats.update(mixed_nodes_checked=0,mixed_nodes_reused=0,mixed_proofs=0,
                           mixed_hall_nodes=0,mixed_loop_nodes=0,mixed_affine_nodes=0,mixed_pb_nodes=0)
@@ -149,14 +149,17 @@ class MixedProofContext(MaskProofContext):
                     from constraint_proof_cursor import ResumableRUPChecker
                     cursor=self.cursors.get(node['id'])
                     if cursor is None:
-                        cursor=ResumableRUPChecker(base,data['proof'])
+                        if self.indexed_proofs:
+                            from constraint_proof_indexed_round26 import IndexedRUPChecker
+                            cursor=self._indexed_cursor(('mixed',node['id']),base,data['proof'],context={'binding':self.binding(record),'node':node['id']})
+                        else:cursor=ResumableRUPChecker(base,data['proof'])
                         self.cursors[node['id']]=cursor
                         while len(self.cursors)>8:self.cursors.popitem(last=False)
                     before=cursor.stats.copy()
                     try:valid=cursor.advance(check,ticks=ticks)
                     finally:
-                        self.stats['proof_cursor_visits']+=cursor.stats['proof_clause_visits']-before['proof_clause_visits']
-                        self.stats['proof_cursor_resumptions']+=cursor.stats['proof_resumptions']-before['proof_resumptions']
+                        self._account_cursor(cursor,before)
+                        if self.indexed_proofs:self._save_cursor(('mixed',node['id']),cursor)
                     if cursor.limited:self.last_verification_status='limited';return None
                     if valid is None:return None
                 else:

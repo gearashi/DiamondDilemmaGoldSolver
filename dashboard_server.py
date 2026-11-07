@@ -72,6 +72,12 @@ def start_solver(body):
     if algorithm=='gpu-domains' and replicas>512:raise ValueError('GPU domain search uses128..512 lanes with a512MiB state budget. Begin with128.')
     workers=validate_workers(body.get('workers',4))
     options=normalize_options(body.get('search_options'))
+    coordinated=options['symbolic_frontier']
+    if coordinated and algorithm not in ('dfs','parallel-dfs','sat','gpu-domains'):raise ValueError('Symbolic coordination requires DFS, SAT, or CUDA domains.')
+    if options['coordinated_gpu']:
+        cpu=False
+        if 'replicas' not in body:replicas=128
+        if replicas>512:raise ValueError('Coordinated CUDA domains use 128..512 lanes. Begin with 128.')
     gpu_features=normalize_features(body.get('gpu_features'))
     if any(gpu_features.values()) and method!='systematic':raise ValueError('GPU reasoning options apply only to GPU DFS.')
     validate_runtime_selection(algorithm,backend,options,stochastic=method=='stochastic',
@@ -86,9 +92,9 @@ def start_solver(body):
     if method!='stochastic':cmd.extend(['--backend',backend])
     if constraint:cmd.extend(['--algorithm',algorithm])
     if method=='systematic' and any(gpu_features.values()):cmd.extend(['--gpu-features',json.dumps(gpu_features,separators=(',',':'))])
-    if algorithm in EXACT_ALGORITHMS or algorithm in ('sat','gpu-domains'):
+    if constraint:
         cmd.extend(['--search-options',json.dumps(options,separators=(',',':'))])
-    if algorithm=='parallel-dfs':cmd.extend(['--workers',str(workers)])
+    if algorithm=='parallel-dfs' or coordinated:cmd.extend(['--workers',str(workers)])
     with (RUNTIME/'solver.log').open('a',encoding='utf-8')as log:
         log.write('\nStarted '+datetime.datetime.now(datetime.timezone.utc).isoformat()+'\n');log.flush()
         CHILD=subprocess.Popen(cmd,cwd=str(ROOT),stdout=log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt'else 0)
@@ -97,11 +103,11 @@ def start_solver(body):
     actual_replicas=0 if cpu else replicas
     LAUNCH_CONFIG={'method':method,'algorithm':actual_algorithm,'target':target,'backend':actual_backend,
                   'launcher_pid':CHILD.pid,'replicas':actual_replicas,'requested_replicas':replicas,
-                  'workers':workers if algorithm=='parallel-dfs' else 1,'search_options':options,'gpu_features':gpu_features,
+                  'workers':workers if algorithm=='parallel-dfs' or coordinated else 1,'search_options':options,'gpu_features':gpu_features,
                   'time_limit_seconds':seconds,'seed':seed,'resume':True,'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat()}
     return {'started':True,'pid':CHILD.pid,'replicas':actual_replicas,'backend':actual_backend,
             'algorithm':actual_algorithm,'method':method,'target':target,
-            'workers':workers if algorithm=='parallel-dfs' else 1,'search_options':options,'gpu_features':gpu_features}
+            'workers':workers if algorithm=='parallel-dfs' or coordinated else 1,'search_options':options,'gpu_features':gpu_features}
 
 def request_stop():
     pid=live_pid()

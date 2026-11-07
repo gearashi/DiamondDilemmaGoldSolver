@@ -15,7 +15,7 @@ def binding(problem,table,engine):
     from gpu_sampling import CUDA_SOURCE
     root=Path(__file__).resolve().parent;backend=engine.runtime_identity()['backend']
     source=(root/('sampling_round24.cu' if backend=='cuda' else 'sampling_round24.wgsl')).read_bytes() if engine.flags else (CUDA_SOURCE.encode() if backend=='cuda' else (root/'sampling_kernels.wgsl').read_bytes())
-    return {'version':1,'fingerprint':problem.fingerprint,'table_sha256':hashlib.sha256(table.tobytes()).hexdigest(),
+    return {'version':1,'fingerprint':problem.fingerprint,'table_sha256':getattr(engine,'_table_digest',hashlib.sha256(table.tobytes()).hexdigest()),
         'replicas':engine.r,'cells':engine.n,'free':engine.f,'meta_rows':engine.meta_rows,'flags':engine.flags,'gold_total':engine.gold_total,
         'runtime':engine.runtime_identity(),'kernel_sha256':hashlib.sha256(source).hexdigest()}
 

@@ -1,5 +1,5 @@
 """Bounded conflict-directed exact PB cancellation (round25 candidate 10)."""
-from collections import defaultdict,OrderedDict
+from collections import defaultdict,OrderedDict,deque
 import heapq
 from constraint_pb import combine,verify_derivation,is_integer_row,primitive_rows,filter_rows
 from constraint_relations import bits
@@ -136,14 +136,28 @@ def compact_steps(base,steps):
 
 
 class ConflictPBLearner:
-    def __init__(self,problem,*,limit=16):
+    def __init__(self,problem,*,limit=16,explain=False):
         if type(limit)is not int or not 1<=limit<=64:raise ValueError('Invalid conflict-PB cache bound.')
+        if type(explain)is not bool:raise ValueError('Invalid conflict explanation policy.')
+        self.explain=explain;self.pending=deque(maxlen=128)
         self.problem=problem;self.limit=limit;self.records=OrderedDict();self.stats=dict.fromkeys(STAT_KEYS,0)
         self.binding=self._binding()
 
     def _binding(self):
         return (self.problem.fingerprint,tuple(tuple(row) for row in self.problem.domains),
                 tuple(tuple(map(int,row)) for row in self.problem.masks),tuple(self.problem.edges))
+
+    def _apply(self,domains,scope,cut,steps,check):
+        if not self.explain:return filter_rows(domains,[cut],check)
+        record={'scope':scope,'steps':steps,'proof_steps':[{'parents':[a,b],'rule':'add','args':[x,y],'row':row} for a,b,x,y,row in steps]}
+        base=primitive_rows(self.problem,scope);index=len(base)+len(steps)-1 if steps else base.index(cut)
+        def capture(before,cell,removed,unused):
+            for code in bits(removed):self.pending.append((before,cell,code,record,index))
+        return filter_rows(domains,[cut],check,reason=capture)
+
+    def drain_deduction_chains(self,target='gold',limit=8):
+        from constraint_arithmetic_round26 import export_chains
+        return export_chains(self.problem,self.pending,target,limit)
 
     def prune(self,domains,check=lambda:None,*,max_trials=64,max_pairs=2048,max_new=64):
         if self._binding()!=self.binding:raise ValueError('Conflict-PB source binding changed.')
@@ -152,7 +166,15 @@ class ConflictPBLearner:
         if len(domains)!=self.problem.n or any(type(m)is not int or m<0 or m&~sum(1<<c for c in self.problem.domains[i]) for i,m in enumerate(domains)):raise ValueError('Conflict-PB domains escape original root.')
         current=list(domains);check()
         for scope,record in tuple(self.records.items()):
-            if all(not current[c]&~mask for c,mask in scope):filter_rows(current,record['cuts'],check)
+            if all(not current[c]&~mask for c,mask in scope):
+                if not self.explain:filter_rows(current,record['cuts'],check)
+                else:
+                    def capture(before,cell,removed,index):
+                        steps=record['proofs'][index];base=record['base'];cut=record['cuts'][index]
+                        proof={'scope':scope,'steps':steps,'proof_steps':[{'parents':[a,b],'rule':'add','args':[x,y],'row':row} for a,b,x,y,row in steps]}
+                        row_index=len(base)+len(steps)-1 if steps else base.index(cut)
+                        for code in bits(removed):self.pending.append((before,cell,code,proof,row_index))
+                    filter_rows(current,record['cuts'],check,reason=capture)
             if not all(current):break
         selected=tuple(sorted((c for c,m in enumerate(current) if 1<m.bit_count()<=12),key=lambda c:(current[c].bit_count(),c))[:5])
         if all(current) and len(selected)>=2 and max_trials:
@@ -187,7 +209,7 @@ class ConflictPBLearner:
                     self.stats['conflict_pb_storage_caps']+=1;remember_attempt();continue
                 self.stats['conflict_pb_replay_rows']+=len(record['base'])+len(steps)
                 if not verify_derivation(record['base'],steps,check):raise RuntimeError('Retained PB cut failed exact replay.')
-                reduced=current.copy();filter_rows(reduced,[cut],check)
+                reduced=current.copy();self._apply(reduced,scope,cut,steps,check)
                 if reduced==current:remember_attempt();continue
                 record['cuts'].append(cut);record['proofs'].append(steps);record['proof_terms']+=proof_terms
                 self.stats['conflict_pb_proof_rows_kept']+=len(steps)

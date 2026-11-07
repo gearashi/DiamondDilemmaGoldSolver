@@ -12,7 +12,7 @@ jobs:
   cpu:
     name: CPU tests (${{ matrix.os }}, Python ${{ matrix.python }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -183,6 +183,13 @@ jobs:
           test_gpu_sampling_round24
           test_gpu_sampling_round25
 
+      - name: Run complete workstream CPU and lifecycle tests
+        env:
+          DIAMOND_REQUIRE_NATIVE: '1'
+        run: |
+          python -B -m unittest discover -v -p 'test_*round26.py'
+          python -B -m unittest test_round26_integration -v
+
   linux-install:
     name: Linux CUDA package installation (no GPU)
     runs-on: ubuntu-24.04
@@ -307,7 +314,7 @@ jobs:
           export XDG_RUNTIME_DIR="$RUNNER_TEMP/diamond-vulkan"
           mkdir -p "$XDG_RUNTIME_DIR"
           chmod 700 "$XDG_RUNTIME_DIR"
-          python -B -m unittest -v test_webgpu test_webgpu_counters test_gpu_sampling test_gpu_sampling_round24 test_gpu_gold test_gpu_reasoning test_gpu_hybrid_reasoning test_gpu_chains_round25.WebGPUChains test_gpu_crossover_round25.WebGPUCrossover test_gpu_gold_scoring_round25.WebGPUGoldScoring test_gpu_temperatures_round25.WebGPUTemperatures
+          python -B -m unittest -v test_webgpu test_webgpu_counters test_gpu_sampling test_gpu_sampling_round24 test_gpu_gold test_gpu_reasoning test_gpu_hybrid_reasoning test_gpu_chains_round25.WebGPUChains test_gpu_crossover_round25.WebGPUCrossover test_gpu_gold_scoring_round25.WebGPUGoldScoring test_gpu_temperatures_round25.WebGPUTemperatures test_gpu_incremental_round26.WebGPUIncremental test_gpu_recombination_native_round26.WebGPURecombination
 
   native-sat-evidence:
     name: Native SAT proof evidence (${{ matrix.os }})
@@ -332,6 +339,12 @@ jobs:
         run: python -B benchmark_sat_capabilities_round25.py --output audit/sat-capabilities.json --evidence-stage frozen
       - name: Check bounded clause persistence and completed fresh-process comparisons
         run: python -B benchmark_sat_persistence_round25.py --output audit/sat-persistence.json --evidence-stage frozen
+      - name: Check isolated proof production and native theory lifecycle
+        env:
+          DIAMOND_TEST_ISOLATED_RUP: '1'
+        run: python -B -m unittest -v test_isolated_proof_round26 test_sat_theory_round26
+      - name: Compare independently checked isolated proofs
+        run: python -B benchmark_isolated_proof_round26.py --output audit/sat-isolated-proof-round26.json --evidence-stage frozen
       - name: Upload capability and persistence evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -373,7 +386,7 @@ jobs:
           from pathlib import Path, PurePosixPath
           import subprocess
           files = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', 'HEAD', '-z']).decode().split('\0')
-          forbidden = {'.native', 'data', 'runtime', 'venv', '.venv', '.venv-test', '.venv-webgpu', '.venv-compare', '.codex', 'audit', 'dist', 'stochastic-runtime', 'dfs-runtime'}
+          forbidden = {'.native', 'data', 'runtime', 'venv', '.venv', '.venv-test', '.venv-webgpu', '.venv-compare', '.venv-wsl-proof', '.codex', 'audit', 'dist', 'stochastic-runtime', 'dfs-runtime'}
           for name in filter(None, files):
               path = PurePosixPath(name)
               assert not any(part in forbidden for part in path.parts), name

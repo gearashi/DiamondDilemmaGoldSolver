@@ -12,7 +12,7 @@ from importlib.metadata import version as package_version, PackageNotFoundError
 import platform
 import sys
 
-from search_options import EXACT_ALGORITHMS, validate_algorithm_options
+from search_options import EXACT_ALGORITHMS, validate_algorithm_options, option_engines
 
 
 def _installed(module):
@@ -60,6 +60,7 @@ def runtime_capabilities():
     gpu = feature(cuda['available'] or webgpu['available'],
                   'Requires a GPU package in this Python environment: CuPy or wgpu.')
     return {
+        'option_engines': option_engines(),
         'python': platform.python_version(), 'detection': 'installed_packages',
         'algorithms': {'dfs': feature(True, ''), 'parallel-dfs': feature(True, ''),
                        'gpu-dfs': dict(gpu), 'hybrid': dict(gpu), 'gpu-domains':dict(cuda),
@@ -67,7 +68,7 @@ def runtime_capabilities():
                        'sat': dict(sat), 'sat-propagator':dict(sat),
                        'sat-channel':dict(sat),'cp-sat-regions':dict(cp)},
         'backends': {'auto': gpu, 'cuda': cuda, 'webgpu': webgpu},
-        'options': {'sat_assist': dict(sat), 'gold_oracle': dict(cp), 'gold_pricing':dict(cp), 'smart_learning':dict(sat), 'shared_sat_assistant':dict(sat), 'higher_order_relations':dict(sat), 'native_sat_persistence':sat_persistence,'gpu_shared_clauses':dict(sat),'native_explanations':_native_explanation_build()},
+        'options': {'retained_repair':dict(cp),'sat_assist': dict(sat), 'gold_oracle': dict(cp), 'gold_pricing':dict(cp), 'smart_learning':dict(sat), 'shared_sat_assistant':dict(sat), 'shared_sat_service':dict(sat), 'semantic_witnesses':dict(sat), 'higher_order_relations':dict(sat), 'native_sat_persistence':sat_persistence,'gpu_shared_clauses':dict(sat),'native_explanations':_native_explanation_build()},
         'features': {'repair': dict(cp)},
     }
 
@@ -81,17 +82,22 @@ def validate_runtime_selection(algorithm, backend='auto', options=None, *,
     if algorithm=='gpu-domains':
         if backend=='webgpu':raise ValueError('GPU domain search currently requires CUDA.')
         selections.append(('backends','cuda'))
+    if (options or {}).get('coordinated_gpu'):
+        if backend=='webgpu':raise ValueError('Coordinated exact GPU work requires CUDA.')
+        selections.append(('backends','cuda'))
+    if (options or {}).get('coordinated_sat'):selections.append(('algorithms','sat'))
     if stochastic:
         selections.append(('backends', 'cuda'))
     elif algorithm in ('gpu-dfs', 'hybrid'):
         selections.append(('backends', backend))
-    if algorithm=='gpu-domains' and (options or {}).get('gpu_shared_clauses'):
+    if (algorithm=='gpu-domains' or (options or {}).get('coordinated_gpu')) and (options or {}).get('gpu_shared_clauses') and not (options or {}).get('gpu_proof_transport'):
         selections.append(('options','gpu_shared_clauses'))
-    if algorithm=='sat' and (options or {}).get('native_sat_persistence'):
+    if (algorithm=='sat' or (options or {}).get('coordinated_sat')) and (options or {}).get('native_sat_persistence'):
         selections.append(('options','native_sat_persistence'))
-    if algorithm in EXACT_ALGORITHMS:
+    if algorithm in EXACT_ALGORITHMS or (options or {}).get('symbolic_frontier'):
         selections.extend(('options', key) for key, enabled in (options or {}).items()
-                          if enabled and key in caps['options'] and not (key=='smart_learning' and (options or {}).get('proof_transport')))
+                          if enabled and key in caps['options'] and not (key=='smart_learning' and (options or {}).get('proof_transport'))
+                          and not (key=='gpu_shared_clauses' and (options or {}).get('gpu_proof_transport')))
     for category, name in selections:
         item = caps.get(category, {}).get(name)
         if item is None:

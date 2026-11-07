@@ -77,7 +77,7 @@ def _binding(problem, kind, inputs, policy):
             for row in domains):
         raise ValueError('Invalid repair continuation domains.')
     # Bind actual mutable semantic inputs as well as the advertised fingerprint.
-    source_names = ('constraint_repair_resume_round25.py', 'constraint_repair_round24.py',
+    source_names = ('constraint_repair_resume_round25.py', 'constraint_repair_round24.py', 'constraint_repair_gold_round26.py',
                     'constraint_lns.py', 'constraint_circuit.py', 'search_problem.py',
                     'validator.py', 'geometry.py')
     sources = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
@@ -285,9 +285,12 @@ def _output(problem, kind, state, binding, began, inputs, policy):
     return result
 
 
-def _oracle(problem, control, state):
+def _oracle(problem, control, state, retained_service=None):
     from constraint_repair_round24 import GoldRepairOracle
     control.check()
+    if retained_service is not None:
+        if retained_service.problem is not problem: raise ValueError('Retained Gold service belongs to another problem.')
+        return retained_service.oracle(control, state_failures=state['failures'])
     state['stats']['repair_model_build_attempts'] += 1
     oracle = GoldRepairOracle(problem, control)
     state['stats']['repair_model_rebuilds'] += 1
@@ -299,11 +302,17 @@ def _query(oracle, assumptions, state):
     """Commit only a finished query; retry telemetry counts actual native starts."""
     oracle.control.check()
     before = dict(oracle.stats)
+    pool = getattr(oracle, 'pool', None)
+    pool_before = pool.stats if pool is not None else None
     was_retry = state['retry']
     answer = None
     try:
         answer = oracle.query(assumptions)
     finally:
+        if pool is not None:
+            after = pool.stats
+            state['stats']['repair_model_build_attempts'] += after['gold_pool_model_build_attempts']-pool_before['gold_pool_model_build_attempts']
+            state['stats']['repair_model_rebuilds'] += after['gold_pool_model_builds']-pool_before['gold_pool_model_builds']
         for key, value in oracle.stats.items(): state['stats'][key] += value-before.get(key, 0)
         starts = oracle.stats['oracle_queries']-before['oracle_queries']
         state['stats']['repair_native_attempts'] += starts
@@ -339,7 +348,7 @@ def _caught(exc, state, control):
     raise exc
 
 
-def core_guided_repair(problem, codes, *, seconds=10, stop=None, max_queries=128, resume=None):
+def core_guided_repair(problem, codes, *, seconds=10, stop=None, max_queries=128, resume=None, retained_service=None):
     from constraint_repair_round24 import _minimum_hitting_set
     _seconds(seconds); score(problem, codes)
     if not _integer(max_queries, 1, MAX_QUERIES): raise ValueError('Invalid repair query limit.')
@@ -350,7 +359,7 @@ def core_guided_repair(problem, codes, *, seconds=10, stop=None, max_queries=128
         _done(state, reason='query_limit')
     try:
         if state['phase'] != 'done':
-            oracle = _oracle(problem, control, state)
+            oracle = _oracle(problem, control, state, retained_service)
             cells = [cell for cell in range(problem.n) if cell not in problem.fixed]
             while state['phase'] != 'done':
                 control.check()
@@ -358,9 +367,17 @@ def core_guided_repair(problem, codes, *, seconds=10, stop=None, max_queries=128
                     _done(state, reason='query_limit'); break
                 if state['phase'] == 'master':
                     if state['master_retry']: stats['repair_master_retries'] += 1
-                    stats['repair_master_attempts'] += 1; stats['repair_master_model_rebuilds'] += 1
+                    stats['repair_master_attempts'] += 1
+                    if retained_service is None: stats['repair_master_model_rebuilds'] += 1
                     stats['hitting_set_solves'] += 1; state['master_retry'] = True
-                    released, work = _minimum_hitting_set([frozenset(row) for row in state['cores']], cells, control, oracle.cp_model)
+                    if retained_service is None:
+                        released, work = _minimum_hitting_set([frozenset(row) for row in state['cores']], cells, control, oracle.cp_model)
+                    else:
+                        before_builds = retained_service.stats['gold_pool_master_builds']
+                        try:
+                            released, work = retained_service.minimum_hitting_set(state['cores'], cells, control, oracle.cp_model, seed=codes)
+                        finally:
+                            stats['repair_master_model_rebuilds'] += retained_service.stats['gold_pool_master_builds']-before_builds
                     if released is None:
                         if work == 'infeasible': _done(state, 'infeasible')
                         break
@@ -399,7 +416,7 @@ def _fragment_master(fragments, conflicts, control, cp):
     return chosen, int(solver.num_branches)
 
 
-def fragment_crossover(problem, boards, *, seconds=10, stop=None, max_fragment=8, max_queries=32, resume=None):
+def fragment_crossover(problem, boards, *, seconds=10, stop=None, max_fragment=8, max_queries=32, resume=None, retained_service=None):
     from constraint_repair_round24 import matched_fragments
     _seconds(seconds)
     if type(boards) not in (list, tuple) or not 1<=len(boards)<=MAX_BOARDS: raise ValueError('Invalid repair archive size.')
@@ -414,15 +431,23 @@ def fragment_crossover(problem, boards, *, seconds=10, stop=None, max_fragment=8
         _done(state, reason='query_limit')
     try:
         if state['phase'] != 'done':
-            oracle = _oracle(problem, control, state)
+            oracle = _oracle(problem, control, state, retained_service)
             while state['phase'] != 'done':
                 control.check()
                 if stats['repair_completed_queries'] >= max_queries: _done(state, reason='query_limit'); break
                 if state['phase'] == 'master':
                     if state['master_retry']: stats['repair_master_retries'] += 1
-                    stats['repair_master_attempts'] += 1; stats['repair_master_model_rebuilds'] += 1
+                    stats['repair_master_attempts'] += 1
+                    if retained_service is None: stats['repair_master_model_rebuilds'] += 1
                     state['master_retry'] = True
-                    chosen, branches = _fragment_master(fragments, state['conflicts'], control, oracle.cp_model)
+                    if retained_service is None:
+                        chosen, branches = _fragment_master(fragments, state['conflicts'], control, oracle.cp_model)
+                    else:
+                        before_builds = retained_service.stats['gold_pool_master_builds']
+                        try:
+                            chosen, branches = retained_service.fragment_master(fragments, state['conflicts'], control, oracle.cp_model)
+                        finally:
+                            stats['repair_master_model_rebuilds'] += retained_service.stats['gold_pool_master_builds']-before_builds
                     stats['fragment_master_branches'] += branches
                     if chosen is None: break
                     stats['repair_completed_masters'] += 1
@@ -442,14 +467,14 @@ def fragment_crossover(problem, boards, *, seconds=10, stop=None, max_fragment=8
     return _output(problem, 'fragment', state, binding, control.began, inputs, policy)
 
 
-def scoped_repair_failure(problem, codes, patch, *, seconds=5, stop=None, resume=None):
+def scoped_repair_failure(problem, codes, patch, *, seconds=5, stop=None, resume=None, retained_service=None):
     _seconds(seconds); score(problem, codes); patch = _patch(problem, patch)
     inputs, policy = {'codes': list(codes), 'patch': patch}, {'max_queries': 1}
     state, binding = _load(problem, 'scoped', inputs, policy, resume)
     control = _RepairControl(seconds, stop)
     try:
         if state['phase'] != 'done':
-            oracle = _oracle(problem, control, state)
+            oracle = _oracle(problem, control, state, retained_service)
             answer = _query(oracle, [(cell, code) for cell, code in enumerate(codes) if cell not in patch], state)
             if answer['status'] == 'solved': state['best_board'] = list(answer['codes'])
             if answer['status'] in ('solved', 'infeasible'): _done(state, answer['status'])
@@ -473,7 +498,7 @@ def _trade_plan(problem, codes, patch):
     return sorted(cells, key=lambda cell: (len(choices[cell]), cell)), choices
 
 
-def loop_merge_trade(problem, codes, patch, *, seconds=2, stop=None, max_states=200000, resume=None):
+def loop_merge_trade(problem, codes, patch, *, seconds=2, stop=None, max_states=200000, resume=None, retained_service=None):
     _seconds(seconds); metrics = score(problem, codes); patch = _patch(problem, patch)
     if metrics['domain_violations'] or metrics['matched_edges'] != len(problem.edges):
         raise ValueError('Loop trades require an edge-perfect legal board.')

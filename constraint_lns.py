@@ -143,7 +143,10 @@ def _select_patch(problem, current, metrics, size, rng, target, dependency_chain
     return sorted(selected)
 
 
-def _solve_patch(problem, current, patch, *, cp_model, control, seconds, seed, target, loop_aware=True, diagnostics=None, resume_state=None):
+def _solve_patch(problem, current, patch, *, cp_model, control, seconds, seed, target, loop_aware=True, diagnostics=None, resume_state=None, retained_service=None):
+    if retained_service is not None:
+        return retained_service.patch_query(current,patch,cp_model=cp_model,control=control,seconds=seconds,seed=seed,target=target,
+            loop_aware=loop_aware,diagnostics=diagnostics,resume_state=resume_state)
     control.check()
     deadline = min(control.deadline, time.monotonic()+seconds)
     cells = sorted(patch)
@@ -260,13 +263,23 @@ def _solve_patch(problem, current, patch, *, cp_model, control, seconds, seed, t
 
 def repair(problem, codes, *, seconds=10, seed=0, target='gold', stop=None, progress=None,
            patch_sizes=(8,16,24,40), per_attempt_seconds=2, max_attempts=64,
-           candidate_boards=None, archive_size=8, adaptive=True, cache_attempts=True, loop_aware=True, dependency_chains=False, experiments=None):
+           candidate_boards=None, archive_size=8, adaptive=True, cache_attempts=True, loop_aware=True, dependency_chains=False, experiments=None, retained=False, retained_service=None):
     """Return the best checked board; an inconclusive patch never proves UNSAT.
 
     ``codes`` may come from GPU sampling or a saved full-board hint. It must be
     a permutation honoring fixed placements. A feasible repair also obeys every
     domain; all initially illegal movable cells are included in each patch.
     """
+    if retained or retained_service is not None:
+        from constraint_lns_resume_round25 import RepairSession
+        session=RepairSession(problem,codes,phase_seconds=seconds,seed=seed,target=target,patch_sizes=patch_sizes,
+            per_attempt_seconds=per_attempt_seconds,max_attempts=max_attempts,candidate_boards=candidate_boards,archive_size=archive_size,
+            adaptive=adaptive,cache_attempts=cache_attempts,loop_aware=loop_aware,dependency_chains=dependency_chains,experiments=experiments,
+            retained=True,retained_service=retained_service)
+        try:
+            session.advance(seconds,stop=stop,progress=progress)
+            return session.report()
+        finally:session.close()
     if isinstance(seconds,bool) or not isinstance(seconds,(int,float)) or not math.isfinite(seconds) or seconds < 0:
         raise ValueError('seconds must be finite and nonnegative.')
     if target not in ('gold','edges') or type(seed) is not int or seed < 0:

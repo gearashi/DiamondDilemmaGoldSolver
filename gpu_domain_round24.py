@@ -24,8 +24,15 @@ class DomainCUDA:
     schema=SCHEMA  # Legacy host-only checkpoint fixtures retain the v1 layout.
     event_propagation=False
     precise_reasons=False
+    support_reuse=False
+    support_metrics=False
+    watched_clauses=False
+    clause_metrics=False
+    global_matching=False
+    cooperative=False
+    proof_transport=False
     def __init__(self,problem,cubes=None,*,target='gold',max_memory_bytes=512*1024*1024,
-                 learning=True,incremental_strands=True,joint_support=False,event_propagation=False,precise_reasons=False,reason_slots=None):
+                 learning=True,incremental_strands=True,joint_support=False,event_propagation=False,precise_reasons=False,reason_slots=None,support_reuse=False,support_metrics=False,support_slots=None,watched_clauses=False,clause_metrics=False,global_matching=False,cooperative=False,proof_transport=False):
         if target not in ('gold','edges'):raise ValueError('Invalid domain-engine target.')
         if type(max_memory_bytes) is not int or max_memory_bytes<1:raise ValueError('Positive memory limit required.')
         self.problem,self.target=problem,target;self.n=problem.n;self.nc=3*self.n
@@ -37,16 +44,37 @@ class DomainCUDA:
         if type(precise_reasons)is not bool:raise ValueError('precise_reasons must be boolean.')
         if reason_slots is not None and (not precise_reasons or type(reason_slots)is not int or not 8<=reason_slots<=2048 or reason_slots&(reason_slots-1)):
             raise ValueError('Reason slots require precise mode and a power of two from8 to2048.')
+        from gpu_reasoning_round26 import validate_support_policy
+        self.support_metrics,self.support_slots=validate_support_policy(support_reuse,support_metrics,support_slots)
+        self.support_reuse=support_reuse
+        if type(watched_clauses)is not bool or type(clause_metrics)is not bool:raise ValueError('Watched clauses/metrics must be boolean.')
+        self.watched_clauses=watched_clauses;self.clause_metrics=bool(watched_clauses or clause_metrics)
+        if type(global_matching)is not bool:raise ValueError("Global matching must be boolean.")
+        self.global_matching=global_matching
+        if type(cooperative)is not bool:raise ValueError("Cooperative execution must be boolean.")
+        self.cooperative=cooperative
+        if type(proof_transport)is not bool:raise ValueError("Proof transport must be boolean.")
+        self.proof_transport=proof_transport
         self.precise_reasons=precise_reasons
         self.reason_slots=reason_slots if reason_slots is not None else min(2048,max(8,1<<(2*self.n*self.nc-1).bit_length()))
         self.joint_support=joint_support;self.event_propagation=event_propagation
         self.schema='diamond-domain-cuda-v3' if event_propagation else ('diamond-domain-cuda-v2' if joint_support else self.SCHEMA)
         if precise_reasons:self.schema='diamond-domain-cuda-v4'
+        if self.support_metrics:self.schema='diamond-domain-cuda-v5'
+        if self.clause_metrics:self.schema='diamond-domain-cuda-v6'
+        if global_matching:self.schema='diamond-domain-cuda-v7'
+        if proof_transport:self.schema='diamond-domain-cuda-v8'
         self.binding={'fingerprint':problem.fingerprint,'target':target,'original':self._original(),
                       'learning':self.learning,'incremental_strands':self.incremental_strands}
         if joint_support:self.binding['joint_support']=True
         if event_propagation:self.binding['event_propagation']=True
         if precise_reasons:self.binding.update(precise_reasons=True,reason_slots=self.reason_slots)
+        if self.support_metrics:self.binding.update(support_metrics=True,support_reuse=support_reuse)
+        if support_reuse:self.binding['support_slots']=self.support_slots
+        if self.clause_metrics:self.binding.update(watched_clauses=watched_clauses,clause_metrics=True)
+        if global_matching:self.binding['global_matching']=True
+        if cooperative:self.binding['cooperative']=True
+        if proof_transport:self.binding['proof_transport']=True
         if cubes is None:cubes=[tuple(int(value,16) for value in self.binding['original'])]
         self.cubes=tuple(self._validate_cube(cube) for cube in cubes)
         self.lanes=len(self.cubes)
@@ -55,15 +83,10 @@ class DomainCUDA:
             for right in self.cubes[:i]:
                 if all(a&b for a,b in zip(left,right)):raise ValueError('Domain CUDA cubes overlap.')
         n,w,rw,nc=self.n,self.words,self.reason_words,self.nc
-        fields=[('meta',META),('domain',n*w),('trail',n*nc),('reason',n*rw),
-                ('frame_cell',n),('frame_code',n),('frame_remaining',n*w),('frame_trail',n),
-                ('frame_union',n),('frame_assign',n),('frame_reason',n*n*rw),('frame_failure',n*rw),
-                ('board',n),('owner',n),('assign_log',n),('parent',n*16),('size',n*16),
-                ('union_child',n*16),('union_parent',n*16),('union_size',n*16),
-                ('clause_length',32),('clause_cell',32*n),('clause_code',32*n)]
-        if joint_support:fields.append(('joint_counters',10))
-        if event_propagation:fields.extend([('dirty_cells',(n+31)//32),('event_counters',10)])
-        if precise_reasons:fields.extend([('precise_root',n*w),('precise_zero',n*w),('precise_count',1),('precise_keys',self.reason_slots),('precise_why',self.reason_slots*rw),('precise_counters',16)])
+        from gpu_reasoning_round26 import domain_layout
+        fields=domain_layout(n,joint_support=joint_support,event_propagation=event_propagation,precise_reasons=precise_reasons,
+            reason_slots=reason_slots,support_reuse=support_reuse,support_metrics=support_metrics,support_slots=support_slots,
+            watched_clauses=watched_clauses,clause_metrics=clause_metrics,global_matching=global_matching,proof_transport=proof_transport,cooperative=cooperative)
         self.offsets={};cursor=0
         for name,size in fields:self.offsets[name]=cursor;cursor+=size
         self.rows=cursor;self.state_bytes=cursor*self.lanes*4
@@ -74,11 +97,11 @@ class DomainCUDA:
         self.cp=cp
         free,_=cp.cuda.runtime.memGetInfo()
         if self.state_bytes>free*0.75:raise ValueError('Domain-trail state exceeds75% of currently free VRAM; reduce lanes.')
-        data=self._initial_state();self.state=cp.asarray(data)
+        data=self._initial_state();self.state=cp.asarray(data,order="F" if cooperative else "C")
         tables=self._tables();self.tables=cp.asarray(tables)
         constants={'N':n,'NC':nc,'W':w,'RW':rw,'P':16*n,'C':32,'ROWS':cursor,
                    'GOLD':int(target=='gold'),'LEARNING':int(learning),'INCREMENTAL_STRANDS':int(incremental_strands),
-                   'TOTAL_SEGMENTS':problem.total_segments,'JOINT_SUPPORT':int(joint_support),'EVENT_PROPAGATION':int(event_propagation),'PRECISE_REASONS':int(precise_reasons),'RS':self.reason_slots,'TW':(n+31)//32,**{key.upper():value for key,value in self.offsets.items()}}
+                   'TOTAL_SEGMENTS':problem.total_segments,'JOINT_SUPPORT':int(joint_support),'EVENT_PROPAGATION':int(event_propagation),'PRECISE_REASONS':int(precise_reasons),'RS':self.reason_slots,'PROOF_TRANSPORT':int(proof_transport),'COOPERATIVE':int(cooperative),'GLOBAL_MATCHING':int(global_matching),'WATCHED_CLAUSES':int(watched_clauses),'CLAUSE_METRICS':int(self.clause_metrics),'SUPPORT_REUSE':int(support_reuse),'SUPPORT_METRICS':int(self.support_metrics),'SS':self.support_slots,'TW':(n+31)//32,**{key.upper():value for key,value in self.offsets.items()}}
         prefix='\n'.join(f'#define {name} {value}' for name,value in constants.items())+'\n'
         self.module=cp.RawModule(code=prefix+(ROOT/'domain_search_round24.cu').read_text(),options=('--std=c++17',),
                                  name_expressions=('domain_search','domain_ack','domain_propagate','domain_share'))
@@ -104,6 +127,14 @@ class DomainCUDA:
         data[self.offsets['owner']:self.offsets['owner']+self.n]=0xffffffff
         data[self.offsets['parent']:self.offsets['parent']+self.n*16]=np.arange(self.n*16,dtype=np.uint32)[:,None]
         data[self.offsets['size']:self.offsets['size']+self.n*16]=1
+        if self.watched_clauses:
+            data[self.offsets['watch_positions']:self.offsets['watch_positions']+64]=0xffffffff
+            data[self.offsets['watch_pending']]=0xffffffff
+        if self.global_matching:
+            for name in ('matching_cells','matching_owners','matching_parent'):
+                data[self.offsets[name]:self.offsets[name]+self.n]=0xffffffff
+            data[self.offsets['matching_components']:self.offsets['matching_components']+self.n]=np.arange(self.n,dtype=np.uint32)[:,None]
+            for word in range(self.reason_words):data[self.offsets['matching_dirty']+word]=(1<<min(32,self.n-32*word))-1
         if self.event_propagation:
             data[3]=self.n
             for word in range((self.n+31)//32):data[self.offsets['dirty_cells']+word]=(1<<min(32,self.n-32*word))-1
@@ -136,14 +167,14 @@ class DomainCUDA:
         return np.concatenate(arrays)
     def step(self,work=1024):
         if type(work) is not int or not 1<=work<=1000000:raise ValueError('Work quantum must be1..1000000.')
-        self.kernel(((self.lanes+63)//64,),(64,),(self.state,self.tables,np.int32(self.lanes),np.int32(work)))
+        self.kernel(((self.lanes+3)//4,) if self.cooperative else ((self.lanes+63)//64,),(128,) if self.cooperative else (64,),(self.state,self.tables,np.int32(self.lanes),np.int32(work)))
         self.cp.cuda.get_current_stream().synchronize()
         return self.state[self.offsets['meta']].get().astype(int)
     def propagate_root(self,work=1024):
         """Advance root inference only; phase2 is a resumable fixed-point barrier."""
         if type(work)is not int or not 1<=work<=1000000:raise ValueError('Work quantum must be1..1000000.')
         if bool(self.cp.any(self.state[1]!=0)):raise ValueError('Root preparation cannot contain decisions.')
-        self.propagate_kernel(((self.lanes+63)//64,),(64,),(self.state,self.tables,np.int32(self.lanes),np.int32(work)))
+        self.propagate_kernel(((self.lanes+3)//4,) if self.cooperative else ((self.lanes+63)//64,),(128,) if self.cooperative else (64,),(self.state,self.tables,np.int32(self.lanes),np.int32(work)))
         self.cp.cuda.get_current_stream().synchronize()
         meta=self.state[:7].get()
         return meta[0].astype(int),bool(np.all((meta[0]!=0)|(meta[6]==2)))
@@ -165,16 +196,36 @@ class DomainCUDA:
             raise ValueError('Fork does not cover the propagated parent.')
         extra_cubes=tuple(self._validate_cube(row) for row in extra_cubes)
         child=DomainCUDA(self.problem,(*cubes,*extra_cubes),target=self.target,max_memory_bytes=max_memory_bytes,
-                         learning=self.learning,incremental_strands=self.incremental_strands,joint_support=self.joint_support,event_propagation=self.event_propagation,precise_reasons=self.precise_reasons,reason_slots=self.reason_slots if self.precise_reasons else None)
+                         learning=self.learning,incremental_strands=self.incremental_strands,joint_support=self.joint_support,event_propagation=self.event_propagation,precise_reasons=self.precise_reasons,reason_slots=self.reason_slots if self.precise_reasons else None,support_reuse=self.support_reuse,support_metrics=self.support_metrics,support_slots=self.support_slots if self.support_reuse else None,watched_clauses=self.watched_clauses,clause_metrics=self.clause_metrics,global_matching=self.global_matching,cooperative=self.cooperative,proof_transport=self.proof_transport)
         try:
             for name,length in [('board',self.n),('owner',self.n),('assign_log',self.n),('parent',self.n*16),('size',self.n*16),
                                 ('union_child',self.n*16),('union_parent',self.n*16),('union_size',self.n*16)]:
                 offset=self.offsets[name];child.state[offset:offset+length,:len(cubes)]=self.state[offset:offset+length]
+            if self.support_reuse:
+                # Positive witnesses survive rebasing only as checked hints;
+                # narrower child domains are revalidated on every hit.
+                for name,length in [('support_keys',self.support_slots),('support_values',3*self.support_slots)]:
+                    start=self.offsets[name];child.state[start:start+length,:len(cubes)]=self.state[start:start+length]
             child.state[9:11,:len(cubes)]=self.state[9:11]
             self.cp.cuda.get_current_stream().synchronize()
             return child
         except BaseException:
             child.close();raise
+    def deduction_input(self,start=0):
+        """One bounded failed-lane trace. This is untrusted proof input only."""
+        if not self.proof_transport:return None
+        if self.delivered:raise ValueError('Enumeration history cannot produce puzzle proofs.')
+        if type(start)is not int or start<0:raise ValueError('Invalid proof lane cursor.')
+        info=self.state[[0,6,self.offsets['proof_meta']+1,self.offsets['proof_meta']+2]].get()
+        for offset in range(self.lanes):
+            lane=(start+offset)%self.lanes
+            if not (info[2,lane] or info[3,lane]) or not (info[0,lane]==2 or info[1,lane]==3):continue
+            data=self.state[:,lane].get();depth=int(data[self.offsets['proof_meta']]);count=int(data[2])
+            decisions=[(int(data[self.offsets['frame_cell']+level]),1<<int(data[self.offsets['frame_code']+level])) for level in range(depth)]
+            trace={'root':list(self.cubes[lane]),'decisions':decisions,'trail':[int(x) for x in data[self.offsets['trail']:self.offsets['trail']+count]]}
+            trace['identity']=hashlib.sha256(json.dumps([self.binding,trace],sort_keys=True,separators=(',',':')).encode()).hexdigest()
+            trace['next']=(lane+1)%self.lanes;return trace
+        return None
     def learned_claims(self,start=0,*,lanes=4,limit=16):
         """Read a bounded sample of local claims; these have NO global authority."""
         if self.delivered:raise ValueError('Do not export enumeration exclusions as puzzle conflicts.')
@@ -231,7 +282,22 @@ class DomainCUDA:
         if self.precise_reasons:
             counters=read(self.offsets['precise_counters'],16)
             precise={name:int((counters[2*i]+(counters[2*i+1]<<np.uint64(32))).sum()) for i,name in enumerate(precise)}
-        return {**precise,**events,**extra,'lanes':len(ids),'state_bytes':self.rows*len(ids)*4,'active':int(np.sum(m[0]==0)),
+        from gpu_reasoning_round26 import SUPPORT_COUNTERS
+        supports=dict.fromkeys(SUPPORT_COUNTERS,0)
+        if self.support_metrics:
+            counters=read(self.offsets['support_counters'],14)
+            supports={name:int((counters[2*i]+(counters[2*i+1]<<np.uint64(32))).sum()) for i,name in enumerate(supports)}
+        from gpu_reasoning_round26 import CLAUSE_COUNTERS
+        clauses=dict.fromkeys(CLAUSE_COUNTERS,0)
+        if self.clause_metrics:
+            counters=read(self.offsets['clause_counters'],10)
+            clauses={name:int((counters[2*i]+(counters[2*i+1]<<np.uint64(32))).sum()) for i,name in enumerate(clauses)}
+        from gpu_reasoning_round26 import MATCHING_COUNTERS
+        matching=dict.fromkeys(MATCHING_COUNTERS,0)
+        if self.global_matching:
+            counters=read(self.offsets['matching_counters'],18)
+            matching={name:int((counters[2*i]+(counters[2*i+1]<<np.uint64(32))).sum()) for i,name in enumerate(matching)}
+        return {**matching,**clauses,**supports,**precise,**events,**extra,'lanes':len(ids),'state_bytes':self.rows*len(ids)*4,'active':int(np.sum(m[0]==0)),
                 'pending':int(np.sum(m[0]==1)),'exhausted':int(np.sum(m[0]==2)),
                 **{name:int((m[index]+(m[20+index-11]<<np.uint64(32))).sum()) for name,index in [('decisions',11),('domain_removals',12),('support_checks',13),('backjumps',14),('learned_clauses',15),('strand_joins',16),('clause_units',17),('solutions',18)]}}
     def candidates(self):
@@ -289,7 +355,7 @@ class DomainCUDA:
         ids=self._lane_ids(lanes)
         if not ids:return
         rows=list(range(11,19))+list(range(20,28))
-        for name,length in [('joint_counters',10),('event_counters',10),('precise_counters',16)]:
+        for name,length in [('joint_counters',10),('event_counters',10),('precise_counters',16),('support_counters',14),('clause_counters',10),('matching_counters',18)]:
             if name in self.offsets:rows.extend(range(self.offsets[name],self.offsets[name]+length))
         row_ids=self.cp.asarray(rows);lane_ids=self.cp.asarray(ids)
         self.state[row_ids[:,None],lane_ids[None,:]]=0
@@ -331,7 +397,7 @@ class DomainCUDA:
         # native checkpoints are trusted process state; portable imports use
         # explicit cubes and reconstruct all deductions.
         if np.any(state[0]>2) or np.any(state[1]>self.n) or np.any(state[2]>self.n*self.nc) or np.any(state[9]>self.n) or np.any(state[10]>self.n*16):raise ValueError('Invalid domain checkpoint counters.')
-        if np.any(state[3]>self.n) or np.any(state[4]>self.nc) or np.any(state[6]>4) or np.any(state[7]>32) or np.any(state[8]>32) or np.any(state[19]>=32):raise ValueError('Invalid domain checkpoint scan state.')
+        if np.any(state[3]>self.n) or np.any(state[4]>self.nc) or np.any(state[6]>(5 if self.global_matching else 4)) or np.any(state[7]>32) or np.any(state[8]>32) or np.any(state[19]>=32):raise ValueError('Invalid domain checkpoint scan state.')
         for name,length,maximum,sentinel in [('board',self.n,self.nc,True),('owner',self.n,self.n,True),('parent',self.n*16,self.n*16,False)]:
             values=state[self.offsets[name]:self.offsets[name]+length]
             if np.any((values>=maximum)&(values!=0xffffffff if sentinel else True)):raise ValueError('Invalid domain checkpoint '+name)
@@ -341,6 +407,43 @@ class DomainCUDA:
             for level in range(int(state[1,lane])):
                 if state[self.offsets['frame_cell']+level,lane]>=self.n or state[self.offsets['frame_code']+level,lane]>=self.nc:raise ValueError('Invalid domain decision frame.')
                 if state[self.offsets['frame_trail']+level,lane]>state[2,lane] or state[self.offsets['frame_assign']+level,lane]>state[9,lane] or state[self.offsets['frame_union']+level,lane]>state[10,lane]:raise ValueError('Invalid domain rollback marker.')
+        if self.proof_transport:
+            for lane in range(self.lanes):
+                depth=int(state[self.offsets['proof_meta'],lane])
+                if depth>self.n:raise ValueError('Invalid proof failure depth.')
+                if int(state[0,lane])==2 or int(state[6,lane])==3:
+                    cells=set()
+                    for level in range(depth):
+                        cell=int(state[self.offsets['frame_cell']+level,lane]);code=int(state[self.offsets['frame_code']+level,lane])
+                        if cell>=self.n or code>=self.nc or cell in cells or not self.cubes[lane][cell]&(1<<code):raise ValueError('Invalid proof decision prefix.')
+                        cells.add(cell)
+        if self.global_matching:
+            from gpu_reasoning_round26 import validate_matching_state
+            validate_matching_state(self,state)
+        if self.watched_clauses:
+            for lane in range(self.lanes):
+                expected=[0]*self.n
+                for slot in range(32):
+                    length=int(state[self.offsets['clause_length']+slot,lane])
+                    first=int(state[self.offsets['watch_positions']+2*slot,lane])
+                    second=int(state[self.offsets['watch_positions']+2*slot+1,lane])
+                    if first==second and first!=0xffffffff:raise ValueError('Duplicate watched literal.')
+                    for index in range(2):
+                        pos=int(state[self.offsets['watch_positions']+2*slot+index,lane])
+                        if pos==0xffffffff:continue
+                        if pos>=length or pos>=self.n:raise ValueError('Invalid watched clause literal index.')
+                        cell=int(state[self.offsets['clause_cell']+slot*self.n+pos,lane])
+                        if cell>=self.n:raise ValueError('Invalid watched clause cell.')
+                        expected[cell]|=1<<slot
+                if any(int(state[self.offsets['watch_cells']+cell,lane])!=mask for cell,mask in enumerate(expected)):
+                    raise ValueError('Watched clause consumer index differs.')
+                if int(state[6,lane])==2 and int(state[self.offsets['watch_pending'],lane])&((1<<int(state[8,lane]))-1):
+                    raise ValueError('Claimed fixed point retains pending watched clauses.')
+        if self.support_reuse:
+            keys=state[self.offsets['support_keys']:self.offsets['support_keys']+self.support_slots]
+            values=state[self.offsets['support_values']:self.offsets['support_values']+3*self.support_slots]
+            if np.any(keys>4*self.n*self.nc) or np.any((values>=self.nc)&(values!=0xffffffff)):
+                raise ValueError('Invalid support witness cache bounds.')
         # Mechanical state invariants are checked even for trusted local
         # checkpoints. A rehashed malformed rollback pointer must not launch a
         # device out-of-bounds write or an endless disjoint-set find loop.

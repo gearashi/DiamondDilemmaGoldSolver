@@ -108,6 +108,8 @@ class RuntimeCapabilityTests(unittest.TestCase):
             runtime.validate_runtime_selection('gpu-domains','cuda',{'gpu_shared_clauses':True},capabilities=missing)
         runtime.validate_runtime_selection('gpu-domains','cuda',{'gpu_shared_clauses':False},capabilities=missing)
         runtime.validate_runtime_selection('gpu-domains','cuda',{'gpu_shared_clauses':True},capabilities=full)
+        runtime.validate_runtime_selection('gpu-domains','cuda',{'gpu_shared_clauses':True,'gpu_proof_transport':True},capabilities=missing)
+        runtime.validate_runtime_selection('parallel-dfs','cuda',{'symbolic_frontier':True,'coordinated_gpu':True,'gpu_shared_clauses':True,'gpu_proof_transport':True},capabilities=missing)
         import dashboard_server as dashboard
         import constraint_search
         with tempfile.TemporaryDirectory(prefix='gpu-clause-capability-',dir=ROOT) as directory:

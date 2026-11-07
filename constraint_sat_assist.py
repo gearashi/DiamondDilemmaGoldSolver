@@ -27,7 +27,7 @@ class SatAssist:
                  support_cover=False,capture_clauses=False):
         self.problem,self.initial,self.target=problem,tuple(initial),target
         self.witness_pool=bool(witness_pool);self.support_cover=bool(support_cover)
-        self._witnesses=OrderedDict();self._captured=[] if capture_clauses else None
+        self._witnesses=OrderedDict();self.semantic_witnesses=None;self._captured=[] if capture_clauses else None
         if len(self.initial)!=problem.n or any(type(value)is not int or value<0 or value>>(3*problem.n) for value in self.initial):
             raise ValueError('SAT initial domains must be valid orientation bitsets.')
         self._original_domains=tuple(tuple(sorted(set(row))) for row in problem.domains)
@@ -323,6 +323,7 @@ class SatAssist:
                 or any(all(codes[c]==code for c,code in clause) for clause in self._gold_known)):
             self.stats['sat_assist_model_invalid']+=1;return None
         witness=tuple(codes)
+        if self.semantic_witnesses is not None:self.semantic_witnesses.add(witness,check)
         if self.witness_pool:
             self._witnesses[witness]=None;self._witnesses.move_to_end(witness)
             while len(self._witnesses)>128:self._witnesses.popitem(last=False)
@@ -344,6 +345,13 @@ class SatAssist:
                 'gold':tuple(sorted(self._gold_known))}
 
     def _pool_supports(self,domains,supported,check):
+        if self.semantic_witnesses is not None:
+            self.semantic_witnesses.add_cuts(self._gold_known,check)
+            before=self.semantic_witnesses.stats['witness_index_hits']
+            gained=self.semantic_witnesses.supports(domains,supported,check)
+            self.stats['sat_assist_witness_pool_hits']+=self.semantic_witnesses.stats['witness_index_hits']-before
+            self.stats['sat_assist_model_supports']+=gained
+            return
         # Never trust context identity: each vector is checked against all
         # current domain restrictions and the current verified Gold clauses.
         for witness in tuple(self._witnesses):

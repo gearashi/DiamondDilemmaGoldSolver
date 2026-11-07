@@ -23,7 +23,7 @@ class GPUWarmupTests(unittest.TestCase):
         with patch('gpu_domain_round24.DomainCUDA',side_effect=factory),patch.dict(sys.modules,{'cupy':self.device()}):
             report=warmup_domain(problem,normalize_options(GPU_PROFILES['combined']))
         self.assertEqual(len(calls),1);self.assertIs(calls[0][0],problem)
-        self.assertEqual({k:v for k,v in calls[0][1].items() if k not in ('target','max_memory_bytes')},dict(joint_support=True,event_propagation=True,precise_reasons=True))
+        self.assertEqual({k:v for k,v in calls[0][1].items() if k not in ('target','max_memory_bytes')},dict(joint_support=True,event_propagation=True,precise_reasons=True,support_reuse=False,watched_clauses=False,global_matching=False,cooperative=False,proof_transport=False))
         self.assertEqual(closed,[True]);self.assertEqual(report['search_steps'],0)
         self.assertEqual((report['cells'],report['total_segments'],report['lanes']),(160,365,1))
         self.assertEqual(report['hardware']['cuda_runtime_version'],12080)

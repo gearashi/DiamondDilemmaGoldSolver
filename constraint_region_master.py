@@ -19,12 +19,13 @@ def check_farkas(columns,rhs,multipliers):
     return all(sum(y[i]*Fraction(value) for i,value in column.items())<=0 for column in columns)
 
 
-def phase_one(columns,rhs,check=lambda:None,time_ms=1000):
+def phase_one(columns,rhs,check=lambda:None,time_ms=1000,telemetry=None):
     """Return an untrusted candidate dual; callers verify it exactly."""
     try:from ortools.linear_solver import pywraplp
     except ImportError:return {'status':'unavailable'}
     check();solver=pywraplp.Solver.CreateSolver('GLOP')
     if solver is None:return {'status':'unavailable'}
+    if telemetry is not None:telemetry['builds']=telemetry.get('builds',0)+1
     solver.SetTimeLimit(int(time_ms));constraints=[solver.Constraint(float(b),float(b)) for b in rhs]
     variables=[]
     for j,column in enumerate(columns):
@@ -35,11 +36,18 @@ def phase_one(columns,rhs,check=lambda:None,time_ms=1000):
         plus=solver.NumVar(0,solver.infinity(),f'p{i}');minus=solver.NumVar(0,solver.infinity(),f'm{i}')
         constraint.SetCoefficient(plus,1);constraint.SetCoefficient(minus,-1)
         objective.SetCoefficient(plus,1);objective.SetCoefficient(minus,1)
-    objective.SetMinimization();status=solver.Solve();check()
-    if status!=pywraplp.Solver.OPTIMAL:return {'status':'unknown'}
-    dual=tuple(Fraction(c.dual_value()).limit_denominator(1000000) for c in constraints)
-    return {'status':'optimal','objective':objective.Value(),'dual':dual,
-            'primal':tuple(x.solution_value() for x in variables)}
+    objective.SetMinimization()
+    if telemetry is not None:telemetry['calls']=telemetry.get('calls',0)+1
+    status=solver.Solve()
+    if status!=pywraplp.Solver.OPTIMAL:result={'status':'unknown'}
+    else:
+        dual=tuple(Fraction(c.dual_value()).limit_denominator(1000000) for c in constraints)
+        result={'status':'optimal','objective':objective.Value(),'dual':dual,
+                'primal':tuple(x.solution_value() for x in variables)}
+    # A controller may commit this completed query even when the following
+    # cooperative Stop prevents normal return. Never persist native objects.
+    if telemetry is not None:telemetry['result']=result
+    check();return result
 
 
 def puzzle_linear_system(problem,domains,cells=None,check=lambda:None,max_columns=1024):

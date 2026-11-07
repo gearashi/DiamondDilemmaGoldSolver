@@ -22,7 +22,7 @@ def warmup_domain(problem,options):
     from gpu_domain_round24 import DomainCUDA
     from gpu_domain_runner import BASE_COUNTERS,MAX_BYTES
     import cupy as cp
-    switches={name:bool(options.get('gpu_'+name,False)) for name in ('joint_support','event_propagation','precise_reasons')}
+    switches={name:bool(options.get('gpu_'+name,False)) for name in ('joint_support','event_propagation','precise_reasons','support_reuse','watched_clauses','global_matching','cooperative','proof_transport')}
     engine=None
     try:
         engine=DomainCUDA(problem,target='gold',max_memory_bytes=MAX_BYTES,**switches)

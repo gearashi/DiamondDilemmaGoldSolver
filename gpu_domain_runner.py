@@ -16,6 +16,8 @@ from constraint_work import WorkScope, frontier_snapshot, restore_frontier, dige
 BASE_COUNTERS=('decisions','domain_removals','support_checks','backjumps','learned_clauses','strand_joins','clause_units','solutions')
 FORK_COUNTERS=('fork_parents','fork_children','fork_root_removals','fork_root_checks','fork_reused_assignments','fork_reused_unions')
 COUNTERS=BASE_COUNTERS+('joint_support_checks','joint_subset_checks','joint_exclusions','joint_word_scans','joint_tile_visits')+FORK_COUNTERS+('event_enqueues','event_cell_scans','event_inventory_checks','event_queue_word_scans','event_inventory_words')+('precise_probes','precise_hits','precise_fallbacks','precise_stores','precise_invalidations','precise_support_words','precise_support_values','precise_dropped')
+from gpu_reasoning_round26 import SUPPORT_COUNTERS,CLAUSE_COUNTERS,MATCHING_COUNTERS
+COUNTERS+=SUPPORT_COUNTERS+CLAUSE_COUNTERS+MATCHING_COUNTERS
 MAX_BYTES=512*1024*1024
 
 def split_cubes(cubes,count):
@@ -75,6 +77,21 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
     precise_reasons=options.get('gpu_precise_reasons',False)
     if type(precise_reasons)is not bool:raise ValueError('gpu_precise_reasons must be boolean.')
     if precise_reasons:engine_options['precise_reasons']=True
+    support_reuse=options.get('gpu_support_reuse',False)
+    if type(support_reuse)is not bool:raise ValueError('gpu_support_reuse must be boolean.')
+    if support_reuse:engine_options['support_reuse']=True
+    watched_clauses=options.get('gpu_watched_clauses',False)
+    if type(watched_clauses)is not bool:raise ValueError('gpu_watched_clauses must be boolean.')
+    if watched_clauses:engine_options['watched_clauses']=True
+    global_matching=options.get('gpu_global_matching',False)
+    if type(global_matching)is not bool:raise ValueError('gpu_global_matching must be boolean.')
+    if global_matching:engine_options['global_matching']=True
+    cooperative=options.get('gpu_cooperative',False)
+    if type(cooperative)is not bool:raise ValueError('gpu_cooperative must be boolean.')
+    if cooperative:engine_options['cooperative']=True
+    proof_transport=options.get('gpu_proof_transport',False)
+    if type(proof_transport)is not bool:raise ValueError('gpu_proof_transport must be boolean.')
+    if proof_transport:engine_options['proof_transport']=True
     propagated_forks=options.get('gpu_propagated_forks',False)
     if type(propagated_forks)is not bool:raise ValueError('gpu_propagated_forks must be boolean.')
     incremental_checkpoint=options.get('gpu_incremental_checkpoint',False)
@@ -99,7 +116,7 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
     if (not isinstance(saved_balance_stats,dict) or not set(saved_balance_stats)<=set(LANE_COUNTERS+LANE_GAUGES)
             or any(type(v)is not int or v<0 for v in saved_balance_stats.values())):raise ValueError('Invalid GPU lane balance statistics.')
     pool=None
-    sharing=options.get('gpu_shared_clauses',False)
+    sharing=options.get('gpu_shared_clauses',False) or proof_transport
     if type(sharing)is not bool:raise ValueError('gpu_shared_clauses must be boolean.')
     dormant_sharing=deepcopy(resume.get('sharing')) if isinstance(resume,dict) else None
     if dormant_sharing is not None and not isinstance(dormant_sharing,dict):raise ValueError('Malformed GPU sharing checkpoint.')
@@ -142,8 +159,14 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
             native_joint=native.get('binding',{}).get('joint_support',False) if native else False
             native_event=native.get('binding',{}).get('event_propagation',False) if native else False
             native_precise=native.get('binding',{}).get('precise_reasons',False) if native else False
+            native_support=native.get('binding',{}).get('support_reuse',False) if native else False
+            native_watched=native.get('binding',{}).get('watched_clauses',False) if native else False
             if type(native_joint)is not bool or type(native_event)is not bool or type(native_precise)is not bool:raise ValueError('Invalid saved domain feature policy.')
-            if native and len(native['cubes'])<=replicas and native_joint==joint_support and saved_forks==propagated_forks and native_event==event_propagation and native_precise==precise_reasons and saved_balance==lane_balance:
+            native_matching=native.get('binding',{}).get('global_matching',False) if native else False
+            native_cooperative=native.get('binding',{}).get('cooperative',False) if native else False
+            native_proofs=native.get('binding',{}).get('proof_transport',False) if native else False
+            if any(type(value)is not bool for value in (native_support,native_watched,native_matching,native_cooperative,native_proofs)):raise ValueError('Invalid saved round26 domain policy.')
+            if native and len(native['cubes'])<=replicas and native_joint==joint_support and saved_forks==propagated_forks and native_event==event_propagation and native_precise==precise_reasons and native_support==support_reuse and native_watched==watched_clauses and native_matching==global_matching and native_cooperative==cooperative and native_proofs==proof_transport and saved_balance==lane_balance:
                 cubes=[tuple(int(x,16) for x in row) for row in native['cubes']]
                 engine=DomainCUDA(problem,cubes,target=target,max_memory_bytes=MAX_BYTES,**engine_options)
                 engine.restore(unpack_native(native,engine))

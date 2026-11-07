@@ -13,7 +13,7 @@ from constraint_lns import score,diverse_archive
 from gpu_sampling_resume_round25 import SamplerSession
 from constraint_lns_resume_round25 import RepairSession
 
-SAMPLING=('ejection_chains','move_tabu','replica_exchange','obstruction_chains','cycle_crossover','lazy_gold_scoring','adaptive_temperatures')
+SAMPLING=('ejection_chains','move_tabu','replica_exchange','obstruction_chains','cycle_crossover','lazy_gold_scoring','adaptive_temperatures','incremental_sampling','optimal_crossover')
 REPAIR=('core_repair','loop_trades','fragment_crossover','repair_learning')
 def _sources():
     root=Path(__file__).parent
@@ -30,12 +30,14 @@ def solve(problem,*,seconds=10,seed=0,target='gold',replicas=128,backend='auto',
     if stop is None:stop=lambda:False
     elif not callable(stop):stop=stop.is_set
     options={} if options is None else options
+    owns_learning=learning_state is None
     learning_state={} if learning_state is None else learning_state
     began=time.monotonic();last_save=began;sampler=None;repair=None
     sampling_policy={'seed':seed,'replicas':replicas,'gold_aware':bool(options.get('gpu_gold_sampling') and target=='gold'),
                      'experiments':{name:True for name in SAMPLING if options.get(name)}}
     repair_policy={'seed':seed,'dependency_chains':bool(options.get('dependency_repair')),
                    'experiments':{name:True for name in REPAIR if options.get(name)}}
+    if options.get('retained_repair'):repair_policy['retained']=True
     scope={'fingerprint':problem.fingerprint,'domains':[list(row) for row in problem.domains],
            'fixed':[[int(c),int(v)] for c,v in sorted(problem.fixed.items())],'target':target}
     total=learning_state.get('_hybrid_run_seconds',seconds)
@@ -157,7 +159,16 @@ def solve(problem,*,seconds=10,seed=0,target='gold',replicas=128,backend='auto',
             else:transition('exact_dfs')
         if state['phase']=='repair':
             inputs=state['repair_inputs']
-            repair=RepairSession(problem,inputs[0],phase_seconds=state['budgets']['repair'],target=target,candidate_boards=inputs[1:],resume=state['repair_state'],**state['repair_policy'])
+            extra={}
+            if state['repair_policy'].get('retained'):
+                from constraint_repair_service_round26 import RetainedRepairService
+                owner=learning_state.get('_repair_service')
+                if owner is None:
+                    saved=state['repair_state'].get('retained_service') if state['repair_state'] else None
+                    owner=RetainedRepairService(problem,resume=saved);learning_state['_repair_service']=owner
+                if not isinstance(owner,RetainedRepairService) or owner.problem is not problem:raise ValueError('Retained hybrid repair owner has another scope.')
+                extra['retained_service']=owner
+            repair=RepairSession(problem,inputs[0],phase_seconds=state['budgets']['repair'],target=target,candidate_boards=inputs[1:],resume=state['repair_state'],**state['repair_policy'],**extra)
             if stop() or not remaining():return interrupted()
             emit({'event':'phase','budget_seconds':max(0.,state['budgets']['repair']-repair.elapsed)})
             repair.advance(min(remaining(),max(0.,state['budgets']['repair']-repair.elapsed)),stop=stop,progress=emit)
@@ -173,7 +184,7 @@ def solve(problem,*,seconds=10,seed=0,target='gold',replicas=128,backend='auto',
         offer_claims() # A fresh process must requeue saved claims before exact verification.
         # The outer scheduler owns these controls, not the exact-search cache.
         # Preserve every other key so DFS still rejects unknown/malformed stores.
-        coordinator_keys={'_hybrid_run_seconds','_hybrid_offered_claims','_coverage_path'}
+        coordinator_keys={'_hybrid_run_seconds','_hybrid_offered_claims','_coverage_path','_repair_service'}
         dfs_learning={key:value for key,value in learning_state.items() if key not in coordinator_keys}
         try:
             result=exact_solve(problem,seconds=remaining(),seed=seed,target=target,hints=state['hints'],stop=stop,progress=emit,
@@ -190,3 +201,5 @@ def solve(problem,*,seconds=10,seed=0,target='gold',replicas=128,backend='auto',
         return result
     finally:
         if sampler is not None:sampler.close()
+        if repair is not None:repair.close()
+        if owns_learning and learning_state.get('_repair_service') is not None:learning_state['_repair_service'].close()

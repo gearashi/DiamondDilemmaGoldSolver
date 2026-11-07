@@ -327,9 +327,10 @@ def _worker(problem,connection,cancel):
                     if payload is not None:shared_conflicts.import_snapshot(payload)
                     learning['_shared_conflicts']=shared_conflicts
                 if request['options'].get('smart_learning'):
-                    if mask_conflicts is None:mask_conflicts=VerifiedMaskConflictStore(problem,request['target'],proof_transport=request['options'].get('proof_transport',False),resumable_proof_checking=request['options'].get('resumable_proof_checking',False),mixed_proof_dag=request['options'].get('mixed_proof_dag',False))
+                    if mask_conflicts is None:mask_conflicts=VerifiedMaskConflictStore(problem,request['target'],proof_transport=request['options'].get('proof_transport',False),resumable_proof_checking=request['options'].get('resumable_proof_checking',False),mixed_proof_dag=request['options'].get('mixed_proof_dag',False),proof_indexing=request['options'].get('proof_indexing',False))
                     mask_conflicts.configure_policy(proof_transport=request['options'].get('proof_transport',False),
-                        resumable_proof_checking=request['options'].get('resumable_proof_checking',False),mixed_proof_dag=request['options'].get('mixed_proof_dag',False))
+                        resumable_proof_checking=request['options'].get('resumable_proof_checking',False),mixed_proof_dag=request['options'].get('mixed_proof_dag',False),proof_indexing=request['options'].get('proof_indexing',False))
+                    mask_conflicts.configure_isolated_producer(request['options'].get('isolated_proof_producer',False))
                     payload=request.get('mask_conflicts')
                     if payload is not None:mask_conflicts.import_snapshot(payload)
                     learning['_mask_conflicts']=mask_conflicts
@@ -340,6 +341,9 @@ def _worker(problem,connection,cancel):
                     learning['_certificates']=certificates
                 if (request['options'].get('extended_regions') or request['options'].get('durable_regions') or request['options'].get('region_certificates')) and request.get('regional_cache_dir') is not None:
                     learning['_regional_cache_dir']=request['regional_cache_dir']
+                if request.get('sat_service') is not None and '_sat_service' not in learning:learning['_sat_service']=request['sat_service']
+                if request.get('reasoning_cache_dir') is not None:learning['_reasoning_cache_dir']=request['reasoning_cache_dir']
+                if request.get('regional_cache_dir') is not None:learning['_regional_cache_dir']=request['regional_cache_dir']
                 result=dfs_solve(problem,seconds=request['seconds'],target=request['target'],
                                  resume=request['checkpoint'],stop=cancel.is_set,progress=progress,
                                  learning_state=learning,options=request['options'])
@@ -418,7 +422,7 @@ def _validate_job(problem,job,target,options):
     return region
 
 
-def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progress=None,
+def _solve_parallel(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progress=None,
           resume=None,workers=1,options=None,learning_state=None):
     """Run bounded parallel exact DFS; workers may change on every resume.
 
@@ -449,10 +453,11 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
     if mask_conflicts is not None and (not isinstance(mask_conflicts,VerifiedMaskConflictStore) or not mask_conflicts.matches(problem,target)):
         raise ValueError('Parallel mask conflicts differ from original domains or target.')
     if mask_conflicts is None and options.get('smart_learning'):
-        mask_conflicts=VerifiedMaskConflictStore(problem,target,proof_transport=options['proof_transport'],resumable_proof_checking=options.get('resumable_proof_checking',False),mixed_proof_dag=options.get('mixed_proof_dag',False));learning_state['_mask_conflicts']=mask_conflicts
+        mask_conflicts=VerifiedMaskConflictStore(problem,target,proof_transport=options['proof_transport'],resumable_proof_checking=options.get('resumable_proof_checking',False),mixed_proof_dag=options.get('mixed_proof_dag',False),proof_indexing=options.get('proof_indexing',False));learning_state['_mask_conflicts']=mask_conflicts
     if mask_conflicts is not None:
         mask_conflicts.configure_policy(proof_transport=options['proof_transport'],
-            resumable_proof_checking=options['resumable_proof_checking'],mixed_proof_dag=options['mixed_proof_dag'])
+            resumable_proof_checking=options['resumable_proof_checking'],mixed_proof_dag=options['mixed_proof_dag'],proof_indexing=options['proof_indexing'])
+    if mask_conflicts is not None:mask_conflicts.configure_isolated_producer(options['isolated_proof_producer'])
     certificates=learning_state.get('_certificates')
     if certificates is not None and (not isinstance(certificates,CertificateStore)
             or certificates.problem.fingerprint!=problem.fingerprint or certificates.target!=target
@@ -709,7 +714,9 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
                                     **({'_shared_conflicts':shared_conflicts} if shared_conflicts is not None else {}),
                                     **({'_mask_conflicts':mask_conflicts} if mask_conflicts is not None else {}),
                                     **({'_certificates':certificates} if certificates is not None else {}),
-                                    **({'_regional_cache_dir':learning_state['_regional_cache_dir']} if '_regional_cache_dir' in learning_state else {})},options=options)
+                                    **({'_regional_cache_dir':learning_state['_regional_cache_dir']} if '_regional_cache_dir' in learning_state else {}),
+                                    **({'_reasoning_cache_dir':learning_state['_reasoning_cache_dir']} if '_reasoning_cache_dir' in learning_state else {}),
+                                    **({'_sat_service':learning_state['_sat_service']} if '_sat_service' in learning_state else {})},options=options)
                 accept(job_id,value)
                 preparation_slice=min(5.,preparation_slice*2)
                 if terminal or job_id not in jobs:break
@@ -774,6 +781,8 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
                                              'region_key':hashlib.sha256(json.dumps(jobs[job_id]['region'],separators=(',',':')).encode()).hexdigest(),
                                              'knowledge':shared,'shared_conflicts':verified,'mask_conflicts':mask_payload,'certificates':certificate_payload,
                                              'regional_cache_dir':learning_state.get('_regional_cache_dir'),
+                                             'reasoning_cache_dir':learning_state.get('_reasoning_cache_dir'),
+                                             'sat_service':learning_state.get('_sat_service'),
                                              'options':worker_options(options,index),'seconds':budget})
                     # Never split a leased checkpoint: ask one busy worker to
                     # commit its current frontier first. At most one outstanding
@@ -872,3 +881,11 @@ def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progres
     if certificates is not None and options.get('proof_certificates'):value['certificates']=certificates.snapshot()
     if error is not None:value['error']=error
     return value
+
+
+def solve(problem,*,seconds=10,seed=0,target='gold',hints=None,stop=None,progress=None,
+          resume=None,workers=1,options=None,learning_state=None):
+    from constraint_service_lifecycle_round26 import run
+    normalized=normalize_options(resume.get('search_options') if options is None and isinstance(resume,dict) else options)
+    return run(_solve_parallel,problem,dict(seconds=seconds,seed=seed,target=target,hints=hints,
+        stop=stop,progress=progress,resume=resume,workers=workers,options=normalized,learning_state=learning_state))

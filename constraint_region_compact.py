@@ -24,8 +24,12 @@ class CompactLimit(Exception):pass
 
 class CompactFactors:
     def __init__(self,problem,domains,check=lambda:None,*,stats=None,max_placements=4096,
-                 max_frontier=96,max_resources=32):
-        self.problem=problem;self.domains=tuple(domains);self.cells=tuple(range(problem.n));self.root_state=(0,())
+                 max_frontier=96,max_resources=32,order=None):
+        self.problem=problem;self.domains=tuple(domains)
+        self.cells=tuple(range(problem.n)) if order is None else tuple(order)
+        if (len(self.cells)!=problem.n or any(type(c)is not int for c in self.cells)
+                or set(self.cells)!=set(range(problem.n))):raise ValueError('Invalid compact cell order.')
+        self.root_state=(0,())
         self.stats=dict.fromkeys(STAT_KEYS,0) if stats is None else stats
         for bound in (max_placements,max_frontier,max_resources):
             if type(bound)is not int or bound<0:raise ValueError('Invalid compact factor bound.')
@@ -33,16 +37,16 @@ class CompactFactors:
                 mask&~sum(1<<code for code in set(problem.domains[cell])) for cell,mask in enumerate(domains))):
             raise ValueError('Compact factor domains escape the original puzzle.')
         if sum(mask.bit_count() for mask in domains)>max_placements:raise CompactLimit('placement admission cap')
-        self.choices=tuple(tuple(values(mask)) for mask in domains);self.n=problem.n
+        self.choices=tuple(tuple(values(domains[cell])) for cell in self.cells);self.n=problem.n
         self.missing=not all(domains);first={};last={}
         for cell,codes in enumerate(self.choices):
             check()
             for code in codes:
                 tile=code//3;first.setdefault(tile,cell);last[tile]=cell
         self.missing|=len(last)!=self.n
-        self.expires=tuple(sum(1<<tile for tile,ending in last.items() if ending==cell) for cell in self.cells)
+        self.expires=tuple(sum(1<<tile for tile,ending in last.items() if ending==cell) for cell in range(self.n))
         self.future=tuple(sum(1<<tile for tile,ending in last.items() if ending>=level) for level in range(self.n+1))
-        resource_width=max((sum(start<=level<last[tile] for tile,start in first.items()) for level in self.cells),default=0)
+        resource_width=max((sum(start<=level<last[tile] for tile,start in first.items()) for level in range(self.n)),default=0)
         self.stats['compact_factor_live_resources']=max(self.stats['compact_factor_live_resources'],resource_width)
         if resource_width>max_resources:raise CompactLimit('live resource width cap')
         incident=[[] for _ in self.cells];incident_bits=[0]*self.n
@@ -56,10 +60,11 @@ class CompactFactors:
         self.stats['compact_factor_frontier_width']=max(self.stats['compact_factor_frontier_width'],width)
         if width>max_frontier:raise CompactLimit('seam frontier width cap')
         self.patterns=[];self.incoming=[];self.outputs=[]
-        for cell,codes in enumerate(self.choices):
-            check();before={edge:index for index,edge in enumerate(self.frontiers[cell])}
+        for level,codes in enumerate(self.choices):
+            cell=self.cells[level]
+            check();before={edge:index for index,edge in enumerate(self.frontiers[level])}
             self.incoming.append(tuple((edge,before[edge]) for edge,side,rev in incident[cell] if edge in before))
-            self.outputs.append(tuple((edge,before.get(edge,-1)) for edge in self.frontiers[cell+1]))
+            self.outputs.append(tuple((edge,before.get(edge,-1)) for edge in self.frontiers[level+1]))
             patterns={}
             for code in codes:
                 check();row={};valid=True;self.stats['compact_factor_placements']+=1
@@ -91,14 +96,15 @@ class GoldCompactFactors(CompactFactors):
         self.segments=tuple(tuple(((a[0]+rotation)%3*11+a[1]-1,(b[0]+rotation)%3*11+b[1]-1)
                                  for a,b in tile['segments']) for tile in problem.tiles for rotation in range(3))
         if any(not row for row in self.segments):raise ValueError('Gold compilation requires a strand on every piece.')
+        positions={cell:level for level,cell in enumerate(self.cells)}
         self.closing=tuple(tuple((eid,a,sa,b,sb) for eid,(a,sa,b,sb) in enumerate(problem.edges)
-                                 if max(a,b)==cell) for cell in self.cells)
+                                 if max(positions[a],positions[b])==level) for level in range(self.n))
     def transition(self,level,state,code,check=lambda:None):
         ordinary=super().transition(level,state[:2],code,check)
         if ordinary is None:return None
         mates={a:b for pair in state[2] for a,b in (pair,pair[::-1])}
         for a,b in self.segments[code]:
-            a+=33*level;b+=33*level;mates[a]=b;mates[b]=a
+            a+=33*self.cells[level];b+=33*self.cells[level];mates[a]=b;mates[b]=a
         cycles=0
         for edge,a,sa,b,sb in self.closing[level]:
             for position in values(self.patterns[level][code][edge]):
@@ -156,14 +162,16 @@ def compile_compact(model,check=lambda:None,*,max_states=4096,max_steps=50000):
             level,edges=nodes[node];number=0
             for code,child in edges:
                 check();stats['compact_factor_backward_edges']+=1
-                if counts.get(child,0):supports[level]|=1<<code;number+=counts[child]
+                if counts.get(child,0):supports[model.cells[level]]|=1<<code;number+=counts[child]
             counts[node]=number
     check();witness=[];node=0
     while len(witness)<model.n:
         check();level,edges=nodes[node]
         code,node=next((code,child) for code,child in edges if counts.get(child,0))
         witness.append(code)
-    return {'complete':True,'supports':tuple(supports),'rows':counts[0],'states':created,'transitions':steps,'witness':tuple(witness)}
+    ordered=[0]*model.n
+    for cell,code in zip(model.cells,witness):ordered[cell]=code
+    return {'complete':True,'supports':tuple(supports),'rows':counts[0],'states':created,'transitions':steps,'witness':tuple(ordered)}
 
 
 class CompactFactorPruner:

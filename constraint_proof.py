@@ -142,8 +142,10 @@ class BoundedDPLL:
 
 
 class MaskProofContext:
-    def __init__(self,problem,initial,target='gold'):
+    def __init__(self,problem,initial,target='gold',*,indexed=False):
         if target not in ('gold','edges'):raise ValueError('Unknown proof objective.')
+        if type(indexed)is not bool:raise ValueError('Invalid proof indexing policy.')
+        self.indexed_proofs=indexed
         self.problem,self.initial,self.target=problem,tuple(initial),target
         self.original=tuple(sum(1<<code for code in sorted(set(row))) for row in problem.domains)
         if len(self.initial)!=problem.n or any(type(mask)is not int or mask<0 or mask&~root for mask,root in zip(self.initial,self.original)):
@@ -151,10 +153,11 @@ class MaskProofContext:
         self._binding=self._current_binding()
         self.encoder=SatAssist(problem,self.initial,'edges',capture_clauses=True,factory=_CaptureSink)
         self.base=None;self.variables=None;self._verification_cursors=OrderedDict();self.last_verification_status=None
-        self._verification_base=None
+        self._verification_base=None;self._local_reasoning=None
         self.stats={'proof_native_calls':0,'proof_checks':0,'proof_imports':0,'proof_unknown':0,
                     'proof_dpll_decisions':0,'proof_dpll_visits':0,'proof_emitted_clauses':0,
-                    'proof_cursor_visits':0,'proof_cursor_resumptions':0}
+                    'proof_cursor_visits':0,'proof_cursor_resumptions':0,
+                    'proof_cursor_index_literals':0,'proof_cursor_watch_moves':0,'proof_cursor_hint_visits':0,'proof_cursor_local_loads':0,'proof_cursor_saved_microsteps':0,'proof_cursor_shared_steps':0,'proof_compaction_input_steps':0,'proof_compaction_output_steps':0,'proof_compaction_checks':0,'proof_compaction_visits':0,'proof_compaction_index_literals':0}
 
     def _current_binding(self):
         return (self.problem.fingerprint,
@@ -192,22 +195,46 @@ class MaskProofContext:
         return self.base+tuple(tuple(lit for code,lit in self.variables[cell].items() if mask>>code&1) for cell,mask in record)
 
     def prove(self,record,check=lambda:None,*,seconds=.1,conflicts=10000):
-        deadline=time.monotonic()+seconds
+        deadline=time.monotonic()+seconds;callback=[None]
+        def external_check():
+            try:check()
+            except BaseException as exc:callback[0]=exc;raise
         def bounded():
-            check()
+            external_check()
             if time.monotonic()>=deadline:raise ProofLimit('Proof time budget reached.')
+        def compact_export(proof,record):
+            if self.indexed_proofs and len(proof)>8:
+                from constraint_proof_reuse_round26 import compact
+                reduced=compact(self.clauses(record),proof,bounded,stats=self.stats)
+                if reduced is not None:return reduced
+            return proof
         producer=None
         try:
-            if not self.prepare(check,seconds=max(0,deadline-time.monotonic())):return None
+            if not self.prepare(external_check,seconds=max(0,deadline-time.monotonic())):return None
             record=self.normalize(record);bounded()
+            if getattr(self,'isolated_producer',False):
+                from constraint_isolated_proof_round26 import provider
+                isolated=provider()
+                if isolated.argv is not None:
+                    before=isolated.stats['requests']
+                    try:proof=isolated.produce_rup(self.clauses(record),bounded,seconds=max(0,deadline-time.monotonic()),conflicts=conflicts)
+                    finally:self.stats['proof_native_calls']+=isolated.stats['requests']-before
+                    if proof is None:return None
+                    proof=compact_export(proof,record)
+                    result={'proof_format':'diamond-rup-mask-v1',**self.binding(record),'proof':proof}
+                    valid=self.verify_incremental(result,bounded,ticks=256) if self.indexed_proofs else self.verify(result,bounded)
+                    return result if valid is True else None
             producer=BoundedDPLL(self.clauses(record),max_decisions=min(512,max(1,conflicts)))
             if producer.solve(bounded):return None
             proof=list(producer.proof)
             if not any(line.strip()=='0' for line in proof):proof.append('0')
+            proof=compact_export(proof,record)
             result={'proof_format':'diamond-rup-mask-v1',**self.binding(record),'proof':proof}
             if not self.verify(result,bounded):raise RuntimeError('DPLL proof failed independent RUP checking.')
             return result
-        except ProofLimit:self.stats['proof_unknown']+=1;return None
+        except ProofLimit:
+            if callback[0] is not None:raise
+            self.stats['proof_unknown']+=1;return None
         finally:
             if producer is not None:
                 for key,value in producer.stats.items():self.stats[key]+=value
@@ -233,6 +260,45 @@ class MaskProofContext:
         if valid:self.stats['proof_imports']+=1
         return valid
 
+    def configure_local_cache(self,directory):
+        """Enable application-owned continuation; never accept it via proof import."""
+        from constraint_reasoning_store_round26 import LocalReasoningStore
+        self._local_reasoning=None if directory is None else LocalReasoningStore(directory,
+            {'fingerprint':self.problem.fingerprint,'target':self.target,
+             'original':self.original,'initial':self.initial})
+
+    def _indexed_cursor(self,key,base,proof,**kwargs):
+        from constraint_proof_indexed_round26 import IndexedRUPChecker
+        kwargs.setdefault('reuse',True);cursor=None
+        if self._local_reasoning is not None:
+            saved=self._local_reasoning.load('watched-rup',key,sources=self._cursor_sources())
+            if saved is not None:
+                try:cursor=IndexedRUPChecker.restore_trusted_local(base,proof,saved,**kwargs)
+                except (ValueError,TypeError,KeyError,IndexError):pass
+                else:
+                    self.stats['proof_cursor_local_loads']+=1
+                    self.stats['proof_cursor_saved_microsteps']+=cursor.stats['proof_microsteps']
+        if cursor is not None:return cursor
+        cursor=IndexedRUPChecker(base,proof,**kwargs);self.stats['proof_cursor_shared_steps']+=cursor.stats['proof_shared_steps'];return cursor
+
+    @staticmethod
+    def _cursor_sources():
+        from pathlib import Path
+        root=Path(__file__).parent
+        return [root/name for name in ('constraint_proof.py','constraint_proof_indexed_round26.py',
+                    'constraint_proof_cursor.py','constraint_reasoning_store_round26.py','constraint_proof_reuse_round26.py')]
+
+    def _save_cursor(self,key,cursor):
+        if self._local_reasoning is None or not self.indexed_proofs or cursor.broken:return
+        try:self._local_reasoning.save('watched-rup',key,cursor.snapshot(),sources=self._cursor_sources())
+        except (ValueError,ProofLimit):pass  # Optional reuse never changes admission.
+
+    def _account_cursor(self,cursor,before):
+        for public,local in (('proof_cursor_visits','proof_clause_visits'),('proof_cursor_resumptions','proof_resumptions'),
+                             ('proof_cursor_index_literals','proof_index_build_literals'),('proof_cursor_watch_moves','proof_watch_moves'),
+                             ('proof_cursor_hint_visits','proof_hint_visits')):
+            self.stats[public]+=cursor.stats.get(local,0)-before.get(local,0)
+
     def verify_incremental(self,certificate,check=lambda:None,*,ticks=256):
         """Resume only a locally held exact certificate; imported cursors do not exist."""
         from constraint_proof_cursor import ResumableRUPChecker,_ValidatedRUPBase
@@ -256,15 +322,18 @@ class MaskProofContext:
         if cursor is None:
             if self._verification_base is None:self._verification_base=_ValidatedRUPBase(self.base)
             assumptions=tuple(tuple(lit for code,lit in self.variables[cell].items() if mask>>code&1) for cell,mask in record)
-            cursor=ResumableRUPChecker(self._verification_base,proof,extra_clauses=assumptions)
+            if self.indexed_proofs:
+                from constraint_proof_indexed_round26 import IndexedRUPChecker
+                cursor=self._indexed_cursor(key,self._verification_base,proof,extra_clauses=assumptions,context=self.binding(record))
+            else:cursor=ResumableRUPChecker(self._verification_base,proof,extra_clauses=assumptions)
             self._verification_cursors[key]=cursor;self.stats['proof_checks']+=1
             while len(self._verification_cursors)>8:self._verification_cursors.popitem(last=False)
         self._verification_cursors.move_to_end(key)
         before=cursor.stats.copy();was_finished=cursor.finished;self.last_verification_status='pending'
         try:valid=cursor.advance(check,ticks=ticks)
         finally:
-            self.stats['proof_cursor_visits']+=cursor.stats['proof_clause_visits']-before['proof_clause_visits']
-            self.stats['proof_cursor_resumptions']+=cursor.stats['proof_resumptions']-before['proof_resumptions']
+            self._account_cursor(cursor,before)
+            if self.indexed_proofs:self._save_cursor(key,cursor)
         if cursor.limited:
             self.last_verification_status='limited'
             if not was_finished:self.stats['proof_unknown']+=1

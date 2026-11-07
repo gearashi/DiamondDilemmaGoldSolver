@@ -19,10 +19,20 @@ STAT_KEYS=('mask_conflicts_offered','mask_conflicts_verified','mask_conflicts_re
            'mask_conflicts_hits','mask_conflicts_calls','mask_conflicts_entries',
            'mask_conflicts_pending','mask_conflicts_loaded','mask_proofs_verified',
            'mask_proofs_generated','mask_proofs_rejected','mask_proofs_unknown',
-           'mask_proof_clause_visits','mask_proof_resumptions','mixed_proof_nodes_checked','mixed_proof_nodes_reused')
+           'mask_proof_clause_visits','mask_proof_resumptions','mask_proof_index_literals','mask_proof_watch_moves','mask_proof_hint_visits','mask_proof_shared_steps','mask_proof_compaction_input_steps','mask_proof_compaction_output_steps','mask_proof_compaction_checks','mask_proof_compaction_visits','mask_proof_compaction_index_literals','mixed_proof_nodes_checked','mixed_proof_nodes_reused')
 GAUGE_KEYS=('mask_conflicts_entries','mask_conflicts_pending')
 _PROOF_COUNTERS={'mask_proof_clause_visits':'proof_cursor_visits',
                  'mask_proof_resumptions':'proof_cursor_resumptions',
+                 'mask_proof_index_literals':'proof_cursor_index_literals',
+                 'mask_proof_watch_moves':'proof_cursor_watch_moves',
+                 'mask_proof_hint_visits':'proof_cursor_hint_visits',
+                 'mask_proof_shared_steps':'proof_cursor_shared_steps',
+                 'mask_proof_compaction_input_steps':'proof_compaction_input_steps',
+                 'mask_proof_compaction_output_steps':'proof_compaction_output_steps',
+                 'mask_proof_compaction_checks':'proof_compaction_checks',
+                 'mask_proof_compaction_visits':'proof_compaction_visits',
+                 'mask_proof_compaction_index_literals':'proof_compaction_index_literals',
+
                  'mixed_proof_nodes_checked':'mixed_nodes_checked',
                  'mixed_proof_nodes_reused':'mixed_nodes_reused'}
 
@@ -38,7 +48,7 @@ def _subsumes(left,right):
 
 
 class VerifiedMaskConflictStore:
-    def __init__(self,problem,target='gold',*,initial=None,factory=None,proof_transport=False,resumable_proof_checking=False,mixed_proof_dag=False):
+    def __init__(self,problem,target='gold',*,initial=None,factory=None,proof_transport=False,resumable_proof_checking=False,mixed_proof_dag=False,proof_indexing=False):
         if target not in ('gold','edges'):raise ValueError('Unknown mask-conflict target.')
         self.problem,self.target=problem,target
         self.original=tuple(sum(1<<code for code in sorted(set(row))) for row in problem.domains)
@@ -48,9 +58,9 @@ class VerifiedMaskConflictStore:
             raise ValueError('Invalid mask-conflict effective root.')
         self.binding=(problem.fingerprint,target,self.original,self.initial)
         self._records=[];self._pending=OrderedDict();self._discarded=OrderedDict()
-        self._oracle=None;self._factory=factory;self._closed=False
-        self.mixed_proof_dag=bool(mixed_proof_dag)
-        self.resumable_proof_checking=bool(resumable_proof_checking or self.mixed_proof_dag)
+        self._oracle=None;self._factory=factory;self._closed=False;self._local_cache_directory=None;self._isolated_producer=False
+        self.mixed_proof_dag=bool(mixed_proof_dag);self.proof_indexing=bool(proof_indexing)
+        self.resumable_proof_checking=bool(resumable_proof_checking or self.mixed_proof_dag or self.proof_indexing)
         self.proof_transport=bool(proof_transport or self.resumable_proof_checking);self._proof_context=None
         self._certificates=OrderedDict();self._certificate_pending=OrderedDict();self._proof_queue=OrderedDict()
         self.stats=dict.fromkeys(STAT_KEYS,0);self.status='idle';self.reason=None
@@ -61,7 +71,7 @@ class VerifiedMaskConflictStore:
             current=0 if self._proof_context is None else self._proof_context.stats.get(local,0)
             self.stats[public]=self._proof_offsets[public]+current
 
-    def configure_policy(self,*,proof_transport=False,resumable_proof_checking=False,mixed_proof_dag=False):
+    def configure_policy(self,*,proof_transport=False,resumable_proof_checking=False,mixed_proof_dag=False,proof_indexing=False):
         """Change future proof work without revoking same-process deductions.
 
         Verified records and the ordinary SAT oracle survive. Incompatible
@@ -70,17 +80,17 @@ class VerifiedMaskConflictStore:
         """
         self._check()
         if self._closed:raise ValueError('A closed mask-conflict store cannot be reconfigured.')
-        if any(type(value)is not bool for value in (proof_transport,resumable_proof_checking,mixed_proof_dag)):
+        if any(type(value)is not bool for value in (proof_transport,resumable_proof_checking,mixed_proof_dag,proof_indexing)):
             raise ValueError('Proof policies must be booleans.')
-        resumable_proof_checking=bool(resumable_proof_checking or mixed_proof_dag)
+        resumable_proof_checking=bool(resumable_proof_checking or mixed_proof_dag or proof_indexing)
         proof_transport=bool(proof_transport or resumable_proof_checking)
-        new=(proof_transport,resumable_proof_checking,mixed_proof_dag)
-        old=(self.proof_transport,self.resumable_proof_checking,self.mixed_proof_dag)
+        new=(proof_transport,resumable_proof_checking,mixed_proof_dag,proof_indexing)
+        old=(self.proof_transport,self.resumable_proof_checking,self.mixed_proof_dag,self.proof_indexing)
         if old==new:return False
         self._sync_proof_stats()
         self._proof_offsets={key:self.stats[key] for key in _PROOF_COUNTERS}
         if self._proof_context is not None:self._proof_context.close();self._proof_context=None
-        self.proof_transport,self.resumable_proof_checking,self.mixed_proof_dag=new
+        self.proof_transport,self.resumable_proof_checking,self.mixed_proof_dag,self.proof_indexing=new
         # An edge-SAT answer only made the old verifier unable to prove the
         # claim. Stronger Gold reasoning may now establish that same claim.
         reconsider=list(self._discarded) if mixed_proof_dag and not old[2] else []
@@ -141,14 +151,38 @@ class VerifiedMaskConflictStore:
         while len(self._pending)>MAX_RECORDS:self._pending.popitem(last=False)
         self._refresh();return record in self._pending
 
+    def configure_isolated_producer(self,enabled):
+        self._check()
+        if type(enabled)is not bool:raise ValueError('Isolated proof policy must be boolean.')
+        self._isolated_producer=enabled
+        if self._proof_context is not None:self._proof_context.isolated_producer=enabled
+
+    def configure_local_cache(self,directory):
+        self._check();self._local_cache_directory=directory
+        if self._proof_context is not None:self._proof_context.configure_local_cache(directory)
+
     def _proofs(self):
         if self._proof_context is None:
             from constraint_proof import MaskProofContext
             if self.mixed_proof_dag:
                 from constraint_mixed_proof import MixedProofContext
-                self._proof_context=MixedProofContext(self.problem,self.initial,self.target)
-            else:self._proof_context=MaskProofContext(self.problem,self.initial,self.target)
+                self._proof_context=MixedProofContext(self.problem,self.initial,self.target,indexed=self.proof_indexing)
+            else:self._proof_context=MaskProofContext(self.problem,self.initial,self.target,indexed=self.proof_indexing)
+            self._proof_context.configure_local_cache(self._local_cache_directory)
+            self._proof_context.isolated_producer=self._isolated_producer
         return self._proof_context
+
+    def admit_deduction_chain(self,certificate,check=lambda:None,*,stats=None):
+        from constraint_deduction_chain_round26 import verify_chain
+        self._check()
+        record=verify_chain(self.problem,certificate,target=self.target,check=check,stats=stats)
+        # A chain proves a globally guarded implication; an effective subroot
+        # may drop only guards already entailed by its own trusted axioms.
+        local=tuple((cell,mask&self.initial[cell]) for cell,mask in record)
+        if any(not mask for _,mask in local):return False
+        local=self._normalize(local);self._check()
+        if len(local)>MAX_LITERALS:return False
+        added=self._admit_verified(local);self._refresh();return added
 
     def add_gold_witnesses(self,records):
         if self.mixed_proof_dag:self._proofs().add_gold_witnesses(records)

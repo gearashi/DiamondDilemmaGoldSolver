@@ -63,6 +63,68 @@ fn loops(lane:u32,a:i32,b:i32)->i32 {
     }
     return result;
 }
+// Round26 exact current-board physical component cache, paired 64-bit work.
+fn ibump(lane:u32,which:u32,value:u32){let row=29u+2u*which;let old=lane_data[row*p.replicas+lane];lane_data[row*p.replicas+lane]=old+value;if old+value<old {lane_data[(row+1u)*p.replicas+lane]++;}}
+fn mtotal(lane:u32)->i32{if (p.unused1&192u)!=0u{ibump(lane,1u,p.n);ibump(lane,2u,p.edges);}return total(lane);}
+fn mloops(lane:u32)->i32{
+ if (p.unused1&192u)==0u{return loops(lane,-1,-1);}if p.gold_total==0u{return 0;}
+ var result=0;var starts=0u;var steps=0u;
+ for(var start=0u;start<p.n;start++){let code=at(start,lane);for(var port=0u;port<33u;port++){let pair=partner(code,port);if pair>=33u||pair<port{continue;}starts++;
+  var cell=start;var incoming=port;let key=start*33u+port;
+  for(var count=1u;count<=p.gold_total;count++){let outgoing=partner(at(cell,lane),incoming);steps++;if outgoing>=33u{break;}
+   let local=cell*33u+min(incoming,outgoing);if local<key{break;}let nb=neighbor(cell,outgoing/11u);if nb>=p.n{break;}
+   incoming=table[21u*p.n+cell*3u+outgoing/11u]*11u+10u-outgoing%11u;cell=nb;if cell==start&&incoming==port{if count<p.gold_total{result++;}break;}
+  }
+ }}ibump(lane,4u,starts);ibump(lane,5u,steps);return result;
+}
+fn inode(code:u32,port:u32)->u32{return table[25u*p.n+p.free_count+3u*p.n*p.n+1u+3u*p.n*33u+code*33u+port];}
+fn ilabel(lane:u32,node:u32)->u32{return (lane_data[(45u+node/2u)*p.replicas+lane]>>(16u*(node%2u)))&65535u;}
+fn iset(lane:u32,node:u32,value:u32){let row=45u+node/2u;let shift=16u*(node%2u);let mask=65535u<<shift;lane_data[row*p.replicas+lane]=(lane_data[row*p.replicas+lane]&~mask)|(value<<shift);}
+fn selected(cell:u32,count:i32,cells:ptr<function,array<u32,6>>)->i32{for(var i=0;i<count;i++){if (*cells)[u32(i)]==cell{return i;}}return -1;}
+fn virtual_code(lane:u32,cell:u32,count:i32,cells:ptr<function,array<u32,6>>,old:ptr<function,array<u32,6>>,previous:bool)->u32{
+ var index=-1;if previous{index=selected(cell,count,cells);}if index>=0{return (*old)[u32(index)];}return at(cell,lane);
+}
+fn ichange(lane:u32,count:u32,cells:ptr<function,array<u32,6>>,next:ptr<function,array<u32,6>>)->i32{
+ var delta=0;var seams=0u;
+ for(var i=0u;i<count;i++){let cell=(*cells)[i];let old=at(cell,lane);let code=(*next)[i];let base=25u*p.n+p.free_count+cell*3u*p.n;
+  delta+=(i32(table[base+code])-i32(table[base+old]))*i32(p.edges+1u);
+  for(var side=0u;side<3u;side++){let nb=neighbor(cell,side);let index=selected(nb,i32(count),cells);if nb>=p.n||(index>=0&&index<i32(i)){continue;}
+   let opposite=table[21u*p.n+cell*3u+side];let other=at(nb,lane);var replacement=other;if index>=0{replacement=(*next)[u32(index)];}
+   delta+=select(0,1,table[code*3u+side]==table[9u*p.n+replacement*3u+opposite])-select(0,1,table[old*3u+side]==table[9u*p.n+other*3u+opposite]);seams++;
+  }
+ }ibump(lane,1u,2u*count);ibump(lane,2u,2u*seams);return delta;
+}
+fn itouched(lane:u32,count:u32,cells:ptr<function,array<u32,6>>)->i32{
+ var seen:array<u32,96>;var size=0u;var reads=0u;
+ for(var i=0u;i<count;i++){let code=at((*cells)[i],lane);for(var port=0u;port<33u;port++){let pair=partner(code,port);if pair>=33u||pair<port{continue;}
+  let label=ilabel(lane,inode(code,port));reads++;if label==0u{continue;}var found=false;for(var j=0u;j<size;j++){if seen[j]==label{found=true;}}if !found{seen[size]=label;size++;}
+ }}ibump(lane,3u,reads);return i32(size);
+}
+// 0 counts proposed touched loops; 1 fills; 2 clears using the virtual old board.
+fn icomponents(lane:u32,count:i32,cells:ptr<function,array<u32,6>>,old:ptr<function,array<u32,6>>,mode:u32)->i32{
+ if p.gold_total==0u{return 0;}var result=0;var starts=0u;var steps=0u;var reads=0u;var roots=p.n;if count>=0{roots=u32(count);}let previous=mode==2u;
+ for(var root=0u;root<roots;root++){var start=root;if count>=0{start=(*cells)[root];}let code=virtual_code(lane,start,count,cells,old,previous);
+  for(var port=0u;port<33u;port++){let pair=partner(code,port);if pair>=33u||pair<port{continue;}
+   if previous{reads++;if ilabel(lane,inode(code,port))==0u{continue;}}
+   starts++;var cell=start;var incoming=port;let key=start*33u+port;var smallest=0xffffffffu;var closed=false;
+   for(var length=1u;length<=p.gold_total;length++){
+    let here=virtual_code(lane,cell,count,cells,old,previous);let outgoing=partner(here,incoming);steps++;if outgoing>=33u{break;}
+    let local=cell*33u+min(incoming,outgoing);if !previous&&(count<0||selected(cell,count,cells)>=0)&&local<key{break;}
+    smallest=min(smallest,inode(here,incoming));let nb=neighbor(cell,outgoing/11u);if nb>=p.n{break;}
+    incoming=table[21u*p.n+cell*3u+outgoing/11u]*11u+10u-outgoing%11u;cell=nb;
+    if cell==start&&incoming==port{closed=length<p.gold_total;break;}
+   }
+   if !closed{continue;}result++;
+   if mode!=0u{cell=start;incoming=port;for(var length=1u;length<=p.gold_total;length++){
+    let here=virtual_code(lane,cell,count,cells,old,previous);let outgoing=partner(here,incoming);steps++;
+    iset(lane,inode(here,incoming),select(smallest+1u,0u,previous));let nb=neighbor(cell,outgoing/11u);
+    incoming=table[21u*p.n+cell*3u+outgoing/11u]*11u+10u-outgoing%11u;cell=nb;if cell==start&&incoming==port{break;}
+   }}
+  }
+ }ibump(lane,3u,reads);ibump(lane,4u,starts);ibump(lane,5u,steps);return result;
+}
+fn irebuild(lane:u32){for(var word=0u;word<(p.gold_total+1u)/2u;word++){lane_data[(45u+word)*p.replicas+lane]=0u;}var cells:array<u32,6>;var old:array<u32,6>;let ignored=icomponents(lane,-1,&cells,&old,1u);ibump(lane,7u,1u);}
+
 // Guidance scores the unchanged board; only the complete closed permutation
 // and its independently recomputed total/loop score control acceptance.
 fn local_candidate(cell:u32,code:u32,lane:u32)->i32 {
@@ -120,13 +182,15 @@ fn save_best(lane:u32) { for(var cell=0u;cell<p.n;cell++) { best_boards[cell*p.r
 @compute @workgroup_size(64)
 fn sample_search(@builtin(global_invocation_id) id:vec3<u32>) {
  let lane=id.x;let r=p.replicas;if lane>=r {return;}random_state=lane_data[lane];let flags=p.unused1;
+ if p.phase==3u{if (flags&64u)!=0u{irebuild(lane);lane_data[r+lane]=u32(mtotal(lane)*i32(p.gold_total+1u)+i32(p.gold_total)-mloops(lane));}return;}
+ if p.phase==2u {if (flags&64u)!=0u&&(p.steps==0xffffffffu||lane==p.steps){irebuild(lane);ibump(lane,6u,1u);}return;}
  if p.phase==0u {
   for(var cell=0u;cell<p.n;cell++){boards[cell*r+lane]=table[24u*p.n+cell];}
   for(var count=p.free_count;count>1u;count--){let a=table[25u*p.n+count-1u];let b=table[25u*p.n+random_next()%count];let code=at(a,lane);boards[a*r+lane]=at(b,lane);boards[b*r+lane]=code;}
   for(var i=0u;i<p.free_count;i++){let cell=table[25u*p.n+i];boards[cell*r+lane]=3u*(at(cell,lane)/3u)+random_next()%3u;}
-  let initial=u32(total(lane)*i32(p.gold_total+1u)+i32(p.gold_total)-loops(lane,-1,-1));lane_data[r+lane]=initial;lane_data[2u*r+lane]=initial;
-  for(var row=3u;row<select(select(select(18u,22u,(flags&8u)!=0u),28u,(flags&16u)!=0u),29u,(flags&32u)!=0u);row++){lane_data[row*r+lane]=0u;}
-  if (flags&32u)!=0u {lane_data[28u*r+lane]=bitcast<u32>(0.2*pow(1.5,f32(lane%8u)));}save_best(lane);
+  for(var row=3u;row<select(select(select(select(18u,22u,(flags&8u)!=0u),28u,(flags&16u)!=0u),29u,(flags&32u)!=0u),45u+select(0u,(p.gold_total+1u)/2u,(flags&64u)!=0u),(flags&192u)!=0u);row++){lane_data[row*r+lane]=0u;}
+  let initial=u32(mtotal(lane)*i32(p.gold_total+1u)+i32(p.gold_total)-mloops(lane));lane_data[r+lane]=initial;lane_data[2u*r+lane]=initial;
+  if (flags&32u)!=0u {lane_data[28u*r+lane]=bitcast<u32>(0.2*pow(1.5,f32(lane%8u)));}save_best(lane);if (flags&64u)!=0u{irebuild(lane);}
  } else if p.free_count>0u {
   var score=i32(lane_data[r+lane]);var best_score=i32(lane_data[2u*r+lane]);var iteration=lane_data[3u*r+lane];
   for(var step=0u;step<p.steps;step++){
@@ -147,13 +211,15 @@ fn sample_search(@builtin(global_invocation_id) id:vec3<u32>) {
    for(var i=0u;i<count;i++){next[i]=3u*(old[(i+1u)%count]/3u)+random_next()%3u;}
    }
    // Integer quotient/remainder recover S=B*(T+1)+T-L exactly.
-   let lazy=(flags&16u)!=0u;var before:i32;var old_loops:i32;
+   let lazy=(flags&16u)!=0u;let incremental=(flags&64u)!=0u;var before:i32;var old_loops:i32;
+   var base_delta=0;var touched=0;if (flags&192u)!=0u{ibump(lane,0u,1u);}if incremental{base_delta=ichange(lane,count,&cells,&next);if p.gold_total>0u{touched=itouched(lane,count,&cells);}}
    if lazy {
     before=score/i32(p.gold_total+1u);old_loops=i32(p.gold_total)-score%i32(p.gold_total+1u);
     lane_data[22u*r+lane]++;if p.gold_total>0u {lane_data[23u*r+lane]++;}
-   } else {before=total(lane);old_loops=loops(lane,-1,-1);}
+   } else if incremental{before=score/i32(p.gold_total+1u);old_loops=i32(p.gold_total)-score%i32(p.gold_total+1u);}
+   else {before=mtotal(lane);old_loops=mloops(lane);}
    for(var i=0u;i<count;i++){boards[cells[i]*r+lane]=next[i];}
-   let candidate_base=total(lane);let base_delta=candidate_base-before;
+   var candidate_base=before+base_delta;if !incremental{candidate_base=mtotal(lane);}base_delta=candidate_base-before;
    if guided && base_delta>0 {lane_data[21u*r+lane]++;}
    var tabu=false;
    if (flags&2u)!=0u {for(var i=0u;i<count;i++){for(var k=0u;k<4u;k++){
@@ -172,7 +238,7 @@ fn sample_search(@builtin(global_invocation_id) id:vec3<u32>) {
     if !accept {skip=true;if p.gold_total>0u {lane_data[26u*r+lane]++;}}
    }
    if !skip {
-    let loop_delta=old_loops-loops(lane,-1,-1);
+    var loop_delta:i32;if incremental{loop_delta=touched-icomponents(lane,i32(count),&cells,&old,0u);}else{loop_delta=old_loops-mloops(lane);}
     if lazy && p.gold_total>0u {lane_data[24u*r+lane]++;}
     delta=base_delta*i32(p.gold_total+1u)+loop_delta;
     var acceptance=f32(select(base_delta,loop_delta,base_delta==0));
@@ -181,6 +247,7 @@ fn sample_search(@builtin(global_invocation_id) id:vec3<u32>) {
    }
    if tabu&&!accept {lane_data[14u*r+lane]++;}iteration++;
    if accept {
+    if incremental&&p.gold_total>0u{let cleared=icomponents(lane,i32(count),&cells,&old,2u);let filled=icomponents(lane,i32(count),&cells,&old,1u);}
     score+=delta;lane_data[13u*r+lane]++;
     if (flags&2u)!=0u {for(var i=0u;i<count;i++){if old[i]!=next[i]{let slot=lane_data[4u*r+lane]%4u;lane_data[4u*r+lane]++;lane_data[(5u+slot)*r+lane]=cells[i]*(3u*p.n)+old[i];lane_data[(9u+slot)*r+lane]=iteration+8u+lane%4u;}}}
     if score>best_score || (score==best_score&&random_next()%64u==0u){best_score=score;save_best(lane);}
@@ -196,6 +263,7 @@ fn replica_exchange(@builtin(global_invocation_id) id:vec3<u32>){
  let exponent=(1.0/ta-1.0/tb)*f32(i32(lane_data[r+b])-i32(lane_data[r+a]))/f32(p.gold_total+1u);lane_data[16u*r+a]++;
  if exponent>=0.0||f32(random_next()%1000000u)<1000000.0*exp(exponent){
   for(var cell=0u;cell<p.n;cell++){let old=at(cell,a);boards[cell*r+a]=at(cell,b);boards[cell*r+b]=old;}
+  if (p.unused1&64u)!=0u{for(var word=0u;word<(p.gold_total+1u)/2u;word++){let value=lane_data[(45u+word)*r+a];lane_data[(45u+word)*r+a]=lane_data[(45u+word)*r+b];lane_data[(45u+word)*r+b]=value;}}
   let old=lane_data[r+a];lane_data[r+a]=lane_data[r+b];lane_data[r+b]=old;lane_data[17u*r+a]++;
   for(var row=4u;row<13u;row++){lane_data[row*r+a]=0u;lane_data[row*r+b]=0u;}
   for(var which=0u;which<2u;which++){let lane=select(a,b,which!=0u);if lane_data[r+lane]>lane_data[2u*r+lane]{lane_data[2u*r+lane]=lane_data[r+lane];save_best(lane);}}

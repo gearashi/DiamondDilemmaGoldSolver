@@ -764,7 +764,7 @@ select('cp-sat-circuit');assert.match(element('algorithmHint').textContent,/Expe
 assert.equal(element('backendInput').disabled,true);assert.equal(element('nativeInput').disabled,true);
 vm.runInContext("command('start');",context);
 const circuitSent=JSON.parse(context.fetchCalls.at(-1)[1].body);
-assert.equal(circuitSent.algorithm,'cp-sat-circuit');assert.equal(circuitSent.method,'constraint');assert.equal(circuitSent.search_options,undefined);
+assert.equal(circuitSent.algorithm,'cp-sat-circuit');assert.equal(circuitSent.method,'constraint');assert.equal(circuitSent.search_options.regional_compiler,false);
 render("commandBusy=false;state={process_running:true,control_token:'test',status:{state:'running',method:'constraint',algorithm:'cp-sat-circuit',stats:{circuit_nodes:5280,circuit_arcs:147840}},history:[]}");
 assert.equal(element('cacheEntriesLabel').textContent,'Circuit ports / arcs');assert.equal(element('cacheEntries').textContent,'5,280 / 147,840');
 assert.match(element('controlHint').textContent,/Direct circuit constraints/);assert.match(element('loadingText').textContent,/Searching internally/);
@@ -809,6 +809,7 @@ element('lookaheadInput').checked=false;element('lookaheadBudgetInput').value='4
 const edited={...saved,lookahead:false,lookahead_ms:400,native:'auto',ordering_goal:'auto',gold_oracle:false,connection_branching:false,lcg:false,native_search:false,"smart_learning":false,"group_lookahead":false,"deep_paths":false,"conservation":false,"signature_branching":false,"impact_branching":false,"objective_ordering":false,"frontier_restarts":false,"worker_portfolio":false,"limited_discrepancy":false,"compact_explanations":false,"conditional_hall":false,"wide_cuts":false,"piece_symmetry":false,"proof_certificates":false,"rotated_learning":false,"extended_regions":false,"gpu_gold_sampling":false,"dependency_repair":false,"dirty_neighborhood":false,"parity_root_reuse":false};
 for(const key of vm.runInContext('round24Keys',context))edited[key]=false;
 for(const key of vm.runInContext('round25Keys',context))edited[key]=false;
+for(const key of vm.runInContext('round26Keys',context))edited[key]=false;edited.sat_service_instances=1;
 assert.deepEqual(JSON.parse(storage.values['diamond.searchOptions']),edited);assert.equal(storage.values['diamond.workers'],'4');
 render("state.process_running=true;state.status.workers=1;state.status.search_options={failure_guided:true,lookahead:true,strand_connectivity:true,multi_seam_cuts:true,regional_cache:true,native:'python'}");
 assert.equal(element('nativeInput').value,'python');assert.equal(element('workersInput').value,'1');assert.equal(element('lookaheadInput').checked,true);

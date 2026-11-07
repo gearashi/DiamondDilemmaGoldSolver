@@ -78,6 +78,22 @@ class RunnerTests(unittest.TestCase):
         self.assertTrue(any(row.get('phase')=='searching' for row in self.statuses))
         self.assert_released()
 
+    def test_symbolic_runner_saves_terminal_and_restores_without_workers(self):
+        options={'symbolic_frontier':True,'native':'python','adaptive_allocation':True}
+        runner.main(self.args('dfs','--workers','2','--search-options',json.dumps(options)))
+        status=self.read('status.json');self.assertEqual(status['state'],'solved')
+        self.assertEqual(status['workers'],2)
+        saved=self.read('searches/dfs-gold/checkpoint.json')['payload']
+        self.assertEqual(saved['schema'],'diamond-symbolic-coordinator-v1')
+        self.assertTrue(self.read('solution.json')['validation']['valid'])
+        prior=status['stats']['coordinator_worker_starts']
+        with patch.object(runner,'run_solver',side_effect=AssertionError('verified terminal must not launch workers')) as search:
+            runner.main(self.args('dfs','--workers','1','--resume','--search-options',json.dumps(options)))
+            search.assert_not_called()
+        again=self.read('status.json');self.assertEqual(again['state'],'solved')
+        self.assertGreater(prior,0)
+        self.assert_released()
+
     @requires_ortools
     def test_direct_circuit_route_runs_and_snapshots_its_model(self):
         runner.main(self.args('cp-sat-circuit'))

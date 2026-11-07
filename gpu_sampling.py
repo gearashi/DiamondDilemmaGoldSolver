@@ -237,12 +237,21 @@ def _temperature_step(controller,engine,dispatches):
 
 
 class _CUDA:
-    def __init__(self, problem, table, free, replicas, seed, *, experiments=None, initialize=True):
+    def __init__(self, problem, table, free, replicas, seed, *, experiments=None, initialize=True, _measure_scoring=False):
         import cupy as cp
         self.cp, self.n, self.r, self.f, self.e = cp, problem.n, replicas, free, len(problem.edges)
         self._poisoned=False
         self.input_binding=_injection_binding(problem)
-        self.flags=sampling_flags(experiments);self.meta_rows=29 if self.flags&32 else (28 if self.flags&16 else (22 if self.flags&8 else (18 if self.flags else 4)))
+        self.flags=sampling_flags(experiments)
+        if type(_measure_scoring)is not bool:raise ValueError('Invalid scoring instrumentation switch.')
+        if _measure_scoring:self.flags|=129
+        from gpu_incremental_sampling_round26 import prepare_table,metadata_rows,state_size
+        table,self.gold_total=prepare_table(problem,table,free,self.flags)
+        self.meta_rows=metadata_rows(self.flags,self.gold_total)
+        self.state_limits=state_size(problem.n,replicas,self.gold_total,self.flags)
+        if self.flags&64 and self.state_limits['snapshot_bytes']>256*1024*1024:raise ValueError(f"Incremental sampler supports at most {self.state_limits['snapshot_replica_cap']} replicas within the durable snapshot bound.")
+        self.validation_work={}
+        self._problem=problem
         if self.flags&32 and replicas<8:raise ValueError('Adaptive exchange requires at least eight replicas.')
         base=25*self.n+free+3*self.n*self.n
         self.gold_total=int(table[base]) if len(table)>base else 0
@@ -253,6 +262,7 @@ class _CUDA:
         self.meta = cp.zeros((self.meta_rows, replicas), np.uint32)
         self.meta[0] = cp.asarray(np.random.default_rng(seed).integers(1, 2**32, replicas, dtype=np.uint32))
         self.table = cp.asarray(table)
+        self._table_digest=__import__('hashlib').sha256(table.tobytes()).hexdigest()
         source=(ROOT/'sampling_round24.cu').read_text() if self.flags else CUDA_SOURCE
         self.kernel = cp.RawKernel(source, 'sample_search', options=('--std=c++17',))
         self.exchange_kernel=cp.RawKernel(source,'replica_exchange',options=('--std=c++17',)) if self.flags&4 else None
@@ -266,6 +276,7 @@ class _CUDA:
         update=objective>=best
         if update:self.best[:,lane]=candidate;self.meta[2,lane]=objective
         if self.meta_rows>4:self.meta[4:13,lane]=0
+        if self.flags&64:self.launch(lane,2)
         self.cp.cuda.get_current_stream().synchronize()
         return {'injected':True,'lane':lane,'objective':objective,'best_updated':update}
     def temperature_feedback(self):
@@ -280,9 +291,24 @@ class _CUDA:
         self.cp.cuda.get_current_stream().synchronize()
     def snapshot_arrays(self):
         _require_sampler_healthy(self);return [self.boards.get(),self.best.get(),self.meta.get()]
+    @_injection_transaction
     def restore_arrays(self,arrays):
         _require_sampler_healthy(self)
-        for target,value in zip((self.boards,self.best,self.meta),arrays):target[:]=self.cp.asarray(value)
+        if self.flags&64:
+            from gpu_incremental_sampling_round26 import validate_arrays,checked_rebuild,charge_restore
+            validate_arrays(self._problem,arrays,self.r,self.gold_total,self.flags)
+            # Validate in scratch before any live-state write. Rebuild work is
+            # charged separately and does not change the saved trajectory.
+            previous=arrays[2];scratch=self.cp.asarray(arrays[2]);dummy=self.cp.empty((self.n,self.r),self.cp.uint32)
+            for index in (0,1):
+                board=self.cp.asarray(arrays[index])
+                self.kernel(((self.r+127)//128,),(128,),(board,dummy,scratch,self.table,
+                    *map(np.int32,(self.n,self.r,self.f,0,3,self.e,self.gold_total,self.flags))))
+                rebuilt=scratch.get();charge_restore(previous,rebuilt,self.validation_work);previous=rebuilt
+                checked_rebuild(arrays[2],rebuilt,best=index==1)
+        staged=[self.cp.asarray(value) for value in arrays]
+        self._injection_writes_started=True
+        for target,value in zip((self.boards,self.best,self.meta),staged):target[:]=value
         self.cp.cuda.get_current_stream().synchronize()
     def runtime_identity(self):
         return {'backend':'cuda','device':self.device,'cupy':self.cp.__version__,'driver':int(self.cp.cuda.runtime.driverGetVersion()),'runtime':int(self.cp.cuda.runtime.runtimeGetVersion())}
@@ -303,7 +329,12 @@ class _CUDA:
         if not self.flags:return {}
         end=28 if self.flags&16 else (22 if self.flags&8 else 18)
         counts=self.meta[13:end].sum(axis=1,dtype=self.cp.uint64).get()
-        return dict(zip(SAMPLING_COUNTERS,map(int,counts)))
+        result=dict(zip(SAMPLING_COUNTERS,map(int,counts)))
+        if self.flags&192:
+            from gpu_incremental_sampling_round26 import COUNTERS
+            native=self.meta[29:45].get() if hasattr(self,'cp') else np.frombuffer(self.queue.read_buffer(self.buffers[2],29*self.r*4,16*self.r*4),np.uint32).reshape(16,self.r)
+            result.update({key:sum(int(native[2*i,j])+(int(native[2*i+1,j])<<32) for j in range(self.r)) for i,key in enumerate(COUNTERS)})
+        return result
     def top(self, count=32):
         _require_sampler_healthy(self)
         scores = self.meta[2].get()
@@ -324,12 +355,21 @@ def _validate_sampling_adapter(info, *, allow_software=False):
 
 
 class _WebGPU:
-    def __init__(self, problem, table, free, replicas, seed, *, allow_software=False, experiments=None, initialize=True):
+    def __init__(self, problem, table, free, replicas, seed, *, allow_software=False, experiments=None, initialize=True, _measure_scoring=False):
         import wgpu
         self.wgpu, self.n, self.r, self.f, self.e = wgpu, problem.n, replicas, free, len(problem.edges)
         self._poisoned=False
         self.input_binding=_injection_binding(problem)
-        self.flags=sampling_flags(experiments);self.meta_rows=29 if self.flags&32 else (28 if self.flags&16 else (22 if self.flags&8 else (18 if self.flags else 4)))
+        self.flags=sampling_flags(experiments)
+        if type(_measure_scoring)is not bool:raise ValueError('Invalid scoring instrumentation switch.')
+        if _measure_scoring:self.flags|=129
+        from gpu_incremental_sampling_round26 import prepare_table,metadata_rows,state_size
+        table,self.gold_total=prepare_table(problem,table,free,self.flags)
+        self.meta_rows=metadata_rows(self.flags,self.gold_total)
+        self.state_limits=state_size(problem.n,replicas,self.gold_total,self.flags)
+        if self.flags&64 and self.state_limits['snapshot_bytes']>256*1024*1024:raise ValueError(f"Incremental sampler supports at most {self.state_limits['snapshot_replica_cap']} replicas within the durable snapshot bound.")
+        self.validation_work={}
+        self._problem=problem
         if self.flags&32 and replicas<8:raise ValueError('Adaptive exchange requires at least eight replicas.')
         base=25*self.n+free+3*self.n*self.n
         self.gold_total=int(table[base]) if len(table)>base else 0
@@ -349,6 +389,7 @@ class _WebGPU:
         self.buffers = [self.gpu.create_buffer(size=size, usage=usage) for size in sizes]
         self.queue.write_buffer(self.buffers[2], 0, np.random.default_rng(seed).integers(1, 2**32, replicas, dtype=np.uint32))
         self.queue.write_buffer(self.buffers[3], 0, table)
+        self._table_digest=__import__('hashlib').sha256(table.tobytes()).hexdigest()
         self.params = self.gpu.create_buffer(size=32, usage=wgpu.BufferUsage.UNIFORM | wgpu.BufferUsage.COPY_DST)
         module = self.gpu.create_shader_module(code=(ROOT/('sampling_round24.wgsl' if self.flags else 'sampling_kernels.wgsl')).read_text())
         self.pipeline = self.gpu.create_compute_pipeline(layout='auto', compute={'module': module, 'entry_point': 'sample_search'})
@@ -376,6 +417,7 @@ class _WebGPU:
         if self.meta_rows>4:
             zero=np.zeros(1,np.uint32)
             for row in range(4,13):self.queue.write_buffer(self.buffers[2],(row*self.r+lane)*4,zero)
+        if self.flags&64:self.launch(lane,2)
         self.queue.read_buffer(self.buffers[2],(self.r+lane)*4,4) # Complete the atomic host-controller operation before publishing.
         return {'injected':True,'lane':lane,'objective':objective,'best_updated':update}
     def temperature_feedback(self):
@@ -394,8 +436,31 @@ class _WebGPU:
         _require_sampler_healthy(self)
         shapes=((self.n,self.r),(self.n,self.r),(self.meta_rows,self.r))
         return [np.frombuffer(self.queue.read_buffer(buffer),np.uint32).reshape(shape).copy() for buffer,shape in zip(self.buffers[:3],shapes)]
+    @_injection_transaction
     def restore_arrays(self,arrays):
         _require_sampler_healthy(self)
+        if self.flags&64:
+            from gpu_incremental_sampling_round26 import validate_arrays,checked_rebuild,charge_restore
+            validate_arrays(self._problem,arrays,self.r,self.gold_total,self.flags)
+            scratch=[]
+            try:
+                usage=self.wgpu.BufferUsage.STORAGE|self.wgpu.BufferUsage.COPY_SRC|self.wgpu.BufferUsage.COPY_DST
+                for array in arrays:scratch.append(self.gpu.create_buffer(size=array.nbytes,usage=usage))
+                self.queue.write_buffer(scratch[2],0,arrays[2])
+                entries=[{'binding':i,'resource':{'buffer':buffer}} for i,buffer in enumerate(scratch+[self.buffers[3]])]
+                entries.append({'binding':4,'resource':{'buffer':self.params}})
+                group=self.gpu.create_bind_group(layout=self.pipeline.get_bind_group_layout(0),entries=entries)
+                self.queue.write_buffer(self.params,0,np.array([self.n,self.r,self.f,0,3,self.e,self.gold_total,self.flags],np.uint32))
+                previous=arrays[2]
+                for index in (0,1):
+                    self.queue.write_buffer(scratch[0],0,arrays[index]);encoder=self.gpu.create_command_encoder();compute=encoder.begin_compute_pass()
+                    compute.set_pipeline(self.pipeline);compute.set_bind_group(0,group);compute.dispatch_workgroups((self.r+63)//64);compute.end();self.queue.submit([encoder.finish()])
+                    rebuilt=np.frombuffer(self.queue.read_buffer(scratch[2]),np.uint32).reshape(self.meta_rows,self.r)
+                    charge_restore(previous,rebuilt,self.validation_work);previous=rebuilt.copy()
+                    checked_rebuild(arrays[2],rebuilt,best=index==1)
+            finally:
+                for buffer in scratch:buffer.destroy()
+        self._injection_writes_started=True
         for buffer,value in zip(self.buffers[:3],arrays):self.queue.write_buffer(buffer,0,value)
         self.queue.read_buffer(self.buffers[2],0,4)
     def runtime_identity(self):
@@ -446,14 +511,19 @@ class _WebGPU:
         if not self.flags:return {}
         rows=(28 if self.flags&16 else (22 if self.flags&8 else 18))-13
         counts=np.frombuffer(self.queue.read_buffer(self.buffers[2],13*self.r*4,rows*self.r*4),np.uint32).reshape(rows,self.r).sum(axis=1,dtype=np.uint64)
-        return dict(zip(SAMPLING_COUNTERS,map(int,counts)))
+        result=dict(zip(SAMPLING_COUNTERS,map(int,counts)))
+        if self.flags&192:
+            from gpu_incremental_sampling_round26 import COUNTERS
+            native=self.meta[29:45].get() if hasattr(self,'cp') else np.frombuffer(self.queue.read_buffer(self.buffers[2],29*self.r*4,16*self.r*4),np.uint32).reshape(16,self.r)
+            result.update({key:sum(int(native[2*i,j])+(int(native[2*i+1,j])<<32) for j in range(self.r)) for i,key in enumerate(COUNTERS)})
+        return result
     def close(self):
         if self.gather_buffer is not None: self.gather_buffer.destroy()
         for buffer in self.buffers: buffer.destroy()
         self.params.destroy(); self.gpu.destroy()
 
 
-SAMPLING_EXPERIMENTS=('ejection_chains','move_tabu','replica_exchange','obstruction_chains','cycle_crossover','lazy_gold_scoring','adaptive_temperatures')
+SAMPLING_EXPERIMENTS=('ejection_chains','move_tabu','replica_exchange','obstruction_chains','cycle_crossover','lazy_gold_scoring','adaptive_temperatures','incremental_sampling','optimal_crossover')
 SAMPLING_COUNTERS=('accepted_moves','tabu_rejections','chain_proposals','exchange_attempts','exchange_accepts',
                    'guided_proposals','guided_candidate_checks','guided_obstruction_starts','guided_base_improvements',
                    'gold_old_base_scans_saved','gold_old_loop_traces_saved','gold_candidate_loop_traces',
@@ -461,17 +531,18 @@ SAMPLING_COUNTERS=('accepted_moves','tabu_rejections','chain_proposals','exchang
 
 def sampling_flags(experiments=None):
     experiments={} if experiments is None else experiments
-    names={'ejection_chains':1,'move_tabu':2,'replica_exchange':4,'obstruction_chains':8,'cycle_crossover':0,'lazy_gold_scoring':16,'adaptive_temperatures':32}
+    names={'ejection_chains':1,'move_tabu':2,'replica_exchange':4,'obstruction_chains':8,'cycle_crossover':0,'lazy_gold_scoring':16,'adaptive_temperatures':32,'incremental_sampling':64,'optimal_crossover':0}
     if not isinstance(experiments,dict) or set(experiments)-set(names) or any(type(value) is not bool for value in experiments.values()):
         raise ValueError('Invalid sampling experiment switches.')
     flags=sum(bit for name,bit in names.items() if experiments.get(name,False))
-    flags=flags|1 if flags&(8|16) else flags
+    flags=flags|1 if flags&(8|16|64) else flags
     return flags|4 if flags&32 else flags
 
-def _make_sampler(problem, table, free, replicas, seed, backend, *, allow_software=False, experiments=None, initialize=True):
+def _make_sampler(problem, table, free, replicas, seed, backend, *, allow_software=False, experiments=None, initialize=True, _measure_scoring=False):
     if sampling_flags(experiments)&32 and replicas<8:raise ValueError('Adaptive exchange requires at least eight replicas.')
     extra={'experiments':experiments} if sampling_flags(experiments) else {}
     if not initialize:extra['initialize']=False
+    if _measure_scoring:extra['_measure_scoring']=True
     if backend == 'cuda': return _CUDA(problem, table, free, replicas, seed,**extra)
     return _WebGPU(problem, table, free, replicas, seed, allow_software=allow_software,**extra)
 
@@ -482,8 +553,10 @@ def _crossover_parent_pool(rows,*,gold_aware=False):
     unique={tuple(row['codes']):row for row in rows};key='gold_objective' if gold_aware else 'objective'
     return [{**row,'codes':list(codes)} for codes,row in sorted(unique.items(),key=lambda item:(-item[1][key],item[0]))[:8]]
 
-def _crossover_step(problem,controller,archive,engine,*,gold_aware=False,target='gold',inject=True,parents=None):
-    trial=controller.propose(archive if parents is None else parents);codes=trial['candidate']
+def _crossover_step(problem,controller,archive,engine,*,gold_aware=False,target='gold',inject=True,parents=None,check=lambda:None):
+    rows=archive if parents is None else parents
+    trial=controller.propose(rows,check=check) if controller.__class__.__module__=='sampling_crossover_round26' else controller.propose(rows)
+    codes=trial['candidate']
     if codes is None:
         if trial['solution'] is not None:raise RuntimeError('Crossover solution is missing its checked candidate.')
         return archive,None
@@ -507,6 +580,8 @@ def sample(problem, *, seconds, seed=0, replicas=128, backend='auto', stop=None,
     if type(replicas) is not int or not 1 <= replicas <= 131072 or type(seed) is not int or seed < 0:
         raise ValueError('replicas must be 1..131072 and seed a nonnegative integer.')
     if backend not in ('auto', 'cuda', 'webgpu'): raise ValueError('Unknown sampling backend.')
+    from gpu_incremental_sampling_round26 import validate_capacity
+    validate_capacity(problem.n,replicas,problem.total_segments if gold_aware else 0,flags)
     if flags&32 and replicas<8:raise ValueError('Adaptive exchange requires at least eight replicas.')
     result = {'status': 'timeout', 'backend': backend, 'device': None, 'replicas': replicas,
               'initial_boards': 0, 'move_proposals': 0, 'samples_considered': 0,
@@ -531,9 +606,13 @@ def sample(problem, *, seconds, seed=0, replicas=128, backend='auto', stop=None,
     if flags&32:
         from sampling_temperatures_round25 import AdaptiveTemperatures
         temperatures=AdaptiveTemperatures()
-    if experiments and experiments.get('cycle_crossover'):
-        from sampling_crossover_round25 import CycleCrossover
-        crossover=CycleCrossover(problem,gold_aware=gold_aware)
+    if experiments and (experiments.get('cycle_crossover') or experiments.get('optimal_crossover')):
+        if experiments.get('optimal_crossover'):
+            from sampling_crossover_round26 import OptimizingCrossover
+            crossover=OptimizingCrossover(problem,gold_aware=gold_aware)
+        else:
+            from sampling_crossover_round25 import CycleCrossover
+            crossover=CycleCrossover(problem,gold_aware=gold_aware)
     def collect(*,inject=True):
         nonlocal archive,crossover_parents
         boards,scores = engine.top()
@@ -603,7 +682,7 @@ def solve(problem, *, seconds=10, seed=0, target='gold', replicas=128, backend='
     very long run; construction/native return can overrun cooperative budgets.
     Resume skips both phases and preserves the exact DFS stack.
     """
-    if (options and options.get('durable_hybrid')) or (isinstance(resume,dict) and resume.get('hybrid_version')==3):
+    if (options and (options.get('durable_hybrid') or options.get('retained_repair'))) or (isinstance(resume,dict) and resume.get('hybrid_version')==3):
         from gpu_hybrid_resume_round25 import solve as durable_solve
         return durable_solve(problem,seconds=seconds,seed=seed,target=target,replicas=replicas,backend=backend,
             sampling_fraction=sampling_fraction,repair_fraction=repair_fraction,hints=hints,seed_board=seed_board,

@@ -6,7 +6,7 @@ signatures. Positive combinations plus integer gcd rounding produce valid cuts.
 Discovered clique/odd-cycle rules are verified against exact incompatibilities.
 These are bounded rule families, not unrestricted automatic theorem discovery.
 """
-from collections import OrderedDict,defaultdict
+from collections import OrderedDict,defaultdict,deque
 from itertools import combinations
 from math import gcd
 from constraint_relations import bits
@@ -93,21 +93,26 @@ def verify_derivation(base,steps,check=lambda:None):
     except (ValueError,TypeError,IndexError,OverflowError):return False
 
 
-def filter_rows(domains,rows,check=lambda:None,*,max_passes=4):
+def filter_rows(domains,rows,check=lambda:None,*,max_passes=4,reason=None):
     current=list(domains)
     for _ in range(max_passes):
         old=tuple(current)
-        for terms,rhs in rows:
-            check();by_cell=defaultdict(dict)
+        for row_index,(terms,rhs) in enumerate(rows):
+            check();before=tuple(current) if reason is not None else None;by_cell=defaultdict(dict)
             for cell,code,coefficient in terms:by_cell[cell][code]=coefficient
             minima={cell:min((coefficients.get(code,0) for code in bits(current[cell])),default=0)
                     for cell,coefficients in by_cell.items()}
             total=sum(minima.values())
             if total>rhs:
-                current[next(iter(by_cell),0)]=0;break
+                cell=next(iter(by_cell),0);current[cell]=0
+                if reason is not None:reason(before,cell,before[cell],row_index)
+                break
             for cell,coefficients in by_cell.items():
                 lower=total-minima[cell]
                 current[cell]&=sum(1<<code for code in bits(current[cell]) if lower+coefficients.get(code,0)<=rhs)
+            if reason is not None:
+                for cell,(old_mask,new_mask) in enumerate(zip(before,current)):
+                    if old_mask!=new_mask:reason(before,cell,old_mask&~new_mask,row_index)
             if not all(current):break
         if not all(current) or tuple(current)==old:break
     check();changed=current!=domains;domains[:]=current;return changed
@@ -209,7 +214,11 @@ class ObstructionMiner:
 
 
 class PBLearner:
-    def __init__(self,problem,*,derive=True,discover=False,limit=32):
+    def __init__(self,problem,*,derive=True,discover=False,limit=32,indexed=False,explain=False):
+        self.explain=bool(explain)
+        if type(explain)is not bool or type(indexed)is not bool:raise ValueError('Invalid indexed PB policy.')
+        from constraint_arithmetic_round26 import STAT_KEYS as QUEUE_KEYS
+        self.indexed=indexed;self.queue_stats=dict.fromkeys(QUEUE_KEYS,0);self.pending=deque(maxlen=128)
         self.problem=problem;self.derive=derive;self.discover=discover;self.limit=limit
         self.records=OrderedDict();self.miner=ObstructionMiner(problem)
         self.stats=dict.fromkeys(('pb_queries','pb_reuses','pb_rows','pb_derived','pb_pair_checks',
@@ -237,19 +246,40 @@ class PBLearner:
             if not verify_derivation(base,steps):raise RuntimeError('PB derivation failed replay.')
         else:rows,steps,checks=base,(),0
         check();record={'scope':scope,'rows':rows,'steps':steps,'rules':rules}
+        record['proof_steps']=tuple({'parents':[a,b],'rule':'add','args':[x,y],'row':cut} for a,b,x,y,cut in steps)
+        if self.indexed:
+            from constraint_arithmetic_round26 import IndexedPBPropagation
+            record['propagator']=IndexedPBPropagation(rows,stats=self.queue_stats)
+            record['proof_steps']=tuple({'parents':[a,b],'rule':'add','args':[x,y],'row':cut} for a,b,x,y,cut in steps)
         self.records[scope]=record
         while len(self.records)>self.limit:self.records.popitem(last=False)
         self.stats['pb_rows']+=len(rows);self.stats['pb_derived']+=len(steps);self.stats['pb_pair_checks']+=checks
         return record
 
+    def _apply(self,domains,record,check):
+        if not self.indexed:
+            def capture(before,cell,removed,index):
+                for code in bits(removed):self.pending.append((before,cell,code,record,index))
+            return filter_rows(domains,record['rows'],check,reason=capture if self.explain else None)
+        worker=record['propagator']
+        try:return worker.filter(domains,check)
+        finally:
+            while worker.reasons:
+                reason=worker.reasons.popleft()
+                for code in bits(reason['removed']):self.pending.append((reason['domains'],reason['cell'],code,record,reason['row']))
+
+    def drain_deduction_chains(self,target='gold',limit=8):
+        from constraint_arithmetic_round26 import export_chains
+        return export_chains(self.problem,self.pending,target,limit)
+
     def prune(self,domains,check=lambda:None,*,max_cells=5,max_values=8):
         current=list(domains)
         for record in tuple(self.records.values()):
-            if all(not current[c]&~mask for c,mask in record['scope']):filter_rows(current,record['rows'],check)
+            if all(not current[c]&~mask for c,mask in record['scope']):self._apply(current,record,check)
             if not all(current):break
         eligible=sorted((c for c,d in enumerate(current) if 1<d.bit_count()<=max_values),key=lambda c:(current[c].bit_count(),c))
         if all(current) and len(eligible)>=2:
             selected=eligible[:max_cells];scope=tuple((c,current[c]) for c in selected)
-            record=self.compile(scope,check);filter_rows(current,record['rows'],check)
+            record=self.compile(scope,check);self._apply(current,record,check)
         check();self.stats['pb_prunes']+=sum((a&~b).bit_count() for a,b in zip(domains,current))
         changed=current!=domains;domains[:]=current;return changed

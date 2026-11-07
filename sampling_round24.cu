@@ -40,6 +40,94 @@ __device__ int loops(const unsigned*t,const unsigned*b,int n,int r,int f,int a,i
  }
  }}return result;
 }
+// Round26 current-board cache: two immutable physical-strand labels/word.
+__device__ void ibump(unsigned*m,int r,int lane,int which,unsigned value=1){
+ unsigned row=29+2*which,old=m[row*r+lane];m[row*r+lane]=old+value;
+ if(m[row*r+lane]<old)m[(row+1)*r+lane]++;
+}
+__device__ int mtotal(const unsigned*t,const unsigned*b,unsigned*m,int n,int r,int f,int edges,int lane,int flags){
+ if(flags&192){ibump(m,r,lane,1,n);ibump(m,r,lane,2,edges);}return total(t,b,n,r,f,edges,lane);
+}
+__device__ int mloops(const unsigned*t,const unsigned*b,unsigned*m,int n,int r,int f,int lane,int total,int flags){
+ if(!(flags&192))return loops(t,b,n,r,f,-1,-1,lane,total);if(!total)return 0;
+ int result=0;unsigned starts=0,steps=0;
+ for(int start=0;start<n;start++){unsigned code=b[start*r+lane];
+  for(unsigned port=0;port<33;port++){unsigned pair=partner(t,n,f,code,port);if(pair>=33||pair<port)continue;starts++;
+   int cell=start,incoming=port,key=start*33+port;
+   for(int count=1;count<=total;count++){unsigned outgoing=partner(t,n,f,b[cell*r+lane],incoming);steps++;if(outgoing>=33)break;
+    int local=cell*33+min(incoming,int(outgoing));if(local<key)break;unsigned next=t[18*n+cell*3+outgoing/11];if(next>=unsigned(n))break;
+    incoming=t[21*n+cell*3+outgoing/11]*11+10-outgoing%11;cell=next;if(cell==start&&incoming==int(port)){if(count<total)result++;break;}
+   }
+  }
+ }ibump(m,r,lane,4,starts);ibump(m,r,lane,5,steps);return result;
+}
+__device__ unsigned inode(const unsigned*t,int n,int f,unsigned code,unsigned port){
+ return t[25*n+f+3*n*n+1+3*n*33+code*33+port];
+}
+__device__ unsigned ilabel(const unsigned*m,int r,int lane,unsigned node){return (m[(45+node/2)*r+lane]>>(16*(node%2)))&65535u;}
+__device__ void iset(unsigned*m,int r,int lane,unsigned node,unsigned value){
+ unsigned row=45+node/2,shift=16*(node%2),mask=65535u<<shift;
+ m[row*r+lane]=(m[row*r+lane]&~mask)|(value<<shift);
+}
+__device__ int selected(int cell,int count,const int*cells){for(int i=0;i<count;i++)if(cells[i]==cell)return i;return -1;}
+__device__ unsigned virtual_code(const unsigned*b,int r,int lane,int cell,int count,const int*cells,const int*old,bool previous){
+ int index=previous?selected(cell,count,cells):-1;return index<0?b[cell*r+lane]:unsigned(old[index]);
+}
+__device__ int ichange(const unsigned*t,const unsigned*b,unsigned*m,int n,int r,int f,int edges,int lane,int count,const int*cells,const int*next){
+ int delta=0;unsigned seams=0;
+ for(int i=0;i<count;i++){int cell=cells[i];unsigned old=b[cell*r+lane],code=next[i];int base=25*n+f+cell*3*n;
+  delta+=(int(t[base+code])-int(t[base+old]))*(edges+1);
+  for(int side=0;side<3;side++){unsigned nb=t[18*n+cell*3+side];int index=selected(nb,count,cells);
+   if(nb>=unsigned(n)||(index>=0&&index<i))continue;
+   unsigned opposite=t[21*n+cell*3+side],other=b[nb*r+lane],replacement=index<0?other:unsigned(next[index]);
+   delta+=int(t[code*3+side]==t[9*n+replacement*3+opposite])-int(t[old*3+side]==t[9*n+other*3+opposite]);seams++;
+  }
+ }
+ ibump(m,r,lane,1,2*count);ibump(m,r,lane,2,2*seams);return delta;
+}
+__device__ int itouched(const unsigned*t,const unsigned*b,unsigned*m,int n,int r,int f,int lane,int count,const int*cells){
+ unsigned seen[96];int size=0;unsigned reads=0;
+ for(int i=0;i<count;i++){unsigned code=b[cells[i]*r+lane];
+  for(unsigned port=0;port<33;port++){unsigned pair=partner(t,n,f,code,port);if(pair>=33||pair<port)continue;
+   unsigned label=ilabel(m,r,lane,inode(t,n,f,code,port));reads++;if(!label)continue;
+   bool found=false;for(int j=0;j<size;j++)if(seen[j]==label)found=true;if(!found)seen[size++]=label;
+  }
+ }ibump(m,r,lane,3,reads);return size;
+}
+// mode 0 counts new touched loops; 1 also fills their labels; 2 clears old
+// touched closed loops using the pre-proposal virtual board. count<0 is rebuild.
+__device__ int icomponents(const unsigned*t,const unsigned*b,unsigned*m,int n,int r,int f,int lane,int total,int count,const int*cells,const int*old,int mode){
+ if(!total)return 0;int result=0;unsigned starts=0,steps=0,reads=0;
+ int roots=count<0?n:count;bool previous=mode==2;
+ for(int root=0;root<roots;root++){int start=count<0?root:cells[root];unsigned code=virtual_code(b,r,lane,start,count,cells,old,previous);
+  for(unsigned port=0;port<33;port++){unsigned pair=partner(t,n,f,code,port);if(pair>=33||pair<port)continue;
+   if(previous){reads++;if(!ilabel(m,r,lane,inode(t,n,f,code,port)))continue;}
+   starts++;int cell=start,incoming=port,key=start*33+port;unsigned smallest=0xffffffffu;bool closed=false;
+   for(int length=1;length<=total;length++){
+    unsigned here=virtual_code(b,r,lane,cell,count,cells,old,previous),outgoing=partner(t,n,f,here,incoming);steps++;if(outgoing>=33)break;
+    int local=cell*33+min(incoming,int(outgoing));if(!previous&&(count<0||selected(cell,count,cells)>=0)&&local<key)break;
+    smallest=min(smallest,inode(t,n,f,here,incoming));
+    unsigned nb=t[18*n+cell*3+outgoing/11];if(nb>=unsigned(n))break;
+    incoming=t[21*n+cell*3+outgoing/11]*11+10-outgoing%11;cell=nb;
+    if(cell==start&&incoming==int(port)){closed=length<total;break;}
+   }
+   if(!closed)continue;result++;
+   if(mode){cell=start;incoming=port;
+    for(int length=1;length<=total;length++){
+     unsigned here=virtual_code(b,r,lane,cell,count,cells,old,previous),outgoing=partner(t,n,f,here,incoming);steps++;
+     iset(m,r,lane,inode(t,n,f,here,incoming),previous?0:smallest+1);
+     unsigned nb=t[18*n+cell*3+outgoing/11];incoming=t[21*n+cell*3+outgoing/11]*11+10-outgoing%11;cell=nb;
+     if(cell==start&&incoming==int(port))break;
+    }
+   }
+  }
+ }ibump(m,r,lane,3,reads);ibump(m,r,lane,4,starts);ibump(m,r,lane,5,steps);return result;
+}
+__device__ void irebuild(const unsigned*t,const unsigned*b,unsigned*m,int n,int r,int f,int lane,int total){
+ for(int word=0;word<(total+1)/2;word++)m[(45+word)*r+lane]=0;
+ int cells[6],old[6];icomponents(t,b,m,n,r,f,lane,total,-1,cells,old,1);ibump(m,r,lane,7);
+}
+
 // Heuristic placement scores never exclude search work. The complete proposed
 // permutation is still evaluated by total()/loops() before acceptance.
 __device__ int local_candidate(const unsigned*t,const unsigned*b,int n,int r,int f,int edges,int cell,unsigned code,int lane){
@@ -83,14 +171,17 @@ __device__ float exchange_heat(const unsigned*m,int r,int lane,int flags){
 }
 extern "C" __global__ void sample_search(unsigned*b,unsigned*best,unsigned*m,const unsigned*t,int n,int r,int f,int steps,int phase,int edges,int gold_total,int flags){
  int lane=blockIdx.x*blockDim.x+threadIdx.x;if(lane>=r)return;unsigned random=m[lane];
+ if(phase==3){if(flags&64){irebuild(t,b,m,n,r,f,lane,gold_total);m[r+lane]=mtotal(t,b,m,n,r,f,edges,lane,flags)*(gold_total+1)+gold_total-mloops(t,b,m,n,r,f,lane,gold_total,flags);}return;}
+ if(phase==2){if((flags&64)&&(steps<0||lane==steps)){irebuild(t,b,m,n,r,f,lane,gold_total);ibump(m,r,lane,6);}return;}
  if(phase==0){
   for(int c=0;c<n;c++)b[c*r+lane]=t[24*n+c];
   for(int count=f;count>1;count--){int a=t[25*n+count-1],d=t[25*n+rnd(random)%count];unsigned old=b[a*r+lane];b[a*r+lane]=b[d*r+lane];b[d*r+lane]=old;}
   for(int i=0;i<f;i++){int c=t[25*n+i];b[c*r+lane]=3*(b[c*r+lane]/3)+rnd(random)%3;}
-  m[r+lane]=m[2*r+lane]=total(t,b,n,r,f,edges,lane)*(gold_total+1)+gold_total-loops(t,b,n,r,f,-1,-1,lane,gold_total);
-  for(int row=3;row<((flags&32)?29:((flags&16)?28:((flags&8)?22:18)));row++)m[row*r+lane]=0;
+  for(int row=3;row<((flags&192)?45+((flags&64)?(gold_total+1)/2:0):((flags&32)?29:((flags&16)?28:((flags&8)?22:18))));row++)m[row*r+lane]=0;
+  m[r+lane]=m[2*r+lane]=mtotal(t,b,m,n,r,f,edges,lane,flags)*(gold_total+1)+gold_total-mloops(t,b,m,n,r,f,lane,gold_total,flags);
   if(flags&32)m[28*r+lane]=__float_as_uint(.2f*powf(1.5f,float(lane%8)));
   for(int c=0;c<n;c++)best[c*r+lane]=b[c*r+lane];
+  if(flags&64)irebuild(t,b,m,n,r,f,lane,gold_total);
  }else if(f>0){
   int score=m[r+lane],bestscore=m[2*r+lane];unsigned iteration=m[3*r+lane];
   for(int step=0;step<steps;step++){
@@ -112,12 +203,16 @@ extern "C" __global__ void sample_search(unsigned*b,unsigned*best,unsigned*m,con
    }
    // S=B*(T+1)+T-L, with 0<=L<=T: quotient/remainder recover the
    // exact old domain/seam score and proper-loop count without retracing.
-   bool lazy=flags&16;int before,oldloops;
+   bool lazy=flags&16,incremental=flags&64;int before,oldloops;
+   int base_delta=0,touched=0;
+   if(flags&192)ibump(m,r,lane,0);
+   if(incremental){base_delta=ichange(t,b,m,n,r,f,edges,lane,count,cells,next);if(gold_total)touched=itouched(t,b,m,n,r,f,lane,count,cells);}
    if(lazy){before=score/(gold_total+1);oldloops=gold_total-score%(gold_total+1);
     m[22*r+lane]++;if(gold_total)m[23*r+lane]++;
-   }else {before=total(t,b,n,r,f,edges,lane);oldloops=loops(t,b,n,r,f,-1,-1,lane,gold_total);}
+   }else if(incremental){before=score/(gold_total+1);oldloops=gold_total-score%(gold_total+1);}
+   else {before=mtotal(t,b,m,n,r,f,edges,lane,flags);oldloops=mloops(t,b,m,n,r,f,lane,gold_total,flags);}
    for(int i=0;i<count;i++)b[cells[i]*r+lane]=next[i];
-   int candidate_base=total(t,b,n,r,f,edges,lane),base_delta=candidate_base-before;
+   int candidate_base=incremental?before+base_delta:mtotal(t,b,m,n,r,f,edges,lane,flags);base_delta=candidate_base-before;
    if(guided&&base_delta>0)m[21*r+lane]++;
    bool tabu=false;
    if(flags&2)for(int i=0;i<count;i++)for(int k=0;k<4;k++)
@@ -136,7 +231,7 @@ extern "C" __global__ void sample_search(unsigned*b,unsigned*best,unsigned*m,con
     if(!accept){skip=true;if(gold_total)m[26*r+lane]++;}
    }
    if(!skip){
-    int loop_delta=oldloops-loops(t,b,n,r,f,-1,-1,lane,gold_total);
+    int loop_delta=incremental?touched-icomponents(t,b,m,n,r,f,lane,gold_total,count,cells,old,0):oldloops-mloops(t,b,m,n,r,f,lane,gold_total,flags);
     if(lazy&&gold_total)m[24*r+lane]++;
     delta=base_delta*(gold_total+1)+loop_delta;
     float acceptance=(flags&4)?float(delta)/float(gold_total+1):float(base_delta?base_delta:loop_delta);
@@ -145,6 +240,7 @@ extern "C" __global__ void sample_search(unsigned*b,unsigned*best,unsigned*m,con
    if(tabu&&!accept)m[14*r+lane]++;
    iteration++;
    if(accept){
+    if(incremental&&gold_total){icomponents(t,b,m,n,r,f,lane,gold_total,count,cells,old,2);icomponents(t,b,m,n,r,f,lane,gold_total,count,cells,old,1);}
     score+=delta;m[13*r+lane]++;
     if(flags&2)for(int i=0;i<count;i++)if(old[i]!=next[i]){unsigned slot=m[4*r+lane]%4;m[4*r+lane]++;
      m[(5+slot)*r+lane]=cells[i]*(3*n)+old[i];m[(9+slot)*r+lane]=iteration+8+lane%4;}
@@ -161,6 +257,7 @@ extern "C" __global__ void replica_exchange(unsigned*b,unsigned*best,unsigned*m,
  float exponent=(1.f/ta-1.f/td)*float(int(m[r+d])-int(m[r+a]))/float(gold_total+1);m[16*r+a]++;
  if(exponent>=0||float(rnd(random)%1000000)<1000000.f*expf(exponent)){
   for(int c=0;c<n;c++){unsigned old=b[c*r+a];b[c*r+a]=b[c*r+d];b[c*r+d]=old;}
+  if(flags&64)for(int word=0;word<(gold_total+1)/2;word++){unsigned value=m[(45+word)*r+a];m[(45+word)*r+a]=m[(45+word)*r+d];m[(45+word)*r+d]=value;}
   unsigned old=m[r+a];m[r+a]=m[r+d];m[r+d]=old;m[17*r+a]++;
   for(int row=4;row<13;row++){m[row*r+a]=0;m[row*r+d]=0;}
   for(int which=0;which<2;which++){int lane=which?d:a;if(m[r+lane]>m[2*r+lane]){m[2*r+lane]=m[r+lane];for(int c=0;c<n;c++)best[c*r+lane]=b[c*r+lane];}}

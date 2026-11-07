@@ -310,7 +310,9 @@ assert.equal(element('advancedOptions').classList.contains('hidden'),false,'Show
 assert.equal(element('r25_native_sat_persistence').disabled,false,'Keep the control clearable even outside exact-search modes');
 assert.equal(element('startBtn').disabled,true);
 edit('native_sat_persistence',false);assert.equal(element('r25_native_sat_persistence').disabled,true);
-assert.equal(element('advancedOptions').classList.contains('hidden'),true);
+// CP-SAT now has its own regional compiler control in this panel.
+assert.equal(element('advancedOptions').classList.contains('hidden'),false);
+assert.equal(element('r26_regional_compiler').disabled,false);
 select('sat');assert.equal(element('startBtn').disabled,false,'Ordinary persistent SAT can import a checked subset without enabling a logger');
 assert.equal(run('readSearchOptions().native_sat_persistence'),false);
 """)

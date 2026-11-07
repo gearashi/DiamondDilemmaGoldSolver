@@ -24,7 +24,7 @@ def _board(problem,value):
 
 class RepairSession:
     def __init__(self,problem,codes,*,phase_seconds,seed=0,target='gold',patch_sizes=(8,16,24,40),per_attempt_seconds=2,max_attempts=64,
-                 candidate_boards=None,archive_size=8,adaptive=True,cache_attempts=True,loop_aware=True,dependency_chains=False,experiments=None,resume=None):
+                 candidate_boards=None,archive_size=8,adaptive=True,cache_attempts=True,loop_aware=True,dependency_chains=False,experiments=None,resume=None,retained=False,retained_service=None):
         if type(phase_seconds)not in (int,float) or not math.isfinite(phase_seconds) or phase_seconds<0 or type(seed)is not int or seed<0 or target not in ('gold','edges'):raise ValueError('Invalid durable repair budget or target.')
         if not patch_sizes or any(type(v)is not int or v<1 for v in patch_sizes) or len(patch_sizes)>32:raise ValueError('Invalid repair patch sizes.')
         if type(max_attempts)is not int or not 1<=max_attempts<=4096 or type(archive_size)is not int or not 1<=archive_size<=64:raise ValueError('Invalid bounded repair policy.')
@@ -32,12 +32,30 @@ class RepairSession:
         if any(type(v)is not bool for v in (adaptive,cache_attempts,loop_aware,dependency_chains)):raise ValueError('Repair controls must be boolean.')
         experiments={} if experiments is None else experiments
         if not isinstance(experiments,dict) or set(experiments)-set(EXPERIMENTS) or any(type(v)is not bool for v in experiments.values()):raise ValueError('Invalid repair experiments.')
+        if type(retained)is not bool:raise ValueError('Invalid retained repair switch.')
+        self.retained=retained;self.retained_service=None;self._owns_service=False
         self.problem=problem;initial=_board(problem,codes)
         self.config={'controller_version':1,'sources':_sources(),'fingerprint':problem.fingerprint,'domains':[list(row) for row in problem.domains],
             'fixed':[[int(c),int(v)] for c,v in sorted(problem.fixed.items())],'phase_seconds':float(phase_seconds),'seed':seed,'target':target,
             'patch_sizes':list(patch_sizes),'per_attempt_seconds':per_attempt_seconds,'max_attempts':max_attempts,'archive_size':archive_size,
             'adaptive':adaptive,'cache_attempts':cache_attempts,'loop_aware':loop_aware,'dependency_chains':dependency_chains,
             'experiments':[name for name in EXPERIMENTS if experiments.get(name)] if target=='gold' else []}
+        if retained:
+            from constraint_repair_service_round26 import RetainedRepairService
+            self.config['retained_repair']=True
+            saved_service=resume.get('retained_service') if isinstance(resume,dict) else None
+            self.retained_service=retained_service or RetainedRepairService(problem,resume=saved_service)
+            self._owns_service=retained_service is None
+            if not isinstance(self.retained_service,RetainedRepairService) or self.retained_service.problem is not problem:raise ValueError('Retained repair service belongs to another problem.')
+            self.retained_service._check()
+            if retained_service is not None and saved_service is not None:
+                def semantic(value):
+                    if isinstance(value,dict):return {k:semantic(v) for k,v in value.items() if k not in ('stats','digest')}
+                    if isinstance(value,list):return [semantic(v) for v in value]
+                    return value
+                live=semantic(retained_service.snapshot());saved=semantic(saved_service)
+                if live!=saved:raise ValueError('Warm retained repair owner differs from saved continuation.')
+        elif retained_service is not None:raise ValueError('Retained service requires its policy switch.')
         if candidate_boards is not None and (not isinstance(candidate_boards,(list,tuple)) or len(candidate_boards)>64):raise ValueError('Repair input archive exceeds64 boards.')
         candidates=[initial]+[_board(problem,row) for row in ([] if candidate_boards is None else candidate_boards)]
         self.config['initial_candidates']=deepcopy(candidates)
@@ -46,6 +64,8 @@ class RepairSession:
         self.index=0;self.size_index=0;self.stalls=0;self.seed_cursor=0;self.previous_size=None;self.rng=random.Random(seed)
         self.elapsed=0.;self.done=False;self.status='timeout';self.reason=None;self._active_since=None
         self.experiment_index=0;self.experiment_pending=None;self.experiment_elapsed=0.;self.experimental_reports=[]
+        self.experiment_order=list(self.config['experiments']);self.experiment_budgets={}
+        if self.retained and resume is None:self.experiment_budgets=self.retained_service.allocation(['mode:'+name for name in self.experiment_order]+['ordinary'],self.config['phase_seconds'])
         self.stats={'attempts':0,'accepted':0,'equal_alternatives':0,'improvements':0,'local_no_candidate':0,'candidates_checked':1,'revisited_boards':0,
             'workers':1,'native_statuses':{},'patch_sizes':list(patch_sizes),'dependency_chains':dependency_chains,'loop_cuts':0,'attempt_cache_hits':0,
             'conclusive_attempts':0,'patch_selections':0,'patch_size_counts':{},'size_changes':0,'seed_switches':0,
@@ -68,8 +88,13 @@ class RepairSession:
         if len(json.dumps(value,separators=(',',':')).encode())>MAX_SNAPSHOT_BYTES:raise ValueError('Repair checkpoint exceeds64MiB bound.')
         expected={'repair_session_version','config','current','best','archive','seen','cache','pending','index','size_index','stalls','seed_cursor','previous_size','rng',
             'elapsed','done','status','reason','experiment_index','experiment_pending','experiment_elapsed','experimental_reports','stats','digest'}
+        if self.retained:expected.update(('retained_service','experiment_order','experiment_budgets'))
         if (not isinstance(value,dict) or set(value)!=expected or type(value['repair_session_version'])is not int or value['repair_session_version']!=1
                 or value['digest']!=digest({k:v for k,v in value.items() if k!='digest'}) or value['config']!=self.config):raise ValueError('Durable repair input/policy differs.')
+        if self.retained:
+            order=value['experiment_order'];budgets=value['experiment_budgets'];names={'mode:'+name for name in self.config['experiments']}|{'ordinary'}
+            if not isinstance(order,list) or sorted(order)!=sorted(self.config['experiments']) or not isinstance(budgets,dict) or set(budgets)!=names or any(type(v)not in (int,float) or not math.isfinite(v) or v<0 for v in budgets.values()) or abs(sum(budgets.values())-self.config['phase_seconds'])>1e-7*max(1,self.config['phase_seconds']):raise ValueError('Invalid retained repair allocation.')
+            self.experiment_order=order.copy();self.experiment_budgets=dict(budgets)
         maximum=self.config['max_attempts'];capacity=self.config['archive_size']
         if value['status'] not in ('timeout','stopped','solved','edge_perfect','inconclusive','skipped') or value['reason'] is not None and (not isinstance(value['reason'],str) or len(value['reason'])>4096):raise ValueError('Invalid repair status.')
         if value['previous_size'] is not None and (type(value['previous_size'])is not int or not 1<=value['previous_size']<=self.problem.n):raise ValueError('Invalid previous repair size.')
@@ -81,8 +106,12 @@ class RepairSession:
         self.current=_board(self.problem,value['current']);self.best=_board(self.problem,value['best']);self.archive=[]
         for item in value['archive']:
             metrics=score(self.problem,item['codes'])
-            if item!={'codes':item['codes'],**metrics}:raise ValueError('Repair archive failed independent scoring.')
-            self.archive.append(deepcopy(item))
+            canonical={'codes':list(item['codes']),**metrics}
+            # JSON preserves edge endpoints but changes tuple rows to lists.
+            # Compare serialized values, then restore the independently scored
+            # canonical representation rather than trusting saved metadata.
+            if json.dumps(item,sort_keys=True)!=json.dumps(canonical,sort_keys=True):raise ValueError('Repair archive failed independent scoring.')
+            self.archive.append(canonical)
         self.seen={tuple(_board(self.problem,row)) for row in value['seen']}
         if not isinstance(value['cache'],list) or len(value['cache'])>maximum:raise ValueError('Repair completed-query cache exceeds bound.')
         self.cache=[]
@@ -93,8 +122,9 @@ class RepairSession:
             self.cache.append(deepcopy(item))
         pending=value['pending']
         if pending is not None:
-            if not isinstance(pending,dict) or set(pending)!={'board','patch','key','seed','calls','cuts'}:raise ValueError('Invalid pending repair query.')
+            if not isinstance(pending,dict) or set(pending)!=({'board','patch','key','seed','calls','cuts','policy_choice'} if self.retained else {'board','patch','key','seed','calls','cuts'}):raise ValueError('Invalid pending repair query.')
             self._validate_query(pending)
+            if self.retained and (type(pending['policy_choice'])is not int or pending['policy_choice'] not in self.config['patch_sizes']):raise ValueError('Invalid pending repair policy choice.')
             if type(pending['calls'])is not int or pending['calls']<0 or pending['seed']!=self.config['seed']+value['index']:raise ValueError('Pending repair seed/call counter differs.')
             cuts=pending['cuts']
             if not isinstance(cuts,dict) or cuts.get('version')!=1 or not isinstance(cuts.get('gold_cuts'),list) or len(cuts['gold_cuts'])>512:raise ValueError('Invalid pending local cut state.')
@@ -117,7 +147,7 @@ class RepairSession:
             setattr(self,key,deepcopy(value[key]))
         if not isinstance(self.experimental_reports,list) or len(self.experimental_reports)>len(self.config['experiments']):raise ValueError('Invalid experimental repair reports.')
         if self.experiment_pending is not None:
-            if not isinstance(self.experiment_pending,dict) or set(self.experiment_pending)!={'name','codes','boards','patch','checkpoint'} or self.experiment_index>=len(self.config['experiments']) or self.experiment_pending['name']!=self.config['experiments'][self.experiment_index]:raise ValueError('Invalid pending repair experiment.')
+            if not isinstance(self.experiment_pending,dict) or set(self.experiment_pending)!={'name','codes','boards','patch','checkpoint'} or self.experiment_index>=len(self.config['experiments']) or self.experiment_pending['name']!=self.experiment_order[self.experiment_index]:raise ValueError('Invalid pending repair experiment.')
             _board(self.problem,self.experiment_pending['codes'])
             for board in self.experiment_pending['boards']:_board(self.problem,board)
         if self.status in ('solved','edge_perfect') and (not self.done or not self._solved(self.best) or (self.status=='solved')!=bool(self.problem.validate(self.best)['valid'])):raise ValueError('Saved repair terminal status lacks a valid target certificate.')
@@ -148,15 +178,21 @@ class RepairSession:
         if progress is not None:progress({'event':event,'phase':'repair','codes':self.best.copy(),'stats':deepcopy(self.stats),**extra})
     def _experiment(self,control,progress):
         from constraint_repair_round24 import core_guided_repair,loop_merge_trade,fragment_crossover,scoped_repair_failure
-        name=self.config['experiments'][self.experiment_index]
+        if self.retained and self.experiment_pending is None:
+            options=['mode:'+name for name in self.experiment_order[self.experiment_index:]]
+            chosen=self.retained_service.select(options)[5:];position=self.experiment_order.index(chosen,self.experiment_index)
+            self.experiment_order[self.experiment_index],self.experiment_order[position]=self.experiment_order[position],self.experiment_order[self.experiment_index]
+        name=self.experiment_order[self.experiment_index]
+        prior_best=score(self.problem,self.best)['objective']
         if self.experiment_pending is None:
             metrics=score(self.problem,self.current);patch=sorted(_select_patch(self.problem,self.current,metrics,self.config['patch_sizes'][0],self.rng,self.config['target'],dependency_chains=self.config['dependency_chains']))
             self.experiment_pending={'name':name,'codes':self.current.copy(),'boards':[row['codes'].copy() for row in self.archive],'patch':patch,'checkpoint':None}
-        pending=self.experiment_pending;budget=self.config['phase_seconds']/(len(self.config['experiments'])+1)
+        pending=self.experiment_pending;budget=self.experiment_budgets.get('mode:'+name,self.config['phase_seconds']/(len(self.config['experiments'])+1))
         seconds=min(max(0.,budget-self.experiment_elapsed),max(0.,control.deadline-time.monotonic()))
         if seconds<=0:
             self.experiment_index+=1;self.experiment_pending=None;self.experiment_elapsed=0.;return
         began=time.monotonic();kwargs={'seconds':seconds,'stop':control.stop,'durable':True,'resume':pending['checkpoint']}
+        if self.retained:kwargs['retained_service']=self.retained_service.gold_pool()
         if name=='core_repair':trial=core_guided_repair(self.problem,pending['codes'],**kwargs)
         elif name=='fragment_crossover':trial=fragment_crossover(self.problem,pending['boards'],**kwargs)
         elif name=='repair_learning':trial=scoped_repair_failure(self.problem,pending['codes'],pending['patch'],**kwargs)
@@ -169,6 +205,7 @@ class RepairSession:
         else:self.experimental_reports.append(report)
         candidate=trial.get('best_board',trial.get('codes'))
         if candidate is not None:self._accept(candidate)
+        if self.retained:self.retained_service.observe('mode:'+name,max(0,score(self.problem,self.best)['objective']-prior_best),complete=bool(trial.get('continuation_complete')))
         if trial.get('continuation_complete') or self.experiment_elapsed>=budget:
             self.experiment_index+=1;self.experiment_pending=None;self.experiment_elapsed=0.
         self._emit(progress,'repair_progress')
@@ -189,12 +226,15 @@ class RepairSession:
                 control.check()
                 if self.pending is None:
                     chosen=self.config['patch_sizes'][self.size_index if self.config['adaptive'] else self.index%len(self.config['patch_sizes'])]
+                    if self.retained and self.config['adaptive']:
+                        chosen=int(self.retained_service.select(list(dict.fromkeys('patch:'+str(size) for size in self.config['patch_sizes'])))[6:])
                     patch=sorted(_select_patch(self.problem,self.current,score(self.problem,self.current),chosen,self.rng,self.config['target'],dependency_chains=self.config['dependency_chains']))
                     if not patch:self.done=True;self.status='inconclusive';break
                     size=len(patch);self.stats['patch_selections']+=1;self.stats['patch_size_counts'][str(size)]=self.stats['patch_size_counts'].get(str(size),0)+1
                     if self.previous_size is not None and size!=self.previous_size:self.stats['size_changes']+=1
                     self.previous_size=size
                     self.pending={'board':self.current.copy(),'patch':patch,'key':self._key(self.current,patch),'seed':self.config['seed']+self.index,'calls':0,'cuts':{'version':1,'gold_cuts':[]}}
+                    if self.retained:self.pending['policy_choice']=chosen
                 pending=self.pending;cached=next((row for row in self.cache if row['key']==pending['key']),None) if self.config['cache_attempts'] else None
                 details={}
                 if cached:
@@ -202,15 +242,19 @@ class RepairSession:
                 else:
                     self._emit(progress,'repair_attempt',patch_cells=pending['patch'])
                     if pending['calls']:self.stats['repair_native_retries']+=1
-                    pending['calls']+=1;self.stats['attempts']+=1;self.stats['repair_model_build_attempts']+=1
+                    pending['calls']+=1;self.stats['attempts']+=1
+                    if not self.retained:self.stats['repair_model_build_attempts']+=1
                     try:
                         candidate,native_status=_solve_patch(self.problem,pending['board'],pending['patch'],cp_model=cp_model,control=control,
-                            seconds=self.config['per_attempt_seconds'],seed=pending['seed'],target=self.config['target'],loop_aware=self.config['loop_aware'],diagnostics=details,resume_state=pending['cuts'])
+                            seconds=self.config['per_attempt_seconds'],seed=pending['seed'],target=self.config['target'],loop_aware=self.config['loop_aware'],diagnostics=details,resume_state=pending['cuts'],**({'retained_service':self.retained_service} if self.retained else {}))
                     finally:
+                        if self.retained:self.stats['repair_model_build_attempts']+=details.get('model_build_attempted',0)
                         self.stats['loop_cuts']+=details.get('loop_cuts',0);self.stats['repair_cut_replays']+=details.get('restored_loop_cuts',0);self.stats['repair_model_rebuilds']+=details.get('model_built',0);self.stats['repair_native_calls']+=details.get('native_calls',0)
                     self.stats['native_statuses'][native_status]=self.stats['native_statuses'].get(native_status,0)+1
                 if candidate is not None:self._validate_candidate(candidate,pending['board'],pending['patch'])
+                prior_objective=score(self.problem,self.best)['objective']
                 improved=self._accept(candidate) if candidate is not None else False
+                if self.retained and not cached:self.retained_service.observe('patch:'+str(pending['policy_choice']),max(0,score(self.problem,self.best)['objective']-prior_objective),complete=native_status in CONCLUSIVE)
                 if self.done:
                     self.pending=None;self.index+=1;self._emit(progress,'candidate');return
                 if not cached and self.config['cache_attempts'] and native_status in CONCLUSIVE:
@@ -240,11 +284,16 @@ class RepairSession:
         return {'status':self.status,'complete':self.status in ('solved','edge_perfect'),'scope':'local_repair_only','best_board':self.best.copy(),
             'best_score':metrics['matched_edges'],'best_objective':metrics['objective'],'domain_violations':metrics['domain_violations'],
             'validation':self.problem.validate(self.best),'elapsed_seconds':self.elapsed,'stats':deepcopy(self.stats),
-            'candidate_archive':deepcopy(self.archive),'experimental_repair':deepcopy(self.experimental_reports),'continuation_complete':self.done,'reason':self.reason}
+            'candidate_archive':deepcopy(self.archive),'experimental_repair':deepcopy(self.experimental_reports),'retained_repair_stats':self.retained_service.telemetry() if self.retained else {},'continuation_complete':self.done,'reason':self.reason}
     def snapshot(self):
         self._check_scope();self._account();value={'repair_session_version':1,'config':deepcopy(self.config),'current':self.current.copy(),'best':self.best.copy(),'archive':deepcopy(self.archive),
             'seen':[list(row) for row in sorted(self.seen)],'cache':deepcopy(self.cache),'pending':deepcopy(self.pending),'rng':self.rng.getstate(),'stats':deepcopy(self.stats)}
         for key in ('index','size_index','stalls','seed_cursor','previous_size','elapsed','done','status','reason','experiment_index','experiment_pending','experiment_elapsed','experimental_reports'):value[key]=deepcopy(getattr(self,key))
+        if self.retained:
+            value['retained_service']=self.retained_service.snapshot();value['experiment_order']=self.experiment_order.copy();value['experiment_budgets']=dict(self.experiment_budgets)
         value['digest']=digest(value)
         if len(json.dumps(value,separators=(',',':')).encode())>MAX_SNAPSHOT_BYTES:raise ValueError('Repair checkpoint exceeds64MiB bound; pending state was retained in memory.')
         return value
+
+    def close(self):
+        if self._owns_service and self.retained_service is not None:self.retained_service.close()
