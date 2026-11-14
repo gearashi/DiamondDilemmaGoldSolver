@@ -6,6 +6,7 @@ GPU time includes imports, allocation, compilation, and CPU verification. There
 is no CPU sampling fallback, and sample failure never establishes infeasibility.
 """
 from __future__ import annotations
+import gc
 import math
 from pathlib import Path
 from types import SimpleNamespace
@@ -384,23 +385,34 @@ class _WebGPU:
             raise ValueError('Sampling replica count exceeds this GPU buffer limit.')
         self.gpu = adapter.request_device_sync(required_limits={'max-buffer-size': required_size,
                     'max-storage-buffer-binding-size': required_size, 'max-storage-buffers-per-shader-stage': 4})
+        self.buffers = []
+        self.gather_buffer = self.params = None
+        try:
+            self._initialize_device(sizes, table, replicas, seed, initialize)
+        except BaseException:
+            self.close()
+            raise
+
+    def _initialize_device(self, sizes, table, replicas, seed, initialize):
         self.queue = self.gpu.queue
-        usage = wgpu.BufferUsage.STORAGE | wgpu.BufferUsage.COPY_SRC | wgpu.BufferUsage.COPY_DST
-        self.buffers = [self.gpu.create_buffer(size=size, usage=usage) for size in sizes]
+        usage = self.wgpu.BufferUsage.STORAGE | self.wgpu.BufferUsage.COPY_SRC | self.wgpu.BufferUsage.COPY_DST
+        for size in sizes:
+            self.buffers.append(self.gpu.create_buffer(size=size, usage=usage))
         self.queue.write_buffer(self.buffers[2], 0, np.random.default_rng(seed).integers(1, 2**32, replicas, dtype=np.uint32))
         self.queue.write_buffer(self.buffers[3], 0, table)
         self._table_digest=__import__('hashlib').sha256(table.tobytes()).hexdigest()
-        self.params = self.gpu.create_buffer(size=32, usage=wgpu.BufferUsage.UNIFORM | wgpu.BufferUsage.COPY_DST)
+        self.params = self.gpu.create_buffer(size=32, usage=self.wgpu.BufferUsage.UNIFORM | self.wgpu.BufferUsage.COPY_DST)
         module = self.gpu.create_shader_module(code=(ROOT/('sampling_round24.wgsl' if self.flags else 'sampling_kernels.wgsl')).read_text())
         self.pipeline = self.gpu.create_compute_pipeline(layout='auto', compute={'module': module, 'entry_point': 'sample_search'})
         self.exchange_pipeline = self.gpu.create_compute_pipeline(layout='auto',compute={'module':module,'entry_point':'replica_exchange'}) if self.flags&4 else None
         self.gather_pipeline = self.gpu.create_compute_pipeline(layout='auto', compute={'module': module, 'entry_point': 'gather_best'})
-        self.gather_buffer, self.gather_capacity, self.gather_group = None, 0, None
+        self.gather_capacity, self.gather_group = 0, None
         entries = [{'binding': i, 'resource': {'buffer': buffer}} for i, buffer in enumerate(self.buffers)]
         entries.append({'binding': 4, 'resource': {'buffer': self.params}})
         self.group = self.gpu.create_bind_group(layout=self.pipeline.get_bind_group_layout(0), entries=entries)
         self.exchange_group=self.gpu.create_bind_group(layout=self.exchange_pipeline.get_bind_group_layout(0),entries=[entries[i] for i in (0,1,2,4)]) if self.exchange_pipeline is not None else None
         if initialize:self.launch(0, 0)
+
     @_injection_transaction
     def inject_candidate(self,problem,codes):
         values,objective=_injection_values(self,problem,codes)
@@ -518,9 +530,26 @@ class _WebGPU:
             result.update({key:sum(int(native[2*i,j])+(int(native[2*i+1,j])<<32) for j in range(self.r)) for i,key in enumerate(COUNTERS)})
         return result
     def close(self):
-        if self.gather_buffer is not None: self.gather_buffer.destroy()
-        for buffer in self.buffers: buffer.destroy()
-        self.params.destroy(); self.gpu.destroy()
+        if self.gpu is None:
+            return
+        try:
+            if self.gather_buffer is not None:
+                self.gather_buffer.destroy()
+            while self.buffers:
+                self.buffers.pop().destroy()
+            if self.params is not None:
+                self.params.destroy()
+        finally:
+            try:
+                self.gpu.destroy()
+            finally:
+                # wgpu-py retains the native device through its queue/self cycle
+                # after destroy(). Release our children before collecting that cycle.
+                self.buffers.clear()
+                self.group = self.exchange_group = self.gather_group = None
+                self.pipeline = self.exchange_pipeline = self.gather_pipeline = None
+                self.gather_buffer = self.params = self.queue = self.gpu = None
+                gc.collect()
 
 
 SAMPLING_EXPERIMENTS=('ejection_chains','move_tabu','replica_exchange','obstruction_chains','cycle_crossover','lazy_gold_scoring','adaptive_temperatures','incremental_sampling','optimal_crossover')

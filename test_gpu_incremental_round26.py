@@ -1,5 +1,5 @@
 """Exact incremental sampler scores/cache across both native backends."""
-import itertools,os,unittest
+import itertools,os,unittest,weakref
 from unittest.mock import patch
 import numpy as np
 import gpu_sampling as sampling
@@ -10,6 +10,24 @@ from gpu_sampling_resume_round25 import SamplerSession
 from test_constraint_dfs import tetrahedron_tiles,double_face,multiple_loops,board
 
 class IncrementalHostTests(unittest.TestCase):
+    def test_webgpu_failed_initialization_releases_allocated_device(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        p = SearchProblem(*tetrahedron_tiles())
+        gpu = Mock()
+        first = Mock()
+        gpu.create_buffer.side_effect = [first, RuntimeError('injected allocation failure')]
+        adapter = Mock(info={'backend_type': 'Vulkan', 'adapter_type': 'DiscreteGPU'},
+                       limits={'max-buffer-size': 2**30, 'max-storage-buffer-binding-size': 2**30})
+        adapter.request_device_sync.return_value = gpu
+        fake = SimpleNamespace(gpu=Mock(), BufferUsage=SimpleNamespace(STORAGE=1, COPY_SRC=2, COPY_DST=4))
+        fake.gpu.request_adapter_sync.return_value = adapter
+        with patch.dict('sys.modules', {'wgpu': fake}):
+            with self.assertRaisesRegex(RuntimeError, 'injected allocation failure'):
+                sampling._WebGPU(p, *sampling._inputs(p, True), 8, 2615)
+        first.destroy.assert_called_once_with()
+        gpu.destroy.assert_called_once_with()
+
     def test_layout_cap_and_flags(self):
         self.assertEqual(sampling.sampling_flags({'incremental_sampling':True}),65)
         size=state_size(160,131072,365,65)
@@ -69,8 +87,10 @@ class _Hardware:
             policy={'ejection_chains':True,**{key:True for key,value in zip(('move_tabu','replica_exchange','obstruction_chains','lazy_gold_scoring'),bits) if value}}
             for gold in (False,True):
                 with self.subTest(policy=policy,gold=gold):
-                    a=self.engine(p,policy,gold);b=self.engine(p,{**policy,'incremental_sampling':True},gold)
+                    a = self.engine(p, policy, gold)
+                    b = None
                     try:
+                        b = self.engine(p, {**policy, 'incremental_sampling': True}, gold)
                         self.equal(a,b)
                         for engine in (a,b):
                             value=engine.snapshot_arrays();value[2][3]=4094;engine.restore_arrays(value)
@@ -80,7 +100,10 @@ class _Hardware:
                             self.equal(a,b);self.check(p,b,gold)
                         stats=b.experiment_stats();accepted+=stats['accepted_moves'];rejected+=stats['incremental_proposals']-stats['accepted_moves']
                         self.assertEqual(stats['incremental_proposals'],48*b.r)
-                    finally:a.close();b.close()
+                    finally:
+                        a.close()
+                        if b is not None:
+                            b.close()
         self.assertGreater(accepted,0);self.assertGreater(rejected,0)
     def test_fixed_empty_and_multiple_loop_cases(self):
         cases=[SearchProblem(multiple_loops(),double_face()),SearchProblem(*tetrahedron_tiles(),fixed={0:0}),
@@ -129,4 +152,15 @@ class _Hardware:
 @unittest.skipUnless(os.environ.get('DIAMOND_TEST_GPU_SAMPLING')=='1','CUDA finite tests disabled')
 class CUDAIncremental(_Hardware,unittest.TestCase):backend='cuda'
 @unittest.skipUnless(os.environ.get('DIAMOND_TEST_WEBGPU')=='1','WebGPU finite tests disabled')
-class WebGPUIncremental(_Hardware,unittest.TestCase):backend='webgpu'
+class WebGPUIncremental(_Hardware,unittest.TestCase):
+    backend = 'webgpu'
+
+    def test_closed_sampler_releases_native_device_with_engine_still_referenced(self):
+        p = SearchProblem(*tetrahedron_tiles())
+        engine = self.engine(p, {'ejection_chains': True, 'replica_exchange': True})
+        self.addCleanup(engine.close)
+        engine.top(2)
+        device = weakref.ref(engine.gpu)
+        engine.close()
+        self.assertIsNone(device())
+        engine.close()
