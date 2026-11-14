@@ -217,6 +217,36 @@ class ConstraintDFSTests(unittest.TestCase):
                 self.assertEqual(result['status'], 'solved')
                 self.assertTrue(problem.validate(result['codes'])['valid'])
 
+    def test_resume_accepts_original_six_counters_and_preserves_validation(self):
+        from constraint_dfs import _checkpoint_digest
+        problem = SearchProblem(simple_tiles(), double_face())
+        saved = legacy_solve(problem, seconds=0)['checkpoint']
+        saved.pop('root_symmetry', None)  # Early v2 snapshots predate symmetry metadata.
+        legacy_keys = ('propagations', 'arc_revisions', 'tile_prunes', 'loop_prunes', 'leaves', 'backtracks')
+        added_keys = set(saved['stats']).difference(legacy_keys)
+        self.assertTrue(added_keys)
+        saved['stats'] = dict.fromkeys(legacy_keys, 0)
+        saved['stats']['arc_revisions'] = 19
+        saved['digest'] = _checkpoint_digest(saved)
+        restored = legacy_solve(problem, seconds=0, resume=saved)['checkpoint']
+        self.assertEqual(restored['stack'], saved['stack'])
+        self.assertEqual(restored['nodes'], saved['nodes'])
+        self.assertEqual(restored['stats']['arc_revisions'], 19)
+        self.assertTrue(all(restored['stats'][key] == 0 for key in added_keys))
+        self.assertEqual(legacy_solve(problem, seconds=2, resume=restored)['status'], 'solved')
+
+        for name, value in (('leaves', None), ('unrecognized', 0), ('leaves', True), ('backtracks', -1)):
+            with self.subTest(name=name, value=value):
+                counters = saved['stats'].copy()
+                if value is None:
+                    del counters[name]
+                else:
+                    counters[name] = value
+                invalid = dict(saved, stats=counters)
+                invalid['digest'] = _checkpoint_digest(invalid)
+                with self.assertRaisesRegex(ValueError, 'Malformed checkpoint counters'):
+                    legacy_solve(problem, seconds=0, resume=invalid)
+
     def test_resume_rejects_wrong_problem_target_or_invalid_frame(self):
         problem = SearchProblem(simple_tiles(), double_face())
         checkpoint = solve(problem, seconds=0)['checkpoint']

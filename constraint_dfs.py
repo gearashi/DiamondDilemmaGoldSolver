@@ -63,7 +63,8 @@ GUIDANCE_STAT_KEYS = ('failure_guided_choices','failure_weight_updates','lookahe
                       'lookahead_probe_propagations','lookahead_probe_arc_revisions') + CACHE_STAT_KEYS + PAIR_STAT_KEYS + PROBE_PLAN_STATS
 KNOWLEDGE_STAT_KEYS = ('loop_witnesses',)
 EXPLANATION_STAT_KEYS = ('explanation_probes', 'explanation_literals_removed', 'explanation_aborted', 'explanation_skipped', 'explanation_time_ns', 'backjumps', 'backjump_levels', 'native_basic_passes_skipped')
-BASE_STAT_KEYS = ('propagations', 'arc_revisions', 'tile_prunes', 'loop_prunes', 'leaves', 'backtracks') + CHAIN_STAT_KEYS + PROPAGATION_CURSOR_STATS + RELATION_CERTIFICATE_STATS
+# Every v2 checkpoint contains these six counters. Later counters default to zero on resume.
+BASE_STAT_KEYS = ('propagations', 'arc_revisions', 'tile_prunes', 'loop_prunes', 'leaves', 'backtracks')
 CONFLICT_STAT_KEYS = ('conflicts_learned', 'conflicts_subsumed', 'conflict_evictions',
                       'conflict_checks', 'conflict_prunes', 'conflict_hits', 'conflict_cache_entries')
 
@@ -527,7 +528,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
     n, count = problem.n, 3*problem.n
     initial = ([sum(1 << code for code in domain) for domain in problem.domains]
                if _initial_domains is None else list(_initial_domains))
-    stats = dict.fromkeys(BASE_STAT_KEYS + PRUNER_STAT_KEYS + CONFLICT_STAT_KEYS + CONNECTIVITY_STAT_KEYS + NATIVE_STAT_KEYS + GUIDANCE_STAT_KEYS + ADVANCED_STAT_KEYS + EXPLANATION_STAT_KEYS + SCHEDULING_STAT_KEYS + KNOWLEDGE_STAT_KEYS + REASON_STAT_KEYS + SAT_ASSIST_STAT_KEYS + ORDERING_STAT_KEYS + SHARED_STAT_KEYS + BRANCH_STAT_KEYS + LCG_STAT_KEYS + GOLD_ORACLE_STAT_KEYS + NATIVE_SEARCH_STAT_KEYS + NATIVE_LEARNING_STAT_KEYS + GROUP_STAT_KEYS + DEEP_STAT_KEYS + POLICY_STAT_KEYS + MASK_STAT_KEYS + RESEARCH_STAT_KEYS + ROUTING_STAT_KEYS + RESIDUAL_STAT_KEYS + HIGHER_STAT_KEYS + REGION26_STATS + ARCHIVE_STATS + SERVICE_STATS + WITNESS_STATS + RELATIONAL_STATS + ('lcg_trace_budget_skips',), 0)
+    stats = dict.fromkeys(BASE_STAT_KEYS + CHAIN_STAT_KEYS + PROPAGATION_CURSOR_STATS + RELATION_CERTIFICATE_STATS + PRUNER_STAT_KEYS + CONFLICT_STAT_KEYS + CONNECTIVITY_STAT_KEYS + NATIVE_STAT_KEYS + GUIDANCE_STAT_KEYS + ADVANCED_STAT_KEYS + EXPLANATION_STAT_KEYS + SCHEDULING_STAT_KEYS + KNOWLEDGE_STAT_KEYS + REASON_STAT_KEYS + SAT_ASSIST_STAT_KEYS + ORDERING_STAT_KEYS + SHARED_STAT_KEYS + BRANCH_STAT_KEYS + LCG_STAT_KEYS + GOLD_ORACLE_STAT_KEYS + NATIVE_SEARCH_STAT_KEYS + NATIVE_LEARNING_STAT_KEYS + GROUP_STAT_KEYS + DEEP_STAT_KEYS + POLICY_STAT_KEYS + MASK_STAT_KEYS + RESEARCH_STAT_KEYS + ROUTING_STAT_KEYS + RESIDUAL_STAT_KEYS + HIGHER_STAT_KEYS + REGION26_STATS + ARCHIVE_STATS + SERVICE_STATS + WITNESS_STATS + RELATIONAL_STATS + ('lcg_trace_budget_skips',), 0)
     nodes, previous_elapsed = 0, 0.0
     if resume is not None:
         if not isinstance(resume, dict) or resume.get('version') != VERSION or resume.get('fingerprint') != problem.fingerprint or resume.get('target') != target:
