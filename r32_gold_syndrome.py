@@ -3,7 +3,9 @@
 The flipped equations form a subset of the actually broken bonds. Paying for each
 flip and at least one loss in each disjoint incompatible group is a lower bound.
 """
-from collections import Counter
+from bisect import bisect_left
+from collections import Counter, defaultdict
+from dataclasses import dataclass
 from itertools import combinations
 import time
 from math import comb
@@ -34,11 +36,32 @@ def projection(base, equations):
     return col[0], col[1:]
 
 
+@dataclass(frozen=True)
+class _SuffixTable:
+    anchor: tuple | None
+    rhs: int
+    columns: tuple
+    prices: tuple
+    buckets: dict
+
+
 class OutsideSyndromes:
-    def __init__(self,problem,reference,groups,required=()):
-        self.groups=maximize_disjoint(groups)
-        self.required=set(required)
-        self.outside=tuple(sorted(set(reference)-set().union(*self.groups)-self.required))
+    @staticmethod
+    def layout(reference, groups, required):
+        packed = maximize_disjoint(groups)
+        required = set(required)
+        outside = tuple(sorted(set(reference) - set().union(*packed) - required))
+        return packed, required, outside
+
+    def __init__(self, problem, reference, groups, required=(), *, reuse_suffix_tables=True, seek_ordered_tails=True, use_bucket_price=True, layout=None):
+        self.groups, self.required, self.outside = (
+            self.layout(reference, groups, required) if layout is None else layout)
+        # This index belongs to this fixed reference and projection. Only the
+        # most recent layer survives, which bounds memory on multi-layer runs.
+        self.reuse_suffix_tables = reuse_suffix_tables
+        self.seek_ordered_tails = seek_ordered_tails
+        self.use_bucket_price = use_bucket_price
+        self._suffix_cache = None
         data=SignedParity(problem)
         # Eliminate phase columns only. Symbol bit zero is RHS; others represent errors.
         self.base={i:(m,b) for i,(m,b,_) in data.base.pivots.items()}
@@ -126,7 +149,52 @@ class OutsideSyndromes:
                        for q in group-self.required for child in [basis.copy()])
         return resolve(basis,sorted(self.groups,key=difficulty),budget-len(flipped))
 
-    def indexed(self, cap, errors, seconds=60, start=0, stop=None):
+    def _build_suffix_table(self, cap, errors):
+        n = len(self.outside)
+        length = min(errors, 2)
+        _, columns = self.outside_check
+        # A projected group further subdivides suffixes. Their lookup
+        # keys are exact XOR syndromes; omitted high-cost keys cannot fit cap.
+        spare=cap-errors-len(self.groups)
+        from operator import xor
+        from functools import reduce
+        from random import Random
+        rng=Random(32)
+        trials=[rng.sample(range(n),errors) for _ in range(96)]
+        def estimated_hits(tab):
+            val,cols,lookup=tab
+            return sum(lookup.get(reduce(xor,(cols[i] for i in row),val),cap+2)<=1+spare
+                       for row in trials),sum(v<=1+spare for v in lookup.values())
+        anchor=min(self.tables,key=estimated_hits,default=None)
+        if anchor is not None:
+            group_rhs, group_cols, prices = anchor
+            charges = tuple((syndrome, cost-1) for syndrome, cost in prices.items() if cost<=1+spare)
+        else:
+            group_rhs, group_cols, charges = 0, (0,)*n, ((0, 0),)
+        buckets=defaultdict(list)
+        for indices in combinations(range(n),length):
+            value=0
+            local=0
+            for i in indices:
+                value^=columns[i]
+                local^=group_cols[i]
+            buckets[value,local].append(indices)
+        return _SuffixTable(anchor, group_rhs, group_cols, charges, dict(buckets))
+
+    @staticmethod
+    def _owned_tails(bucket, last, stats):
+        # combinations() orders tuples lexicographically. All suffixes starting
+        # at or before the final prefix index form one initial slice.
+        if last < 0 or not bucket or bucket[0][0] > last:
+            return bucket
+        if bucket[-1][0] <= last:
+            stats['unowned_tail_visits_skipped'] += len(bucket)
+            return ()
+        first = bisect_left(bucket, (last + 1,))
+        stats['unowned_tail_visits_skipped'] += first
+        return bucket[first:]
+
+    def indexed(self, cap, errors, seconds=60, start=0, stop=None, *, accept_errors=None):
         """Index all suffixes of size at most two by their outside-only syndrome.
 
         The owned prefix ranks have a different scope from check()'s full-set ranks.
@@ -146,65 +214,74 @@ class OutsideSyndromes:
             return dict(status=status,start=start,stop=end,next_rank=rank,cap=cap,errors=errors,
                         total_prefixes=total,total_error_sets=comb(n,errors),work=dict(stats),**detail)
         if self.inconsistent or len(self.groups)+errors>cap:return report('INFEASIBLE',end)
+        if start == end:
+            return report('INFEASIBLE', end)
         rhs,columns=self.outside_check
-        # A projected group further subdivides suffixes. Their lookup
-        # keys are exact XOR syndromes; omitted high-cost keys cannot fit cap.
-        spare=cap-errors-len(self.groups)
-        from operator import xor
-        from functools import reduce
-        from random import Random
-        rng=Random(32)
-        trials=[rng.sample(range(n),errors) for _ in range(96)]
-        def estimated_hits(tab):
-            val,cols,lookup=tab
-            return sum(lookup.get(reduce(xor,(cols[i] for i in row),val),cap+2)<=1+spare
-                       for row in trials),sum(v<=1+spare for v in lookup.values())
-        anchor=min(self.tables,key=estimated_hits,default=None)
-        if anchor is not None:
-            group_rhs, group_cols, prices = anchor
-            keys=[s for s,c in prices.items() if c<=1+spare]
+        signature = (cap, errors)
+        cached = self._suffix_cache
+        if cached is not None and cached[0] == signature:
+            table = cached[1]
+            stats['suffix_table_reuses'] += 1
         else:
-            group_rhs,group_cols,keys=0,(0,)*n,[0]
-        from collections import defaultdict
-        buckets=defaultdict(list)
-        for indices in combinations(range(n),length):
-            value=0
-            local=0
-            for i in indices:
-                value^=columns[i]
-                local^=group_cols[i]
-            buckets[value,local].append(indices)
-        stats['suffix_rows']=sum(map(len,buckets.values()))
+            # Release the previous layer before allocating its replacement.
+            self._suffix_cache = None
+            del cached
+            table = self._build_suffix_table(cap, errors)
+            if self.reuse_suffix_tables:
+                self._suffix_cache = (signature, table)
+            stats['suffix_rows'] = comb(n, length)
+        # For the anchor group, a matched bucket already determines its exact
+        # projected cost. The remaining group tests and the joint check still run.
+        prepaid = self.use_bucket_price and table.anchor is not None
+        checks = tuple(t for t in self.tables if t is not table.anchor) if prepaid else self.tables
+        spare = cap - errors - len(self.groups)
         duration=time.monotonic()+seconds
         for rank,prefix in ranked_combinations(n-length,prefix_size,start,end):
             if rank%64==0 and time.monotonic()>=duration:return report('UNKNOWN',rank)
             stats['prefixes']+=1
             key=rhs
-            local=group_rhs
+            local=table.rhs
             for i in prefix:
                 key^=columns[i]
-                local^=group_cols[i]
+                local^=table.columns[i]
             base=[]
-            for val,cols,lookup in self.tables:
+            for val,cols,lookup in checks:
                 for i in prefix:val^=cols[i]
                 base.append((val,cols,lookup))
             last=prefix[-1] if prefix else -1
-            for ntail,tail in enumerate(chain.from_iterable(buckets.get((key,local^v),()) for v in keys)):
-                if ntail%4096==0 and time.monotonic()>=duration:return report('UNKNOWN',rank)
-                if tail and tail[0]<=last:continue
-                stats['indexed_tails']+=1
-                slack=cap-errors-len(self.groups)
-                for val,cols,lookup in base:
-                    for i in tail:val^=cols[i]
-                    slack-=lookup.get(val,cap+2)-1
-                    if slack<0:break
-                else:
-                    stats['joint_queries']+=1
-                    try:
-                        if self.joint(set(chain(prefix,tail)),cap,duration):
-                            return report('PHASE_RELAXATION_FEASIBLE',rank,
-                                          outside_errors=[self.outside[i] for i in chain(prefix,tail)])
-                    except TimeoutError:return report('UNKNOWN',rank)
+            for syndrome, charge in table.prices:
+                bucket = table.buckets.get((key, local ^ syndrome), ())
+                if self.seek_ordered_tails:
+                    bucket = self._owned_tails(bucket, last, stats)
+                available = spare - charge if prepaid else spare
+                if bucket and prepaid:
+                    stats['bucket_prices_reused'] += 1
+                for ntail,tail in enumerate(bucket):
+                    if ntail%4096==0 and time.monotonic()>=duration:return report('UNKNOWN',rank)
+                    if not self.seek_ordered_tails and tail and tail[0] <= last:
+                        stats['unowned_tail_visits'] += 1
+                        continue
+                    stats['indexed_tails']+=1
+                    slack = available
+                    for val,cols,lookup in base:
+                        for i in tail:val^=cols[i]
+                        slack-=lookup.get(val,cap+2)-1
+                        if slack<0:break
+                    else:
+                        stats['joint_queries']+=1
+                        try:
+                            errors_here = set(chain(prefix, tail))
+                            if not self.joint(errors_here, cap, duration):
+                                continue
+                            status = 'PHASE_RELAXATION_FEASIBLE'
+                            if accept_errors is not None:
+                                stats['integer_checks'] += 1
+                                if not accept_errors(errors_here, duration):
+                                    stats['integer_rejections'] += 1
+                                    continue
+                                status = 'INTEGER_RELAXATION_FEASIBLE'
+                            return report(status, rank, outside_errors=[self.outside[i] for i in chain(prefix, tail)])
+                        except TimeoutError:return report('UNKNOWN',rank)
         return report('INFEASIBLE',end)
 
     def check(self, cap, errors, seconds=60, start=0, stop=None):

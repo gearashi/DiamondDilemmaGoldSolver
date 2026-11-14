@@ -1,0 +1,108 @@
+{
+  "sources": {
+    "current": {
+      "r32_gold.py": "ae888156fd7c72d3f3da8cfcd22e7372378672bcd92e3aed32557735f56647c8",
+      "r32_gold_syndrome.py": "deea280df25c38b864a495f062bcbccd0db52fd964140048777f0efd702a0ec4"
+    },
+    "released": {
+      "r32_gold.py": "3b6b83ecdbf22599bdfa1b50a61f6179173f8fff5a9666f2dde2e2d31e098704",
+      "r32_gold_syndrome.py": "b7eb53a4c78a85ef63841c82c823fc706399ef568f3c04773a2b61490a6d3fbf"
+    }
+  },
+  "rows": [
+    {
+      "version": "released",
+      "seconds": 17.3606,
+      "result": {
+        "status": "INFEASIBLE",
+        "loss_budget": 15,
+        "checked_layers": [
+          5
+        ],
+        "all_outside_layers": false,
+        "completed_prefixes": 266916,
+        "total_prefixes": 266916,
+        "new_pages": 33,
+        "work": {
+          "suffix_rows": 235620,
+          "prefixes": 266916,
+          "indexed_tails": 3237403,
+          "joint_queries": 1046
+        },
+        "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853"
+      }
+    },
+    {
+      "version": "current",
+      "seconds": 13.3103,
+      "result": {
+        "status": "INFEASIBLE",
+        "loss_budget": 15,
+        "checked_layers": [
+          5
+        ],
+        "all_outside_layers": false,
+        "completed_prefixes": 266916,
+        "total_prefixes": 266916,
+        "new_pages": 33,
+        "work": {
+          "suffix_rows": 7140,
+          "prefixes": 266916,
+          "bucket_prices_reused": 401571,
+          "indexed_tails": 3237403,
+          "unowned_tail_visits_skipped": 32273877,
+          "joint_queries": 1046,
+          "suffix_table_reuses": 32
+        },
+        "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853"
+      }
+    },
+    {
+      "version": "current",
+      "seconds": 13.6933,
+      "result": {
+        "status": "INFEASIBLE",
+        "loss_budget": 15,
+        "checked_layers": [
+          5
+        ],
+        "all_outside_layers": false,
+        "completed_prefixes": 266916,
+        "total_prefixes": 266916,
+        "new_pages": 33,
+        "work": {
+          "suffix_rows": 7140,
+          "prefixes": 266916,
+          "bucket_prices_reused": 401571,
+          "indexed_tails": 3237403,
+          "unowned_tail_visits_skipped": 32273877,
+          "joint_queries": 1046,
+          "suffix_table_reuses": 32
+        },
+        "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853"
+      }
+    },
+    {
+      "version": "released",
+      "seconds": 17.1878,
+      "result": {
+        "status": "INFEASIBLE",
+        "loss_budget": 15,
+        "checked_layers": [
+          5
+        ],
+        "all_outside_layers": false,
+        "completed_prefixes": 266916,
+        "total_prefixes": 266916,
+        "new_pages": 33,
+        "work": {
+          "suffix_rows": 235620,
+          "prefixes": 266916,
+          "indexed_tails": 3237403,
+          "joint_queries": 1046
+        },
+        "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853"
+      }
+    }
+  ]
+}

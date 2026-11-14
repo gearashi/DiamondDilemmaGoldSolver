@@ -1,0 +1,106 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "loss_budget": 16,
+  "scope": "d9f88bca99cb4a30678f4500785a96a805c77213004fb0aae822dbad3d62a9aa",
+  "rows": [
+    {
+      "mode": "original_pages",
+      "initial_pages": 67,
+      "v113": {
+        "status": "INFEASIBLE",
+        "complete": true,
+        "covered": 7947775,
+        "new_pages": 0,
+        "work": {},
+        "selects": 134,
+        "write_transactions": 67,
+        "sqlite_vm_hundreds": 113,
+        "group_projections": 10,
+        "seconds": 0.0436
+      },
+      "current": {
+        "status": "INFEASIBLE",
+        "complete": true,
+        "covered": 7947775,
+        "new_pages": 0,
+        "work": {},
+        "selects": 15,
+        "write_transactions": 0,
+        "sqlite_vm_hundreds": 5,
+        "group_projections": 0,
+        "seconds": 0.00499
+      }
+    },
+    {
+      "mode": "fragmented_ledger",
+      "initial_pages": 1090,
+      "v113": {
+        "status": "INFEASIBLE",
+        "complete": true,
+        "covered": 7947775,
+        "new_pages": 0,
+        "work": {},
+        "selects": 2180,
+        "write_transactions": 1090,
+        "sqlite_vm_hundreds": 26833,
+        "group_projections": 10,
+        "seconds": 0.32304
+      },
+      "current": {
+        "status": "INFEASIBLE",
+        "complete": true,
+        "covered": 7947775,
+        "new_pages": 0,
+        "work": {},
+        "selects": 15,
+        "write_transactions": 0,
+        "sqlite_vm_hundreds": 66,
+        "group_projections": 0,
+        "seconds": 0.00583
+      }
+    },
+    {
+      "mode": "partial_resume",
+      "initial_pages": 68,
+      "v113": {
+        "status": "INFEASIBLE",
+        "complete": true,
+        "covered": 7947775,
+        "new_pages": 2,
+        "work": {
+          "suffix_rows": 7140,
+          "prefixes": 31,
+          "unowned_tail_visits_skipped": 978,
+          "bucket_prices_reused": 9,
+          "indexed_tails": 74,
+          "suffix_table_reuses": 1
+        },
+        "selects": 142,
+        "write_transactions": 70,
+        "sqlite_vm_hundreds": 114,
+        "group_projections": 10,
+        "seconds": 0.06845
+      },
+      "current": {
+        "status": "INFEASIBLE",
+        "complete": true,
+        "covered": 7947775,
+        "new_pages": 2,
+        "work": {
+          "suffix_rows": 7140,
+          "prefixes": 31,
+          "unowned_tail_visits_skipped": 978,
+          "bucket_prices_reused": 9,
+          "indexed_tails": 74,
+          "suffix_table_reuses": 1
+        },
+        "selects": 24,
+        "write_transactions": 3,
+        "sqlite_vm_hundreds": 6,
+        "group_projections": 10,
+        "seconds": 0.06453
+      }
+    }
+  ],
+  "original_page_count": 67
+}

@@ -1,0 +1,116 @@
+{
+  "loss17-progress": {
+    "status": "PHASE_RELAXATION_FEASIBLE",
+    "start": 768,
+    "stop": 1024,
+    "next_rank": 874,
+    "cap": 17,
+    "errors": 4,
+    "total_prefixes": 6903,
+    "total_error_sets": 8214570,
+    "work": {
+      "suffix_rows": 21541,
+      "prefixes": 996,
+      "bucket_prices_reused": 44157,
+      "indexed_tails": 462664,
+      "joint_queries": 2536,
+      "unowned_tail_visits_skipped": 1042341,
+      "suffix_table_reuses": 3
+    },
+    "outside_errors": [
+      [
+        16,
+        240
+      ],
+      [
+        205,
+        216
+      ],
+      [
+        294,
+        427
+      ],
+      [
+        380,
+        475
+      ]
+    ],
+    "pages": 8,
+    "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853"
+  },
+  "loss17-replay": {
+    "status": "PHASE_RELAXATION_FEASIBLE",
+    "start": 768,
+    "stop": 1024,
+    "next_rank": 874,
+    "cap": 17,
+    "errors": 4,
+    "total_prefixes": 6903,
+    "total_error_sets": 8214570,
+    "work": {},
+    "outside_errors": [
+      [
+        16,
+        240
+      ],
+      [
+        205,
+        216
+      ],
+      [
+        294,
+        427
+      ],
+      [
+        380,
+        475
+      ]
+    ],
+    "reused": true,
+    "pages": 0,
+    "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853"
+  },
+  "loss17-integer": {
+    "status": "UNKNOWN",
+    "start": 33280,
+    "stop": 33536,
+    "next_rank": 33361,
+    "cap": 17,
+    "errors": 5,
+    "total_prefixes": 266916,
+    "total_error_sets": 190578024,
+    "work": {
+      "suffix_rows": 14280,
+      "prefixes": 39391,
+      "unowned_tail_visits_skipped": 36087666,
+      "bucket_prices_reused": 360547,
+      "indexed_tails": 6401402,
+      "joint_queries": 9225,
+      "integer_checks": 5,
+      "integer_rejections": 5,
+      "suffix_table_reuses": 153
+    },
+    "pages": 155,
+    "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853"
+  },
+  "geo17": {
+    "status": "UNKNOWN",
+    "cp_calls": 1,
+    "branches": 5543026,
+    "type_cuts": 0,
+    "strand_cuts": 0,
+    "failed_embeddings": 0,
+    "geographic_core_sizes": [],
+    "geographic_cores": [],
+    "channel": {
+      "status": "SIZE_LIMIT"
+    },
+    "partner_variables": 3036,
+    "reused_type_cuts": 0,
+    "discovered_type_sets": [],
+    "reusable_type_sets": [],
+    "branch": [],
+    "children": 6,
+    "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853"
+  }
+}

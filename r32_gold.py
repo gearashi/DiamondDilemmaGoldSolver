@@ -15,53 +15,106 @@ from r32_gold_syndrome import OutsideSyndromes
 from search_problem import SearchProblem
 
 
-def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None):
+def _advance_saved(db, scopes, errors, start, covered=None):
+    """Read an adjacent run of committed half-open intervals up to its first gap."""
+    current = start if covered is None else covered
+    placeholders = ','.join('?' for _ in scopes)
+    rows = db.execute(f'SELECT lo,hi FROM r32_loss_pages WHERE scope IN ({placeholders}) '
+                      'AND errors=? AND lo>=? ORDER BY lo', (*scopes, errors, start))
+    with closing(rows):
+        for lo, hi in rows:
+            if lo > current:
+                break
+            current = max(current, hi)
+    return current
+
+
+def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False):
     """Save completed disjoint prefix ranges together with their negative result."""
     if page<1 or seconds<0:raise ValueError('Expected positive page size and nonnegative duration')
-    q=OutsideSyndromes(problem,ref,groups,inventory(problem).required)
-    max_error=min(len(q.outside),max(0,upper-len(q.groups)))
-    indices=list(range(max_error+1)) if indices is None else list(indices)
-    scope=digest([3,problem.fingerprint,sorted(ref),sorted(q.required),[sorted(c) for c in q.groups],upper])
-    budget=monotonic()+seconds if seconds else float('inf')
-    work={}
-    total=solved=pages=0
-    with closing(sqlite3.connect(db_path,timeout=30)) as db:
-        with db:
-            db.execute('CREATE TABLE IF NOT EXISTS r32_loss_pages(scope TEXT, errors INTEGER,lo INTEGER,hi INTEGER, PRIMARY KEY(scope,errors,lo))')
-            db.execute('CREATE TABLE IF NOT EXISTS r32_phase_hits(scope TEXT, errors INTEGER, result TEXT, PRIMARY KEY(scope,errors))')
+    layout = OutsideSyndromes.layout(ref, groups, inventory(problem).required)
+    packed, required, outside = layout
+    max_error = min(len(outside), max(0, upper-len(packed)))
+    indices = list(range(max_error+1)) if indices is None else list(indices)
+    scope = digest([3,problem.fingerprint,sorted(ref),sorted(required),[sorted(c) for c in packed],upper])
+    # A plain negative page excludes every integer-feasible pattern inside it.
+    # A plain hit can coexist with further candidates in the same prefix.
+    plain_scope = scope
+    if refine_integer:
+        scope = digest([plain_scope, 'integer-pattern-v1'])
+    read_scopes = (plain_scope, scope) if refine_integer else (scope,)
+    budget = monotonic()+seconds if seconds else float('inf')
+    pattern_filter = None
+
+    def accept_errors(indices, deadline):
+        nonlocal pattern_filter
+        if pattern_filter is None:
+            from r33_gold_refine import IntegerPatternFilter
+            pattern_filter = IntegerPatternFilter(problem,ref,packed,required,outside,upper)
+        return pattern_filter(indices, deadline)
+
+    work = {}
+    total = solved = pages = 0
+    query = None
+    with closing(sqlite3.connect(db_path, timeout=30, uri=True)) as db:
+        schema = db.execute("SELECT count(*) FROM sqlite_master WHERE type='table' AND name IN ('r32_loss_pages','r32_phase_hits')").fetchone()[0]
+        if schema != 2:
+            with db:
+                db.execute('CREATE TABLE IF NOT EXISTS r32_loss_pages(scope TEXT, errors INTEGER,lo INTEGER,hi INTEGER, PRIMARY KEY(scope,errors,lo))')
+                db.execute('CREATE TABLE IF NOT EXISTS r32_phase_hits(scope TEXT, errors INTEGER, result TEXT, PRIMARY KEY(scope,errors))')
+        hit_sql = 'SELECT result FROM r32_phase_hits WHERE scope=? AND errors=?'
         for errors in indices:
-            if errors<0 or errors>len(q.outside):raise ValueError('Outside-error layer out of range')
-            count=comb(len(q.outside)-min(errors,2),max(0,errors-2))
-            total+=count
-            current=0
-            while current<count:
+            if errors<0 or errors>len(outside):raise ValueError('Outside-error layer out of range')
+            count = comb(len(outside)-min(errors,2),max(0,errors-2))
+            total += count
+            known = db.execute(hit_sql, (scope,errors)).fetchone()
+            if known:
+                return dict(json.loads(known[0]), reused=True, pages=pages, work=work)
+            current = _advance_saved(db, read_scopes, errors, 0)
+            while current < count:
+                if query is None:
+                    query = OutsideSyndromes(problem, ref, groups, required, layout=layout)
                 with db:
+                    # Another worker may have finished the gap since our unlocked read.
                     db.execute('BEGIN IMMEDIATE')
-                    known=db.execute('SELECT result FROM r32_phase_hits WHERE scope=? AND errors=?',(scope,errors)).fetchone()
-                    if known:return dict(json.loads(known[0]),reused=True,pages=pages)
-                    row=db.execute('SELECT hi FROM r32_loss_pages WHERE scope=? AND errors=? AND lo<=? AND hi>?',(scope,errors,current,current)).fetchone()
-                    if row:
-                        current=row[0]
+                    known=db.execute(hit_sql,(scope,errors)).fetchone()
+                    if known:return dict(json.loads(known[0]),reused=True,pages=pages,work=work)
+                    # Pages are disjoint by construction. Only the closest earlier
+                    # start can contain current. The index can stop after one row,
+                    # including when we have advanced beyond all committed pages.
+                    covered = current
+                    for source in read_scopes:
+                        row = db.execute('SELECT hi FROM r32_loss_pages WHERE scope=? AND errors=? '
+                                         'AND lo<=? ORDER BY lo DESC LIMIT 1', (source,errors,current)).fetchone()
+                        if row:
+                            covered = max(covered, row[0])
+                    if covered > current:
+                        current = _advance_saved(db, read_scopes, errors, current, covered)
                         continue
                     remaining=budget-monotonic()
                     if remaining<=0:return dict(status='UNKNOWN',errors=errors,next_prefix=current,pages=pages,work=work)
-                    other=db.execute('SELECT min(lo) FROM r32_loss_pages WHERE scope=? AND errors=? AND lo>?',(scope,errors,current)).fetchone()[0]
-                    end=min(count,current+page,other if other is not None else count)
-                    out=q.indexed(upper,errors,remaining,start=current,stop=end)
+                    end = min(count, current+page)
+                    for source in read_scopes:
+                        other = db.execute('SELECT min(lo) FROM r32_loss_pages WHERE scope=? AND errors=? AND lo>?',
+                                           (source, errors, current)).fetchone()[0]
+                        if other is not None:
+                            end = min(end, other)
+                    options = {'accept_errors':accept_errors} if refine_integer else {}
+                    out=query.indexed(upper,errors,remaining,start=current,stop=end,**options)
                     for k,v in out['work'].items():work[k]=work.get(k,0)+v
                     stop=out['next_rank']
                     if stop>current:
                         db.execute('INSERT INTO r32_loss_pages VALUES(?,?,?,?)',(scope,errors,current,stop))
                         pages+=1
                     current=stop
-                    if out['status']=='PHASE_RELAXATION_FEASIBLE':
+                    if out['status'] in ('PHASE_RELAXATION_FEASIBLE','INTEGER_RELAXATION_FEASIBLE'):
                         db.execute('INSERT OR IGNORE INTO r32_phase_hits VALUES(?,?,?)',(scope,errors,json.dumps(out)))
-                        return dict(out,pages=pages)
-                    if out['status']=='UNKNOWN':return dict(out,pages=pages)
+                        return dict(out,pages=pages,work=work)
+                    if out['status']=='UNKNOWN':return dict(out,pages=pages,work=work)
                 if emit:emit(errors,current,count)
             solved+=count
     return dict(status='INFEASIBLE',loss_budget=upper,checked_layers=list(indices),
-                all_outside_layers=(set(indices)>=set(range(max(0,min(len(q.outside),upper-len(q.groups))+1)))),
+                all_outside_layers=set(indices)>=set(range(max_error+1)),
                 completed_prefixes=solved,total_prefixes=total,new_pages=pages,work=work)
 
 
@@ -80,6 +133,7 @@ def main():
     parser.add_argument('--lower',type=int,default=0)
     parser.add_argument('--outside',type=int,help='In loss, outside phase errors. In geographic, exact physical bond losses outside the packed groups.')
     parser.add_argument('--page',type=int,default=8192)
+    parser.add_argument('--refine-integer',action='store_true',help='In loss mode, check signed integer inventories before accepting a phase pattern (requires OR-Tools).')
     parser.add_argument('--stage',choices=('xor','integer','euler','mating'),default='integer')
     parser.add_argument('--branch',nargs='*',type=int,default=[])
     parser.add_argument('--limit',type=int,default=10000)
@@ -88,6 +142,12 @@ def main():
     if args.seconds<0 or args.limit<0 or args.page<1 or args.upper<0 or (args.mode!='loss' and args.seconds==0):
         parser.error('Invalid budget')
     if args.backend!='cpu' and args.mode!='watch':parser.error('CUDA applies to watch mode')
+    if args.refine_integer:
+        if args.mode != 'loss':
+            parser.error('--refine-integer is available in loss mode')
+        from importlib.util import find_spec
+        if find_spec('ortools') is None:
+            parser.error('--refine-integer requires OR-Tools from the full Python 3.12 setup')
     p=SearchProblem(read_json(args.tiles),physical_gold_support=True)
     case=read_json(args.case) if args.case else {}
     if 'domains' in case:
@@ -116,7 +176,8 @@ def main():
         if args.mode=='loss':
             if case.keys()-{'codes'}:parser.error('loss accepts an unrestricted physical reference only')
             indices=None if args.outside is None else [args.outside]
-            out=run_syndrome(p,ref,groups,args.upper,indices,args.database,args.seconds,args.page)
+            out=run_syndrome(p,ref,groups,args.upper,indices,args.database,args.seconds,args.page,
+                             refine_integer=args.refine_integer)
         elif args.mode=='master':
             out=master(p,ref,cert,args.upper,args.seconds,req,forbid,ds)
         elif args.mode=='geographic':

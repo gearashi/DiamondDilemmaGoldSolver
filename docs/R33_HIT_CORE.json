@@ -1,0 +1,912 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "reference": "docs/R29_INCUMBENT.json",
+  "original_rank": 874,
+  "outside_count": 120,
+  "outside_errors": [
+    [
+      16,
+      240
+    ],
+    [
+      205,
+      216
+    ],
+    [
+      294,
+      427
+    ],
+    [
+      380,
+      475
+    ]
+  ],
+  "original_status": "INFEASIBLE",
+  "model": "Signed integer reciprocal inventory. Every tile phase free; no Gold bonds, loss cap, Euler equation, geography or group conflicts.",
+  "status": "INFEASIBLE",
+  "core_size": 73,
+  "disagree": [
+    [
+      205,
+      216
+    ],
+    [
+      294,
+      427
+    ],
+    [
+      380,
+      475
+    ]
+  ],
+  "agree": [
+    [
+      19,
+      106
+    ],
+    [
+      24,
+      29
+    ],
+    [
+      25,
+      124
+    ],
+    [
+      26,
+      178
+    ],
+    [
+      27,
+      292
+    ],
+    [
+      31,
+      464
+    ],
+    [
+      33,
+      83
+    ],
+    [
+      40,
+      397
+    ],
+    [
+      42,
+      478
+    ],
+    [
+      43,
+      438
+    ],
+    [
+      45,
+      367
+    ],
+    [
+      46,
+      116
+    ],
+    [
+      47,
+      103
+    ],
+    [
+      49,
+      169
+    ],
+    [
+      53,
+      444
+    ],
+    [
+      60,
+      118
+    ],
+    [
+      65,
+      320
+    ],
+    [
+      70,
+      435
+    ],
+    [
+      72,
+      79
+    ],
+    [
+      75,
+      477
+    ],
+    [
+      81,
+      296
+    ],
+    [
+      82,
+      98
+    ],
+    [
+      84,
+      268
+    ],
+    [
+      92,
+      422
+    ],
+    [
+      93,
+      227
+    ],
+    [
+      100,
+      454
+    ],
+    [
+      104,
+      460
+    ],
+    [
+      105,
+      184
+    ],
+    [
+      107,
+      420
+    ],
+    [
+      108,
+      144
+    ],
+    [
+      117,
+      463
+    ],
+    [
+      119,
+      279
+    ],
+    [
+      120,
+      234
+    ],
+    [
+      122,
+      250
+    ],
+    [
+      125,
+      142
+    ],
+    [
+      128,
+      239
+    ],
+    [
+      131,
+      375
+    ],
+    [
+      134,
+      147
+    ],
+    [
+      143,
+      466
+    ],
+    [
+      145,
+      208
+    ],
+    [
+      146,
+      426
+    ],
+    [
+      149,
+      379
+    ],
+    [
+      151,
+      442
+    ],
+    [
+      156,
+      479
+    ],
+    [
+      157,
+      257
+    ],
+    [
+      170,
+      182
+    ],
+    [
+      172,
+      304
+    ],
+    [
+      180,
+      381
+    ],
+    [
+      181,
+      476
+    ],
+    [
+      191,
+      418
+    ],
+    [
+      193,
+      329
+    ],
+    [
+      195,
+      450
+    ],
+    [
+      196,
+      440
+    ],
+    [
+      204,
+      407
+    ],
+    [
+      206,
+      207
+    ],
+    [
+      210,
+      253
+    ],
+    [
+      276,
+      387
+    ],
+    [
+      278,
+      335
+    ],
+    [
+      280,
+      437
+    ],
+    [
+      285,
+      383
+    ],
+    [
+      291,
+      378
+    ],
+    [
+      305,
+      389
+    ],
+    [
+      306,
+      453
+    ],
+    [
+      319,
+      351
+    ],
+    [
+      325,
+      337
+    ],
+    [
+      353,
+      368
+    ],
+    [
+      366,
+      398
+    ],
+    [
+      372,
+      394
+    ],
+    [
+      431,
+      439
+    ],
+    [
+      452,
+      470
+    ]
+  ],
+  "exact_four_error_patterns_covered": 47,
+  "minimality": "Every one-equation deletion has a checked feasible phase assignment. Bit i of the hexadecimal value is tile i phase.",
+  "controls": [
+    {
+      "dropped": [
+        19,
+        106
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x5580473cb62eb78bff145ec90ea3f9d495e0a4c7"
+    },
+    {
+      "dropped": [
+        24,
+        29
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x16804d2769034a396ad2fccc99098d9095cd162e"
+    },
+    {
+      "dropped": [
+        25,
+        124
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x3608098a58412a6421dc1d71912ca08388c11f3a"
+    },
+    {
+      "dropped": [
+        26,
+        178
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x54804334a76e979af81458c40623f9d485a0a496"
+    },
+    {
+      "dropped": [
+        27,
+        292
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x16904a0361070ba02bd278409949c9b0b5871430"
+    },
+    {
+      "dropped": [
+        31,
+        464
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x8bf6ca4b59874a210bf27c4691d90330b7575728"
+    },
+    {
+      "dropped": [
+        33,
+        83
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x55805736a66835aae81452c92ca3f9dc45e0acc7"
+    },
+    {
+      "dropped": [
+        40,
+        397
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x8b5f88cb5995487506fab576d19c06033a577b28"
+    },
+    {
+      "dropped": [
+        42,
+        478
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xe548882408528f527d6f573d14807a33d875f1a"
+    },
+    {
+      "dropped": [
+        43,
+        438
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xefcc84348830a2860c2e882d14d07b0a5cf1721"
+    },
+    {
+      "dropped": [
+        45,
+        367
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x8b7680995fb1acd41caa973753d006030a3b7b28"
+    },
+    {
+      "dropped": [
+        46,
+        116
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x54081fbcb67e95cef75c03f8ae6ef88f58a8ace3"
+    },
+    {
+      "dropped": [
+        47,
+        103
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x8bde90db5fe16cb406aaa13f71dc06697f77fb49"
+    },
+    {
+      "dropped": [
+        49,
+        169
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xa9e6d45147f0fe111eae9e0733d1067cf778e3ca"
+    },
+    {
+      "dropped": [
+        53,
+        444
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xaa6f98cb5191487500e8a536f15c062b6a5f5b78"
+    },
+    {
+      "dropped": [
+        60,
+        118
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x89dec0514ff0fe8014aa9807539d0674a76be38d"
+    },
+    {
+      "dropped": [
+        65,
+        320
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x895ec8114ea0fcc015e2d607d39d0776275be308"
+    },
+    {
+      "dropped": [
+        70,
+        435
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xae4c88885081aa5531ecbd33d35c06a3af0d5f32"
+    },
+    {
+      "dropped": [
+        72,
+        79
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x548817bcb66e958eb11c03702e6ef8ed69a0ac43"
+    },
+    {
+      "dropped": [
+        75,
+        477
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x500a4235a62e95cad604c2880e6fdd763730a086"
+    },
+    {
+      "dropped": [
+        81,
+        296
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x89ffd8187ff0fe9114ea9a07f3dd0e7dea7beb4c"
+    },
+    {
+      "dropped": [
+        82,
+        98
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x8b7788cb5991687505fa9577d1b806222a5f5bae"
+    },
+    {
+      "dropped": [
+        84,
+        268
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x89ded8514fe4fe91156a9a07f39d067cf77be36c"
+    },
+    {
+      "dropped": [
+        92,
+        422
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x8b779ccb59d14a7408fab172f1d8062b2a5f5b68"
+    },
+    {
+      "dropped": [
+        93,
+        227
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xaa7f88c34995486406eaad36d15c06233a1f5b38"
+    },
+    {
+      "dropped": [
+        100,
+        454
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x55995f36a67c17abe2547ac8aca7f9ded0a2a4c5"
+    },
+    {
+      "dropped": [
+        104,
+        460
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x54a801a6881a11aee81c27f84c2eb0a128800cb1"
+    },
+    {
+      "dropped": [
+        105,
+        184
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x55995f36ae7e15abe3547ac88ca7f9dcd0a2a4c5"
+    },
+    {
+      "dropped": [
+        107,
+        420
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xabf6d80b59c168314ee2f88fd1990730f75f533c"
+    },
+    {
+      "dropped": [
+        108,
+        144
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x8b778cc95991c85418fab572d3d806332a5f5b20"
+    },
+    {
+      "dropped": [
+        117,
+        463
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x52100ba7800d41eee15813f08c2af08308821832"
+    },
+    {
+      "dropped": [
+        119,
+        279
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x8cdec0104ea2be8111a2de07135507f4a72be70c"
+    },
+    {
+      "dropped": [
+        120,
+        234
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x56100ba6a81b01eee15853f88c2af88308821cba"
+    },
+    {
+      "dropped": [
+        122,
+        250
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x54a05f34ae7a978af95e5ac8ae23f9dcc0a8a4c6"
+    },
+    {
+      "dropped": [
+        125,
+        142
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x34b950336f761ea0221cbc443145cefcf5a7a7f8"
+    },
+    {
+      "dropped": [
+        128,
+        239
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xab7688c249d14a7508e83936d1980623aa5b5b3c"
+    },
+    {
+      "dropped": [
+        131,
+        375
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x54885f34866e978bfb547ac8ae2ff9dcd5a0a4c4"
+    },
+    {
+      "dropped": [
+        134,
+        147
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x56000bacb80f89deff5053f88e2ac98318c01c32"
+    },
+    {
+      "dropped": [
+        143,
+        466
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x81dec0514fe0fe8014aa980753bd0674a77be38d"
+    },
+    {
+      "dropped": [
+        145,
+        208
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x894ed8d957e1ecc015ea9337f39d065e4779f346"
+    },
+    {
+      "dropped": [
+        146,
+        426
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x54a051b6ae6e35aaef1453f92c62f9cc55a0a4c6"
+    },
+    {
+      "dropped": [
+        149,
+        379
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x8bd6c80b518302214ce2f886d1db1730a75f532c"
+    },
+    {
+      "dropped": [
+        151,
+        442
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xaa7e80c2498568650ea2e537515807233f1f5b3c"
+    },
+    {
+      "dropped": [
+        156,
+        479
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x76884365885a931bf02248880e37b190808014b3"
+    },
+    {
+      "dropped": [
+        157,
+        257
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x5590533fb66e75aae73252c92ca3f9dc55a2a4c3"
+    },
+    {
+      "dropped": [
+        170,
+        182
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x540019b6867815eee95c13f8ad02f0cf4da1acc6"
+    },
+    {
+      "dropped": [
+        172,
+        304
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x56904b2fb00f03aae7d25ac88e2bf99090c2141a"
+    },
+    {
+      "dropped": [
+        180,
+        381
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xab46808bd88168648c289537559806232f555b3a"
+    },
+    {
+      "dropped": [
+        181,
+        476
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x89cec051ceeade8198a66806429d0374a778e301"
+    },
+    {
+      "dropped": [
+        191,
+        418
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x54895735a62eb58afb1476c9ae27f9dc55a4a4c0"
+    },
+    {
+      "dropped": [
+        193,
+        329
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xaa7f88c85991885515ea8d37d35c0623aa5f5b3c"
+    },
+    {
+      "dropped": [
+        195,
+        450
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xf196d218b76eb78bdf245a8b2efbf97cf732e0dc"
+    },
+    {
+      "dropped": [
+        196,
+        440
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xf11fda3a967c17e3c6745ec8acbff15ed272e0d4"
+    },
+    {
+      "dropped": [
+        204,
+        407
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x56884ba5a80fa39af1c05a818e2fb99080801416"
+    },
+    {
+      "dropped": [
+        205,
+        216
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x56100ba6a01f01eee1d052f08c2af98308821c9a"
+    },
+    {
+      "dropped": [
+        206,
+        207
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x887f98504ff0fcd515ea8027f354066f6f7febcc"
+    },
+    {
+      "dropped": [
+        210,
+        253
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x89d7d85147e4fe911b6e3c47b3d1027cf73fe368"
+    },
+    {
+      "dropped": [
+        276,
+        387
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x54805f34a66e178bef545ac8ae23f9dcd5e0a4c6"
+    },
+    {
+      "dropped": [
+        278,
+        335
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x54895f34ae6e178afb5478c8ae27f9dcd5a4a4c4"
+    },
+    {
+      "dropped": [
+        280,
+        437
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x511001fcbe6af5ced11c01f90eaaf8470df2a887"
+    },
+    {
+      "dropped": [
+        285,
+        383
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x894e80985ff1acc59ca8913753dc06672f31fb8c"
+    },
+    {
+      "dropped": [
+        291,
+        378
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x16880182401109be2090d3f01d2cc5a128891c9a"
+    },
+    {
+      "dropped": [
+        294,
+        427
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xab5f88c349954a7106eabd36d19c0622b21f533c"
+    },
+    {
+      "dropped": [
+        305,
+        389
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x56100b8eb11b01cfe15053f88e6af98308821cb2"
+    },
+    {
+      "dropped": [
+        306,
+        453
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x540917bcb67e958eb71c03782e66f8cf58a8acc3"
+    },
+    {
+      "dropped": [
+        319,
+        351
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xab5698ca5bc16e7405ea9937f198060bcf7f5b6e"
+    },
+    {
+      "dropped": [
+        325,
+        337
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x897e98d04ff0ecd515e88337f3dc066f6f7bebc4"
+    },
+    {
+      "dropped": [
+        353,
+        368
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x8b5788c24bb14ef500fabd76d19806038a7f5b2e"
+    },
+    {
+      "dropped": [
+        366,
+        398
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x741917e4a67e95deb21c23782e2ef8cf58a28cd1"
+    },
+    {
+      "dropped": [
+        372,
+        394
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x56100baea81b01eee15051f88c4af9830d861cb2"
+    },
+    {
+      "dropped": [
+        380,
+        475
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0xc9d6da12c7f05ea18c625a0ee4d1037ce73ae3c4"
+    },
+    {
+      "dropped": [
+        431,
+        439
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x8b5608cb5993487405fa9576d19806232f5f5baa"
+    },
+    {
+      "dropped": [
+        452,
+        470
+      ],
+      "status": "OPTIMAL",
+      "tile_phases_hex": "0x46100bacb00da1cef75051f98e6af9831d8e1cb2"
+    }
+  ]
+}

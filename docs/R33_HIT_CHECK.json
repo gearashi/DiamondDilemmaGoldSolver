@@ -1,0 +1,136 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "release_control": "41f1e9c980fc441c3151ff21b5f73ae12ca3d9d7",
+  "reference_bonds": 207,
+  "outside_equations": 120,
+  "prefix_rank": 874,
+  "outside_errors": [
+    [
+      16,
+      240
+    ],
+    [
+      205,
+      216
+    ],
+    [
+      294,
+      427
+    ],
+    [
+      380,
+      475
+    ]
+  ],
+  "replay": {
+    "v113": {
+      "status": "PHASE_RELAXATION_FEASIBLE",
+      "start": 874,
+      "stop": 875,
+      "next_rank": 874,
+      "cap": 17,
+      "errors": 4,
+      "total_prefixes": 6903,
+      "total_error_sets": 8214570,
+      "work": {
+        "suffix_rows": 7140,
+        "prefixes": 1,
+        "indexed_tails": 56,
+        "joint_queries": 1
+      },
+      "outside_errors": [
+        [
+          16,
+          240
+        ],
+        [
+          205,
+          216
+        ],
+        [
+          294,
+          427
+        ],
+        [
+          380,
+          475
+        ]
+      ]
+    },
+    "current": {
+      "status": "PHASE_RELAXATION_FEASIBLE",
+      "start": 874,
+      "stop": 875,
+      "next_rank": 874,
+      "cap": 17,
+      "errors": 4,
+      "total_prefixes": 6903,
+      "total_error_sets": 8214570,
+      "work": {
+        "suffix_rows": 7140,
+        "prefixes": 1,
+        "unowned_tail_visits_skipped": 581,
+        "bucket_prices_reused": 12,
+        "indexed_tails": 56,
+        "joint_queries": 1
+      },
+      "outside_errors": [
+        [
+          16,
+          240
+        ],
+        [
+          205,
+          216
+        ],
+        [
+          294,
+          427
+        ],
+        [
+          380,
+          475
+        ]
+      ]
+    }
+  },
+  "integer_trials": [
+    {
+      "status": "INFEASIBLE",
+      "integer_inventory": true,
+      "euler": false,
+      "loss_budget": null,
+      "branches": 0,
+      "conflicts": 0,
+      "seconds": 0.00657
+    },
+    {
+      "status": "INFEASIBLE",
+      "integer_inventory": true,
+      "euler": true,
+      "loss_budget": null,
+      "branches": 0,
+      "conflicts": 0,
+      "seconds": 0.00295
+    },
+    {
+      "status": "INFEASIBLE",
+      "integer_inventory": true,
+      "euler": false,
+      "loss_budget": 17,
+      "branches": 0,
+      "conflicts": 0,
+      "seconds": 0.00595
+    },
+    {
+      "status": "INFEASIBLE",
+      "integer_inventory": true,
+      "euler": true,
+      "loss_budget": 17,
+      "branches": 0,
+      "conflicts": 0,
+      "seconds": 0.00643
+    }
+  ],
+  "scope": "One exact outside phase-error set. A phase-compatible outside pair may still break physically."
+}
