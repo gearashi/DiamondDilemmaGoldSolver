@@ -1,0 +1,36 @@
+# Seven- and eight-piece physical exchanges
+
+The two open four-swap families are one triple plus two swaps, and four swaps. The target is 208 matched seams with every legal rotation available. The original held-out comparisons used the same three published physical centers, six half-open intervals of 4,096 supports, and the original tiles. All six intervals completed at the same result. No original-puzzle 208 witness was found. [Rank and pool data](R32_ROUTE_WORK.json) · [Independent follow-ups](R32_ROUTE_FOLLOWUPS.json)
+
+## Results
+
+| Workstream | Experiment and disposition |
+|---|---|
+| 1. Skip groups of support ranks | A fixed suffix in colex order defines a contiguous block. Bound how many contacts the free lower slots could make, whether the movement clauses fit, and whether any donor cycle partition can connect its parts. For a single open slot, partition the candidate cells by their exact contacts with the suffix and check clauses within each class. Both family engines still account for the full range in the same SQLite transaction. Across six intervals, **10,381 of 24,576 position sets** closed before constructing their candidate rows. The counts were 1,925, 2,786 and 924 at seven pieces and 3,122, 762 and 862 at eight. Final paired wall times favored the range filter on four intervals and the original vectorized control on two. The default includes the new range deduction for reduced support generation. |
+| 2. Restrict assignment bounds to connected donors | In the family-aware weight matrix, maximize only over the 210 or 105 possible donor orders that pass the exact cycle cuts on the current support. Independent full-board comparisons sampled both dispersed and clustered cells. Against the existing cycle-typed bound, this lowered 400 of 1,800 seven-piece upper bounds and 375 of 1,548 eight-piece upper bounds. It produced zero extra 208 closures on that set. Issuing it before the general assignment caused additional price computations on several ranked intervals. Available as the explicit filter `orderprice` for difficult supports. |
+| 3. Price the last two cycles together | Relative to a common prefix, price each possible remaining cycle once. Correct an exact pair of disjoint cycles only on their shared physical seams. A sorted partner catalogue uses an optimistic correction to discard subthreshold suffixes. Both repeated swaps and a directed triple/swap residual are checked. On cells 0–9, across three centers, the connected comparison priced 17,499 seven-piece attachments. The new join used 34,020 individual cycle prices and 287 joint prices and the same one full star query. For eight pieces the corresponding figures were 11,189 old attachments, 26,595 individual prices, 65 joint prices and zero full stars. The released half join also reaches these star counts. The new approach is optional for targeted pools and full-board work intervals. |
+| 4. Skip wrong-owner buckets | Group possible attachments by which of the current cycles they touch. Test each contact signature and range of insertion positions once using its small articulation graph. On the dense original eight-piece pool, this skipped 13 entire buckets in shared traversal and retained the same 591 owned attachments. The unit tests compare exact endpoint multiplicity with full ordinary donor enumeration on two families, with positive witnesses. |
+| 5. Price bridge interactions | For a bridge in the cycle contact graph, price the two component star sums and recompute only stars touched on both sides. The correction reproduces the full star price. For a fixed prefix the diagnostic also prices an entire class of possible last cycles, admitting multiple contacts across its cut. In the 12-cell pools the 112 possible directed triples or 15 swaps per center gave doubled bounds of 398–401. The released ordinary star calculation yields the same bounds, and the three measured 10-cell pools had no additional 208 exclusion. Keep bridge pricing as an explicit comparator. |
+| 6. Overlapping defects | Each physically impossible seam or set of seams requiring inconsistent tile rotations must contain a failed seam or a newly moved endpoint in its dependency footprint. Solve all these clauses with an integral cap on failed seams and on further moved cells. A completed infeasibility proof drops the prefix. On the original board, 80 prefix/center cases survived the older forced-actor bound with unrestricted choice of the last three movers. **57 closed** under the new cover (17, 21 and 19 by center in the archived order). Includes center 51c26e4e, fixed swaps (51,62) and (118,122), whose old upper bound was 213. The released connected search recognizes the measured pair prefixes and rechecks each on demand. If OR-Tools is unavailable or the probe times out, traversal continues. |
+| 7. Share connected search across centers | Carry the centers still eligible for each prefix. Resolve canonical cycle geometry once and price each remaining physical board separately. The dense ten-cell test reduced geometric prefixes from 855 to 285 at seven pieces and 1,908 to 636 at eight. Indexed streaming orders the two final swaps canonically, saves each distinct work item and its best board transactionally, and resumes in the same database. On both full 160-cell families, interrupt/resume completed the same 32 requested work items, and a third call reopened the interval with zero new pages and no catalogue rebuild. |
+
+## Running the retained modes
+
+From the installed project directory the regular seven-piece run reuses existing colex checkpoints. Use pages of 1,024 for sustained search. Pages of 256 commit more frequently when restarting often. Replace the family with `2,2,2,2` to switch to eight.
+
+```shell
+python r30_multicenter.py --family 2,2,3 --backend cpu --page 1024 --target 208 --seconds 0 --database runtime/four-swap-union.sqlite
+```
+
+To compare bounded physical work in the alternative two-cycle join, use an explicit interval or finite pool. Each streamed item fixes a prefix and the smaller of the last two swaps. A page checks the remaining partners at that item. Its optional timer is polled between items. Finite-pool completion can publish singleton-center ranked negatives; the separate streamed item counts have their own coverage scope. The app's previously committed ranked pages stay valid.
+
+```shell
+python r32_route_pool.py --family 322 --stream --start 12 --stop 44 --database runtime/four-swap-joint.sqlite
+python r32_route_pool.py --family 2222 --cells 0 1 2 3 4 5 6 7 8 9 --database runtime/four-swap-union.sqlite
+python r32_route_pool.py --family 2222 --cells 0 1 2 3 4 5 6 7 8 9 --cover --bridge --database runtime/four-swap-control.sqlite
+python -B -m unittest -v test_r32_route_work test_r31_routes test_r30_multicenter
+python bench_r32_route_work.py --tiles data/tiles.json --ranks 4096 --output route-screen.json
+python bench_r32_route_followups.py --tiles data/tiles.json --output route-followups.json
+```
+
+All exclusion counts are scoped to the named objective, center, family and domains. Center-labelled counts can overlap. Lowering the target or changing physical data can invalidate a deduction. Every candidate for 208 is scored by the existing full rotation solver.

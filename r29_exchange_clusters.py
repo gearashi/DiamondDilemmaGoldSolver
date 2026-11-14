@@ -52,7 +52,7 @@ class StarClusters:
     def support_screen(self,cells,target):
         return self.support_upper_twice(cells) < 2*target
 
-    def support_upper_twice(self,cells,term_cache=None,*,family=None):
+    def support_upper_twice(self,cells,term_cache=None,*,family=None,orders=None):
         """Upper bound for all derangements. Identical local inputs can share terms across centers."""
         cells = tuple(map(int,cells))
         touched = {}
@@ -91,6 +91,11 @@ class StarClusters:
                 matrix[row[v],[row[j] for j in centers]] += values
             else:
                 const += int(values.max())
+        if orders is not None:
+            if not len(orders):
+                return -1
+            rows = np.asarray(orders, dtype=int)
+            return int(const + matrix[np.arange(len(cells)), rows].sum(axis=1).max())
         shift = int(matrix.min(initial=0))
         values = [[None if i==j else int(v)-shift for j,v in enumerate(line)] for i,line in enumerate(matrix)]
         if family is not None:

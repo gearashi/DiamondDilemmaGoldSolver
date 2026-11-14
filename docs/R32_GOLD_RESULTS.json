@@ -1,0 +1,1602 @@
+{
+  "binding": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "matched": 207,
+  "possible": 3036,
+  "required": [
+    [
+      54,
+      433
+    ],
+    [
+      69,
+      76
+    ],
+    [
+      132,
+      321
+    ],
+    [
+      141,
+      451
+    ],
+    [
+      167,
+      456
+    ],
+    [
+      242,
+      425
+    ],
+    [
+      258,
+      417
+    ],
+    [
+      318,
+      364
+    ]
+  ],
+  "forbidden": [
+    [
+      47,
+      433
+    ],
+    [
+      54,
+      73
+    ],
+    [
+      54,
+      103
+    ],
+    [
+      54,
+      122
+    ],
+    [
+      61,
+      143
+    ],
+    [
+      96,
+      392
+    ],
+    [
+      114,
+      433
+    ],
+    [
+      133,
+      223
+    ],
+    [
+      133,
+      400
+    ],
+    [
+      243,
+      270
+    ],
+    [
+      245,
+      294
+    ],
+    [
+      245,
+      352
+    ],
+    [
+      245,
+      391
+    ],
+    [
+      245,
+      463
+    ],
+    [
+      250,
+      433
+    ],
+    [
+      267,
+      271
+    ],
+    [
+      294,
+      352
+    ],
+    [
+      294,
+      391
+    ],
+    [
+      294,
+      463
+    ],
+    [
+      308,
+      472
+    ],
+    [
+      352,
+      391
+    ],
+    [
+      352,
+      463
+    ],
+    [
+      391,
+      463
+    ],
+    [
+      420,
+      469
+    ]
+  ],
+  "partial_loop_bonds": [
+    [
+      47,
+      433
+    ],
+    [
+      61,
+      143
+    ],
+    [
+      96,
+      392
+    ],
+    [
+      114,
+      433
+    ],
+    [
+      133,
+      223
+    ],
+    [
+      133,
+      400
+    ],
+    [
+      243,
+      270
+    ],
+    [
+      245,
+      294
+    ],
+    [
+      245,
+      352
+    ],
+    [
+      245,
+      391
+    ],
+    [
+      245,
+      463
+    ],
+    [
+      250,
+      433
+    ],
+    [
+      267,
+      271
+    ],
+    [
+      294,
+      352
+    ],
+    [
+      294,
+      391
+    ],
+    [
+      294,
+      463
+    ],
+    [
+      308,
+      472
+    ],
+    [
+      352,
+      391
+    ],
+    [
+      352,
+      463
+    ],
+    [
+      391,
+      463
+    ],
+    [
+      420,
+      469
+    ]
+  ],
+  "disjoint_groups": [
+    [
+      [
+        96,
+        392
+      ]
+    ],
+    [
+      [
+        245,
+        352
+      ]
+    ],
+    [
+      [
+        171,
+        376
+      ],
+      [
+        173,
+        374
+      ],
+      [
+        192,
+        373
+      ],
+      [
+        194,
+        266
+      ],
+      [
+        265,
+        350
+      ],
+      [
+        349,
+        377
+      ]
+    ],
+    [
+      [
+        15,
+        330
+      ],
+      [
+        17,
+        262
+      ],
+      [
+        37,
+        338
+      ],
+      [
+        38,
+        331
+      ],
+      [
+        99,
+        263
+      ],
+      [
+        101,
+        391
+      ],
+      [
+        310,
+        336
+      ],
+      [
+        311,
+        390
+      ]
+    ],
+    [
+      [
+        21,
+        80
+      ],
+      [
+        22,
+        441
+      ],
+      [
+        78,
+        286
+      ],
+      [
+        201,
+        371
+      ],
+      [
+        202,
+        357
+      ],
+      [
+        287,
+        369
+      ],
+      [
+        358,
+        467
+      ],
+      [
+        443,
+        465
+      ]
+    ],
+    [
+      [
+        13,
+        446
+      ],
+      [
+        14,
+        473
+      ],
+      [
+        30,
+        385
+      ],
+      [
+        32,
+        212
+      ],
+      [
+        55,
+        356
+      ],
+      [
+        56,
+        445
+      ],
+      [
+        139,
+        298
+      ],
+      [
+        222,
+        396
+      ],
+      [
+        297,
+        384
+      ]
+    ],
+    [
+      [
+        133,
+        354
+      ],
+      [
+        135,
+        400
+      ],
+      [
+        136,
+        322
+      ],
+      [
+        225,
+        472
+      ],
+      [
+        226,
+        458
+      ],
+      [
+        324,
+        399
+      ],
+      [
+        326,
+        406
+      ],
+      [
+        355,
+        471
+      ],
+      [
+        405,
+        457
+      ]
+    ],
+    [
+      [
+        18,
+        403
+      ],
+      [
+        20,
+        249
+      ],
+      [
+        67,
+        140
+      ],
+      [
+        68,
+        404
+      ],
+      [
+        87,
+        251
+      ],
+      [
+        89,
+        409
+      ],
+      [
+        138,
+        340
+      ],
+      [
+        313,
+        393
+      ],
+      [
+        314,
+        410
+      ],
+      [
+        341,
+        395
+      ]
+    ],
+    [
+      [
+        4,
+        273
+      ],
+      [
+        6,
+        50
+      ],
+      [
+        7,
+        362
+      ],
+      [
+        39,
+        74
+      ],
+      [
+        41,
+        152
+      ],
+      [
+        48,
+        290
+      ],
+      [
+        52,
+        112
+      ],
+      [
+        73,
+        114
+      ],
+      [
+        111,
+        361
+      ],
+      [
+        115,
+        176
+      ],
+      [
+        175,
+        289
+      ]
+    ],
+    [
+      [
+        35,
+        85
+      ],
+      [
+        44,
+        198
+      ],
+      [
+        59,
+        110
+      ],
+      [
+        61,
+        230
+      ],
+      [
+        62,
+        447
+      ],
+      [
+        71,
+        449
+      ],
+      [
+        77,
+        154
+      ],
+      [
+        109,
+        162
+      ],
+      [
+        126,
+        188
+      ],
+      [
+        153,
+        429
+      ],
+      [
+        164,
+        411
+      ],
+      [
+        186,
+        233
+      ],
+      [
+        229,
+        232
+      ],
+      [
+        246,
+        414
+      ],
+      [
+        260,
+        308
+      ],
+      [
+        300,
+        419
+      ],
+      [
+        307,
+        430
+      ]
+    ]
+  ],
+  "input_claims": [
+    [
+      [
+        96,
+        392
+      ]
+    ],
+    [
+      [
+        245,
+        352
+      ]
+    ],
+    [
+      [
+        115,
+        176
+      ],
+      [
+        174,
+        382
+      ],
+      [
+        285,
+        383
+      ]
+    ],
+    [
+      [
+        14,
+        473
+      ],
+      [
+        54,
+        433
+      ],
+      [
+        55,
+        356
+      ],
+      [
+        133,
+        354
+      ],
+      [
+        355,
+        471
+      ]
+    ],
+    [
+      [
+        171,
+        376
+      ],
+      [
+        173,
+        374
+      ],
+      [
+        192,
+        373
+      ],
+      [
+        194,
+        266
+      ],
+      [
+        265,
+        350
+      ],
+      [
+        349,
+        377
+      ]
+    ],
+    [
+      [
+        26,
+        178
+      ],
+      [
+        37,
+        338
+      ],
+      [
+        38,
+        331
+      ],
+      [
+        177,
+        401
+      ],
+      [
+        179,
+        332
+      ],
+      [
+        324,
+        399
+      ],
+      [
+        325,
+        337
+      ]
+    ],
+    [
+      [
+        15,
+        330
+      ],
+      [
+        17,
+        262
+      ],
+      [
+        37,
+        338
+      ],
+      [
+        38,
+        331
+      ],
+      [
+        99,
+        263
+      ],
+      [
+        101,
+        391
+      ],
+      [
+        310,
+        336
+      ],
+      [
+        311,
+        390
+      ]
+    ],
+    [
+      [
+        21,
+        80
+      ],
+      [
+        22,
+        441
+      ],
+      [
+        78,
+        286
+      ],
+      [
+        201,
+        371
+      ],
+      [
+        202,
+        357
+      ],
+      [
+        287,
+        369
+      ],
+      [
+        358,
+        467
+      ],
+      [
+        443,
+        465
+      ]
+    ],
+    [
+      [
+        13,
+        446
+      ],
+      [
+        14,
+        473
+      ],
+      [
+        30,
+        385
+      ],
+      [
+        32,
+        212
+      ],
+      [
+        55,
+        356
+      ],
+      [
+        56,
+        445
+      ],
+      [
+        139,
+        298
+      ],
+      [
+        222,
+        396
+      ],
+      [
+        297,
+        384
+      ]
+    ],
+    [
+      [
+        133,
+        354
+      ],
+      [
+        135,
+        400
+      ],
+      [
+        136,
+        322
+      ],
+      [
+        225,
+        472
+      ],
+      [
+        226,
+        458
+      ],
+      [
+        324,
+        399
+      ],
+      [
+        326,
+        406
+      ],
+      [
+        355,
+        471
+      ],
+      [
+        405,
+        457
+      ]
+    ],
+    [
+      [
+        18,
+        403
+      ],
+      [
+        20,
+        249
+      ],
+      [
+        67,
+        140
+      ],
+      [
+        68,
+        404
+      ],
+      [
+        87,
+        251
+      ],
+      [
+        89,
+        409
+      ],
+      [
+        138,
+        340
+      ],
+      [
+        313,
+        393
+      ],
+      [
+        314,
+        410
+      ],
+      [
+        341,
+        395
+      ]
+    ],
+    [
+      [
+        4,
+        273
+      ],
+      [
+        6,
+        50
+      ],
+      [
+        7,
+        362
+      ],
+      [
+        39,
+        74
+      ],
+      [
+        41,
+        152
+      ],
+      [
+        48,
+        290
+      ],
+      [
+        52,
+        112
+      ],
+      [
+        73,
+        114
+      ],
+      [
+        111,
+        361
+      ],
+      [
+        115,
+        176
+      ],
+      [
+        175,
+        289
+      ]
+    ],
+    [
+      [
+        35,
+        85
+      ],
+      [
+        44,
+        198
+      ],
+      [
+        59,
+        110
+      ],
+      [
+        61,
+        230
+      ],
+      [
+        62,
+        447
+      ],
+      [
+        71,
+        449
+      ],
+      [
+        77,
+        154
+      ],
+      [
+        109,
+        162
+      ],
+      [
+        126,
+        188
+      ],
+      [
+        153,
+        429
+      ],
+      [
+        164,
+        411
+      ],
+      [
+        186,
+        233
+      ],
+      [
+        229,
+        232
+      ],
+      [
+        246,
+        414
+      ],
+      [
+        260,
+        308
+      ],
+      [
+        300,
+        419
+      ],
+      [
+        307,
+        430
+      ]
+    ]
+  ],
+  "outside_all": 127,
+  "outside_variable": 120,
+  "baseline_required": 7,
+  "directed_pose_support_words_removed": 432,
+  "matching_vars": [
+    3060,
+    3036
+  ],
+  "mask_baseline": {
+    "stage": "xor",
+    "status": "UNKNOWN",
+    "branches": 124273,
+    "seconds": 2.0013914,
+    "cap": 12,
+    "lower": 0,
+    "wall": 2.031
+  },
+  "relaxations": [
+    {
+      "stage": "xor",
+      "status": "UNKNOWN",
+      "branches": 109515,
+      "seconds": 2.0020066,
+      "cap": 16,
+      "lower": 2,
+      "wall": 2.016
+    },
+    {
+      "stage": "integer",
+      "status": "UNKNOWN",
+      "branches": 43568,
+      "seconds": 2.0010392,
+      "cap": 16,
+      "lower": 2,
+      "wall": 2.031
+    },
+    {
+      "stage": "euler",
+      "status": "UNKNOWN",
+      "branches": 49698,
+      "seconds": 2.0018860000000003,
+      "cap": 16,
+      "lower": 2,
+      "wall": 2.063
+    },
+    {
+      "stage": "mating",
+      "status": "UNKNOWN",
+      "branches": 51099,
+      "seconds": 2.0018805,
+      "cap": 16,
+      "lower": 3,
+      "wall": 2.234
+    }
+  ],
+  "poses": {
+    "status": "OPTIMAL",
+    "lower": 9,
+    "relaxed_poses": [
+      17,
+      83,
+      95,
+      110,
+      117,
+      124,
+      130,
+      143,
+      157
+    ]
+  },
+  "pinned_pose": {
+    "status": "INFEASIBLE",
+    "lower": 0,
+    "relaxed_poses": null
+  },
+  "master": {
+    "status": "UNKNOWN",
+    "calls": {
+      "master": 89,
+      "xor_or_loop": 89,
+      "pose": 0,
+      "mating": 0
+    },
+    "wall": 3.031,
+    "checked_claims_after": 102
+  },
+  "watched_units": [
+    {
+      "group": 1,
+      "placements": 2,
+      "removed": 1,
+      "rechecked": true
+    },
+    {
+      "group": 1,
+      "placements": 2,
+      "removed": 1,
+      "rechecked": true
+    },
+    {
+      "group": 9,
+      "placements": 12,
+      "removed": 1,
+      "rechecked": true
+    },
+    {
+      "group": 9,
+      "placements": 10,
+      "removed": 1,
+      "rechecked": true
+    },
+    {
+      "group": 11,
+      "placements": 13,
+      "removed": 1,
+      "rechecked": true
+    },
+    {
+      "group": 17,
+      "placements": 24,
+      "removed": 1,
+      "rechecked": true
+    }
+  ],
+  "local_loops": {
+    "queries": 40000,
+    "examples": [
+      [
+        [
+          1,
+          416
+        ],
+        [
+          2,
+          415
+        ]
+      ],
+      [
+        [
+          3,
+          353
+        ],
+        [
+          4,
+          51
+        ]
+      ],
+      [
+        [
+          3,
+          462
+        ],
+        [
+          4,
+          51
+        ]
+      ],
+      [
+        [
+          24,
+          157
+        ],
+        [
+          25,
+          158
+        ]
+      ],
+      [
+        [
+          24,
+          277
+        ],
+        [
+          25,
+          276
+        ]
+      ],
+      [
+        [
+          126,
+          415
+        ],
+        [
+          127,
+          414
+        ]
+      ],
+      [
+        [
+          150,
+          273
+        ],
+        [
+          151,
+          274
+        ]
+      ],
+      [
+        [
+          150,
+          273
+        ],
+        [
+          275,
+          282
+        ]
+      ],
+      [
+        [
+          333,
+          468
+        ],
+        [
+          334,
+          470
+        ]
+      ],
+      [
+        [
+          225,
+          260
+        ],
+        [
+          227,
+          418
+        ],
+        [
+          258,
+          417
+        ]
+      ]
+    ],
+    "distinct": 10,
+    "sizes": [
+      2,
+      3
+    ]
+  },
+  "geographic_reopen": [
+    "GOLD",
+    true,
+    0
+  ],
+  "root_branches": 6,
+  "direct_twelve": [
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 1,
+      "next_rank": 1,
+      "total": 1,
+      "outside_count": 0,
+      "budget": 12,
+      "work": {
+        "outside_cases": 1,
+        "single_loss_groups_closed": 1
+      },
+      "wall": 0.0
+    },
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 127,
+      "next_rank": 127,
+      "total": 127,
+      "outside_count": 1,
+      "budget": 12,
+      "work": {
+        "outside_cases": 127,
+        "single_loss_groups_closed": 119,
+        "joint_choices": 36,
+        "joint_closed": 1
+      },
+      "wall": 0.078
+    },
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 8001,
+      "next_rank": 8001,
+      "total": 8001,
+      "outside_count": 2,
+      "budget": 12,
+      "work": {
+        "outside_cases": 8001,
+        "single_loss_groups_closed": 7134,
+        "joint_choices": 384,
+        "joint_closed": 6
+      },
+      "wall": 3.562
+    }
+  ],
+  "unindexed_fourteen": [
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 8214570,
+      "next_rank": 8214570,
+      "cap": 14,
+      "errors": 4,
+      "total": 8214570,
+      "work": {
+        "error_sets": 8214570,
+        "joint_queries": 58
+      },
+      "wall": 15.532
+    }
+  ],
+  "projected_layers": [
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 1,
+      "next_rank": 1,
+      "cap": 14,
+      "errors": 0,
+      "total_prefixes": 1,
+      "total_error_sets": 1,
+      "work": {
+        "suffix_rows": 1,
+        "prefixes": 1,
+        "indexed_tails": 1
+      },
+      "wall": 0.0
+    },
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 1,
+      "next_rank": 1,
+      "cap": 14,
+      "errors": 1,
+      "total_prefixes": 1,
+      "total_error_sets": 120,
+      "work": {
+        "suffix_rows": 120,
+        "prefixes": 1,
+        "indexed_tails": 29
+      },
+      "wall": 0.0
+    },
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 1,
+      "next_rank": 1,
+      "cap": 14,
+      "errors": 2,
+      "total_prefixes": 1,
+      "total_error_sets": 7140,
+      "work": {
+        "suffix_rows": 7140,
+        "prefixes": 1,
+        "indexed_tails": 2453,
+        "joint_queries": 2
+      },
+      "wall": 0.078
+    },
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 118,
+      "next_rank": 118,
+      "cap": 14,
+      "errors": 3,
+      "total_prefixes": 118,
+      "total_error_sets": 280840,
+      "work": {
+        "suffix_rows": 7140,
+        "prefixes": 118,
+        "indexed_tails": 9029,
+        "joint_queries": 19
+      },
+      "wall": 0.14
+    },
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 6903,
+      "next_rank": 6903,
+      "cap": 14,
+      "errors": 4,
+      "total_prefixes": 6903,
+      "total_error_sets": 8214570,
+      "work": {
+        "suffix_rows": 7140,
+        "prefixes": 6903,
+        "indexed_tails": 487928,
+        "joint_queries": 58
+      },
+      "wall": 2.188
+    },
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 1,
+      "next_rank": 1,
+      "cap": 15,
+      "errors": 0,
+      "total_prefixes": 1,
+      "total_error_sets": 1,
+      "work": {
+        "suffix_rows": 1,
+        "prefixes": 1,
+        "indexed_tails": 1
+      },
+      "wall": 0.0
+    },
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 1,
+      "next_rank": 1,
+      "cap": 15,
+      "errors": 1,
+      "total_prefixes": 1,
+      "total_error_sets": 120,
+      "work": {
+        "suffix_rows": 120,
+        "prefixes": 1,
+        "indexed_tails": 82,
+        "joint_queries": 1
+      },
+      "wall": 0.016
+    },
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 1,
+      "next_rank": 1,
+      "cap": 15,
+      "errors": 2,
+      "total_prefixes": 1,
+      "total_error_sets": 7140,
+      "work": {
+        "suffix_rows": 7140,
+        "prefixes": 1,
+        "indexed_tails": 2453,
+        "joint_queries": 6
+      },
+      "wall": 0.484
+    },
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 118,
+      "next_rank": 118,
+      "cap": 15,
+      "errors": 3,
+      "total_prefixes": 118,
+      "total_error_sets": 280840,
+      "work": {
+        "suffix_rows": 7140,
+        "prefixes": 118,
+        "indexed_tails": 54847,
+        "joint_queries": 85
+      },
+      "wall": 2.344
+    },
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 6903,
+      "next_rank": 6903,
+      "cap": 15,
+      "errors": 4,
+      "total_prefixes": 6903,
+      "total_error_sets": 8214570,
+      "work": {
+        "suffix_rows": 7140,
+        "prefixes": 6903,
+        "indexed_tails": 215355,
+        "joint_queries": 219
+      },
+      "wall": 3.453
+    },
+    {
+      "status": "INFEASIBLE",
+      "start": 0,
+      "stop": 266916,
+      "next_rank": 266916,
+      "cap": 15,
+      "errors": 5,
+      "total_prefixes": 266916,
+      "total_error_sets": 190578024,
+      "work": {
+        "suffix_rows": 7140,
+        "prefixes": 266916,
+        "indexed_tails": 3237403,
+        "joint_queries": 1046
+      },
+      "wall": 21.219
+    }
+  ],
+  "budget16": {
+    "upper_loss_budget_tested": 16,
+    "proved_minimum_required_losses": 17,
+    "outcome": "INFEASIBLE",
+    "outside_phase_error_layers": [
+      {
+        "status": "INFEASIBLE",
+        "start": 0,
+        "stop": 1,
+        "next_rank": 1,
+        "cap": 16,
+        "errors": 0,
+        "total_prefixes": 1,
+        "total_error_sets": 1,
+        "work": {
+          "suffix_rows": 1,
+          "prefixes": 1,
+          "indexed_tails": 1
+        },
+        "wall": 0.0
+      },
+      {
+        "status": "INFEASIBLE",
+        "start": 0,
+        "stop": 1,
+        "next_rank": 1,
+        "cap": 16,
+        "errors": 1,
+        "total_prefixes": 1,
+        "total_error_sets": 120,
+        "work": {
+          "suffix_rows": 120,
+          "prefixes": 1,
+          "indexed_tails": 82,
+          "joint_queries": 1
+        },
+        "wall": 0.016
+      },
+      {
+        "status": "INFEASIBLE",
+        "start": 0,
+        "stop": 1,
+        "next_rank": 1,
+        "cap": 16,
+        "errors": 2,
+        "total_prefixes": 1,
+        "total_error_sets": 7140,
+        "work": {
+          "suffix_rows": 7140,
+          "prefixes": 1,
+          "indexed_tails": 3381,
+          "joint_queries": 17
+        },
+        "wall": 2.422
+      },
+      {
+        "status": "INFEASIBLE",
+        "start": 0,
+        "stop": 118,
+        "next_rank": 118,
+        "cap": 16,
+        "errors": 3,
+        "total_prefixes": 118,
+        "total_error_sets": 280840,
+        "work": {
+          "suffix_rows": 7140,
+          "prefixes": 118,
+          "indexed_tails": 54847,
+          "joint_queries": 230
+        },
+        "wall": 12.718
+      },
+      {
+        "status": "INFEASIBLE",
+        "start": 0,
+        "stop": 6903,
+        "next_rank": 6903,
+        "cap": 16,
+        "errors": 4,
+        "total_prefixes": 6903,
+        "total_error_sets": 8214570,
+        "work": {
+          "suffix_rows": 7140,
+          "prefixes": 6903,
+          "indexed_tails": 1090000,
+          "joint_queries": 1392
+        },
+        "wall": 25.0
+      },
+      {
+        "status": "INFEASIBLE",
+        "start": 0,
+        "stop": 266916,
+        "next_rank": 266916,
+        "cap": 16,
+        "errors": 5,
+        "total_prefixes": 266916,
+        "total_error_sets": 190578024,
+        "work": {
+          "suffix_rows": 7140,
+          "prefixes": 266916,
+          "indexed_tails": 3237403,
+          "joint_queries": 3649
+        },
+        "wall": 54.875
+      },
+      {
+        "cap": 16,
+        "errors": 6,
+        "start": 0,
+        "stop": 7044800,
+        "total_prefixes": 7673835,
+        "total_error_sets": 3652745460,
+        "status": "INFEASIBLE",
+        "search_scope": "Completed prefix before timeout on entire layer",
+        "budget_seconds": 550
+      },
+      {
+        "status": "INFEASIBLE",
+        "start": 7044800,
+        "stop": 7673835,
+        "next_rank": 7673835,
+        "cap": 16,
+        "errors": 6,
+        "total_prefixes": 7673835,
+        "total_error_sets": 3652745460,
+        "work": {
+          "suffix_rows": 7140,
+          "prefixes": 629035,
+          "indexed_tails": 3714820,
+          "joint_queries": 196
+        }
+      }
+    ]
+  }
+}

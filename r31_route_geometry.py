@@ -134,6 +134,26 @@ class ConnectedJoin:
         from r31_route_price import DefectPrices
         self.actors = DefectPrices(self.bound) if actor_bounds else None
 
+    def covered_swap_prefix(self, group):
+        if not hasattr(self,'_checked_prefixes'):
+            from r32_route_pool import load_prefix_certificates
+            self._checked_prefixes = load_prefix_certificates(self.bound,self.target,self.family)
+            self._verified_prefixes = {}
+        group = tuple(group)
+        if group not in self._checked_prefixes:
+            return False
+        if group not in self._verified_prefixes:
+            from r32_route_pool import defect_cover
+            try:
+                result = defect_cover(self.bound,group,self.bound.model.free,3,208)
+            except ImportError:
+                return False
+            self._verified_prefixes[group] = result['closed']
+        if self._verified_prefixes[group]:
+            self.work['certified_defect_prefixes'] += 1
+            return True
+        return False
+
     def _attachments(self, group, occupied, remaining):
         available = self.pool - occupied
         boundary = set().union(*(self.near[c] for c in occupied)) if occupied else available
@@ -143,7 +163,7 @@ class ConnectedJoin:
                 if parent(child, self.close) == group:
                     yield cycle, child
 
-    def _bucket(self, length, anchor):
+    def catalogue_cells(self, length, anchor):
         # Only cycles containing anchor are needed. Two directed triples over
         # the same support may have very different standalone prices.
         remaining = sorted(self.pool-{anchor})
@@ -155,6 +175,10 @@ class ConnectedJoin:
             rows = np.column_stack((np.full(len(pairs),anchor),pairs))
             rows.sort(axis=1)
             rows = np.concatenate((rows,rows[:,(0,2,1)]))
+        return rows
+
+    def catalogue_prices(self, rows):
+        length = rows.shape[1]
         # Directed cycle source vector. First count each moved cell's
         # individual substitutions, then correct every shared physical edge.
         gain = np.zeros(len(rows),dtype=np.int16)
@@ -174,7 +198,12 @@ class ConnectedJoin:
                 gain += (fit[b,d]-fit[b,c]-fit[a,d]+fit[a,c])*shared
         indices = np.lexsort((*rows.T[::-1],-gain))
         self.work['catalogue_rows'] += len(rows)
-        return (-gain[indices]).tolist(),rows[indices]
+        return -gain[indices], indices
+
+    def _bucket(self, length, anchor):
+        rows = self.catalogue_cells(length,anchor)
+        prices,indices = self.catalogue_prices(rows)
+        return prices.tolist(),rows[indices]
 
     def attachment_bonuses(self,available,sources):
         donors = np.array(sorted(available),dtype=int)
@@ -220,6 +249,8 @@ class ConnectedJoin:
             if self.actors.actor_upper(group,sum(remaining),pool=self.pool)<self.target:
                 self.work['forced_swap_pairs_closed'] += 1
                 return
+        if tuple(map(len,group))==(2,2) and self.family==(2,2,3) and self.covered_swap_prefix(group):
+            return
         children = self._attachments(group, set(sources), remaining)
         final = len(remaining) == 1
         if final and price:

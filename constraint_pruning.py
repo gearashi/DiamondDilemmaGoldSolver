@@ -186,7 +186,9 @@ class Pruner:
     """
     def __init__(self, problem, check=lambda: None, *, regions=None, neighborhood=True,
                  neighborhood_limit=24, parity=True, native='python', tables=None,
-                 dirty_neighborhood=False, parity_root_reuse=False, incremental_hall=False, hall_rematch=False):
+                 dirty_neighborhood=False, parity_root_reuse=False, incremental_hall=False, hall_rematch=False, gold_bonds=False):
+        self.gold_bonds = gold_bonds
+        self.bond_watcher = None
         self.problem, self.n, self.check = problem, problem.n, check
         if neighborhood_limit is not None and (type(neighborhood_limit) is not int or neighborhood_limit < 1):
             raise ValueError('neighborhood_limit must be positive or None for unrestricted checks.')
@@ -236,6 +238,8 @@ class Pruner:
             seen_regions.add(cells)
             region_cells.append(cells)
         binding = (self.n, self.masks, self.neighbors, self.sides, tuple(region_cells), bool(parity))
+        if gold_bonds:
+            binding += ('gold-physical-bonds', problem.fingerprint)
         if tables is not None:
             if not isinstance(tables, PrunerTables) or tables.binding != binding:
                 raise ValueError('Pruner tables differ from current puzzle masks, topology or regions.')
@@ -321,6 +325,10 @@ class Pruner:
                 bonds.append((*occurrences[mask][0], *occurrences[reverse][0]))
             elif mask == reverse and len(occurrences[mask]) == 2:
                 bonds.append((*occurrences[mask][0], *occurrences[mask][1]))
+        if self.gold_bonds:
+            from r32_gold_bonds import inventory
+            physical = inventory(self.problem)
+            bonds = [(*divmod(a,3), *divmod(b,3)) for a,b in sorted(physical.required)]
         adjacency = defaultdict(list)
         for a, sa, b, sb in bonds:
             adjacency[a].append((sa, b, sb))
@@ -395,7 +403,12 @@ class Pruner:
             raise ValueError('Domains must contain one valid orientation bitset per cell.')
         if any(domain == 0 for domain in domains):
             return False
-        changed = self.prune_hall(domains)
+        changed = False
+        if self.bond_watcher is not None:
+            changed = self.bond_watcher.prune(domains)
+            if 0 in domains:
+                return changed
+        changed = self.prune_hall(domains) or changed
         if 0 in domains:
             return changed
         changed = self.prune_clusters(domains) or changed

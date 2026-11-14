@@ -1,0 +1,473 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "section": "geometry",
+  "rounds": 64,
+  "rows": [
+    {
+      "name": "sample-contour",
+      "seed": 4,
+      "seconds": 1.407,
+      "result": {
+        "status": "PARITY_PLACEMENT",
+        "trials": 39,
+        "assignments": 1,
+        "active": 103,
+        "actual_matches": 16,
+        "raw": 16,
+        "components": 308,
+        "gold": false,
+        "required": 0,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "OPTIMAL",
+          "kept": 16,
+          "ceiling": 16,
+          "calls": 1,
+          "branches": 466
+        },
+        "skeletons_found": 1
+      }
+    },
+    {
+      "name": "sample-contour",
+      "seed": 5,
+      "seconds": 0.64,
+      "result": {
+        "status": "PARITY_PLACEMENT",
+        "trials": 6,
+        "assignments": 1,
+        "active": 103,
+        "actual_matches": 9,
+        "raw": 9,
+        "components": 318,
+        "gold": false,
+        "required": 0,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "OPTIMAL",
+          "kept": 9,
+          "ceiling": 9,
+          "calls": 2,
+          "branches": 885
+        },
+        "skeletons_found": 1
+      }
+    },
+    {
+      "name": "sample-contour",
+      "seed": 6,
+      "seconds": 0.578,
+      "result": {
+        "status": "PARITY_PLACEMENT",
+        "trials": 24,
+        "assignments": 1,
+        "active": 103,
+        "actual_matches": 12,
+        "raw": 12,
+        "components": 311,
+        "gold": false,
+        "required": 0,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "OPTIMAL",
+          "kept": 12,
+          "ceiling": 12,
+          "calls": 1,
+          "branches": 425
+        },
+        "skeletons_found": 1
+      }
+    },
+    {
+      "name": "sample-contour",
+      "seed": 7,
+      "seconds": 0.563,
+      "result": {
+        "status": "PARITY_PLACEMENT",
+        "trials": 28,
+        "assignments": 1,
+        "active": 103,
+        "actual_matches": 12,
+        "raw": 12,
+        "components": 315,
+        "gold": false,
+        "required": 0,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "OPTIMAL",
+          "kept": 12,
+          "ceiling": 12,
+          "calls": 1,
+          "branches": 425
+        },
+        "skeletons_found": 1
+      }
+    },
+    {
+      "name": "frontier-False",
+      "seed": 0,
+      "seconds": 2.719,
+      "result": {
+        "active": 103,
+        "complete": false,
+        "work": {
+          "states": 100000
+        },
+        "skeletons_found": 0
+      }
+    },
+    {
+      "name": "frontier-True",
+      "seed": 0,
+      "seconds": 0.343,
+      "result": {
+        "active": 103,
+        "complete": false,
+        "work": {
+          "states": 9670,
+          "merged": 1724
+        },
+        "skeletons_found": 8
+      }
+    },
+    {
+      "name": "phase-cube",
+      "width": 0,
+      "index": 0,
+      "result": {
+        "status": "OPTIMAL",
+        "kept": 0,
+        "calls": 1,
+        "branches": 700,
+        "cuts": 0,
+        "ceiling": 0
+      }
+    },
+    {
+      "name": "phase-cube",
+      "width": 1,
+      "index": 0,
+      "result": {
+        "status": "OPTIMAL",
+        "kept": 0,
+        "calls": 2,
+        "branches": 1499,
+        "cuts": 2,
+        "ceiling": 0
+      }
+    },
+    {
+      "name": "phase-cube",
+      "width": 1,
+      "index": 1,
+      "result": {
+        "status": "OPTIMAL",
+        "kept": 0,
+        "calls": 1,
+        "branches": 713,
+        "cuts": 0,
+        "ceiling": 0
+      }
+    },
+    {
+      "name": "phase-cube",
+      "width": 2,
+      "index": 0,
+      "result": {
+        "status": "OPTIMAL",
+        "kept": 0,
+        "calls": 1,
+        "branches": 693,
+        "cuts": 0,
+        "ceiling": 0
+      }
+    },
+    {
+      "name": "phase-cube",
+      "width": 2,
+      "index": 1,
+      "result": {
+        "status": "OPTIMAL",
+        "kept": 0,
+        "calls": 1,
+        "branches": 702,
+        "cuts": 0,
+        "ceiling": 0
+      }
+    },
+    {
+      "name": "phase-cube",
+      "width": 2,
+      "index": 2,
+      "result": {
+        "status": "OPTIMAL",
+        "kept": 0,
+        "calls": 1,
+        "branches": 700,
+        "cuts": 0,
+        "ceiling": 0
+      }
+    },
+    {
+      "name": "phase-cube",
+      "width": 2,
+      "index": 3,
+      "result": {
+        "status": "OPTIMAL",
+        "kept": 0,
+        "calls": 1,
+        "branches": 697,
+        "cuts": 0,
+        "ceiling": 0
+      }
+    },
+    {
+      "name": "slot-projection",
+      "seed": 207,
+      "seconds": 0.328,
+      "result": {
+        "status": "UNKNOWN",
+        "branches": 0,
+        "layers": [
+          0
+        ],
+        "shared_defects": 240,
+        "regions": 0
+      }
+    },
+    {
+      "name": "slot-projection",
+      "seed": 207,
+      "seconds": 0.312,
+      "result": {
+        "status": "UNKNOWN",
+        "branches": 0,
+        "layers": [
+          0
+        ],
+        "shared_defects": 240,
+        "regions": 1
+      }
+    },
+    {
+      "name": "slot-projection",
+      "seed": 207,
+      "seconds": 0.328,
+      "result": {
+        "status": "UNKNOWN",
+        "branches": 0,
+        "layers": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "shared_defects": 240,
+        "regions": 0
+      }
+    },
+    {
+      "name": "slot-projection",
+      "seed": 207,
+      "seconds": 0.407,
+      "result": {
+        "status": "UNKNOWN",
+        "branches": 0,
+        "layers": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "shared_defects": 240,
+        "regions": 1
+      }
+    },
+    {
+      "name": "slot-projection",
+      "seed": 208,
+      "seconds": 0.375,
+      "result": {
+        "status": "UNKNOWN",
+        "branches": 0,
+        "layers": [
+          0
+        ],
+        "shared_defects": 240,
+        "regions": 0
+      }
+    },
+    {
+      "name": "slot-projection",
+      "seed": 208,
+      "seconds": 0.422,
+      "result": {
+        "status": "UNKNOWN",
+        "branches": 0,
+        "layers": [
+          0
+        ],
+        "shared_defects": 240,
+        "regions": 1
+      }
+    },
+    {
+      "name": "slot-projection",
+      "seed": 208,
+      "seconds": 0.39,
+      "result": {
+        "status": "UNKNOWN",
+        "branches": 0,
+        "layers": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "shared_defects": 240,
+        "regions": 0
+      }
+    },
+    {
+      "name": "slot-projection",
+      "seed": 208,
+      "seconds": 0.375,
+      "result": {
+        "status": "UNKNOWN",
+        "branches": 0,
+        "layers": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "shared_defects": 240,
+        "regions": 1
+      }
+    },
+    {
+      "name": "slot-projection",
+      "seed": 240,
+      "seconds": 0.047,
+      "result": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "layers": [
+          0
+        ],
+        "shared_defects": 240,
+        "regions": 0
+      }
+    },
+    {
+      "name": "slot-projection",
+      "seed": 240,
+      "seconds": 0.078,
+      "result": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "layers": [
+          0
+        ],
+        "shared_defects": 240,
+        "regions": 1
+      }
+    },
+    {
+      "name": "slot-projection",
+      "seed": 240,
+      "seconds": 0.156,
+      "result": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "layers": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "shared_defects": 240,
+        "regions": 0
+      }
+    },
+    {
+      "name": "slot-projection",
+      "seed": 240,
+      "seconds": 0.219,
+      "result": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "layers": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "shared_defects": 240,
+        "regions": 1
+      }
+    },
+    {
+      "name": "planted-lift",
+      "index": 0,
+      "repeat": 0,
+      "result": {
+        "status": "GOLD",
+        "branches": 0,
+        "lift_calls": 1
+      }
+    },
+    {
+      "name": "planted-lift",
+      "index": 0,
+      "repeat": 1,
+      "result": {
+        "status": "GOLD",
+        "branches": 0,
+        "lift_calls": 1
+      }
+    },
+    {
+      "name": "planted-lift",
+      "index": 1,
+      "repeat": 0,
+      "result": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "lift_calls": 3,
+        "proved_pins": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "name": "planted-lift",
+      "index": 1,
+      "repeat": 1,
+      "result": {
+        "status": "INFEASIBLE",
+        "reused": true,
+        "lift_calls": 0
+      }
+    }
+  ]
+}

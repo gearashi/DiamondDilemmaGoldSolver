@@ -1,0 +1,172 @@
+"""Check Gold-specific physical facts, perform resumable loss searches and transport checked conflicts."""
+import argparse
+from contextlib import closing
+import json
+from math import comb
+from pathlib import Path
+import sqlite3
+from time import monotonic
+
+from r32_gold_bonds import bounded_loop_cores, inventory
+from r32_gold_loss import (Certificates, digest, dropout, first_loss_partition, geographic,
+                           master, pose_lower, read_json, reference_groups)
+from r32_gold_partition import maximize_disjoint
+from r32_gold_syndrome import OutsideSyndromes
+from search_problem import SearchProblem
+
+
+def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None):
+    """Save completed disjoint prefix ranges together with their negative result."""
+    if page<1 or seconds<0:raise ValueError('Expected positive page size and nonnegative duration')
+    q=OutsideSyndromes(problem,ref,groups,inventory(problem).required)
+    max_error=min(len(q.outside),max(0,upper-len(q.groups)))
+    indices=list(range(max_error+1)) if indices is None else list(indices)
+    scope=digest([3,problem.fingerprint,sorted(ref),sorted(q.required),[sorted(c) for c in q.groups],upper])
+    budget=monotonic()+seconds if seconds else float('inf')
+    work={}
+    total=solved=pages=0
+    with closing(sqlite3.connect(db_path,timeout=30)) as db:
+        with db:
+            db.execute('CREATE TABLE IF NOT EXISTS r32_loss_pages(scope TEXT, errors INTEGER,lo INTEGER,hi INTEGER, PRIMARY KEY(scope,errors,lo))')
+            db.execute('CREATE TABLE IF NOT EXISTS r32_phase_hits(scope TEXT, errors INTEGER, result TEXT, PRIMARY KEY(scope,errors))')
+        for errors in indices:
+            if errors<0 or errors>len(q.outside):raise ValueError('Outside-error layer out of range')
+            count=comb(len(q.outside)-min(errors,2),max(0,errors-2))
+            total+=count
+            current=0
+            while current<count:
+                with db:
+                    db.execute('BEGIN IMMEDIATE')
+                    known=db.execute('SELECT result FROM r32_phase_hits WHERE scope=? AND errors=?',(scope,errors)).fetchone()
+                    if known:return dict(json.loads(known[0]),reused=True,pages=pages)
+                    row=db.execute('SELECT hi FROM r32_loss_pages WHERE scope=? AND errors=? AND lo<=? AND hi>?',(scope,errors,current,current)).fetchone()
+                    if row:
+                        current=row[0]
+                        continue
+                    remaining=budget-monotonic()
+                    if remaining<=0:return dict(status='UNKNOWN',errors=errors,next_prefix=current,pages=pages,work=work)
+                    other=db.execute('SELECT min(lo) FROM r32_loss_pages WHERE scope=? AND errors=? AND lo>?',(scope,errors,current)).fetchone()[0]
+                    end=min(count,current+page,other if other is not None else count)
+                    out=q.indexed(upper,errors,remaining,start=current,stop=end)
+                    for k,v in out['work'].items():work[k]=work.get(k,0)+v
+                    stop=out['next_rank']
+                    if stop>current:
+                        db.execute('INSERT INTO r32_loss_pages VALUES(?,?,?,?)',(scope,errors,current,stop))
+                        pages+=1
+                    current=stop
+                    if out['status']=='PHASE_RELAXATION_FEASIBLE':
+                        db.execute('INSERT OR IGNORE INTO r32_phase_hits VALUES(?,?,?)',(scope,errors,json.dumps(out)))
+                        return dict(out,pages=pages)
+                    if out['status']=='UNKNOWN':return dict(out,pages=pages)
+                if emit:emit(errors,current,count)
+            solved+=count
+    return dict(status='INFEASIBLE',loss_budget=upper,checked_layers=list(indices),
+                all_outside_layers=(set(indices)>=set(range(max(0,min(len(q.outside),upper-len(q.groups))+1)))),
+                completed_prefixes=solved,total_prefixes=total,new_pages=pages,work=work)
+
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('mode',choices=('inventory','loss','dropout','master','geographic','poses','cores','loops','watch'))
+    parser.add_argument('--tiles',default='data/tiles.json')
+    parser.add_argument('--center',default='docs/R29_INCUMBENT.json')
+    parser.add_argument('--backend',choices=('cpu','cuda'),default='cpu',help='Runtime for the checked placement watcher')
+    parser.add_argument('--replicas',type=int,default=128)
+    parser.add_argument('--claims',action='append',default=[],help='JSON file with clauses to replay')
+    parser.add_argument('--case',help='JSON with optional codes, pins, domains, required and forbidden')
+    parser.add_argument('--database',default=':memory:')
+    parser.add_argument('--seconds',type=float,default=15,help='Zero is unlimited in loss mode')
+    parser.add_argument('--upper',type=int,default=17)
+    parser.add_argument('--lower',type=int,default=0)
+    parser.add_argument('--outside',type=int,help='In loss, outside phase errors. In geographic, exact physical bond losses outside the packed groups.')
+    parser.add_argument('--page',type=int,default=8192)
+    parser.add_argument('--stage',choices=('xor','integer','euler','mating'),default='integer')
+    parser.add_argument('--branch',nargs='*',type=int,default=[])
+    parser.add_argument('--limit',type=int,default=10000)
+    parser.add_argument('--output')
+    args=parser.parse_args()
+    if args.seconds<0 or args.limit<0 or args.page<1 or args.upper<0 or (args.mode!='loss' and args.seconds==0):
+        parser.error('Invalid budget')
+    if args.backend!='cpu' and args.mode!='watch':parser.error('CUDA applies to watch mode')
+    p=SearchProblem(read_json(args.tiles),physical_gold_support=True)
+    case=read_json(args.case) if args.case else {}
+    if 'domains' in case:
+        from r29_gold_geography import checked_domains
+        ds=checked_domains(p,[sum(1<<v for v in set(row)) if isinstance(row,list) else row
+                              for row in case['domains']])
+    else:ds=None
+    rules=inventory(p)
+    if args.mode=='inventory':
+        out=dict(required=sorted(rules.required),forbidden=sorted(rules.forbidden),possible=len(rules.possible),
+                 single_bond_loops=sorted(rules.loops))
+    else:
+        codes=case['codes'] if 'codes' in case else read_json(args.center)['codes']
+        extra=[]
+        for file in args.claims:extra.extend(read_json(file)['clauses'])
+        ref,cert,groups=reference_groups(p,codes,extra)
+        for pair in [*case.get('required',[]),*case.get('forbidden',[])]:
+            if (not isinstance(pair,(list,tuple)) or len(pair)!=2 or
+                    any(type(v) is not int or not 0<=v<3*p.n for v in pair) or pair[0]==pair[1]):
+                raise ValueError("Invalid physical pair in case")
+        requested={tuple(sorted(x)) for x in case.get('required',[])}
+        if not requested<=rules.possible:
+            raise ValueError("Required pair cannot participate in a Gold sewing")
+        req=set(rules.required)|requested
+        forbid=set(rules.forbidden)|{tuple(sorted(x)) for x in case.get('forbidden',[])}
+        if args.mode=='loss':
+            if case.keys()-{'codes'}:parser.error('loss accepts an unrestricted physical reference only')
+            indices=None if args.outside is None else [args.outside]
+            out=run_syndrome(p,ref,groups,args.upper,indices,args.database,args.seconds,args.page)
+        elif args.mode=='master':
+            out=master(p,ref,cert,args.upper,args.seconds,req,forbid,ds)
+        elif args.mode=='geographic':
+            if case.keys()-{'codes','domains','pins'}:parser.error('Use branch for geographic bond conditions')
+            out=geographic(p,ref,maximize_disjoint(groups),cert.rows,args.branch,args.lower,args.upper,args.outside,
+                           args.seconds,args.database,ds,{int(i):v for i,v in case.get('pins',{}).items()})
+        elif args.mode=='dropout':
+            out=dropout(p,ref,args.upper,groups,args.seconds,args.stage,req,forbid,ds)
+        elif args.mode=='poses':
+            out=pose_lower(p,ref,groups,codes,args.seconds,case.get('free_cells'))
+        elif args.mode=='cores':
+            out=dict(clauses=cert.clauses(),reference_groups=len(groups),packed=len(maximize_disjoint(groups)))
+        elif args.mode=='watch':
+            from constraint_dfs import solve
+            p.physical_conflicts=cert.clauses()
+            if ds is not None:
+                from r27_structure_filters import bits
+                p.domains=[list(bits(row)) for row in ds]
+            if args.backend=='cuda':
+                from constraint_shared_conflicts import VerifiedConflictStore, MAX_LITERALS
+                from gpu_domain_runner import solve as device_solve
+                from r32_gold_watch import placed_bonds
+                # Reconstruct the physical witness at this known placement; each
+                # transported clause is checked again against original tile data.
+                joins=placed_bonds(p,enumerate(codes))
+                store=VerifiedConflictStore(p,'gold')
+                admitted=0
+                try:
+                    for group in groups:
+                        literals=sorted({literal for pair in group for literal in joins[pair]})
+                        if (len(literals)<=MAX_LITERALS and
+                                all(v in p.domains[c] for c,v in literals)):
+                            admitted+=store.admit_physical_conflict(group,literals)
+                    out=device_solve(p,target='gold',seconds=args.seconds,replicas=args.replicas,
+                                     backend='cuda',options={'gpu_shared_clauses':True},
+                                     learning_state={'_shared_conflicts':store})
+                finally:
+                    store.close()
+                out['physical_clauses_admitted']=admitted
+            else:
+                out=solve(p,target='gold',seconds=args.seconds)
+            out.pop('checkpoint',None)
+        else:
+            out_rows,visits=bounded_loop_cores(p,req,args.limit)
+            cert.add(out_rows)
+            out=dict(clauses=cert.clauses(),candidate_queries=visits)
+    out['fingerprint']=p.fingerprint
+    message=json.dumps(out,indent=2)
+    if args.output:Path(args.output).write_text(message+'\n',encoding='utf-8')
+    print(message)
+
+
+if __name__=='__main__':main()

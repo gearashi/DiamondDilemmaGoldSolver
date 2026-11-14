@@ -31,9 +31,14 @@ def quality(result):
 
 class Assemblies:
     """Pose entire bonded components. Remaining identities complete a legal bijection."""
-    def __init__(self, model):
+    def __init__(self, model, *, gold_bonds=True):
         self.model = model
-        rules = Pruner(model.problem, regions=[], parity=False)
+        if gold_bonds:
+            from r32_gold_bonds import inventory
+            self.forbidden = inventory(model.problem).forbidden
+        else:
+            self.forbidden = frozenset()
+        rules = Pruner(model.problem, regions=[], parity=False, gold_bonds=gold_bonds)
         self.bonds = frozenset(tuple(sorted((3*a+s,3*b+t))) for a,s,b,t in rules.bonds)
         self.groups = []
         self.tiles = set()
@@ -50,7 +55,8 @@ class Assemblies:
     def seed(self, hint, rng, work=20000):
         model = self.model
         hint = model.legal_board(hint)
-        if self.bonds <= physical_bonds(model,hint):
+        bonds = physical_bonds(model,hint)
+        if self.bonds <= bonds and not self.forbidden & bonds:
             return hint
         poses = []
         for _, fits in self.groups:
@@ -89,12 +95,49 @@ class Assemblies:
                     return None
                 rotations=weights[np.arange(len(cells)),donors].argmax(axis=1)
                 board[cells]=codes[donors,rotations]
-            return model.legal_board(board)
+            return self.clear_forbidden(model.legal_board(board), rng)
         board=place(0,{})
         if board is None:
             raise ValueError("No legal mandatory-bond start found within the pose budget.")
         if not self.bonds <= physical_bonds(model,board):
             raise ArithmeticError("Mandatory-bond construction failed verification.")
+        return board
+
+    def clear_forbidden(self, board, rng):
+        """Repair forbidden physical mates while preserving all obligatory assemblies."""
+        if not self.forbidden:
+            return board
+        model = self.model
+        banned = self.forbidden & physical_bonds(model, board)
+        if not banned:
+            return board
+        allowed = [int(c) for c in model.free if board[c]//3 not in self.tiles]
+        for _ in range(len(banned)):
+            a,b = min(banned)
+            affected = [c for c in allowed if board[c]//3 in (a//3,b//3)]
+            found = False
+            for c in affected:
+                for d in [c, *rng.permutation(allowed)]:
+                    tc,td = board[c]//3,board[d]//3
+                    for r in range(3):
+                        candidate = board.copy()
+                        candidate[c] = 3*td+r
+                        if c != d:
+                            candidate[d] = 3*tc+board[c]%3
+                        if not model.legal[c,candidate[c]] or not model.legal[d,candidate[d]]:
+                            continue
+                        remaining = self.forbidden & physical_bonds(model,candidate)
+                        if remaining < banned:
+                            board,banned,found = candidate,remaining,True
+                            break
+                    if found:
+                        break
+                if found:
+                    break
+            if not found:
+                return None
+            if not banned:
+                break
         return board
 
     def relocate(self, board, rng, trials=8):
@@ -127,7 +170,7 @@ class Assemblies:
             for c,v in pose.items():
                 candidate[c]=v
             score=int(model.matches(candidate).sum())
-            if score>=best_score:
+            if score>=best_score and not self.forbidden & physical_bonds(model,candidate):
                 best,best_score=candidate,score
         return best
 
@@ -275,8 +318,12 @@ def relink(model, first, second, assemblies, limit=6):
                     break
                 row[donor]=options[0]
             key=row.tobytes()
-            if key in seen or (assemblies and not assemblies.bonds<=physical_bonds(model,row)):
+            if key in seen:
                 continue
+            if assemblies:
+                actual = physical_bonds(model,row)
+                if not assemblies.bonds <= actual or assemblies.forbidden & actual:
+                    continue
             seen.add(key)
             chain.append(row.copy())
         if chain:
@@ -445,6 +492,7 @@ class Engine:
 
     def repair(self, board, rng, step, stats, prices):
         model=self.model
+        initial_board=board
         if self.assemblies:
             board=self.assemblies.relocate(board,rng)
             protected=self.assemblies.protected(board)
@@ -474,6 +522,11 @@ class Engine:
         else:
             board=model.block(board,cells,rng)
         board,rotation=model.orientations(board,rng=rng,movable=set(map(int,available)))
+        if self.assemblies and self.assemblies.forbidden:
+            board=self.assemblies.clear_forbidden(board,rng)
+            if board is None:
+                board=initial_board
+                stats['forbidden_rejections']+=1
         stats['orientation_entries']+=rotation['table_entries']
         stats['block_assignments']+=int(len(cells)>0)
         if self.assemblies and not self.assemblies.bonds<=physical_bonds(model,board):
@@ -524,7 +577,7 @@ class Engine:
         if reusable:
             config=dict(bonds=self.assemblies is not None,joint=self.joint,adjacent=self.adjacent,
                         cycle_budget=self.cycle_budget,pool=self.pool,ties=self.ties,tie_slack=self.tie_slack)
-            key=[1,domain_binding(model),config,seed,backend,replicas,dispatches,ranked,list(hints)]
+            key=[2 if self.assemblies else 1,domain_binding(model),config,seed,backend,replicas,dispatches,ranked,list(hints)]
             scope=hashlib.sha256(json.dumps(key,sort_keys=True).encode()).hexdigest()
             with closing(sqlite3.connect(trajectory_db,timeout=60)) as db,db:
                 db.execute('CREATE TABLE IF NOT EXISTS r31_repair_prefix (scope TEXT, rounds INTEGER, gold INTEGER, '
@@ -677,7 +730,7 @@ def main():
     engine=Engine(p,**config)
     experiment={k:getattr(args,k) for k in ('backend','dispatches','replicas','rounds','ranked')}
     hints=[engine.model.legal_board(read_json(path)['codes']).tolist() for path in args.hint]
-    scope=hashlib.sha256(json.dumps([1,domain_binding(engine.model),config,experiment,hints],sort_keys=True).encode()).hexdigest()
+    scope=hashlib.sha256(json.dumps([2 if args.bonds else 1,domain_binding(engine.model),config,experiment,hints],sort_keys=True).encode()).hexdigest()
     args.database.parent.mkdir(parents=True,exist_ok=True)
     def run(seed,saved,save):
         return engine.run(seed,**experiment,sampler_cache=args.sampler_cache,saved=saved,save=save,hints=hints,trajectory_db=args.database)

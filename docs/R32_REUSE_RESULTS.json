@@ -1,0 +1,423 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "families": [
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "ranked": {
+        "first_rank_interval": 0,
+        "first_contact": 80640,
+        "raw_center_endpoints": 80640
+      },
+      "cold": {
+        "first_rank_interval": 0,
+        "first_contact": 26880,
+        "raw_center_endpoints": 26880
+      },
+      "inherited": {
+        "first_prior_page": 26880,
+        "raw_center_endpoints": 26880
+      },
+      "root1": {
+        "cursor_steps": 9192,
+        "cursor_pages": 78,
+        "roots_completed": 12,
+        "catalogue_cells_built": 810,
+        "catalogue_rows": 810
+      },
+      "root2": {
+        "cursor_steps": 6115,
+        "cursor_pages": 54,
+        "roots_completed": 12,
+        "catalogue_cells_reused": 810,
+        "catalogue_prices_reused": 810
+      },
+      "connected_orders": 25074,
+      "covered_orders": 10988,
+      "exterior": [
+        {
+          "cells": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "optima": [
+            [
+              null,
+              197,
+              197
+            ],
+            [
+              null,
+              193,
+              193
+            ],
+            [
+              null,
+              195,
+              195
+            ],
+            [
+              null,
+              197,
+              197
+            ],
+            [
+              null,
+              196,
+              196
+            ],
+            [
+              null,
+              195,
+              195
+            ],
+            [
+              null,
+              195,
+              195
+            ],
+            [
+              null,
+              195,
+              195
+            ],
+            [
+              null,
+              196,
+              196
+            ]
+          ],
+          "old_entries": 384993,
+          "new_entries": 3000
+        },
+        {
+          "cells": [
+            18,
+            30,
+            42,
+            44,
+            51,
+            62,
+            118
+          ],
+          "optima": [
+            [
+              null,
+              197,
+              197
+            ],
+            [
+              null,
+              198,
+              198
+            ],
+            [
+              null,
+              198,
+              198
+            ],
+            [
+              null,
+              198,
+              198
+            ],
+            [
+              null,
+              200,
+              200
+            ],
+            [
+              null,
+              198,
+              198
+            ],
+            [
+              null,
+              196,
+              196
+            ],
+            [
+              null,
+              199,
+              199
+            ],
+            [
+              null,
+              199,
+              199
+            ]
+          ],
+          "old_entries": 481140,
+          "new_entries": 3642
+        }
+      ],
+      "halves": [
+        {
+          "pool": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "baseline": {
+            "catalogued": 285,
+            "pair_prices": 5670,
+            "half_entries": 870,
+            "pair_reuse": 7536,
+            "half_suffix_skips": 23952,
+            "half_queries": 1248,
+            "star_queries": 1
+          },
+          "grouped": {
+            "catalogued": 285,
+            "pair_prices": 5670,
+            "half_entries": 870,
+            "pair_reuse": 7326,
+            "half_suffix_skips": 23952,
+            "half_queries": 1143,
+            "response_rows_shared": 105,
+            "star_queries": 1
+          }
+        },
+        {
+          "pool": [
+            18,
+            30,
+            42,
+            44,
+            51,
+            62,
+            118,
+            122,
+            146,
+            155
+          ],
+          "baseline": {
+            "catalogued": 285,
+            "pair_prices": 5670,
+            "half_entries": 870,
+            "pair_reuse": 5214,
+            "half_suffix_skips": 25113,
+            "half_queries": 87
+          },
+          "grouped": {
+            "catalogued": 285,
+            "pair_prices": 5670,
+            "half_entries": 870,
+            "pair_reuse": 5096,
+            "half_suffix_skips": 25113,
+            "half_queries": 28,
+            "response_rows_shared": 59
+          }
+        }
+      ]
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "ranked": {
+        "first_rank_interval": 0,
+        "first_contact": 38745,
+        "first_connected": 1503,
+        "raw_center_endpoints": 40320,
+        "support_assignments": 2,
+        "local_term_misses": 3,
+        "first_support": 72,
+        "local_term_hits": 3,
+        "whole_support_reuses": 1
+      },
+      "cold": {
+        "first_rank_interval": 0,
+        "first_contact": 12915,
+        "first_connected": 501,
+        "raw_center_endpoints": 13440,
+        "support_assignments": 1,
+        "local_term_misses": 3,
+        "first_support": 24
+      },
+      "inherited": {
+        "first_prior_page": 13440,
+        "raw_center_endpoints": 13440
+      },
+      "root1": {
+        "cursor_steps": 15458,
+        "cursor_pages": 127,
+        "roots_completed": 12,
+        "catalogue_cells_built": 90,
+        "catalogue_rows": 90
+      },
+      "root2": {
+        "cursor_steps": 8726,
+        "cursor_pages": 76,
+        "roots_completed": 12,
+        "catalogue_cells_reused": 90,
+        "catalogue_prices_reused": 90
+      },
+      "connected_orders": 4710,
+      "covered_orders": 3636,
+      "exterior": [
+        {
+          "cells": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "optima": [
+            [
+              null,
+              195,
+              195
+            ],
+            [
+              null,
+              191,
+              191
+            ],
+            [
+              null,
+              196,
+              196
+            ],
+            [
+              null,
+              194,
+              194
+            ],
+            [
+              null,
+              193,
+              193
+            ]
+          ],
+          "old_entries": 350649,
+          "new_entries": 2706
+        },
+        {
+          "cells": [
+            18,
+            30,
+            42,
+            44,
+            51,
+            62,
+            118,
+            122
+          ],
+          "optima": [
+            [
+              null,
+              196,
+              196
+            ],
+            [
+              null,
+              198,
+              198
+            ],
+            [
+              null,
+              196,
+              196
+            ],
+            [
+              null,
+              199,
+              199
+            ],
+            [
+              null,
+              196,
+              196
+            ]
+          ],
+          "old_entries": 547236,
+          "new_entries": 3156
+        }
+      ],
+      "halves": [
+        {
+          "pool": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "baseline": {
+            "catalogued": 45,
+            "pair_prices": 630,
+            "half_entries": 630,
+            "pair_reuse": 45684,
+            "half_suffix_skips": 14946,
+            "half_queries": 1971
+          },
+          "grouped": {
+            "catalogued": 45,
+            "pair_prices": 630,
+            "half_entries": 630,
+            "pair_reuse": 45560,
+            "half_suffix_skips": 14946,
+            "half_queries": 1940,
+            "response_rows_shared": 31
+          }
+        },
+        {
+          "pool": [
+            18,
+            30,
+            42,
+            44,
+            51,
+            62,
+            118,
+            122,
+            146,
+            155
+          ],
+          "baseline": {
+            "catalogued": 45,
+            "pair_prices": 630,
+            "half_entries": 630,
+            "pair_reuse": 37800,
+            "half_suffix_skips": 28350
+          },
+          "grouped": {
+            "catalogued": 45,
+            "pair_prices": 630,
+            "half_entries": 630,
+            "pair_reuse": 37800,
+            "half_suffix_skips": 28350
+          }
+        }
+      ]
+    }
+  ]
+}

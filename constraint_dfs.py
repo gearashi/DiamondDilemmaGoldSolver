@@ -234,6 +234,7 @@ class _PropagationTables:
     groups: tuple
     arcs: tuple
     incoming: tuple
+    physical_gold_support: bool = False
 
 
 def _build_support_tables(problem, initial, target, check):
@@ -246,15 +247,26 @@ def _build_support_tables(problem, initial, target, check):
         for side, mask in enumerate(masks):
             by_side[side][int(mask)] = by_side[side].get(int(mask), 0) | (1 << code)
     reversed_masks = {mask: reverse_mask(mask) for row in by_side for mask in row}
+    forbidden = ()
+    physical_gold_support = target == 'gold' and problem.physical_gold_support
+    if physical_gold_support:
+        from r32_gold_bonds import inventory, forbidden_codes
+        forbidden = inventory(problem).forbidden
     compatible, groups = [], []
     for side in range(3):
         compatible_row, groups_row = [], []
         for other in range(3):
             check()
-            compatible_row.append(tuple(by_side[other].get(reversed_masks[int(problem.masks[code, side])], 0)
-                                        & ~tile_bits[code//3] for code in range(count)))
-            groups_row.append(tuple((source, by_side[other].get(reversed_masks[mask], 0))
-                                    for mask, source in by_side[side].items()))
+            rows = [by_side[other].get(reversed_masks[int(problem.masks[c, side])], 0)
+                    for c in range(count)]
+            if forbidden:
+                for code, other_code in forbidden_codes(forbidden, side, other):
+                    rows[code] &= ~(1 << other_code)
+            by_support = {}
+            for code, support in enumerate(rows):
+                by_support[support] = by_support.get(support, 0) | (1 << code)
+            compatible_row.append(tuple(s & ~tile_bits[c//3] for c,s in enumerate(rows)))
+            groups_row.append(tuple((source,support) for support,source in by_support.items()))
         compatible.append(tuple(compatible_row))
         groups.append(tuple(groups_row))
     arcs = tuple(problem.edges) + tuple((b, sb, a, sa) for a, sa, b, sb in problem.edges)
@@ -262,7 +274,7 @@ def _build_support_tables(problem, initial, target, check):
     for index, arc in enumerate(arcs):
         incoming[arc[2]].append(index)
     return _PropagationTables(problem.fingerprint, target, tuple(initial), tile_bits,
-                              tuple(compatible), tuple(groups), arcs, tuple(map(tuple, incoming)))
+                              tuple(compatible), tuple(groups), arcs, tuple(map(tuple, incoming)),physical_gold_support)
 
 
 def _filter_arc(domain, neighbor, groups, compatible, tile_bits):
@@ -670,6 +682,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             (not isinstance(support_tables, _PropagationTables)
              or support_tables.fingerprint != problem.fingerprint
              or support_tables.target != target
+             or support_tables.physical_gold_support != (target == 'gold' and problem.physical_gold_support)
              or support_tables.initial_domains != tuple(initial))):
         raise ValueError('The in-memory seam support cache has different effective problem data or is malformed.')
     if '_native' in learning_state and (not isinstance(learning_state['_native'],NativePropagation)
@@ -1083,8 +1096,13 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
         kwargs = {'tables': runtime.pruner_tables} if runtime.pruner_tables is not None else {}
         if options['incremental_hall']:kwargs['incremental_hall']=True
         if options.get('hall_rematch',False):kwargs['hall_rematch']=True
+        if target == 'gold' and problem.physical_gold_support:
+            kwargs['gold_bonds'] = True
         pruner = Pruner(problem, check, native=options['native'], dirty_neighborhood=options['dirty_neighborhood'], parity_root_reuse=options['parity_root_reuse'], **kwargs)
         runtime.pruner_tables = pruner.tables
+        if target == 'gold' and getattr(problem, 'physical_conflicts', ()):
+            from r32_gold_watch import BondWatcher
+            pruner.bond_watcher = BondWatcher(problem, problem.physical_conflicts, check)
         advanced_options = tuple(sorted(options.items()))
         if runtime.advanced is not None and not isinstance(runtime.advanced,AdvancedPruner):
             raise ValueError('The in-memory advanced pruning cache is malformed.')

@@ -1,0 +1,84 @@
+{
+  "binding": "f2033beb1d578feb56320c88d3893a9de8ae9fd44cfeffe382e2d52140edc5a1",
+  "puzzle": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "range": [
+    5360481967048,
+    5360481983432
+  ],
+  "seven_replay_range": [
+    301415334487,
+    301415335511
+  ],
+  "before": {
+    "(2, 2, 3)": {
+      "pages": 2569,
+      "count": 706816,
+      "in_interval": 0,
+      "hits": 0
+    },
+    "(2, 2, 2, 2)": {
+      "pages": 0,
+      "count": 0,
+      "in_interval": 0,
+      "hits": 0
+    }
+  },
+  "after": {
+    "(2, 2, 3)": {
+      "pages": 2569,
+      "count": 706816,
+      "in_interval": 0,
+      "hits": 0
+    },
+    "(2, 2, 2, 2)": {
+      "pages": 16,
+      "count": 16384,
+      "in_interval": 16384,
+      "hits": 0
+    }
+  },
+  "production": {
+    "scope": "5f89874bd411d948edb3571e26b1073dd80bc8f3c1d32732c77738376b50fc39",
+    "covered_supports": 16384,
+    "total_supports": 8917061687820,
+    "complete": false,
+    "range_finished": true,
+    "remaining_supports": 8917061671436,
+    "best": null,
+    "new_pages": 16,
+    "work": {
+      "interval_probes": 2219,
+      "supports_before_generation": 12988,
+      "first_rank_interval": 4091220,
+      "first_contact": 925155,
+      "first_connected": 116541,
+      "support_assignments": 882,
+      "local_term_misses": 1324,
+      "first_support": 28044,
+      "local_term_hits": 2435,
+      "raw_center_endpoints": 5160960
+    }
+  },
+  "replay_eight": {
+    "scope": "5f89874bd411d948edb3571e26b1073dd80bc8f3c1d32732c77738376b50fc39",
+    "covered_supports": 16384,
+    "total_supports": 8917061687820,
+    "complete": false,
+    "range_finished": true,
+    "remaining_supports": 8917061671436,
+    "best": null,
+    "new_pages": 0,
+    "work": {}
+  },
+  "replay_seven": {
+    "scope": "7e5c4bd7ec53cb649994208ec242906e922eac1b6604e28b7186e236c880f84c",
+    "covered_supports": 706816,
+    "total_supports": 466251591520,
+    "complete": false,
+    "range_finished": true,
+    "remaining_supports": 466250884704,
+    "best": null,
+    "new_pages": 0,
+    "work": {}
+  }
+}

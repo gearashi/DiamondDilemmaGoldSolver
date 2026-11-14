@@ -1,0 +1,1105 @@
+{
+  "domain": "f2033beb1d578feb56320c88d3893a9de8ae9fd44cfeffe382e2d52140edc5a1",
+  "ranks": [
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "start": 200000000000,
+      "width": 4096,
+      "v112": {
+        "work": {
+          "first_rank_interval": 0,
+          "first_contact": 2471490,
+          "first_connected": 66654,
+          "support_assignments": 174,
+          "local_term_misses": 442,
+          "first_support": 42336,
+          "whole_support_reuses": 345,
+          "raw_center_endpoints": 2580480,
+          "local_term_hits": 2
+        },
+        "seconds": 2.578,
+        "best": null
+      },
+      "ranges": {
+        "work": {
+          "interval_probes": 390,
+          "first_rank_interval": 1212750,
+          "first_contact": 1258740,
+          "first_connected": 66654,
+          "support_assignments": 174,
+          "local_term_misses": 442,
+          "first_support": 42336,
+          "whole_support_reuses": 345,
+          "raw_center_endpoints": 2580480,
+          "supports_before_generation": 1925,
+          "local_term_hits": 2
+        },
+        "seconds": 1.953,
+        "best": null
+      },
+      "new": {
+        "work": {
+          "interval_probes": 390,
+          "first_rank_interval": 1212750,
+          "first_contact": 1258740,
+          "first_connected": 66654,
+          "local_term_misses": 442,
+          "connected_assignment_prices": 519,
+          "first_orderprice": 42336,
+          "local_term_hits": 884,
+          "raw_center_endpoints": 2580480,
+          "supports_before_generation": 1925
+        },
+        "seconds": 1.938,
+        "best": null
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "start": 301414649175,
+      "width": 4096,
+      "v112": {
+        "work": {
+          "first_rank_interval": 0,
+          "first_contact": 2497320,
+          "first_connected": 50040,
+          "support_assignments": 158,
+          "local_term_misses": 372,
+          "first_support": 33120,
+          "local_term_hits": 60,
+          "whole_support_reuses": 238,
+          "raw_center_endpoints": 2580480
+        },
+        "seconds": 1.672,
+        "best": null
+      },
+      "ranges": {
+        "work": {
+          "interval_probes": 311,
+          "supports_before_generation": 2786,
+          "first_rank_interval": 1755180,
+          "first_contact": 742140,
+          "first_connected": 50040,
+          "support_assignments": 158,
+          "local_term_misses": 372,
+          "first_support": 33120,
+          "local_term_hits": 60,
+          "whole_support_reuses": 238,
+          "raw_center_endpoints": 2580480
+        },
+        "seconds": 1.734,
+        "best": null
+      },
+      "new": {
+        "work": {
+          "interval_probes": 311,
+          "supports_before_generation": 2786,
+          "first_rank_interval": 1755180,
+          "first_contact": 742140,
+          "first_connected": 50040,
+          "local_term_misses": 372,
+          "connected_assignment_prices": 396,
+          "first_orderprice": 33120,
+          "local_term_hits": 732,
+          "raw_center_endpoints": 2580480
+        },
+        "seconds": 3.0,
+        "best": null
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "start": 390001234567,
+      "width": 4096,
+      "v112": {
+        "work": {
+          "first_rank_interval": 0,
+          "first_contact": 1794870,
+          "first_connected": 426816,
+          "support_assignments": 1924,
+          "local_term_misses": 3503,
+          "first_support": 358794,
+          "local_term_hits": 1582,
+          "whole_support_reuses": 1817,
+          "raw_center_endpoints": 2580480
+        },
+        "seconds": 3.297,
+        "best": null
+      },
+      "ranges": {
+        "work": {
+          "interval_probes": 733,
+          "first_rank_interval": 582120,
+          "first_contact": 1212750,
+          "first_connected": 426816,
+          "support_assignments": 1924,
+          "local_term_misses": 3503,
+          "first_support": 358794,
+          "local_term_hits": 1582,
+          "whole_support_reuses": 1817,
+          "raw_center_endpoints": 2580480,
+          "supports_before_generation": 924
+        },
+        "seconds": 3.078,
+        "best": null
+      },
+      "new": {
+        "work": {
+          "interval_probes": 733,
+          "first_rank_interval": 582120,
+          "first_contact": 1212750,
+          "first_connected": 426816,
+          "local_term_misses": 3503,
+          "connected_assignment_prices": 3741,
+          "first_orderprice": 358794,
+          "local_term_hits": 6517,
+          "raw_center_endpoints": 2580480,
+          "supports_before_generation": 924
+        },
+        "seconds": 4.328,
+        "best": null
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "start": 5360481967048,
+      "width": 4096,
+      "v112": {
+        "work": {
+          "first_rank_interval": 0,
+          "first_contact": 1252125,
+          "first_connected": 31779,
+          "raw_center_endpoints": 1290240,
+          "support_assignments": 213,
+          "local_term_misses": 274,
+          "first_support": 6336,
+          "local_term_hits": 509
+        },
+        "seconds": 1.907,
+        "best": null
+      },
+      "ranges": {
+        "work": {
+          "interval_probes": 517,
+          "supports_before_generation": 3122,
+          "first_rank_interval": 983430,
+          "raw_center_endpoints": 1290240,
+          "first_contact": 273420,
+          "first_connected": 27054,
+          "support_assignments": 213,
+          "local_term_misses": 274,
+          "first_support": 6336,
+          "local_term_hits": 509
+        },
+        "seconds": 1.328,
+        "best": null
+      },
+      "new": {
+        "work": {
+          "interval_probes": 517,
+          "supports_before_generation": 3122,
+          "first_rank_interval": 983430,
+          "raw_center_endpoints": 1290240,
+          "first_contact": 273420,
+          "first_connected": 27054,
+          "local_term_misses": 274,
+          "connected_assignment_prices": 213,
+          "first_orderprice": 6336,
+          "local_term_hits": 509
+        },
+        "seconds": 1.922,
+        "best": null
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "start": 1014012345678,
+      "width": 4096,
+      "v112": {
+        "work": {
+          "first_rank_interval": 0,
+          "first_contact": 791280,
+          "first_connected": 276894,
+          "support_assignments": 2740,
+          "local_term_misses": 6742,
+          "first_support": 222066,
+          "whole_support_reuses": 2012,
+          "local_term_hits": 3725,
+          "raw_center_endpoints": 1290240
+        },
+        "seconds": 3.953,
+        "best": null
+      },
+      "ranges": {
+        "work": {
+          "interval_probes": 1287,
+          "supports_before_generation": 762,
+          "first_rank_interval": 240030,
+          "first_contact": 551250,
+          "first_connected": 276894,
+          "support_assignments": 2740,
+          "local_term_misses": 6742,
+          "first_support": 222066,
+          "whole_support_reuses": 2012,
+          "local_term_hits": 3725,
+          "raw_center_endpoints": 1290240
+        },
+        "seconds": 3.656,
+        "best": null
+      },
+      "new": {
+        "work": {
+          "interval_probes": 1287,
+          "supports_before_generation": 762,
+          "first_rank_interval": 240030,
+          "first_contact": 551250,
+          "first_connected": 276894,
+          "local_term_misses": 6742,
+          "connected_assignment_prices": 4752,
+          "first_orderprice": 222066,
+          "local_term_hits": 11645,
+          "raw_center_endpoints": 1290240
+        },
+        "seconds": 3.625,
+        "best": null
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "start": 7000012345678,
+      "width": 4096,
+      "v112": {
+        "work": {
+          "first_rank_interval": 0,
+          "first_contact": 779310,
+          "first_connected": 281988,
+          "support_assignments": 3912,
+          "local_term_misses": 10097,
+          "first_support": 228942,
+          "local_term_hits": 6864,
+          "whole_support_reuses": 954,
+          "raw_center_endpoints": 1290240
+        },
+        "seconds": 3.859,
+        "best": null
+      },
+      "ranges": {
+        "work": {
+          "interval_probes": 1040,
+          "first_rank_interval": 271530,
+          "first_contact": 507780,
+          "first_connected": 281988,
+          "support_assignments": 3912,
+          "local_term_misses": 10097,
+          "first_support": 228942,
+          "local_term_hits": 6864,
+          "whole_support_reuses": 954,
+          "raw_center_endpoints": 1290240,
+          "supports_before_generation": 862
+        },
+        "seconds": 4.422,
+        "best": null
+      },
+      "new": {
+        "work": {
+          "interval_probes": 1040,
+          "first_rank_interval": 271530,
+          "first_contact": 507780,
+          "first_connected": 281988,
+          "local_term_misses": 10097,
+          "connected_assignment_prices": 4866,
+          "first_orderprice": 228942,
+          "local_term_hits": 11116,
+          "raw_center_endpoints": 1290240,
+          "supports_before_generation": 862
+        },
+        "seconds": 3.828,
+        "best": null
+      }
+    }
+  ],
+  "joins": [
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "pool": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118,
+        122,
+        146,
+        155
+      ],
+      "last": {
+        "work": {
+          "attachments_priced": 855
+        },
+        "seconds": 0.047
+      },
+      "half": {
+        "seconds": 0.734,
+        "counts": [
+          {
+            "work": {
+              "catalogued": 285,
+              "pair_prices": 5670,
+              "half_entries": 870,
+              "pair_reuse": 5220,
+              "half_suffix_skips": 25110,
+              "half_queries": 90
+            },
+            "complete": true,
+            "target": 208
+          },
+          {
+            "work": {
+              "catalogued": 285,
+              "pair_prices": 5670,
+              "half_entries": 870,
+              "pair_reuse": 5214,
+              "half_suffix_skips": 25113,
+              "half_queries": 87
+            },
+            "complete": true,
+            "target": 208
+          },
+          {
+            "work": {
+              "catalogued": 285,
+              "pair_prices": 5670,
+              "half_entries": 870,
+              "pair_reuse": 5336,
+              "half_suffix_skips": 25052,
+              "half_queries": 148
+            },
+            "complete": true,
+            "target": 208
+          }
+        ]
+      },
+      "shared": {
+        "work": {
+          "geometry_prefixes": 285,
+          "individual_cycle_prices": 34020,
+          "suffix_rows_skipped": 736279,
+          "joint_parents_closed": 285,
+          "joint_physical_prices": 975
+        },
+        "seconds": 1.078
+      },
+      "individual": {
+        "work": {
+          "geometry_prefixes": 855,
+          "individual_cycle_prices": 34020,
+          "suffix_rows_skipped": 736279,
+          "joint_parents_closed": 855,
+          "joint_physical_prices": 975
+        },
+        "seconds": 1.328
+      },
+      "bridge": {
+        "work": {
+          "geometry_prefixes": 285,
+          "individual_cycle_prices": 34020,
+          "suffix_rows_skipped": 736279,
+          "joint_parents_closed": 285,
+          "joint_physical_prices": 975
+        },
+        "seconds": 1.657
+      },
+      "surviving_stars": 0
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "pool": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "last": {
+        "work": {
+          "attachments_priced": 17499,
+          "forced_swap_pairs_closed": 1449,
+          "catalogue_rows": 2430,
+          "sorted_rows_skipped": 623331,
+          "empty_buckets": 60038,
+          "parents_without_candidate": 15184,
+          "last_pruned": 8,
+          "certified_defect_prefixes": 1,
+          "exact_star_queries": 1
+        },
+        "seconds": 5.203
+      },
+      "half": {
+        "seconds": 1.125,
+        "counts": [
+          {
+            "work": {
+              "catalogued": 285,
+              "pair_prices": 5670,
+              "half_entries": 870,
+              "pair_reuse": 6064,
+              "half_suffix_skips": 24688,
+              "half_queries": 512
+            },
+            "complete": true,
+            "target": 208
+          },
+          {
+            "work": {
+              "catalogued": 285,
+              "pair_prices": 5670,
+              "half_entries": 870,
+              "pair_reuse": 7536,
+              "half_suffix_skips": 23952,
+              "half_queries": 1248,
+              "star_queries": 1
+            },
+            "complete": true,
+            "target": 208
+          },
+          {
+            "work": {
+              "catalogued": 285,
+              "pair_prices": 5670,
+              "half_entries": 870,
+              "pair_reuse": 6064,
+              "half_suffix_skips": 24688,
+              "half_queries": 512
+            },
+            "complete": true,
+            "target": 208
+          }
+        ]
+      },
+      "shared": {
+        "work": {
+          "geometry_prefixes": 285,
+          "individual_cycle_prices": 34020,
+          "suffix_rows_skipped": 739239,
+          "joint_physical_prices": 287,
+          "joint_parents_closed": 284,
+          "full_stars": 1
+        },
+        "seconds": 2.406
+      },
+      "individual": {
+        "work": {
+          "geometry_prefixes": 855,
+          "individual_cycle_prices": 34020,
+          "suffix_rows_skipped": 739239,
+          "joint_physical_prices": 287,
+          "joint_parents_closed": 854,
+          "full_stars": 1
+        },
+        "seconds": 2.047
+      },
+      "bridge": {
+        "work": {
+          "geometry_prefixes": 285,
+          "individual_cycle_prices": 34020,
+          "suffix_rows_skipped": 739239,
+          "joint_physical_prices": 287,
+          "joint_parents_closed": 284,
+          "full_stars": 1
+        },
+        "seconds": 2.625
+      },
+      "surviving_stars": 0
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "pool": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        21,
+        26,
+        27,
+        28,
+        29
+      ],
+      "last": {
+        "work": {
+          "attachments_priced": 15060,
+          "catalogue_rows": 2430,
+          "sorted_rows_skipped": 590424,
+          "empty_buckets": 49043,
+          "parents_without_candidate": 13476,
+          "forced_swap_pairs_closed": 678,
+          "last_pruned": 51
+        },
+        "seconds": 1.984
+      },
+      "half": {
+        "seconds": 0.531,
+        "counts": [
+          {
+            "work": {
+              "catalogued": 285,
+              "pair_prices": 5670,
+              "half_entries": 870,
+              "pair_reuse": 9690,
+              "half_suffix_skips": 22875,
+              "half_queries": 2325
+            },
+            "complete": true,
+            "target": 208
+          },
+          {
+            "work": {
+              "catalogued": 285,
+              "pair_prices": 5670,
+              "half_entries": 870,
+              "pair_reuse": 14514,
+              "half_suffix_skips": 20463,
+              "half_queries": 4737
+            },
+            "complete": true,
+            "target": 208
+          },
+          {
+            "work": {
+              "catalogued": 285,
+              "pair_prices": 5670,
+              "half_entries": 870,
+              "pair_reuse": 9690,
+              "half_suffix_skips": 22875,
+              "half_queries": 2325
+            },
+            "complete": true,
+            "target": 208
+          }
+        ]
+      },
+      "shared": {
+        "work": {
+          "geometry_prefixes": 285,
+          "individual_cycle_prices": 34020,
+          "suffix_rows_skipped": 736405,
+          "joint_physical_prices": 897,
+          "joint_parents_closed": 285
+        },
+        "seconds": 1.735
+      },
+      "individual": {
+        "work": {
+          "geometry_prefixes": 855,
+          "individual_cycle_prices": 34020,
+          "suffix_rows_skipped": 736405,
+          "joint_parents_closed": 855,
+          "joint_physical_prices": 897
+        },
+        "seconds": 1.531
+      },
+      "bridge": {
+        "work": {
+          "geometry_prefixes": 285,
+          "individual_cycle_prices": 34020,
+          "suffix_rows_skipped": 736405,
+          "joint_physical_prices": 897,
+          "joint_parents_closed": 285
+        },
+        "seconds": 1.656
+      },
+      "surviving_stars": 0
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "pool": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118,
+        122,
+        146,
+        155
+      ],
+      "last": {
+        "work": {
+          "attachments_priced": 135
+        },
+        "seconds": 0.0
+      },
+      "half": {
+        "seconds": 0.656,
+        "counts": [
+          {
+            "work": {
+              "catalogued": 45,
+              "pair_prices": 630,
+              "half_entries": 630,
+              "pair_reuse": 37816,
+              "half_suffix_skips": 28326,
+              "half_queries": 4
+            },
+            "complete": true,
+            "target": 208
+          },
+          {
+            "work": {
+              "catalogued": 45,
+              "pair_prices": 630,
+              "half_entries": 630,
+              "pair_reuse": 37800,
+              "half_suffix_skips": 28350
+            },
+            "complete": true,
+            "target": 208
+          },
+          {
+            "work": {
+              "catalogued": 45,
+              "pair_prices": 630,
+              "half_entries": 630,
+              "pair_reuse": 37840,
+              "half_suffix_skips": 28290,
+              "half_queries": 10
+            },
+            "complete": true,
+            "target": 208
+          }
+        ]
+      },
+      "shared": {
+        "work": {
+          "geometry_prefixes": 45
+        },
+        "seconds": 0.0
+      },
+      "individual": {
+        "work": {
+          "geometry_prefixes": 135
+        },
+        "seconds": 0.0
+      },
+      "bridge": {
+        "work": {
+          "geometry_prefixes": 45
+        },
+        "seconds": 0.0
+      },
+      "surviving_stars": 0
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "pool": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "last": {
+        "work": {
+          "attachments_priced": 11189,
+          "catalogue_rows": 270,
+          "sorted_rows_skipped": 249986,
+          "empty_buckets": 27679,
+          "parents_without_candidate": 9279,
+          "last_pruned": 2
+        },
+        "seconds": 1.562
+      },
+      "half": {
+        "seconds": 0.875,
+        "counts": [
+          {
+            "work": {
+              "catalogued": 45,
+              "pair_prices": 630,
+              "half_entries": 630,
+              "pair_reuse": 43764,
+              "half_suffix_skips": 18102,
+              "half_queries": 1491
+            },
+            "complete": true,
+            "target": 208
+          },
+          {
+            "work": {
+              "catalogued": 45,
+              "pair_prices": 630,
+              "half_entries": 630,
+              "pair_reuse": 45684,
+              "half_suffix_skips": 14946,
+              "half_queries": 1971
+            },
+            "complete": true,
+            "target": 208
+          },
+          {
+            "work": {
+              "catalogued": 45,
+              "pair_prices": 630,
+              "half_entries": 630,
+              "pair_reuse": 43764,
+              "half_suffix_skips": 18102,
+              "half_queries": 1491
+            },
+            "complete": true,
+            "target": 208
+          }
+        ]
+      },
+      "shared": {
+        "work": {
+          "geometry_prefixes": 636,
+          "owned_attachments": 591,
+          "individual_cycle_prices": 26595,
+          "suffix_rows_skipped": 398381,
+          "joint_parents_closed": 591,
+          "joint_physical_prices": 65,
+          "wrong_owner_buckets": 13
+        },
+        "seconds": 2.5
+      },
+      "individual": {
+        "work": {
+          "geometry_prefixes": 1908,
+          "owned_attachments": 1773,
+          "individual_cycle_prices": 26595,
+          "suffix_rows_skipped": 398381,
+          "joint_parents_closed": 1773,
+          "joint_physical_prices": 65,
+          "wrong_owner_buckets": 39
+        },
+        "seconds": 2.344
+      },
+      "bridge": {
+        "work": {
+          "geometry_prefixes": 636,
+          "owned_attachments": 591,
+          "individual_cycle_prices": 26595,
+          "suffix_rows_skipped": 398381,
+          "joint_parents_closed": 591,
+          "joint_physical_prices": 65,
+          "wrong_owner_buckets": 13
+        },
+        "seconds": 2.063
+      },
+      "surviving_stars": 0
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "pool": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        21,
+        26,
+        27,
+        28,
+        29
+      ],
+      "last": {
+        "work": {
+          "attachments_priced": 8962,
+          "catalogue_rows": 270,
+          "sorted_rows_skipped": 195845,
+          "empty_buckets": 21749,
+          "parents_without_candidate": 7494,
+          "last_pruned": 1
+        },
+        "seconds": 1.141
+      },
+      "half": {
+        "seconds": 0.734,
+        "counts": [
+          {
+            "work": {
+              "catalogued": 45,
+              "pair_prices": 630,
+              "half_entries": 630,
+              "pair_reuse": 42436,
+              "half_suffix_skips": 20650,
+              "half_queries": 1159
+            },
+            "complete": true,
+            "target": 208
+          },
+          {
+            "work": {
+              "catalogued": 45,
+              "pair_prices": 630,
+              "half_entries": 630,
+              "pair_reuse": 44384,
+              "half_suffix_skips": 17634,
+              "half_queries": 1646
+            },
+            "complete": true,
+            "target": 208
+          },
+          {
+            "work": {
+              "catalogued": 45,
+              "pair_prices": 630,
+              "half_entries": 630,
+              "pair_reuse": 42436,
+              "half_suffix_skips": 20650,
+              "half_queries": 1159
+            },
+            "complete": true,
+            "target": 208
+          }
+        ]
+      },
+      "shared": {
+        "work": {
+          "geometry_prefixes": 489,
+          "owned_attachments": 444,
+          "individual_cycle_prices": 19980,
+          "suffix_rows_skipped": 299453,
+          "joint_parents_closed": 444,
+          "joint_physical_prices": 15,
+          "wrong_owner_buckets": 10
+        },
+        "seconds": 1.219
+      },
+      "individual": {
+        "work": {
+          "geometry_prefixes": 1467,
+          "owned_attachments": 1332,
+          "individual_cycle_prices": 19980,
+          "suffix_rows_skipped": 299453,
+          "joint_parents_closed": 1332,
+          "joint_physical_prices": 15,
+          "wrong_owner_buckets": 30
+        },
+        "seconds": 1.312
+      },
+      "bridge": {
+        "work": {
+          "geometry_prefixes": 489,
+          "owned_attachments": 444,
+          "individual_cycle_prices": 19980,
+          "suffix_rows_skipped": 299453,
+          "joint_parents_closed": 444,
+          "joint_physical_prices": 15,
+          "wrong_owner_buckets": 10
+        },
+        "seconds": 1.344
+      },
+      "surviving_stars": 0
+    }
+  ],
+  "covers": [
+    {
+      "group": [
+        [
+          0,
+          1,
+          2
+        ]
+      ],
+      "available": 10,
+      "remaining": 4,
+      "old_upper": 210,
+      "result": {
+        "closed": true,
+        "status": "INFEASIBLE",
+        "clauses": 45,
+        "branches": 0
+      }
+    },
+    {
+      "group": [
+        [
+          0,
+          1,
+          2
+        ]
+      ],
+      "available": 160,
+      "remaining": 4,
+      "old_upper": 214,
+      "result": {
+        "closed": false,
+        "status": "OPTIMAL",
+        "clauses": 45,
+        "branches": 0
+      }
+    },
+    {
+      "group": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "available": 10,
+      "remaining": 4,
+      "old_upper": 208,
+      "result": {
+        "closed": true,
+        "status": "INFEASIBLE",
+        "clauses": 45,
+        "branches": 0
+      }
+    },
+    {
+      "group": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "available": 160,
+      "remaining": 4,
+      "old_upper": 212,
+      "result": {
+        "closed": false,
+        "status": "OPTIMAL",
+        "clauses": 45,
+        "branches": 0
+      }
+    },
+    {
+      "group": [
+        [
+          18,
+          30
+        ],
+        [
+          42,
+          44
+        ]
+      ],
+      "available": 160,
+      "remaining": 3,
+      "old_upper": 209,
+      "result": {
+        "closed": false,
+        "status": "OPTIMAL",
+        "clauses": 39,
+        "branches": 0
+      }
+    },
+    {
+      "group": [
+        [
+          51,
+          62
+        ],
+        [
+          118,
+          122
+        ]
+      ],
+      "available": 14,
+      "remaining": 3,
+      "old_upper": 209,
+      "result": {
+        "closed": true,
+        "status": "INFEASIBLE",
+        "clauses": 46,
+        "branches": 0
+      }
+    },
+    {
+      "group": [
+        [
+          51,
+          62
+        ],
+        [
+          118,
+          122
+        ]
+      ],
+      "available": 160,
+      "remaining": 3,
+      "old_upper": 213,
+      "result": {
+        "closed": true,
+        "status": "INFEASIBLE",
+        "clauses": 46,
+        "branches": 0
+      }
+    }
+  ]
+}

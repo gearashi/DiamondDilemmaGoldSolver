@@ -1,0 +1,900 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "section": "cpu",
+  "rounds": 64,
+  "rows": [
+    {
+      "name": "released-seven",
+      "seed": 4,
+      "seconds": 14.047,
+      "result": {
+        "gold": false,
+        "score": 171,
+        "components": 109,
+        "seed": 4,
+        "initial": 14,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 64,
+          "positive_swap_pairs": 3568,
+          "potential_pairs_priced": 677440,
+          "full_cycle_relaxations": 104,
+          "full_cycle_complete": 48,
+          "full_cycle_cycles": 21,
+          "joint_OPTIMAL": 64,
+          "joint_branches": 5379,
+          "orientation_entries": 166320,
+          "block_assignments": 64,
+          "round_to_150": 6,
+          "round_to_160": 13,
+          "round_to_170": 48,
+          "unique_repaired_boards": 54,
+          "mandatory_bonds": 7
+        },
+        "raw": 171,
+        "required": 7,
+        "forbidden": 2,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 129,
+          "ceiling": 169,
+          "calls": 1,
+          "branches": 37069
+        }
+      }
+    },
+    {
+      "name": "eight-only",
+      "seed": 4,
+      "seconds": 15.094,
+      "result": {
+        "gold": false,
+        "score": 170,
+        "components": 104,
+        "seed": 4,
+        "initial": 16,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 64,
+          "positive_swap_pairs": 3418,
+          "potential_pairs_priced": 658944,
+          "full_cycle_relaxations": 115,
+          "full_cycle_complete": 41,
+          "full_cycle_cycles": 29,
+          "joint_OPTIMAL": 63,
+          "joint_branches": 9416,
+          "orientation_entries": 178668,
+          "block_assignments": 64,
+          "round_to_150": 5,
+          "round_to_160": 12,
+          "joint_FEASIBLE": 1,
+          "round_to_170": 61,
+          "unique_repaired_boards": 62,
+          "mandatory_bonds": 8
+        },
+        "raw": 170,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 135,
+          "ceiling": 170,
+          "calls": 1,
+          "branches": 41061
+        }
+      }
+    },
+    {
+      "name": "phase",
+      "seed": 4,
+      "seconds": 2.343,
+      "result": {
+        "gold": false,
+        "score": 132,
+        "components": 151,
+        "signed": 129,
+        "forbidden_bonds": 0,
+        "seed": 4,
+        "work": {
+          "phase_calls": 2,
+          "rounds": 64,
+          "round_to_signed_100": 4,
+          "round_to_signed_110": 6,
+          "round_to_signed_120": 18,
+          "rows_computed": 3524,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 132,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 129,
+          "ceiling": 132,
+          "calls": 1,
+          "branches": 37943
+        }
+      }
+    },
+    {
+      "name": "phase-refit",
+      "seed": 4,
+      "seconds": 8.922,
+      "result": {
+        "gold": false,
+        "score": 132,
+        "components": 151,
+        "signed": 129,
+        "forbidden_bonds": 0,
+        "seed": 4,
+        "work": {
+          "phase_calls": 2,
+          "rounds": 64,
+          "round_to_signed_100": 4,
+          "round_to_signed_110": 6,
+          "refit_calls": 7,
+          "round_to_signed_120": 18,
+          "rows_computed": 3524,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 132,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 129,
+          "ceiling": 132,
+          "calls": 1,
+          "branches": 37943
+        }
+      }
+    },
+    {
+      "name": "phase-assemblies",
+      "seed": 4,
+      "seconds": 2.172,
+      "result": {
+        "gold": false,
+        "score": 137,
+        "components": 156,
+        "signed": 135,
+        "forbidden_bonds": 0,
+        "seed": 4,
+        "work": {
+          "phase_calls": 2,
+          "speculative_tried": 4,
+          "speculative_retained": 4,
+          "speculative_backed_out": 0,
+          "rounds": 64,
+          "round_to_signed_100": 4,
+          "round_to_signed_110": 5,
+          "round_to_signed_120": 8,
+          "round_to_signed_130": 14,
+          "rows_computed": 3485,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 137,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 135,
+          "ceiling": 137,
+          "calls": 1,
+          "branches": 20973
+        }
+      }
+    },
+    {
+      "name": "phase-contour",
+      "seed": 4,
+      "seconds": 2.828,
+      "result": {
+        "gold": false,
+        "score": 138,
+        "components": 148,
+        "signed": 137,
+        "forbidden_bonds": 0,
+        "seed": 4,
+        "work": {
+          "contour_trials": 39,
+          "contour_assignments": 1,
+          "phase_calls": 2,
+          "rounds": 64,
+          "round_to_signed_100": 3,
+          "round_to_signed_110": 5,
+          "round_to_signed_120": 8,
+          "round_to_signed_130": 19,
+          "rows_computed": 3548,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 138,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 137,
+          "ceiling": 138,
+          "calls": 1,
+          "branches": 32169
+        }
+      }
+    },
+    {
+      "name": "released-seven",
+      "seed": 5,
+      "seconds": 17.016,
+      "result": {
+        "gold": false,
+        "score": 175,
+        "components": 94,
+        "seed": 5,
+        "initial": 14,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 64,
+          "positive_swap_pairs": 3556,
+          "potential_pairs_priced": 677440,
+          "full_cycle_relaxations": 105,
+          "full_cycle_complete": 46,
+          "full_cycle_cycles": 29,
+          "joint_OPTIMAL": 63,
+          "joint_branches": 4025,
+          "orientation_entries": 270504,
+          "block_assignments": 64,
+          "round_to_150": 7,
+          "round_to_160": 15,
+          "joint_UNKNOWN": 1,
+          "round_to_170": 27,
+          "round_to_175": 49,
+          "unique_repaired_boards": 54,
+          "mandatory_bonds": 7
+        },
+        "raw": 175,
+        "required": 7,
+        "forbidden": 4,
+        "final_refit": {
+          "status": "UNKNOWN",
+          "ceiling": 171,
+          "calls": 1,
+          "branches": 29063
+        }
+      }
+    },
+    {
+      "name": "eight-only",
+      "seed": 5,
+      "seconds": 16.094,
+      "result": {
+        "gold": false,
+        "score": 167,
+        "components": 103,
+        "seed": 5,
+        "initial": 14,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 64,
+          "positive_swap_pairs": 4134,
+          "potential_pairs_priced": 658944,
+          "full_cycle_relaxations": 131,
+          "full_cycle_complete": 41,
+          "full_cycle_cycles": 70,
+          "joint_OPTIMAL": 64,
+          "joint_branches": 2520,
+          "orientation_entries": 234156,
+          "block_assignments": 64,
+          "round_to_150": 4,
+          "round_to_160": 6,
+          "unique_repaired_boards": 51,
+          "mandatory_bonds": 8
+        },
+        "raw": 167,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 130,
+          "ceiling": 167,
+          "calls": 1,
+          "branches": 22485
+        }
+      }
+    },
+    {
+      "name": "phase",
+      "seed": 5,
+      "seconds": 0.875,
+      "result": {
+        "gold": false,
+        "score": 135,
+        "components": 140,
+        "signed": 135,
+        "forbidden_bonds": 0,
+        "seed": 5,
+        "work": {
+          "phase_calls": 1,
+          "rounds": 64,
+          "round_to_signed_100": 3,
+          "round_to_signed_110": 5,
+          "round_to_signed_120": 7,
+          "round_to_signed_130": 12,
+          "rows_computed": 3540,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 135,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "OPTIMAL",
+          "kept": 135,
+          "ceiling": 135,
+          "calls": 1,
+          "branches": 649
+        }
+      }
+    },
+    {
+      "name": "phase-refit",
+      "seed": 5,
+      "seconds": 2.75,
+      "result": {
+        "gold": false,
+        "score": 135,
+        "components": 140,
+        "signed": 135,
+        "forbidden_bonds": 0,
+        "seed": 5,
+        "work": {
+          "phase_calls": 1,
+          "rounds": 64,
+          "round_to_signed_100": 3,
+          "round_to_signed_110": 5,
+          "round_to_signed_120": 7,
+          "refit_calls": 7,
+          "round_to_signed_130": 12,
+          "rows_computed": 3540,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 135,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "OPTIMAL",
+          "kept": 135,
+          "ceiling": 135,
+          "calls": 1,
+          "branches": 649
+        }
+      }
+    },
+    {
+      "name": "phase-assemblies",
+      "seed": 5,
+      "seconds": 1.937,
+      "result": {
+        "gold": false,
+        "score": 131,
+        "components": 156,
+        "signed": 129,
+        "forbidden_bonds": 0,
+        "seed": 5,
+        "work": {
+          "phase_calls": 1,
+          "speculative_tried": 4,
+          "speculative_retained": 4,
+          "speculative_backed_out": 0,
+          "rounds": 64,
+          "round_to_signed_100": 4,
+          "round_to_signed_110": 5,
+          "round_to_signed_120": 9,
+          "rows_computed": 3545,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 131,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 129,
+          "ceiling": 131,
+          "calls": 1,
+          "branches": 21521
+        }
+      }
+    },
+    {
+      "name": "phase-contour",
+      "seed": 5,
+      "seconds": 2.078,
+      "result": {
+        "gold": false,
+        "score": 141,
+        "components": 146,
+        "signed": 139,
+        "forbidden_bonds": 0,
+        "seed": 5,
+        "work": {
+          "contour_trials": 6,
+          "contour_assignments": 1,
+          "phase_calls": 1,
+          "rounds": 64,
+          "round_to_signed_100": 3,
+          "round_to_signed_110": 5,
+          "round_to_signed_120": 8,
+          "round_to_signed_130": 21,
+          "rows_computed": 3541,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 141,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 139,
+          "ceiling": 141,
+          "calls": 1,
+          "branches": 19852
+        }
+      }
+    },
+    {
+      "name": "released-seven",
+      "seed": 6,
+      "seconds": 18.188,
+      "result": {
+        "gold": false,
+        "score": 175,
+        "components": 98,
+        "seed": 6,
+        "initial": 13,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 64,
+          "positive_swap_pairs": 3484,
+          "potential_pairs_priced": 677440,
+          "full_cycle_relaxations": 118,
+          "full_cycle_complete": 44,
+          "full_cycle_cycles": 26,
+          "joint_OPTIMAL": 64,
+          "joint_branches": 5158,
+          "orientation_entries": 491142,
+          "block_assignments": 64,
+          "round_to_150": 4,
+          "round_to_160": 7,
+          "round_to_170": 18,
+          "round_to_175": 53,
+          "unique_repaired_boards": 55,
+          "mandatory_bonds": 7
+        },
+        "raw": 175,
+        "required": 7,
+        "forbidden": 2,
+        "final_refit": {
+          "status": "UNKNOWN",
+          "ceiling": 173,
+          "calls": 1,
+          "branches": 40930
+        }
+      }
+    },
+    {
+      "name": "eight-only",
+      "seed": 6,
+      "seconds": 15.828,
+      "result": {
+        "gold": false,
+        "score": 174,
+        "components": 94,
+        "seed": 6,
+        "initial": 16,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 64,
+          "positive_swap_pairs": 3417,
+          "potential_pairs_priced": 658944,
+          "full_cycle_relaxations": 112,
+          "full_cycle_complete": 41,
+          "full_cycle_cycles": 27,
+          "joint_OPTIMAL": 64,
+          "joint_branches": 3594,
+          "orientation_entries": 426684,
+          "block_assignments": 64,
+          "round_to_150": 7,
+          "round_to_160": 12,
+          "round_to_170": 43,
+          "unique_repaired_boards": 58,
+          "mandatory_bonds": 8
+        },
+        "raw": 174,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 135,
+          "ceiling": 174,
+          "calls": 1,
+          "branches": 43930
+        }
+      }
+    },
+    {
+      "name": "phase",
+      "seed": 6,
+      "seconds": 1.812,
+      "result": {
+        "gold": false,
+        "score": 127,
+        "components": 148,
+        "signed": 125,
+        "forbidden_bonds": 0,
+        "seed": 6,
+        "work": {
+          "phase_calls": 2,
+          "rounds": 64,
+          "round_to_signed_100": 4,
+          "round_to_signed_110": 7,
+          "round_to_signed_120": 10,
+          "rows_computed": 3556,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 127,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 125,
+          "ceiling": 127,
+          "calls": 1,
+          "branches": 29803
+        }
+      }
+    },
+    {
+      "name": "phase-refit",
+      "seed": 6,
+      "seconds": 6.907,
+      "result": {
+        "gold": false,
+        "score": 127,
+        "components": 148,
+        "signed": 125,
+        "forbidden_bonds": 0,
+        "seed": 6,
+        "work": {
+          "phase_calls": 2,
+          "rounds": 64,
+          "round_to_signed_100": 4,
+          "round_to_signed_110": 7,
+          "refit_calls": 7,
+          "round_to_signed_120": 10,
+          "rows_computed": 3556,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 127,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 125,
+          "ceiling": 127,
+          "calls": 1,
+          "branches": 29803
+        }
+      }
+    },
+    {
+      "name": "phase-assemblies",
+      "seed": 6,
+      "seconds": 2.546,
+      "result": {
+        "gold": false,
+        "score": 131,
+        "components": 151,
+        "signed": 130,
+        "forbidden_bonds": 0,
+        "seed": 6,
+        "work": {
+          "phase_calls": 2,
+          "speculative_tried": 4,
+          "speculative_retained": 4,
+          "speculative_backed_out": 0,
+          "rounds": 64,
+          "round_to_signed_100": 3,
+          "round_to_signed_110": 4,
+          "round_to_signed_120": 7,
+          "round_to_signed_130": 40,
+          "rows_computed": 3558,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 131,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 130,
+          "ceiling": 131,
+          "calls": 1,
+          "branches": 37548
+        }
+      }
+    },
+    {
+      "name": "phase-contour",
+      "seed": 6,
+      "seconds": 2.875,
+      "result": {
+        "gold": false,
+        "score": 136,
+        "components": 152,
+        "signed": 135,
+        "forbidden_bonds": 0,
+        "seed": 6,
+        "work": {
+          "contour_trials": 24,
+          "contour_assignments": 1,
+          "phase_calls": 2,
+          "rounds": 64,
+          "round_to_signed_100": 4,
+          "round_to_signed_110": 5,
+          "round_to_signed_120": 9,
+          "round_to_signed_130": 17,
+          "rows_computed": 3529,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 136,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 135,
+          "ceiling": 136,
+          "calls": 1,
+          "branches": 37279
+        }
+      }
+    },
+    {
+      "name": "released-seven",
+      "seed": 7,
+      "seconds": 19.813,
+      "result": {
+        "gold": false,
+        "score": 169,
+        "components": 107,
+        "seed": 7,
+        "initial": 15,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 64,
+          "positive_swap_pairs": 3465,
+          "potential_pairs_priced": 677440,
+          "full_cycle_relaxations": 144,
+          "full_cycle_complete": 38,
+          "full_cycle_cycles": 21,
+          "joint_OPTIMAL": 64,
+          "joint_branches": 2680,
+          "orientation_entries": 149646,
+          "block_assignments": 64,
+          "round_to_150": 6,
+          "round_to_160": 30,
+          "unique_repaired_boards": 60,
+          "mandatory_bonds": 7
+        },
+        "raw": 169,
+        "required": 8,
+        "forbidden": 3,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 130,
+          "ceiling": 166,
+          "calls": 1,
+          "branches": 31739
+        }
+      }
+    },
+    {
+      "name": "eight-only",
+      "seed": 7,
+      "seconds": 17.672,
+      "result": {
+        "gold": false,
+        "score": 173,
+        "components": 92,
+        "seed": 7,
+        "initial": 18,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 64,
+          "positive_swap_pairs": 3517,
+          "potential_pairs_priced": 658944,
+          "full_cycle_relaxations": 157,
+          "full_cycle_complete": 20,
+          "full_cycle_cycles": 165,
+          "joint_OPTIMAL": 63,
+          "joint_branches": 9235,
+          "orientation_entries": 237990,
+          "block_assignments": 64,
+          "joint_UNKNOWN": 1,
+          "round_to_150": 6,
+          "round_to_160": 11,
+          "round_to_170": 32,
+          "unique_repaired_boards": 51,
+          "mandatory_bonds": 8
+        },
+        "raw": 173,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 125,
+          "ceiling": 173,
+          "calls": 1,
+          "branches": 37846
+        }
+      }
+    },
+    {
+      "name": "phase",
+      "seed": 7,
+      "seconds": 1.844,
+      "result": {
+        "gold": false,
+        "score": 143,
+        "components": 146,
+        "signed": 142,
+        "forbidden_bonds": 0,
+        "seed": 7,
+        "work": {
+          "phase_calls": 1,
+          "rounds": 64,
+          "round_to_signed_100": 5,
+          "round_to_signed_110": 7,
+          "round_to_signed_120": 11,
+          "round_to_signed_130": 20,
+          "round_to_signed_140": 57,
+          "rows_computed": 3540,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 143,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 142,
+          "ceiling": 143,
+          "calls": 1,
+          "branches": 33250
+        }
+      }
+    },
+    {
+      "name": "phase-refit",
+      "seed": 7,
+      "seconds": 5.656,
+      "result": {
+        "gold": false,
+        "score": 143,
+        "components": 146,
+        "signed": 142,
+        "forbidden_bonds": 0,
+        "seed": 7,
+        "work": {
+          "phase_calls": 1,
+          "rounds": 64,
+          "round_to_signed_100": 5,
+          "round_to_signed_110": 7,
+          "refit_calls": 7,
+          "round_to_signed_120": 11,
+          "round_to_signed_130": 20,
+          "round_to_signed_140": 57,
+          "rows_computed": 3540,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 143,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 142,
+          "ceiling": 143,
+          "calls": 1,
+          "branches": 33250
+        }
+      }
+    },
+    {
+      "name": "phase-assemblies",
+      "seed": 7,
+      "seconds": 0.89,
+      "result": {
+        "gold": false,
+        "score": 135,
+        "components": 156,
+        "signed": 134,
+        "forbidden_bonds": 0,
+        "seed": 7,
+        "work": {
+          "phase_calls": 1,
+          "speculative_tried": 4,
+          "speculative_retained": 4,
+          "speculative_backed_out": 0,
+          "rounds": 64,
+          "round_to_signed_100": 4,
+          "round_to_signed_110": 5,
+          "round_to_signed_120": 7,
+          "round_to_signed_130": 32,
+          "rows_computed": 3541,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 135,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "OPTIMAL",
+          "kept": 134,
+          "ceiling": 134,
+          "calls": 1,
+          "branches": 798
+        }
+      }
+    },
+    {
+      "name": "phase-contour",
+      "seed": 7,
+      "seconds": 2.188,
+      "result": {
+        "gold": false,
+        "score": 127,
+        "components": 150,
+        "signed": 125,
+        "forbidden_bonds": 0,
+        "seed": 7,
+        "work": {
+          "contour_trials": 28,
+          "contour_assignments": 1,
+          "phase_calls": 1,
+          "rounds": 64,
+          "round_to_signed_100": 3,
+          "round_to_signed_110": 5,
+          "round_to_signed_120": 12,
+          "rows_computed": 3521,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 127,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 125,
+          "ceiling": 127,
+          "calls": 1,
+          "branches": 38042
+        }
+      }
+    }
+  ]
+}

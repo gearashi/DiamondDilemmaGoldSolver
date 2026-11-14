@@ -13,7 +13,10 @@ from validator import normalize_tiles, orientation_masks, validate_arrangement
 
 
 class SearchProblem:
-    def __init__(self, data, board=None, fixed=None):
+    def __init__(self, data, board=None, fixed=None, *, physical_gold_support=False):
+        # Normal app searches enable the stronger Gold-only mate relation.
+        # Standalone callers can still reproduce the original seam traversal.
+        self.physical_gold_support = physical_gold_support
         self.tiles = normalize_tiles(data)
         self.board = board if board is not None else build_board()
         self.n = len(self.tiles)

@@ -145,6 +145,9 @@ class ConstraintDFSTests(unittest.TestCase):
         gold = legacy_solve(problem, target='gold', seconds=2)
         self.assertEqual(gold['status'], 'infeasible')
         self.assertEqual(gold['stats']['leaves'], 18)
+        current = solve(SearchProblem(multiple_loops(),double_face(),physical_gold_support=True), target='gold', seconds=2)
+        self.assertEqual(current['status'], 'infeasible')
+        self.assertEqual(current['stats']['leaves'], 0)
 
     def test_closed_proper_loop_prunes_before_remaining_cells_are_chosen(self):
         geometry = board(4, [(0, s, 1, s) for s in range(3)] + [(2, s, 3, s) for s in range(3)])

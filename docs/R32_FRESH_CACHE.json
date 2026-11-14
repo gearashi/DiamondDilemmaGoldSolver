@@ -1,0 +1,135 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "section": "cache",
+  "rounds": 24,
+  "rows": [
+    {
+      "cross_seed_boards": 0,
+      "preexisting_row_keys": 0,
+      "name": "replay-rows",
+      "seed": 4,
+      "pass_index": 0,
+      "result": {
+        "rows_computed": 294,
+        "assignments": 24,
+        "row_hits": 1024
+      },
+      "final": [
+        123,
+        0
+      ]
+    },
+    {
+      "cross_seed_boards": 0,
+      "preexisting_row_keys": 0,
+      "name": "replay-rows",
+      "seed": 5,
+      "pass_index": 0,
+      "result": {
+        "rows_computed": 302,
+        "assignments": 24,
+        "row_hits": 1014
+      },
+      "final": [
+        118,
+        0
+      ]
+    },
+    {
+      "cross_seed_boards": 0,
+      "preexisting_row_keys": 0,
+      "name": "replay-rows",
+      "seed": 6,
+      "pass_index": 0,
+      "result": {
+        "rows_computed": 335,
+        "assignments": 24,
+        "row_hits": 987
+      },
+      "final": [
+        133,
+        0
+      ]
+    },
+    {
+      "cross_seed_boards": 0,
+      "preexisting_row_keys": 0,
+      "name": "replay-rows",
+      "seed": 7,
+      "pass_index": 0,
+      "result": {
+        "rows_computed": 329,
+        "assignments": 24,
+        "row_hits": 964
+      },
+      "final": [
+        125,
+        0
+      ]
+    },
+    {
+      "cross_seed_boards": 24,
+      "preexisting_row_keys": 294,
+      "name": "replay-rows",
+      "seed": 4,
+      "pass_index": 1,
+      "result": {
+        "rows_computed": 0,
+        "assignments": 24,
+        "row_hits": 1318
+      },
+      "final": [
+        123,
+        0
+      ]
+    },
+    {
+      "cross_seed_boards": 24,
+      "preexisting_row_keys": 302,
+      "name": "replay-rows",
+      "seed": 5,
+      "pass_index": 1,
+      "result": {
+        "rows_computed": 0,
+        "assignments": 24,
+        "row_hits": 1316
+      },
+      "final": [
+        118,
+        0
+      ]
+    },
+    {
+      "cross_seed_boards": 24,
+      "preexisting_row_keys": 335,
+      "name": "replay-rows",
+      "seed": 6,
+      "pass_index": 1,
+      "result": {
+        "rows_computed": 0,
+        "assignments": 24,
+        "row_hits": 1322
+      },
+      "final": [
+        133,
+        0
+      ]
+    },
+    {
+      "cross_seed_boards": 24,
+      "preexisting_row_keys": 329,
+      "name": "replay-rows",
+      "seed": 7,
+      "pass_index": 1,
+      "result": {
+        "rows_computed": 0,
+        "assignments": 24,
+        "row_hits": 1293
+      },
+      "final": [
+        125,
+        0
+      ]
+    }
+  ]
+}

@@ -92,6 +92,19 @@ class VerifiedConflictStore:
         while len(self._pending)>MAX_PENDING:
             self._pending.popitem(last=False);self.stats['shared_conflicts_pending_dropped']+=1
         self._refresh();return record in self._pending
+    def admit_physical_conflict(self, bonds, placements):
+        """Admit a physical Gold conflict only after replay in these original domains."""
+        from r32_gold_watch import verified_placement
+        self._assert_binding()
+        if self.target != 'gold':
+            return False
+        record = self._normalize(placements)
+        if len(record)>MAX_LITERALS or not verified_placement(self.problem,bonds,record):
+            return False
+        inserted = self._insert_verified(record)
+        self._refresh()
+        return inserted
+
     def admit_deduction_chain(self,certificate,check=lambda:None,*,max_clauses=64,stats=None):
         """Replay structural evidence before exposing singleton GPU clauses."""
         from constraint_deduction_chain_round26 import verify_chain,expand_placement_conflicts

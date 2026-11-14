@@ -28,6 +28,8 @@ class AttachmentPage:
                                  for a,b in join.edges if a in self.sources or b in self.sources)
         self.blocked=bool(join.actors and join.family==(2,2,3) and tuple(map(len,group))==(2,2)
                           and join.actors.actor_upper(group,sum(pending),pool=join.pool)<join.target)
+        if not self.blocked and tuple(map(len,group))==(2,2) and join.family==(2,2,3):
+            self.blocked = join.covered_swap_prefix(group)
         self.bonus={} if not self.final or self.blocked else join.attachment_bonuses(self.available,self.sources)
         self.cache={}
 
@@ -83,6 +85,10 @@ class AttachmentPage:
             return after,None
         cells=tuple(sorted(change))
         index={c:i for i,c in enumerate(cells)}
+        covered=getattr(self.join,'covered_support',None)
+        if covered is not None and covered(cells):
+            self.join.work['ranked_stars_avoided']+=1
+            return after,None
         order=tuple(index[change[c]] for c in cells)
         self.join.work['exact_star_queries']+=1
         return after,(cells,order) if self.join.stars.price(cells,order)>=2*self.join.target else None

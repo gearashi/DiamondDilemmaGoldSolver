@@ -172,7 +172,7 @@ def embedding(problem, domains, mates):
 
 
 class GoldMatching:
-    def __init__(self,problem,domains,pins,bonds,cutsets=(),forbidden=()):
+    def __init__(self,problem,domains,pins,bonds,cutsets=(),forbidden=(),*,physical_support=True):
         self.problem=problem
         self.domains=domains
         self.inputs=EndpointCuts(problem)
@@ -188,6 +188,11 @@ class GoldMatching:
         options=_all_seam_edges(problem,self.inputs,domains)
         banned={tuple(sorted(x)) for x in forbidden}
         wanted={tuple(sorted(x)) for x in bonds}
+        if physical_support:
+            from r32_gold_bonds import inventory
+            physical = inventory(problem)
+            banned.update(physical.forbidden)
+            wanted.update(physical.required)
         by_side=defaultdict(list)
         for a,b in options:
             if (a,b) in banned:
@@ -305,7 +310,7 @@ class GoldMatching:
 
 def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=(), matching=True,
            geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=(),
-           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=()):
+           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None):
     from ortools.sat.python import cp_model
     if seconds<=0 or max_rounds<1 or (geography and not matching):
         raise ValueError("Invalid Gold solve budget or mode.")
@@ -317,7 +322,17 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
     started=time.monotonic()
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
     if matching:
-        check=GoldMatching(problem,domains,pins,bonds,cutsets,forbidden)
+        check=GoldMatching(problem,domains,pins,bonds,cutsets,forbidden,physical_support=physical_support)
+        if physical_loss is not None:
+            from r32_gold_loss import add_loss_budget
+            reference, spec, cores = physical_loss
+            add_loss_budget(check, reference, spec)
+            from r32_gold_loss import Certificates
+            replay = Certificates(problem)
+            replay.add(cores)
+            for core in replay.rows:
+                if core <= check.mate.keys():
+                    check.m.add_bool_or([~check.mate[p] for p in core])
         if (learned_geometry or geographic_cores or channel) and not geography:
             raise ValueError("Geographic exclusions require the embed search objective.")
         if learned_geometry or geographic_cores:

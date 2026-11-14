@@ -1,0 +1,88 @@
+{
+  "original": [
+    {
+      "mode": "old",
+      "lanes": 128,
+      "candidates": 0,
+      "device": "NVIDIA GeForce RTX 2060",
+      "work": {
+        "decisions": 0,
+        "support_word_scans": 34973,
+        "exhausted": 0
+      },
+      "complete": false
+    },
+    {
+      "mode": "current",
+      "lanes": 128,
+      "candidates": 0,
+      "device": "NVIDIA GeForce RTX 2060",
+      "work": {
+        "decisions": 0,
+        "support_word_scans": 35660,
+        "exhausted": 0
+      },
+      "complete": false
+    }
+  ],
+  "closed_loops": [
+    {
+      "mode": "old",
+      "lanes": 36,
+      "candidates": 0,
+      "device": "NVIDIA GeForce RTX 2060",
+      "work": {
+        "decisions": 0,
+        "support_word_scans": 108,
+        "exhausted": 36
+      },
+      "complete": true
+    },
+    {
+      "mode": "current",
+      "lanes": 36,
+      "candidates": 0,
+      "device": "NVIDIA GeForce RTX 2060",
+      "work": {
+        "decisions": 0,
+        "support_word_scans": 72,
+        "exhausted": 36
+      },
+      "complete": true
+    }
+  ],
+  "positive": [
+    {
+      "mode": "old",
+      "lanes": 128,
+      "candidates": 4,
+      "device": "NVIDIA GeForce RTX 2060",
+      "work": {
+        "decisions": 2,
+        "support_word_scans": 620,
+        "exhausted": 128
+      },
+      "complete": true
+    },
+    {
+      "mode": "current",
+      "lanes": 128,
+      "candidates": 4,
+      "device": "NVIDIA GeForce RTX 2060",
+      "work": {
+        "decisions": 2,
+        "support_word_scans": 620,
+        "exhausted": 128
+      },
+      "complete": true
+    }
+  ],
+  "migration": {
+    "source_schema": "diamond-domain-cuda-v1",
+    "native_old": true,
+    "frontier_cubes": 3,
+    "gold_answers_in_remainder": 4,
+    "status": "solved",
+    "portable_restart": 1
+  }
+}

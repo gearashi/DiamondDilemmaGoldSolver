@@ -129,7 +129,7 @@ class TypedJoin:
         yield from visit((),0,self.base)
 
 
-    def half_survivors(self):
+    def half_survivors(self,representatives=False):
         """Group a 3+2+2 or 2+2+2+2 join into two bounded partner lists."""
         if self.family not in ((3,2,2),(2,2,2,2)):
             yield from self.survivors()
@@ -175,28 +175,43 @@ class TypedJoin:
                 selected=members&((1<<end)-1)
                 self.cost['half_suffix_skips']+=members.bit_count()-selected.bit_count()
                 lanes|=selected
-            while lanes:
-                bit=lanes&-lanes
-                lanes^=bit
-                other,right_bits,rcycles=right[bit.bit_length()-1]
-                if cut==2 and lcycles[-1]>=rcycles[0]:continue
-                cs=lcycles+rcycles
+            def eligible_rows(mask):
+                while mask:
+                    bit=mask&-mask
+                    mask^=bit
+                    row=right[bit.bit_length()-1]
+                    if cut!=2 or lcycles[-1]<row[2][0]:
+                        yield row
+            rows=eligible_rows(lanes)
+            if representatives:
+                from r32_half_response import group_rows
+                groups=group_rows(self,lcycles,rows)
+            else:
+                groups=((row,) for row in rows)
+            for items in groups:
+                other,_,representative=items[0]
                 self.cost['half_queries']+=1
-                interaction=sum(self.correction(a,b) for a in lcycles for b in rcycles)
-                if self.base+gain+other+interaction<self.target:continue
-                if self.contact and not any(self.close[a].intersection(B) for i,A in enumerate(cs)
-                                           for B in cs[:i] for a in A):continue
-                sources={a:b for cycle in cs for a,b in self.cycles[cycle].items()}
-                cells=tuple(sorted(sources));pos={c:i for i,c in enumerate(cells)}
-                order=tuple(pos[sources[c]] for c in cells)
-                self.cost['star_queries']+=1
-                if self.stars.price(cells,order)>=2*self.target:
-                    self.cost['survivors']+=1
-                    yield cs,cells,order
+                if representatives:
+                    self.cost['response_rows_shared']+=len(items)-1
+                interaction=sum(self.correction(a,b) for a in lcycles for b in representative)
+                if self.base+gain+other+interaction<self.target:
+                    continue
+                for _,_,rcycles in items:
+                    cs=lcycles+rcycles
+                    if self.contact and not any(self.close[a].intersection(B) for i,A in enumerate(cs)
+                                               for B in cs[:i] for a in A):continue
+                    sources={a:b for cycle in cs for a,b in self.cycles[cycle].items()}
+                    cells=tuple(sorted(sources));pos={c:i for i,c in enumerate(cells)}
+                    order=tuple(pos[sources[c]] for c in cells)
+                    self.cost['star_queries']+=1
+                    if self.stars.price(cells,order)>=2*self.target:
+                        self.cost['survivors']+=1
+                        yield cs,cells,order
+
 
 
 def matching_bound(weights, family):
-    """Maximum sum of directed donor prices under an exact partition of ≤8 rows.
+    """Maximum sum of directed donor prices under an exact partition of â‰¤8 rows.
 
     Enumerate directed cycles once, then solve a disjoint set partition by DP.
     In the all-swap case each edge has price w[i,j]+w[j,i], a perfect matching.
@@ -225,7 +240,7 @@ def matching_bound(weights, family):
     return visit((1<<k)-1,tuple(sorted(family)))
 
 
-def solve_pool(problem,board,pool,family,target,*,stop=False,order_by_gain=True,halves=False):
+def solve_pool(problem,board,pool,family,target,*,stop=False,order_by_gain=True,halves=False,representatives=False):
     from r27_incumbent import BoardModel
     from r28_exchange import ExchangeBound
     from r28_exchange_rotations import RotationOracle
@@ -237,7 +252,7 @@ def solve_pool(problem,board,pool,family,target,*,stop=False,order_by_gain=True,
     join=TypedJoin(bound,pool,family,target,contact=pred.certified)
     best=None
     oracle=RotationOracle(model)
-    rows=join.half_survivors() if halves else join.survivors(order_by_gain=order_by_gain)
+    rows=join.half_survivors(representatives) if halves or representatives else join.survivors(order_by_gain=order_by_gain)
     for cycles,cells,order in rows:
         if pred.reject(cycles):
             join.cost['predecessor']+=1
@@ -264,9 +279,10 @@ def main():
     parser.add_argument('--target',type=int,default=208)
     parser.add_argument('--stop-on-hit',action='store_true')
     parser.add_argument('--halves',action='store_true',help='Group large cycle families into two sorted joins.')
+    parser.add_argument('--representatives',action='store_true',help='Share the seam price across compatible half-join responses.')
     args=parser.parse_args()
     result=solve_pool(SearchProblem(read_json(args.tiles)),read_json(args.incumbent)['codes'],
-                      args.cells,tuple(map(int,args.family)),args.target,stop=args.stop_on_hit,halves=args.halves)
+                      args.cells,tuple(map(int,args.family)),args.target,stop=args.stop_on_hit,halves=args.halves,representatives=args.representatives)
     print(json.dumps(result))
 
 

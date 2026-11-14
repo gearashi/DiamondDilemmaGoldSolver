@@ -1,0 +1,242 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "section": "cuda",
+  "rounds": 64,
+  "rows": [
+    {
+      "name": "released-seven",
+      "seed": 4,
+      "seconds": 18.046,
+      "result": {
+        "gold": false,
+        "score": 175,
+        "components": 100,
+        "seed": 4,
+        "initial": 113,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 0,
+          "repair_steps": 64,
+          "positive_swap_pairs": 100,
+          "potential_pairs_priced": 677440,
+          "full_cycle_relaxations": 160,
+          "full_cycle_complete": 40,
+          "full_cycle_cycles": 22,
+          "joint_OPTIMAL": 64,
+          "joint_branches": 6470,
+          "orientation_entries": 223482,
+          "block_assignments": 64,
+          "round_to_150": 3,
+          "round_to_160": 8,
+          "round_to_170": 29,
+          "round_to_175": 46,
+          "unique_repaired_boards": 56,
+          "mandatory_bonds": 7
+        },
+        "raw": 175,
+        "required": 7,
+        "forbidden": 4,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 135,
+          "ceiling": 171,
+          "calls": 1,
+          "branches": 22689
+        }
+      }
+    },
+    {
+      "name": "eight-only",
+      "seed": 4,
+      "seconds": 17.36,
+      "result": {
+        "gold": false,
+        "score": 172,
+        "components": 96,
+        "seed": 4,
+        "initial": 106,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 0,
+          "repair_steps": 64,
+          "positive_swap_pairs": 312,
+          "potential_pairs_priced": 658944,
+          "full_cycle_relaxations": 129,
+          "full_cycle_complete": 34,
+          "full_cycle_cycles": 38,
+          "joint_OPTIMAL": 64,
+          "joint_branches": 4074,
+          "orientation_entries": 357702,
+          "block_assignments": 64,
+          "round_to_150": 5,
+          "round_to_160": 9,
+          "round_to_170": 45,
+          "unique_repaired_boards": 58,
+          "mandatory_bonds": 8
+        },
+        "raw": 172,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 147,
+          "ceiling": 172,
+          "calls": 1,
+          "branches": 42652
+        }
+      }
+    },
+    {
+      "name": "phase",
+      "seed": 4,
+      "seconds": 2.14,
+      "result": {
+        "gold": false,
+        "score": 139,
+        "components": 144,
+        "signed": 137,
+        "forbidden_bonds": 0,
+        "seed": 4,
+        "work": {
+          "gpu_proposals": 0,
+          "phase_calls": 2,
+          "rounds": 64,
+          "round_to_signed_100": 2,
+          "round_to_signed_110": 3,
+          "round_to_signed_120": 5,
+          "round_to_signed_130": 10,
+          "rows_computed": 3517,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 139,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 137,
+          "ceiling": 139,
+          "calls": 1,
+          "branches": 12674
+        }
+      }
+    },
+    {
+      "name": "released-seven",
+      "seed": 5,
+      "seconds": 16.344,
+      "result": {
+        "gold": false,
+        "score": 169,
+        "components": 102,
+        "seed": 5,
+        "initial": 112,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 0,
+          "repair_steps": 64,
+          "positive_swap_pairs": 139,
+          "potential_pairs_priced": 677440,
+          "full_cycle_relaxations": 159,
+          "full_cycle_complete": 38,
+          "full_cycle_cycles": 15,
+          "joint_OPTIMAL": 63,
+          "joint_branches": 6656,
+          "orientation_entries": 196368,
+          "block_assignments": 64,
+          "round_to_150": 3,
+          "round_to_160": 8,
+          "joint_FEASIBLE": 1,
+          "unique_repaired_boards": 56,
+          "mandatory_bonds": 7
+        },
+        "raw": 169,
+        "required": 7,
+        "forbidden": 3,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 132,
+          "ceiling": 166,
+          "calls": 1,
+          "branches": 27372
+        }
+      }
+    },
+    {
+      "name": "eight-only",
+      "seed": 5,
+      "seconds": 15.781,
+      "result": {
+        "gold": false,
+        "score": 174,
+        "components": 99,
+        "seed": 5,
+        "initial": 107,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 0,
+          "repair_steps": 64,
+          "positive_swap_pairs": 345,
+          "potential_pairs_priced": 658944,
+          "full_cycle_relaxations": 107,
+          "full_cycle_complete": 47,
+          "full_cycle_cycles": 48,
+          "joint_OPTIMAL": 64,
+          "joint_branches": 6471,
+          "orientation_entries": 216288,
+          "block_assignments": 64,
+          "round_to_150": 3,
+          "round_to_160": 5,
+          "round_to_170": 25,
+          "unique_repaired_boards": 59,
+          "mandatory_bonds": 8
+        },
+        "raw": 174,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 130,
+          "ceiling": 174,
+          "calls": 1,
+          "branches": 39601
+        }
+      }
+    },
+    {
+      "name": "phase",
+      "seed": 5,
+      "seconds": 2.657,
+      "result": {
+        "gold": false,
+        "score": 140,
+        "components": 148,
+        "signed": 135,
+        "forbidden_bonds": 0,
+        "seed": 5,
+        "work": {
+          "gpu_proposals": 0,
+          "phase_calls": 1,
+          "rounds": 64,
+          "round_to_signed_100": 2,
+          "round_to_signed_110": 3,
+          "round_to_signed_120": 6,
+          "round_to_signed_130": 9,
+          "rows_computed": 3568,
+          "assignments": 64,
+          "mandatory_bonds": 8
+        },
+        "raw": 140,
+        "required": 8,
+        "forbidden": 0,
+        "final_refit": {
+          "status": "FEASIBLE",
+          "kept": 135,
+          "ceiling": 140,
+          "calls": 1,
+          "branches": 25626
+        }
+      }
+    }
+  ]
+}

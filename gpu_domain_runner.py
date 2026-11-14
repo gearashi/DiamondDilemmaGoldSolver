@@ -166,7 +166,9 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
             native_cooperative=native.get('binding',{}).get('cooperative',False) if native else False
             native_proofs=native.get('binding',{}).get('proof_transport',False) if native else False
             if any(type(value)is not bool for value in (native_support,native_watched,native_matching,native_cooperative,native_proofs)):raise ValueError('Invalid saved round26 domain policy.')
-            if native and len(native['cubes'])<=replicas and native_joint==joint_support and saved_forks==propagated_forks and native_event==event_propagation and native_precise==precise_reasons and native_support==support_reuse and native_watched==watched_clauses and native_matching==global_matching and native_cooperative==cooperative and native_proofs==proof_transport and saved_balance==lane_balance:
+            current_tables = (not native or target != 'gold' or 'binding' not in native
+                              or native['binding'].get('physical_bond_support') == 1)
+            if current_tables and native and len(native['cubes'])<=replicas and native_joint==joint_support and saved_forks==propagated_forks and native_event==event_propagation and native_precise==precise_reasons and native_support==support_reuse and native_watched==watched_clauses and native_matching==global_matching and native_cooperative==cooperative and native_proofs==proof_transport and saved_balance==lane_balance:
                 cubes=[tuple(int(x,16) for x in row) for row in native['cubes']]
                 engine=DomainCUDA(problem,cubes,target=target,max_memory_bytes=MAX_BYTES,**engine_options)
                 engine.restore(unpack_native(native,engine))

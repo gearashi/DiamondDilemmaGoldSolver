@@ -3,6 +3,8 @@ import json
 
 
 def register(db,scope,binding,families,target,owners):
+    from r32_route_store import schema
+    schema(db)
     db.execute("""CREATE TABLE IF NOT EXISTS r31_members(
         scope TEXT, domain TEXT, family TEXT, target INTEGER, owner TEXT,
         PRIMARY KEY(scope,family,owner))""")
@@ -16,6 +18,8 @@ def register(db,scope,binding,families,target,owners):
 def inherited_end(db,scope,binding,families,target,owners,start,stop):
     """An owner can be deferred to another page in a multicenter run.
 
+    Legacy multicenter pages lack owner information. New pages can supply
+    exact transitive owner dependencies through r32_route_store.
     Only a singleton source has no deferred cross-center endpoints. Within
     that scope the earlier-radius certificates are complete independent proofs.
     A higher target can also consume a completed lower-target page if the
@@ -34,5 +38,6 @@ def inherited_end(db,scope,binding,families,target,owners,start,stop):
                       default=start)
             until = min(until,end)
             if until==start:
-                return start
+                from r32_route_store import inherited
+                return inherited(db,scope,binding,families,target,owners,start,stop)
     return until

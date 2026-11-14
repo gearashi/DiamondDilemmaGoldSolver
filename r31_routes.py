@@ -18,7 +18,8 @@ from r29_exchange_route import physical_hash,rotation_optimum
 from r30_cycles import canonical_cycles
 from r30_multicenter import released_six
 from r31_route_geometry import ConnectedJoin,proved_connected
-from r31_route_price import DefectPrices,Exterior,comparison_relations
+from r31_route_price import DefectPrices,comparison_relations
+from r32_exterior import CompactExterior
 
 
 def rank(cells,free):
@@ -82,7 +83,7 @@ def search(problem,board,cells,family,target,*,database=':memory:',price=True,
                     continue
             if exterior:
                 if support!=exterior_cell:
-                    envelope = Exterior(b,support)
+                    envelope = CompactExterior(b,support)
                     exterior_cell = support
                 cap = envelope.score(order)
                 if cap is not None and cap<target:
@@ -127,7 +128,7 @@ def search(problem,board,cells,family,target,*,database=':memory:',price=True,
     return dict(family=family,cells=cells,target=target,complete=True,best=best,work=dict(join.work+count))
 
 
-def search_roots(problem,board,family,target,database,*,pool=None,start=0,stop=None,seconds=0,quantum=256,max_pages=None):
+def search_roots(problem,board,family,target,database,*,pool=None,start=0,stop=None,seconds=0,quantum=256,max_pages=None,catalogue=True):
     """Durable, disjoint root intervals on the complete board or a restricted pool.
 
     Short cursor pages are atomic. A crash can replay its current page;
@@ -174,6 +175,25 @@ def search_roots(problem,board,family,target,database,*,pool=None,start=0,stop=N
                    scope TEXT, idx INTEGER, stack TEXT NOT NULL, best TEXT,
                    PRIMARY KEY(scope,idx))""")
         db.commit()
+        from r32_route_store import schema
+        schema(db)
+        db.execute('INSERT OR IGNORE INTO r32_root_binding VALUES(?,?,?,?,?,?)',
+                   (key,binding,owner,json.dumps(family),target,json.dumps(pool)))
+        db.commit()
+        if catalogue:
+            from r32_catalogue import install
+            install(join,db,binding,owner)
+            db.commit()
+        ranked_exists = db.execute('SELECT 1 FROM r30_pages WHERE scope=? LIMIT 1',(ranked_key,)).fetchone()
+        if ranked_exists:
+            from functools import lru_cache
+            @lru_cache(maxsize=1024)
+            def covered_support(support):
+                point = rank(support,model.free)
+                previous = db.execute('SELECT hi,best FROM r30_pages WHERE scope=? AND lo<=? ORDER BY lo DESC LIMIT 1',
+                                      (ranked_key,point)).fetchone()
+                return previous is not None and previous[0]>point and previous[1]=='null'
+            join.covered_support = covered_support
         frames = {}
         def expired():
             return bool(seconds and monotonic()-clock>=seconds)
@@ -299,6 +319,7 @@ def main():
     p.add_argument('--start',type=int,default=0)
     p.add_argument('--stop',type=int)
     p.add_argument('--seconds',type=float,default=0)
+    p.add_argument('--no-catalogue',action='store_true',help='Rebuild attachment buckets in memory only.')
     p.add_argument('--cursor-page',type=int,default=256)
     p.add_argument('--family',choices=('322','2222'),required=True)
     p.add_argument('--target',type=int,default=208)
@@ -311,7 +332,7 @@ def main():
         if a.compare_six or a.defects or a.exterior:
             p.error("The diagnostic endpoint options apply to support-pool mode.")
         print(json.dumps(search_roots(SearchProblem(read_json(a.tiles)),read_json(a.incumbent)['codes'],
-                        tuple(map(int,a.family)),a.target,a.database,pool=a.cells,start=a.start,stop=a.stop,seconds=a.seconds,quantum=a.cursor_page)))
+                        tuple(map(int,a.family)),a.target,a.database,pool=a.cells,start=a.start,stop=a.stop,seconds=a.seconds,quantum=a.cursor_page,catalogue=not a.no_catalogue)))
         return
     if not a.cells or a.start or a.stop is not None or a.seconds:
         p.error("Supply --cells for pool mode, or --roots for ranked subtrees.")

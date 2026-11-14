@@ -318,7 +318,7 @@ class PropagatedForkCUDATests(unittest.TestCase):
 class EventPropagationHostTests(unittest.TestCase):
     def test_static_consumer_index_covers_original_domain_tiles_across_words(self):
         problem=planted160_fixture();engine=DomainCUDA.__new__(DomainCUDA)
-        engine.problem=problem;engine.n=problem.n;engine.nc=3*problem.n;engine.words=(engine.nc+31)//32;engine.event_propagation=True
+        engine.problem=problem;engine.target='edges';engine.n=problem.n;engine.nc=3*problem.n;engine.words=(engine.nc+31)//32;engine.event_propagation=True
         table=engine._tables();offset=25*engine.n+engine.nc*33+9*engine.nc*engine.words;words=(engine.n+31)//32
         index=table[offset:].reshape(engine.n,words)
         for tile in range(engine.n):

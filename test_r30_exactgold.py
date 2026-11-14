@@ -94,7 +94,7 @@ class ExactComparisons(unittest.TestCase):
     def test_valid_and_unrealizable_incompatible_physical_matchings(self):
         p,ds=planted(1,0,23,False,True)
         allowed,banned,fixed,pins=bridge_fixture(p)
-        choices=GoldMatching(p,domain_bits(p),pins,fixed,(),banned)
+        choices=GoldMatching(p,domain_bits(p),pins,fixed,(),banned,physical_support=False)
         graph=Union(choices.strands)
         for pair in allowed:
             for a,b in choices.transitions[pair]:
@@ -103,7 +103,7 @@ class ExactComparisons(unittest.TestCase):
         counts=pairing_oracle(choices,allowed,fixed)
         self.assertGreater(counts['matchings'],0)
         self.assertEqual(counts['connected'],0)
-        result=search(p,pins=pins,bonds=fixed,forbidden=banned,seconds=5)
+        result=search(p,pins=pins,bonds=fixed,forbidden=banned,seconds=5,physical_support=False)
         self.assertEqual(result['status'],'INFEASIBLE')
         self.assertGreater(result['strand_cuts'],0)
         independent_bounds=[choices.crossing_capacity(g,2) for g in result['physical_cutsets']]
@@ -120,7 +120,7 @@ class ExactComparisons(unittest.TestCase):
         self.assertEqual(valid['status'],'GOLD')
         self.assertTrue(p.validate(valid['codes'])['valid'])
         # An empty time/iteration frontier must remain open.
-        self.assertEqual(search(p,pins=pins,bonds=fixed,forbidden=banned,max_rounds=1)['status'],'UNKNOWN')
+        self.assertEqual(search(p,pins=pins,bonds=fixed,forbidden=banned,max_rounds=1,physical_support=False)['status'],'UNKNOWN')
 
 
 def bridge_fixture(p):
@@ -129,7 +129,7 @@ def bridge_fixture(p):
              (3,9),(3,20),(7,14),(7,16),(7,22),(8,15),(8,17),(8,18),(8,20),(8,26),
              (9,23),(14,20),(14,27),(16,22),(17,18),(18,21),(18,23),(20,22),(20,26),(26,27)}
     pins=dict(enumerate(phases(p)))
-    total=GoldMatching(p,domain_bits(p),pins,[],[],[])
+    total=GoldMatching(p,domain_bits(p),pins,[],[],[],physical_support=False)
     banned=[pair for pair in total.mate if total.transitions[pair] and pair not in allowed]
     fixed=[pair for pair in seams(p) if not total.transitions.get(tuple(sorted(pair)))]
     return allowed,banned,fixed,pins

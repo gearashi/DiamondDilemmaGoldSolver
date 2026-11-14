@@ -486,7 +486,7 @@ def main(argv=None):
         publish()
         raw = args.data.read_bytes()
         data = json.loads(raw.decode('utf-8-sig'))
-        problem = SearchProblem(data)
+        problem = SearchProblem(data,physical_gold_support=True)
         if options['shared_coverage'] and args.algorithm in ('dfs','parallel-dfs','sat','gpu-domains'):learning_state['_coverage_path']=str(run/'completed-coverage.sqlite3')
         if args.algorithm=='gpu-domains':learning_state['_gpu_checkpoint_dir']=str(folder/'gpu-checkpoints')
         if args.algorithm=='hybrid' and options['durable_hybrid']:learning_state['_hybrid_run_seconds']=args.seconds

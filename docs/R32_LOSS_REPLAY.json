@@ -1,0 +1,58 @@
+{
+  "command": "python -B r32_gold.py loss --upper 15 --seconds 210",
+  "result": {
+    "status": "INFEASIBLE",
+    "loss_budget": 15,
+    "checked_layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "all_outside_layers": true,
+    "completed_prefixes": 273940,
+    "total_prefixes": 273940,
+    "new_pages": 38,
+    "work": {
+      "suffix_rows": 257161,
+      "prefixes": 273940,
+      "indexed_tails": 3510141,
+      "joint_queries": 1357
+    },
+    "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853"
+  },
+  "software": [
+    {
+      "name": "runner-python",
+      "version": "3.12.14"
+    },
+    {
+      "name": "CPython",
+      "version": "3.12.14"
+    },
+    {
+      "name": "numpy",
+      "version": "2.5.3"
+    }
+  ],
+  "wall_seconds": 40.234,
+  "inputs_sha256": {
+    "r32_gold.py": "3b6b83ecdbf22599bdfa1b50a61f6179173f8fff5a9666f2dde2e2d31e098704",
+    "r32_gold_syndrome.py": "b7eb53a4c78a85ef63841c82c823fc706399ef568f3c04773a2b61490a6d3fbf",
+    "r32_gold_partition.py": "e5740df75d225485ab861cbc61356f00a58d8d73676f38b8692c7b36758b7326",
+    "r32_gold_bonds.py": "77a82d49d811d97476e8cb4a707f50804abc79a7f8907279e1eba6d7c6ff4cae",
+    "r32_gold_loss.py": "48ac83435504a41255724c6f489e41af96722fc0402473605ceabbf81cc7fc6b",
+    "r29_gold_phase.py": "81150119a67591f0b0ca3595eeaa1d256156fa0223576aeab592757bc689bbb9",
+    "r28_geo_color.py": "acda7d4e9334f1b8bd7aa59159db2728d1e4bce6da35b69181deefb3f57023e7",
+    "r27_structure_filters.py": "42836dae0bc4e2fa10541826a56861b2c9319c7b8cdaa9b522fd6b3cd9d8f361",
+    "r31_geographic.py": "b5179ef772ae56f5546feb13e5890904bbd3a358045c5e9b196b70c661bfb11b",
+    "search_problem.py": "42514de3bc076252a2a1b3a4992bb9f4cd5b8a647f47a2e8c24f8fc62a92d3aa",
+    "geometry.py": "fb34df600b516c545a8417f6ba3c11bed27dabd9b0b4531b1e4b443d6d434538",
+    "validator.py": "f2c200e4f3e6d9dec5addd52f411bb8d8e60c795b5422ce971d2e99d5eb96828",
+    "docs/R29_INCUMBENT.json": "ca0a089fa219f93713bf3a26ce3191d8090e2410b0072ee9146c90297049f492",
+    "docs/R31_GOLD_RESULTS.json": "9f48dfbf96a80ad1208d5ec8c0895d86d3aa17f393a4f489e1ace3b8b7dd631b",
+    "data/tiles.json": "81e5e40ab23afb135cafe913af3e9d6579d68eea4c096c60d2ddd57a1c8cfe79"
+  }
+}

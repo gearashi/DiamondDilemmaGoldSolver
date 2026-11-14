@@ -71,6 +71,8 @@ class DomainCUDA:
         if proof_transport:self.schema='diamond-domain-cuda-v8'
         self.binding={'fingerprint':problem.fingerprint,'target':target,'original':self._original(),
                       'learning':self.learning,'incremental_strands':self.incremental_strands}
+        if target == 'gold':
+            self.binding['physical_bond_support'] = 1
         if joint_support:self.binding['joint_support']=True
         if event_propagation:self.binding['event_propagation']=True
         if precise_reasons:self.binding.update(precise_reasons=True,reason_slots=self.reason_slots)
@@ -151,10 +153,14 @@ class DomainCUDA:
         for code,rows in enumerate(self.problem._segment_ports):ports[code]=np.asarray(rows,dtype=np.int32).ravel().view(np.uint32)
         masks=np.asarray(self.problem.masks,np.uint32)
         reverse=np.asarray([[reverse_mask(value) for value in row] for row in masks],np.uint32)
+        from r32_gold_bonds import inventory, forbidden_codes
+        excluded = inventory(self.problem).forbidden if self.target == 'gold' else ()
         compatible=np.zeros((9,self.nc,self.words),np.uint32)
         for side in range(3):
             for other_side in range(3):
                 supports=masks[:,side,None]==reverse[None,:,other_side]
+                for first, second in forbidden_codes(excluded, side, other_side):
+                    supports[first, second] = False
                 packed=np.packbits(supports,axis=1,bitorder='little')
                 storage=np.zeros((self.nc,self.words*4),np.uint8)
                 storage[:,:packed.shape[1]]=packed
