@@ -113,12 +113,35 @@ struct Context {
    if(value>=0&&value<NC&&has(other,value)&&(t[offset+(value>>5)]&(1u<<(value&31)))){support_bump(1);return true;}
   }support_bump(2);
 #endif
+#if CROSS_LANE && !COOPERATIVE && __CUDA_ARCH__ >= 700
+  // Only lanes with exactly the same immutable table row and domain may share
+  // a negative answer. Partition the active warp by the full operand tuple.
+  unsigned group=__match_any_sync(__activemask(),offset);
+  for(int w=0;w<W && (group&(group-1));++w){
+   group=__match_any_sync(group,domain(other,w));
+  }
+  int leader=__ffs(group)-1;
+  int witness=-1;
+  if((threadIdx.x&31)==leader){
+   for(int w=0;w<W;++w){
+    support_bump(3);
+    unsigned hits=domain(other,w)&t[offset+w];
+    if(hits){witness=w*32+__ffs(hits)-1;break;}
+   }
+  }
+  witness=__shfl_sync(group,witness,leader);
+#if SUPPORT_REUSE
+  if(witness>=0)support_put(key,witness);
+#endif
+  return witness>=0;
+#else
   for(int word=0;word<W;word++){support_bump(3);unsigned supported=domain(other,word)&t[offset+word];if(supported){
 #if SUPPORT_REUSE
    support_put(key,word*32+__ffs(supported)-1);
 #endif
    return true;
   }}return false;
+#endif
  }
  __device__ void clause_bump(int index,unsigned amount=1){
 #if CLAUSE_METRICS

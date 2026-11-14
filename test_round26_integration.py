@@ -84,7 +84,10 @@ class ReasoningIntegrationTests(unittest.TestCase):
         from search_options import BOOLEAN_OPTIONS
         from unittest.mock import patch
         problem=permutation_ring([(1,0,2),(0,2,1)]*2)
-        options={**dict.fromkeys(BOOLEAN_OPTIONS,False),'native':'python','lookahead':True,'pair_lookahead':True,'durable_reasoning':True}
+        # Stop on the first completed probe. The ordinary 100 ms scheduling
+        # slice can expire during durable I/O before the callback on a busy host.
+        options={**dict.fromkeys(BOOLEAN_OPTIONS,False),'native':'python','lookahead':True,
+                 'lookahead_ms':1000,'pair_lookahead':True,'durable_reasoning':True}
         original=CompletedProbeCache.run;calls=[]
         def probe(owner,*args,**kwargs):
             result=original(owner,*args,**kwargs);calls.append(result);return result

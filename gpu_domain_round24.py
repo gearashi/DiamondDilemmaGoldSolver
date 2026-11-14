@@ -30,9 +30,10 @@ class DomainCUDA:
     clause_metrics=False
     global_matching=False
     cooperative=False
+    cross_lane=False
     proof_transport=False
     def __init__(self,problem,cubes=None,*,target='gold',max_memory_bytes=512*1024*1024,
-                 learning=True,incremental_strands=True,joint_support=False,event_propagation=False,precise_reasons=False,reason_slots=None,support_reuse=False,support_metrics=False,support_slots=None,watched_clauses=False,clause_metrics=False,global_matching=False,cooperative=False,proof_transport=False):
+                 learning=True,incremental_strands=True,joint_support=False,event_propagation=False,precise_reasons=False,reason_slots=None,support_reuse=False,support_metrics=False,support_slots=None,watched_clauses=False,clause_metrics=False,global_matching=False,cooperative=False,proof_transport=False,cross_lane=False):
         if target not in ('gold','edges'):raise ValueError('Invalid domain-engine target.')
         if type(max_memory_bytes) is not int or max_memory_bytes<1:raise ValueError('Positive memory limit required.')
         self.problem,self.target=problem,target;self.n=problem.n;self.nc=3*self.n
@@ -52,6 +53,10 @@ class DomainCUDA:
         if type(global_matching)is not bool:raise ValueError("Global matching must be boolean.")
         self.global_matching=global_matching
         if type(cooperative)is not bool:raise ValueError("Cooperative execution must be boolean.")
+        if type(cross_lane) is not bool:
+            raise ValueError("Cross-lane support sharing requires a boolean")
+        self.cross_lane = cross_lane
+        self._page_mirror = None
         self.cooperative=cooperative
         if type(proof_transport)is not bool:raise ValueError("Proof transport must be boolean.")
         self.proof_transport=proof_transport
@@ -101,7 +106,7 @@ class DomainCUDA:
         tables=self._tables();self.tables=cp.asarray(tables)
         constants={'N':n,'NC':nc,'W':w,'RW':rw,'P':16*n,'C':32,'ROWS':cursor,
                    'GOLD':int(target=='gold'),'LEARNING':int(learning),'INCREMENTAL_STRANDS':int(incremental_strands),
-                   'TOTAL_SEGMENTS':problem.total_segments,'JOINT_SUPPORT':int(joint_support),'EVENT_PROPAGATION':int(event_propagation),'PRECISE_REASONS':int(precise_reasons),'RS':self.reason_slots,'PROOF_TRANSPORT':int(proof_transport),'COOPERATIVE':int(cooperative),'GLOBAL_MATCHING':int(global_matching),'WATCHED_CLAUSES':int(watched_clauses),'CLAUSE_METRICS':int(self.clause_metrics),'SUPPORT_REUSE':int(support_reuse),'SUPPORT_METRICS':int(self.support_metrics),'SS':self.support_slots,'TW':(n+31)//32,**{key.upper():value for key,value in self.offsets.items()}}
+                   'CROSS_LANE':int(cross_lane),'TOTAL_SEGMENTS':problem.total_segments,'JOINT_SUPPORT':int(joint_support),'EVENT_PROPAGATION':int(event_propagation),'PRECISE_REASONS':int(precise_reasons),'RS':self.reason_slots,'PROOF_TRANSPORT':int(proof_transport),'COOPERATIVE':int(cooperative),'GLOBAL_MATCHING':int(global_matching),'WATCHED_CLAUSES':int(watched_clauses),'CLAUSE_METRICS':int(self.clause_metrics),'SUPPORT_REUSE':int(support_reuse),'SUPPORT_METRICS':int(self.support_metrics),'SS':self.support_slots,'TW':(n+31)//32,**{key.upper():value for key,value in self.offsets.items()}}
         prefix='\n'.join(f'#define {name} {value}' for name,value in constants.items())+'\n'
         self.module=cp.RawModule(code=prefix+(ROOT/'domain_search_round24.cu').read_text(),options=('--std=c++17',),
                                  name_expressions=('domain_search','domain_ack','domain_propagate','domain_share','domain_ordered'))
@@ -211,7 +216,7 @@ class DomainCUDA:
             raise ValueError('Fork does not cover the propagated parent.')
         extra_cubes=tuple(self._validate_cube(row) for row in extra_cubes)
         child=DomainCUDA(self.problem,(*cubes,*extra_cubes),target=self.target,max_memory_bytes=max_memory_bytes,
-                         learning=self.learning,incremental_strands=self.incremental_strands,joint_support=self.joint_support,event_propagation=self.event_propagation,precise_reasons=self.precise_reasons,reason_slots=self.reason_slots if self.precise_reasons else None,support_reuse=self.support_reuse,support_metrics=self.support_metrics,support_slots=self.support_slots if self.support_reuse else None,watched_clauses=self.watched_clauses,clause_metrics=self.clause_metrics,global_matching=self.global_matching,cooperative=self.cooperative,proof_transport=self.proof_transport)
+                         learning=self.learning,incremental_strands=self.incremental_strands,joint_support=self.joint_support,event_propagation=self.event_propagation,precise_reasons=self.precise_reasons,reason_slots=self.reason_slots if self.precise_reasons else None,support_reuse=self.support_reuse,support_metrics=self.support_metrics,support_slots=self.support_slots if self.support_reuse else None,watched_clauses=self.watched_clauses,clause_metrics=self.clause_metrics,global_matching=self.global_matching,cooperative=self.cooperative,proof_transport=self.proof_transport,cross_lane=self.cross_lane)
         try:
             for name,length in [('board',self.n),('owner',self.n),('assign_log',self.n),('parent',self.n*16),('size',self.n*16),
                                 ('union_child',self.n*16),('union_parent',self.n*16),('union_size',self.n*16)]:
@@ -412,10 +417,27 @@ class DomainCUDA:
         except BaseException:
             self.state[:,ids]=self.cp.asarray(previous);self.cp.cuda.get_current_stream().synchronize();raise
         self.cubes=tuple(updated)
+    def incremental_snapshot(self):
+        from r28_device_pages import DevicePages
+        cp = self.cp
+        if self._page_mirror is None:
+            free, _ = cp.cuda.runtime.memGetInfo()
+            if self.state_bytes > free // 2:
+                return self.checkpoint()
+            self._page_mirror = DevicePages()
+        try:
+            data = self._page_mirror.capture(cp, self.state)
+        except cp.cuda.memory.OutOfMemoryError:
+            self._page_mirror = None
+            return self.checkpoint()
+        return self._checkpoint_payload(data)
+
     def checkpoint(self):
         # Native arrays are retained exactly; portable cube transport separately
         # preserves remaining coverage while intentionally losing engine scratch.
         data=np.ascontiguousarray(self.state.get())
+        return self._checkpoint_payload(data)
+    def _checkpoint_payload(self,data):
         return {'schema':self.schema,'binding':self.binding,'cubes':[[hex(v) for v in cube] for cube in self.cubes],
                 'state':data,'state_sha256':hashlib.sha256(memoryview(data).cast('B')).hexdigest(),'delivered':list(self.delivered),'rows':self.rows}
     def restore(self,checkpoint):
@@ -587,4 +609,4 @@ class DomainCUDA:
                 raise ValueError('Delivered candidate failed independent validation.')
             seen.add(tuple(codes));verified.append({'lane':lane,'codes':list(codes),'validation':report})
         self.state[:]=self.cp.asarray(state);self.delivered=verified
-    def close(self):self.state=self.tables=self.kernel=self.ack_kernel=self.propagate_kernel=self.share_kernel=self.module=None
+    def close(self):self._page_mirror=self.state=self.tables=self.kernel=self.ack_kernel=self.propagate_kernel=self.share_kernel=self.module=None

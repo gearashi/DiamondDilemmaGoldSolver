@@ -247,6 +247,10 @@ class RepairSession:
                     self.pending={'board':self.current.copy(),'patch':patch,'key':self._key(self.current,patch),'seed':self.config['seed']+self.index,'calls':0,'cuts':{'version':1,'gold_cuts':[]}}
                     if self.retained:self.pending['policy_choice']=chosen
                 pending=self.pending;cached=next((row for row in self.cache if row['key']==pending['key']),None) if self.config['cache_attempts'] else None
+                if cached is None and self.config['cache_attempts'] and not self.retained:
+                    from r28_patch_cache import transplant
+                    cached = transplant(self.problem, pending, self.cache, target=self.config['target'],
+                                        loop_aware=self.config['loop_aware'])
                 details={}
                 if cached:
                     candidate=deepcopy(cached['candidate']);native_status=cached['status'];self.stats['attempt_cache_hits']+=1;self.stats['repair_completed_work_reused']+=1

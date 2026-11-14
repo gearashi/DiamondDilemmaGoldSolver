@@ -52,7 +52,11 @@ def bounded_tail(problem,masks,target,check,*,max_active=8,max_alternatives=64,m
     """Only completion certifies an answer; any limit leaves the caller's exact frame intact."""
     check()
     widths = [m.bit_count() for m in masks]
-    if (not all(widths) or not 1 <= sum(n>1 for n in widths) <= max_active
+    active = sum(n>1 for n in widths)
+    if active > max_active and widths and min(widths) > 0 and max(widths) <= 2:
+        from r28_logic_tail import binary_tail
+        return binary_tail(problem,masks,target,check,max_work=max_checks,seconds=seconds)
+    if (not all(widths) or not 1 <= active <= max_active
             or sum(n-1 for n in widths)>max_alternatives):
         return None
     rows = []

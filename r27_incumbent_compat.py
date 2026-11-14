@@ -89,6 +89,14 @@ _RELEASE_TEXT = {
     'validator.py': ('f2c200e4f3e6d9dec5addd52f411bb8d8e60c795b5422ce971d2e99d5eb96828', 'f2c200e4f3e6d9dec5addd52f411bb8d8e60c795b5422ce971d2e99d5eb96828', 'f2c200e4f3e6d9dec5addd52f411bb8d8e60c795b5422ce971d2e99d5eb96828'),
 }
 
+_R28 = {
+    'constraint_lns_resume_round25.py': ('5c42f53ce0f5fad6485e651d13e0e7cf44d47ad065ea0a0c77b8e22f3a707ed8', 'e18dcf659c75ccf746f5d0bbd3f6acd1263adee7a60a414e4fb8dc2d3f7007e4', '69b5b001153b65386f86b731134d704498cbee104a4cdbfc3d8a1c15e5f30b25'),
+    'constraint_symbolic_frontier.py': ('e0a2e06c438d2141fae436b2169186165eb22beb21a614a866be366ed8a713df', '864ee26bce5911c853b1e1fba4d2cc897e110daf2285ae90a0b6594d6596c0b6', '04bbcb149c52552dbba78e6914aa39f6a558022ba8083bb7285b1a8469e42429'),
+    'gpu_domain_round24.py': ('56018ee01984e57def7a6f100467a9157442a026d1146e74b95c8837a107e89f', 'd6aeb828dd23613ed00e61979a5b41dd79bf4da16fa69aac7dfc80d532b03e86', 'c28ef46d5a6ac0f07505c93e34f90e920e1343e987815ddeb62b9c70c953f063'),
+    'gpu_domain_runner.py': ('584eb134831acb3a63f26bfa950133b36e634e5bf95e8700b12c35cd774fe1ab', '2dc06201e7bc9d360dc4d03ba6503065fe34fa1f04cec46cc63fa7741190bb31', '420fe3066d71165764d6f9de856079084aeda1466b4b0bdea5534751e91b2753'),
+    'domain_search_round24.cu': ('68bdf1b64bd56540454b26cc4f8329da9749cdc15d7a09fc590a6c7c7b091486', 'c42e0e0d661209e25c7c60190f8ae75d2b608b962f2fa3edcf394aa075d28508', '84ccf676f549af30646bbb4b6f59a1f9ca2be28223ff9a51834657c57accb984'),
+}
+
 # Bind each historical text image to the exact current image reviewed here.
 # Git checkouts and release archives can use LF or CRLF for the same source.
 @lru_cache(maxsize=256)
@@ -102,6 +110,9 @@ def _variants(name,current):
     variants={sha256(data).hexdigest() for data in (raw,lf,crlf)}
     if current not in variants:
         return ()
+    version = _R28.get(name)
+    if version and version[0] in variants:
+        variants.update(version[1:])
     old_new=_COMPATIBLE.get(name)
     if old_new and old_new[1] in variants:
         variants.update((old_new[0],_V17_CRLF[name]))

@@ -1,0 +1,118 @@
+{
+  "dispatches": [
+    {
+      "cross_lane": false,
+      "lanes": 1,
+      "dispatches": 3,
+      "decisions": 0,
+      "support_checks": 3065,
+      "support_words": 22876,
+      "device_transfer_bytes": 1042116,
+      "full_transfer_bytes": 4711900
+    },
+    {
+      "cross_lane": true,
+      "lanes": 1,
+      "dispatches": 3,
+      "decisions": 0,
+      "support_checks": 3065,
+      "support_words": 22876,
+      "device_transfer_bytes": 1042116,
+      "full_transfer_bytes": 4711900
+    },
+    {
+      "cross_lane": false,
+      "lanes": 8,
+      "dispatches": 3,
+      "decisions": 0,
+      "support_checks": 24520,
+      "support_words": 183008,
+      "device_transfer_bytes": 7616020,
+      "full_transfer_bytes": 37695200
+    },
+    {
+      "cross_lane": true,
+      "lanes": 8,
+      "dispatches": 3,
+      "decisions": 0,
+      "support_checks": 24520,
+      "support_words": 22876,
+      "device_transfer_bytes": 7616020,
+      "full_transfer_bytes": 37695200
+    },
+    {
+      "cross_lane": false,
+      "lanes": 32,
+      "dispatches": 3,
+      "decisions": 0,
+      "support_checks": 98080,
+      "support_words": 732032,
+      "device_transfer_bytes": 30267460,
+      "full_transfer_bytes": 150780800
+    },
+    {
+      "cross_lane": true,
+      "lanes": 32,
+      "dispatches": 3,
+      "decisions": 0,
+      "support_checks": 98080,
+      "support_words": 22876,
+      "device_transfer_bytes": 30267460,
+      "full_transfer_bytes": 150780800
+    },
+    {
+      "cross_lane": false,
+      "lanes": 64,
+      "dispatches": 3,
+      "decisions": 0,
+      "support_checks": 196160,
+      "support_words": 1464064,
+      "device_transfer_bytes": 60403848,
+      "full_transfer_bytes": 301561600
+    },
+    {
+      "cross_lane": true,
+      "lanes": 64,
+      "dispatches": 3,
+      "decisions": 0,
+      "support_checks": 196160,
+      "support_words": 45752,
+      "device_transfer_bytes": 60403848,
+      "full_transfer_bytes": 301561600
+    }
+  ],
+  "donation": [
+    {
+      "shared": false,
+      "assigned": [
+        0,
+        0
+      ],
+      "unions": [
+        0,
+        0
+      ],
+      "solutions": 2,
+      "bytes": 53232,
+      "strand_joins": 24,
+      "checks": 32,
+      "decisions": 0
+    },
+    {
+      "shared": true,
+      "assigned": [
+        10,
+        10
+      ],
+      "unions": [
+        9,
+        9
+      ],
+      "solutions": 2,
+      "bytes": 53232,
+      "strand_joins": 6,
+      "checks": 32,
+      "decisions": 0
+    }
+  ]
+}

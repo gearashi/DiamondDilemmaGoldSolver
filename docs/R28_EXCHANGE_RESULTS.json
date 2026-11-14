@@ -1,0 +1,354 @@
+{
+  "scope": "Real 207-edge incumbents, all 160 rotations free, target 208",
+  "shells": {
+    "original": {
+      "3": {
+        "tested": 1339840,
+        "bounded": 1339840,
+        "exact": 0,
+        "illegal": 0
+      },
+      "4": {
+        "tested": 236649240,
+        "bounded": 236649239,
+        "exact": 1,
+        "reused": 0,
+        "illegal": 0,
+        "hits": 0
+      },
+      "5": {
+        "tested": 36096897408,
+        "bounded": 36096897408,
+        "exact": 0,
+        "reused": 0,
+        "illegal": 0,
+        "hits": 0
+      }
+    },
+    "verified-best": {
+      "3": {
+        "tested": 1339840,
+        "bounded": 1339840,
+        "exact": 0,
+        "illegal": 0
+      },
+      "4": {
+        "tested": 236649240,
+        "bounded": 236649238,
+        "exact": 2,
+        "reused": 0,
+        "illegal": 0,
+        "hits": 0
+      },
+      "5": {
+        "tested": 36096897408,
+        "bounded": 36096897408,
+        "exact": 0,
+        "reused": 0,
+        "illegal": 0,
+        "hits": 0
+      }
+    },
+    "walk207-1": {
+      "3": {
+        "tested": 1339840,
+        "bounded": 1339840,
+        "exact": 0,
+        "reused": 0,
+        "illegal": 0,
+        "hits": 0
+      },
+      "4": {
+        "tested": 236649240,
+        "bounded": 236649239,
+        "exact": 1,
+        "reused": 0,
+        "illegal": 0,
+        "hits": 0
+      },
+      "5": {
+        "tested": 36096897408,
+        "bounded": 36096897408,
+        "exact": 0,
+        "reused": 0,
+        "illegal": 0,
+        "hits": 0
+      }
+    }
+  },
+  "complete_207_plateau": {
+    "centers": 3,
+    "star": 38034,
+    "solved": 125,
+    "reused": 1,
+    "exact_fallback": 125,
+    "closed": 3,
+    "open": 0,
+    "score": 207,
+    "components": 52,
+    "rotation_work": {
+      "dominated": 0,
+      "messages": 13357506,
+      "avoided": 17888085,
+      "hits": 16039
+    }
+  },
+  "neighborhood_benchmark": {
+    "start": [
+      207,
+      52
+    ],
+    "rotated_examples": [
+      202,
+      201,
+      202,
+      202,
+      202,
+      202,
+      201,
+      202,
+      203,
+      202,
+      201,
+      202,
+      202,
+      202,
+      204,
+      202,
+      203,
+      202,
+      204,
+      204,
+      202,
+      201,
+      203,
+      204
+    ],
+    "rotation_work": {
+      "dominated": 0,
+      "messages": 420,
+      "avoided": 4545,
+      "hits": 3753,
+      "threshold_removed": 8515,
+      "threshold_rejected": 27
+    },
+    "pricing_rows": 442,
+    "avoided_price_rows": 3718,
+    "independent": [
+      {
+        "cells": 8,
+        "ties_examined": 1,
+        "best": [
+          207,
+          -52
+        ]
+      },
+      {
+        "cells": 16,
+        "ties_examined": 1,
+        "best": [
+          207,
+          -52
+        ]
+      },
+      {
+        "cells": 57,
+        "ties_examined": 1,
+        "best": [
+          207,
+          -52
+        ]
+      }
+    ],
+    "blocks": [
+      {
+        "size": 2,
+        "cells": [
+          6,
+          31
+        ],
+        "patch_threshold": "INFEASIBLE",
+        "independent_threshold": "INFEASIBLE",
+        "connectivity": "INFEASIBLE",
+        "component_score": null,
+        "star_bounds": [
+          208,
+          208,
+          208,
+          208
+        ]
+      },
+      {
+        "size": 3,
+        "cells": [
+          6,
+          95,
+          5
+        ],
+        "patch_threshold": "INFEASIBLE",
+        "independent_threshold": "INFEASIBLE",
+        "connectivity": "INFEASIBLE",
+        "component_score": null,
+        "star_bounds": [
+          208,
+          208,
+          208,
+          208
+        ]
+      },
+      {
+        "size": 4,
+        "cells": [
+          6,
+          95,
+          31,
+          29
+        ],
+        "patch_threshold": "INFEASIBLE",
+        "independent_threshold": "INFEASIBLE",
+        "connectivity": "INFEASIBLE",
+        "component_score": null,
+        "star_bounds": [
+          208,
+          208,
+          208,
+          208
+        ]
+      },
+      {
+        "size": 6,
+        "cells": [
+          6,
+          31,
+          5,
+          95,
+          93,
+          94
+        ],
+        "patch_threshold": "INFEASIBLE",
+        "independent_threshold": "INFEASIBLE",
+        "connectivity": "INFEASIBLE",
+        "component_score": null,
+        "star_bounds": [
+          208,
+          208,
+          208,
+          208
+        ]
+      },
+      {
+        "size": 8,
+        "cells": [
+          6,
+          5,
+          95,
+          31,
+          93,
+          102,
+          4,
+          29
+        ],
+        "patch_threshold": "INFEASIBLE",
+        "independent_threshold": "INFEASIBLE",
+        "connectivity": "UNKNOWN",
+        "component_score": null,
+        "star_bounds": [
+          209,
+          209,
+          209,
+          209
+        ]
+      }
+    ],
+    "rigid": [
+      {
+        "count": 2,
+        "trades": 256,
+        "best": 203
+      },
+      {
+        "count": 3,
+        "trades": 512,
+        "best": 202
+      }
+    ],
+    "patch_dominated": 8,
+    "patch_orientations": 9,
+    "unordered_paths": 66,
+    "raw_paths": 132,
+    "preserved_capped_paths": 132,
+    "forest": [
+      "INFEASIBLE",
+      "INFEASIBLE"
+    ],
+    "cut_trades": [
+      "INFEASIBLE",
+      "INFEASIBLE",
+      "INFEASIBLE",
+      "INFEASIBLE"
+    ],
+    "ranked_scores": [
+      207,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206,
+      206
+    ],
+    "pareto": [
+      {
+        "seams": 207,
+        "components": 51,
+        "status": "INFEASIBLE",
+        "actual": null,
+        "seconds": 9.51600000000326
+      },
+      {
+        "seams": 206,
+        "components": 51,
+        "status": "INFEASIBLE",
+        "actual": null,
+        "seconds": 9.296000000002095
+      },
+      {
+        "seams": 205,
+        "components": 50,
+        "status": "INFEASIBLE",
+        "actual": null,
+        "seconds": 7.5939999999973224
+      }
+    ]
+  },
+  "bounded_pilot_snapshot": {
+    "utc": "2026-11-14T17:09:43+00:00",
+    "six_piece_best_center": {
+      "tested": 68217733120,
+      "total": 5616212352400,
+      "hits": 0
+    },
+    "floor_206": {
+      "closed_score_count": [
+        [
+          0,
+          206,
+          238
+        ],
+        [
+          1,
+          206,
+          49
+        ],
+        [
+          1,
+          207,
+          3
+        ]
+      ],
+      "cached_optima": 3789
+    }
+  }
+}

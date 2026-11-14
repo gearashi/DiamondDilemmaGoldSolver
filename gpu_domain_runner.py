@@ -79,7 +79,7 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
     if precise_reasons:engine_options['precise_reasons']=True
     support_reuse=options.get('gpu_support_reuse',False)
     if type(support_reuse)is not bool:raise ValueError('gpu_support_reuse must be boolean.')
-    if support_reuse:engine_options['support_reuse']=True
+    if support_reuse:engine_options.update(support_reuse=True, cross_lane=True)
     watched_clauses=options.get('gpu_watched_clauses',False)
     if type(watched_clauses)is not bool:raise ValueError('gpu_watched_clauses must be boolean.')
     if watched_clauses:engine_options['watched_clauses']=True
@@ -229,7 +229,7 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
         # GPU dispatch, batch ownership, or accumulated totals invalidate this
         # private snapshot. A deadline crossed while saving can reuse it exactly.
         if cached_revision==state_revision:return cached_payload
-        frozen=engine.checkpoint() if incremental_checkpoint and engine else None
+        frozen=getattr(engine, 'incremental_snapshot', engine.checkpoint)() if incremental_checkpoint and engine else None
         if frozen is not None:storage['gpu_checkpoint_host_copies']+=1
         native=pack_native(engine) if engine and not incremental_checkpoint else None
         blobs={}

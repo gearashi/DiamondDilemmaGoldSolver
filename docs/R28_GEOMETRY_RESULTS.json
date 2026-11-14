@@ -1,0 +1,565 @@
+{
+  "original": {
+    "signature_classes": 480,
+    "duplicate_orientations": 0,
+    "phase_euler_False": {
+      "status": "OPTIMAL",
+      "unsupported_phases": [
+        [
+          0,
+          1
+        ]
+      ],
+      "unsupported_bonds": [],
+      "calls": 38
+    },
+    "phase_euler_True": {
+      "status": "OPTIMAL",
+      "unsupported_phases": [
+        [
+          0,
+          1
+        ]
+      ],
+      "unsupported_bonds": [],
+      "calls": 26
+    },
+    "stars": {
+      "status": "UNKNOWN",
+      "examined": 1000001,
+      "complete_columns": false
+    },
+    "boundary": {
+      "lower": [
+        0,
+        3,
+        4,
+        5,
+        4,
+        5,
+        6,
+        7,
+        6,
+        7
+      ],
+      "complete_shape_counts": [
+        160,
+        240,
+        480,
+        1105,
+        2792,
+        7165,
+        18690,
+        49450,
+        131890
+      ]
+    },
+    "scarce_subsets": {
+      "tested": 772,
+      "min_supply": {
+        "2": 4,
+        "3": 7,
+        "4": 8,
+        "5": 11,
+        "6": 12,
+        "7": 13,
+        "8": 16,
+        "9": 17
+      },
+      "saturated": {
+        "2": 7
+      }
+    },
+    "forced_pairs": 7,
+    "forced_poses": {
+      "feasible": true,
+      "independent": true,
+      "nodes": 7
+    },
+    "repeat_poses": {
+      "feasible": true,
+      "independent": true,
+      "nodes": 7
+    },
+    "pose_cache": {
+      "hits": 153,
+      "misses": 153,
+      "maxsize": 256,
+      "currsize": 153
+    },
+    "incumbent": 207,
+    "signed_core": {
+      "status": "INFEASIBLE",
+      "bonds": [
+        [
+          436,
+          158
+        ],
+        [
+          435,
+          70
+        ],
+        [
+          77,
+          154
+        ],
+        [
+          153,
+          429
+        ],
+        [
+          430,
+          307
+        ],
+        [
+          306,
+          453
+        ],
+        [
+          454,
+          100
+        ],
+        [
+          99,
+          263
+        ],
+        [
+          262,
+          17
+        ],
+        [
+          478,
+          42
+        ],
+        [
+          479,
+          156
+        ],
+        [
+          43,
+          438
+        ],
+        [
+          440,
+          196
+        ],
+        [
+          197,
+          423
+        ],
+        [
+          240,
+          16
+        ]
+      ],
+      "minimal": true,
+      "queries": 17
+    },
+    "signed_core_without_euler": {
+      "status": "INFEASIBLE",
+      "bonds": [
+        [
+          436,
+          158
+        ],
+        [
+          435,
+          70
+        ],
+        [
+          77,
+          154
+        ],
+        [
+          153,
+          429
+        ],
+        [
+          430,
+          307
+        ],
+        [
+          306,
+          453
+        ],
+        [
+          454,
+          100
+        ],
+        [
+          99,
+          263
+        ],
+        [
+          262,
+          17
+        ],
+        [
+          478,
+          42
+        ],
+        [
+          479,
+          156
+        ],
+        [
+          43,
+          438
+        ],
+        [
+          440,
+          196
+        ],
+        [
+          197,
+          423
+        ],
+        [
+          240,
+          16
+        ]
+      ],
+      "minimal": true,
+      "queries": 17
+    },
+    "sewn_20": {
+      "poses": {
+        "feasible": true,
+        "independent": true,
+        "nodes": 1
+      },
+      "phase": {
+        "status": "OPTIMAL",
+        "unsupported_phases": [
+          [
+            0,
+            1
+          ]
+        ],
+        "unsupported_bonds": [],
+        "calls": 18
+      }
+    },
+    "sewn_100": {
+      "poses": {
+        "feasible": true,
+        "independent": true,
+        "nodes": 2
+      },
+      "phase": {
+        "status": "INFEASIBLE",
+        "unsupported_phases": [],
+        "unsupported_bonds": [],
+        "calls": 1
+      }
+    },
+    "sewn_207": {
+      "poses": {
+        "feasible": true,
+        "independent": true,
+        "nodes": 1
+      },
+      "phase": {
+        "status": "INFEASIBLE",
+        "unsupported_phases": [],
+        "unsupported_bonds": [],
+        "calls": 1
+      }
+    }
+  },
+  "controls": {
+    "gold": {
+      "dual": {
+        "complete": true,
+        "exists": true,
+        "boards": 1,
+        "cuts": 0
+      },
+      "stars": {
+        "status": "UNKNOWN",
+        "columns": 11786,
+        "examined": 265915,
+        "complete_columns": true
+      },
+      "plain": {
+        "complete": true,
+        "work": {
+          "region_nodes": 115,
+          "regional_strands": 569,
+          "boundary_pattern_object_bytes": 10560,
+          "boundary_key_bytes": 280,
+          "region_histories": 69,
+          "states": 40,
+          "row_extensions": 438,
+          "complete_joins": 32
+        },
+        "solutions": 12
+      },
+      "trie": {
+        "complete": true,
+        "work": {
+          "region_nodes": 115,
+          "regional_strands": 569,
+          "boundary_pattern_object_bytes": 10560,
+          "boundary_key_bytes": 280,
+          "region_histories": 69,
+          "states": 40,
+          "trie_prefixes": 9,
+          "row_extensions": 10,
+          "complete_joins": 2
+        },
+        "solutions": 12
+      }
+    },
+    "split": {
+      "dual": {
+        "complete": true,
+        "exists": false,
+        "boards": 12,
+        "cuts": 12
+      },
+      "stars": {
+        "status": "UNKNOWN",
+        "columns": 11786,
+        "examined": 265915,
+        "complete_columns": true
+      },
+      "plain": {
+        "complete": true,
+        "work": {
+          "region_nodes": 115,
+          "regional_strands": 569,
+          "boundary_pattern_object_bytes": 9632,
+          "boundary_key_bytes": 256,
+          "region_histories": 57,
+          "states": 36,
+          "row_extensions": 178,
+          "complete_joins": 4
+        },
+        "solutions": 0
+      },
+      "trie": {
+        "complete": true,
+        "work": {
+          "region_nodes": 115,
+          "regional_strands": 569,
+          "boundary_pattern_object_bytes": 9632,
+          "boundary_key_bytes": 256,
+          "region_histories": 57,
+          "states": 36,
+          "trie_prefixes": 1
+        },
+        "solutions": 0
+      }
+    },
+    "nested": {
+      "dual": {
+        "complete": true,
+        "exists": false,
+        "boards": 1,
+        "cuts": 4
+      },
+      "stars": {
+        "status": "OPTIMAL",
+        "columns": 7,
+        "examined": 68,
+        "complete_columns": true
+      },
+      "plain": {
+        "complete": true,
+        "work": {
+          "region_nodes": 13,
+          "regional_strands": 25,
+          "boundary_pattern_object_bytes": 760,
+          "boundary_key_bytes": 20,
+          "region_histories": 3,
+          "states": 3,
+          "row_extensions": 3,
+          "complete_joins": 1
+        },
+        "solutions": 0
+      },
+      "trie": {
+        "complete": true,
+        "work": {
+          "region_nodes": 13,
+          "regional_strands": 25,
+          "boundary_pattern_object_bytes": 760,
+          "boundary_key_bytes": 20,
+          "region_histories": 3,
+          "states": 3,
+          "trie_prefixes": 9,
+          "row_extensions": 3,
+          "complete_joins": 1
+        },
+        "solutions": 0
+      }
+    },
+    "40cells": {
+      "dual": {
+        "complete": true,
+        "exists": true,
+        "boards": 1,
+        "cuts": 0
+      },
+      "stars": {
+        "status": "OPTIMAL",
+        "columns": 116,
+        "examined": 7347,
+        "complete_columns": true
+      },
+      "plain": {
+        "complete": true,
+        "work": {
+          "region_nodes": 54,
+          "regional_strands": 391,
+          "boundary_pattern_object_bytes": 2456,
+          "boundary_key_bytes": 136,
+          "region_histories": 10,
+          "states": 7,
+          "row_extensions": 15,
+          "complete_joins": 3
+        },
+        "solutions": 6
+      },
+      "trie": {
+        "complete": true,
+        "work": {
+          "region_nodes": 54,
+          "regional_strands": 391,
+          "boundary_pattern_object_bytes": 2456,
+          "boundary_key_bytes": 136,
+          "region_histories": 10,
+          "states": 7,
+          "trie_prefixes": 10,
+          "row_extensions": 13,
+          "complete_joins": 3
+        },
+        "solutions": 6
+      }
+    },
+    "160cells": {
+      "dual": {
+        "complete": true,
+        "exists": true,
+        "boards": 1,
+        "cuts": 0
+      },
+      "stars": {
+        "status": "OPTIMAL",
+        "columns": 103,
+        "examined": 4545,
+        "complete_columns": true
+      },
+      "plain": {
+        "complete": true,
+        "work": {
+          "region_nodes": 170,
+          "regional_strands": 617,
+          "boundary_pattern_object_bytes": 760,
+          "boundary_key_bytes": 40,
+          "region_histories": 4,
+          "states": 3,
+          "row_extensions": 3,
+          "complete_joins": 1
+        },
+        "solutions": 2
+      },
+      "trie": {
+        "complete": true,
+        "work": {
+          "region_nodes": 170,
+          "regional_strands": 617,
+          "boundary_pattern_object_bytes": 760,
+          "boundary_key_bytes": 40,
+          "region_histories": 4,
+          "states": 3,
+          "trie_prefixes": 10,
+          "row_extensions": 3,
+          "complete_joins": 1
+        },
+        "solutions": 2
+      }
+    },
+    "symmetric": {
+      "plain": {
+        "complete": true,
+        "work": {
+          "region_nodes": 195,
+          "regional_strands": 460,
+          "boundary_pattern_object_bytes": 2520,
+          "boundary_key_bytes": 60,
+          "region_histories": 40,
+          "states": 15,
+          "row_extensions": 55,
+          "complete_joins": 50
+        },
+        "solutions": 20
+      },
+      "trie": {
+        "complete": true,
+        "work": {
+          "region_nodes": 195,
+          "regional_strands": 460,
+          "boundary_pattern_object_bytes": 2520,
+          "boundary_key_bytes": 60,
+          "region_histories": 40,
+          "states": 15,
+          "trie_prefixes": 19,
+          "row_extensions": 10,
+          "complete_joins": 5
+        },
+        "solutions": 20
+      },
+      "response": {
+        "complete": true,
+        "work": {
+          "region_nodes": 195,
+          "regional_strands": 460,
+          "boundary_pattern_object_bytes": 2520,
+          "boundary_key_bytes": 60,
+          "region_histories": 40,
+          "states": 15,
+          "response_tests": 5,
+          "complete_joins": 5
+        },
+        "solutions": 20
+      },
+      "basis": {
+        "complete": true,
+        "work": {
+          "region_nodes": 195,
+          "regional_strands": 460,
+          "boundary_pattern_object_bytes": 2520,
+          "boundary_key_bytes": 60,
+          "region_histories": 40,
+          "states": 15,
+          "basis_columns": 2,
+          "complete_joins": 1
+        },
+        "exists": true
+      },
+      "orbit": {
+        "complete": true,
+        "work": {
+          "region_nodes": 195,
+          "regional_strands": 460,
+          "boundary_pattern_object_bytes": 2520,
+          "boundary_key_bytes": 60,
+          "region_histories": 40,
+          "states": 15,
+          "orbit_representatives": 3,
+          "relative_alignments": 10,
+          "complete_joins": 1
+        },
+        "solutions": 20
+      }
+    },
+    "switches": {
+      "complete": true,
+      "single_tours": 0,
+      "nodes": 67,
+      "rejected_switch_sets": 1024
+    }
+  }
+}

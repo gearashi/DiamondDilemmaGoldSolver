@@ -408,6 +408,18 @@ class SymbolicFrontier:
             activity[self.sets.order[level]]+=len(edges)
         proposals=(tuple(sorted(self.sets.order,key=lambda axis:(-activity[axis],axis))),
                    tuple(reversed(self.sets.order)))
+        # Trial local sifts after the existing global orders. A frequently tested
+        # split can move nearer to its dependency without reversing unrelated axes.
+        order = self.sets.order
+        pivots = sorted(range(len(order)), key=lambda i: -activity[order[i]])[:4]
+        local = []
+        for i in pivots:
+            for j in (i-1, i+1, i//2, (i+len(order))//2):
+                if 0 <= j < len(order) and j != i:
+                    other = list(order)
+                    other.insert(j, other.pop(i))
+                    local.append(tuple(other))
+        proposals += tuple(local)
         best=self.sets;best_roots=roots;best_size=current;accepted=False
         for order in dict.fromkeys(proposals):
             if order==self.sets.order:continue
