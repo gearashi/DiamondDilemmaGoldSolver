@@ -55,6 +55,33 @@ def _unpack(keys,word):
     return tuple(out)
 
 
+def _strand_key(problem, near, assignment, inside, rank, compact, work, used):
+    lookup={}
+    count=0
+    for c,v in assignment.items():
+        for seg in oriented_segments(problem,v):
+            for s,k in seg:lookup[c,s,k]=count
+            count+=1
+    uf=Union(count)
+    external={}
+    work.tick('regional_strands',count)
+    for c in assignment:
+        for s,b,t,e,rev in near[c]:
+            for k in bits(int(problem.masks[assignment[c],s])):
+                u=lookup[c,s,k+1]
+                if b in inside:
+                    if c<b:uf.join(u,lookup[b,t,11-k])
+                else:external[rank[e,11-k if rev else k+1]]=u
+    parts=defaultdict(list)
+    for k,u in external.items():parts[uf.find(u)].append(k)
+    if any(uf.find(i) not in parts for i in range(count)):return
+    if any(len(x)!=2 for x in parts.values()):raise ValueError('Invalid regional endpoint degree.')
+    pairs=tuple(sorted(tuple(sorted(p)) for p in parts.values()))
+    active=tuple(sorted(external))
+    word=_pack(pairs) if compact else None
+    return used,active,pairs if word is None else word
+
+
 def _states(problem,ds,cells,rank,compact,work):
     inside=set(cells)
     near=defaultdict(list)
@@ -65,30 +92,11 @@ def _states(problem,ds,cells,rank,compact,work):
     assignment={}
     groups={}
     def finish(used):
-        lookup={}
-        count=0
-        for c,v in assignment.items():
-            for seg in oriented_segments(problem,v):
-                for s,k in seg:lookup[c,s,k]=count
-                count+=1
-        uf=Union(count)
-        external={}
-        work.tick('regional_strands',count)
-        for c in assignment:
-            for s,b,t,e,rev in near[c]:
-                for k in bits(int(problem.masks[assignment[c],s])):
-                    u=lookup[c,s,k+1]
-                    if b in inside:
-                        if c<b:uf.join(u,lookup[b,t,11-k])
-                    else:external[rank[e,11-k if rev else k+1]]=u
-        parts=defaultdict(list)
-        for k,u in external.items():parts[uf.find(u)].append(k)
-        if any(uf.find(i) not in parts for i in range(count)):return
-        if any(len(x)!=2 for x in parts.values()):raise ValueError('Invalid regional endpoint degree.')
-        pairs=tuple(sorted(tuple(sorted(p)) for p in parts.values()))
-        active=tuple(sorted(external))
-        word=_pack(pairs) if compact else None
-        key=(used,active,pairs if word is None else word)
+        key = _strand_key(problem,near,assignment,inside,rank,compact,work,used)
+        if key is None:return
+        active = key[1]
+        word = key[2] if type(key[2]) is int else None
+        pairs = key[2] if word is None else ()
         if key in groups:groups[key][0]+=1
         else:
             from sys import getsizeof

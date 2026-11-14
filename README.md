@@ -8,6 +8,10 @@ The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaap
 
 The [v1.7.0 results and recommended settings](docs/ROUND26_RESULTS.md) cover 17 workstreams and 81 scoped evaluations. They include exact CPU and CUDA search, shared SAT reasoning, disk-backed progress, regional pruning, incremental GPU scoring and repair. The [workstream register](docs/round26-workstreams.json) records which candidates reduced steps, which saved repeated work and where extra work outweighed the benefit. Earlier evaluations are available for [Round 25](docs/ROUND25_RESULTS.md), [Round 24](docs/ROUND24.md) and [Round 23](docs/ROUND23.md).
 
+## Search improvements in v1.10.0
+
+The shortest remaining route from each of the three tested 207-edge boards to 208 takes at least four physical swaps. The release includes the verified 207-edge, 52-component starting board, resumable swap searches, and new pruning for one-loop Gold. The [v1.10.0 results and settings](docs/ROUND29_RESULTS.md) give the commands for continuing the open routes and the measured settings for the RTX 2060.
+
 ## Search improvements in v1.9.0
 
 You can now search every physical permutation at a chosen distance from a saved board, allowing every tile to rotate. The search records completed batches in SQLite. To try the one-swap route, the plateau tool can move through tied or temporarily lower-scoring boards and independently validate any new best. Reproduction commands, measured search reductions and limits are in the [v1.9.0 results](docs/ROUND28_RESULTS.md).

@@ -70,6 +70,7 @@ def main():
     p.add_argument("--method",choices=["trie","plain","basis","response","orbit","paged"],default="trie")
     p.add_argument("--checkpoint",type=Path,help="Durable cursor for paged regional joins.")
     p.add_argument("--table-work",type=int,default=1000000,help="Regional table compilation work per page.")
+    p.add_argument("--table-cache",type=Path,help="Share compiled regional tables between related checkpoints.")
     args = p.parse_args()
     problem = SearchProblem(json.loads(args.tiles.read_text(encoding="utf-8-sig")),build_board(args.subdivision))
     dataset = json.loads(args.input.read_text(encoding="utf-8-sig")) if args.input else {}
@@ -82,7 +83,12 @@ def main():
         ds = (None if "domains" not in dataset else
               tuple(sum(1<<v for v in set(row)) for row in dataset["domains"]))
         cursor = read_json_shared(args.checkpoint) if args.checkpoint.exists() else None
-        record = paged_trie(problem,parts,ds,cursor=cursor,max_steps=args.max_work,table_work=args.table_work)
+        cache_path = args.table_cache or args.checkpoint.with_name(args.checkpoint.name+".sqlite3")
+        if cache_path.resolve() == args.checkpoint.resolve():
+            p.error("Use separate paths for the JSON checkpoint and SQLite table cache.")
+        cache_path.parent.mkdir(parents=True,exist_ok=True)
+        record = paged_trie(problem,parts,ds,cursor=cursor,max_steps=args.max_work,table_work=args.table_work,
+                            cache_path=cache_path)
         if record.get("cursor"):atomic_json(args.checkpoint,record["cursor"])
         print(json.dumps({k:v for k,v in record.items() if k!="cursor"},indent=2))
     else:print(json.dumps(run(problem,dataset,args.mode,args.max_work,args.seconds,args.method),indent=2))

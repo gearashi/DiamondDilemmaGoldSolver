@@ -86,6 +86,14 @@ def phase_probe(problem, *, euler=True, pins=None, bonds=(), probe_tiles=(), pot
     """Certify unsupported phase choices and individual physical bonds; UNKNOWN never prunes."""
     from ortools.sat.python import cp_model
     if seconds <= 0:raise ValueError("Expected a positive per-query timeout.")
+    from r29_gold_phase import SignedParity, checked_pins
+    parity = SignedParity(problem)
+    bonds = tuple(bonds)
+    for a,b in bonds:
+        parity.bond(a,b)
+    for t,v in checked_pins(problem.n,{0:0} if pins is None else pins).items():
+        parity.pin(t,v)
+    mark = len(parity.base.trail)
     model,phase = signed_phase_model(problem,euler=euler,pins=pins,bonds=bonds)
     s = cp_model.CpSolver()
     s.parameters.num_search_workers = 1
@@ -109,11 +117,19 @@ def phase_probe(problem, *, euler=True, pins=None, bonds=(), probe_tiles=(), pot
                     seen.update((u,s.value(x)) for u,x in enumerate(phase))
         model.clear_assumptions()
     rejected = []
+    parity_rejections = 0
     for a,b in potential_bonds:
+        if not parity.bond(a,b):
+            rejected.append((a,b))
+            parity_rejections += 1
+            parity.base.rollback(mark)
+            continue
+        parity.base.rollback(mark)
         trial,_ = signed_phase_model(problem,euler=euler,pins=pins,bonds=(*bonds,(a,b)))
         if s.solve(trial) == cp_model.INFEASIBLE:rejected.append((a,b))
         calls += 1
-    return dict(status=s.status_name(r),unsupported_phases=unsupported,unsupported_bonds=rejected,calls=calls)
+    return dict(status=s.status_name(r),unsupported_phases=unsupported,unsupported_bonds=rejected,calls=calls,
+                parity_rejections=parity_rejections)
 
 
 def dual_cuts(problem, domains, *, max_boards=10000, deterministic_seconds=1):
@@ -127,6 +143,12 @@ def dual_cuts(problem, domains, *, max_boards=10000, deterministic_seconds=1):
     pairs = sum(a.bit_count() for a in ds)
     if pairs+sum(ds[a].bit_count()*ds[b].bit_count() for a,s,b,t in problem.edges) > 2000000:
         return dict(complete=False,exists=None,boards=0,cuts=0,reason="residual-model-size")
+    flexible = sum(d.bit_count()>1 for d in ds)
+    if 0 < flexible <= 8 and max_boards > 0:
+        from r29_gold_geography import partition_capacity
+        cut = partition_capacity(problem,ds,width=1,max_bags=flexible+1)
+        if cut["feasible"] is False:
+            return dict(complete=True,exists=False,boards=0,cuts=1,capacity=cut)
     m = cp_model.CpModel()
     choices = [{v:m.new_bool_var("p%d_%d"%(c,v)) for v in bits(mask)} for c,mask in enumerate(ds)]
     for row in choices:m.add_exactly_one(row.values())
@@ -190,6 +212,13 @@ def dual_cuts(problem, domains, *, max_boards=10000, deterministic_seconds=1):
 def phase_bond_core(problem, bonds, *, euler=True, seconds=3):
     """Shrink an incompatible physical seam set; every reported core is independently UNSAT."""
     from ortools.sat.python import cp_model
+    from r29_gold_phase import SignedParity
+    parity = SignedParity(problem)
+    bonds = list(bonds)
+    for a,b in bonds:
+        if not parity.bond(a,b):
+            bonds = [(x[1],x[2]) for x in sorted(parity.base.conflict) if x[0] == "bond"]
+            break
     model,xs = signed_phase_model(problem,euler=euler)
     _,regs = _sphere(problem)
     guards = {}

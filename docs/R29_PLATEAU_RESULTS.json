@@ -1,0 +1,41 @@
+{
+  "target": 208,
+  "floor": 207,
+  "core_sizes": [
+    136,
+    138
+  ],
+  "core_skipped_two": 501,
+  "unfiltered_two": 12720,
+  "core_skipped_six_supports": 209209,
+  "floor_first": {
+    "score": 207,
+    "components": 52,
+    "open": 2,
+    "closed": 1,
+    "solved": 88,
+    "reused": 1,
+    "star_evaluations": 12720,
+    "cached_stars": 0
+  },
+  "floor_second": {
+    "score": 207,
+    "components": 52,
+    "open": 71,
+    "closed": 1,
+    "solved": 436,
+    "reused": 2,
+    "star_evaluations": 0,
+    "cached_stars": 12720
+  },
+  "floor_second_cold": {
+    "score": 207,
+    "components": 52,
+    "open": 71,
+    "closed": 1,
+    "solved": 524,
+    "reused": 1,
+    "star_evaluations": 12720,
+    "cached_stars": 0
+  }
+}

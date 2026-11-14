@@ -278,7 +278,16 @@ def count_partition(problem, parts, domains=None, *, mode="trie", max_work=10000
     return out
 
 
-def paged_trie(problem, parts, domains=None, *, max_steps=10000, table_work=1000000, cursor=None):
+def paged_trie(problem, parts, domains=None, *, max_steps=10000, table_work=1000000, cursor=None, cache_path=None):
+    """Resume a regional join. A cache path also persists partial tables and completed indexes."""
+    if cache_path is None:
+        return _paged_trie(problem, parts, domains, max_steps=max_steps, table_work=table_work, cursor=cursor)
+    from r29_regional_cache import cached_page
+    return cached_page(cache_path, _paged_trie, problem, parts, domains,
+                       max_steps=max_steps, table_work=table_work, cursor=cursor)
+
+
+def _paged_trie(problem, parts, domains=None, *, max_steps, table_work, cursor, store=None):
     """Resume the exact multiway join after fixed seam-row tables are compiled.
 
     The server can save the explicit branch path, next child indices and counts
@@ -312,7 +321,23 @@ def paged_trie(problem, parts, domains=None, *, max_steps=10000, table_work=1000
         path,next_index,solutions,checks,witness = [],[0],0,0,None
     rank = {(e,k):11*e+k-1 for e in range(len(problem.edges)) for k in range(1,12)}
     w = Work(table_work)
-    try:tables = [_states(problem,ds,p,rank,False,w) for p in parts]
+    bindings = []
+    if store is not None:
+        from r29_regional_cache import signature
+        # With durable tables the budget is measured in DFS transitions. Each transition
+        # finishes atomically, including the strand analysis of one regional placement.
+        if table_work < 1:raise ValueError("Table page must be positive.")
+        tables = []
+        w.limit = float("inf")
+        for part in parts:
+            binding_id, table = store.table(problem,part,ds,rank,table_work,w)
+            bindings.append(binding_id)
+            if table is None:
+                return dict(complete=False,reason="table-budget",cursor=cursor,solutions=solutions,
+                            checks=checks,witness=witness,work=dict(w.counters))
+            tables.append(table)
+    try:
+        if store is None:tables = [_states(problem,ds,p,rank,False,w) for p in parts]
     except WorkLimit:
         return dict(complete=False,reason="table-budget",cursor=cursor,solutions=solutions,checks=checks,witness=witness)
     region = {c:i for i,p in enumerate(parts) for c in p}
@@ -323,7 +348,11 @@ def paged_trie(problem, parts, domains=None, *, max_steps=10000, table_work=1000
         if i==j:continue
         def labels(r):
             return tuple(sum(1<<(k%11) for k in key[1] if k//11 == e) for key in keys[r])
-        left,right = labels(i),labels(j)
+        if store is None:
+            left,right = labels(i),labels(j)
+        else:
+            left = store.labels(bindings[i],e,lambda: labels(i),w)
+            right = store.labels(bindings[j],e,lambda: labels(j),w)
         shared.append((len(set(left)&set(right)),e,i,j,left,right))
     shared.sort()
     extent = len(shared)+len(parts)
@@ -347,6 +376,17 @@ def paged_trie(problem, parts, domains=None, *, max_steps=10000, table_work=1000
     if len(next_index) != len(path)+1 or len(path)>extent:raise ValueError("Invalid trie cursor stack.")
     for i,j in enumerate(path):stack.append(children(i,stack[-1])[j])
     child_cache = {}
+    # An exact empty suffix depends only on selected row patterns and the remaining
+    # admissible row patterns. Row multiplicities and example IDs cannot alter emptiness.
+    def gap_key(d, ctx):
+        if store is None or d < len(shared) or d == extent:return None
+        allowed, _, chosen = ctx
+        picked = [keys[i][j] for i,j in enumerate(chosen)]
+        future = [[keys[i][j] for j in allowed[i]] for i in range(len(chosen),len(parts))]
+        return signature(["empty-gold-join-v1",problem.fingerprint,parts,picked,future])
+    baseline = list(state.get("entry_solutions",[None]*len(stack))) if cursor else [0]
+    if len(baseline)!=len(stack):raise ValueError("Invalid trie cursor counts.")
+    gap_keys = {}
     steps = 0
     while stack and steps < max_steps:
         steps += 1
@@ -367,7 +407,13 @@ def paged_trie(problem, parts, domains=None, *, max_steps=10000, table_work=1000
                     witness = [assign[i] for i in range(problem.n)]
                     if not problem.validate(witness)["valid"]:raise ArithmeticError("Invalid paged witness.")
         else:
-            if d not in child_cache:child_cache[d] = children(d,stack[-1])
+            if d not in child_cache:
+                key = gap_key(d,stack[-1])
+                gap_keys[d] = key
+                if key is not None and store.empty(key):
+                    w.counters["empty_hits"] += 1
+                    child_cache[d] = []
+                else:child_cache[d] = children(d,stack[-1])
             choices = child_cache[d]
             j = next_index[-1]
             if j < len(choices):
@@ -375,12 +421,17 @@ def paged_trie(problem, parts, domains=None, *, max_steps=10000, table_work=1000
                 stack.append(choices[j])
                 path.append(j)
                 next_index.append(0)
+                baseline.append(solutions)
                 continue
+            key = gap_keys.pop(d,None)
+            if key is not None and baseline[-1] == solutions:
+                store.record_empty(key)
             child_cache.pop(d,None)
+        baseline.pop()
         stack.pop()
         next_index.pop()
         if path:path.pop()
     done = not stack
-    state = dict(binding=binding,path=path,next=next_index,solutions=solutions,checks=checks,witness=witness,done=done)
+    state = dict(binding=binding,path=path,next=next_index,solutions=solutions,checks=checks,witness=witness,done=done,entry_solutions=baseline)
     return dict(complete=done,solutions=solutions,witness=witness,checks=checks,steps=steps,
-                cursor=dict(data=state,sha256=checksum(state)))
+                work=dict(w.counters),cursor=dict(data=state,sha256=checksum(state)))

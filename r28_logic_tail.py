@@ -15,6 +15,10 @@ def _two_sat(size, clauses, tick):
         for a, b in ((left ^ 1, right), (right ^ 1, left)):
             arcs[a].append(b)
             reverse[b].append(a)
+    return _scc_model(size,arcs,reverse,tick)
+
+
+def _scc_model(size, arcs, reverse, tick):
     visited = set()
     finish = []
     for root in range(len(arcs)):
@@ -49,7 +53,7 @@ def _two_sat(size, clauses, tick):
 
 
 def binary_search(problem, rows, target, *, check=lambda: None, max_work=50000, seconds=2,
-                  wide_limit=1):
+                  wide_limit=1, reuse_graph=True):
     """Search two-choice cells jointly, splitting exceptional domains or Gold loop cuts."""
     if target not in ('gold', 'edges'):
         raise ValueError('Expected gold or edges.')
@@ -95,6 +99,9 @@ def binary_search(problem, rows, target, *, check=lambda: None, max_work=50000, 
                     tick()
                     if int(problem.masks[x,sc]) != reverse_mask(problem.masks[y,sd]):
                         clauses.add((2*c+(1-i),2*d+(1-j)))
+        if reuse_graph:
+            from r29_logic_binary import search_loop_cuts
+            return search_loop_cuts(problem,domains,clauses,target,tick)
         bits = _two_sat(problem.n, clauses, tick)
         if bits is None:
             return None

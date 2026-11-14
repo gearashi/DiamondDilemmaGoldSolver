@@ -157,6 +157,8 @@ def run_shell(problem, board, size, target, database, *, seconds=0, batch=None,
     state = dict(offset=0, order_offset=0, tested=0, bounded=0, exact=0, reused=0, illegal=0, hits=0, best=None)
     from r28_exchange_rotations import RotationOracle
     oracle = RotationOracle(bound.model)
+    from r29_move_cores import load_cores, permitted_sets
+    cores = load_cores(connection, bound.model, board, target) if not cuda else []
     start = time.monotonic()
     def finish():
         return dict(state, total=total, complete=state["tested"]==total, objective="matched_edges", target=target)
@@ -185,13 +187,16 @@ def run_shell(problem, board, size, target, database, *, seconds=0, batch=None,
                 orders = permutations
                 end_order = order_count
             cells = None if cuda else combination_batch(movable,size,state["offset"],count)
+            if cores:
+                cells = cells[permitted_sets(cells, cores)]
+                state["core_skips"] = state.get("core_skips",0) + (count-len(cells)) * (end_order - (first_order if permutations is None else 0))
             for order in orders:
                 if cuda:
                     survivors = cuda.survivors(state["offset"], count, order, target)
                     if survivors and np.any(bound.bounds(survivors, order)<target):
                         raise RuntimeError("CUDA and CPU exchange bounds disagree.")
                 else:
-                    survivors = cells[bound.bounds(cells, order)>=target]
+                    survivors = cells[bound.bounds(cells, order)>=target] if len(cells) else []
                 state["tested"] += count
                 state["bounded"] += count-len(survivors)
                 for moved in survivors:
