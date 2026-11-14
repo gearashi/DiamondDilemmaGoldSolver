@@ -1,5 +1,6 @@
 """Independent consumer verification, durable claim files and disjoint policies."""
 import copy,json,threading,unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 import constraint_parallel as parallel
 import constraint_search as runner
@@ -38,8 +39,15 @@ class TransportTests(unittest.TestCase):
             store.advance(seconds=1)
             self.assertEqual(len(store),1);self.assertEqual(len(state['_certificates'].records),1)
             return {'status':'timeout','nodes':0,'stats':{}}
-        with patch.object(parallel,'VerifiedMaskConflictStore',side_effect=factory),patch.object(parallel,'dfs_solve',side_effect=fake_solve):
+        # The fake oracle has finite work. Let both jobs finish verification even
+        # when a CI runner is descheduled while constructing that oracle.
+        clock = SimpleNamespace(monotonic=lambda: 10.0)
+        with (patch.object(parallel,'VerifiedMaskConflictStore',side_effect=factory),
+              patch.object(parallel,'dfs_solve',side_effect=fake_solve),
+              patch('constraint_mask_conflicts.time',clock),
+              patch('constraint_sat_assist.time',clock)):
             parallel._worker(problem,connection,threading.Event())
+        self.assertEqual([item['kind'] for item in connection.sent], ['result','result'], connection.sent)
         self.assertIsNot(states[0],states[1]);self.assertIs(stores[0],stores[1])
         self.assertTrue(all(item['result']['mask_conflicts']['records'] for item in connection.sent))
         self.assertTrue(all(item['result']['certificates']['records'] for item in connection.sent))
