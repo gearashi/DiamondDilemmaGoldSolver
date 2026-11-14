@@ -178,6 +178,21 @@ class IncumbentTests(unittest.TestCase):
             restored=cls(p,resume=saved)
             self.assertEqual(controller.binding,restored.binding)
 
+    def test_optional_gold_modules_in_historical_heuristic_identity(self):
+        from hashlib import sha256
+        from pathlib import Path
+        from r27_incumbent_compat import compatible_sources, legacy_sources
+        root = Path(__file__).parent
+        names = ('constraint_pruning.py', 'search_problem.py', 'r27_structure_filters.py', 'r32_gold_bonds.py')
+        current = {n:sha256((root/n).read_bytes()).hexdigest() for n in names}
+        previous = legacy_sources(current, 'v112-lf')
+        self.assertEqual(set(previous), set(names[:2]))
+        self.assertTrue(compatible_sources(previous,current))
+        altered = dict(current, **{'r32_gold_bonds.py':'unknown'})
+        self.assertFalse(compatible_sources(previous,altered))
+        self.assertIsNone(legacy_sources(altered,'v112-lf'))
+        self.assertFalse(compatible_sources(previous,dict(current,unreviewed='unknown')))
+
     def test_assignment_fallback_uses_checked_hungarian(self):
         from r27_incumbent import assignment
         import sys

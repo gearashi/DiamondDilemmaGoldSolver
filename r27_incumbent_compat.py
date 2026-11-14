@@ -97,6 +97,13 @@ _R28 = {
     'domain_search_round24.cu': ('68bdf1b64bd56540454b26cc4f8329da9749cdc15d7a09fc590a6c7c7b091486', 'c42e0e0d661209e25c7c60190f8ae75d2b608b962f2fa3edcf394aa075d28508', '84ccf676f549af30646bbb4b6f59a1f9ca2be28223ff9a51834657c57accb984'),
 }
 
+# The heuristic controllers use the original pruning relation. These two source
+# changes introduce opt-in Gold DFS capabilities and preserve heuristic state.
+_R32_HEURISTIC = {
+    'constraint_pruning.py': ('69ea908ccf4b2cdafe409413cbe3eaebed8d9765c6a544ebd31ae7071bdc8b4a', 'c64363073be2fca374ca688917fcb35785a44da326baea6c0bcb9e7d452d41e3', 'f5abf9067e9f5894f99b8b49983cedc384ece47c1b15d9e3885ffdbe1fd1b8d9'),
+    'search_problem.py': ('42514de3bc076252a2a1b3a4992bb9f4cd5b8a647f47a2e8c24f8fc62a92d3aa', 'ee3447ba79ce73aebabe6b3f9eea8c479e5333fff71af171f5e3d15c4d1ea7f1', 'a057bf686d41ce6ffa4dfba383bc86d08e1a9092fd1ccea9438bc08754c2d0d6'),
+}
+
 # Bind each historical text image to the exact current image reviewed here.
 # Git checkouts and release archives can use LF or CRLF for the same source.
 @lru_cache(maxsize=256)
@@ -110,6 +117,9 @@ def _variants(name,current):
     variants={sha256(data).hexdigest() for data in (raw,lf,crlf)}
     if current not in variants:
         return ()
+    heuristic = _R32_HEURISTIC.get(name)
+    if heuristic and heuristic[0] in variants:
+        variants.update(heuristic[1:])
     version = _R28.get(name)
     if version and version[0] in variants:
         variants.update(version[1:])
@@ -119,24 +129,50 @@ def _variants(name,current):
     return variants
 
 
+# Transitive import discovery now sees optional modules that the released
+# heuristic controllers did not execute. Only omit these exact reviewed bytes
+# when reconstructing an older heuristic source manifest.
+_R32_OPTIONAL = {
+    'r27_structure_filters.py': '42836dae0bc4e2fa10541826a56861b2c9319c7b8cdaa9b522fd6b3cd9d8f361',
+    'r32_gold_bonds.py': '77a82d49d811d97476e8cb4a707f50804abc79a7f8907279e1eba6d7c6ff4cae',
+}
+
+def _old_extra(name, current):
+    return name in _R32_OPTIONAL and _R32_OPTIONAL[name] in _variants(name, current)
+
+
 def compatible_sources(saved,current):
-    return (isinstance(saved,dict) and set(saved)==set(current)
+    return (isinstance(saved,dict) and saved.keys() <= current.keys()
+            and all(_old_extra(name,current[name]) for name in current.keys()-saved.keys())
             and all(isinstance(saved[name],str) and
                     (saved[name]==current[name] or saved[name] in _variants(name,current[name]))
-                    for name in current))
+                    for name in saved))
 
 def compatible_identity(saved,current,legacy):
     if not isinstance(saved,str):
         return False
-    return saved==current or any(saved==legacy(profile) for profile in ('lf','windows'))
+    return saved==current or any(saved==legacy(profile) for profile in ('lf','windows','v112-lf','v112-crlf'))
 
 
 def legacy_sources(current,profile):
     """Reconstruct only a checksum-verified published source manifest."""
-    if profile not in ('lf','windows'):
+    if profile not in ('lf','windows','v112-lf','v112-crlf'):
         raise ValueError('Unknown release source layout.')
     result={}
     for name,sha in current.items():
+        if _old_extra(name,sha):
+            continue
+        if profile.startswith('v112-'):
+            variants = _variants(name,sha)
+            if not variants:
+                return None
+            row = _R32_HEURISTIC.get(name)
+            if row and row[0] in variants:
+                result[name] = row[1 if profile=='v112-lf' else 2]
+            else:
+                body = (Path(__file__).parent/name).read_bytes().replace(b'\r\n',b'\n')
+                result[name] = sha256(body if profile=='v112-lf' else body.replace(b'\n',b'\r\n')).hexdigest()
+            continue
         row=_RELEASE_TEXT.get(name)
         if row is None or row[0] not in _variants(name,sha):
             return None
