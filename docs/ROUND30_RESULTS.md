@@ -1,6 +1,6 @@
 # Gold solver v1.11.0
 
-The best verified board still matches **207 of 240 edges with 52 line components**. Gold requires all 240 edges and one closed loop. The new exact search closed both six-piece four-swap families at all three known 207-edge placements. At each center, that covers **2,755,123,040,800** physical permutations with every legal rotation available. Across the six runs, only two permutations needed exact rotation optimization. Their best scores were 205 and 206. A four-swap route to 208 from these centers would have to move seven or eight pieces. Other starting placements and longer routes remain open. [Six-piece runs](R30_ROUTES.md)
+The best verified board still matches **207 of 240 edges with 52 line components**. Gold requires all 240 edges and one closed loop. The new exact search closed both six-piece four-swap families at all three known 207-edge placements. At each center, that covers **2,755,123,040,800** physical permutations with every legal rotation available. Across the six runs, only two permutations needed exact rotation optimization. Their best scores were 205 and 206. The native library build also serializes first-time compilation when several Windows workers open the same installation. A four-swap route to 208 from these centers would have to move seven or eight pieces. Other starting placements and longer routes remain open. [Six-piece runs](R30_ROUTES.md)
 
 ## Best settings on the Core i7-4790 and RTX 2060 6 GB
 
@@ -51,4 +51,4 @@ To continue the existing one-swap walk through scores of 206 and above, use the 
 
 The mathematical counts overlap. The first-exclusion counters measure incremental benefit within individual runs. Benchmarks with fixed pools, restored checkpoints and planted positive controls support different conclusions and retain their scopes in the linked evidence.
 
-[Exact cycle joins and witnesses](R30_ROUTES.md) ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· [Physical bounds and matched seven-cell control](R30_BOUNDS.md) ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· [Ownership, diagrams and CPU/GPU coverage](R30_SHARED.md) ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· [Gold and independent exact checks](R30_EXACT_GOLD.md) ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· [Original contact verifier output](R30_CONTACT_RESULTS.json) ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· [Second-contact verification](R30_SINGLE_CONTACT.json) Ã‚Â· [Connected-cycle verification](R30_CYCLE_GROUPS.json)
+[Exact cycle joins and witnesses](R30_ROUTES.md) · [Physical bounds and matched seven-cell control](R30_BOUNDS.md) · [Ownership, diagrams and CPU/GPU coverage](R30_SHARED.md) · [Gold and independent exact checks](R30_EXACT_GOLD.md) · [Original contact verifier output](R30_CONTACT_RESULTS.json) · [Second-contact verification](R30_SINGLE_CONTACT.json) · [Connected-cycle verification](R30_CYCLE_GROUPS.json)

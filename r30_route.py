@@ -29,7 +29,15 @@ def library(stem='r30_cycle_native'):
     digest=hashlib.sha256(sources).hexdigest()[:20]
     directory=ROOT/'.native'/digest
     path=directory/library_name(stem)
-    if not path.exists():_build_one(stem=stem,output_dir=directory,manifest_name='cycle-build.json')
+    if not path.is_file():
+        directory.mkdir(parents=True,exist_ok=True)
+        # Two processes can encounter a new digest together. Publish once before either
+        # maps the DLL, since Windows prevents replacement of a loaded native library.
+        with closing(sqlite3.connect(directory/'build-lock.sqlite',timeout=120)) as guard:
+            guard.execute('BEGIN IMMEDIATE')
+            if not path.is_file():
+                _build_one(stem=stem,output_dir=directory,manifest_name='cycle-build.json')
+            guard.commit()
     dll=ctypes.CDLL(str(path))
     dll.cycle_abi.argtypes=[]
     dll.cycle_abi.restype=ctypes.c_int

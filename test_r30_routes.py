@@ -40,6 +40,38 @@ class CycleRoutes(unittest.TestCase):
         cls.p=SearchProblem(tiles,geometry)
         cls.bound=ExchangeBound(BoardModel(cls.p),cls.codes)
 
+    def test_simultaneous_first_build_publishes_once(self):
+        import r30_route
+        try:
+            find_compiler()
+        except RuntimeError:
+            self.skipTest('No native compiler')
+        # Windows retains mapped DLLs until the process exits. Run both imports in
+        # a separate interpreter so the temporary build directory is then removable.
+        import subprocess
+        import sys
+        with tempfile.TemporaryDirectory() as tmp:
+            from shutil import copyfile
+            copyfile(Path(r30_route.ROOT)/'r30_cycle_native.c',Path(tmp)/'r30_cycle_native.c')
+            program = """from concurrent.futures import ThreadPoolExecutor
+from threading import Barrier
+from unittest.mock import patch
+from pathlib import Path
+import sys
+import r30_route
+r30_route.ROOT = Path(sys.argv[1])
+gate = Barrier(2)
+def load():
+    gate.wait()
+    return r30_route.library().cycle_abi()
+with patch.object(r30_route,'_build_one',wraps=r30_route._build_one) as build:
+    with ThreadPoolExecutor(2) as pool:
+        values = [pool.submit(load) for _ in range(2)]
+        assert [v.result() for v in values] == [1,1]
+    assert build.call_count == 1, build.call_count
+"""
+            subprocess.run([sys.executable,'-B','-c',program,tmp],cwd=r30_route.ROOT,check=True,timeout=90)
+
     def test_native_prices_and_overflow(self):
         try:find_compiler()
         except RuntimeError:self.skipTest('No native compiler')

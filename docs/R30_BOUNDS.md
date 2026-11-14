@@ -12,7 +12,7 @@ A seam with no compatible physical side must fail. Another failure is forced whe
 | 207/52 | 4 | 61 | 1,259,815,824 |
 | Third | 2 | 60 | 1,263,575,544 |
 
-The seven- and eight-cell counts are in the evidence. They overlap other filters. On each center, 25â€“26 of 384 seeded six-cell samples were rejected before asking for a donor assignment bound. The previous support bound could close all 384 after doing that work.
+The seven- and eight-cell counts are in the evidence. They overlap other filters. On each center, 25–26 of 384 seeded six-cell samples were rejected before asking for a donor assignment bound. The previous support bound could close all 384 after doing that work.
 
 The v1.10.0 and current portable runners were also compared on identical seven-cell colex prefixes at the 207/52 center, with fresh in-memory state and prior ball reuse disabled. On the published first twelve supports, the movement clauses saved one of twelve support assignments. On the first 1,024 they saved 36, lowering assignment solves to 988. Both versions rejected all 215,040 possible endpoints in that longer prefix and needed zero full rotation solves. Times were 0.579 s and 0.687 s respectively. This comparison supports retaining the reduction in search work. [Seven-cell comparison](R30_BOUNDS_SEVEN.json)
 
@@ -62,4 +62,4 @@ python bench_r30_bounds.py --tiles data/tiles.json --seven-baseline ../v1.10.0-c
 python -B -m unittest test_r30_bounds test_r29_exchange test_r29_plateau
 ```
 
-[Bound measurements and pair certificates](R30_BOUNDS_RESULTS.json) Â· [Rotation, donor and walk comparisons](R30_BOUNDS_FOLLOWUPS.json)
+[Bound measurements and pair certificates](R30_BOUNDS_RESULTS.json) · [Rotation, donor and walk comparisons](R30_BOUNDS_FOLLOWUPS.json)
