@@ -173,7 +173,7 @@ def run_hybrid(problem,*,seconds,seed,replicas,backend,options,learning_state,pu
   # Retain helpers across slices, release every known native owner on success
   # and failure. Several names may reference the same verifier.
   runtime=learning_state.get('_runtime');owners=[learning_state.get(key) for key in
-      ('_sat_session','_shared_sat','_shared_conflicts','_mask_conflicts')]
+      ('_sat_session','_shared_sat','_shared_conflicts','_mask_conflicts','_repair_service')]
   if runtime is not None:owners.extend(getattr(runtime,key,None) for key in ('sat','higher','gold_oracle','mask_conflicts','local_mask_conflicts'))
   seen=set();errors=[]
   for owner in owners:
@@ -284,24 +284,31 @@ def worker(args):
       'cartesian_volume':str(volume((scope.root,))),'same_full_original_root':True,
       'partition_method':'gpu_domain_runner.split_cubes' if args.engine=='sat' else 'single original root'}
  coverage_path=state_dir/'coverage.sqlite';regional_path=state_dir/'regional';regional_path.mkdir()
+ reasoning_path=state_dir/'reasoning-cache'
+ learning_state={'_coverage_path':coverage_path}
+ if args.engine in ('cpu','hybrid'):
+  learning_state['_regional_cache_dir']=regional_path
+  if any(options.get(key) for key in ('durable_reasoning','semantic_witnesses','shared_sat_service','relation_certificates')):
+   learning_state['_reasoning_cache_dir']=reasoning_path
  if args.engine=='cpu':
   from constraint_parallel import solve
   result=solve(problem,seconds=args.seconds,seed=args.seed,target='gold',workers=args.workers,resume=initial,
-      options=options,learning_state={'_coverage_path':coverage_path,'_regional_cache_dir':regional_path})
+      options=options,learning_state=learning_state)
  elif args.engine=='hybrid':
   solver_began=time.monotonic()
   with CheckpointPublisher(state_dir/'published-checkpoint.json') as publication:
    result=run_hybrid(problem,seconds=args.seconds,seed=args.seed,replicas=args.replicas,backend=getattr(args,'hybrid_backend','auto'),
-       options=options,learning_state={'_coverage_path':coverage_path,'_regional_cache_dir':regional_path},publication=publication)
+       options=options,learning_state=learning_state,publication=publication)
   result['checkpoint_publication']=publication.report();result['solver_wall_seconds']=time.monotonic()-solver_began
   result['pipeline_work']=hybrid_work(result)
  elif args.engine=='gpu':
   from gpu_domain_runner import solve
+  learning_state['_gpu_checkpoint_dir']=state_dir/'gpu-checkpoints'
   warmup=warmup_domain(problem,options)
   solver_began=time.monotonic()
   with CheckpointPublisher(state_dir/'published-checkpoint.json') as publication:
    result=solve(problem,seconds=args.seconds,seed=args.seed,target='gold',replicas=args.replicas,work_frontier=initial,backend='cuda',
-       options=options,learning_state={'_coverage_path':coverage_path,'_gpu_checkpoint_dir':state_dir/'gpu-checkpoints'},
+       options=options,learning_state=learning_state,
        progress=publication.progress,stop=publication.failed)
    publication.publish(result.get('checkpoint'))
   result['checkpoint_publication']=publication.report()
@@ -309,7 +316,7 @@ def worker(args):
   result['solver_wall_seconds']=time.monotonic()-solver_began
  else:
   result=run_sat(problem,seconds=args.seconds,seed=args.seed,initial=initial,options=options,
-      learning_state={'_coverage_path':coverage_path})
+      learning_state=learning_state)
  status=result['status']
  if status in ('solved','edge_perfect') and result.get('codes') is None:
   raise ValueError('A solved benchmark result has no independently checkable witness.')
@@ -352,7 +359,9 @@ def worker(args):
       'sat':'Native SAT search and independent core-verification decisions; see the separate SAT work counters.'}[args.engine],
      evidence_scope='Worker result only; frozen claims require its unchanged-source coordinator report.',
      benchmark_state={'directory':str(state_dir),'coverage_enabled':bool(options.get('shared_coverage')),
-                      'coverage_file_created':coverage_path.exists(),'regional_directory_supplied':args.engine in ('cpu','hybrid')},
+                      'coverage_file_created':coverage_path.exists(),'regional_directory_supplied':args.engine in ('cpu','hybrid'),
+                      'reasoning_directory_supplied':'_reasoning_cache_dir' in learning_state,
+                      'reasoning_directory_created':reasoning_path.is_dir()},
      wall_seconds=time.monotonic()-began)
  if args.engine=='hybrid':
   result['pipeline_input']=pipeline_input;result['hybrid_backend_requested']=getattr(args,'hybrid_backend','auto')
