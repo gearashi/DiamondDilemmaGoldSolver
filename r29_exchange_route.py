@@ -95,8 +95,8 @@ def existing_balls(model, target):
     return [(row['pieces'],record['radius']) for row in record['centers']]
 
 
-def owner_copies(model, centers, current, size):
-    """Only retain copies whose radius or completed shell can intersect this shell."""
+def legal_cell_rotations(model):
+    """Cell permutations induced by proper rotations that preserve all domains."""
     from constraint_symmetry import proper_rotations
     transforms = []
     problem = model.problem
@@ -112,6 +112,12 @@ def owner_copies(model, centers, current, size):
             pass
     if not transforms:
         transforms.append(range(model.n))
+    return transforms
+
+
+def owner_copies(model, centers, current, size):
+    """Only retain copies whose radius or completed shell can intersect this shell."""
+    transforms = legal_cell_rotations(model)
     seen = set()
     inverse = np.argsort(current)
     for other,radius in centers:
@@ -227,6 +233,12 @@ class NativeTriples:
             self.ptr = None
 
 
+def only_certified_contact(clusters, selection, anchors):
+    contacts = ((a,b) for a,b in itertools.combinations(selection,2) if clusters.close[a,b])
+    first = next(contacts,None)
+    return first in anchors and next(contacts,None) is None
+
+
 def run(problem,codes,target,db,*,distance=3,size=6,backend='native',seconds=0,batch=128,
         reuse_balls=True,max_pages=None,cluster_screen=True):
     from r28_exchange import combination_batch
@@ -254,6 +266,10 @@ def run(problem,codes,target,db,*,distance=3,size=6,backend='native',seconds=0,b
         from r29_exchange_clusters import StarClusters
         from r29_move_cores import load_cores
         cores = load_cores(connection,model,bound.board,target)
+        from r30_bounds import RotationForest, RotationRegions, budget_upper, cell_mask, defect_cores, defect_packings, issued_pair_anchors
+        use_defects = cluster_screen and distance==4
+        shell_ceiling = paired = forest = anchor_proofs = None
+        movement = ()
         clusters = None
         release = read_json(ROOT/'docs'/'R29_EXCHANGE_CENTERS.json')
         separated = (reuse_balls and binding==release['domain'] and target>=release['target'] and any(
@@ -273,6 +289,7 @@ def run(problem,codes,target,db,*,distance=3,size=6,backend='native',seconds=0,b
             end = math.comb(nfree,size)
         start = time.monotonic()
         pages = 0
+        check_six = reuse_balls and size==6 and distance==4 and target>=208
         while True:
             connection.execute('BEGIN IMMEDIATE')
             row = connection.execute('SELECT body FROM route_state WHERE key=?',(scope,)).fetchone()
@@ -281,6 +298,31 @@ def run(problem,codes,target,db,*,distance=3,size=6,backend='native',seconds=0,b
             if pos==end or (seconds and time.monotonic()-start>=seconds) or (max_pages is not None and pages>=max_pages):
                 connection.commit()
                 break
+            if check_six and not state['hits']:
+                check_six = False
+                from r30_multicenter import released_six
+                if released_six(binding,[center],((2,4),(3,3)),target):
+                    state.update(offset=end,release_closed_cursor=end-pos,
+                                 evidence='docs/R30_ROUTES_RESULTS.json')
+                    connection.execute('INSERT OR REPLACE INTO route_state VALUES (?,?)',(scope,json.dumps(state)))
+                    connection.commit()
+                    break
+            if use_defects and shell_ceiling is None:
+                packings = defect_packings(bound)
+                shell_ceiling = budget_upper(bound,packings,distance)
+                if shell_ceiling>=target:
+                    movement = defect_cores(bound,target,packings)
+                    paired = RotationRegions(bound,2)
+                    forest = RotationForest(model)
+            if shell_ceiling is not None and shell_ceiling<target and not state['hits']:
+                # Preserve counts on a partially completed cursor. This proof owns
+                # every remaining support and every cycle type at this distance.
+                state.update(offset=end,budget_upper=shell_ceiling,budget_closed_cursor=end-pos)
+                connection.execute('INSERT OR REPLACE INTO route_state VALUES (?,?)',(scope,json.dumps(state)))
+                connection.commit()
+                break
+            if anchor_proofs is None:
+                anchor_proofs = issued_pair_anchors(bound,target,size-2) if cluster_screen and distance>=4 else set()
             step = min(pos+batch,end)
             if triples:
                 if graph is None:
@@ -308,16 +350,21 @@ def run(problem,codes,target,db,*,distance=3,size=6,backend='native',seconds=0,b
                             cells.append(moved)
                 active = []
                 for selection in cells:
+                    support = cell_mask(selection) if movement or paired is not None else 0
                     if support_owned(owners,selection):
                         state['support_owned'] += order_count
-                    elif any(core.isdisjoint(selection) for core in cores):
+                    elif (any(core.isdisjoint(selection) for core in cores) or
+                          any(not support & core for core in movement)):
                         state['core_closed'] += order_count
                     elif cluster_screen:
                         if clusters is None:
                             clusters = StarClusters(bound)
                         if owner_pairs is None and separated and not any(clusters.close[a,b] for a,b in itertools.combinations(selection,2)):
                             state['separated'] += order_count
-                        elif clusters.support_screen(selection,target):
+                        elif anchor_proofs and only_certified_contact(clusters, selection, anchor_proofs):
+                            state['family_closed'] = state.get('family_closed',0)+order_count
+                        elif clusters.support_upper_twice(selection) - (
+                                paired.discount(support) if paired else 0) < 2*target:
                             state['support_closed'] += order_count
                         else:
                             active.append(selection)
@@ -346,6 +393,9 @@ def run(problem,codes,target,db,*,distance=3,size=6,backend='native',seconds=0,b
                         item = json.loads(cached[0])
                         state['reused'] += 1
                     else:
+                        if forest is not None and forest.upper(seed//3,rounds=1)<target:
+                            state['forest_closed'] = state.get('forest_closed',0)+1
+                            continue
                         item = rotation_optimum(bound,oracle,seed)
                         connection.execute('INSERT INTO optima VALUES (?,?)',(key,json.dumps(item)))
                         state['exact'] += 1

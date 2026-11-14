@@ -8,6 +8,10 @@ The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaap
 
 The [v1.7.0 results and recommended settings](docs/ROUND26_RESULTS.md) cover 17 workstreams and 81 scoped evaluations. They include exact CPU and CUDA search, shared SAT reasoning, disk-backed progress, regional pruning, incremental GPU scoring and repair. The [workstream register](docs/round26-workstreams.json) records which candidates reduced steps, which saved repeated work and where extra work outweighed the benefit. Earlier evaluations are available for [Round 25](docs/ROUND25_RESULTS.md), [Round 24](docs/ROUND24.md) and [Round 23](docs/ROUND23.md).
 
+## Search improvements in v1.11.0
+
+The exact search exhausted both six-piece four-swap routes to 208 at all three known 207-edge boards. An improvement at four swaps from these centers now requires seven or eight moved pieces. The solver can also start from unrelated full boards, save completed seeds and use defect bounds to rule out an entire unpromising exchange neighborhood. The unrestricted Gold search allows all placements and requires a single loop. [v1.11.0 results, all 20 workstreams and hardware settings](docs/ROUND30_RESULTS.md)
+
 ## Search improvements in v1.10.0
 
 The shortest remaining route from each of the three tested 207-edge boards to 208 takes at least four physical swaps. The release includes the verified 207-edge, 52-component starting board, resumable swap searches, and new pruning for one-loop Gold. The [v1.10.0 results and settings](docs/ROUND29_RESULTS.md) give the commands for continuing the open routes and the measured settings for the RTX 2060.
@@ -142,7 +146,7 @@ The corresponding Python command on Windows is:
 .\venv\Scripts\python.exe systematic_search.py --resume --seconds 0 --replicas 4096
 ```
 
-For the **GPU DFS** option, the dashboard accepts 128–131,072 replicas, including when resuming; the selected GPU must have enough memory and support the required compute limits. To reduce GPU load, **Stop**, wait for the saved **Stopped** state, choose fewer replicas, then **Start**. Unfinished branches that do not fit remain paused with their exact search positions; increasing the count later can bring them back onto the GPU. The dashboard shows active and paused branches separately. Paused state still uses host memory and checkpoint storage. For **hybrid**, replicas only control the initial GPU sampling population; CPU neighborhood repair then improves the seed before smart DFS; it has no paused GPU branch bank, and resuming its CPU DFS does not sample again. Use a separate `--output` directory for an independent search.
+For the **GPU DFS** option, the dashboard accepts 128â€“131,072 replicas, including when resuming; the selected GPU must have enough memory and support the required compute limits. To reduce GPU load, **Stop**, wait for the saved **Stopped** state, choose fewer replicas, then **Start**. Unfinished branches that do not fit remain paused with their exact search positions; increasing the count later can bring them back onto the GPU. The dashboard shows active and paused branches separately. Paused state still uses host memory and checkpoint storage. For **hybrid**, replicas only control the initial GPU sampling population; CPU neighborhood repair then improves the seed before smart DFS; it has no paused GPU branch bank, and resuming its CPU DFS does not sample again. Use a separate `--output` directory for an independent search.
 
 ## What is saved
 

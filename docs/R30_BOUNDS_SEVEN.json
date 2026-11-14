@@ -1,0 +1,54 @@
+[
+  {
+    "batch": 12,
+    "pages": 1,
+    "threshold": 208,
+    "orders_per_support": 210,
+    "v1.10.0": {
+      "center": "d297c8f5cbdf792d841e8efb699f7662d7cf4c0959fc4214ec45498802c0b1c6",
+      "offset": 12,
+      "core_closed": 0,
+      "support_closed": 2520,
+      "considered": 0,
+      "exact": 0,
+      "hits": 0,
+      "seconds": 0.046999999991385266
+    },
+    "current": {
+      "center": "d297c8f5cbdf792d841e8efb699f7662d7cf4c0959fc4214ec45498802c0b1c6",
+      "offset": 12,
+      "core_closed": 210,
+      "support_closed": 2310,
+      "considered": 0,
+      "exact": 0,
+      "hits": 0,
+      "seconds": 0.046000000002095476
+    }
+  },
+  {
+    "batch": 128,
+    "pages": 8,
+    "threshold": 208,
+    "orders_per_support": 210,
+    "v1.10.0": {
+      "center": "d297c8f5cbdf792d841e8efb699f7662d7cf4c0959fc4214ec45498802c0b1c6",
+      "offset": 1024,
+      "core_closed": 0,
+      "support_closed": 215040,
+      "considered": 0,
+      "exact": 0,
+      "hits": 0,
+      "seconds": 0.5789999999979045
+    },
+    "current": {
+      "center": "d297c8f5cbdf792d841e8efb699f7662d7cf4c0959fc4214ec45498802c0b1c6",
+      "offset": 1024,
+      "core_closed": 7560,
+      "support_closed": 207480,
+      "considered": 0,
+      "exact": 0,
+      "hits": 0,
+      "seconds": 0.6870000000053551
+    }
+  }
+]

@@ -58,6 +58,9 @@ jobs:
       - name: Check round 29 search reductions and witness validation
         run: python -B -m unittest discover -v -p "test_r29*.py"
 
+      - name: Check four-swap routes and reusable bounds
+        run: python -B -m unittest discover -v -p "test_r30*.py"
+
       - name: Run CPU-only tests
         env:
           DIAMOND_REQUIRE_NATIVE: '1'

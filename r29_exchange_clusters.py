@@ -50,13 +50,10 @@ class StarClusters:
         return total
 
     def support_screen(self,cells,target):
-        """Upper-bound every fixed-point-free donor ordering of this support at once.
+        return self.support_upper_twice(cells) < 2*target
 
-        A star touched once gets its exact single substitution price. Each
-        multiply touched star is either bounded by degree or by maximizing
-        over center donor/orientation and independent neighbor donors. The
-        resulting prices form a certified physical assignment relaxation.
-        """
+    def support_upper_twice(self,cells,term_cache=None,*,family=None):
+        """Upper bound for all derangements. Identical local inputs can share terms across centers."""
         cells = tuple(map(int,cells))
         touched = {}
         for c in cells:
@@ -72,20 +69,36 @@ class StarClusters:
                 continue
             const -= int(self.bound.base[v])
             centers = [j for j in cells if j!=v] if v in row else [v]
-            scores = np.zeros((len(centers),3),int)
-            masks = self.bound.masks[self.bound.tiles[centers]]
-            for side,nb in enumerate(self.bound.neighbors[v]):
-                others = [j for j in cells if j!=nb] if nb in row else [nb]
-                scores+=self.bound.support[masks[:,:,side,None],self.bound.pieces[others]].max(axis=-1)
+            neighbors = self.bound.neighbors[v]
+            candidates = tuple([j for j in cells if j!=nb] if nb in row else [nb] for nb in neighbors)
+            # Ordered tile IDs bind all masks on all three physical sides.
+            # A cache belongs to one immutable problem and is shared only within that scope.
+            key = None
+            values = None
+            if term_cache is not None:
+                key = (tuple(self.bound.tiles[centers]),
+                       tuple(tuple(self.bound.pieces[opts]) for opts in candidates))
+                values = term_cache.get(key)
+            if values is None:
+                masks = self.bound.masks[self.bound.tiles[centers]]
+                scores = np.zeros((len(centers),3),int)
+                for side,opts in enumerate(candidates):
+                    scores += self.bound.support[masks[:,:,side,None],self.bound.pieces[opts]].max(axis=-1)
+                values = scores.max(axis=1)
+                if term_cache is not None:
+                    term_cache[key] = values
             if v in row:
-                for j,best in zip(centers,scores.max(axis=1)):
-                    matrix[row[v],row[j]] += best
+                matrix[row[v],[row[j] for j in centers]] += values
             else:
-                const += int(scores.max())
+                const += int(values.max())
         shift = int(matrix.min(initial=0))
         values = [[None if i==j else int(v)-shift for j,v in enumerate(line)] for i,line in enumerate(matrix)]
+        if family is not None:
+            from r30_cycle_joins import matching_bound
+            typed = matching_bound(values,family)
+            return -1 if typed is None else int(const + typed + len(cells)*shift)
         dual = assignment_upper_bound(values)
-        return const + dual['bound']+len(cells)*shift < 2*target
+        return int(const + dual['bound']+len(cells)*shift)
 
     def separated_certificate(self,target,exact,*,max_leaves=64):
         """Check all legal assignments within dual slack, with a bounded fail-open.

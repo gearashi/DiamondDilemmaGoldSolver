@@ -1,0 +1,355 @@
+[
+  {
+    "center": "51c26e4e47abf28fb41267f051b855320ce1a11fe6e6912fc7070a2d25ad8147",
+    "star": 415,
+    "constituents": {
+      "2": {
+        "top": [
+          1,
+          0,
+          -1,
+          -1
+        ],
+        "nonnegative": [
+          {
+            "cells": [
+              30,
+              118
+            ],
+            "order": [
+              1,
+              0
+            ],
+            "gain": 0
+          },
+          {
+            "cells": [
+              18,
+              146
+            ],
+            "order": [
+              1,
+              0
+            ],
+            "gain": 1
+          }
+        ],
+        "count": 12720
+      },
+      "3": {
+        "top": [
+          0,
+          0,
+          0,
+          -1
+        ],
+        "nonnegative": [
+          {
+            "cells": [
+              18,
+              44,
+              146
+            ],
+            "order": [
+              2,
+              0,
+              1
+            ],
+            "gain": 0
+          },
+          {
+            "cells": [
+              18,
+              122,
+              146
+            ],
+            "order": [
+              2,
+              0,
+              1
+            ],
+            "gain": 0
+          },
+          {
+            "cells": [
+              18,
+              132,
+              146
+            ],
+            "order": [
+              1,
+              2,
+              0
+            ],
+            "gain": 0
+          }
+        ],
+        "count": 1339840
+      },
+      "4": {
+        "tested": 157766160,
+        "doubled_threshold": 415,
+        "survivors": [
+          {
+            "cells": [
+              30,
+              111,
+              118,
+              122
+            ],
+            "order": [
+              1,
+              3,
+              0,
+              2
+            ],
+            "gain": 0
+          },
+          {
+            "cells": [
+              30,
+              42,
+              51,
+              62
+            ],
+            "order": [
+              2,
+              0,
+              3,
+              1
+            ],
+            "gain": 0
+          }
+        ]
+      }
+    },
+    "isolated_swap_count": 5477,
+    "predecessor_coverage": {
+      "counts": {
+        "4+2": 702394031100,
+        "3+3": 183721587840,
+        "3+2+2": 34651438867600,
+        "2+2+2+2": 616224576981920
+      },
+      "total": 651762131468460,
+      "singles": 1273506808931700,
+      "pairs": 698339886917640,
+      "flagged_directed_triples": 347040
+    },
+    "cross_cycle_required": true
+  },
+  {
+    "center": "d297c8f5cbdf792d841e8efb699f7662d7cf4c0959fc4214ec45498802c0b1c6",
+    "star": 416,
+    "constituents": {
+      "2": {
+        "top": [
+          0,
+          -1,
+          -1,
+          -1
+        ],
+        "nonnegative": [
+          {
+            "cells": [
+              30,
+              118
+            ],
+            "order": [
+              1,
+              0
+            ],
+            "gain": 0
+          }
+        ],
+        "count": 12720
+      },
+      "3": {
+        "top": [
+          -1,
+          -1,
+          -1,
+          -1
+        ],
+        "nonnegative": [],
+        "count": 1339840
+      },
+      "4": {
+        "tested": 157766160,
+        "doubled_threshold": 416,
+        "survivors": [
+          {
+            "cells": [
+              30,
+              111,
+              118,
+              122
+            ],
+            "order": [
+              1,
+              3,
+              0,
+              2
+            ],
+            "gain": 0
+          },
+          {
+            "cells": [
+              30,
+              42,
+              51,
+              62
+            ],
+            "order": [
+              2,
+              0,
+              3,
+              1
+            ],
+            "gain": 0
+          }
+        ]
+      }
+    },
+    "isolated_swap_count": 5485,
+    "predecessor_coverage": {
+      "counts": {
+        "4+2": 703419985500,
+        "3+3": 184052989736,
+        "3+2+2": 34702052618000,
+        "2+2+2+2": 616785192480351
+      },
+      "total": 652374718073587,
+      "singles": 1275385844415300,
+      "pairs": 700416111389547,
+      "flagged_directed_triples": 347666
+    },
+    "cross_cycle_required": true
+  },
+  {
+    "center": "840affdf318119d3c7a2ad3f40307a4623f1cd13896ba8074a94f61ba5089771",
+    "star": 415,
+    "constituents": {
+      "2": {
+        "top": [
+          1,
+          0,
+          -1,
+          -1
+        ],
+        "nonnegative": [
+          {
+            "cells": [
+              30,
+              118
+            ],
+            "order": [
+              1,
+              0
+            ],
+            "gain": 0
+          },
+          {
+            "cells": [
+              44,
+              146
+            ],
+            "order": [
+              1,
+              0
+            ],
+            "gain": 1
+          }
+        ],
+        "count": 12720
+      },
+      "3": {
+        "top": [
+          0,
+          0,
+          -1,
+          -1
+        ],
+        "nonnegative": [
+          {
+            "cells": [
+              18,
+              44,
+              146
+            ],
+            "order": [
+              1,
+              2,
+              0
+            ],
+            "gain": 0
+          },
+          {
+            "cells": [
+              44,
+              122,
+              146
+            ],
+            "order": [
+              2,
+              0,
+              1
+            ],
+            "gain": 0
+          }
+        ],
+        "count": 1339840
+      },
+      "4": {
+        "tested": 157766160,
+        "doubled_threshold": 415,
+        "survivors": [
+          {
+            "cells": [
+              30,
+              111,
+              118,
+              122
+            ],
+            "order": [
+              1,
+              3,
+              0,
+              2
+            ],
+            "gain": 0
+          },
+          {
+            "cells": [
+              30,
+              42,
+              51,
+              62
+            ],
+            "order": [
+              2,
+              0,
+              3,
+              1
+            ],
+            "gain": 0
+          }
+        ]
+      }
+    },
+    "isolated_swap_count": 5502,
+    "predecessor_coverage": {
+      "counts": {
+        "4+2": 705600138600,
+        "3+3": 185170015296,
+        "3+2+2": 34809606837600,
+        "2+2+2+2": 617970295365880
+      },
+      "total": 653670672357376,
+      "singles": 1279319481829200,
+      "pairs": 704728077560760,
+      "flagged_directed_triples": 349776
+    },
+    "cross_cycle_required": true
+  }
+]

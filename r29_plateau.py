@@ -196,10 +196,13 @@ def _route(db, scope, key):
     return list(reversed(path))
 
 
-def walk(problem, codes, database, floor, goal, *, max_centers=20, seconds=0, tie_limit=8, widest=False):
+def walk(problem, codes, database, floor, goal, *, max_centers=20, seconds=0, tie_limit=8, widest=False,
+         max_swaps=None, potentials=True):
     """A BFS at each floor gives a shortest path; descending closed floors certify the bottleneck."""
     if not 0 <= floor < goal <= len(problem.edges) or tie_limit < 1 or max_centers < 0 or seconds < 0:
         raise ValueError("Invalid plateau range or budget.")
+    if max_swaps is not None and (type(max_swaps) is not int or max_swaps<0):
+        raise ValueError("Nonnegative swap limit required.")
     started = time.monotonic()
     model = BoardModel(problem)
     start = model.legal_board(codes)
@@ -215,7 +218,12 @@ def walk(problem, codes, database, floor, goal, *, max_centers=20, seconds=0, ti
         db.commit()
         levels = range(min(initial['score'],goal-1),floor-1,-1) if widest else [floor]
         for level in levels:
-            scope = hashlib.sha256(f'{root}/{level}/{goal}'.encode()).hexdigest()
+            binding = f'{root}/{level}/{goal}'
+            if max_swaps is not None:
+                binding += f'/depth/{max_swaps}'
+                graph.work.setdefault('potential_closed',0)
+                graph.work.setdefault('depth_closed',0)
+            scope = hashlib.sha256(binding.encode()).hexdigest()
             db.execute("BEGIN IMMEDIATE")
             db.execute("INSERT OR IGNORE INTO walk_queue(scope,board,parent,depth) VALUES (?,?,NULL,0)", (scope,root))
             db.execute("INSERT OR IGNORE INTO walk_roots VALUES (?,?)",(scope,root))
@@ -233,7 +241,16 @@ def walk(problem, codes, database, floor, goal, *, max_centers=20, seconds=0, ti
                     db.commit()
                     break
                 key,depth = row
-                for child,item in graph.neighbors(key, get(key)['codes'], level):
+                board = get(key)['codes']
+                skip = max_swaps is not None and depth>=max_swaps
+                if skip:
+                    graph.work['depth_closed'] += 1
+                elif max_swaps is not None and potentials:
+                    from r30_bounds import budget_upper, defect_packings
+                    bound = ExchangeBound(model,board)
+                    skip = budget_upper(bound,defect_packings(bound),max_swaps-depth)<goal
+                    graph.work['potential_closed'] += int(skip)
+                for child,item in (() if skip else graph.neighbors(key,board,level)):
                     db.execute("INSERT OR IGNORE INTO walk_queue(scope,board,parent,depth) VALUES (?,?,?,?)",
                                (scope,child,key,depth+1))
                     if item['score'] >= best['score'] and tie_limit > 1:

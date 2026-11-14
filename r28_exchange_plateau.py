@@ -20,9 +20,10 @@ def main():
     p.add_argument("--output",type=Path)
     p.add_argument("--widest",action="store_true",help="Exhaust higher score floors first, then find a shortest route.")
     p.add_argument("--ties",type=int,default=8,help="Number of tied best rotations to inspect for the displayed board.")
+    p.add_argument("--max-swaps",type=int,help="Find a target within this many swaps. Score reports the best witness visited.")
     args = p.parse_args()
     result = walk(SearchProblem(read_json(args.tiles)),read_json(args.incumbent)["codes"],
-                  args.database,args.floor,args.target,max_centers=args.centers,seconds=args.seconds,tie_limit=args.ties,widest=args.widest)
+                  args.database,args.floor,args.target,max_centers=args.centers,seconds=args.seconds,tie_limit=args.ties,widest=args.widest,max_swaps=args.max_swaps)
     if args.output:
         from io_utils import atomic_json
         atomic_json(args.output,result)

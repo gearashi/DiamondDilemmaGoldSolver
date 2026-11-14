@@ -11,7 +11,7 @@ from search_problem import SearchProblem
 
 
 def phase_search(problem, *, pins=None, bonds=(), width=2, max_subsets=10000,
-                 boundary=(), seconds=3, cp=True):
+                 boundary=(), seconds=3, cp=True, warm_cuts=True):
     from r28_geo_color import signed_phase_model
     if seconds <= 0:
         raise ValueError("Expected positive query time.")
@@ -29,6 +29,12 @@ def phase_search(problem, *, pins=None, bonds=(), width=2, max_subsets=10000,
         return dict(status="INFEASIBLE",reason="parity",core=sorted(base.conflict),metrics=metrics)
     if base.conflict is not None:
         return inconsistent()
+    if warm_cuts and (pins or bonds):
+        from r30_gold import insufficient_crossings
+        reused=insufficient_crossings(cuts,dict(pins)|base.forced())
+        if reused:
+            metrics.update(subsets=0,endpoint_cut_reuses=1)
+            return dict(status="INFEASIBLE",reason="endpoint-crossings",cut=reused,metrics=metrics)
     rules,summary = cuts.clauses(width,max_subsets)
     metrics.update(summary)
     values = dict(pins)

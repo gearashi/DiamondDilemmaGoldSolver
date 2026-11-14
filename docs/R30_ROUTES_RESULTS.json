@@ -1,0 +1,583 @@
+{
+  "domain": "f2033beb1d578feb56320c88d3893a9de8ae9fd44cfeffe382e2d52140edc5a1",
+  "six": [
+    {
+      "cursor": 25600,
+      "outer": 1339840,
+      "joins": 1503983,
+      "star_queries": 1503983,
+      "survivors": 1,
+      "undo": 0,
+      "exact": 1,
+      "cached": 0,
+      "hits": 0,
+      "best": null,
+      "scope": [
+        3,
+        3
+      ],
+      "total": 847730166400,
+      "target": 208,
+      "center": "d297c8f5cbdf792d841e8efb699f7662d7cf4c0959fc4214ec45498802c0b1c6",
+      "complete": true,
+      "end": 25600,
+      "elapsed": 25.078999999997905
+    },
+    {
+      "cursor": 25600,
+      "outer": 157766160,
+      "joins": 2734721,
+      "star_queries": 2734721,
+      "survivors": 1,
+      "undo": 0,
+      "exact": 1,
+      "cached": 0,
+      "hits": 0,
+      "best": null,
+      "scope": [
+        4,
+        2
+      ],
+      "total": 1907392874400,
+      "target": 208,
+      "center": "d297c8f5cbdf792d841e8efb699f7662d7cf4c0959fc4214ec45498802c0b1c6",
+      "complete": true,
+      "end": 25600,
+      "elapsed": 77.53099999998813
+    },
+    {
+      "cursor": 25600,
+      "outer": 1339840,
+      "joins": 802589,
+      "star_queries": 802589,
+      "survivors": 0,
+      "undo": 0,
+      "exact": 0,
+      "cached": 0,
+      "hits": 0,
+      "best": null,
+      "scope": [
+        3,
+        3
+      ],
+      "total": 847730166400,
+      "target": 208,
+      "center": "51c26e4e47abf28fb41267f051b855320ce1a11fe6e6912fc7070a2d25ad8147",
+      "complete": true,
+      "end": 25600,
+      "elapsed": 17.75
+    },
+    {
+      "cursor": 25600,
+      "outer": 157766160,
+      "joins": 1446115,
+      "star_queries": 1446115,
+      "survivors": 0,
+      "undo": 0,
+      "exact": 0,
+      "cached": 0,
+      "hits": 0,
+      "best": null,
+      "scope": [
+        4,
+        2
+      ],
+      "total": 1907392874400,
+      "target": 208,
+      "center": "51c26e4e47abf28fb41267f051b855320ce1a11fe6e6912fc7070a2d25ad8147",
+      "complete": true,
+      "end": 25600,
+      "elapsed": 72.51600000000326
+    },
+    {
+      "cursor": 25600,
+      "outer": 1339840,
+      "joins": 864836,
+      "star_queries": 864836,
+      "survivors": 0,
+      "undo": 0,
+      "exact": 0,
+      "cached": 0,
+      "hits": 0,
+      "best": null,
+      "scope": [
+        3,
+        3
+      ],
+      "total": 847730166400,
+      "target": 208,
+      "center": "840affdf318119d3c7a2ad3f40307a4623f1cd13896ba8074a94f61ba5089771",
+      "complete": true,
+      "end": 25600,
+      "elapsed": 19.187000000005355
+    },
+    {
+      "cursor": 25600,
+      "outer": 157766160,
+      "joins": 1542237,
+      "star_queries": 1542237,
+      "survivors": 0,
+      "undo": 0,
+      "exact": 0,
+      "cached": 0,
+      "hits": 0,
+      "best": null,
+      "scope": [
+        4,
+        2
+      ],
+      "total": 1907392874400,
+      "target": 208,
+      "center": "840affdf318119d3c7a2ad3f40307a4623f1cd13896ba8074a94f61ba5089771",
+      "complete": true,
+      "end": 25600,
+      "elapsed": 69.25
+    }
+  ],
+  "middle_candidates": [
+    {
+      "cycles": [
+        [
+          30,
+          62,
+          105
+        ],
+        [
+          104,
+          107,
+          106
+        ]
+      ],
+      "contacts": 5,
+      "score": 205,
+      "shallow": null,
+      "deep": null
+    },
+    {
+      "cycles": [
+        [
+          43,
+          123
+        ],
+        [
+          30,
+          51,
+          62,
+          42
+        ]
+      ],
+      "contacts": 2,
+      "score": 206,
+      "shallow": null,
+      "deep": "undo_split"
+    }
+  ],
+  "large_pools": [
+    {
+      "pool": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118,
+        122,
+        146,
+        155
+      ],
+      "family": [
+        3,
+        2,
+        2
+      ],
+      "work": {
+        "typed_dfs": {
+          "catalogued": 285,
+          "pair_prices": 5670,
+          "pair_reuse": 57932,
+          "prefixes": 496,
+          "priced_siblings_skipped": 5715,
+          "star_queries": 87,
+          "wall": 0.09314949999679811
+        },
+        "indexed_halves": {
+          "catalogued": 285,
+          "pair_prices": 5670,
+          "half_entries": 870,
+          "pair_reuse": 5214,
+          "half_suffix_skips": 25113,
+          "half_queries": 87,
+          "star_queries": 87,
+          "wall": 0.024461699998937547
+        },
+        "direct_star_queries": 25200,
+        "expected_star_survivors": 0
+      }
+    },
+    {
+      "pool": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "family": [
+        3,
+        2,
+        2
+      ],
+      "work": {
+        "typed_dfs": {
+          "catalogued": 285,
+          "pair_prices": 5670,
+          "pair_reuse": 60550,
+          "prefixes": 720,
+          "priced_siblings_skipped": 6800,
+          "star_queries": 1,
+          "wall": 0.12688739999430254
+        },
+        "indexed_halves": {
+          "catalogued": 285,
+          "pair_prices": 5670,
+          "half_entries": 870,
+          "pair_reuse": 7536,
+          "half_suffix_skips": 23952,
+          "half_queries": 1248,
+          "star_queries": 1,
+          "wall": 0.04094999999506399
+        },
+        "direct_star_queries": 25200,
+        "expected_star_survivors": 0
+      }
+    },
+    {
+      "pool": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118,
+        122,
+        146,
+        155
+      ],
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "work": {
+        "typed_dfs": {
+          "catalogued": 45,
+          "pair_prices": 630,
+          "pair_reuse": 18763,
+          "prefixes": 103,
+          "priced_siblings_skipped": 616,
+          "wall": 0.04841850002412684
+        },
+        "indexed_halves": {
+          "catalogued": 45,
+          "pair_prices": 630,
+          "half_entries": 630,
+          "pair_reuse": 37800,
+          "half_suffix_skips": 28350,
+          "wall": 0.07571969999116845
+        },
+        "direct_star_queries": 4725,
+        "expected_star_survivors": 0
+      }
+    },
+    {
+      "pool": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "work": {
+        "typed_dfs": {
+          "catalogued": 45,
+          "pair_prices": 630,
+          "pair_reuse": 50762,
+          "prefixes": 826,
+          "priced_siblings_skipped": 3337,
+          "wall": 0.07092699999338947
+        },
+        "indexed_halves": {
+          "catalogued": 45,
+          "pair_prices": 630,
+          "half_entries": 630,
+          "pair_reuse": 45684,
+          "half_suffix_skips": 14946,
+          "half_queries": 1971,
+          "wall": 0.06658720000996254
+        },
+        "direct_star_queries": 4725,
+        "expected_star_survivors": 0
+      }
+    }
+  ],
+  "ordering": [
+    {
+      "family": [
+        4,
+        2
+      ],
+      "seed": 21,
+      "modes": [
+        {
+          "order": "cell",
+          "prefixes": 9,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        },
+        {
+          "order": "gain",
+          "prefixes": 3,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        }
+      ]
+    },
+    {
+      "family": [
+        4,
+        2
+      ],
+      "seed": 37,
+      "modes": [
+        {
+          "order": "cell",
+          "prefixes": 10,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        },
+        {
+          "order": "gain",
+          "prefixes": 3,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        }
+      ]
+    },
+    {
+      "family": [
+        3,
+        3
+      ],
+      "seed": 21,
+      "modes": [
+        {
+          "order": "cell",
+          "prefixes": 13,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        },
+        {
+          "order": "gain",
+          "prefixes": 8,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        }
+      ]
+    },
+    {
+      "family": [
+        3,
+        3
+      ],
+      "seed": 37,
+      "modes": [
+        {
+          "order": "cell",
+          "prefixes": 8,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        },
+        {
+          "order": "gain",
+          "prefixes": 4,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        }
+      ]
+    },
+    {
+      "family": [
+        3,
+        2,
+        2
+      ],
+      "seed": 21,
+      "modes": [
+        {
+          "order": "cell",
+          "prefixes": 8,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        },
+        {
+          "order": "gain",
+          "prefixes": 8,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        }
+      ]
+    },
+    {
+      "family": [
+        3,
+        2,
+        2
+      ],
+      "seed": 37,
+      "modes": [
+        {
+          "order": "cell",
+          "prefixes": 12,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        },
+        {
+          "order": "gain",
+          "prefixes": 31,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        }
+      ]
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "seed": 21,
+      "modes": [
+        {
+          "order": "cell",
+          "prefixes": 76,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        },
+        {
+          "order": "gain",
+          "prefixes": 9,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        }
+      ]
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "seed": 37,
+      "modes": [
+        {
+          "order": "cell",
+          "prefixes": 105,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        },
+        {
+          "order": "gain",
+          "prefixes": 88,
+          "stars": 1,
+          "exact": 1,
+          "score": 15
+        }
+      ]
+    }
+  ],
+  "family_bounds": [
+    {
+      "family": [
+        4,
+        2
+      ],
+      "samples": 512,
+      "targeted": 152,
+      "stricter": 147,
+      "additional_closed_at_208": 1,
+      "generic_closed_at_208": 508
+    },
+    {
+      "family": [
+        3,
+        3
+      ],
+      "samples": 512,
+      "targeted": 152,
+      "stricter": 338,
+      "additional_closed_at_208": 3,
+      "generic_closed_at_208": 508
+    },
+    {
+      "family": [
+        3,
+        2,
+        2
+      ],
+      "samples": 760,
+      "targeted": 400,
+      "stricter": 414,
+      "additional_closed_at_208": 1,
+      "generic_closed_at_208": 759
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "samples": 760,
+      "targeted": 400,
+      "stricter": 675,
+      "additional_closed_at_208": 3,
+      "generic_closed_at_208": 757
+    }
+  ]
+}

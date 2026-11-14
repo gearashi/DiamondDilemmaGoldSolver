@@ -1,0 +1,120 @@
+{
+  "domain": "f2033beb1d578feb56320c88d3893a9de8ae9fd44cfeffe382e2d52140edc5a1",
+  "target": 208,
+  "proofs": [
+    {
+      "center": "51c26e4e47abf28fb41267f051b855320ce1a11fe6e6912fc7070a2d25ad8147",
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "catalog_counts": {
+        "2": 186
+      },
+      "max_common_stars": 2,
+      "work": {
+        "standalone_pass": 2483,
+        "star_queries": 1188
+      },
+      "star_survivors": [],
+      "second_contact_required": true
+    },
+    {
+      "center": "51c26e4e47abf28fb41267f051b855320ce1a11fe6e6912fc7070a2d25ad8147",
+      "family": [
+        3,
+        2,
+        2
+      ],
+      "catalog_counts": {
+        "2": 540,
+        "3": 1378
+      },
+      "max_common_stars": 2,
+      "work": {
+        "standalone_pass": 3947,
+        "star_queries": 1871
+      },
+      "star_survivors": [],
+      "second_contact_required": true
+    },
+    {
+      "center": "d297c8f5cbdf792d841e8efb699f7662d7cf4c0959fc4214ec45498802c0b1c6",
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "catalog_counts": {
+        "2": 87
+      },
+      "max_common_stars": 2,
+      "work": {
+        "standalone_pass": 1868,
+        "star_queries": 855
+      },
+      "star_survivors": [],
+      "second_contact_required": true
+    },
+    {
+      "center": "d297c8f5cbdf792d841e8efb699f7662d7cf4c0959fc4214ec45498802c0b1c6",
+      "family": [
+        3,
+        2,
+        2
+      ],
+      "catalog_counts": {
+        "2": 181,
+        "3": 343
+      },
+      "max_common_stars": 2,
+      "work": {
+        "standalone_pass": 5325,
+        "star_queries": 2292
+      },
+      "star_survivors": [],
+      "second_contact_required": true
+    },
+    {
+      "center": "840affdf318119d3c7a2ad3f40307a4623f1cd13896ba8074a94f61ba5089771",
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "catalog_counts": {
+        "2": 193
+      },
+      "max_common_stars": 2,
+      "work": {
+        "standalone_pass": 3012,
+        "star_queries": 1169
+      },
+      "star_survivors": [],
+      "second_contact_required": true
+    },
+    {
+      "center": "840affdf318119d3c7a2ad3f40307a4623f1cd13896ba8074a94f61ba5089771",
+      "family": [
+        3,
+        2,
+        2
+      ],
+      "catalog_counts": {
+        "2": 570,
+        "3": 1585
+      },
+      "max_common_stars": 2,
+      "work": {
+        "standalone_pass": 4182,
+        "star_queries": 2025
+      },
+      "star_survivors": [],
+      "second_contact_required": true
+    }
+  ]
+}

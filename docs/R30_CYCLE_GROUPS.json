@@ -1,0 +1,87 @@
+{
+  "domain": "f2033beb1d578feb56320c88d3893a9de8ae9fd44cfeffe382e2d52140edc5a1",
+  "target": 208,
+  "proofs": [
+    {
+      "center": "51c26e4e47abf28fb41267f051b855320ce1a11fe6e6912fc7070a2d25ad8147",
+      "component_queries": {
+        "left_cycles": 1352560,
+        "star_queries": 148935,
+        "triple_star_pass": 182,
+        "triple_seam_pass": 41664685
+      },
+      "best_retained_pair_gains": [
+        0,
+        0
+      ],
+      "minimum_connected_cycles": 3,
+      "four_swaps_all_connected": true,
+      "retained": {
+        "(2, 2)": 96,
+        "(3, 2)": 1
+      },
+      "cases": {
+        "322_pair_swap_swap": {},
+        "322_pair_triple_swap": {},
+        "2222_one_pair": {},
+        "2222_two_pairs": {},
+        "2222_three_plus_one": {}
+      },
+      "hits": []
+    },
+    {
+      "center": "d297c8f5cbdf792d841e8efb699f7662d7cf4c0959fc4214ec45498802c0b1c6",
+      "component_queries": {
+        "left_cycles": 1352560,
+        "star_queries": 139445,
+        "triple_star_pass": 0,
+        "triple_seam_pass": 38408455
+      },
+      "best_retained_pair_gains": [
+        -1,
+        null
+      ],
+      "minimum_connected_cycles": 3,
+      "four_swaps_all_connected": true,
+      "retained": {
+        "(2, 2)": 72,
+        "(3, 2)": 0
+      },
+      "cases": {
+        "322_pair_swap_swap": {},
+        "322_pair_triple_swap": {},
+        "2222_one_pair": {},
+        "2222_two_pairs": {},
+        "2222_three_plus_one": {}
+      },
+      "hits": []
+    },
+    {
+      "center": "840affdf318119d3c7a2ad3f40307a4623f1cd13896ba8074a94f61ba5089771",
+      "component_queries": {
+        "left_cycles": 1352560,
+        "star_queries": 160026,
+        "triple_star_pass": 204,
+        "triple_seam_pass": 49305567
+      },
+      "best_retained_pair_gains": [
+        0,
+        0
+      ],
+      "minimum_connected_cycles": 3,
+      "four_swaps_all_connected": true,
+      "retained": {
+        "(2, 2)": 120,
+        "(3, 2)": 2
+      },
+      "cases": {
+        "322_pair_swap_swap": {},
+        "322_pair_triple_swap": {},
+        "2222_one_pair": {},
+        "2222_two_pairs": {},
+        "2222_three_plus_one": {}
+      },
+      "hits": []
+    }
+  ]
+}

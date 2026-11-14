@@ -1,0 +1,293 @@
+{
+  "scope": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "cells": [
+    18,
+    30,
+    44,
+    51,
+    62,
+    146
+  ],
+  "seconds_per_query": 5,
+  "routes": {
+    "(4, 2)": {
+      "independent": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "contact_predecessors": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 2
+      }
+    },
+    "(3, 3)": {
+      "independent": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "contact_predecessors": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 2
+      }
+    },
+    "predecessors_unknown": {
+      "status": "UNKNOWN",
+      "branches": 0,
+      "applied": 0,
+      "cp_calls": 1,
+      "predecessor_cuts": 2
+    },
+    "learned_real_204": {
+      "status": "CERTIFIED",
+      "queries": 6,
+      "stored": true,
+      "rule": {
+        "binding": "c9568c24bbd99f6a38e76cf317e729219bd2049e0f61af9d84bbf6d4a52435fa",
+        "pins": [
+          [
+            18,
+            30
+          ],
+          [
+            44,
+            51
+          ]
+        ],
+        "upper": 203
+      },
+      "matching_endpoints": 5,
+      "zero_call_hits": 5
+    },
+    "real_pool_feasible_204": {
+      "status": "OPTIMAL",
+      "branches": 2818,
+      "applied": 0,
+      "cp_calls": 1,
+      "predecessor_cuts": 0,
+      "score": 204,
+      "gold": false
+    },
+    "pool_bound_208": {
+      "status": "CERTIFIED",
+      "queries": 5,
+      "stored": false,
+      "rule": {
+        "binding": "c9568c24bbd99f6a38e76cf317e729219bd2049e0f61af9d84bbf6d4a52435fa",
+        "pins": [],
+        "upper": 205
+      }
+    },
+    "full_family_trial": {
+      "(4, 2)": {
+        "status": "UNKNOWN",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "(3, 3)": {
+        "status": "UNKNOWN",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      }
+    }
+  },
+  "planted_route": {
+    "(4, 2)": {
+      "status": "OPTIMAL",
+      "branches": 1466,
+      "applied": 0,
+      "cp_calls": 1,
+      "predecessor_cuts": 0,
+      "score": 15,
+      "gold": true
+    },
+    "(3, 3)": {
+      "status": "OPTIMAL",
+      "branches": 266,
+      "applied": 0,
+      "cp_calls": 1,
+      "predecessor_cuts": 0,
+      "score": 15,
+      "gold": true
+    }
+  },
+  "gold": {
+    "five": {
+      "phase_entry_previous": 801,
+      "phase_entry_reuse": [
+        {
+          "upper": 0,
+          "subsets": 0,
+          "cp_calls": 0
+        },
+        {
+          "upper": 0,
+          "subsets": 0,
+          "cp_calls": 0
+        }
+      ],
+      "cold": {
+        "status": "INFEASIBLE",
+        "cp_calls": 2,
+        "branches": 684,
+        "type_cuts": 2,
+        "strand_cuts": 0,
+        "failed_embeddings": 0,
+        "reused_type_cuts": 0
+      },
+      "warm": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "type_cuts": 0,
+        "strand_cuts": 0,
+        "failed_embeddings": 0,
+        "reused_type_cuts": 2
+      },
+      "learned_cut_widths": [
+        2,
+        140
+      ],
+      "previous_subsets": 801
+    },
+    "twelve": {
+      "phase_entry_previous": 7628,
+      "phase_entry_reuse": [
+        {
+          "upper": 0,
+          "subsets": 0,
+          "cp_calls": 0
+        },
+        {
+          "upper": 0,
+          "subsets": 0,
+          "cp_calls": 0
+        }
+      ],
+      "cold": {
+        "status": "INFEASIBLE",
+        "cp_calls": 2,
+        "branches": 661,
+        "type_cuts": 2,
+        "strand_cuts": 0,
+        "failed_embeddings": 0,
+        "reused_type_cuts": 0
+      },
+      "warm": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "type_cuts": 0,
+        "strand_cuts": 0,
+        "failed_embeddings": 0,
+        "reused_type_cuts": 2
+      },
+      "learned_cut_widths": [
+        3,
+        140
+      ],
+      "previous_subsets": 7628
+    },
+    "competing_bridges": {
+      "oracle": {
+        "matchings": 4,
+        "connected": 0
+      },
+      "coupled": {
+        "status": "INFEASIBLE",
+        "cp_calls": 2,
+        "branches": 0,
+        "type_cuts": 0,
+        "strand_cuts": 5,
+        "failed_embeddings": 0,
+        "partner_variables": 91,
+        "reused_type_cuts": 0
+      },
+      "successive_capacities": [
+        {
+          "status": "OPTIMAL",
+          "branches": 0,
+          "value": 4,
+          "upper": 4
+        },
+        {
+          "status": "OPTIMAL",
+          "branches": 0,
+          "value": 2,
+          "upper": 2
+        },
+        {
+          "status": "OPTIMAL",
+          "branches": 0,
+          "value": 4,
+          "upper": 4
+        },
+        {
+          "status": "OPTIMAL",
+          "branches": 0,
+          "value": 2,
+          "upper": 2
+        },
+        {
+          "status": "OPTIMAL",
+          "branches": 0,
+          "value": 0,
+          "upper": 0
+        }
+      ],
+      "core_recheck": "INFEASIBLE",
+      "core_queries": 6,
+      "core_entries": 124,
+      "restricted_entries": 128
+    },
+    "planted_embedding": {
+      "status": "GOLD",
+      "cp_calls": 1,
+      "branches": 0,
+      "type_cuts": 0,
+      "strand_cuts": 0,
+      "failed_embeddings": 0,
+      "partner_variables": 15,
+      "reused_type_cuts": 0
+    },
+    "unrestricted": {
+      "status": "UNKNOWN",
+      "cp_calls": 6,
+      "branches": 266504,
+      "type_cuts": 2,
+      "strand_cuts": 41,
+      "failed_embeddings": 0,
+      "partner_variables": 3060,
+      "reused_type_cuts": 0
+    }
+  }
+}
