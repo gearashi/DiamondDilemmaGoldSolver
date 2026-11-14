@@ -726,5 +726,253 @@
       },
       "hits": 0
     }
+  ],
+  "exterior_controls": [
+    {
+      "n": 10,
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "scores": [
+        6,
+        6,
+        5,
+        5,
+        7,
+        7,
+        4,
+        4,
+        6,
+        7,
+        5,
+        6
+      ],
+      "shared": {
+        "eliminated_variables": 120,
+        "table_entries": 11160
+      },
+      "cold": {
+        "eliminated_variables": 120,
+        "table_entries": 11160
+      }
+    },
+    {
+      "n": 10,
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "scores": [
+        5,
+        6,
+        6,
+        4,
+        3,
+        6,
+        6,
+        7,
+        7,
+        5,
+        5,
+        6
+      ],
+      "shared": {
+        "eliminated_variables": 120,
+        "table_entries": 11160
+      },
+      "cold": {
+        "eliminated_variables": 120,
+        "table_entries": 11160
+      }
+    },
+    {
+      "n": 40,
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "scores": [
+        52,
+        51,
+        50,
+        49,
+        50,
+        51,
+        50,
+        50,
+        51,
+        51,
+        51,
+        50
+      ],
+      "shared": {
+        "eliminated_variables": 205,
+        "table_entries": 524619
+      },
+      "cold": {
+        "eliminated_variables": 480,
+        "table_entries": 2511144
+      }
+    },
+    {
+      "n": 40,
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "scores": [
+        50,
+        50,
+        50,
+        49,
+        51,
+        50,
+        50,
+        50,
+        49,
+        51,
+        49,
+        50
+      ],
+      "shared": {
+        "eliminated_variables": 216,
+        "table_entries": 760572
+      },
+      "cold": {
+        "eliminated_variables": 480,
+        "table_entries": 2511144
+      }
+    }
+  ],
+  "transfer": {
+    "ranked": {
+      "first_contact": 210,
+      "raw_center_endpoints": 210
+    },
+    "connected": {
+      "whole_pool_reused": 1
+    },
+    "learn": {
+      "status": "CERTIFIED",
+      "queries": 3,
+      "stored": true,
+      "rule": {
+        "binding": "0f2aed4319db9d5a64b35abbc86170a4c6d090fd1e4d79b1cc835755a33b9695",
+        "pins": [],
+        "upper": 202
+      }
+    },
+    "repeat": {
+      "status": "INFEASIBLE",
+      "branches": 0,
+      "applied": 1,
+      "cp_calls": 0,
+      "upper": 202,
+      "reason": "verified_donor_bound",
+      "predecessor_cuts": 0
+    }
+  },
+  "bounded_full_roots": [
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "attempt": 1,
+      "allowance": 0.15,
+      "elapsed": 0.2340000000258442,
+      "result": {
+        "next_root": 0,
+        "total_roots": 1352560,
+        "completed_roots": 0,
+        "complete": false,
+        "range_finished": false,
+        "best": null,
+        "work": {
+          "cursor_steps": 1138,
+          "cursor_pages": 9,
+          "catalogue_rows": 75366
+        }
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "attempt": 2,
+      "allowance": 0.15,
+      "elapsed": 0.2029999999795109,
+      "result": {
+        "next_root": 0,
+        "total_roots": 1352560,
+        "completed_roots": 0,
+        "complete": false,
+        "range_finished": false,
+        "best": null,
+        "work": {
+          "cursor_steps": 930,
+          "cursor_pages": 8,
+          "catalogue_rows": 150732
+        }
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "attempt": 1,
+      "allowance": 0.15,
+      "elapsed": 0.21900000001187436,
+      "result": {
+        "next_root": 0,
+        "total_roots": 12720,
+        "completed_roots": 0,
+        "complete": false,
+        "range_finished": false,
+        "best": null,
+        "work": {
+          "cursor_steps": 1146,
+          "cursor_pages": 9,
+          "catalogue_rows": 14151
+        }
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "attempt": 2,
+      "allowance": 0.15,
+      "elapsed": 0.20300000000861473,
+      "result": {
+        "next_root": 0,
+        "total_roots": 12720,
+        "completed_roots": 0,
+        "complete": false,
+        "range_finished": false,
+        "best": null,
+        "work": {
+          "cursor_steps": 1033,
+          "cursor_pages": 9,
+          "catalogue_rows": 16854
+        }
+      }
+    }
   ]
 }

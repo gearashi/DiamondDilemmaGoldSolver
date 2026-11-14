@@ -1,6 +1,7 @@
 """Adaptive residuals, comparison witnesses, CP replay and root/pool interoperability."""
 import argparse
 from collections import Counter
+from contextlib import closing
 from itertools import combinations
 import json
 from math import comb
@@ -134,7 +135,7 @@ def main():
                 now=monotonic()
                 result=search_roots(problem,codes,f,208,db,start=0,stop=1,seconds=0.15,quantum=128)
                 elapsed=monotonic()-now
-                with connect(db) as check:
+                with closing(connect(db)) as check:
                     backlog=check.execute('SELECT count(*) FROM r31_root_cursor').fetchone()[0]
                 assert not result['range_finished'] and result['work'].get('cursor_steps',0)>0 and backlog>0
                 timed.append(dict(family=f,attempt=i+1,allowance=0.15,elapsed=elapsed,result=result))
