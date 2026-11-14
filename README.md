@@ -6,7 +6,7 @@ A CPU and GPU search tool for the **Gold Challenge** of Diamond Dilemma on Windo
 
 The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaapsch.net/puzzles/diamdil.htm).
 
-The [Round 25 results and hardware settings](docs/ROUND25_RESULTS.md) cover all 37 new optional improvements, frozen comparisons and adverse cases. The [37-proposal register](docs/ROUND25.md) records implemented scope and controls; all new options default off. Fewer decisions and repeated reasoning are assessed separately from speed. Earlier [Round 24](docs/ROUND24.md) and [Round 23](docs/ROUND23.md) registers retain the 42- and 52-proposal evaluations as historical evidence.
+The [v1.7.0 results and recommended settings](docs/ROUND26_RESULTS.md) cover 17 workstreams and 81 scoped evaluations. They include exact CPU and CUDA search, shared SAT reasoning, disk-backed progress, regional pruning, incremental GPU scoring and repair. The [workstream register](docs/round26-workstreams.json) records which candidates reduced steps, which saved repeated work and where extra work outweighed the benefit. Earlier evaluations are available for [Round 25](docs/ROUND25_RESULTS.md), [Round 24](docs/ROUND24.md) and [Round 23](docs/ROUND23.md).
 
 ## Requirements
 

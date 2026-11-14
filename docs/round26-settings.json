@@ -1,0 +1,4298 @@
+{
+  "source_commit": "2b031e0b17e6dd9361b51438d996fa8e38077ff1",
+  "matrix_sha256": "a6cd38f62b71c028e16716e69c99240eab5ee40e97cd9a33eb53a74216081cd1",
+  "suites": {
+    "cpu-finite": {
+      "command": [
+        "python",
+        "-B",
+        "benchmark_round26.py",
+        "--suite",
+        "finite",
+        "--profiles",
+        "baseline",
+        "round26-reuse",
+        "round26-shared",
+        "round26-deductions",
+        "--free-cell-counts",
+        "8",
+        "24",
+        "--finite-seconds",
+        "30",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "<fresh-directory>"
+      ],
+      "sha256": "313d4c654ac9f49293b99044202b6b436fa79a7d84d6db8ebad7f6b45689ef1a",
+      "profiles": {
+        "baseline": {
+          "cases": 6,
+          "solved": 6,
+          "proved_unsat": 0,
+          "completed_nodes": 129,
+          "status_counts": {
+            "solved": 6
+          }
+        },
+        "round26-reuse": {
+          "cases": 6,
+          "solved": 6,
+          "proved_unsat": 0,
+          "completed_nodes": 135,
+          "status_counts": {
+            "solved": 6
+          }
+        },
+        "round26-shared": {
+          "cases": 6,
+          "solved": 6,
+          "proved_unsat": 0,
+          "completed_nodes": 200,
+          "status_counts": {
+            "solved": 6
+          }
+        },
+        "round26-deductions": {
+          "cases": 6,
+          "solved": 2,
+          "proved_unsat": 0,
+          "completed_nodes": 17,
+          "status_counts": {
+            "solved": 2,
+            "timeout": 4
+          }
+        }
+      },
+      "runs": [
+        {
+          "engine": "cpu",
+          "case": "small",
+          "profile": "baseline",
+          "seed": 817,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 10,
+          "fingerprint": "f195ba77ec62c26222e647d9a150da52785ba31783715de8f2120461c6b5e16a",
+          "domains_sha256": "fb59f164bce743c51a7f072f755c80c538717d0e50408b7c6716985f2083eda0",
+          "wall_seconds": 1.453,
+          "worker_process_seconds": 1.938,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 27,
+            "arc_revisions": 29,
+            "backtracks": 0,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 1
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "small",
+          "profile": "round26-reuse",
+          "seed": 817,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 11,
+          "fingerprint": "f195ba77ec62c26222e647d9a150da52785ba31783715de8f2120461c6b5e16a",
+          "domains_sha256": "fb59f164bce743c51a7f072f755c80c538717d0e50408b7c6716985f2083eda0",
+          "wall_seconds": 5.141,
+          "worker_process_seconds": 5.609,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 16,
+            "arc_revisions": 33,
+            "backtracks": 0,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 3
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "small",
+          "profile": "round26-shared",
+          "seed": 817,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 11,
+          "fingerprint": "f195ba77ec62c26222e647d9a150da52785ba31783715de8f2120461c6b5e16a",
+          "domains_sha256": "fb59f164bce743c51a7f072f755c80c538717d0e50408b7c6716985f2083eda0",
+          "wall_seconds": 5.313,
+          "worker_process_seconds": 5.875,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 15,
+            "arc_revisions": 32,
+            "backtracks": 0,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 3
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "small",
+          "profile": "round26-deductions",
+          "seed": 817,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 9,
+          "fingerprint": "f195ba77ec62c26222e647d9a150da52785ba31783715de8f2120461c6b5e16a",
+          "domains_sha256": "fb59f164bce743c51a7f072f755c80c538717d0e50408b7c6716985f2083eda0",
+          "wall_seconds": 30.844,
+          "worker_process_seconds": 31.343,
+          "cartesian_assignments": {
+            "initial": "22654638800640",
+            "closed": "3873032064000"
+          },
+          "checkpoint_bytes": 131636,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 2,
+            "completed_jobs": 0,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 9,
+            "arc_revisions": 8,
+            "backtracks": 0,
+            "leaves": 0,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 0,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 9
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "baseline",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 8,
+          "fingerprint": "ebf78da488e9ac522adb74ada7f51a5747d700b0e45fff60014dfc543a04d6e5",
+          "domains_sha256": "5ef4c8d41d1864dcd0f0a121b430b04b1a6ea3cfdb8605b3f9f5029e18812c31",
+          "wall_seconds": 2.187,
+          "worker_process_seconds": 2.703,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 2,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 18,
+            "arc_revisions": 23,
+            "backtracks": 1,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 2,
+            "parallel_splits": 2,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 2
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "round26-reuse",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 10,
+          "fingerprint": "ebf78da488e9ac522adb74ada7f51a5747d700b0e45fff60014dfc543a04d6e5",
+          "domains_sha256": "5ef4c8d41d1864dcd0f0a121b430b04b1a6ea3cfdb8605b3f9f5029e18812c31",
+          "wall_seconds": 6.422,
+          "worker_process_seconds": 6.937,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 2,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 17,
+            "arc_revisions": 36,
+            "backtracks": 2,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 2,
+            "parallel_splits": 2,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 5
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "round26-shared",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 9,
+          "fingerprint": "ebf78da488e9ac522adb74ada7f51a5747d700b0e45fff60014dfc543a04d6e5",
+          "domains_sha256": "5ef4c8d41d1864dcd0f0a121b430b04b1a6ea3cfdb8605b3f9f5029e18812c31",
+          "wall_seconds": 6.86,
+          "worker_process_seconds": 7.39,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 2,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 16,
+            "arc_revisions": 36,
+            "backtracks": 2,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 2,
+            "parallel_splits": 2,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 5
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "round26-deductions",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 9,
+          "fingerprint": "ebf78da488e9ac522adb74ada7f51a5747d700b0e45fff60014dfc543a04d6e5",
+          "domains_sha256": "5ef4c8d41d1864dcd0f0a121b430b04b1a6ea3cfdb8605b3f9f5029e18812c31",
+          "wall_seconds": 22.281,
+          "worker_process_seconds": 22.766,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 3,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 9,
+            "arc_revisions": 29,
+            "backtracks": 2,
+            "leaves": 0,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 3,
+            "parallel_splits": 3,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 10
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "baseline",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 56,
+          "fingerprint": "09896fb0134dd0ae2bbc08ba5faa543a46754df74175319b1fb49ab0d2c4a177",
+          "domains_sha256": "15b6a9cd11daa18dfefcfe90c1702180e76798aebb3606e0678305a3e6b3d92b",
+          "wall_seconds": 3.156,
+          "worker_process_seconds": 3.688,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 84,
+            "arc_revisions": 441,
+            "backtracks": 26,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 2
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "round26-reuse",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 34,
+          "fingerprint": "09896fb0134dd0ae2bbc08ba5faa543a46754df74175319b1fb49ab0d2c4a177",
+          "domains_sha256": "15b6a9cd11daa18dfefcfe90c1702180e76798aebb3606e0678305a3e6b3d92b",
+          "wall_seconds": 10.156,
+          "worker_process_seconds": 10.719,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 43,
+            "arc_revisions": 137,
+            "backtracks": 8,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 4
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "round26-shared",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 99,
+          "fingerprint": "09896fb0134dd0ae2bbc08ba5faa543a46754df74175319b1fb49ab0d2c4a177",
+          "domains_sha256": "15b6a9cd11daa18dfefcfe90c1702180e76798aebb3606e0678305a3e6b3d92b",
+          "wall_seconds": 22.766,
+          "worker_process_seconds": 23.344,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 128,
+            "arc_revisions": 563,
+            "backtracks": 48,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 8
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "round26-deductions",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 9,
+          "fingerprint": "09896fb0134dd0ae2bbc08ba5faa543a46754df74175319b1fb49ab0d2c4a177",
+          "domains_sha256": "15b6a9cd11daa18dfefcfe90c1702180e76798aebb3606e0678305a3e6b3d92b",
+          "wall_seconds": 30.938,
+          "worker_process_seconds": 31.484,
+          "cartesian_assignments": {
+            "initial": "80923828321089341416495758781012377600000",
+            "closed": "80923828321077275953546308501750743040000"
+          },
+          "checkpoint_bytes": 306489,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 2,
+            "completed_jobs": 0,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 9,
+            "arc_revisions": 106,
+            "backtracks": 0,
+            "leaves": 0,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 0,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 9
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "round26-deductions",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 11,
+          "fingerprint": "8c80a239f67854b08a47d7c5f9796274a88d31cd022b2159c6c3c5349f8fd812",
+          "domains_sha256": "4dc74a215916e6a9c842170bbaaffd2efd3fa35cd200da9e634a8dce588f0059",
+          "wall_seconds": 31.047,
+          "worker_process_seconds": 32.063,
+          "cartesian_assignments": {
+            "initial": "104362593751397518572872874756854513664000",
+            "closed": "104362593751397439272130140094992916480000"
+          },
+          "checkpoint_bytes": 333481,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 2,
+            "completed_jobs": 0,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 14,
+            "arc_revisions": 126,
+            "backtracks": 0,
+            "leaves": 0,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 0,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 9
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "round26-shared",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 60,
+          "fingerprint": "8c80a239f67854b08a47d7c5f9796274a88d31cd022b2159c6c3c5349f8fd812",
+          "domains_sha256": "4dc74a215916e6a9c842170bbaaffd2efd3fa35cd200da9e634a8dce588f0059",
+          "wall_seconds": 19.078,
+          "worker_process_seconds": 19.578,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 89,
+            "arc_revisions": 211,
+            "backtracks": 7,
+            "leaves": 5,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 7
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "round26-reuse",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 59,
+          "fingerprint": "8c80a239f67854b08a47d7c5f9796274a88d31cd022b2159c6c3c5349f8fd812",
+          "domains_sha256": "4dc74a215916e6a9c842170bbaaffd2efd3fa35cd200da9e634a8dce588f0059",
+          "wall_seconds": 18.188,
+          "worker_process_seconds": 18.687,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 85,
+            "arc_revisions": 197,
+            "backtracks": 8,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 7
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "baseline",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 34,
+          "fingerprint": "8c80a239f67854b08a47d7c5f9796274a88d31cd022b2159c6c3c5349f8fd812",
+          "domains_sha256": "4dc74a215916e6a9c842170bbaaffd2efd3fa35cd200da9e634a8dce588f0059",
+          "wall_seconds": 2.672,
+          "worker_process_seconds": 3.188,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 68,
+            "arc_revisions": 101,
+            "backtracks": 2,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 2
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "round26-deductions",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 8,
+          "fingerprint": "4740a93401fb3fda202c71e7efd7e94ed2169acfc9f952d3d26b76c128235a02",
+          "domains_sha256": "b9da8bdbc8cb6090c162310a9b6564574b88c612e7e0b61ca0100ffa4a0422d3",
+          "wall_seconds": 28.906,
+          "worker_process_seconds": 29.406,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 8,
+            "arc_revisions": 34,
+            "backtracks": 0,
+            "leaves": 0,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 9
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "round26-shared",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 10,
+          "fingerprint": "4740a93401fb3fda202c71e7efd7e94ed2169acfc9f952d3d26b76c128235a02",
+          "domains_sha256": "b9da8bdbc8cb6090c162310a9b6564574b88c612e7e0b61ca0100ffa4a0422d3",
+          "wall_seconds": 6.609,
+          "worker_process_seconds": 7.125,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 18,
+            "arc_revisions": 33,
+            "backtracks": 3,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 3
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "round26-reuse",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 10,
+          "fingerprint": "4740a93401fb3fda202c71e7efd7e94ed2169acfc9f952d3d26b76c128235a02",
+          "domains_sha256": "b9da8bdbc8cb6090c162310a9b6564574b88c612e7e0b61ca0100ffa4a0422d3",
+          "wall_seconds": 5.766,
+          "worker_process_seconds": 6.265,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 18,
+            "arc_revisions": 33,
+            "backtracks": 3,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 3
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "residual",
+          "profile": "baseline",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 10,
+          "fingerprint": "4740a93401fb3fda202c71e7efd7e94ed2169acfc9f952d3d26b76c128235a02",
+          "domains_sha256": "b9da8bdbc8cb6090c162310a9b6564574b88c612e7e0b61ca0100ffa4a0422d3",
+          "wall_seconds": 2.016,
+          "worker_process_seconds": 2.485,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 26,
+            "arc_revisions": 17,
+            "backtracks": 0,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 2
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "small",
+          "profile": "round26-deductions",
+          "seed": 291,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 9,
+          "fingerprint": "d1d5029dd96c602ad64575f6d5bd3b02ddb829d487ce7c919b434dd590666a0d",
+          "domains_sha256": "3c8b8dceda4c6dc69e2774a0b1da389945e5b75b1b873dd0a7f7c6787818d2ac",
+          "wall_seconds": 30.828,
+          "worker_process_seconds": 31.313,
+          "cartesian_assignments": {
+            "initial": "23227585920000",
+            "closed": "3599576534400"
+          },
+          "checkpoint_bytes": 131638,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 2,
+            "completed_jobs": 0,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 9,
+            "arc_revisions": 5,
+            "backtracks": 0,
+            "leaves": 0,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 0,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 9
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "small",
+          "profile": "round26-shared",
+          "seed": 291,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 11,
+          "fingerprint": "d1d5029dd96c602ad64575f6d5bd3b02ddb829d487ce7c919b434dd590666a0d",
+          "domains_sha256": "3c8b8dceda4c6dc69e2774a0b1da389945e5b75b1b873dd0a7f7c6787818d2ac",
+          "wall_seconds": 5.062,
+          "worker_process_seconds": 5.516,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 20,
+            "arc_revisions": 25,
+            "backtracks": 0,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 3
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "small",
+          "profile": "round26-reuse",
+          "seed": 291,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 11,
+          "fingerprint": "d1d5029dd96c602ad64575f6d5bd3b02ddb829d487ce7c919b434dd590666a0d",
+          "domains_sha256": "3c8b8dceda4c6dc69e2774a0b1da389945e5b75b1b873dd0a7f7c6787818d2ac",
+          "wall_seconds": 4.625,
+          "worker_process_seconds": 5.094,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 19,
+            "arc_revisions": 25,
+            "backtracks": 0,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 3
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "small",
+          "profile": "baseline",
+          "seed": 291,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 11,
+          "fingerprint": "d1d5029dd96c602ad64575f6d5bd3b02ddb829d487ce7c919b434dd590666a0d",
+          "domains_sha256": "3c8b8dceda4c6dc69e2774a0b1da389945e5b75b1b873dd0a7f7c6787818d2ac",
+          "wall_seconds": 1.469,
+          "worker_process_seconds": 1.938,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "jobs": {
+            "workers": 1,
+            "pending_jobs": 1,
+            "completed_jobs": 1,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 38,
+            "arc_revisions": 28,
+            "backtracks": 0,
+            "leaves": 1,
+            "parallel_workers_started": 1,
+            "parallel_jobs_completed": 1,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 1
+          }
+        }
+      ]
+    },
+    "cpu-original": {
+      "command": [
+        "python",
+        "-B",
+        "benchmark_round26.py",
+        "--suite",
+        "original",
+        "--profiles",
+        "baseline",
+        "round26-reuse",
+        "--worker-counts",
+        "4",
+        "8",
+        "--seconds",
+        "45",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "<fresh-directory>"
+      ],
+      "sha256": "3a0aa5ae6765df6b421a6c9e122fd7968db6da1798ae5a147fe4eb99f2d991b1",
+      "profiles": {
+        "baseline": {
+          "cases": 4,
+          "solved": 0,
+          "proved_unsat": 0,
+          "completed_nodes": 0,
+          "status_counts": {
+            "timeout": 4
+          }
+        },
+        "round26-reuse": {
+          "cases": 4,
+          "solved": 0,
+          "proved_unsat": 0,
+          "completed_nodes": 0,
+          "status_counts": {
+            "timeout": 4
+          }
+        }
+      },
+      "runs": [
+        {
+          "engine": "cpu",
+          "case": "original",
+          "profile": "baseline",
+          "seed": 71,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 4,
+          "replicas": 0,
+          "budget_seconds": 45.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 53,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 45.609,
+          "worker_process_seconds": 46.188,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "371602480990133952581405665906160153370922291387155878305664438526412598345027871445346133080136249771144407357542906650916782982454030513315052314824498619046637317050059420429166782778754383020222708659172870525185599067609489082586940291434425211881487523370039248167703929960151977291198593069908023354679365542385811482261266627807532977060314513627347496831586298832122369927052802008525715215589373578862551083029618688000"
+          },
+          "checkpoint_bytes": 1083288,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "jobs": {
+            "workers": 4,
+            "pending_jobs": 8,
+            "completed_jobs": 0,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 55,
+            "arc_revisions": 490,
+            "backtracks": 0,
+            "leaves": 0,
+            "parallel_workers_started": 4,
+            "parallel_jobs_completed": 0,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 52
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "original",
+          "profile": "round26-reuse",
+          "seed": 71,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 4,
+          "replicas": 0,
+          "budget_seconds": 45.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 50,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 45.984,
+          "worker_process_seconds": 46.578,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "371602480990133869692549978480374091378990811670387592631240084112824834705225874727354750008600081825479131530724967148003720910621199660980800037615879167265272563996769277622266956471331330415540807532701327533944124002557813743268310767290118247311863417991244783338195369723066745414484511309652346812752276119752375801734776509240266677146095756251678040917283245546914613196502134770349116699876759184080649900194521088000"
+          },
+          "checkpoint_bytes": 1377412,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 4,
+            "pending_jobs": 8,
+            "completed_jobs": 0,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 50,
+            "arc_revisions": 374,
+            "backtracks": 0,
+            "leaves": 0,
+            "parallel_workers_started": 4,
+            "parallel_jobs_completed": 0,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 48
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "original",
+          "profile": "baseline",
+          "seed": 71,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 8,
+          "replicas": 0,
+          "budget_seconds": 45.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 87,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 45.75,
+          "worker_process_seconds": 46.39,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "371628834898770119912241526127964653069481821159026616605656372363236327713923643537032541493444626525897535181394867791259600564581460457864433686239896182647242773306392467871622473607815292409836766571148375722968268575816554307549829042245444973949633739654406721064186581106547203013098559730409121221468246155285667928727221249713334852614167149214496935038257151217642576208729003855620212661681773464847977783708868608000"
+          },
+          "checkpoint_bytes": 1917419,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "jobs": {
+            "workers": 8,
+            "pending_jobs": 16,
+            "completed_jobs": 0,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 87,
+            "arc_revisions": 751,
+            "backtracks": 0,
+            "leaves": 0,
+            "parallel_workers_started": 8,
+            "parallel_jobs_completed": 0,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 98
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "original",
+          "profile": "round26-reuse",
+          "seed": 71,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 8,
+          "replicas": 0,
+          "budget_seconds": 45.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 77,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 46.281,
+          "worker_process_seconds": 46.844,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "371628834898770119899582072580979518882622309670783546289245653429339758034100890725888295355544970248384408181000323654805425486699424576897729427494488043099820586483236766075968851135400796528450567711910907726102837450152794237864734403818601310376401386663073829301946383500569249916600872446168963558900638587597725890420274115979249938687790942272895558187153607869810317889310141920195907069748376789955177783708868608000"
+          },
+          "checkpoint_bytes": 2153463,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 8,
+            "pending_jobs": 16,
+            "completed_jobs": 0,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 77,
+            "arc_revisions": 747,
+            "backtracks": 0,
+            "leaves": 0,
+            "parallel_workers_started": 8,
+            "parallel_jobs_completed": 0,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 88
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "original",
+          "profile": "round26-reuse",
+          "seed": 197,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 8,
+          "replicas": 0,
+          "budget_seconds": 45.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 82,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 46.593,
+          "worker_process_seconds": 47.234,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "371628834914571330463050420709298158930433531730626468232255209185314945450152284608731077194993298651709114954541247906575150786393230117937503422478034922701577302729665375708832970757584871047210888802676421534370040341045648216756321384294754822844965919729244768519356811663786559795442949306602439497841205023867536561140884971141231972183406184492797735821461837919077863279408448105647835822498447581100268966064947200000"
+          },
+          "checkpoint_bytes": 2193223,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 8,
+            "pending_jobs": 16,
+            "completed_jobs": 0,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 82,
+            "arc_revisions": 775,
+            "backtracks": 0,
+            "leaves": 0,
+            "parallel_workers_started": 8,
+            "parallel_jobs_completed": 0,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 93
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "original",
+          "profile": "baseline",
+          "seed": 197,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 8,
+          "replicas": 0,
+          "budget_seconds": 45.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 89,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 45.891,
+          "worker_process_seconds": 46.515,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "371628834914571330475709874256283293117293043218869538548665928119211515129975037419875323332892954929222241954935792043029325864275265998904207681223443062248999489552821077504486593229999366928597087661913889531235471466709408286441416022721598486418198272720577660281597009269764512891940636590842597160408812591555478599447832104875316886109782391434399112672565381266910121598827310041072141414431844255993068966064947200000"
+          },
+          "checkpoint_bytes": 1917386,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "jobs": {
+            "workers": 8,
+            "pending_jobs": 16,
+            "completed_jobs": 0,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 89,
+            "arc_revisions": 779,
+            "backtracks": 0,
+            "leaves": 0,
+            "parallel_workers_started": 8,
+            "parallel_jobs_completed": 0,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 100
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "original",
+          "profile": "round26-reuse",
+          "seed": 197,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 4,
+          "replicas": 0,
+          "budget_seconds": 45.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 50,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 46.11,
+          "worker_process_seconds": 46.688,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "371602481005935154567592082304130788969325705845024735558123003691571213753757224574125122769843598722708944849957689034121606482681838594745340756605011780332376783721678117581682318991202063267288674647044694758827811607825098924273000806374915828424056164514667455954290297545399391354334424068793252091506679459218846808758146063940929576878215334390355634035785919362946335444605287613276232584381829508022707825441505280000"
+          },
+          "checkpoint_bytes": 1300307,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "jobs": {
+            "workers": 4,
+            "pending_jobs": 8,
+            "completed_jobs": 0,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 52,
+            "arc_revisions": 492,
+            "backtracks": 0,
+            "leaves": 0,
+            "parallel_workers_started": 4,
+            "parallel_jobs_completed": 0,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 48
+          }
+        },
+        {
+          "engine": "cpu",
+          "case": "original",
+          "profile": "baseline",
+          "seed": 197,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 4,
+          "replicas": 0,
+          "budget_seconds": 45.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 51,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 45.61,
+          "worker_process_seconds": 46.188,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "371602481005935154567591982161781273643389917099793986432183497754740752016973407930648341646012217330569201127359234111091136047281477595479022335545337261484733383233315070069077490657911175805747666119070653347525683814028506189209601051250509100993895772316312771306827319791944005940208834944140891757397466881093848591732320822965378704342295659423621430548350897496239485981241742580795992627562713125178391037665607680000"
+          },
+          "checkpoint_bytes": 1083051,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "jobs": {
+            "workers": 4,
+            "pending_jobs": 8,
+            "completed_jobs": 0,
+            "replayed_jobs": 0
+          },
+          "work": {
+            "propagations": 52,
+            "arc_revisions": 486,
+            "backtracks": 0,
+            "leaves": 0,
+            "parallel_workers_started": 4,
+            "parallel_jobs_completed": 0,
+            "parallel_splits": 1,
+            "parallel_replayed_jobs": 0,
+            "parallel_slices_started": 48
+          }
+        }
+      ]
+    },
+    "gpu-finite": {
+      "command": [
+        "python",
+        "-B",
+        "benchmark_round26.py",
+        "--suite",
+        "gpu",
+        "--gpu-cases",
+        "small",
+        "residual",
+        "--free-cell-counts",
+        "8",
+        "24",
+        "--gpu-profiles",
+        "combined",
+        "round26-reuse",
+        "round26-matching",
+        "round26-cooperative",
+        "--replicas",
+        "128",
+        "--finite-seconds",
+        "30",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "<fresh-directory>"
+      ],
+      "sha256": "37e8e217d61513ae80acda20b2b7f1f6ffdbd12e8e27a50eb6104abd90f6bd00",
+      "profiles": {
+        "combined": {
+          "cases": 6,
+          "solved": 6,
+          "proved_unsat": 0,
+          "completed_nodes": 10514,
+          "status_counts": {
+            "solved": 6
+          }
+        },
+        "round26-reuse": {
+          "cases": 6,
+          "solved": 6,
+          "proved_unsat": 0,
+          "completed_nodes": 9848,
+          "status_counts": {
+            "solved": 6
+          }
+        },
+        "round26-matching": {
+          "cases": 6,
+          "solved": 6,
+          "proved_unsat": 0,
+          "completed_nodes": 6084,
+          "status_counts": {
+            "solved": 6
+          }
+        },
+        "round26-cooperative": {
+          "cases": 6,
+          "solved": 6,
+          "proved_unsat": 0,
+          "completed_nodes": 6264,
+          "status_counts": {
+            "solved": 6
+          }
+        }
+      },
+      "runs": [
+        {
+          "engine": "gpu",
+          "case": "small",
+          "profile": "combined",
+          "seed": 817,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 1606,
+          "fingerprint": "f195ba77ec62c26222e647d9a150da52785ba31783715de8f2120461c6b5e16a",
+          "domains_sha256": "fb59f164bce743c51a7f072f755c80c538717d0e50408b7c6716985f2083eda0",
+          "wall_seconds": 7.75,
+          "worker_process_seconds": 8.265,
+          "solver_wall_seconds": 1.36,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 1606,
+            "domain_removals": 23001,
+            "support_checks": 174413,
+            "gpu_domain_completed": 0,
+            "support_word_scans": 0,
+            "support_cache_hits": 0,
+            "clause_units": 3,
+            "learned_clauses": 832,
+            "event_cell_scans": 27635,
+            "event_inventory_words": 2044
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "small",
+          "profile": "round26-reuse",
+          "seed": 817,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 834,
+          "fingerprint": "f195ba77ec62c26222e647d9a150da52785ba31783715de8f2120461c6b5e16a",
+          "domains_sha256": "fb59f164bce743c51a7f072f755c80c538717d0e50408b7c6716985f2083eda0",
+          "wall_seconds": 10.047,
+          "worker_process_seconds": 10.594,
+          "solver_wall_seconds": 1.406,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 834,
+            "domain_removals": 15415,
+            "support_checks": 140797,
+            "gpu_domain_completed": 0,
+            "support_word_scans": 196650,
+            "support_cache_hits": 422413,
+            "clause_units": 1,
+            "learned_clauses": 218,
+            "event_cell_scans": 17925,
+            "event_inventory_words": 1026
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "small",
+          "profile": "round26-matching",
+          "seed": 817,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 965,
+          "fingerprint": "f195ba77ec62c26222e647d9a150da52785ba31783715de8f2120461c6b5e16a",
+          "domains_sha256": "fb59f164bce743c51a7f072f755c80c538717d0e50408b7c6716985f2083eda0",
+          "wall_seconds": 12.328,
+          "worker_process_seconds": 12.859,
+          "solver_wall_seconds": 1.421,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 965,
+            "domain_removals": 16120,
+            "support_checks": 134210,
+            "gpu_domain_completed": 10,
+            "support_word_scans": 194848,
+            "support_cache_hits": 400327,
+            "clause_units": 1,
+            "learned_clauses": 307,
+            "event_cell_scans": 19307,
+            "event_inventory_words": 1266
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "small",
+          "profile": "round26-cooperative",
+          "seed": 817,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 1534,
+          "fingerprint": "f195ba77ec62c26222e647d9a150da52785ba31783715de8f2120461c6b5e16a",
+          "domains_sha256": "fb59f164bce743c51a7f072f755c80c538717d0e50408b7c6716985f2083eda0",
+          "wall_seconds": 10.843,
+          "worker_process_seconds": 11.344,
+          "solver_wall_seconds": 1.875,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 1534,
+            "domain_removals": 19721,
+            "support_checks": 151935,
+            "gpu_domain_completed": 12,
+            "support_word_scans": 212362,
+            "support_cache_hits": 457688,
+            "clause_units": 2,
+            "learned_clauses": 701,
+            "event_cell_scans": 25185,
+            "event_inventory_words": 1931
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "combined",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 87,
+          "fingerprint": "ebf78da488e9ac522adb74ada7f51a5747d700b0e45fff60014dfc543a04d6e5",
+          "domains_sha256": "5ef4c8d41d1864dcd0f0a121b430b04b1a6ea3cfdb8605b3f9f5029e18812c31",
+          "wall_seconds": 13.578,
+          "worker_process_seconds": 14.141,
+          "solver_wall_seconds": 2.047,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 87,
+            "domain_removals": 499,
+            "support_checks": 28514,
+            "gpu_domain_completed": 120,
+            "support_word_scans": 0,
+            "support_cache_hits": 0,
+            "clause_units": 0,
+            "learned_clauses": 58,
+            "event_cell_scans": 27539,
+            "event_inventory_words": 7800
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "round26-reuse",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 86,
+          "fingerprint": "ebf78da488e9ac522adb74ada7f51a5747d700b0e45fff60014dfc543a04d6e5",
+          "domains_sha256": "5ef4c8d41d1864dcd0f0a121b430b04b1a6ea3cfdb8605b3f9f5029e18812c31",
+          "wall_seconds": 17.203,
+          "worker_process_seconds": 17.922,
+          "solver_wall_seconds": 2.625,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 86,
+            "domain_removals": 498,
+            "support_checks": 28647,
+            "gpu_domain_completed": 120,
+            "support_word_scans": 1017742,
+            "support_cache_hits": 54808,
+            "clause_units": 0,
+            "learned_clauses": 58,
+            "event_cell_scans": 27670,
+            "event_inventory_words": 9025
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "round26-matching",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 21,
+          "fingerprint": "ebf78da488e9ac522adb74ada7f51a5747d700b0e45fff60014dfc543a04d6e5",
+          "domains_sha256": "5ef4c8d41d1864dcd0f0a121b430b04b1a6ea3cfdb8605b3f9f5029e18812c31",
+          "wall_seconds": 20.297,
+          "worker_process_seconds": 20.922,
+          "solver_wall_seconds": 2.937,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 21,
+            "domain_removals": 383,
+            "support_checks": 27878,
+            "gpu_domain_completed": 137,
+            "support_word_scans": 1140247,
+            "support_cache_hits": 44720,
+            "clause_units": 0,
+            "learned_clauses": 10,
+            "event_cell_scans": 26901,
+            "event_inventory_words": 26875
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "round26-cooperative",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 21,
+          "fingerprint": "ebf78da488e9ac522adb74ada7f51a5747d700b0e45fff60014dfc543a04d6e5",
+          "domains_sha256": "5ef4c8d41d1864dcd0f0a121b430b04b1a6ea3cfdb8605b3f9f5029e18812c31",
+          "wall_seconds": 19.016,
+          "worker_process_seconds": 19.562,
+          "solver_wall_seconds": 2.797,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 21,
+            "domain_removals": 381,
+            "support_checks": 25817,
+            "gpu_domain_completed": 134,
+            "support_word_scans": 1348624,
+            "support_cache_hits": 42402,
+            "clause_units": 0,
+            "learned_clauses": 11,
+            "event_cell_scans": 24906,
+            "event_inventory_words": 22250
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "combined",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 3806,
+          "fingerprint": "09896fb0134dd0ae2bbc08ba5faa543a46754df74175319b1fb49ab0d2c4a177",
+          "domains_sha256": "15b6a9cd11daa18dfefcfe90c1702180e76798aebb3606e0678305a3e6b3d92b",
+          "wall_seconds": 11.781,
+          "worker_process_seconds": 12.359,
+          "solver_wall_seconds": 6.391,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 3806,
+            "domain_removals": 42808,
+            "support_checks": 1037731,
+            "gpu_domain_completed": 0,
+            "support_word_scans": 0,
+            "support_cache_hits": 0,
+            "clause_units": 4,
+            "learned_clauses": 1281,
+            "event_cell_scans": 556658,
+            "event_inventory_words": 19355
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "round26-reuse",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 3598,
+          "fingerprint": "09896fb0134dd0ae2bbc08ba5faa543a46754df74175319b1fb49ab0d2c4a177",
+          "domains_sha256": "15b6a9cd11daa18dfefcfe90c1702180e76798aebb3606e0678305a3e6b3d92b",
+          "wall_seconds": 11.032,
+          "worker_process_seconds": 11.625,
+          "solver_wall_seconds": 5.86,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 3598,
+            "domain_removals": 41855,
+            "support_checks": 1011347,
+            "gpu_domain_completed": 0,
+            "support_word_scans": 41295782,
+            "support_cache_hits": 1429076,
+            "clause_units": 4,
+            "learned_clauses": 1089,
+            "event_cell_scans": 533487,
+            "event_inventory_words": 18260
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "round26-matching",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 1851,
+          "fingerprint": "09896fb0134dd0ae2bbc08ba5faa543a46754df74175319b1fb49ab0d2c4a177",
+          "domains_sha256": "15b6a9cd11daa18dfefcfe90c1702180e76798aebb3606e0678305a3e6b3d92b",
+          "wall_seconds": 9.406,
+          "worker_process_seconds": 9.968,
+          "solver_wall_seconds": 5.39,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 1851,
+            "domain_removals": 25118,
+            "support_checks": 708141,
+            "gpu_domain_completed": 0,
+            "support_word_scans": 31004225,
+            "support_cache_hits": 832153,
+            "clause_units": 0,
+            "learned_clauses": 376,
+            "event_cell_scans": 311597,
+            "event_inventory_words": 9975
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "round26-cooperative",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 1851,
+          "fingerprint": "09896fb0134dd0ae2bbc08ba5faa543a46754df74175319b1fb49ab0d2c4a177",
+          "domains_sha256": "15b6a9cd11daa18dfefcfe90c1702180e76798aebb3606e0678305a3e6b3d92b",
+          "wall_seconds": 8.625,
+          "worker_process_seconds": 9.281,
+          "solver_wall_seconds": 4.391,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 1851,
+            "domain_removals": 25118,
+            "support_checks": 708141,
+            "gpu_domain_completed": 0,
+            "support_word_scans": 42749862,
+            "support_cache_hits": 832153,
+            "clause_units": 0,
+            "learned_clauses": 376,
+            "event_cell_scans": 311597,
+            "event_inventory_words": 9975
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "round26-cooperative",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 2266,
+          "fingerprint": "8c80a239f67854b08a47d7c5f9796274a88d31cd022b2159c6c3c5349f8fd812",
+          "domains_sha256": "4dc74a215916e6a9c842170bbaaffd2efd3fa35cd200da9e634a8dce588f0059",
+          "wall_seconds": 10.703,
+          "worker_process_seconds": 11.328,
+          "solver_wall_seconds": 5.75,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 2266,
+            "domain_removals": 24920,
+            "support_checks": 775206,
+            "gpu_domain_completed": 17,
+            "support_word_scans": 46263505,
+            "support_cache_hits": 947187,
+            "clause_units": 0,
+            "learned_clauses": 323,
+            "event_cell_scans": 417711,
+            "event_inventory_words": 34790
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "round26-matching",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 2131,
+          "fingerprint": "8c80a239f67854b08a47d7c5f9796274a88d31cd022b2159c6c3c5349f8fd812",
+          "domains_sha256": "4dc74a215916e6a9c842170bbaaffd2efd3fa35cd200da9e634a8dce588f0059",
+          "wall_seconds": 12.172,
+          "worker_process_seconds": 12.734,
+          "solver_wall_seconds": 7.656,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 2131,
+            "domain_removals": 24506,
+            "support_checks": 754918,
+            "gpu_domain_completed": 17,
+            "support_word_scans": 34346215,
+            "support_cache_hits": 905006,
+            "clause_units": 0,
+            "learned_clauses": 239,
+            "event_cell_scans": 398771,
+            "event_inventory_words": 35245
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "round26-reuse",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 3484,
+          "fingerprint": "8c80a239f67854b08a47d7c5f9796274a88d31cd022b2159c6c3c5349f8fd812",
+          "domains_sha256": "4dc74a215916e6a9c842170bbaaffd2efd3fa35cd200da9e634a8dce588f0059",
+          "wall_seconds": 10.64,
+          "worker_process_seconds": 11.266,
+          "solver_wall_seconds": 5.797,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 3484,
+            "domain_removals": 35326,
+            "support_checks": 905343,
+            "gpu_domain_completed": 8,
+            "support_word_scans": 39015672,
+            "support_cache_hits": 1212435,
+            "clause_units": 0,
+            "learned_clauses": 1214,
+            "event_cell_scans": 504701,
+            "event_inventory_words": 26855
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "combined",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 3180,
+          "fingerprint": "8c80a239f67854b08a47d7c5f9796274a88d31cd022b2159c6c3c5349f8fd812",
+          "domains_sha256": "4dc74a215916e6a9c842170bbaaffd2efd3fa35cd200da9e634a8dce588f0059",
+          "wall_seconds": 9.922,
+          "worker_process_seconds": 10.625,
+          "solver_wall_seconds": 5.11,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 3180,
+            "domain_removals": 34164,
+            "support_checks": 866538,
+            "gpu_domain_completed": 9,
+            "support_word_scans": 0,
+            "support_cache_hits": 0,
+            "clause_units": 0,
+            "learned_clauses": 983,
+            "event_cell_scans": 471219,
+            "event_inventory_words": 19920
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "round26-cooperative",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 154,
+          "fingerprint": "4740a93401fb3fda202c71e7efd7e94ed2169acfc9f952d3d26b76c128235a02",
+          "domains_sha256": "b9da8bdbc8cb6090c162310a9b6564574b88c612e7e0b61ca0100ffa4a0422d3",
+          "wall_seconds": 5.031,
+          "worker_process_seconds": 5.765,
+          "solver_wall_seconds": 2.859,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 154,
+            "domain_removals": 698,
+            "support_checks": 58516,
+            "gpu_domain_completed": 96,
+            "support_word_scans": 2993072,
+            "support_cache_hits": 99604,
+            "clause_units": 0,
+            "learned_clauses": 69,
+            "event_cell_scans": 55505,
+            "event_inventory_words": 14140
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "round26-matching",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 154,
+          "fingerprint": "4740a93401fb3fda202c71e7efd7e94ed2169acfc9f952d3d26b76c128235a02",
+          "domains_sha256": "b9da8bdbc8cb6090c162310a9b6564574b88c612e7e0b61ca0100ffa4a0422d3",
+          "wall_seconds": 5.235,
+          "worker_process_seconds": 5.781,
+          "solver_wall_seconds": 3.047,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 154,
+            "domain_removals": 698,
+            "support_checks": 61312,
+            "gpu_domain_completed": 96,
+            "support_word_scans": 2396361,
+            "support_cache_hits": 104580,
+            "clause_units": 0,
+            "learned_clauses": 69,
+            "event_cell_scans": 58225,
+            "event_inventory_words": 14140
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "round26-reuse",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 469,
+          "fingerprint": "4740a93401fb3fda202c71e7efd7e94ed2169acfc9f952d3d26b76c128235a02",
+          "domains_sha256": "b9da8bdbc8cb6090c162310a9b6564574b88c612e7e0b61ca0100ffa4a0422d3",
+          "wall_seconds": 4.609,
+          "worker_process_seconds": 5.172,
+          "solver_wall_seconds": 2.312,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 469,
+            "domain_removals": 1297,
+            "support_checks": 83208,
+            "gpu_domain_completed": 35,
+            "support_word_scans": 3093614,
+            "support_cache_hits": 149892,
+            "clause_units": 1,
+            "learned_clauses": 203,
+            "event_cell_scans": 78421,
+            "event_inventory_words": 5530
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "residual",
+          "profile": "combined",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 469,
+          "fingerprint": "4740a93401fb3fda202c71e7efd7e94ed2169acfc9f952d3d26b76c128235a02",
+          "domains_sha256": "b9da8bdbc8cb6090c162310a9b6564574b88c612e7e0b61ca0100ffa4a0422d3",
+          "wall_seconds": 4.86,
+          "worker_process_seconds": 5.407,
+          "solver_wall_seconds": 2.344,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 469,
+            "domain_removals": 1297,
+            "support_checks": 83186,
+            "gpu_domain_completed": 35,
+            "support_word_scans": 0,
+            "support_cache_hits": 0,
+            "clause_units": 1,
+            "learned_clauses": 203,
+            "event_cell_scans": 78399,
+            "event_inventory_words": 5530
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "small",
+          "profile": "round26-cooperative",
+          "seed": 291,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 438,
+          "fingerprint": "d1d5029dd96c602ad64575f6d5bd3b02ddb829d487ce7c919b434dd590666a0d",
+          "domains_sha256": "3c8b8dceda4c6dc69e2774a0b1da389945e5b75b1b873dd0a7f7c6787818d2ac",
+          "wall_seconds": 3.5,
+          "worker_process_seconds": 4.141,
+          "solver_wall_seconds": 1.391,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 438,
+            "domain_removals": 11949,
+            "support_checks": 103440,
+            "gpu_domain_completed": 3,
+            "support_word_scans": 191939,
+            "support_cache_hits": 281968,
+            "clause_units": 0,
+            "learned_clauses": 15,
+            "event_cell_scans": 12181,
+            "event_inventory_words": 574
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "small",
+          "profile": "round26-matching",
+          "seed": 291,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 962,
+          "fingerprint": "d1d5029dd96c602ad64575f6d5bd3b02ddb829d487ce7c919b434dd590666a0d",
+          "domains_sha256": "3c8b8dceda4c6dc69e2774a0b1da389945e5b75b1b873dd0a7f7c6787818d2ac",
+          "wall_seconds": 3.765,
+          "worker_process_seconds": 4.265,
+          "solver_wall_seconds": 1.625,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 962,
+            "domain_removals": 16545,
+            "support_checks": 126714,
+            "gpu_domain_completed": 3,
+            "support_word_scans": 214715,
+            "support_cache_hits": 355195,
+            "clause_units": 0,
+            "learned_clauses": 161,
+            "event_cell_scans": 19876,
+            "event_inventory_words": 1291
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "small",
+          "profile": "round26-reuse",
+          "seed": 291,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 1377,
+          "fingerprint": "d1d5029dd96c602ad64575f6d5bd3b02ddb829d487ce7c919b434dd590666a0d",
+          "domains_sha256": "3c8b8dceda4c6dc69e2774a0b1da389945e5b75b1b873dd0a7f7c6787818d2ac",
+          "wall_seconds": 4.5,
+          "worker_process_seconds": 5.094,
+          "solver_wall_seconds": 1.687,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 1377,
+            "domain_removals": 20119,
+            "support_checks": 151247,
+            "gpu_domain_completed": 0,
+            "support_word_scans": 239884,
+            "support_cache_hits": 429545,
+            "clause_units": 1,
+            "learned_clauses": 464,
+            "event_cell_scans": 25162,
+            "event_inventory_words": 1820
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "small",
+          "profile": "combined",
+          "seed": 291,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 1366,
+          "fingerprint": "d1d5029dd96c602ad64575f6d5bd3b02ddb829d487ce7c919b434dd590666a0d",
+          "domains_sha256": "3c8b8dceda4c6dc69e2774a0b1da389945e5b75b1b873dd0a7f7c6787818d2ac",
+          "wall_seconds": 3.875,
+          "worker_process_seconds": 4.469,
+          "solver_wall_seconds": 1.437,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 1366,
+            "domain_removals": 20067,
+            "support_checks": 151102,
+            "gpu_domain_completed": 0,
+            "support_word_scans": 0,
+            "support_cache_hits": 0,
+            "clause_units": 1,
+            "learned_clauses": 452,
+            "event_cell_scans": 25084,
+            "event_inventory_words": 1807
+          }
+        }
+      ]
+    },
+    "gpu-original": {
+      "command": [
+        "python",
+        "-B",
+        "benchmark_round26.py",
+        "--suite",
+        "gpu",
+        "--gpu-cases",
+        "original",
+        "--gpu-profiles",
+        "combined",
+        "round26-reuse",
+        "round26-matching",
+        "round26-cooperative",
+        "--replicas",
+        "128",
+        "--seconds",
+        "30",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "<fresh-directory>"
+      ],
+      "sha256": "cd317cbe3e81c786a32a455bd425227a80e028ec4b10b10309d2650fd8978d19",
+      "profiles": {
+        "combined": {
+          "cases": 2,
+          "solved": 0,
+          "proved_unsat": 0,
+          "completed_nodes": 0,
+          "status_counts": {
+            "timeout": 2
+          }
+        },
+        "round26-reuse": {
+          "cases": 2,
+          "solved": 0,
+          "proved_unsat": 0,
+          "completed_nodes": 0,
+          "status_counts": {
+            "timeout": 2
+          }
+        },
+        "round26-matching": {
+          "cases": 2,
+          "solved": 0,
+          "proved_unsat": 0,
+          "completed_nodes": 0,
+          "status_counts": {
+            "timeout": 2
+          }
+        },
+        "round26-cooperative": {
+          "cases": 2,
+          "solved": 0,
+          "proved_unsat": 0,
+          "completed_nodes": 0,
+          "status_counts": {
+            "timeout": 2
+          }
+        }
+      },
+      "runs": [
+        {
+          "engine": "gpu",
+          "case": "original",
+          "profile": "combined",
+          "seed": 71,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 267,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 48.219,
+          "worker_process_seconds": 48.984,
+          "solver_wall_seconds": 33.25,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "197344746749026777370302327893787858048626958262047781548754146200316550035149803289941381797936606333548722369075768114419713556570962960388593377825195556659477846466007343542540040326480908666805806919383337863544075738656414738378176387586930399450462656465136062658829998255093084104178685340918144357347949619593200589053471314179016917328083457442081849063999897323879082361190760732544662346667306143666225010840698880000"
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 267,
+            "domain_removals": 1316221,
+            "support_checks": 92345173,
+            "gpu_domain_completed": 0,
+            "support_word_scans": 0,
+            "support_cache_hits": 0,
+            "clause_units": 0,
+            "learned_clauses": 0,
+            "event_cell_scans": 267284,
+            "event_inventory_words": 2000
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "original",
+          "profile": "round26-reuse",
+          "seed": 71,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 160,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 47.438,
+          "worker_process_seconds": 48.125,
+          "solver_wall_seconds": 32.984,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "197344627954843010594296752466678479352963715564516063060307772873275762944173288404022364716779203149478410487136737827142368208963215722420930049782479853664911370753866898296137598259013760590319604333182512362205913253596814157728403942226209549786452475556748434240770457207331429786622001690798594763476541350569453985776877394639452181181364509044546967733308123337385305684153368009298378675395329174851821850486374400000"
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 160,
+            "domain_removals": 884184,
+            "support_checks": 69874352,
+            "gpu_domain_completed": 0,
+            "support_word_scans": 2558635359,
+            "support_cache_hits": 885210,
+            "clause_units": 0,
+            "learned_clauses": 0,
+            "event_cell_scans": 194255,
+            "event_inventory_words": 1160
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "original",
+          "profile": "round26-matching",
+          "seed": 71,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 80,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 49.312,
+          "worker_process_seconds": 49.953,
+          "solver_wall_seconds": 31.969,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "197166343440390642897783368882873164048832144253902521877381953232804757668851124989547812110671687122402879658690592932697770108802399118982609943376863856273957662805895556751600342091465696606613892201468141264859299462939893594201732696823175105551994836477625748025038002332860174321937401576234006078371407548080109050540943880354485551642039002672129297391103991201709162496000000000000000000000000000000000000000000000000"
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 80,
+            "domain_removals": 352944,
+            "support_checks": 27670302,
+            "gpu_domain_completed": 47,
+            "support_word_scans": 1121691041,
+            "support_cache_hits": 426142,
+            "clause_units": 0,
+            "learned_clauses": 0,
+            "event_cell_scans": 81565,
+            "event_inventory_words": 205
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "original",
+          "profile": "round26-cooperative",
+          "seed": 71,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 291,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 52.984,
+          "worker_process_seconds": 53.672,
+          "solver_wall_seconds": 33.391,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "197379484370248687888386743106387989999671578294527126685248403688035192121250982150499631571738668210284581718853540970312317468358411716953747622251957139245037378267831796234734645045240914336509642469853288528920365483701538569611132403258092350314812692893741306739823391733008326588137943199721596676817398479406360294909837654455572351806486216211233530348030748050535111030093439621320522166189377340446238642233999360000"
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 291,
+            "domain_removals": 1437017,
+            "support_checks": 119907224,
+            "gpu_domain_completed": 47,
+            "support_word_scans": 8054311549,
+            "support_cache_hits": 1181724,
+            "clause_units": 0,
+            "learned_clauses": 2,
+            "event_cell_scans": 319107,
+            "event_inventory_words": 2695
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "original",
+          "profile": "round26-cooperative",
+          "seed": 197,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 276,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 39.609,
+          "worker_process_seconds": 40.282,
+          "solver_wall_seconds": 33.843,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "197379491750162188112560223346083047537168984974416559267387056754805986432998857638682243194070427932195932215312027068130368810457366758848502468985574747519096860307711703693101482319407373165035340426115082426252503440164153351540892770557898658151349993618859005081835733577979780552750405155773988587579616471892668912318756295108739346988878884979164252539047903610382774545668247654400829306620564336014184636179087360000"
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 276,
+            "domain_removals": 1408451,
+            "support_checks": 116270767,
+            "gpu_domain_completed": 47,
+            "support_word_scans": 7812713178,
+            "support_cache_hits": 1155498,
+            "clause_units": 0,
+            "learned_clauses": 2,
+            "event_cell_scans": 309553,
+            "event_inventory_words": 2545
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "original",
+          "profile": "round26-matching",
+          "seed": 197,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 80,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 34.688,
+          "worker_process_seconds": 35.328,
+          "solver_wall_seconds": 31.922,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "197533547287736344100352507669857720700870749685190504476136968303151926223507244318428005367812286075640319183999864505583434664923435334637888715452404709907619459789968381839461513151691201515442971285513027025013690770944419107665285495991333735815941728977718710158103827779882369327401754581606668053093921117027809222311572139007040144240677153900279789726573741393095092629286158336000000000000000000000000000000000000000"
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 80,
+            "domain_removals": 369502,
+            "support_checks": 32670424,
+            "gpu_domain_completed": 47,
+            "support_word_scans": 1273888138,
+            "support_cache_hits": 429866,
+            "clause_units": 0,
+            "learned_clauses": 0,
+            "event_cell_scans": 93201,
+            "event_inventory_words": 390
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "original",
+          "profile": "round26-reuse",
+          "seed": 197,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 166,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 36.734,
+          "worker_process_seconds": 37.359,
+          "solver_wall_seconds": 32.828,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "197344631752997043250483820751159515386706883071913230245060302953234169562453394456474151958375174141143248375114115493986872445284130556730241974231513673096414285526769448876473255477561811064677436739379110501264328591922913840310717792254820993404113050445100982742957275059079907294369764912763731681011085588234395921500563481601661721719253198790967023015003133913673721125378602941886503408088264917477155255328178176000"
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 166,
+            "domain_removals": 921967,
+            "support_checks": 70919108,
+            "gpu_domain_completed": 0,
+            "support_word_scans": 2601272582,
+            "support_cache_hits": 918193,
+            "clause_units": 0,
+            "learned_clauses": 0,
+            "event_cell_scans": 198045,
+            "event_inventory_words": 1200
+          }
+        },
+        {
+          "engine": "gpu",
+          "case": "original",
+          "profile": "combined",
+          "seed": 197,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 0,
+          "replicas": 128,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 267,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 39.25,
+          "worker_process_seconds": 39.953,
+          "solver_wall_seconds": 33.437,
+          "cartesian_assignments": {
+            "initial": "996776935125457988094674756543352086822454613367797962033252364769665591304456201736283268093020524955248451697478765044368246471576308506312977348340287256082818810525174008584139560857554872178561643673690857272102126439486565774163059436171048392014491426171398389760000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "closed": "197344746749026777370297595796949483274581159992739826006578385046784435260251400787209334166538345301255638934226529973388970634998073333232894419667080035313817683843803747740411025067594534519038369012432792742340473055695038942362684657732686120047680891424273673794798122523586037396608461973763321068515094314629253792766881274093279328075378466255121875467189012018901279249258537018030530938764086618818791931023196160000"
+          },
+          "checkpoint_bytes": 445,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "decisions": 267,
+            "domain_removals": 1309444,
+            "support_checks": 91561206,
+            "gpu_domain_completed": 0,
+            "support_word_scans": 0,
+            "support_cache_hits": 0,
+            "clause_units": 0,
+            "learned_clauses": 0,
+            "event_cell_scans": 264818,
+            "event_inventory_words": 1970
+          }
+        }
+      ]
+    },
+    "sat-finite": {
+      "command": [
+        "python",
+        "-B",
+        "benchmark_round26.py",
+        "--suite",
+        "sat",
+        "--sat-cases",
+        "small",
+        "residual",
+        "--free-cell-counts",
+        "8",
+        "24",
+        "--sat-profiles",
+        "baseline",
+        "round26-guards",
+        "round26-simplified",
+        "round26-theory",
+        "--finite-seconds",
+        "30",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "<fresh-directory>"
+      ],
+      "sha256": "398f30cbbcdbf933393a077dd84186de15ca262ab982d877503bc25e11047607",
+      "profiles": {
+        "baseline": {
+          "cases": 6,
+          "solved": 5,
+          "proved_unsat": 0,
+          "completed_nodes": 4775,
+          "status_counts": {
+            "solved": 5,
+            "timeout": 1
+          }
+        },
+        "round26-guards": {
+          "cases": 6,
+          "solved": 4,
+          "proved_unsat": 0,
+          "completed_nodes": 167,
+          "status_counts": {
+            "solved": 4,
+            "timeout": 2
+          }
+        },
+        "round26-simplified": {
+          "cases": 6,
+          "solved": 5,
+          "proved_unsat": 0,
+          "completed_nodes": 6638,
+          "status_counts": {
+            "solved": 5,
+            "timeout": 1
+          }
+        },
+        "round26-theory": {
+          "cases": 6,
+          "solved": 6,
+          "proved_unsat": 0,
+          "completed_nodes": 2727,
+          "status_counts": {
+            "solved": 6
+          }
+        }
+      },
+      "runs": [
+        {
+          "engine": "sat",
+          "case": "small",
+          "profile": "baseline",
+          "seed": 817,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 60,
+          "fingerprint": "f195ba77ec62c26222e647d9a150da52785ba31783715de8f2120461c6b5e16a",
+          "domains_sha256": "fb59f164bce743c51a7f072f755c80c538717d0e50408b7c6716985f2083eda0",
+          "wall_seconds": 0.078,
+          "worker_process_seconds": 0.782,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 11375,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 60,
+            "session_core_decisions": 0,
+            "session_total_decisions": 60,
+            "session_model_builds": 1,
+            "session_native_calls": 1,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "small",
+          "profile": "round26-guards",
+          "seed": 817,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 60,
+          "fingerprint": "f195ba77ec62c26222e647d9a150da52785ba31783715de8f2120461c6b5e16a",
+          "domains_sha256": "fb59f164bce743c51a7f072f755c80c538717d0e50408b7c6716985f2083eda0",
+          "wall_seconds": 0.063,
+          "worker_process_seconds": 0.625,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 11373,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 60,
+            "session_core_decisions": 0,
+            "session_total_decisions": 60,
+            "session_model_builds": 1,
+            "session_native_calls": 1,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "small",
+          "profile": "round26-simplified",
+          "seed": 817,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 1295,
+          "fingerprint": "f195ba77ec62c26222e647d9a150da52785ba31783715de8f2120461c6b5e16a",
+          "domains_sha256": "fb59f164bce743c51a7f072f755c80c538717d0e50408b7c6716985f2083eda0",
+          "wall_seconds": 1.422,
+          "worker_process_seconds": 1.89,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 32563,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 1295,
+            "session_core_decisions": 0,
+            "session_total_decisions": 1295,
+            "session_model_builds": 1,
+            "session_native_calls": 76,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "small",
+          "profile": "round26-theory",
+          "seed": 817,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 102,
+          "fingerprint": "f195ba77ec62c26222e647d9a150da52785ba31783715de8f2120461c6b5e16a",
+          "domains_sha256": "fb59f164bce743c51a7f072f755c80c538717d0e50408b7c6716985f2083eda0",
+          "wall_seconds": 0.156,
+          "worker_process_seconds": 0.641,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 11544,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 102,
+            "session_core_decisions": 0,
+            "session_total_decisions": 102,
+            "session_model_builds": 1,
+            "session_native_calls": 1,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "baseline",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 28,
+          "fingerprint": "ebf78da488e9ac522adb74ada7f51a5747d700b0e45fff60014dfc543a04d6e5",
+          "domains_sha256": "5ef4c8d41d1864dcd0f0a121b430b04b1a6ea3cfdb8605b3f9f5029e18812c31",
+          "wall_seconds": 0.125,
+          "worker_process_seconds": 0.687,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 404682,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 28,
+            "session_core_decisions": 0,
+            "session_total_decisions": 28,
+            "session_model_builds": 1,
+            "session_native_calls": 3,
+            "session_cubes_closed": 1
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "round26-guards",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 29,
+          "fingerprint": "ebf78da488e9ac522adb74ada7f51a5747d700b0e45fff60014dfc543a04d6e5",
+          "domains_sha256": "5ef4c8d41d1864dcd0f0a121b430b04b1a6ea3cfdb8605b3f9f5029e18812c31",
+          "wall_seconds": 0.11,
+          "worker_process_seconds": 0.719,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 404680,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 29,
+            "session_core_decisions": 0,
+            "session_total_decisions": 29,
+            "session_model_builds": 1,
+            "session_native_calls": 3,
+            "session_cubes_closed": 1
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "round26-simplified",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 29,
+          "fingerprint": "ebf78da488e9ac522adb74ada7f51a5747d700b0e45fff60014dfc543a04d6e5",
+          "domains_sha256": "5ef4c8d41d1864dcd0f0a121b430b04b1a6ea3cfdb8605b3f9f5029e18812c31",
+          "wall_seconds": 1.453,
+          "worker_process_seconds": 2.032,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 404693,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 29,
+            "session_core_decisions": 0,
+            "session_total_decisions": 29,
+            "session_model_builds": 1,
+            "session_native_calls": 3,
+            "session_cubes_closed": 1
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "round26-theory",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 26,
+          "fingerprint": "ebf78da488e9ac522adb74ada7f51a5747d700b0e45fff60014dfc543a04d6e5",
+          "domains_sha256": "5ef4c8d41d1864dcd0f0a121b430b04b1a6ea3cfdb8605b3f9f5029e18812c31",
+          "wall_seconds": 0.25,
+          "worker_process_seconds": 0.719,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 403938,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 26,
+            "session_core_decisions": 0,
+            "session_total_decisions": 26,
+            "session_model_builds": 1,
+            "session_native_calls": 2,
+            "session_cubes_closed": 1
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "baseline",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 105031,
+          "fingerprint": "09896fb0134dd0ae2bbc08ba5faa543a46754df74175319b1fb49ab0d2c4a177",
+          "domains_sha256": "15b6a9cd11daa18dfefcfe90c1702180e76798aebb3606e0678305a3e6b3d92b",
+          "wall_seconds": 32.547,
+          "worker_process_seconds": 33.109,
+          "cartesian_assignments": {
+            "initial": "80923828321089341416495758781012377600000",
+            "closed": "0"
+          },
+          "checkpoint_bytes": 27717097,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 105031,
+            "session_core_decisions": 0,
+            "session_total_decisions": 105031,
+            "session_model_builds": 1,
+            "session_native_calls": 4311,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "round26-guards",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 121983,
+          "fingerprint": "09896fb0134dd0ae2bbc08ba5faa543a46754df74175319b1fb49ab0d2c4a177",
+          "domains_sha256": "15b6a9cd11daa18dfefcfe90c1702180e76798aebb3606e0678305a3e6b3d92b",
+          "wall_seconds": 35.437,
+          "worker_process_seconds": 36.031,
+          "cartesian_assignments": {
+            "initial": "80923828321089341416495758781012377600000",
+            "closed": "0"
+          },
+          "checkpoint_bytes": 32159714,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 121983,
+            "session_core_decisions": 0,
+            "session_total_decisions": 121983,
+            "session_model_builds": 1,
+            "session_native_calls": 5036,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "round26-simplified",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 15160,
+          "fingerprint": "09896fb0134dd0ae2bbc08ba5faa543a46754df74175319b1fb49ab0d2c4a177",
+          "domains_sha256": "15b6a9cd11daa18dfefcfe90c1702180e76798aebb3606e0678305a3e6b3d92b",
+          "wall_seconds": 30.422,
+          "worker_process_seconds": 30.984,
+          "cartesian_assignments": {
+            "initial": "80923828321089341416495758781012377600000",
+            "closed": "0"
+          },
+          "checkpoint_bytes": 4216892,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 15160,
+            "session_core_decisions": 0,
+            "session_total_decisions": 15160,
+            "session_model_builds": 1,
+            "session_native_calls": 601,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "round26-theory",
+          "seed": 817,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 1449,
+          "fingerprint": "09896fb0134dd0ae2bbc08ba5faa543a46754df74175319b1fb49ab0d2c4a177",
+          "domains_sha256": "15b6a9cd11daa18dfefcfe90c1702180e76798aebb3606e0678305a3e6b3d92b",
+          "wall_seconds": 16.203,
+          "worker_process_seconds": 16.75,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 457373,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 1449,
+            "session_core_decisions": 0,
+            "session_total_decisions": 1449,
+            "session_model_builds": 1,
+            "session_native_calls": 6,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "round26-theory",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 1004,
+          "fingerprint": "8c80a239f67854b08a47d7c5f9796274a88d31cd022b2159c6c3c5349f8fd812",
+          "domains_sha256": "4dc74a215916e6a9c842170bbaaffd2efd3fa35cd200da9e634a8dce588f0059",
+          "wall_seconds": 8.562,
+          "worker_process_seconds": 9.094,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 397713,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 1004,
+            "session_core_decisions": 0,
+            "session_total_decisions": 1004,
+            "session_model_builds": 1,
+            "session_native_calls": 8,
+            "session_cubes_closed": 4
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "round26-simplified",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 5216,
+          "fingerprint": "8c80a239f67854b08a47d7c5f9796274a88d31cd022b2159c6c3c5349f8fd812",
+          "domains_sha256": "4dc74a215916e6a9c842170bbaaffd2efd3fa35cd200da9e634a8dce588f0059",
+          "wall_seconds": 15.328,
+          "worker_process_seconds": 16.219,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 1541018,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 5216,
+            "session_core_decisions": 0,
+            "session_total_decisions": 5216,
+            "session_model_builds": 1,
+            "session_native_calls": 198,
+            "session_cubes_closed": 4
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "round26-guards",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 144213,
+          "fingerprint": "8c80a239f67854b08a47d7c5f9796274a88d31cd022b2159c6c3c5349f8fd812",
+          "domains_sha256": "4dc74a215916e6a9c842170bbaaffd2efd3fa35cd200da9e634a8dce588f0059",
+          "wall_seconds": 33.734,
+          "worker_process_seconds": 34.328,
+          "cartesian_assignments": {
+            "initial": "104362593751397518572872874756854513664000",
+            "closed": "12808136505853331824852580083795781222400"
+          },
+          "checkpoint_bytes": 36447106,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 144213,
+            "session_core_decisions": 0,
+            "session_total_decisions": 144213,
+            "session_model_builds": 1,
+            "session_native_calls": 6226,
+            "session_cubes_closed": 4
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "baseline",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 24,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 4584,
+          "fingerprint": "8c80a239f67854b08a47d7c5f9796274a88d31cd022b2159c6c3c5349f8fd812",
+          "domains_sha256": "4dc74a215916e6a9c842170bbaaffd2efd3fa35cd200da9e634a8dce588f0059",
+          "wall_seconds": 0.875,
+          "worker_process_seconds": 1.39,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 1348056,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 4584,
+            "session_core_decisions": 0,
+            "session_total_decisions": 4584,
+            "session_model_builds": 1,
+            "session_native_calls": 164,
+            "session_cubes_closed": 4
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "round26-theory",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 29,
+          "fingerprint": "4740a93401fb3fda202c71e7efd7e94ed2169acfc9f952d3d26b76c128235a02",
+          "domains_sha256": "b9da8bdbc8cb6090c162310a9b6564574b88c612e7e0b61ca0100ffa4a0422d3",
+          "wall_seconds": 0.406,
+          "worker_process_seconds": 1.0,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 420610,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 29,
+            "session_core_decisions": 0,
+            "session_total_decisions": 29,
+            "session_model_builds": 1,
+            "session_native_calls": 1,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "round26-simplified",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 27,
+          "fingerprint": "4740a93401fb3fda202c71e7efd7e94ed2169acfc9f952d3d26b76c128235a02",
+          "domains_sha256": "b9da8bdbc8cb6090c162310a9b6564574b88c612e7e0b61ca0100ffa4a0422d3",
+          "wall_seconds": 1.188,
+          "worker_process_seconds": 1.687,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 421459,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 27,
+            "session_core_decisions": 0,
+            "session_total_decisions": 27,
+            "session_model_builds": 1,
+            "session_native_calls": 2,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "round26-guards",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 43,
+          "fingerprint": "4740a93401fb3fda202c71e7efd7e94ed2169acfc9f952d3d26b76c128235a02",
+          "domains_sha256": "b9da8bdbc8cb6090c162310a9b6564574b88c612e7e0b61ca0100ffa4a0422d3",
+          "wall_seconds": 0.125,
+          "worker_process_seconds": 0.625,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 421446,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 43,
+            "session_core_decisions": 0,
+            "session_total_decisions": 43,
+            "session_model_builds": 1,
+            "session_native_calls": 2,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "residual",
+          "profile": "baseline",
+          "seed": 291,
+          "cells": 160,
+          "free_cells": 8,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 68,
+          "fingerprint": "4740a93401fb3fda202c71e7efd7e94ed2169acfc9f952d3d26b76c128235a02",
+          "domains_sha256": "b9da8bdbc8cb6090c162310a9b6564574b88c612e7e0b61ca0100ffa4a0422d3",
+          "wall_seconds": 0.125,
+          "worker_process_seconds": 0.625,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 240,
+            "total_edges": 240,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 447016,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 68,
+            "session_core_decisions": 0,
+            "session_total_decisions": 68,
+            "session_model_builds": 1,
+            "session_native_calls": 8,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "small",
+          "profile": "round26-theory",
+          "seed": 291,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 117,
+          "fingerprint": "d1d5029dd96c602ad64575f6d5bd3b02ddb829d487ce7c919b434dd590666a0d",
+          "domains_sha256": "3c8b8dceda4c6dc69e2774a0b1da389945e5b75b1b873dd0a7f7c6787818d2ac",
+          "wall_seconds": 0.172,
+          "worker_process_seconds": 0.625,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 11622,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 117,
+            "session_core_decisions": 0,
+            "session_total_decisions": 117,
+            "session_model_builds": 1,
+            "session_native_calls": 1,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "small",
+          "profile": "round26-simplified",
+          "seed": 291,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 71,
+          "fingerprint": "d1d5029dd96c602ad64575f6d5bd3b02ddb829d487ce7c919b434dd590666a0d",
+          "domains_sha256": "3c8b8dceda4c6dc69e2774a0b1da389945e5b75b1b873dd0a7f7c6787818d2ac",
+          "wall_seconds": 1.031,
+          "worker_process_seconds": 1.5,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 11443,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 71,
+            "session_core_decisions": 0,
+            "session_total_decisions": 71,
+            "session_model_builds": 1,
+            "session_native_calls": 1,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "small",
+          "profile": "round26-guards",
+          "seed": 291,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 35,
+          "fingerprint": "d1d5029dd96c602ad64575f6d5bd3b02ddb829d487ce7c919b434dd590666a0d",
+          "domains_sha256": "3c8b8dceda4c6dc69e2774a0b1da389945e5b75b1b873dd0a7f7c6787818d2ac",
+          "wall_seconds": 0.047,
+          "worker_process_seconds": 0.5,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 11426,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 35,
+            "session_core_decisions": 0,
+            "session_total_decisions": 35,
+            "session_model_builds": 1,
+            "session_native_calls": 1,
+            "session_cubes_closed": 0
+          }
+        },
+        {
+          "engine": "sat",
+          "case": "small",
+          "profile": "baseline",
+          "seed": 291,
+          "cells": 10,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 0,
+          "budget_seconds": 30.0,
+          "status": "solved",
+          "complete": true,
+          "nodes": 35,
+          "fingerprint": "d1d5029dd96c602ad64575f6d5bd3b02ddb829d487ce7c919b434dd590666a0d",
+          "domains_sha256": "3c8b8dceda4c6dc69e2774a0b1da389945e5b75b1b873dd0a7f7c6787818d2ac",
+          "wall_seconds": 0.063,
+          "worker_process_seconds": 0.516,
+          "independent_validation": {
+            "valid": true,
+            "matched_edges": 15,
+            "total_edges": 15,
+            "line_components": 1,
+            "all_closed": true
+          },
+          "checkpoint_bytes": 11428,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "work": {
+            "session_decisions": 35,
+            "session_core_decisions": 0,
+            "session_total_decisions": 35,
+            "session_model_builds": 1,
+            "session_native_calls": 1,
+            "session_cubes_closed": 0
+          }
+        }
+      ]
+    },
+    "hybrid-original": {
+      "command": [
+        "python",
+        "-B",
+        "benchmark_round26.py",
+        "--suite",
+        "hybrid",
+        "--hybrid-cases",
+        "original",
+        "--hybrid-profiles",
+        "round25-combined",
+        "round26-sampling",
+        "round26-combined",
+        "--hybrid-backend",
+        "cuda",
+        "--hybrid-replica-counts",
+        "4096",
+        "--seconds",
+        "60",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "<fresh-directory>"
+      ],
+      "sha256": "2086ce38515fa3963a9d1fec7db46bf903000961b3aadba7b38f25a6a50cd9d9",
+      "profiles": {
+        "round25-combined": {
+          "cases": 2,
+          "solved": 0,
+          "proved_unsat": 0,
+          "completed_nodes": 0,
+          "status_counts": {
+            "timeout": 2
+          }
+        },
+        "round26-sampling": {
+          "cases": 2,
+          "solved": 0,
+          "proved_unsat": 0,
+          "completed_nodes": 0,
+          "status_counts": {
+            "timeout": 2
+          }
+        },
+        "round26-combined": {
+          "cases": 2,
+          "solved": 0,
+          "proved_unsat": 0,
+          "completed_nodes": 0,
+          "status_counts": {
+            "timeout": 2
+          }
+        }
+      },
+      "runs": [
+        {
+          "engine": "hybrid",
+          "case": "original",
+          "profile": "round25-combined",
+          "seed": 71,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 4096,
+          "budget_seconds": 60.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 9,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 60.969,
+          "worker_process_seconds": 62.703,
+          "solver_wall_seconds": 60.625,
+          "checkpoint_bytes": 10075566,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "sampling": {
+            "initial_boards": 4096,
+            "move_proposals": 12582912,
+            "best_score": 146,
+            "dispatches": 48,
+            "archive_repeated_observations": 6
+          },
+          "repair": {
+            "status": "inconclusive",
+            "best_score": 147,
+            "domain_violations": 0,
+            "repair_native_calls": 5
+          }
+        },
+        {
+          "engine": "hybrid",
+          "case": "original",
+          "profile": "round26-sampling",
+          "seed": 71,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 4096,
+          "budget_seconds": 60.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 14,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 60.297,
+          "worker_process_seconds": 61.187,
+          "solver_wall_seconds": 60.188,
+          "checkpoint_bytes": 1446354,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "sampling": {
+            "initial_boards": 4096,
+            "move_proposals": 37748736,
+            "best_score": 159,
+            "dispatches": 144,
+            "archive_repeated_observations": 14
+          },
+          "repair": {
+            "status": "inconclusive",
+            "best_score": 163,
+            "domain_violations": 0,
+            "repair_native_calls": 17
+          }
+        },
+        {
+          "engine": "hybrid",
+          "case": "original",
+          "profile": "round26-combined",
+          "seed": 71,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 4096,
+          "budget_seconds": 60.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 21,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 61.359,
+          "worker_process_seconds": 63.281,
+          "solver_wall_seconds": 61.031,
+          "checkpoint_bytes": 10229804,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "sampling": {
+            "initial_boards": 4096,
+            "move_proposals": 29360128,
+            "best_score": 155,
+            "dispatches": 112,
+            "archive_repeated_observations": 10
+          },
+          "repair": {
+            "status": "inconclusive",
+            "best_score": 155,
+            "domain_violations": 0,
+            "repair_native_calls": 2
+          }
+        },
+        {
+          "engine": "hybrid",
+          "case": "original",
+          "profile": "round26-combined",
+          "seed": 197,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 4096,
+          "budget_seconds": 60.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 12,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 61.422,
+          "worker_process_seconds": 63.547,
+          "solver_wall_seconds": 61.047,
+          "checkpoint_bytes": 10130869,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": true,
+            "reasoning_directory_created": true
+          },
+          "sampling": {
+            "initial_boards": 4096,
+            "move_proposals": 30932992,
+            "best_score": 155,
+            "dispatches": 118,
+            "archive_repeated_observations": 16
+          },
+          "repair": {
+            "status": "inconclusive",
+            "best_score": 155,
+            "domain_violations": 0,
+            "repair_native_calls": 2
+          }
+        },
+        {
+          "engine": "hybrid",
+          "case": "original",
+          "profile": "round26-sampling",
+          "seed": 197,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 4096,
+          "budget_seconds": 60.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 15,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 60.203,
+          "worker_process_seconds": 60.969,
+          "solver_wall_seconds": 60.125,
+          "checkpoint_bytes": 1499196,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "sampling": {
+            "initial_boards": 4096,
+            "move_proposals": 38535168,
+            "best_score": 160,
+            "dispatches": 147,
+            "archive_repeated_observations": 19
+          },
+          "repair": {
+            "status": "inconclusive",
+            "best_score": 160,
+            "domain_violations": 0,
+            "repair_native_calls": 15
+          }
+        },
+        {
+          "engine": "hybrid",
+          "case": "original",
+          "profile": "round25-combined",
+          "seed": 197,
+          "cells": 160,
+          "free_cells": null,
+          "workers": 1,
+          "replicas": 4096,
+          "budget_seconds": 60.0,
+          "status": "timeout",
+          "complete": false,
+          "nodes": 10,
+          "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+          "domains_sha256": "6cdaad6b78872ef1d16c124f35db0adc81c0cb5afd8f91785812209b349f878c",
+          "wall_seconds": 60.985,
+          "worker_process_seconds": 62.734,
+          "solver_wall_seconds": 60.64,
+          "checkpoint_bytes": 10058360,
+          "disk_reasoning": {
+            "reasoning_directory_supplied": false,
+            "reasoning_directory_created": false
+          },
+          "sampling": {
+            "initial_boards": 4096,
+            "move_proposals": 12320768,
+            "best_score": 145,
+            "dispatches": 47,
+            "archive_repeated_observations": 9
+          },
+          "repair": {
+            "status": "inconclusive",
+            "best_score": 145,
+            "domain_violations": 0,
+            "repair_native_calls": 4
+          }
+        }
+      ]
+    }
+  }
+}

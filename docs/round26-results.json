@@ -1,0 +1,2975 @@
+{
+  "schema": "diamond-round26-finite-evidence-v1",
+  "frozen_source_commit": "685f6212871e3a8dcd2ef830da365c08c222f249",
+  "finite_matrix_sha256": "bee446199aa5687aed96c5d61270a3acbee607080beceaaf22815734a45f8dad",
+  "scope_register": "round26-workstreams.json",
+  "hardware_settings_report": "round26-settings.json",
+  "baseline_release": "v1.6.0",
+  "scope_count": 81,
+  "family_count": 17,
+  "gold_solution_found": false,
+  "receipts": {
+    "F02": {
+      "file": "audit/optimization-round26/finite-frozen02/F02.json",
+      "sha256": "22410661874991ca8eff01556b429f2c639ef78b0badbc459f2d87acd4f60174",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_learning_round26.py",
+        "--family",
+        "F02",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F02.json"
+      ]
+    },
+    "F03": {
+      "file": "audit/optimization-round26/finite-frozen02/F03.json",
+      "sha256": "3161fad05d5d8152c6b1056dfd1c74f112e48d2006d51f32aa568d6c18475f7e",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_learning_round26.py",
+        "--family",
+        "F03",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F03.json"
+      ]
+    },
+    "F04": {
+      "file": "audit/optimization-round26/finite-frozen02/F04.json",
+      "sha256": "9624737fceb933d5b233b94b44ca14fad6e214abe3719b5b5a31b3c68831f1d5",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_learning_round26.py",
+        "--family",
+        "F04",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F04.json"
+      ]
+    },
+    "F05": {
+      "file": "audit/optimization-round26/finite-frozen02/F05.json",
+      "sha256": "67e0bf3798ca7bd330459df97ad85deb9486a62b95acd0d338dd2265d7fa4fd1",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_learning_round26.py",
+        "--family",
+        "F05",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F05.json"
+      ]
+    },
+    "F06": {
+      "file": "audit/optimization-round26/finite-frozen02/F06.json",
+      "sha256": "f7e94bfe334b4e4eb4dba377cd6c0eb5f20252613075bbffdf183ba4f4ac8cef",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_learning_round26.py",
+        "--family",
+        "F06",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F06.json"
+      ]
+    },
+    "F07": {
+      "file": "audit/optimization-round26/finite-frozen02/F07.json",
+      "sha256": "7ad9935976cf27fe81598804618f667b8c86a9975f27ddcc9392f2bea5bc338b",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_learning_round26.py",
+        "--family",
+        "F07",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F07.json"
+      ]
+    },
+    "F08-context": {
+      "file": "audit/optimization-round26/finite-frozen02/F08-context.json",
+      "sha256": "4958ecaad9cfced7b711a22042c3237e1e5bd00d7956111eb1b0c66145a8dd78",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_context_round26.py",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F08-context.json"
+      ]
+    },
+    "F04-theory": {
+      "file": "audit/optimization-round26/finite-frozen02/F04-theory.json",
+      "sha256": "c04071a8641a50aa60ae7d1354dd310e63a28a4e9ec8725ce60229ef2952ea12",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_theory_round26.py",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F04-theory.json"
+      ]
+    },
+    "F05-isolated": {
+      "file": "audit/optimization-round26/finite-frozen02/F05-isolated.json",
+      "sha256": "028645267c3002be68da9f1ebd8b8f408b3572d51f4a7eacde4a085819a2c8be",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_isolated_proof_round26.py",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F05-isolated.json"
+      ]
+    },
+    "F09-F13-regions": {
+      "file": "audit/optimization-round26/finite-frozen02/F09-F13-regions.json",
+      "sha256": "1a8d4273fb096827bb08ec6bc8a1fd0cd053ca6a601074b979ad8e27afd39322",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_regions_round26.py",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F09-F13-regions.json"
+      ]
+    },
+    "F14-exact": {
+      "file": "audit/optimization-round26/finite-frozen02/F14-exact.json",
+      "sha256": "2f97f947fc2484efbeaea794a7927e258d977601f6c699bc280c0bd39ca60ae4",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_gpu_round26.py",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F14-exact.json"
+      ]
+    },
+    "F14-cooperative": {
+      "file": "audit/optimization-round26/finite-frozen02/F14-cooperative.json",
+      "sha256": "1ca172e2b5ee36e87922ac4cd252092f5415966af87949c04dd46a988ee6aeec",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_gpu_round26.py",
+        "--mode",
+        "cooperative",
+        "--repeats",
+        "5",
+        "--dispatches",
+        "32",
+        "--quantum",
+        "16",
+        "--replicas",
+        "128",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F14-cooperative.json"
+      ]
+    },
+    "F15-cuda": {
+      "file": "audit/optimization-round26/finite-frozen02/F15-cuda.json",
+      "sha256": "c588b9dd97ca3a69c3efca50f32530f661321914da024e8e4e088ba8d495f631",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_sampling_round26.py",
+        "--backend",
+        "cuda",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F15-cuda.json"
+      ]
+    },
+    "F15-webgpu": {
+      "file": "audit/optimization-round26/finite-frozen02/F15-webgpu.json",
+      "sha256": "177449260db2de92ee5e96c5bc596f6c474514f660972504f1f21a1869fe470f",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_sampling_round26.py",
+        "--backend",
+        "webgpu",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F15-webgpu.json"
+      ]
+    },
+    "F16-recombination": {
+      "file": "audit/optimization-round26/finite-frozen02/F16-recombination.json",
+      "sha256": "1c450c09b191465ee2993e5a4e87648a7e46fb913ccdd33c8069b8f40f6abbce",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_recombination_round26.py",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F16-recombination.json"
+      ]
+    },
+    "F17-repair": {
+      "file": "audit/optimization-round26/finite-frozen02/F17-repair.json",
+      "sha256": "44275e995ac9764f50ce032f74844af0577b80f6766d61a8e53cc2096e0d74eb",
+      "command": [
+        "python",
+        "-B",
+        "benchmark_repair_round26.py",
+        "--evidence-stage",
+        "frozen",
+        "--output",
+        "audit/F17-repair.json"
+      ]
+    }
+  },
+  "finite_work_by_family": {
+    "F02": {
+      "fixture": "12 seeded four-cell valid-completion contexts and one archived exact singleton query",
+      "contexts": 12,
+      "total_arc_checks": {
+        "cold_restart_work_including_prefix": 308,
+        "durable_work_including_prefix": 188
+      },
+      "completed_probe": {
+        "independent_oracle_calls": 1,
+        "restores": 1
+      },
+      "limits": [
+        "The native basic-propagation call is an opaque retryable unit; its internal instruction cursor is not serialized.",
+        "Every restored cursor is trusted local continuation bound to source/root/options, not imported proof authority.",
+        "Snapshot bytes and setup/restoration costs are separate from propagation work."
+      ]
+    },
+    "F03": {
+      "fixture": "16 identical independently impossible original-root placement queries from two spawned worker processes",
+      "cold_models": 16,
+      "cold_work": {
+        "sat_assist_build_steps": 2080,
+        "sat_assist_clauses": 2016,
+        "sat_assist_calls": 16,
+        "sat_assist_unsat": 16
+      },
+      "service_work": {
+        "sat_service_requests": 17,
+        "sat_service_batches": 17,
+        "sat_service_cache_hits": 15,
+        "sat_service_models": 1,
+        "sat_service_query_calls": 1
+      },
+      "limits": [
+        "This repeated-query fixture measures cross-worker deduplication, not unrelated-query throughput.",
+        "Native solver stacks are not serialized; restart reconstructs the model and independently reloads semantic support boards.",
+        "One to eight affinity owners are supported; this finite discriminator uses one."
+      ]
+    },
+    "F04": {
+      "checking": {
+        "scan": {
+          "proof_steps": 3,
+          "proof_clause_visits": 1212,
+          "proof_propagations": 3
+        },
+        "indexed": {
+          "proof_steps": 3,
+          "proof_clause_visits": 7,
+          "proof_propagations": 3,
+          "proof_resumptions": 60,
+          "proof_index_build_literals": 810,
+          "proof_watch_moves": 0,
+          "proof_hint_visits": 0,
+          "proof_microsteps": 418,
+          "proof_shared_steps": 0
+        },
+        "hinted": {
+          "proof_steps": 3,
+          "proof_clause_visits": 6,
+          "proof_propagations": 3,
+          "proof_resumptions": 60,
+          "proof_index_build_literals": 810,
+          "proof_watch_moves": 0,
+          "proof_hint_visits": 6,
+          "proof_microsteps": 415,
+          "proof_shared_steps": 0
+        },
+        "base_clauses": 404,
+        "proof_lines": 3
+      },
+      "compaction": {
+        "input_lines": 33,
+        "output_lines": 3,
+        "work": {
+          "proof_compaction_input_steps": 33,
+          "proof_compaction_output_steps": 3,
+          "proof_compaction_checks": 2,
+          "proof_compaction_visits": 14,
+          "proof_compaction_index_literals": 80
+        }
+      },
+      "shared_second_proof": {
+        "proof_steps": 0,
+        "proof_clause_visits": 0,
+        "proof_propagations": 0,
+        "proof_resumptions": 10,
+        "proof_index_build_literals": 130,
+        "proof_watch_moves": 0,
+        "proof_hint_visits": 0,
+        "proof_microsteps": 69,
+        "proof_shared_steps": 65
+      },
+      "direct_theory": {
+        "puzzle_cases": [
+          {
+            "case": "double",
+            "both_complete": true,
+            "decisions": [
+              1,
+              1
+            ]
+          },
+          {
+            "case": "double-unsat",
+            "both_complete": true,
+            "decisions": [
+              23,
+              23
+            ]
+          },
+          {
+            "case": "tetra",
+            "both_complete": true,
+            "decisions": [
+              42,
+              42
+            ]
+          },
+          {
+            "case": "permutation",
+            "both_complete": true,
+            "decisions": [
+              10,
+              10
+            ]
+          }
+        ],
+        "narrowed_sequences": [
+          {
+            "case": "tetra",
+            "queries": 65,
+            "both_complete": true,
+            "decisions": [
+              490,
+              490
+            ],
+            "same_answer_count": true
+          },
+          {
+            "case": "double-unsat",
+            "queries": 64,
+            "both_complete": true,
+            "decisions": [
+              12,
+              12
+            ],
+            "same_answer_count": true
+          },
+          {
+            "case": "permutation",
+            "queries": 64,
+            "both_complete": true,
+            "decisions": [
+              122,
+              122
+            ],
+            "same_answer_count": true
+          }
+        ],
+        "order": [
+          "clause",
+          "direct"
+        ]
+      },
+      "limits": [
+        "Prefix reuse always rebuilds its clause index and is bound to exact assumptions/source/proof bytes.",
+        "Compaction performs two independent checks up front; fewer exported lines is not a one-off runtime saving.",
+        "Persistent theory and isolated native production have separate benchmark_theory_round26.py and benchmark_isolated_proof_round26.py reports.",
+        "Regional and GPU deduction transport are checked separately; unsupported or capped replay never proves a conflict."
+      ]
+    },
+    "F05": {
+      "guards": {
+        "baseline": {
+          "status": "infeasible",
+          "native_calls": 54,
+          "decisions": 36,
+          "guard_clauses": 108,
+          "guard_creates": 0,
+          "guard_hits": 0,
+          "root_boxes": 36,
+          "remaining_boxes": 0
+        },
+        "reused": {
+          "status": "infeasible",
+          "native_calls": 54,
+          "decisions": 36,
+          "guard_clauses": 12,
+          "guard_creates": 12,
+          "guard_hits": 60,
+          "root_boxes": 36,
+          "remaining_boxes": 0
+        }
+      },
+      "simplification": [
+        {
+          "fixture": "double",
+          "queries": 36,
+          "modes": [
+            {
+              "enabled": false,
+              "base_clauses": 126,
+              "search_clauses": 126,
+              "native": {
+                "restarts": 36,
+                "conflicts": 0,
+                "decisions": 12,
+                "propagations": 1698
+              },
+              "sat_answers": 6,
+              "setup": {}
+            },
+            {
+              "enabled": true,
+              "base_clauses": 126,
+              "search_clauses": 98,
+              "native": {
+                "restarts": 36,
+                "conflicts": 0,
+                "decisions": 12,
+                "propagations": 718
+              },
+              "sat_answers": 6,
+              "setup": {
+                "simplify_inputs": 1,
+                "simplify_literal_visits": 4038,
+                "simplify_resolvents": 96,
+                "simplify_subsumption_checks": 624,
+                "simplify_equivalences": 12,
+                "simplify_eliminations": 16,
+                "simplify_clauses_removed": 28,
+                "simplify_replay_steps": 28,
+                "simplify_model_clauses": 756,
+                "simplify_cache_hits": 1,
+                "simplify_pinned_auxiliaries": 28
+              }
+            }
+          ]
+        },
+        {
+          "fixture": "tetra",
+          "queries": 64,
+          "modes": [
+            {
+              "enabled": false,
+              "base_clauses": 432,
+              "search_clauses": 432,
+              "native": {
+                "restarts": 64,
+                "conflicts": 27,
+                "decisions": 376,
+                "propagations": 9537
+              },
+              "sat_answers": 60,
+              "setup": {}
+            },
+            {
+              "enabled": true,
+              "base_clauses": 432,
+              "search_clauses": 450,
+              "native": {
+                "restarts": 64,
+                "conflicts": 35,
+                "decisions": 449,
+                "propagations": 6259
+              },
+              "sat_answers": 60,
+              "setup": {
+                "simplify_inputs": 1,
+                "simplify_literal_visits": 59138,
+                "simplify_resolvents": 384,
+                "simplify_subsumption_checks": 1024,
+                "simplify_eliminations": 56,
+                "simplify_clauses_removed": -18,
+                "simplify_replay_steps": 56,
+                "simplify_model_clauses": 25920,
+                "simplify_caps": 1,
+                "simplify_cache_hits": 1,
+                "simplify_pinned_auxiliaries": 56
+              }
+            }
+          ]
+        },
+        {
+          "fixture": "ring4",
+          "queries": 64,
+          "modes": [
+            {
+              "enabled": false,
+              "base_clauses": 112,
+              "search_clauses": 112,
+              "native": {
+                "restarts": 64,
+                "conflicts": 3,
+                "decisions": 117,
+                "propagations": 2628
+              },
+              "sat_answers": 36,
+              "setup": {}
+            },
+            {
+              "enabled": true,
+              "base_clauses": 112,
+              "search_clauses": 112,
+              "native": {
+                "restarts": 64,
+                "conflicts": 0,
+                "decisions": 109,
+                "propagations": 1246
+              },
+              "sat_answers": 36,
+              "setup": {
+                "simplify_inputs": 1,
+                "simplify_literal_visits": 6264,
+                "simplify_resolvents": 128,
+                "simplify_subsumption_checks": 1024,
+                "simplify_eliminations": 24,
+                "simplify_replay_steps": 32,
+                "simplify_model_clauses": 4032,
+                "simplify_caps": 1,
+                "simplify_cache_hits": 1,
+                "simplify_pinned_auxiliaries": 24
+              }
+            }
+          ]
+        },
+        {
+          "fixture": "ring5",
+          "queries": 64,
+          "modes": [
+            {
+              "enabled": false,
+              "base_clauses": 180,
+              "search_clauses": 180,
+              "native": {
+                "restarts": 64,
+                "conflicts": 5,
+                "decisions": 199,
+                "propagations": 4050
+              },
+              "sat_answers": 46,
+              "setup": {}
+            },
+            {
+              "enabled": true,
+              "base_clauses": 180,
+              "search_clauses": 184,
+              "native": {
+                "restarts": 64,
+                "conflicts": 4,
+                "decisions": 190,
+                "propagations": 2438
+              },
+              "sat_answers": 46,
+              "setup": {
+                "simplify_inputs": 1,
+                "simplify_literal_visits": 12830,
+                "simplify_resolvents": 160,
+                "simplify_subsumption_checks": 1024,
+                "simplify_eliminations": 30,
+                "simplify_clauses_removed": -4,
+                "simplify_replay_steps": 36,
+                "simplify_model_clauses": 8280,
+                "simplify_caps": 1,
+                "simplify_cache_hits": 1,
+                "simplify_pinned_auxiliaries": 30
+              }
+            }
+          ]
+        }
+      ],
+      "isolated_producer": [
+        {
+          "holes": 3,
+          "dpll_status": "complete",
+          "dpll_work": {
+            "proof_dpll_decisions": 5,
+            "proof_dpll_visits": 526,
+            "proof_emitted_clauses": 11
+          },
+          "isolated_status": "complete",
+          "isolated_work": {
+            "requests": 1,
+            "ready_hits": 1,
+            "pending_hits": 139,
+            "native_decisions": 8,
+            "starts": 1
+          },
+          "proof_lines": 7
+        },
+        {
+          "holes": 4,
+          "dpll_status": "complete",
+          "dpll_work": {
+            "proof_dpll_decisions": 31,
+            "proof_dpll_visits": 8944,
+            "proof_emitted_clauses": 63
+          },
+          "isolated_status": "complete",
+          "isolated_work": {
+            "requests": 1,
+            "pending_hits": 8,
+            "native_decisions": 41
+          },
+          "proof_lines": 39
+        },
+        {
+          "holes": 5,
+          "dpll_status": "complete",
+          "dpll_work": {
+            "proof_dpll_decisions": 241,
+            "proof_dpll_visits": 292696,
+            "proof_emitted_clauses": 483
+          },
+          "isolated_status": "complete",
+          "isolated_work": {
+            "requests": 1,
+            "pending_hits": 8,
+            "native_decisions": 209
+          },
+          "proof_lines": 261
+        },
+        {
+          "holes": 6,
+          "dpll_status": "unknown: DPLL clause-work cap reached.",
+          "dpll_work": {
+            "proof_dpll_decisions": 311,
+            "proof_dpll_visits": 500001,
+            "proof_emitted_clauses": 598
+          },
+          "isolated_status": "complete",
+          "isolated_work": {
+            "requests": 1,
+            "pending_hits": 7,
+            "native_decisions": 1084
+          },
+          "proof_lines": 1364
+        }
+      ],
+      "limits": [
+        "All placement answers are compared against independent finite enumeration.",
+        "Simplification is not uniformly better: native decisions can increase even when propagation decreases.",
+        "Windows native proof logging stays disabled; the isolated Linux/WSL producer is tested separately."
+      ]
+    },
+    "F06": {
+      "semijoin": {
+        "edge_completions": 15,
+        "native_compile_queries": 121,
+        "native_compile_decisions": 952,
+        "removed_orientations": 2,
+        "stats": {
+          "relation_index_build_rows": 117,
+          "relation_index_slots": 95,
+          "relation_dag_nodes": 77,
+          "relation_join_queries": 1,
+          "relation_join_pairs": 18,
+          "relation_join_keys": 369,
+          "relation_tuple_prunes": 8,
+          "relation_domain_prunes": 2,
+          "relation_dag_projection_nodes": 231
+        }
+      },
+      "durable_projection": {
+        "complete_rows": 24,
+        "cold_restart_models": 27,
+        "completed_models_by_run": [
+          3,
+          21,
+          0
+        ],
+        "import_queries": 0,
+        "import_work": {
+          "relation_certificate_checks": 1,
+          "relation_certificate_rows": 24,
+          "relation_certificate_checker_visits": 770,
+          "relation_certificate_index_literals": 424,
+          "relation_certificate_imports": 1,
+          "relation_certificate_saved_queries": 25
+        }
+      },
+      "limits": [
+        "Complete Gold tables are allowed covers/overapproximations if rows survive later Gold cuts, never falsely labelled exact final-theory projections.",
+        "Only complete checked covers may prune by missing rows. Partial consequences use separate ordinary support queries.",
+        "Core/missing-support/spurious-tuple selection is guidance only; no universal benefit has been established for that heuristic.",
+        "Certificate production and independent import checking are additional costs, reported separately."
+      ]
+    },
+    "F07": {
+      "lattice": {
+        "cold": {
+          "lattice_contexts": 24,
+          "lattice_builds": 120,
+          "lattice_vectors": 3644,
+          "lattice_integer_ops": 176161,
+          "lattice_membership_checks": 1031,
+          "lattice_trials": 1007,
+          "lattice_prunes": 24,
+          "lattice_reuses": 0,
+          "lattice_caps": 0
+        },
+        "tree": {
+          "lattice_contexts": 24,
+          "lattice_builds": 174,
+          "lattice_vectors": 1865,
+          "lattice_integer_ops": 103484,
+          "lattice_membership_checks": 1031,
+          "lattice_trials": 1007,
+          "lattice_prunes": 24,
+          "lattice_reuses": 0,
+          "lattice_caps": 0,
+          "lattice_tree_nodes": 78,
+          "lattice_tree_reuses": 46,
+          "lattice_tree_merges": 146,
+          "lattice_tree_without_reuses": 911,
+          "lattice_tree_source_vectors": 163,
+          "lattice_separator_checks": 24,
+          "lattice_separator_terms": 4956,
+          "lattice_separator_produced": 24
+        },
+        "independent_chain_checks": 24,
+        "contexts": 24
+      },
+      "pb_queue": {
+        "rows": 74,
+        "contexts": 24,
+        "cold_row_visits": 1776,
+        "queue_work": {
+          "arithmetic_rows_tested": 1064,
+          "arithmetic_cell_minima": 3604,
+          "arithmetic_queue_reuses": 342,
+          "arithmetic_context_reuses": 5
+        }
+      },
+      "additional_discovery": {
+        "contexts": 160,
+        "deductions": 0,
+        "added_work": {
+          "arithmetic_rule_checks": 71842,
+          "arithmetic_divisions": 31795,
+          "arithmetic_saturations": 11596,
+          "arithmetic_cover_assignments": 1271952,
+          "arithmetic_covers": 4236,
+          "arithmetic_rows_kept": 39162,
+          "arithmetic_rows_tested": 39162,
+          "arithmetic_seed_pair_checks": 20480,
+          "arithmetic_pair_checks": 75221,
+          "arithmetic_combination_terms": 743817,
+          "arithmetic_cell_minima": 112552,
+          "arithmetic_compilations": 160
+        }
+      },
+      "limits": [
+        "Integer operations, basis builds, source vectors and separator checking are distinct work units.",
+        "Additional PB division/cover discovery is inactive in production unless a completed stronger discriminator establishes benefit.",
+        "The retained row queue changes reuse on the same existing rows; no extra pruning is claimed for its neutral fixture.",
+        "No original-puzzle solve or wall-time dominance claim."
+      ]
+    },
+    "F08": {
+      "completed_profile_comparisons": 96,
+      "held_out": {
+        "completed_rows": 24,
+        "base_nodes": 129,
+        "selected_nodes": 122
+      },
+      "scope": "priorities only; never pruning authority"
+    },
+    "F09": {
+      "fixture": "7-cell five-strand scrambled ring, seed260905",
+      "oracle": "Odd product parity cannot be the even five-cycle required by Gold.",
+      "cases": {
+        "natural": {
+          "complete": true,
+          "feasible": false,
+          "order": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "stats": {
+            "regional_order_candidates": 0,
+            "regional_order_cost_evaluations": 0,
+            "regional_compiler_queries": 0,
+            "regional_compiler_completed": 0,
+            "regional_compiler_unknown": 0,
+            "regional_compiler_cache_hits": 0,
+            "regional_compiler_resumes": 0,
+            "regional_compiler_transition_attempts": 23611,
+            "regional_compiler_transitions": 23611,
+            "regional_compiler_states": 3373,
+            "regional_compiler_merges": 3955,
+            "regional_compiler_rank_rows": 0,
+            "regional_compiler_rank_kept": 0,
+            "regional_compiler_rank_entries": 0,
+            "regional_compiler_rank_xors": 0,
+            "regional_compiler_backward_edges": 7327,
+            "regional_compiler_prunes": 0,
+            "regional_compiler_saved": 0,
+            "regional_compiler_loaded": 0,
+            "regional_compiler_io_failures": 0,
+            "regional_compiler_native_arcs": 0,
+            "regional_compiler_native_constraints": 0,
+            "regional_compiler_model_builds": 1,
+            "regional_compiler_model_placements": 49,
+            "regional_compiler_model_seam_tests": 14134,
+            "regional_compiler_model_forget_checks": 7746,
+            "regional_compiler_model_pair_splices": 70670
+          }
+        },
+        "ordered": {
+          "complete": true,
+          "feasible": false,
+          "order": [
+            0,
+            3,
+            4,
+            1,
+            5,
+            2,
+            6
+          ],
+          "stats": {
+            "regional_order_candidates": 3,
+            "regional_order_cost_evaluations": 56,
+            "regional_compiler_queries": 0,
+            "regional_compiler_completed": 0,
+            "regional_compiler_unknown": 0,
+            "regional_compiler_cache_hits": 0,
+            "regional_compiler_resumes": 0,
+            "regional_compiler_transition_attempts": 15554,
+            "regional_compiler_transitions": 15554,
+            "regional_compiler_states": 2222,
+            "regional_compiler_merges": 2554,
+            "regional_compiler_rank_rows": 0,
+            "regional_compiler_rank_kept": 0,
+            "regional_compiler_rank_entries": 0,
+            "regional_compiler_rank_xors": 0,
+            "regional_compiler_backward_edges": 4775,
+            "regional_compiler_prunes": 0,
+            "regional_compiler_saved": 0,
+            "regional_compiler_loaded": 0,
+            "regional_compiler_io_failures": 0,
+            "regional_compiler_native_arcs": 0,
+            "regional_compiler_native_constraints": 0,
+            "regional_compiler_model_builds": 1,
+            "regional_compiler_model_placements": 49,
+            "regional_compiler_model_seam_tests": 5606,
+            "regional_compiler_model_forget_checks": 5194,
+            "regional_compiler_model_pair_splices": 28030
+          }
+        },
+        "ranked": {
+          "complete": true,
+          "feasible": false,
+          "order": [
+            0,
+            3,
+            4,
+            1,
+            5,
+            2,
+            6
+          ],
+          "stats": {
+            "regional_order_candidates": 3,
+            "regional_order_cost_evaluations": 56,
+            "regional_compiler_queries": 0,
+            "regional_compiler_completed": 0,
+            "regional_compiler_unknown": 0,
+            "regional_compiler_cache_hits": 0,
+            "regional_compiler_resumes": 0,
+            "regional_compiler_transition_attempts": 12691,
+            "regional_compiler_transitions": 12691,
+            "regional_compiler_states": 2215,
+            "regional_compiler_merges": 2104,
+            "regional_compiler_rank_rows": 2214,
+            "regional_compiler_rank_kept": 1812,
+            "regional_compiler_rank_entries": 35312,
+            "regional_compiler_rank_xors": 7993,
+            "regional_compiler_backward_edges": 4318,
+            "regional_compiler_prunes": 0,
+            "regional_compiler_saved": 0,
+            "regional_compiler_loaded": 0,
+            "regional_compiler_io_failures": 0,
+            "regional_compiler_native_arcs": 0,
+            "regional_compiler_native_constraints": 0,
+            "regional_compiler_model_builds": 1,
+            "regional_compiler_model_placements": 49,
+            "regional_compiler_model_seam_tests": 4787,
+            "regional_compiler_model_forget_checks": 4556,
+            "regional_compiler_model_pair_splices": 23935
+          }
+        }
+      },
+      "limitations": [
+        "Rank is existence-only; counts and placement supports are deliberately unavailable.",
+        "Additional order evaluation, basis construction and XOR work is reported separately.",
+        "This is a completed bounded negative, not an original 160-cell solve."
+      ]
+    },
+    "F10": {
+      "fixture": "Two three-cell messages on the six-cell ring",
+      "baseline_inventory_pair_geometry_checks": 400,
+      "cases": {
+        "cold": {
+          "rows": 720,
+          "stats": {
+            "recursive_region_zdd_nodes": 90,
+            "recursive_region_zdd_operations": 965,
+            "recursive_region_symbolic_geometry_tests": 1,
+            "recursive_region_symbolic_inventory_pairs": 20,
+            "recursive_region_symbolic_class_skips": 0,
+            "recursive_region_symbolic_group_rows": 40
+          },
+          "controller_steps": 205,
+          "restores": 0
+        },
+        "resumed": {
+          "rows": 720,
+          "stats": {
+            "recursive_region_zdd_nodes": 90,
+            "recursive_region_zdd_operations": 965,
+            "recursive_region_symbolic_geometry_tests": 1,
+            "recursive_region_symbolic_inventory_pairs": 20,
+            "recursive_region_symbolic_class_skips": 0,
+            "recursive_region_symbolic_group_rows": 40
+          },
+          "controller_steps": 205,
+          "restores": 18
+        }
+      },
+      "limitations": [
+        "Both policies pay the same local relation compilation before this join comparison.",
+        "ZDD construction/operator overhead is separate from eliminated geometry checks.",
+        "Serialization/reconstruction is reported as restore count, not claimed free.",
+        "Shared inventories and exact Gold pairings remain correlated; this is not independent component multiplication."
+      ]
+    },
+    "F11": {
+      "fixture": "Duplicate physical piece in cells0/1, four increasingly fixed outside contexts",
+      "oracle": "The same physical piece cannot occupy two cells.",
+      "shared_producer_cost": {
+        "regional_core_queries": 0,
+        "regional_core_index_checks": 0,
+        "regional_core_verified_import_hits": 0,
+        "regional_core_checks": 0,
+        "regional_core_verified_states": 21,
+        "regional_core_verified_transitions": 21,
+        "regional_core_build_transitions": 42,
+        "regional_core_build_states": 21,
+        "regional_core_generalization_trials": 2,
+        "regional_core_generalized_assumptions": 0,
+        "regional_core_reuses": 0,
+        "regional_core_contractions": 0,
+        "regional_core_terminal_checks": 0,
+        "regional_core_unknown": 0,
+        "regional_core_imported": 0,
+        "regional_core_rejected": 0,
+        "regional_core_evicted": 0,
+        "regional_core_saved": 0,
+        "regional_core_io_failures": 0
+      },
+      "fresh_verification": {
+        "regional_core_queries": 4,
+        "regional_core_index_checks": 4,
+        "regional_core_verified_import_hits": 0,
+        "regional_core_checks": 4,
+        "regional_core_verified_states": 8,
+        "regional_core_verified_transitions": 8,
+        "regional_core_build_transitions": 0,
+        "regional_core_build_states": 0,
+        "regional_core_generalization_trials": 0,
+        "regional_core_generalized_assumptions": 0,
+        "regional_core_reuses": 4,
+        "regional_core_contractions": 0,
+        "regional_core_terminal_checks": 0,
+        "regional_core_unknown": 0,
+        "regional_core_imported": 4,
+        "regional_core_rejected": 0,
+        "regional_core_evicted": 0,
+        "regional_core_saved": 0,
+        "regional_core_io_failures": 0
+      },
+      "verified_assumption_index": {
+        "regional_core_queries": 4,
+        "regional_core_index_checks": 4,
+        "regional_core_verified_import_hits": 3,
+        "regional_core_checks": 4,
+        "regional_core_verified_states": 2,
+        "regional_core_verified_transitions": 2,
+        "regional_core_build_transitions": 0,
+        "regional_core_build_states": 0,
+        "regional_core_generalization_trials": 0,
+        "regional_core_generalized_assumptions": 0,
+        "regional_core_reuses": 4,
+        "regional_core_contractions": 0,
+        "regional_core_terminal_checks": 0,
+        "regional_core_unknown": 0,
+        "regional_core_imported": 1,
+        "regional_core_rejected": 0,
+        "regional_core_evicted": 0,
+        "regional_core_saved": 0,
+        "regional_core_io_failures": 0
+      },
+      "limitations": [
+        "Only byte-identical previously admitted proofs bypass repeat verification.",
+        "Novel external certificates always undergo independent transition-completeness checking.",
+        "Forced fixed outside contractions are supported; arbitrary active graph contractions are not certified."
+      ]
+    },
+    "F12": {
+      "fixture": "Two unchanged/delta/restored cyclic components; omitted third strand; correlated two-demand orientation",
+      "graph": {
+        "fresh_traversal_callback_steps": 4,
+        "incremental_callback_steps": 8,
+        "stats": {
+          "connectivity_assignment_queries": 0,
+          "connectivity_assignment_relaxations": 0,
+          "connectivity_assignment_dual_checks": 0,
+          "connectivity_joint_states": 0,
+          "connectivity_joint_transitions": 0,
+          "connectivity_joint_failures": 0,
+          "connectivity_refinement_rounds": 0,
+          "connectivity_refinement_obligations": 0,
+          "connectivity_route_steps": 0,
+          "connectivity_route_label_checks": 0,
+          "connectivity_route_graph_steps": 0,
+          "connectivity_route_unknown": 0,
+          "connectivity_route_failures": 0,
+          "connectivity_graph_input_edges": 28,
+          "connectivity_graph_recomputed_vertices": 10,
+          "connectivity_graph_reused_components": 1,
+          "connectivity_graph_block_edges": 11,
+          "connectivity_graph_restores": 2,
+          "connectivity_prunes": 0,
+          "connectivity_scope_checks": 0,
+          "connectivity_reason_checks": 0,
+          "connectivity_reason_steps": 0
+        }
+      },
+      "routing": {
+        "old_possible": true,
+        "old_steps": 4,
+        "all_strands_possible": false,
+        "new_steps": 8,
+        "label_checks": 4,
+        "refinements": 1,
+        "added_obligations": 1
+      },
+      "joint_demand": {
+        "independent_verified_failure": true,
+        "verification_steps": 3
+      },
+      "assignment_bound": {
+        "bound": 4,
+        "rows": [
+          1,
+          1
+        ],
+        "columns": [
+          2,
+          0
+        ],
+        "assignment": [
+          0,
+          1
+        ],
+        "relaxations": 5,
+        "dual_checks": 4
+      },
+      "limitations": [
+        "Callbacks, edge counts and route states are distinct work units, not a timing comparison.",
+        "The stronger route can do more work while proving a contradiction the older relaxation misses.",
+        "Positive capacity/routing relaxations never establish Gold."
+      ]
+    },
+    "F13": {
+      "fixture": "Three constrained cells sharing only two physical pieces across three nonempty regions",
+      "oracle": "Pigeonhole principle on cells0/2/4 and physical pieces0/1.",
+      "optional_native_lp_exercised": true,
+      "cases": {
+        "integer_weighted_bound_fallback": {
+          "complete": true,
+          "feasible": false,
+          "stats": {
+            "integer_region_queries": 0,
+            "integer_region_completed": 0,
+            "integer_region_unknown": 0,
+            "integer_region_compiler_transitions": 42,
+            "integer_region_compiler_states": 36,
+            "integer_region_price_queries": 44,
+            "integer_region_price_edges": 440,
+            "integer_region_columns": 8,
+            "integer_region_column_reuses": 0,
+            "integer_region_branches": 8,
+            "integer_region_connectivity_rejections": 256,
+            "integer_region_bound_queries": 9,
+            "integer_region_bound_replays": 8,
+            "integer_region_bound_hits": 0,
+            "integer_region_bound_failures": 8,
+            "integer_region_candidate_checks": 0,
+            "integer_region_candidate_fixings": 0,
+            "integer_region_validations": 0,
+            "integer_region_closure_checks": 72,
+            "integer_region_closure_states": 8,
+            "integer_region_failed_state_hits": 0,
+            "integer_region_saved": 0,
+            "integer_region_loaded": 0,
+            "integer_region_io_failures": 0,
+            "integer_bp_master_requests": 9,
+            "integer_bp_native_builds": 0,
+            "integer_bp_native_calls": 0,
+            "integer_bp_native_unknown": 9,
+            "integer_bp_native_retries": 0,
+            "integer_bp_pricing_queries": 0,
+            "integer_bp_pricing_edges": 0,
+            "integer_bp_generated_columns": 0,
+            "integer_bp_reused_columns": 0,
+            "integer_bp_exact_replays": 0,
+            "integer_bp_certified_failures": 0,
+            "integer_bp_fractional_nodes": 0,
+            "integer_bp_integral_candidates": 0,
+            "integer_bp_connectivity_cuts": 0,
+            "integer_bp_dual_reuses": 0,
+            "integer_bp_completed_price_reuses": 0
+          }
+        },
+        "branch_and_price": {
+          "complete": true,
+          "feasible": false,
+          "stats": {
+            "integer_region_queries": 0,
+            "integer_region_completed": 0,
+            "integer_region_unknown": 0,
+            "integer_region_compiler_transitions": 42,
+            "integer_region_compiler_states": 36,
+            "integer_region_price_queries": 0,
+            "integer_region_price_edges": 0,
+            "integer_region_columns": 0,
+            "integer_region_column_reuses": 0,
+            "integer_region_branches": 0,
+            "integer_region_connectivity_rejections": 0,
+            "integer_region_bound_queries": 0,
+            "integer_region_bound_replays": 0,
+            "integer_region_bound_hits": 0,
+            "integer_region_bound_failures": 0,
+            "integer_region_candidate_checks": 0,
+            "integer_region_candidate_fixings": 0,
+            "integer_region_validations": 0,
+            "integer_region_closure_checks": 0,
+            "integer_region_closure_states": 0,
+            "integer_region_failed_state_hits": 0,
+            "integer_region_saved": 0,
+            "integer_region_loaded": 0,
+            "integer_region_io_failures": 0,
+            "integer_bp_master_requests": 5,
+            "integer_bp_native_builds": 5,
+            "integer_bp_native_calls": 5,
+            "integer_bp_native_unknown": 0,
+            "integer_bp_native_retries": 0,
+            "integer_bp_pricing_queries": 18,
+            "integer_bp_pricing_edges": 180,
+            "integer_bp_generated_columns": 12,
+            "integer_bp_reused_columns": 0,
+            "integer_bp_exact_replays": 1,
+            "integer_bp_certified_failures": 1,
+            "integer_bp_fractional_nodes": 0,
+            "integer_bp_integral_candidates": 0,
+            "integer_bp_connectivity_cuts": 0,
+            "integer_bp_dual_reuses": 0,
+            "integer_bp_completed_price_reuses": 0
+          }
+        }
+      },
+      "limitations": [
+        "LP proposals alone prove nothing; omitted paths and Farkas inequalities are replayed exactly.",
+        "The fallback already has exact weighted bounds, so this comparison includes a strong existing regional relaxation.",
+        "No universal branch-count or wall-time dominance is claimed.",
+        "Native solver objects are rebuilt; completed native results and exact pricing subqueries are retained."
+      ]
+    },
+    "F14": {
+      "completed_finite_comparisons": [
+        {
+          "feature": "support",
+          "fixture": "tetra",
+          "enabled": false,
+          "complete": true,
+          "solutions": 4,
+          "work": {
+            "decisions": 12,
+            "domain_removals": 444,
+            "support_word_scans": 1016,
+            "support_cache_hits": 0,
+            "clause_literal_checks": 58,
+            "support_witness_checks": 0,
+            "clause_watch_checks": 0,
+            "clause_watch_hits": 0,
+            "clause_rescans": 58,
+            "matching_runs": 0,
+            "matching_rows_rebuilt": 0,
+            "matching_edge_checks": 0,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "support",
+          "fixture": "tetra",
+          "enabled": true,
+          "complete": true,
+          "solutions": 4,
+          "work": {
+            "decisions": 12,
+            "domain_removals": 444,
+            "support_word_scans": 503,
+            "support_cache_hits": 345,
+            "clause_literal_checks": 58,
+            "support_witness_checks": 712,
+            "clause_watch_checks": 0,
+            "clause_watch_hits": 0,
+            "clause_rescans": 58,
+            "matching_runs": 0,
+            "matching_rows_rebuilt": 0,
+            "matching_edge_checks": 0,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "support",
+          "fixture": "word-boundary",
+          "enabled": false,
+          "complete": true,
+          "solutions": 18,
+          "work": {
+            "decisions": 24,
+            "domain_removals": 84,
+            "support_word_scans": 1477,
+            "support_cache_hits": 0,
+            "clause_literal_checks": 120,
+            "support_witness_checks": 0,
+            "clause_watch_checks": 0,
+            "clause_watch_hits": 0,
+            "clause_rescans": 120,
+            "matching_runs": 0,
+            "matching_rows_rebuilt": 0,
+            "matching_edge_checks": 0,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "support",
+          "fixture": "word-boundary",
+          "enabled": true,
+          "complete": true,
+          "solutions": 18,
+          "work": {
+            "decisions": 24,
+            "domain_removals": 84,
+            "support_word_scans": 298,
+            "support_cache_hits": 1110,
+            "clause_literal_checks": 120,
+            "support_witness_checks": 1224,
+            "clause_watch_checks": 0,
+            "clause_watch_hits": 0,
+            "clause_rescans": 120,
+            "matching_runs": 0,
+            "matching_rows_rebuilt": 0,
+            "matching_edge_checks": 0,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "support",
+          "fixture": "prism",
+          "enabled": false,
+          "complete": true,
+          "solutions": 0,
+          "work": {
+            "decisions": 2,
+            "domain_removals": 29,
+            "support_word_scans": 781,
+            "support_cache_hits": 0,
+            "clause_literal_checks": 1,
+            "support_witness_checks": 0,
+            "clause_watch_checks": 0,
+            "clause_watch_hits": 0,
+            "clause_rescans": 1,
+            "matching_runs": 0,
+            "matching_rows_rebuilt": 0,
+            "matching_edge_checks": 0,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "support",
+          "fixture": "prism",
+          "enabled": true,
+          "complete": true,
+          "solutions": 0,
+          "work": {
+            "decisions": 2,
+            "domain_removals": 29,
+            "support_word_scans": 345,
+            "support_cache_hits": 316,
+            "clause_literal_checks": 1,
+            "support_witness_checks": 534,
+            "clause_watch_checks": 0,
+            "clause_watch_hits": 0,
+            "clause_rescans": 1,
+            "matching_runs": 0,
+            "matching_rows_rebuilt": 0,
+            "matching_edge_checks": 0,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "watch",
+          "fixture": "tetra",
+          "enabled": false,
+          "complete": true,
+          "solutions": 4,
+          "work": {
+            "decisions": 12,
+            "domain_removals": 444,
+            "support_word_scans": 503,
+            "support_cache_hits": 345,
+            "clause_literal_checks": 58,
+            "support_witness_checks": 712,
+            "clause_watch_checks": 0,
+            "clause_watch_hits": 0,
+            "clause_rescans": 58,
+            "matching_runs": 0,
+            "matching_rows_rebuilt": 0,
+            "matching_edge_checks": 0,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "watch",
+          "fixture": "tetra",
+          "enabled": true,
+          "complete": true,
+          "solutions": 4,
+          "work": {
+            "decisions": 12,
+            "domain_removals": 444,
+            "support_word_scans": 503,
+            "support_cache_hits": 345,
+            "clause_literal_checks": 7,
+            "support_witness_checks": 712,
+            "clause_watch_checks": 36,
+            "clause_watch_hits": 36,
+            "clause_rescans": 7,
+            "matching_runs": 0,
+            "matching_rows_rebuilt": 0,
+            "matching_edge_checks": 0,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "watch",
+          "fixture": "prism",
+          "enabled": false,
+          "complete": true,
+          "solutions": 0,
+          "work": {
+            "decisions": 2,
+            "domain_removals": 29,
+            "support_word_scans": 345,
+            "support_cache_hits": 316,
+            "clause_literal_checks": 1,
+            "support_witness_checks": 534,
+            "clause_watch_checks": 0,
+            "clause_watch_hits": 0,
+            "clause_rescans": 1,
+            "matching_runs": 0,
+            "matching_rows_rebuilt": 0,
+            "matching_edge_checks": 0,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "watch",
+          "fixture": "prism",
+          "enabled": true,
+          "complete": true,
+          "solutions": 0,
+          "work": {
+            "decisions": 2,
+            "domain_removals": 29,
+            "support_word_scans": 345,
+            "support_cache_hits": 316,
+            "clause_literal_checks": 1,
+            "support_witness_checks": 534,
+            "clause_watch_checks": 0,
+            "clause_watch_hits": 0,
+            "clause_rescans": 1,
+            "matching_runs": 0,
+            "matching_rows_rebuilt": 0,
+            "matching_edge_checks": 0,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "matching",
+          "fixture": "nonlocal-deficiency",
+          "enabled": false,
+          "complete": true,
+          "solutions": 0,
+          "work": {
+            "decisions": 2,
+            "domain_removals": 6,
+            "support_word_scans": 116,
+            "support_cache_hits": 58,
+            "clause_literal_checks": 1,
+            "support_witness_checks": 108,
+            "clause_watch_checks": 0,
+            "clause_watch_hits": 0,
+            "clause_rescans": 1,
+            "matching_runs": 0,
+            "matching_rows_rebuilt": 0,
+            "matching_edge_checks": 0,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "matching",
+          "fixture": "nonlocal-deficiency",
+          "enabled": true,
+          "complete": true,
+          "solutions": 0,
+          "work": {
+            "decisions": 0,
+            "domain_removals": 0,
+            "support_word_scans": 72,
+            "support_cache_hits": 0,
+            "clause_literal_checks": 0,
+            "support_witness_checks": 0,
+            "clause_watch_checks": 0,
+            "clause_watch_hits": 0,
+            "clause_rescans": 0,
+            "matching_runs": 1,
+            "matching_rows_rebuilt": 6,
+            "matching_edge_checks": 120,
+            "matching_hall_failures": 1,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "matching",
+          "fixture": "unsupported-tile",
+          "enabled": false,
+          "complete": true,
+          "solutions": 4,
+          "work": {
+            "decisions": 6,
+            "domain_removals": 18,
+            "support_word_scans": 124,
+            "support_cache_hits": 166,
+            "clause_literal_checks": 1,
+            "support_witness_checks": 273,
+            "clause_watch_checks": 2,
+            "clause_watch_hits": 2,
+            "clause_rescans": 1,
+            "matching_runs": 0,
+            "matching_rows_rebuilt": 0,
+            "matching_edge_checks": 0,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "matching",
+          "fixture": "unsupported-tile",
+          "enabled": true,
+          "complete": true,
+          "solutions": 4,
+          "work": {
+            "decisions": 6,
+            "domain_removals": 15,
+            "support_word_scans": 115,
+            "support_cache_hits": 155,
+            "clause_literal_checks": 1,
+            "support_witness_checks": 252,
+            "clause_watch_checks": 2,
+            "clause_watch_hits": 2,
+            "clause_rescans": 1,
+            "matching_runs": 8,
+            "matching_rows_rebuilt": 34,
+            "matching_edge_checks": 636,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 3
+          }
+        },
+        {
+          "feature": "matching",
+          "fixture": "disjoint-components",
+          "enabled": false,
+          "complete": true,
+          "solutions": 8,
+          "work": {
+            "decisions": 14,
+            "domain_removals": 28,
+            "support_word_scans": 144,
+            "support_cache_hits": 342,
+            "clause_literal_checks": 7,
+            "support_witness_checks": 524,
+            "clause_watch_checks": 23,
+            "clause_watch_hits": 22,
+            "clause_rescans": 5,
+            "matching_runs": 0,
+            "matching_rows_rebuilt": 0,
+            "matching_edge_checks": 0,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "matching",
+          "fixture": "disjoint-components",
+          "enabled": true,
+          "complete": true,
+          "solutions": 8,
+          "work": {
+            "decisions": 14,
+            "domain_removals": 28,
+            "support_word_scans": 144,
+            "support_cache_hits": 342,
+            "clause_literal_checks": 7,
+            "support_witness_checks": 524,
+            "clause_watch_checks": 23,
+            "clause_watch_hits": 22,
+            "clause_rescans": 5,
+            "matching_runs": 15,
+            "matching_rows_rebuilt": 62,
+            "matching_edge_checks": 1147,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "cooperative",
+          "fixture": "word-boundary",
+          "enabled": false,
+          "complete": true,
+          "solutions": 18,
+          "work": {
+            "decisions": 24,
+            "domain_removals": 84,
+            "support_word_scans": 298,
+            "support_cache_hits": 1110,
+            "clause_literal_checks": 5,
+            "support_witness_checks": 1224,
+            "clause_watch_checks": 55,
+            "clause_watch_hits": 55,
+            "clause_rescans": 5,
+            "matching_runs": 25,
+            "matching_rows_rebuilt": 224,
+            "matching_edge_checks": 8079,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "cooperative",
+          "fixture": "word-boundary",
+          "enabled": true,
+          "complete": true,
+          "solutions": 18,
+          "work": {
+            "decisions": 24,
+            "domain_removals": 84,
+            "support_word_scans": 382,
+            "support_cache_hits": 1110,
+            "clause_literal_checks": 5,
+            "support_witness_checks": 1224,
+            "clause_watch_checks": 55,
+            "clause_watch_hits": 55,
+            "clause_rescans": 5,
+            "matching_runs": 25,
+            "matching_rows_rebuilt": 224,
+            "matching_edge_checks": 8079,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "cooperative",
+          "fixture": "controlled160",
+          "enabled": false,
+          "complete": true,
+          "solutions": 1,
+          "work": {
+            "decisions": 0,
+            "domain_removals": 6,
+            "support_word_scans": 11133,
+            "support_cache_hits": 20,
+            "clause_literal_checks": 0,
+            "support_witness_checks": 30,
+            "clause_watch_checks": 0,
+            "clause_watch_hits": 0,
+            "clause_rescans": 0,
+            "matching_runs": 1,
+            "matching_rows_rebuilt": 160,
+            "matching_edge_checks": 76960,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "cooperative",
+          "fixture": "controlled160",
+          "enabled": true,
+          "complete": true,
+          "solutions": 1,
+          "work": {
+            "decisions": 0,
+            "domain_removals": 6,
+            "support_word_scans": 14490,
+            "support_cache_hits": 20,
+            "clause_literal_checks": 0,
+            "support_witness_checks": 30,
+            "clause_watch_checks": 0,
+            "clause_watch_hits": 0,
+            "clause_rescans": 0,
+            "matching_runs": 1,
+            "matching_rows_rebuilt": 160,
+            "matching_edge_checks": 76960,
+            "matching_hall_failures": 0,
+            "matching_exclusions": 0
+          }
+        },
+        {
+          "feature": "structural-proof",
+          "fixture": "duplicate-piece-native-failure",
+          "enabled": false,
+          "complete": true,
+          "verification": {
+            "shared_conflicts_calls": 1,
+            "shared_conflicts_verified": 1
+          },
+          "scope": "Both approaches independently establish a globally invalid duplicate-piece conjunction. GPU failed-root preparation is charged separately; structural guard minimization/replay and SAT model/query work are different units."
+        },
+        {
+          "feature": "structural-proof",
+          "fixture": "duplicate-piece-native-failure",
+          "enabled": true,
+          "complete": true,
+          "verification": {
+            "shared_conflicts_calls": 0,
+            "shared_conflicts_verified": 2
+          },
+          "proof_work": {
+            "gpu_shared_pending_reused": 1,
+            "gpu_proof_cache_replays": 2,
+            "gpu_proof_minimize_trials": 3,
+            "gpu_proof_minimize_successes": 1,
+            "gpu_proof_minimize_unknown": 2,
+            "gpu_proof_verifier_checks": 25,
+            "gpu_proof_checked_events": 4,
+            "gpu_proof_checked_removed_values": 4,
+            "gpu_proof_checked_seam_placements": 8,
+            "gpu_proof_admitted": 3
+          },
+          "scope": "Both approaches independently establish a globally invalid duplicate-piece conjunction. GPU failed-root preparation is charged separately; structural guard minimization/replay and SAT model/query work are different units."
+        }
+      ]
+    },
+    "F15": {
+      "same_trajectory_pairs": {
+        "cuda": [
+          {
+            "fixture": "tetra",
+            "policy": {
+              "ejection_chains": true
+            },
+            "objective": "edges",
+            "replicas": 8,
+            "lane_proposals": 768,
+            "independently_checked_boards": 80,
+            "baseline": {
+              "incremental_domain_terms": 6176,
+              "incremental_seam_terms": 9264,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            },
+            "incremental": {
+              "incremental_domain_terms": 4656,
+              "incremental_seam_terms": 8488,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            }
+          },
+          {
+            "fixture": "tetra",
+            "policy": {
+              "ejection_chains": true
+            },
+            "objective": "gold",
+            "replicas": 8,
+            "lane_proposals": 768,
+            "independently_checked_boards": 80,
+            "baseline": {
+              "incremental_domain_terms": 6176,
+              "incremental_seam_terms": 9264,
+              "incremental_strand_steps": 13063,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 6176
+            },
+            "incremental": {
+              "incremental_domain_terms": 4656,
+              "incremental_seam_terms": 8488,
+              "incremental_strand_steps": 8456,
+              "incremental_cache_reads": 3980,
+              "incremental_component_starts": 4044
+            }
+          },
+          {
+            "fixture": "tetra",
+            "policy": {
+              "ejection_chains": true,
+              "obstruction_chains": true,
+              "move_tabu": true,
+              "replica_exchange": true,
+              "lazy_gold_scoring": true
+            },
+            "objective": "edges",
+            "replicas": 8,
+            "lane_proposals": 768,
+            "independently_checked_boards": 80,
+            "baseline": {
+              "incremental_domain_terms": 3104,
+              "incremental_seam_terms": 4656,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            },
+            "incremental": {
+              "incremental_domain_terms": 5220,
+              "incremental_seam_terms": 9078,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            }
+          },
+          {
+            "fixture": "tetra",
+            "policy": {
+              "ejection_chains": true,
+              "obstruction_chains": true,
+              "move_tabu": true,
+              "replica_exchange": true,
+              "lazy_gold_scoring": true
+            },
+            "objective": "gold",
+            "replicas": 8,
+            "lane_proposals": 768,
+            "independently_checked_boards": 80,
+            "baseline": {
+              "incremental_domain_terms": 3104,
+              "incremental_seam_terms": 4656,
+              "incremental_strand_steps": 4515,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 2060
+            },
+            "incremental": {
+              "incremental_domain_terms": 5220,
+              "incremental_seam_terms": 9078,
+              "incremental_strand_steps": 5492,
+              "incremental_cache_reads": 3301,
+              "incremental_component_starts": 2435
+            }
+          },
+          {
+            "fixture": "controlled160",
+            "policy": {
+              "ejection_chains": true
+            },
+            "objective": "edges",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 123520,
+              "incremental_seam_terms": 185280,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            },
+            "incremental": {
+              "incremental_domain_terms": 3560,
+              "incremental_seam_terms": 9636,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            }
+          },
+          {
+            "fixture": "controlled160",
+            "policy": {
+              "ejection_chains": true
+            },
+            "objective": "gold",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 123520,
+              "incremental_seam_terms": 185280,
+              "incremental_strand_steps": 547001,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 264024
+            },
+            "incremental": {
+              "incremental_domain_terms": 3584,
+              "incremental_seam_terms": 9712,
+              "incremental_strand_steps": 17360,
+              "incremental_cache_reads": 5394,
+              "incremental_component_starts": 8131
+            }
+          },
+          {
+            "fixture": "controlled160",
+            "policy": {
+              "ejection_chains": true,
+              "obstruction_chains": true,
+              "move_tabu": true,
+              "replica_exchange": true,
+              "lazy_gold_scoring": true
+            },
+            "objective": "edges",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 62080,
+              "incremental_seam_terms": 93120,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            },
+            "incremental": {
+              "incremental_domain_terms": 3982,
+              "incremental_seam_terms": 10852,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            }
+          },
+          {
+            "fixture": "controlled160",
+            "policy": {
+              "ejection_chains": true,
+              "obstruction_chains": true,
+              "move_tabu": true,
+              "replica_exchange": true,
+              "lazy_gold_scoring": true
+            },
+            "objective": "gold",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 62080,
+              "incremental_seam_terms": 93120,
+              "incremental_strand_steps": 286356,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 132696
+            },
+            "incremental": {
+              "incremental_domain_terms": 3984,
+              "incremental_seam_terms": 10858,
+              "incremental_strand_steps": 18798,
+              "incremental_cache_reads": 5389,
+              "incremental_component_starts": 8127
+            }
+          },
+          {
+            "fixture": "original160",
+            "policy": {
+              "ejection_chains": true
+            },
+            "objective": "edges",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 123520,
+              "incremental_seam_terms": 185280,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            },
+            "incremental": {
+              "incremental_domain_terms": 3570,
+              "incremental_seam_terms": 9660,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            }
+          },
+          {
+            "fixture": "original160",
+            "policy": {
+              "ejection_chains": true
+            },
+            "objective": "gold",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 123520,
+              "incremental_seam_terms": 185280,
+              "incremental_strand_steps": 580337,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 281780
+            },
+            "incremental": {
+              "incremental_domain_terms": 3558,
+              "incremental_seam_terms": 9632,
+              "incremental_strand_steps": 19223,
+              "incremental_cache_reads": 6116,
+              "incremental_component_starts": 9037
+            }
+          },
+          {
+            "fixture": "original160",
+            "policy": {
+              "ejection_chains": true,
+              "obstruction_chains": true,
+              "move_tabu": true,
+              "replica_exchange": true,
+              "lazy_gold_scoring": true
+            },
+            "objective": "edges",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 62080,
+              "incremental_seam_terms": 93120,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            },
+            "incremental": {
+              "incremental_domain_terms": 3994,
+              "incremental_seam_terms": 10888,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            }
+          },
+          {
+            "fixture": "original160",
+            "policy": {
+              "ejection_chains": true,
+              "obstruction_chains": true,
+              "move_tabu": true,
+              "replica_exchange": true,
+              "lazy_gold_scoring": true
+            },
+            "objective": "gold",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 62080,
+              "incremental_seam_terms": 93120,
+              "incremental_strand_steps": 301989,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 141255
+            },
+            "incremental": {
+              "incremental_domain_terms": 3996,
+              "incremental_seam_terms": 10886,
+              "incremental_strand_steps": 20483,
+              "incremental_cache_reads": 6010,
+              "incremental_component_starts": 8922
+            }
+          }
+        ],
+        "webgpu": [
+          {
+            "fixture": "tetra",
+            "policy": {
+              "ejection_chains": true
+            },
+            "objective": "edges",
+            "replicas": 8,
+            "lane_proposals": 768,
+            "independently_checked_boards": 80,
+            "baseline": {
+              "incremental_domain_terms": 6176,
+              "incremental_seam_terms": 9264,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            },
+            "incremental": {
+              "incremental_domain_terms": 4656,
+              "incremental_seam_terms": 8488,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            }
+          },
+          {
+            "fixture": "tetra",
+            "policy": {
+              "ejection_chains": true
+            },
+            "objective": "gold",
+            "replicas": 8,
+            "lane_proposals": 768,
+            "independently_checked_boards": 80,
+            "baseline": {
+              "incremental_domain_terms": 6176,
+              "incremental_seam_terms": 9264,
+              "incremental_strand_steps": 13063,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 6176
+            },
+            "incremental": {
+              "incremental_domain_terms": 4656,
+              "incremental_seam_terms": 8488,
+              "incremental_strand_steps": 8456,
+              "incremental_cache_reads": 3980,
+              "incremental_component_starts": 4044
+            }
+          },
+          {
+            "fixture": "tetra",
+            "policy": {
+              "ejection_chains": true,
+              "obstruction_chains": true,
+              "move_tabu": true,
+              "replica_exchange": true,
+              "lazy_gold_scoring": true
+            },
+            "objective": "edges",
+            "replicas": 8,
+            "lane_proposals": 768,
+            "independently_checked_boards": 80,
+            "baseline": {
+              "incremental_domain_terms": 3104,
+              "incremental_seam_terms": 4656,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            },
+            "incremental": {
+              "incremental_domain_terms": 5220,
+              "incremental_seam_terms": 9078,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            }
+          },
+          {
+            "fixture": "tetra",
+            "policy": {
+              "ejection_chains": true,
+              "obstruction_chains": true,
+              "move_tabu": true,
+              "replica_exchange": true,
+              "lazy_gold_scoring": true
+            },
+            "objective": "gold",
+            "replicas": 8,
+            "lane_proposals": 768,
+            "independently_checked_boards": 80,
+            "baseline": {
+              "incremental_domain_terms": 3104,
+              "incremental_seam_terms": 4656,
+              "incremental_strand_steps": 4515,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 2060
+            },
+            "incremental": {
+              "incremental_domain_terms": 5220,
+              "incremental_seam_terms": 9078,
+              "incremental_strand_steps": 5492,
+              "incremental_cache_reads": 3301,
+              "incremental_component_starts": 2435
+            }
+          },
+          {
+            "fixture": "controlled160",
+            "policy": {
+              "ejection_chains": true
+            },
+            "objective": "edges",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 123520,
+              "incremental_seam_terms": 185280,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            },
+            "incremental": {
+              "incremental_domain_terms": 3560,
+              "incremental_seam_terms": 9636,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            }
+          },
+          {
+            "fixture": "controlled160",
+            "policy": {
+              "ejection_chains": true
+            },
+            "objective": "gold",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 123520,
+              "incremental_seam_terms": 185280,
+              "incremental_strand_steps": 547001,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 264024
+            },
+            "incremental": {
+              "incremental_domain_terms": 3584,
+              "incremental_seam_terms": 9712,
+              "incremental_strand_steps": 17360,
+              "incremental_cache_reads": 5394,
+              "incremental_component_starts": 8131
+            }
+          },
+          {
+            "fixture": "controlled160",
+            "policy": {
+              "ejection_chains": true,
+              "obstruction_chains": true,
+              "move_tabu": true,
+              "replica_exchange": true,
+              "lazy_gold_scoring": true
+            },
+            "objective": "edges",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 62080,
+              "incremental_seam_terms": 93120,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            },
+            "incremental": {
+              "incremental_domain_terms": 3982,
+              "incremental_seam_terms": 10852,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            }
+          },
+          {
+            "fixture": "controlled160",
+            "policy": {
+              "ejection_chains": true,
+              "obstruction_chains": true,
+              "move_tabu": true,
+              "replica_exchange": true,
+              "lazy_gold_scoring": true
+            },
+            "objective": "gold",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 62080,
+              "incremental_seam_terms": 93120,
+              "incremental_strand_steps": 286356,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 132696
+            },
+            "incremental": {
+              "incremental_domain_terms": 3984,
+              "incremental_seam_terms": 10858,
+              "incremental_strand_steps": 18798,
+              "incremental_cache_reads": 5389,
+              "incremental_component_starts": 8127
+            }
+          },
+          {
+            "fixture": "original160",
+            "policy": {
+              "ejection_chains": true
+            },
+            "objective": "edges",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 123520,
+              "incremental_seam_terms": 185280,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            },
+            "incremental": {
+              "incremental_domain_terms": 3570,
+              "incremental_seam_terms": 9660,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            }
+          },
+          {
+            "fixture": "original160",
+            "policy": {
+              "ejection_chains": true
+            },
+            "objective": "gold",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 123520,
+              "incremental_seam_terms": 185280,
+              "incremental_strand_steps": 580337,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 281780
+            },
+            "incremental": {
+              "incremental_domain_terms": 3558,
+              "incremental_seam_terms": 9632,
+              "incremental_strand_steps": 19223,
+              "incremental_cache_reads": 6116,
+              "incremental_component_starts": 9037
+            }
+          },
+          {
+            "fixture": "original160",
+            "policy": {
+              "ejection_chains": true,
+              "obstruction_chains": true,
+              "move_tabu": true,
+              "replica_exchange": true,
+              "lazy_gold_scoring": true
+            },
+            "objective": "edges",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 62080,
+              "incremental_seam_terms": 93120,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            },
+            "incremental": {
+              "incremental_domain_terms": 3994,
+              "incremental_seam_terms": 10888,
+              "incremental_strand_steps": 0,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 0
+            }
+          },
+          {
+            "fixture": "original160",
+            "policy": {
+              "ejection_chains": true,
+              "obstruction_chains": true,
+              "move_tabu": true,
+              "replica_exchange": true,
+              "lazy_gold_scoring": true
+            },
+            "objective": "gold",
+            "replicas": 4,
+            "lane_proposals": 384,
+            "independently_checked_boards": 40,
+            "baseline": {
+              "incremental_domain_terms": 62080,
+              "incremental_seam_terms": 93120,
+              "incremental_strand_steps": 301989,
+              "incremental_cache_reads": 0,
+              "incremental_component_starts": 141255
+            },
+            "incremental": {
+              "incremental_domain_terms": 3996,
+              "incremental_seam_terms": 10886,
+              "incremental_strand_steps": 20483,
+              "incremental_cache_reads": 6010,
+              "incremental_component_starts": 8922
+            }
+          }
+        ]
+      },
+      "units": {
+        "incremental_domain_terms": "individual old/new domain lookups; a changed-cell difference costs two",
+        "incremental_seam_terms": "individual old/new seam comparisons; an incident difference costs two",
+        "incremental_strand_steps": "endpoint-walker iterations, including accepted cache clear/fill and initialization",
+        "incremental_cache_reads": "cached proper-component label reads; separate from strand traversal",
+        "incremental_component_starts": "trace roots including partial/aborted traces"
+      },
+      "limits": [
+        "Same proposals and legacy trajectory; no faster solve claim.",
+        "Initial score and cache construction are charged; independent host validation costs are separate.",
+        "Candidate generation, metadata accesses, parent selection, and duplicate-label comparisons are not included in scorer counters.",
+        "Tiny or high-acceptance neighborhoods can do more strand/cache work; all pairs are retained."
+      ]
+    },
+    "F16": {
+      "interacting_cycles": {
+        "neighborhood_boards": 16,
+        "old_found_gold": false,
+        "found_gold": true,
+        "independent_scores_including_parent_seed": 3
+      },
+      "neighborhoods": {
+        "pair": {
+          "complete": true,
+          "boards_in_defined_neighborhood": 4,
+          "best_objective": [
+            149,
+            0
+          ],
+          "independent_scores_including_parent_seed": 3
+        },
+        "three_parent": {
+          "complete": true,
+          "boards_in_defined_neighborhood": 16,
+          "best_objective": [
+            174,
+            1
+          ],
+          "independent_scores_including_parent_seed": 4
+        },
+        "all_rotations": {
+          "complete": true,
+          "boards_in_defined_neighborhood": 81,
+          "best_objective": [
+            174,
+            1
+          ],
+          "independent_scores_including_parent_seed": 3
+        }
+      },
+      "conditional_gold_cuts": {
+        "cold_nodes": 7,
+        "cut_nodes": 5,
+        "baseline_scores": 4,
+        "cut_scores": 2,
+        "same_completed_best": true
+      },
+      "controller": {
+        "complete_configured_schedule": true,
+        "restores": 5
+      },
+      "limits": [
+        "All neighborhood counts describe the defined parental model only, not original puzzle coverage.",
+        "Stronger neighborhoods can require more work while finding a better candidate.",
+        "Gold cuts are exact safe bounds on the sampling objective; only independent full validation claims Gold.",
+        "Cache eviction and interrupted unfinished factor calculations can repeat work; counters disclose actual completed and retried operations.",
+        "No GPU workload, original Gold solution or elapsed-time superiority is claimed."
+      ]
+    },
+    "F17": {
+      "ordinary": [
+        {
+          "fixture": {
+            "cells": 4,
+            "free_cells": 4,
+            "provenance": "independent tiny tetrahedron"
+          },
+          "contexts": 6,
+          "same_completed_optima": true,
+          "variants": {
+            "existing_local_models": {
+              "constructed_variables": 102,
+              "constructed_constraints": 132,
+              "native": {
+                "model_constructions": 6,
+                "solver_constructions": 6,
+                "native_calls": 6,
+                "native_completed_calls": 6,
+                "native_unknown_calls": 0,
+                "native_exception_calls": 0,
+                "native_branches": 500,
+                "native_conflicts": 31,
+                "native_statuses": {
+                  "OPTIMAL": 6
+                }
+              },
+              "checkpoint_bytes": []
+            },
+            "retained_warm": {
+              "constructed_variables": 51,
+              "constructed_constraints": 59,
+              "native": {
+                "model_constructions": 1,
+                "solver_constructions": 1,
+                "native_calls": 6,
+                "native_completed_calls": 6,
+                "native_unknown_calls": 0,
+                "native_exception_calls": 0,
+                "native_branches": 1980,
+                "native_conflicts": 42,
+                "native_statuses": {
+                  "OPTIMAL": 6
+                }
+              },
+              "checkpoint_bytes": []
+            },
+            "retained_restore_after3": {
+              "constructed_variables": 92,
+              "constructed_constraints": 104,
+              "native": {
+                "model_constructions": 2,
+                "solver_constructions": 2,
+                "native_calls": 6,
+                "native_completed_calls": 6,
+                "native_unknown_calls": 0,
+                "native_exception_calls": 0,
+                "native_branches": 1980,
+                "native_conflicts": 42,
+                "native_statuses": {
+                  "OPTIMAL": 6
+                }
+              },
+              "checkpoint_bytes": [
+                5203
+              ]
+            }
+          }
+        },
+        {
+          "fixture": {
+            "cells": 160,
+            "free_cells": 4,
+            "provenance": "synthetic planted Gold on actual160-cell geometry, all but4fixed"
+          },
+          "contexts": 6,
+          "same_completed_optima": true,
+          "variants": {
+            "existing_local_models": {
+              "constructed_variables": 106,
+              "constructed_constraints": 140,
+              "native": {
+                "model_constructions": 6,
+                "solver_constructions": 6,
+                "native_calls": 6,
+                "native_completed_calls": 6,
+                "native_unknown_calls": 0,
+                "native_exception_calls": 0,
+                "native_branches": 284,
+                "native_conflicts": 7,
+                "native_statuses": {
+                  "OPTIMAL": 6
+                }
+              },
+              "checkpoint_bytes": []
+            },
+            "retained_warm": {
+              "constructed_variables": 1689,
+              "constructed_constraints": 1931,
+              "native": {
+                "model_constructions": 1,
+                "solver_constructions": 1,
+                "native_calls": 6,
+                "native_completed_calls": 6,
+                "native_unknown_calls": 0,
+                "native_exception_calls": 0,
+                "native_branches": 1806,
+                "native_conflicts": 16,
+                "native_statuses": {
+                  "OPTIMAL": 6
+                }
+              },
+              "checkpoint_bytes": []
+            },
+            "retained_restore_after3": {
+              "constructed_variables": 3368,
+              "constructed_constraints": 3848,
+              "native": {
+                "model_constructions": 2,
+                "solver_constructions": 2,
+                "native_calls": 6,
+                "native_completed_calls": 6,
+                "native_unknown_calls": 0,
+                "native_exception_calls": 0,
+                "native_branches": 1806,
+                "native_conflicts": 16,
+                "native_statuses": {
+                  "OPTIMAL": 6
+                }
+              },
+              "checkpoint_bytes": [
+                109817
+              ]
+            }
+          }
+        }
+      ],
+      "gold_feasibility": {
+        "contexts": 49,
+        "cold": {
+          "models": 49,
+          "variables": 11956,
+          "constraints": 8281,
+          "native": {
+            "calls": 49,
+            "statuses": {
+              "OPTIMAL": 17,
+              "INFEASIBLE": 32
+            },
+            "branches": 4912,
+            "conflicts": 196,
+            "exceptions": 0
+          }
+        },
+        "retained_native_work": {
+          "calls": 36,
+          "statuses": {
+            "OPTIMAL": 4,
+            "INFEASIBLE": 32
+          },
+          "branches": 3486,
+          "conflicts": 18,
+          "exceptions": 0
+        },
+        "repeated_contexts_native_calls": 0
+      },
+      "masters": {
+        "hitting_master": {
+          "contexts": 5,
+          "cold_models": 5,
+          "cold_native": {
+            "calls": 5,
+            "statuses": {
+              "OPTIMAL": 5
+            },
+            "branches": 11,
+            "conflicts": 1,
+            "exceptions": 0
+          },
+          "retained_native": {
+            "calls": 4,
+            "statuses": {
+              "OPTIMAL": 4
+            },
+            "branches": 10,
+            "conflicts": 0,
+            "exceptions": 0
+          }
+        },
+        "fragment_master": {
+          "contexts": 4,
+          "cold_models": 4,
+          "cold_native": {
+            "calls": 4,
+            "statuses": {
+              "OPTIMAL": 4
+            },
+            "branches": 0,
+            "conflicts": 0,
+            "exceptions": 0
+          },
+          "retained_native": {
+            "calls": 3,
+            "statuses": {
+              "OPTIMAL": 3
+            },
+            "branches": 0,
+            "conflicts": 0,
+            "exceptions": 0
+          }
+        }
+      },
+      "controlled160": {
+        "fixed_cells": 157,
+        "enumerated_assignments": 162,
+        "gold_boards": 1,
+        "contexts": 3
+      },
+      "limits": [
+        "Local completed query/model reuse is not global puzzle coverage.",
+        "No native CP-SAT active search or learned-state serialization is claimed.",
+        "Construction savings may accompany more model terms or search branches; no elapsed-time winner or original Gold result is inferred."
+      ]
+    }
+  },
+  "f01_correctness": [
+    "Eight dimensions with eight values each and one exclusion per dimension leave 7**8 Cartesian assignments in one pending cube represented by fewer than 40 graph nodes.",
+    "The serialized shared snapshot occupies less than 1/20 of the flat JSON length for 100 synthetic native frames. The exact value and independent mutable copies survive restoration."
+  ],
+  "f08_held_out_context_policy": {
+    "completed_rows": 24,
+    "base_nodes": 129,
+    "selected_nodes": 122
+  },
+  "f14_cooperative_fixed_work": {
+    "original160": {
+      "trials": [
+        {
+          "scalar_s": 0.023037500053760596,
+          "cooperative_s": 0.014642300011473708,
+          "scalar_word_scans": 1957421,
+          "cooperative_word_scans": 4279363
+        },
+        {
+          "scalar_s": 0.015316999968490563,
+          "cooperative_s": 0.01414340001065284,
+          "scalar_word_scans": 1957421,
+          "cooperative_word_scans": 4279363
+        },
+        {
+          "scalar_s": 0.013859199985745363,
+          "cooperative_s": 0.016485699990880676,
+          "scalar_word_scans": 1957421,
+          "cooperative_word_scans": 4279363
+        },
+        {
+          "scalar_s": 0.015160500042838976,
+          "cooperative_s": 0.015838999970583245,
+          "scalar_word_scans": 1957421,
+          "cooperative_word_scans": 4279363
+        },
+        {
+          "scalar_s": 0.016288099985104054,
+          "cooperative_s": 0.015571299984003417,
+          "scalar_word_scans": 1957421,
+          "cooperative_word_scans": 4279363
+        }
+      ],
+      "median_scalar_s": 0.015316999968490563,
+      "median_cooperative_s": 0.015571299984003417,
+      "median_paired_cooperative_to_scalar_ratio": 0.9559924115301249,
+      "cooperative_faster_pairs": 3
+    },
+    "word-boundary": {
+      "trials": [
+        {
+          "scalar_s": 0.0061031999794067815,
+          "cooperative_s": 0.0055856000108178705,
+          "scalar_word_scans": 1086,
+          "cooperative_word_scans": 1680
+        },
+        {
+          "scalar_s": 0.004831900048884563,
+          "cooperative_s": 0.005485500019858591,
+          "scalar_word_scans": 1086,
+          "cooperative_word_scans": 1680
+        },
+        {
+          "scalar_s": 0.004370499984361231,
+          "cooperative_s": 0.0073649000260047615,
+          "scalar_word_scans": 1086,
+          "cooperative_word_scans": 1680
+        },
+        {
+          "scalar_s": 0.00399440000182949,
+          "cooperative_s": 0.00738440002896823,
+          "scalar_word_scans": 1086,
+          "cooperative_word_scans": 1680
+        },
+        {
+          "scalar_s": 0.004356099976575933,
+          "cooperative_s": 0.006772900014766492,
+          "scalar_word_scans": 1086,
+          "cooperative_word_scans": 1680
+        }
+      ],
+      "median_scalar_s": 0.004370499984361231,
+      "median_cooperative_s": 0.006772900014766492,
+      "median_paired_cooperative_to_scalar_ratio": 1.5548082117459248,
+      "cooperative_faster_pairs": 1
+    }
+  },
+  "f14_cooperative_application": {
+    "settings_source_commit": "2b031e0b17e6dd9361b51438d996fa8e38077ff1",
+    "suites": {
+      "gpu-finite": {
+        "report_sha256": "37e8e217d61513ae80acda20b2b7f1f6ffdbd12e8e27a50eb6104abd90f6bd00",
+        "rows": [
+          {
+            "case": "residual",
+            "seed": 817,
+            "profile": "round26-matching",
+            "cells": 160,
+            "free_cells": 24,
+            "replicas": 128,
+            "complete": true,
+            "status": "solved",
+            "nodes": 1851,
+            "solver_wall_seconds": 5.389999999999418,
+            "wall_seconds": 9.405999999988126,
+            "lane_completions": 0
+          },
+          {
+            "case": "residual",
+            "seed": 817,
+            "profile": "round26-cooperative",
+            "cells": 160,
+            "free_cells": 24,
+            "replicas": 128,
+            "complete": true,
+            "status": "solved",
+            "nodes": 1851,
+            "solver_wall_seconds": 4.39100000000326,
+            "wall_seconds": 8.625,
+            "lane_completions": 0
+          },
+          {
+            "case": "residual",
+            "seed": 291,
+            "profile": "round26-cooperative",
+            "cells": 160,
+            "free_cells": 24,
+            "replicas": 128,
+            "complete": true,
+            "status": "solved",
+            "nodes": 2266,
+            "solver_wall_seconds": 5.75,
+            "wall_seconds": 10.702999999994063,
+            "lane_completions": 17
+          },
+          {
+            "case": "residual",
+            "seed": 291,
+            "profile": "round26-matching",
+            "cells": 160,
+            "free_cells": 24,
+            "replicas": 128,
+            "complete": true,
+            "status": "solved",
+            "nodes": 2131,
+            "solver_wall_seconds": 7.655999999988126,
+            "wall_seconds": 12.171999999991385,
+            "lane_completions": 17
+          }
+        ]
+      },
+      "gpu-original": {
+        "report_sha256": "cd317cbe3e81c786a32a455bd425227a80e028ec4b10b10309d2650fd8978d19",
+        "rows": [
+          {
+            "case": "original",
+            "seed": 71,
+            "profile": "round26-matching",
+            "cells": 160,
+            "free_cells": null,
+            "replicas": 128,
+            "complete": false,
+            "status": "timeout",
+            "nodes": 80,
+            "solver_wall_seconds": 31.968999999997322,
+            "wall_seconds": 49.312000000005355,
+            "lane_completions": 47
+          },
+          {
+            "case": "original",
+            "seed": 71,
+            "profile": "round26-cooperative",
+            "cells": 160,
+            "free_cells": null,
+            "replicas": 128,
+            "complete": false,
+            "status": "timeout",
+            "nodes": 291,
+            "solver_wall_seconds": 33.39100000000326,
+            "wall_seconds": 52.98399999999674,
+            "lane_completions": 47
+          },
+          {
+            "case": "original",
+            "seed": 197,
+            "profile": "round26-cooperative",
+            "cells": 160,
+            "free_cells": null,
+            "replicas": 128,
+            "complete": false,
+            "status": "timeout",
+            "nodes": 276,
+            "solver_wall_seconds": 33.84300000000803,
+            "wall_seconds": 39.60899999999674,
+            "lane_completions": 47
+          },
+          {
+            "case": "original",
+            "seed": 197,
+            "profile": "round26-matching",
+            "cells": 160,
+            "free_cells": null,
+            "replicas": 128,
+            "complete": false,
+            "status": "timeout",
+            "nodes": 80,
+            "solver_wall_seconds": 31.922000000005937,
+            "wall_seconds": 34.687999999994645,
+            "lane_completions": 47
+          }
+        ]
+      }
+    }
+  },
+  "f04_theory_application": {
+    "settings_source_commit": "2b031e0b17e6dd9361b51438d996fa8e38077ff1",
+    "report_sha256": "398f30cbbcdbf933393a077dd84186de15ca262ab982d877503bc25e11047607",
+    "all_profiles": {
+      "baseline": {
+        "cases": 6,
+        "completed": 5
+      },
+      "round26-guards": {
+        "cases": 6,
+        "completed": 4
+      },
+      "round26-simplified": {
+        "cases": 6,
+        "completed": 5
+      },
+      "round26-theory": {
+        "cases": 6,
+        "completed": 6
+      }
+    },
+    "on_24_free_cells": [
+      {
+        "seed": 817,
+        "profile": "baseline",
+        "complete": false,
+        "status": "timeout",
+        "nodes": 105031,
+        "budget_seconds": 30.0
+      },
+      {
+        "seed": 817,
+        "profile": "round26-theory",
+        "complete": true,
+        "status": "solved",
+        "nodes": 1449,
+        "budget_seconds": 30.0
+      },
+      {
+        "seed": 291,
+        "profile": "round26-theory",
+        "complete": true,
+        "status": "solved",
+        "nodes": 1004,
+        "budget_seconds": 30.0
+      },
+      {
+        "seed": 291,
+        "profile": "baseline",
+        "complete": true,
+        "status": "solved",
+        "nodes": 4584,
+        "budget_seconds": 30.0
+      }
+    ],
+    "baseline_backend": "Glucose4",
+    "theory_profile_backend": "Cadical195",
+    "theory_profile_options": [
+      "persistent_theory",
+      "sat_guard_reuse"
+    ],
+    "interpretation": "This application comparison evaluates the entire profile. The separate direct-versus-clause-only experiment on CaDiCaL is the controlled comparison of the propagation callback. Nodes observed before a timeout are incomplete work."
+  },
+  "validation": {
+    "cpu312": {
+      "source_commit": "813c470acbda1b045e0799b74257104c1427fe2a",
+      "report_sha256": "1a0190c63c514c52cddb3d80c786838f92505361604fe5f849966c136e2986ac",
+      "tests": 2164,
+      "skipped": 196,
+      "errors": 0,
+      "failures": 0,
+      "scripts_passed": 1
+    },
+    "cpu315": {
+      "source_commit": "b9c1bffc58f7b6853c84f348483d9f5f3d0ea0c5",
+      "report_sha256": "e89af72edc341c76196ce8ff175c7f85db6f27de1bb2c68aec37df8755639e4d",
+      "tests": 2168,
+      "skipped": 424,
+      "errors": 0,
+      "failures": 0,
+      "scripts_passed": 1
+    },
+    "installed_checkpoints": {
+      "source_commit": "b0cd9371622d6279214256b6b4c1c3ccf59a4861",
+      "report_sha256": "c209abb68e7c0fec0e3982e47a59eeb8099d5e382a53bf6628b1a6b6f1fcf317",
+      "checked_routes": [
+        "dfs-legacy",
+        "hybrid-legacy",
+        "hybrid-durable-adoption-inner-dfs",
+        "hybrid-durable-flag-off"
+      ],
+      "protected_files_unchanged": 6
+    },
+    "hardware": {
+      "source_commit": "685f6212871e3a8dcd2ef830da365c08c222f249",
+      "report_sha256": "c6c2fc38857721f63b48fbfdf09c167e93fd2910be8121bfca7164cf720c19d2",
+      "tests": 372,
+      "skipped": 1,
+      "errors": 0,
+      "failures": 0,
+      "scripts_passed": 6
+    }
+  }
+}

@@ -26,4 +26,4 @@ The finite evidence runner is:
 python benchmark_recombination_round26.py --output audit/optimization-round26/recombination-finite.json --evidence-stage frozen
 ```
 
-It requires a fresh output and a clean, unchanged source/runtime/Git identity for frozen evidence. It compares completed interacting-cycle, multi-parent/rotation and conditional-cut outcomes, separately accounting scorer calls, factor/cut work, branch work and restore costs. Whole-board retention/settings measurements and the final release-wide test gate remain outstanding. No original Gold solution or universal elapsed-time gain is claimed.
+It requires a fresh output and a clean, unchanged source/runtime/Git identity for frozen evidence. It compares completed interacting-cycle, multi-parent/rotation and conditional-cut outcomes, separately accounting scorer calls, factor/cut work, branch work and restore costs. The [Round 26 release results](ROUND26_RESULTS.md) include the full validation suite and original-input trials. The unrestricted Gold puzzle remains unsolved.

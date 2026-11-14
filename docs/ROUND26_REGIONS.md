@@ -2,7 +2,7 @@
 
 F09-F13 implement the 25 agreed regional subscopes below. The five controls are opt-in: `regional_compiler`, `recursive_regions`, `regional_proof_reuse`, `connectivity_obligations`, and `integer_regional_master`. They are integrated into DFS; the direct regional DAG encoding also runs in SAT, CP-SAT, CP-SAT circuit and persistent SAT. No original Gold solution or universal speed improvement is claimed.
 
-The implemented mechanisms have passed bounded correctness and lifecycle checks. Final frozen evidence, whole-board ablations, hardware settings and release validation remain separate gates. A cap means that optional reasoning is unknown; it never marks the owned search region exhausted.
+The implemented mechanisms have passed bounded correctness and lifecycle checks. The [Round 26 release results](ROUND26_RESULTS.md) report the frozen regional measurements, application benchmarks and hardware settings. A cap means that optional reasoning is unknown; it never marks the owned search region exhausted.
 
 ## F09: reusable Gold-aware compiler
 
@@ -94,4 +94,4 @@ The reproducible finite runner is:
 python benchmark_regions_round26.py --output audit/optimization-round26/regions-finite.json --evidence-stage frozen
 ```
 
-Use `--family F09`, `F10`, `F11`, `F12` or `F13` for a single workstream. It requires a fresh JSON destination, enabled Python assertions, stable source/runtime/Git identity, and a clean commit for frozen evidence. All comparisons must finish and satisfy their independent finite oracle before a passed report is written. Final frozen receipts and original-board measurements are still required for retention/settings decisions.
+Use `--family F09`, `F10`, `F11`, `F12` or `F13` for a single workstream. It requires a fresh JSON destination, enabled Python assertions, stable source/runtime/Git identity, and a clean commit for frozen evidence. All comparisons must finish and satisfy their independent finite oracle before a passed report is written. The combined report covers F09 through F13. Its SHA-256 and reproduction command appear in the [machine-readable measurements](round26-results.json).

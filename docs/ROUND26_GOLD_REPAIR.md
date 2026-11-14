@@ -69,8 +69,7 @@ new native calls. Five hitting-set contexts used five versus four native calls;
 four fragment contexts used four versus three. All optima/completions were
 independently checked. The actual 160-cell geometry case fixes 157 cells and
 checks all 162 remaining physical/rotation assignments; it is a correctness
-fixture, not progress on the original unsolved Gold puzzle. Final frozen
-receipts and whole-application interaction results are recorded separately.
+fixture, not progress on the original unsolved Gold puzzle. The [Round 26 release results](ROUND26_RESULTS.md) include the frozen repair comparison and application results.
 
 The ordinary retained service and adaptive patch/policy allocation are owned by
 the rest of F17. These Gold-specific results do not establish the best overall
