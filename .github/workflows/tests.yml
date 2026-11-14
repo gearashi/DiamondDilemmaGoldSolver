@@ -61,6 +61,9 @@ jobs:
       - name: Check four-swap routes and reusable bounds
         run: python -B -m unittest discover -v -p "test_r30*.py"
 
+      - name: Check connected exchanges, fresh boards and physical Gold deductions
+        run: python -B -m unittest discover -v -p "test_r31*.py"
+
       - name: Run CPU-only tests
         env:
           DIAMOND_REQUIRE_NATIVE: '1'

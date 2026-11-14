@@ -156,11 +156,11 @@ class CycleModel:
         return len(self.actor_groups)
 
     def solve(self, *, target, pins=(), rules=(), seconds=5, optimize=False, core=False,
-              move_cores=(), contact=False, predecessors=False):
+              move_cores=(), contact=False, predecessors=False, connected=False):
         from ortools.sat.python import cp_model
         if type(target) is not int or not 0<=target<=len(self.model.problem.edges) or seconds<=0:
             raise ValueError("Invalid target or solve budget.")
-        if optimize and (rules or move_cores or contact or predecessors):
+        if optimize and (rules or move_cores or contact or predecessors or connected):
             raise ValueError("Threshold-specific exclusions cannot be used to optimize smaller scores.")
         m = self.cp.clone()
         pins = list(pins)
@@ -198,7 +198,7 @@ class CycleModel:
                 m.add_forbidden_assignments([self.donors[c] for c in row],[row])
             else:
                 m.add_bool_or([])
-        if contact:
+        if contact or connected:
             # Each supported class requires an inter-cycle contact in the three
             # checked center scopes. Polarity and objective are part of this proof.
             record=read_json(Path(__file__).resolve().parent/'docs/R29_EXCHANGE_CENTERS.json')
@@ -209,14 +209,25 @@ class CycleModel:
             near=[{i,*[int(b) for b in row if b>=0]} for i,row in enumerate(self.model.problem.neighbors)]
             pairs=[(a,b) for a in self.pool for b in self.pool if a!=b and near[a]&near[b]]
             contacts=[]
+            cycle_edges=[]
             for i,first in enumerate(self.actor_groups):
-                for second in self.actor_groups[i+1:]:
+                for j,second in enumerate(self.actor_groups[i+1:],i+1):
+                    group_contacts=[]
                     for a in first:
                         for b in second:
                             e=m.new_bool_var("touches")
                             m.add_allowed_assignments([a,b],pairs).only_enforce_if(e)
                             contacts.append(e)
-            m.add_bool_or(contacts)
+                            group_contacts.append(e)
+                    cycle_edges.append((i,j,group_contacts))
+            from r28_exchange import ExchangeBound
+            from r31_route_geometry import proved_connected
+            if connected and proved_connected(ExchangeBound(self.model,self.center),target,self.cycles):
+                # Every proper bipartition must have at least one actual contact.
+                for cut in range(1,1 << (len(self.actor_groups)-1)):
+                    m.add_bool_or([e for i,j,lits in cycle_edges if ((cut>>i)^(cut>>j))&1 for e in lits])
+            else:
+                m.add_bool_or(contacts)
         if not optimize:
             m.add(sum(self.seams)>=target)
         else:
@@ -259,19 +270,19 @@ def rules_in(database, binding):
                 for pins,upper in db.execute("SELECT pins,upper FROM route_donor_rule WHERE binding=?",(binding,))]
 
 
-def learn(query, pins, target, *, seconds=5, max_delete=30, database=None):
+def learn(query, pins, target, *, seconds=5, max_delete=30, database=None, contact=False, connected=False):
     """Learn only after a fresh unguarded threshold query confirms the smaller condition."""
     if max_delete<0:
         raise ValueError("Invalid deletion budget.")
     pins = sorted(set(map(tuple,pins)))
-    first = query.solve(target=target,pins=pins,seconds=seconds,core=True)
+    first = query.solve(target=target,pins=pins,seconds=seconds,core=True,contact=contact,connected=connected)
     if first['status']!='INFEASIBLE':
         return dict(status=first['status'],queries=1,stored=False)
     keep = list(first['core'])
     calls = 1
     for pair in keep.copy()[:max_delete]:
         reduced = [x for x in keep if x!=pair]
-        answer = query.solve(target=target,pins=reduced,seconds=seconds)
+        answer = query.solve(target=target,pins=reduced,seconds=seconds,contact=contact,connected=connected)
         calls += 1
         if answer['status']=='INFEASIBLE':
             keep = reduced
@@ -307,6 +318,7 @@ def main():
     parser.add_argument("--database",help="SQLite cache of checked conditional donor bounds.")
     parser.add_argument("--learn",action="store_true")
     parser.add_argument("--contact",action="store_true",help="Use the released-center 208 inter-cycle contact proof.")
+    parser.add_argument("--connected",action="store_true",help="Require all actor cycles to connect under the release proof.")
     parser.add_argument("--predecessors",action="store_true",help="Use checked isolated-cycle predecessor gains where the released proof applies.")
     args=parser.parse_args()
     problem=SearchProblem(read_json(args.tiles))
@@ -315,7 +327,7 @@ def main():
     query=CycleModel(model,board,args.cells,args.cycles)
     pins=read_json(args.pins) if args.pins else []
     if args.learn:
-        result=learn(query,pins,args.target,seconds=args.seconds,database=args.database)
+        result=learn(query,pins,args.target,seconds=args.seconds,database=args.database,contact=args.contact,connected=args.connected)
     else:
         from r29_move_cores import load_cores
         cores=[]
@@ -324,7 +336,7 @@ def main():
                 cores=load_cores(db,model,board,args.target)
         result=query.solve(target=args.target,pins=pins,seconds=args.seconds,
                            rules=rules_in(args.database,query.binding),move_cores=cores,contact=args.contact,
-                           predecessors=args.predecessors)
+                           predecessors=args.predecessors,connected=args.connected)
     print(json.dumps(result))
 
 

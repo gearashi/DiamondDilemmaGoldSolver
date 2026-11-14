@@ -1,0 +1,799 @@
+{
+  "domain": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "backend": "cpu",
+  "rounds": 32,
+  "dispatches": 64,
+  "replicas": 512,
+  "runs": {
+    "released": [
+      {
+        "seed": 0,
+        "initial": 8,
+        "gpu_proposals": 0,
+        "repair_rounds": 32,
+        "score": 167,
+        "components": 115,
+        "gold": false,
+        "bonds_kept": 2
+      },
+      {
+        "seed": 1,
+        "initial": 10,
+        "gpu_proposals": 0,
+        "repair_rounds": 32,
+        "score": 164,
+        "components": 127,
+        "gold": false,
+        "bonds_kept": 3
+      },
+      {
+        "seed": 2,
+        "initial": 5,
+        "gpu_proposals": 0,
+        "repair_rounds": 32,
+        "score": 161,
+        "components": 125,
+        "gold": false,
+        "bonds_kept": 3
+      },
+      {
+        "seed": 3,
+        "initial": 9,
+        "gpu_proposals": 0,
+        "repair_rounds": 32,
+        "score": 166,
+        "components": 111,
+        "gold": false,
+        "bonds_kept": 3
+      }
+    ],
+    "plain": [
+      {
+        "gold": false,
+        "score": 163,
+        "components": 118,
+        "seed": 0,
+        "initial": 8,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 3
+      },
+      {
+        "gold": false,
+        "score": 166,
+        "components": 113,
+        "seed": 1,
+        "initial": 10,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      },
+      {
+        "gold": false,
+        "score": 164,
+        "components": 116,
+        "seed": 2,
+        "initial": 5,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 3
+      },
+      {
+        "gold": false,
+        "score": 166,
+        "components": 114,
+        "seed": 3,
+        "initial": 9,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      }
+    ],
+    "bonds": [
+      {
+        "gold": false,
+        "score": 164,
+        "components": 121,
+        "seed": 0,
+        "initial": 14,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      },
+      {
+        "gold": false,
+        "score": 162,
+        "components": 122,
+        "seed": 1,
+        "initial": 16,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      },
+      {
+        "gold": false,
+        "score": 160,
+        "components": 111,
+        "seed": 2,
+        "initial": 13,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 31,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      },
+      {
+        "gold": false,
+        "score": 165,
+        "components": 111,
+        "seed": 3,
+        "initial": 16,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      }
+    ],
+    "slate": [
+      {
+        "gold": false,
+        "score": 158,
+        "components": 120,
+        "seed": 0,
+        "initial": 8,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 4
+      },
+      {
+        "gold": false,
+        "score": 158,
+        "components": 127,
+        "seed": 1,
+        "initial": 10,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      },
+      {
+        "gold": false,
+        "score": 156,
+        "components": 131,
+        "seed": 2,
+        "initial": 8,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 3
+      },
+      {
+        "gold": false,
+        "score": 158,
+        "components": 131,
+        "seed": 3,
+        "initial": 9,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      }
+    ],
+    "joint": [
+      {
+        "gold": false,
+        "score": 173,
+        "components": 115,
+        "seed": 0,
+        "initial": 8,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "positive_swap_pairs": 3990,
+          "joint_OPTIMAL": 31,
+          "joint_branches": 4048,
+          "joint_FEASIBLE": 1,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 3
+      },
+      {
+        "gold": false,
+        "score": 171,
+        "components": 98,
+        "seed": 1,
+        "initial": 10,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "positive_swap_pairs": 3736,
+          "joint_OPTIMAL": 32,
+          "joint_branches": 3784,
+          "unique_repaired_boards": 30
+        },
+        "bonds_kept": 1
+      },
+      {
+        "gold": false,
+        "score": 167,
+        "components": 110,
+        "seed": 2,
+        "initial": 5,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "positive_swap_pairs": 4296,
+          "joint_OPTIMAL": 31,
+          "joint_branches": 12282,
+          "joint_UNKNOWN": 1,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      },
+      {
+        "gold": false,
+        "score": 171,
+        "components": 104,
+        "seed": 3,
+        "initial": 9,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "positive_swap_pairs": 3870,
+          "joint_OPTIMAL": 32,
+          "joint_branches": 1077,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 3
+      }
+    ],
+    "bond-joint": [
+      {
+        "gold": false,
+        "score": 162,
+        "components": 113,
+        "seed": 0,
+        "initial": 14,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "positive_swap_pairs": 3547,
+          "joint_FEASIBLE": 1,
+          "joint_branches": 8078,
+          "joint_OPTIMAL": 31,
+          "unique_repaired_boards": 32,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      },
+      {
+        "gold": false,
+        "score": 165,
+        "components": 114,
+        "seed": 1,
+        "initial": 16,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "positive_swap_pairs": 3261,
+          "joint_OPTIMAL": 32,
+          "joint_branches": 5018,
+          "unique_repaired_boards": 31,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      },
+      {
+        "gold": false,
+        "score": 164,
+        "components": 117,
+        "seed": 2,
+        "initial": 13,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "positive_swap_pairs": 3574,
+          "joint_OPTIMAL": 32,
+          "joint_branches": 2456,
+          "unique_repaired_boards": 32,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      },
+      {
+        "gold": false,
+        "score": 167,
+        "components": 104,
+        "seed": 3,
+        "initial": 16,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "positive_swap_pairs": 3130,
+          "joint_OPTIMAL": 32,
+          "joint_branches": 5090,
+          "unique_repaired_boards": 32,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      }
+    ],
+    "adjacent": [
+      {
+        "gold": false,
+        "score": 173,
+        "components": 115,
+        "seed": 0,
+        "initial": 8,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "positive_swap_pairs": 3990,
+          "joint_OPTIMAL": 26,
+          "joint_branches": 35620,
+          "joint_FEASIBLE": 5,
+          "joint_UNKNOWN": 1,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 3
+      },
+      {
+        "gold": false,
+        "score": 171,
+        "components": 98,
+        "seed": 1,
+        "initial": 10,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "positive_swap_pairs": 3736,
+          "joint_OPTIMAL": 26,
+          "joint_branches": 34484,
+          "joint_FEASIBLE": 5,
+          "joint_UNKNOWN": 1,
+          "unique_repaired_boards": 30
+        },
+        "bonds_kept": 1
+      },
+      {
+        "gold": false,
+        "score": 167,
+        "components": 110,
+        "seed": 2,
+        "initial": 5,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "positive_swap_pairs": 4296,
+          "joint_OPTIMAL": 27,
+          "joint_branches": 43337,
+          "joint_FEASIBLE": 4,
+          "joint_UNKNOWN": 1,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      },
+      {
+        "gold": false,
+        "score": 171,
+        "components": 104,
+        "seed": 3,
+        "initial": 9,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "positive_swap_pairs": 3870,
+          "joint_OPTIMAL": 24,
+          "joint_branches": 34860,
+          "joint_FEASIBLE": 6,
+          "joint_UNKNOWN": 2,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 3
+      }
+    ],
+    "fork": [
+      {
+        "gold": false,
+        "score": 163,
+        "components": 118,
+        "seed": 0,
+        "initial": 8,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 3
+      },
+      {
+        "gold": false,
+        "score": 161,
+        "components": 123,
+        "seed": 1,
+        "initial": 10,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "forks": 1,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      },
+      {
+        "gold": false,
+        "score": 164,
+        "components": 116,
+        "seed": 2,
+        "initial": 5,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 3
+      },
+      {
+        "gold": false,
+        "score": 166,
+        "components": 114,
+        "seed": 3,
+        "initial": 9,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      }
+    ],
+    "ties": [
+      {
+        "gold": false,
+        "score": 154,
+        "components": 127,
+        "seed": 0,
+        "initial": 8,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "ties_validated": 89,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      },
+      {
+        "gold": false,
+        "score": 158,
+        "components": 120,
+        "seed": 1,
+        "initial": 10,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "ties_validated": 109,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 1
+      },
+      {
+        "gold": false,
+        "score": 157,
+        "components": 125,
+        "seed": 2,
+        "initial": 5,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "ties_validated": 84,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 3
+      },
+      {
+        "gold": false,
+        "score": 154,
+        "components": 135,
+        "seed": 3,
+        "initial": 9,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "ties_validated": 99,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 3
+      }
+    ],
+    "slack1": [
+      {
+        "gold": false,
+        "score": 159,
+        "components": 129,
+        "seed": 0,
+        "initial": 8,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "ties_validated": 236,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      },
+      {
+        "gold": false,
+        "score": 158,
+        "components": 121,
+        "seed": 1,
+        "initial": 10,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "ties_validated": 250,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 1
+      },
+      {
+        "gold": false,
+        "score": 161,
+        "components": 114,
+        "seed": 2,
+        "initial": 5,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "ties_validated": 232,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 3
+      },
+      {
+        "gold": false,
+        "score": 159,
+        "components": 124,
+        "seed": 3,
+        "initial": 9,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "ties_validated": 243,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 1
+      }
+    ],
+    "slack2": [
+      {
+        "gold": false,
+        "score": 156,
+        "components": 126,
+        "seed": 0,
+        "initial": 8,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "ties_validated": 256,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 1
+      },
+      {
+        "gold": false,
+        "score": 161,
+        "components": 119,
+        "seed": 1,
+        "initial": 10,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "ties_validated": 256,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 4
+      },
+      {
+        "gold": false,
+        "score": 163,
+        "components": 109,
+        "seed": 2,
+        "initial": 5,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "ties_validated": 256,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 3
+      },
+      {
+        "gold": false,
+        "score": 154,
+        "components": 134,
+        "seed": 3,
+        "initial": 9,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "ties_validated": 256,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      }
+    ],
+    "relink": [
+      {
+        "gold": false,
+        "score": 158,
+        "components": 124,
+        "seed": 0,
+        "initial": 13,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "internal_candidates": 12,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 4
+      },
+      {
+        "gold": false,
+        "score": 156,
+        "components": 135,
+        "seed": 1,
+        "initial": 12,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "internal_candidates": 12,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      },
+      {
+        "gold": false,
+        "score": 153,
+        "components": 136,
+        "seed": 2,
+        "initial": 12,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "internal_candidates": 12,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      },
+      {
+        "gold": false,
+        "score": 155,
+        "components": 135,
+        "seed": 3,
+        "initial": 9,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "internal_candidates": 12,
+          "unique_repaired_boards": 32
+        },
+        "bonds_kept": 2
+      }
+    ]
+  },
+  "rotation": {
+    "RotationOracle": {
+      "scores": [
+        183,
+        180,
+        183,
+        182,
+        179,
+        188,
+        185,
+        183
+      ],
+      "dominated": 0,
+      "messages": 57701,
+      "avoided": 126729,
+      "hits": 1791,
+      "threshold_removed": 3524,
+      "threshold_rejected": 17
+    },
+    "CyclicRotationOracle": {
+      "scores": [
+        183,
+        180,
+        183,
+        182,
+        179,
+        188,
+        185,
+        183
+      ],
+      "dominated": 0,
+      "messages": 55776,
+      "avoided": 128654,
+      "hits": 1926,
+      "threshold_removed": 3524,
+      "threshold_rejected": 17
+    }
+  }
+}

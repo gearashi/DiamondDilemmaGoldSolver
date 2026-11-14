@@ -154,7 +154,7 @@ def released_six(binding,physical,families,target):
 
 
 def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop=None,
-        page=64,seconds=0,max_pages=None,filters=('contact','core','star','family'),share=True,triage=False,backend='cpu',reuse_release=True,progress=None):
+        page=64,seconds=0,max_pages=None,filters=('contact','core','connected','star','family'),share=True,triage=False,backend='cpu',reuse_release=True,progress=None):
     """Negative coverage applies to the union of listed families and centers.
 
     Pages are colex support ranks. Concurrent workers may submit overlapping ranges:
@@ -166,7 +166,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
     if not families or any(f not in ((2,4),(3,3),(2,2,3),(2,2,2,2)) for f in families):
         raise ValueError("Expected a physical four-swap cycle partition.")
     sizes = {sum(f) for f in families}
-    if (len(sizes)!=1 or len(filters)!=len(set(filters)) or set(filters)-{'contact','core','star','family','diagram'}
+    if (len(sizes)!=1 or len(filters)!=len(set(filters)) or set(filters)-{'contact','core','connected','star','family','diagram'}
             or not 0<=target<=len(problem.edges) or seconds<0 or page<1 or max_pages is not None and max_pages<0):
         raise ValueError("Invalid multi-center search scope or page settings.")
     k, = sizes
@@ -217,6 +217,9 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                 PRIMARY KEY(scope,lo));
             CREATE TABLE IF NOT EXISTS optima(key TEXT PRIMARY KEY,result TEXT NOT NULL);
         """)
+        from r31_route_coverage import inherited_end, register
+        owners = tuple(physical_hash(b.tiles) for b in graph.bounds)
+        register(db,key,binding,families,target,owners)
         from r30_cycles import Predecessors, canonical_cycles
         predecessor = {}
         previous_shells = {}
@@ -231,6 +234,13 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
         if 'contact' in filters:
             from r30_cycles import certified_contacts
             required = [certified_contacts(b,target,families) for b in graph.bounds]
+        from r31_route_geometry import eligible_orders, proved_connected
+        geometry = [{f for f in families if 'connected' in filters and proved_connected(b,target,f)}
+                    for b in graph.bounds]
+        if closed_centers:
+            for tiles,radius in list(closed_centers):
+                if radius>=0 and released_six(binding,[tiles],[(2,4),(3,3)],target):
+                    closed_centers.append((tiles,-2))
         if 'core' in filters:
             from r30_bounds import defect_cores
             cores = []
@@ -255,6 +265,17 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                 continue
             next_lo = db.execute("SELECT min(lo) FROM r30_pages WHERE scope=? AND lo>?",(key,current)).fetchone()[0]
             end = min(stop,current+page,next_lo if next_lo is not None else stop)
+            inherited = inherited_end(db,key,binding,families,target,owners,current,end)
+            if inherited>current:
+                endpoints = (inherited-current)*multiplicity*len(owners)
+                inherited_work = {'first_prior_page':endpoints,'raw_center_endpoints':endpoints}
+                db.execute("INSERT INTO r30_pages VALUES(?,?,?,?,?)",
+                           (key,current,inherited,json.dumps(inherited_work),'null'))
+                db.commit()
+                work.update(inherited_work)
+                new_pages += 1
+                current = inherited
+                continue
             cells_batch = combination_batch(graph.free,k,current,end-current)
             counters = Counter()
             page_best = None
@@ -270,22 +291,32 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                 row = cells_batch[row_index]
                 cells = tuple(map(int,row))
                 local = CountingTerms(counters)
+                geometry_orders = {}
                 upper_by_center = {}
                 survivors = []
                 for ix,b in enumerate(graph.bounds):
                     if caps[ix]<target:
                         counters['first_budget'] += multiplicity
                         continue
+                    active_orders = orders_by_family.copy()
                     left = list(families)
                     for rule in filters:
                         if rule=='contact' and required[ix] and pairs[row_index]<required[ix]:
-                            counters['first_contact'] += sum(len(orders_by_family[f]) for f in left)
+                            counters['first_contact'] += sum(len(active_orders[f]) for f in left)
                             left = []
                         if rule=='core' and not allowed[ix,row_index]:
-                            counters['first_core'] += sum(len(orders_by_family[f]) for f in left)
+                            counters['first_core'] += sum(len(active_orders[f]) for f in left)
                             left = []
+                        if rule=='connected':
+                            for f in left:
+                                if f in geometry[ix]:
+                                    if f not in geometry_orders:
+                                        geometry_orders[f] = tuple(eligible_orders(graph.clusters[0].close,cells,f))
+                                    counters['first_connected'] += len(active_orders[f])-len(geometry_orders[f])
+                                    active_orders[f] = geometry_orders[f]
+                            left = [f for f in left if active_orders[f]]
                         if left and rule=='star' and graph.upper(ix,cells,upper_by_center,local,counters)<2*target:
-                            counters['first_support'] += sum(len(orders_by_family[f]) for f in left)
+                            counters['first_support'] += sum(len(active_orders[f]) for f in left)
                             left = []
                         if left and rule=='family':
                             retained = []
@@ -293,7 +324,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                                 cap = graph.clusters[ix].support_upper_twice(cells,local if share else None,family=f)
                                 counters['typed_assignments'] += 1
                                 if cap<2*target:
-                                    counters['first_typed'] += len(orders_by_family[f])
+                                    counters['first_typed'] += len(active_orders[f])
                                 else:
                                     retained.append(f)
                             left = retained
@@ -304,14 +335,14 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                                 counters['dd_transitions'] += rec['transitions'] + rec.get('relaxed_transitions',0)
                                 counters['dd_merged'] += rec['merged']
                                 if rec['upper_twice'] < 2*target:
-                                    counters['first_diagram'] += len(orders_by_family[f])
+                                    counters['first_diagram'] += len(active_orders[f])
                                 else:
                                     retained.append(f)
                             left = retained
                         if not left:
                             break
                     for f in left:
-                        for order in orders_by_family[f]:
+                        for order in active_orders[f]:
                             if ix not in previous_shells:
                                 previous_shells[ix] = list(owner_copies(model,closed_centers,b.tiles,k))
                             if (is_owned(previous_shells[ix],cells,order)
@@ -351,7 +382,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                         if page_best is None or item['score']>page_best['score']:
                             page_best = item
             endpoints = multiplicity*len(graph.bounds)*(end-current)
-            if sum(counters[s] for s in ('first_budget','first_typed','first_contact','first_core','first_support','first_diagram','first_owned',
+            if sum(counters[s] for s in ('first_budget','first_typed','first_contact','first_core','first_connected','first_support','first_diagram','first_owned',
                                          'first_predecessor','first_endpoint','illegal','exact_reused','exact_solved'))!=endpoints:
                 raise RuntimeError("Incomplete page accounting.")
             counters['raw_center_endpoints'] = endpoints
@@ -389,7 +420,7 @@ def main():
     p.add_argument('--stop',type=int)
     p.add_argument('--page',type=int,default=64)
     p.add_argument('--seconds',type=float,default=0)
-    p.add_argument('--filters',default='contact,core,star,family')
+    p.add_argument('--filters',default='contact,core,connected,star,family')
     p.add_argument('--recheck',action='store_true',help='Ignore the shipped six-cell proof; use a fresh database to reproduce it.')
     p.add_argument('--backend',choices=('cpu','cuda'),default='cpu',help='Support-core filter backend; checkpoints are shared.')
     p.add_argument('--triage',action='store_true')

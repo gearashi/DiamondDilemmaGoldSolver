@@ -1,0 +1,88 @@
+{
+  "domain": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "backend": "cpu",
+  "rounds": 32,
+  "dispatches": 64,
+  "replicas": 512,
+  "runs": {
+    "relink": [
+      {
+        "gold": false,
+        "score": 152,
+        "components": 137,
+        "seed": 0,
+        "initial": 8,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "orientation_entries": 64122,
+          "block_assignments": 32,
+          "internal_candidates": 12,
+          "round_to_150": 26,
+          "unique_repaired_boards": 32
+        },
+        "seconds": 1.9446,
+        "bonds_kept": 2
+      },
+      {
+        "gold": false,
+        "score": 157,
+        "components": 120,
+        "seed": 1,
+        "initial": 10,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "orientation_entries": 67296,
+          "block_assignments": 32,
+          "internal_candidates": 12,
+          "round_to_150": 22,
+          "unique_repaired_boards": 32
+        },
+        "seconds": 2.1475,
+        "bonds_kept": 3
+      },
+      {
+        "gold": false,
+        "score": 163,
+        "components": 117,
+        "seed": 2,
+        "initial": 8,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "orientation_entries": 77550,
+          "block_assignments": 32,
+          "internal_candidates": 12,
+          "round_to_150": 21,
+          "round_to_160": 24,
+          "unique_repaired_boards": 32
+        },
+        "seconds": 2.3068,
+        "bonds_kept": 4
+      },
+      {
+        "gold": false,
+        "score": 159,
+        "components": 129,
+        "seed": 3,
+        "initial": 9,
+        "work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 32,
+          "orientation_entries": 64464,
+          "block_assignments": 32,
+          "internal_candidates": 12,
+          "round_to_150": 24,
+          "unique_repaired_boards": 32
+        },
+        "seconds": 1.8582,
+        "bonds_kept": 2
+      }
+    ]
+  }
+}

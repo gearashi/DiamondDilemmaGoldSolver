@@ -1,0 +1,465 @@
+{
+  "budget": 32,
+  "results": [
+    {
+      "source": "fresh-cpu.sqlite",
+      "seed": 0,
+      "initial": 183,
+      "before_components": 81,
+      "continue": {
+        "score": 183,
+        "components": 81,
+        "gold": false
+      },
+      "fork": {
+        "gold": false,
+        "score": 183,
+        "components": 79
+      },
+      "independent": {
+        "score": 183,
+        "components": 81,
+        "gold": false
+      },
+      "layers": [
+        {
+          "slack": 0,
+          "score_floor": 183,
+          "first_components": 81,
+          "best_components": 81,
+          "score": 183,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        },
+        {
+          "slack": 1,
+          "score_floor": 182,
+          "first_components": 81,
+          "best_components": 81,
+          "score": 183,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        },
+        {
+          "slack": 2,
+          "score_floor": 181,
+          "first_components": 81,
+          "best_components": 81,
+          "score": 183,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        }
+      ],
+      "all_adjacent": {
+        "status": "UNKNOWN",
+        "branches": 0
+      }
+    },
+    {
+      "source": "fresh-cpu.sqlite",
+      "seed": 1,
+      "initial": 180,
+      "before_components": 98,
+      "continue": {
+        "score": 180,
+        "components": 98,
+        "gold": false
+      },
+      "fork": {
+        "score": 180,
+        "components": 98,
+        "gold": false
+      },
+      "independent": {
+        "gold": false,
+        "score": 183,
+        "components": 84
+      },
+      "layers": [
+        {
+          "slack": 0,
+          "score_floor": 180,
+          "first_components": 98,
+          "best_components": 98,
+          "score": 180,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        },
+        {
+          "slack": 1,
+          "score_floor": 179,
+          "first_components": 98,
+          "best_components": 98,
+          "score": 180,
+          "closed": false,
+          "calls": {
+            "UNKNOWN": 1
+          }
+        },
+        {
+          "slack": 2,
+          "score_floor": 178,
+          "first_components": 98,
+          "best_components": 98,
+          "score": 180,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        }
+      ]
+    },
+    {
+      "source": "fresh-cpu.sqlite",
+      "seed": 2,
+      "initial": 183,
+      "before_components": 88,
+      "continue": {
+        "score": 183,
+        "components": 88,
+        "gold": false
+      },
+      "fork": {
+        "gold": false,
+        "score": 184,
+        "components": 85
+      },
+      "independent": {
+        "score": 183,
+        "components": 88,
+        "gold": false
+      },
+      "layers": [
+        {
+          "slack": 0,
+          "score_floor": 183,
+          "first_components": 88,
+          "best_components": 88,
+          "score": 183,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        },
+        {
+          "slack": 1,
+          "score_floor": 182,
+          "first_components": 88,
+          "best_components": 87,
+          "score": 182,
+          "closed": false,
+          "calls": {
+            "OPTIMAL": 1,
+            "UNKNOWN": 1
+          }
+        },
+        {
+          "slack": 2,
+          "score_floor": 181,
+          "first_components": 88,
+          "best_components": 87,
+          "score": 182,
+          "closed": false,
+          "calls": {
+            "OPTIMAL": 1,
+            "UNKNOWN": 1
+          }
+        }
+      ]
+    },
+    {
+      "source": "fresh-cpu.sqlite",
+      "seed": 3,
+      "initial": 182,
+      "before_components": 89,
+      "continue": {
+        "gold": false,
+        "score": 183,
+        "components": 86
+      },
+      "fork": {
+        "gold": false,
+        "score": 183,
+        "components": 88
+      },
+      "independent": {
+        "gold": false,
+        "score": 183,
+        "components": 81
+      },
+      "layers": [
+        {
+          "slack": 0,
+          "score_floor": 182,
+          "first_components": 89,
+          "best_components": 89,
+          "score": 182,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        },
+        {
+          "slack": 1,
+          "score_floor": 181,
+          "first_components": 89,
+          "best_components": 88,
+          "score": 181,
+          "closed": true,
+          "calls": {
+            "OPTIMAL": 1,
+            "INFEASIBLE": 1
+          }
+        },
+        {
+          "slack": 2,
+          "score_floor": 180,
+          "first_components": 89,
+          "best_components": 88,
+          "score": 180,
+          "closed": true,
+          "calls": {
+            "OPTIMAL": 1,
+            "INFEASIBLE": 1
+          }
+        }
+      ]
+    },
+    {
+      "source": "fresh-cuda.sqlite",
+      "seed": 0,
+      "initial": 179,
+      "before_components": 91,
+      "continue": {
+        "gold": false,
+        "score": 180,
+        "components": 93
+      },
+      "fork": {
+        "score": 179,
+        "components": 91,
+        "gold": false
+      },
+      "independent": {
+        "gold": false,
+        "score": 188,
+        "components": 84
+      },
+      "layers": [
+        {
+          "slack": 0,
+          "score_floor": 179,
+          "first_components": 91,
+          "best_components": 91,
+          "score": 179,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        },
+        {
+          "slack": 1,
+          "score_floor": 178,
+          "first_components": 91,
+          "best_components": 91,
+          "score": 179,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        },
+        {
+          "slack": 2,
+          "score_floor": 177,
+          "first_components": 91,
+          "best_components": 91,
+          "score": 179,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        }
+      ],
+      "all_adjacent": {
+        "status": "UNKNOWN",
+        "branches": 0
+      }
+    },
+    {
+      "source": "fresh-cuda.sqlite",
+      "seed": 1,
+      "initial": 188,
+      "before_components": 85,
+      "continue": {
+        "score": 188,
+        "components": 85,
+        "gold": false
+      },
+      "fork": {
+        "score": 188,
+        "components": 85,
+        "gold": false
+      },
+      "independent": {
+        "score": 188,
+        "components": 85,
+        "gold": false
+      },
+      "layers": [
+        {
+          "slack": 0,
+          "score_floor": 188,
+          "first_components": 85,
+          "best_components": 85,
+          "score": 188,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        },
+        {
+          "slack": 1,
+          "score_floor": 187,
+          "first_components": 85,
+          "best_components": 85,
+          "score": 188,
+          "closed": false,
+          "calls": {
+            "UNKNOWN": 1
+          }
+        },
+        {
+          "slack": 2,
+          "score_floor": 186,
+          "first_components": 85,
+          "best_components": 85,
+          "score": 188,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        }
+      ]
+    },
+    {
+      "source": "fresh-cuda.sqlite",
+      "seed": 2,
+      "initial": 185,
+      "before_components": 84,
+      "continue": {
+        "gold": false,
+        "score": 186,
+        "components": 86
+      },
+      "fork": {
+        "gold": false,
+        "score": 186,
+        "components": 86
+      },
+      "independent": {
+        "gold": false,
+        "score": 186,
+        "components": 86
+      },
+      "layers": [
+        {
+          "slack": 0,
+          "score_floor": 185,
+          "first_components": 84,
+          "best_components": 84,
+          "score": 185,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        },
+        {
+          "slack": 1,
+          "score_floor": 184,
+          "first_components": 84,
+          "best_components": 84,
+          "score": 185,
+          "closed": false,
+          "calls": {
+            "UNKNOWN": 1
+          }
+        },
+        {
+          "slack": 2,
+          "score_floor": 183,
+          "first_components": 84,
+          "best_components": 84,
+          "score": 185,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        }
+      ]
+    },
+    {
+      "source": "fresh-cuda.sqlite",
+      "seed": 3,
+      "initial": 183,
+      "before_components": 92,
+      "continue": {
+        "gold": false,
+        "score": 183,
+        "components": 89
+      },
+      "fork": {
+        "gold": false,
+        "score": 183,
+        "components": 89
+      },
+      "independent": {
+        "gold": false,
+        "score": 183,
+        "components": 89
+      },
+      "layers": [
+        {
+          "slack": 0,
+          "score_floor": 183,
+          "first_components": 92,
+          "best_components": 92,
+          "score": 183,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        },
+        {
+          "slack": 1,
+          "score_floor": 182,
+          "first_components": 92,
+          "best_components": 92,
+          "score": 183,
+          "closed": false,
+          "calls": {
+            "UNKNOWN": 1
+          }
+        },
+        {
+          "slack": 2,
+          "score_floor": 181,
+          "first_components": 92,
+          "best_components": 92,
+          "score": 183,
+          "closed": true,
+          "calls": {
+            "INFEASIBLE": 1
+          }
+        }
+      ]
+    }
+  ]
+}

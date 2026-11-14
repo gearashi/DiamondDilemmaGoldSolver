@@ -147,6 +147,22 @@ def is_owned(owners, moved, order):
         diff = sum(other[c]!=j for c,j in changes.items())
         if radius>=0 and diff<=radius:
             return True
+        if radius==-2 and diff==6:
+            # Both six-cell four-swap classes were exhaustively closed.
+            inverse = {v:k for k,v in enumerate(other)}
+            relative = {c:inverse[j] for c,j in changes.items() if inverse[j]!=c}
+            unseen = set(relative)
+            lengths = []
+            while unseen:
+                c = next(iter(unseen))
+                length = 0
+                while c in unseen:
+                    unseen.remove(c)
+                    c = relative[c]
+                    length += 1
+                lengths.append(length)
+            if sorted(lengths) in ([2,4],[3,3]):
+                return True
         if radius==-1 and diff==6:
             inverse = {v:k for k,v in enumerate(other)}
             partner = {c:inverse[j] for c,j in changes.items()}

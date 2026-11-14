@@ -1,0 +1,272 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "ranked_initial_boards": 512,
+  "cuda": {
+    "scope": {
+      "seed": 95,
+      "backend": "cuda",
+      "replicas": 512
+    },
+    "dispatches": [
+      64,
+      256
+    ],
+    "prefix_proposals": 2097152,
+    "extension_proposals": 6291456,
+    "cold_proposals": 8388608,
+    "warm_proposals": 0,
+    "reused_dispatches": 64,
+    "native_arrays_sha256": "d396fc0c452fe48a44cc20a6d36cd8ae9aed2f5ce8b085b814d1a62e575349b0",
+    "archive_boards": 8
+  },
+  "soft_score_scopes": [
+    {
+      "free_cells": 6,
+      "target": 207,
+      "comparison": {
+        "released": {
+          "status": "threshold_met",
+          "calls": 1,
+          "native": {
+            "restarts": 1,
+            "conflicts": 0,
+            "decisions": 2,
+            "propagations": 2852
+          },
+          "edge_upper_bound": 207
+        },
+        "global": {
+          "status": "witness",
+          "target": 207,
+          "pending": 1,
+          "calls": 1,
+          "conflicts": 0,
+          "decisions": 2,
+          "core_skips": 0,
+          "budget_skips": 0,
+          "adaptive_splits": 0,
+          "completed_branches": 0,
+          "inventory_queries": 0,
+          "inventory_tightened": 0,
+          "seconds": 0.0470000000204891,
+          "score": 207,
+          "warm_calls": 0
+        },
+        "bands": {
+          "status": "witness",
+          "target": 207,
+          "pending": 2,
+          "calls": 1,
+          "conflicts": 0,
+          "decisions": 2,
+          "core_skips": 0,
+          "budget_skips": 0,
+          "adaptive_splits": 0,
+          "completed_branches": 0,
+          "inventory_queries": 1,
+          "inventory_tightened": 0,
+          "seconds": 0.11000000001513399,
+          "score": 207,
+          "warm_calls": 0
+        }
+      }
+    },
+    {
+      "free_cells": 6,
+      "target": 208,
+      "comparison": {
+        "released": {
+          "status": "threshold_impossible",
+          "calls": 0,
+          "native": null,
+          "edge_upper_bound": 207
+        },
+        "global": {
+          "status": "infeasible",
+          "target": 208,
+          "pending": 0,
+          "calls": 0,
+          "conflicts": 0,
+          "decisions": 0,
+          "core_skips": 0,
+          "budget_skips": 1,
+          "adaptive_splits": 0,
+          "completed_branches": 0,
+          "inventory_queries": 0,
+          "inventory_tightened": 0,
+          "seconds": 0.015000000013969839,
+          "score": null,
+          "warm_calls": 0
+        },
+        "bands": {
+          "status": "infeasible",
+          "target": 208,
+          "pending": 0,
+          "calls": 0,
+          "conflicts": 0,
+          "decisions": 0,
+          "core_skips": 0,
+          "budget_skips": 1,
+          "adaptive_splits": 0,
+          "completed_branches": 0,
+          "inventory_queries": 0,
+          "inventory_tightened": 0,
+          "seconds": 0.015000000013969839,
+          "score": null,
+          "warm_calls": 0
+        }
+      }
+    },
+    {
+      "free_cells": 24,
+      "target": 207,
+      "comparison": {
+        "released": {
+          "status": "threshold_met",
+          "calls": 1,
+          "native": {
+            "restarts": 7,
+            "conflicts": 869,
+            "decisions": 3790,
+            "propagations": 753716
+          },
+          "edge_upper_bound": 212
+        },
+        "global": {
+          "status": "witness",
+          "target": 207,
+          "pending": 1,
+          "calls": 1,
+          "conflicts": 128,
+          "decisions": 575,
+          "core_skips": 0,
+          "budget_skips": 0,
+          "adaptive_splits": 0,
+          "completed_branches": 0,
+          "inventory_queries": 0,
+          "inventory_tightened": 0,
+          "seconds": 0.125,
+          "score": 207,
+          "warm_calls": 0
+        },
+        "bands": {
+          "status": "witness",
+          "target": 207,
+          "pending": 3,
+          "calls": 1,
+          "conflicts": 753,
+          "decisions": 4592,
+          "core_skips": 0,
+          "budget_skips": 0,
+          "adaptive_splits": 0,
+          "completed_branches": 0,
+          "inventory_queries": 1,
+          "inventory_tightened": 1,
+          "seconds": 0.2340000000258442,
+          "score": 207,
+          "warm_calls": 0
+        }
+      }
+    },
+    {
+      "free_cells": 24,
+      "target": 208,
+      "comparison": {
+        "released": {
+          "status": "threshold_impossible",
+          "calls": 1,
+          "native": {
+            "restarts": 3,
+            "conflicts": 524,
+            "decisions": 2864,
+            "propagations": 350175
+          },
+          "edge_upper_bound": 207
+        },
+        "global": {
+          "status": "infeasible",
+          "target": 208,
+          "pending": 0,
+          "calls": 1,
+          "conflicts": 453,
+          "decisions": 2619,
+          "core_skips": 0,
+          "budget_skips": 0,
+          "adaptive_splits": 0,
+          "completed_branches": 1,
+          "inventory_queries": 0,
+          "inventory_tightened": 0,
+          "seconds": 0.14100000000325963,
+          "score": null,
+          "warm_calls": 0
+        },
+        "bands": {
+          "status": "infeasible",
+          "target": 208,
+          "pending": 0,
+          "calls": 1,
+          "conflicts": 395,
+          "decisions": 2221,
+          "core_skips": 0,
+          "budget_skips": 2,
+          "adaptive_splits": 0,
+          "completed_branches": 1,
+          "inventory_queries": 1,
+          "inventory_tightened": 1,
+          "seconds": 0.139999999984866,
+          "score": null,
+          "warm_calls": 0
+        }
+      }
+    },
+    {
+      "free_cells": 160,
+      "target": 208,
+      "comparison": {
+        "released": {
+          "status": "unknown",
+          "calls": 12,
+          "native": {
+            "restarts": 47,
+            "conflicts": 8004,
+            "decisions": 785428,
+            "propagations": 29891907
+          },
+          "edge_upper_bound": 240
+        },
+        "global": {
+          "status": "open",
+          "target": 208,
+          "pending": 1,
+          "calls": 4,
+          "conflicts": 9152,
+          "decisions": 816925,
+          "core_skips": 0,
+          "budget_skips": 0,
+          "adaptive_splits": 0,
+          "completed_branches": 0,
+          "inventory_queries": 0,
+          "inventory_tightened": 0,
+          "seconds": 12.26600000000326,
+          "score": null
+        },
+        "bands": {
+          "status": "open",
+          "target": 208,
+          "pending": 14,
+          "calls": 4,
+          "conflicts": 8634,
+          "decisions": 633885,
+          "core_skips": 0,
+          "budget_skips": 0,
+          "adaptive_splits": 4,
+          "completed_branches": 0,
+          "inventory_queries": 3,
+          "inventory_tightened": 0,
+          "seconds": 10.921000000002095,
+          "score": null
+        }
+      }
+    }
+  ]
+}

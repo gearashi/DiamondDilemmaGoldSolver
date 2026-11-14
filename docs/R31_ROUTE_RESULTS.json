@@ -1,0 +1,920 @@
+{
+  "domain": "f2033beb1d578feb56320c88d3893a9de8ae9fd44cfeffe382e2d52140edc5a1",
+  "center": "d297c8f5cbdf792d841e8efb699f7662d7cf4c0959fc4214ec45498802c0b1c6",
+  "target": 208,
+  "ranks": [
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "start": 200000000000,
+      "stop": 200000001024,
+      "baseline": {
+        "first_contact": 595980,
+        "support_assignments": 79,
+        "local_term_misses": 204,
+        "first_support": 49140,
+        "whole_support_reuses": 155,
+        "raw_center_endpoints": 645120,
+        "local_term_hits": 2
+      },
+      "connected": {
+        "first_contact": 595980,
+        "first_connected": 29844,
+        "support_assignments": 79,
+        "local_term_misses": 204,
+        "first_support": 19296,
+        "whole_support_reuses": 155,
+        "raw_center_endpoints": 645120,
+        "local_term_hits": 2
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "start": 301414649175,
+      "stop": 301414650199,
+      "baseline": {
+        "first_contact": 633150,
+        "support_assignments": 21,
+        "local_term_misses": 54,
+        "first_support": 11970,
+        "local_term_hits": 5,
+        "whole_support_reuses": 36,
+        "raw_center_endpoints": 645120
+      },
+      "connected": {
+        "first_contact": 633150,
+        "first_connected": 7290,
+        "support_assignments": 21,
+        "local_term_misses": 54,
+        "first_support": 4680,
+        "local_term_hits": 5,
+        "whole_support_reuses": 36,
+        "raw_center_endpoints": 645120
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "start": 200000000000,
+      "stop": 200000001024,
+      "baseline": {
+        "first_contact": 238770,
+        "support_assignments": 394,
+        "local_term_misses": 990,
+        "first_support": 83790,
+        "local_term_hits": 390,
+        "whole_support_reuses": 404,
+        "raw_center_endpoints": 322560
+      },
+      "connected": {
+        "first_contact": 238770,
+        "first_connected": 45126,
+        "support_assignments": 394,
+        "local_term_misses": 990,
+        "first_support": 38664,
+        "local_term_hits": 390,
+        "whole_support_reuses": 404,
+        "raw_center_endpoints": 322560
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "start": 5360481967048,
+      "stop": 5360481968072,
+      "baseline": {
+        "first_contact": 319410,
+        "support_assignments": 30,
+        "local_term_misses": 32,
+        "first_support": 3150,
+        "local_term_hits": 61,
+        "raw_center_endpoints": 322560
+      },
+      "connected": {
+        "first_contact": 319410,
+        "first_connected": 3006,
+        "raw_center_endpoints": 322560,
+        "support_assignments": 6,
+        "local_term_misses": 8,
+        "first_support": 144,
+        "local_term_hits": 16
+      }
+    }
+  ],
+  "independent_geometry": [
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "sets": 4096,
+      "sets_passing_count": 1297,
+      "orders_passing_count": 272370,
+      "sets_passing_connected": 1297,
+      "orders_passing_connected": 132292
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "sets": 4096,
+      "sets_passing_count": 741,
+      "orders_passing_count": 77805,
+      "sets_passing_connected": 635,
+      "orders_passing_connected": 27636
+    }
+  ],
+  "pools": [
+    {
+      "pool": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118,
+        122,
+        146,
+        155
+      ],
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "unpriced": {
+        "attachments_priced": 285
+      },
+      "priced": {
+        "attachments_priced": 285
+      },
+      "surviving": 0,
+      "support": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118
+      ],
+      "connected_donors": 0,
+      "joint_star_twice": -1,
+      "new_defect_closures": 0,
+      "defect_upper_rejections": 0
+    },
+    {
+      "pool": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118,
+        122,
+        146,
+        155
+      ],
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "unpriced": {
+        "attachments_priced": 45
+      },
+      "priced": {
+        "attachments_priced": 45
+      },
+      "surviving": 0,
+      "support": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118,
+        122
+      ],
+      "connected_donors": 0,
+      "joint_star_twice": -1,
+      "new_defect_closures": 0,
+      "defect_upper_rejections": 0
+    },
+    {
+      "pool": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "unpriced": {
+        "attachments_priced": 30904,
+        "exact_star_queries": 25074,
+        "parents_without_candidate": 1074
+      },
+      "priced": {
+        "attachments_priced": 5837,
+        "catalogue_rows": 810,
+        "sorted_rows_skipped": 229295,
+        "empty_buckets": 20202,
+        "parents_without_candidate": 5137,
+        "forced_swap_pairs_closed": 407,
+        "last_pruned": 6,
+        "exact_star_queries": 1
+      },
+      "surviving": 0,
+      "support": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "connected_donors": 210,
+      "joint_star_twice": 403,
+      "new_defect_closures": 0,
+      "defect_upper_rejections": 210
+    },
+    {
+      "pool": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "unpriced": {
+        "attachments_priced": 8439,
+        "exact_star_queries": 4710,
+        "parents_without_candidate": 1272
+      },
+      "priced": {
+        "attachments_priced": 3731,
+        "catalogue_rows": 90,
+        "sorted_rows_skipped": 83278,
+        "empty_buckets": 9191,
+        "parents_without_candidate": 3093,
+        "last_pruned": 2
+      },
+      "surviving": 0,
+      "support": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "connected_donors": 105,
+      "joint_star_twice": 398,
+      "new_defect_closures": 0,
+      "defect_upper_rejections": 105
+    }
+  ],
+  "six_tests": [
+    {
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "order": [
+        1,
+        6,
+        5,
+        4,
+        3,
+        2,
+        0
+      ],
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "keep": true,
+      "tables": 25,
+      "tables_skipped": 7
+    },
+    {
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "order": [
+        1,
+        0,
+        4,
+        5,
+        6,
+        3,
+        2
+      ],
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "keep": true,
+      "tables": 27,
+      "tables_skipped": 5
+    },
+    {
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "order": [
+        6,
+        5,
+        1,
+        4,
+        3,
+        2,
+        0
+      ],
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "keep": true,
+      "tables_skipped": 7,
+      "tables": 25
+    },
+    {
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "order": [
+        6,
+        4,
+        5,
+        7,
+        1,
+        2,
+        0,
+        3
+      ],
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "keep": true,
+      "tables_skipped": 30,
+      "tables": 2
+    },
+    {
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "order": [
+        1,
+        0,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2
+      ],
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "keep": true,
+      "tables_skipped": 30,
+      "tables": 2
+    },
+    {
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "order": [
+        6,
+        7,
+        5,
+        4,
+        3,
+        2,
+        0,
+        1
+      ],
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "keep": true,
+      "tables_skipped": 28,
+      "tables": 4
+    }
+  ],
+  "actors": [
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "length": 2,
+      "actors": 12720,
+      "minimum": 213,
+      "maximum": 220,
+      "closed_at_208": 0
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "length": 3,
+      "actors": 1339840,
+      "minimum": 209,
+      "maximum": 220,
+      "closed_at_208": 0
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "length": 2,
+      "anchor": [
+        18,
+        30
+      ],
+      "actors": 12403,
+      "minimum": 206,
+      "maximum": 213,
+      "closed_at_208": 4420
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "length": 2,
+      "anchor": [
+        51,
+        62
+      ],
+      "actors": 12403,
+      "minimum": 209,
+      "maximum": 216,
+      "closed_at_208": 0
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "length": 2,
+      "actors": 12720,
+      "minimum": 214,
+      "maximum": 221,
+      "closed_at_208": 0
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "length": 2,
+      "anchor": [
+        18,
+        30
+      ],
+      "actors": 12403,
+      "minimum": 208,
+      "maximum": 215,
+      "closed_at_208": 0
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "length": 2,
+      "anchor": [
+        51,
+        62
+      ],
+      "actors": 12403,
+      "minimum": 211,
+      "maximum": 218,
+      "closed_at_208": 0
+    }
+  ],
+  "exterior": [
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "cells": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118
+      ],
+      "values": [
+        [
+          null,
+          197
+        ],
+        [
+          null,
+          196
+        ],
+        [
+          null,
+          196
+        ],
+        [
+          null,
+          197
+        ],
+        [
+          null,
+          200
+        ],
+        [
+          null,
+          200
+        ]
+      ],
+      "shared": {
+        "eliminated_variables": 102,
+        "table_entries": 481140
+      },
+      "reference": {
+        "dominated": 0,
+        "messages": 56,
+        "avoided": 1032,
+        "hits": 942,
+        "threshold_removed": 2199,
+        "threshold_rejected": 4
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "cells": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118,
+        122
+      ],
+      "values": [
+        [
+          null,
+          196
+        ],
+        [
+          null,
+          196
+        ],
+        [
+          null,
+          195
+        ],
+        [
+          null,
+          196
+        ],
+        [
+          null,
+          196
+        ],
+        [
+          null,
+          195
+        ]
+      ],
+      "shared": {
+        "eliminated_variables": 100,
+        "table_entries": 547236
+      },
+      "reference": {
+        "dominated": 0,
+        "messages": 230,
+        "avoided": 1304,
+        "hits": 911,
+        "threshold_removed": 2500,
+        "threshold_rejected": 7
+      }
+    }
+  ],
+  "cp": [
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "pool": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118,
+        122,
+        146,
+        155
+      ],
+      "ordinary": {
+        "status": "INFEASIBLE",
+        "branches": 8187,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "old_contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "connected": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "pool": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "ordinary": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "old_contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "connected": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "pool": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118,
+        122,
+        146,
+        155
+      ],
+      "ordinary": {
+        "status": "INFEASIBLE",
+        "branches": 7929,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "old_contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "connected": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "pool": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "ordinary": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "old_contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "connected": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      }
+    }
+  ],
+  "coverage": {
+    "connected": {
+      "attachments_priced": 91,
+      "published_supports": 1
+    },
+    "same_rank": {},
+    "higher": {
+      "first_prior_page": 210,
+      "raw_center_endpoints": 210
+    },
+    "roots": {
+      "next_root": 32,
+      "total_roots": 285,
+      "completed_roots": 32,
+      "complete": false,
+      "range_finished": true,
+      "best": null,
+      "work": {
+        "cursor_steps": 18754,
+        "cursor_pages": 87,
+        "roots_completed": 32,
+        "catalogue_rows": 810
+      }
+    },
+    "warm_roots": {
+      "next_root": 32,
+      "total_roots": 285,
+      "completed_roots": 32,
+      "complete": false,
+      "range_finished": true,
+      "best": null,
+      "work": {
+        "roots_reused": 32
+      }
+    }
+  }
+}

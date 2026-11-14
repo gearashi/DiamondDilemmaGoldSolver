@@ -293,13 +293,19 @@ class GoldMatching:
             if not self.problem.validate(codes)['valid']:
                 raise ArithmeticError("Decoded physical matching failed independent Gold verification.")
             return dict(status="GOLD",codes=codes,phases=values,pairs=active)
-        self.m.add_bool_or([~self.mate[p] for p in active])
+        core = self.geo_conflicts.learn(active) if getattr(self, "geo_conflicts", None) is not None else None
+        block = active if core is None else core
+        self.m.add_bool_or([~self.mate[p] for p in block])
+        if core is not None:
+            stats["geographic_core_sizes"].append(len(core))
+            stats["geographic_cores"] = [sorted(c) for c in self.geo_conflicts.cores]
         stats['failed_embeddings']+=1
         return None
 
 
 def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=(), matching=True,
-           geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=()):
+           geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=(),
+           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=()):
     from ortools.sat.python import cp_model
     if seconds<=0 or max_rounds<1 or (geography and not matching):
         raise ValueError("Invalid Gold solve budget or mode.")
@@ -312,6 +318,34 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
     if matching:
         check=GoldMatching(problem,domains,pins,bonds,cutsets,forbidden)
+        if (learned_geometry or geographic_cores or channel) and not geography:
+            raise ValueError("Geographic exclusions require the embed search objective.")
+        if learned_geometry or geographic_cores:
+            from r31_geographic import GeographicConflicts
+            check.geo_conflicts=GeographicConflicts(problem,domains)
+            stats.update(geographic_core_sizes=[],geographic_cores=[])
+            for core in geographic_cores:
+                pairs=frozenset(tuple(sorted(row)) for row in core)
+                if pairs<=check.mate.keys() and check.geo_conflicts.impossible(pairs):
+                    m=check.m
+                    m.add_bool_or([~check.mate[p] for p in pairs])
+                    check.geo_conflicts.cores.append(pairs)
+            stats['geographic_cores']=[sorted(c) for c in check.geo_conflicts.cores]
+        if channel:
+            from r31_geographic import channel_geographic
+            stats['channel']=channel_geographic(check)
+
+        if fraction:
+            from r31_gold_pricing import fractional_cuts
+            stats['fractional']=fractional_cuts(check,bonds,pins)
+        if departure_rules:
+            from r31_geographic import add_departure_rules
+            stats["rechecked_departure_cores"]=add_departure_rules(check,departure_rules)
+        if bridges:
+            from r31_geographic import tighten_bridge
+            distinct=sorted({tuple(sorted(set(group))) for group in bridges},key=lambda g:(len(g),g))
+            stats['bridges']=[tighten_bridge(check,g,min(seconds,2)) for g in distinct]
+            stats['bridge_hints']=[g for g,r in zip(distinct,stats['bridges']) if r['status']=='CHECKED']
         m=check.m
         stats['strand_cuts']=len(check.strand_seen)
         stats['partner_variables']=len(check.mate)
@@ -431,6 +465,7 @@ def main():
     cli.add_argument("--rounds",type=int,default=32)
     cli.add_argument("--output",type=Path,help="Save a result and its reusable cuts.")
     cli.add_argument("--reuse",type=Path,help="Reuse a checked physical core or endpoint cut sets.")
+    cli.add_argument("--departure-branch",type=int,help="Check one disjoint first-broken-bond branch from a departure result.")
     args=cli.parse_args()
     data=read_json(args.input) if args.input else {}
     problem=SearchProblem(read_json(args.tiles))
@@ -439,6 +474,20 @@ def main():
               pins=None if 'pins' not in data else {int(t):v for t,v in data['pins'].items()},
               bonds=data.get('bonds',()),forbidden=data.get('forbidden',()),seconds=args.seconds)
     prior=read_json(args.reuse) if args.reuse else {}
+    if args.departure_branch is not None:
+        from r29_gold_phase import SignedParity
+        cores=[sorted({tuple(sorted(p)) for p in row}) for row in prior.get("cores",())]
+        if args.method not in ("matching","embed") or not cores:
+            cli.error("--departure-branch requires matching or embed and --reuse of a departure result.")
+        core=min(cores,key=lambda row:(len(row),row))
+        parity=SignedParity(problem)
+        if all(parity.bond(a,b) for a,b in core):
+            cli.error("The first physical departure core fails rechecking on this puzzle.")
+        index=args.departure_branch
+        if not 0<=index<len(core):
+            cli.error("Departure branch index is out of range.")
+        opts['bonds']=[*opts['bonds'],*core[:index]]
+        opts['forbidden']=[*opts['forbidden'],core[index]]
     if args.method=='capacity':
         checker=GoldMatching(problem,checked_domains(problem,opts['domains']),opts['pins'],
                              opts['bonds'],(),opts['forbidden'])
@@ -454,7 +503,14 @@ def main():
     else:
         reusable=prior.get('reusable_type_sets',prior.get('discovered_type_sets',()))
         out=search(problem,matching=args.method!='types',geography=args.method=='embed',
-                   cutsets=data.get('strand_cuts',()),type_cuts=reusable,max_rounds=args.rounds,**opts)
+                   cutsets=data.get('strand_cuts',()),type_cuts=reusable,max_rounds=args.rounds,
+                   learned_geometry=args.method=="embed" and data.get("learn_geography",True),
+                   channel=data.get("channel",args.method=="embed"),fraction=data.get("fractional",False),
+                   bridges=[*data.get("bridges",()),*prior.get("bridge_hints",())],
+                   geographic_cores=prior.get("geographic_cores",()) if args.method=="embed" else (),
+                   departure_rules=prior.get("cores",()),**opts)
+    if args.departure_branch is not None:
+        out["covered_departure_branch"]={"required":core[:index],"forbidden":core[index],"total":len(core)}
     if args.output:
         from io_utils import atomic_json
         atomic_json(args.output,out)

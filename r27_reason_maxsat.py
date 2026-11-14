@@ -38,7 +38,7 @@ def checked_score(problem, rows, codes):
 
 
 class SeamFormula:
-    def __init__(self, problem, rows, solver, check):
+    def __init__(self, problem, rows, solver, check, *, exact_defects=False):
         from pysat.card import CardEnc, EncType
         from pysat.formula import IDPool
         self.pool = IDPool()
@@ -91,6 +91,9 @@ class SeamFormula:
                     clause = [-lit, symbols[mask]]
                     if cell == b:
                         clause.append(defect)
+                        if exact_defects:
+                            # The first endpoint forces its unique symbol true.
+                            add([-defect, -lit, -symbols[mask]])
                     add(clause)
             at_most_one(list(symbols.values()))
         self.stats['placement_variables'] = sum(map(len, self.literals))

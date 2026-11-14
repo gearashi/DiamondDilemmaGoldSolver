@@ -8,6 +8,10 @@ The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaap
 
 The [v1.7.0 results and recommended settings](docs/ROUND26_RESULTS.md) cover 17 workstreams and 81 scoped evaluations. They include exact CPU and CUDA search, shared SAT reasoning, disk-backed progress, regional pruning, incremental GPU scoring and repair. The [workstream register](docs/round26-workstreams.json) records which candidates reduced steps, which saved repeated work and where extra work outweighed the benefit. Earlier evaluations are available for [Round 25](docs/ROUND25_RESULTS.md), [Round 24](docs/ROUND24.md) and [Round 23](docs/ROUND23.md).
 
+## Search improvements in v1.12.0
+
+The four-swap search now removes disconnected exchanges before pricing their donors. Fresh search can preserve all seven mandatory Gold bonds and choose donor cycles across the board. The release also includes seven independently checkable physical-bond conflicts on the 207-edge reference board. See the [measured results, hardware profiles and commands](docs/ROUND31_RESULTS.md).
+
 ## Search improvements in v1.11.0
 
 The exact search exhausted both six-piece four-swap routes to 208 at all three known 207-edge boards. An improvement at four swaps from these centers now requires seven or eight moved pieces. The solver can also start from unrelated full boards, save completed seeds and use defect bounds to rule out an entire unpromising exchange neighborhood. The unrestricted Gold search allows all placements and requires a single loop. [v1.11.0 results, all 20 workstreams and hardware settings](docs/ROUND30_RESULTS.md)

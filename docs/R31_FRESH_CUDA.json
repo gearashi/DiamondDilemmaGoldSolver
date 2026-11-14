@@ -1,0 +1,249 @@
+{
+  "domain": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "backend": "cuda",
+  "rounds": 64,
+  "dispatches": 256,
+  "replicas": 512,
+  "runs": {
+    "released": [
+      {
+        "seed": 0,
+        "initial": 121,
+        "gpu_proposals": 8388608,
+        "repair_rounds": 64,
+        "score": 167,
+        "components": 111,
+        "gold": false,
+        "bonds_kept": 1
+      },
+      {
+        "seed": 1,
+        "initial": 119,
+        "gpu_proposals": 8388608,
+        "repair_rounds": 64,
+        "score": 177,
+        "components": 96,
+        "gold": false,
+        "bonds_kept": 3
+      },
+      {
+        "seed": 2,
+        "initial": 120,
+        "gpu_proposals": 8388608,
+        "repair_rounds": 64,
+        "score": 174,
+        "components": 96,
+        "gold": false,
+        "bonds_kept": 5
+      },
+      {
+        "seed": 3,
+        "initial": 118,
+        "gpu_proposals": 8388608,
+        "repair_rounds": 64,
+        "score": 172,
+        "components": 111,
+        "gold": false,
+        "bonds_kept": 1
+      }
+    ],
+    "slate": [
+      {
+        "gold": false,
+        "score": 169,
+        "components": 109,
+        "seed": 0,
+        "initial": 121,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 8388608,
+          "repair_steps": 64,
+          "unique_repaired_boards": 63
+        },
+        "bonds_kept": 2
+      },
+      {
+        "gold": false,
+        "score": 163,
+        "components": 120,
+        "seed": 1,
+        "initial": 119,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 8388608,
+          "repair_steps": 64,
+          "unique_repaired_boards": 64
+        },
+        "bonds_kept": 2
+      },
+      {
+        "gold": false,
+        "score": 174,
+        "components": 99,
+        "seed": 2,
+        "initial": 120,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 8388608,
+          "repair_steps": 64,
+          "unique_repaired_boards": 63
+        },
+        "bonds_kept": 2
+      },
+      {
+        "gold": false,
+        "score": 172,
+        "components": 102,
+        "seed": 3,
+        "initial": 118,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 8388608,
+          "repair_steps": 64,
+          "unique_repaired_boards": 63
+        },
+        "bonds_kept": 4
+      }
+    ],
+    "bonds": [
+      {
+        "gold": false,
+        "score": 166,
+        "components": 98,
+        "seed": 0,
+        "initial": 114,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 8388608,
+          "repair_steps": 64,
+          "unique_repaired_boards": 64,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      },
+      {
+        "gold": false,
+        "score": 170,
+        "components": 101,
+        "seed": 1,
+        "initial": 108,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 8388608,
+          "repair_steps": 64,
+          "unique_repaired_boards": 61,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      },
+      {
+        "gold": false,
+        "score": 164,
+        "components": 115,
+        "seed": 2,
+        "initial": 113,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 8388608,
+          "repair_steps": 64,
+          "unique_repaired_boards": 62,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      },
+      {
+        "gold": false,
+        "score": 174,
+        "components": 95,
+        "seed": 3,
+        "initial": 109,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 8388608,
+          "repair_steps": 64,
+          "unique_repaired_boards": 64,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      }
+    ],
+    "combined": [
+      {
+        "gold": false,
+        "score": 168,
+        "components": 98,
+        "seed": 0,
+        "initial": 116,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 8388608,
+          "repair_steps": 64,
+          "positive_swap_pairs": 337,
+          "joint_OPTIMAL": 62,
+          "joint_branches": 6696,
+          "joint_FEASIBLE": 2,
+          "unique_repaired_boards": 64,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      },
+      {
+        "gold": false,
+        "score": 167,
+        "components": 111,
+        "seed": 1,
+        "initial": 114,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 8388608,
+          "repair_steps": 64,
+          "positive_swap_pairs": 451,
+          "joint_OPTIMAL": 63,
+          "joint_branches": 9508,
+          "joint_FEASIBLE": 1,
+          "unique_repaired_boards": 63,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      },
+      {
+        "gold": false,
+        "score": 168,
+        "components": 112,
+        "seed": 2,
+        "initial": 113,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 8388608,
+          "repair_steps": 64,
+          "positive_swap_pairs": 436,
+          "joint_OPTIMAL": 63,
+          "joint_branches": 4831,
+          "joint_FEASIBLE": 1,
+          "unique_repaired_boards": 62,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      },
+      {
+        "gold": false,
+        "score": 170,
+        "components": 102,
+        "seed": 3,
+        "initial": 109,
+        "work": {
+          "gpu_proposals": 8388608,
+          "new_gpu_proposals": 8388608,
+          "repair_steps": 64,
+          "positive_swap_pairs": 489,
+          "joint_OPTIMAL": 62,
+          "joint_branches": 10542,
+          "joint_FEASIBLE": 2,
+          "unique_repaired_boards": 59,
+          "mandatory_bonds": 7
+        },
+        "bonds_kept": 7
+      }
+    ]
+  }
+}

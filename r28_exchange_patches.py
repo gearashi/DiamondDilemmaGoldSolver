@@ -38,10 +38,10 @@ class AssignmentPrices:
             table[~self.model.legal[cell].reshape(self.model.n,3)] = -10
             self.prices[cell] = table
 
-    def independent(self, cells, *, slack=0, limit=None):
+    def independent(self, cells, *, slack=0, limit=None, min_slack=0):
         """Enumerate every assignment within a score gap, including rotation ties."""
         cells = tuple(cells)
-        if (not cells or len(set(cells))!=len(cells) or slack<0 or
+        if (not cells or len(set(cells))!=len(cells) or not 0<=min_slack<=slack or
                 set(cells).intersection(self.model.problem.neighbors[list(cells)].ravel())):
             raise ValueError("Expected distinct nonadjacent cells and nonnegative slack.")
         tiles = self.board[list(cells)]//3
@@ -89,7 +89,7 @@ class AssignmentPrices:
                     yield from explore(depth+1,available^(1<<j),remaining-cost)
         # Each exact slack layer is generated at most once, monotonically ranked.
         generated = 0
-        for gap in range(slack+1):
+        for gap in range(min_slack,slack+1):
             for board in explore(0,(1<<len(cells))-1,gap):
                 yield board
                 generated += 1

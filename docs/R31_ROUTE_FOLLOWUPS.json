@@ -1,0 +1,730 @@
+{
+  "seed": 3131,
+  "geometry_cp": [
+    {
+      "cells": [
+        5,
+        10,
+        60,
+        94,
+        100,
+        110,
+        120,
+        127
+      ],
+      "one_contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "all_cycles": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      }
+    },
+    {
+      "cells": [
+        3,
+        65,
+        80,
+        98,
+        118,
+        128,
+        132,
+        145
+      ],
+      "one_contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "all_cycles": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      }
+    },
+    {
+      "cells": [
+        2,
+        81,
+        126,
+        129,
+        131,
+        136,
+        145,
+        153
+      ],
+      "one_contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "all_cycles": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      }
+    },
+    {
+      "cells": [
+        19,
+        32,
+        38,
+        40,
+        48,
+        49,
+        53,
+        120
+      ],
+      "one_contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "all_cycles": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      }
+    },
+    {
+      "cells": [
+        0,
+        2,
+        7,
+        13,
+        56,
+        89,
+        107,
+        113
+      ],
+      "one_contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "all_cycles": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      }
+    },
+    {
+      "cells": [
+        4,
+        10,
+        15,
+        32,
+        63,
+        133,
+        134,
+        158
+      ],
+      "one_contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "all_cycles": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      }
+    },
+    {
+      "cells": [
+        9,
+        90,
+        93,
+        94,
+        119,
+        125,
+        138,
+        154
+      ],
+      "one_contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "all_cycles": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      }
+    },
+    {
+      "cells": [
+        56,
+        73,
+        93,
+        97,
+        120,
+        124,
+        125,
+        128
+      ],
+      "one_contact": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      },
+      "all_cycles": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "applied": 0,
+        "cp_calls": 1,
+        "predecessor_cuts": 0
+      }
+    }
+  ],
+  "joint": [
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "sets": 1200,
+      "connected_sets": 667
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "sets": 1200,
+      "connected_sets": 520
+    }
+  ],
+  "comparisons": [
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "order": [
+        1,
+        6,
+        5,
+        4,
+        3,
+        2,
+        0
+      ],
+      "star_twice": 403,
+      "defect_cap": 199,
+      "survived": true,
+      "tables": 25,
+      "tables_skipped": 43
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "order": [
+        6,
+        5,
+        1,
+        4,
+        3,
+        2,
+        0
+      ],
+      "star_twice": 399,
+      "defect_cap": 197,
+      "survived": true,
+      "tables_skipped": 43,
+      "tables": 25
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "order": [
+        1,
+        0,
+        4,
+        5,
+        6,
+        3,
+        2
+      ],
+      "star_twice": 399,
+      "defect_cap": 198,
+      "survived": true,
+      "tables": 27,
+      "tables_skipped": 41
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "order": [
+        5,
+        4,
+        3,
+        2,
+        1,
+        6,
+        0
+      ],
+      "star_twice": 398,
+      "defect_cap": 198,
+      "survived": false,
+      "tables": 16,
+      "tables_skipped": 3
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "order": [
+        3,
+        2,
+        1,
+        6,
+        5,
+        4,
+        0
+      ],
+      "star_twice": 398,
+      "defect_cap": 198,
+      "survived": true,
+      "tables": 28,
+      "tables_skipped": 40
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "order": [
+        1,
+        4,
+        3,
+        2,
+        0,
+        6,
+        5
+      ],
+      "star_twice": 398,
+      "defect_cap": 198,
+      "survived": true,
+      "tables": 30,
+      "tables_skipped": 38
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "order": [
+        6,
+        4,
+        5,
+        7,
+        1,
+        2,
+        0,
+        3
+      ],
+      "star_twice": 398,
+      "defect_cap": 197,
+      "survived": true,
+      "tables_skipped": 357,
+      "tables": 3
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "order": [
+        6,
+        7,
+        5,
+        4,
+        3,
+        2,
+        0,
+        1
+      ],
+      "star_twice": 397,
+      "defect_cap": 196,
+      "survived": true,
+      "tables_skipped": 356,
+      "tables": 4
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "order": [
+        1,
+        0,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2
+      ],
+      "star_twice": 397,
+      "defect_cap": 197,
+      "survived": true,
+      "tables_skipped": 357,
+      "tables": 3
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "order": [
+        4,
+        3,
+        7,
+        1,
+        0,
+        6,
+        5,
+        2
+      ],
+      "star_twice": 396,
+      "defect_cap": 196,
+      "survived": true,
+      "tables_skipped": 356,
+      "tables": 4
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "order": [
+        1,
+        0,
+        7,
+        4,
+        3,
+        6,
+        5,
+        2
+      ],
+      "star_twice": 396,
+      "defect_cap": 196,
+      "survived": true,
+      "tables_skipped": 356,
+      "tables": 4
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "cells": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "order": [
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        0
+      ],
+      "star_twice": 395,
+      "defect_cap": 196,
+      "survived": true,
+      "tables_skipped": 357,
+      "tables": 3
+    }
+  ],
+  "legacy_half": [
+    {
+      "pool": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118,
+        122,
+        146,
+        155
+      ],
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "work": {
+        "catalogued": 285,
+        "pair_prices": 5670,
+        "half_entries": 870,
+        "pair_reuse": 5214,
+        "half_suffix_skips": 25113,
+        "half_queries": 87
+      },
+      "hits": 0
+    },
+    {
+      "pool": [
+        18,
+        30,
+        42,
+        44,
+        51,
+        62,
+        118,
+        122,
+        146,
+        155
+      ],
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "work": {
+        "catalogued": 45,
+        "pair_prices": 630,
+        "half_entries": 630,
+        "pair_reuse": 37800,
+        "half_suffix_skips": 28350
+      },
+      "hits": 0
+    },
+    {
+      "pool": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "work": {
+        "catalogued": 285,
+        "pair_prices": 5670,
+        "half_entries": 870,
+        "pair_reuse": 7536,
+        "half_suffix_skips": 23952,
+        "half_queries": 1248,
+        "star_queries": 1
+      },
+      "hits": 0
+    },
+    {
+      "pool": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "work": {
+        "catalogued": 45,
+        "pair_prices": 630,
+        "half_entries": 630,
+        "pair_reuse": 45684,
+        "half_suffix_skips": 14946,
+        "half_queries": 1971
+      },
+      "hits": 0
+    }
+  ]
+}
