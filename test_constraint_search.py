@@ -501,6 +501,31 @@ class RunnerTests(unittest.TestCase):
         self.assertFalse((self.run/'solution.json').exists())
         self.assert_released()
 
+    def test_polish_tied_edges_preserves_smaller_component_count_and_reuses_it(self):
+        from r27_structure_fixtures import planted
+        problem,_=planted(1,4)
+        self.model.return_value=problem
+        old=[0,5,7,9,12,15,18,21,24,27]
+        new=[0,5,6,9,12,15,18,21,24,27]
+        self.assertEqual((problem.validate(old)['matched_edges'],problem.validate(old)['line_components']),(13,3))
+        self.assertEqual((problem.validate(new)['matched_edges'],problem.validate(new)['line_components']),(13,2))
+        atomic_json(self.run/'best.json',{'codes':old})
+        def solve(problem,algorithm,**kwargs):
+            self.assertEqual(kwargs['seed_board'],old)
+            kwargs['progress']({'event':'incumbent_polish','phase':'incumbent_polish','codes':new,
+                                'round':1,'best_score':13,'line_components':2})
+            kwargs['progress']({'event':'repair','phase':'repair','codes':old,'best_score':13})
+            return self.terminal('stopped')
+        with patch.object(runner,'run_solver',side_effect=solve):
+            runner.main(self.args('hybrid'))
+        for path in ('best.json','searches/hybrid-gold/heuristic-best.json'):
+            best=self.read(path)
+            self.assertEqual(best['codes'],new)
+            self.assertEqual(best['snapshot_kind'],'repair_sample')
+            self.assertEqual(best['sample_metrics']['source'],'incumbent_polish')
+        atomic_json(self.run/'first.json',{'codes':old})
+        self.assertEqual(runner.load_seed_board(problem,[self.run/'first.json',self.run/'best.json']),new)
+
     def test_repair_final_report_preserves_later_dfs_live_branch(self):
         report = {'status': 'timeout', 'best_board': [0, 4], 'best_score': 1, 'attempts': 3}
         def solve(problem, algorithm, **kwargs):

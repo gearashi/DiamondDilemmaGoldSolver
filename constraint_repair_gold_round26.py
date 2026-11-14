@@ -45,13 +45,19 @@ class GoldRepairPool:
         self._oracle_model=None; self._posted_cores=set(); self._native_masters={}; self.closed=False
         if resume is not None: self._restore(resume)
 
-    def _identity(self):
+    def _identity(self,profile=None):
         from constraint_repair_resume_round25 import _binding
         source=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
         from importlib.metadata import version, PackageNotFoundError
         try: dependency=version('ortools')
         except PackageNotFoundError: dependency=None
-        return _digest({'semantic':_binding(self.problem,'gold_pool',{},self.policy),'source':source,'ortools':dependency})
+        semantic=_binding(self.problem,'gold_pool',{},self.policy,profile)
+        if profile is not None:
+            from r27_incumbent_compat import legacy_sources
+            sources=legacy_sources({Path(__file__).name:source},profile)
+            if semantic is None or sources is None:return None
+            source=sources[Path(__file__).name]
+        return _digest({'semantic':semantic,'source':source,'ortools':dependency})
 
     def _check(self):
         if self.closed: raise RuntimeError('Gold repair pool is closed.')
@@ -334,7 +340,8 @@ class GoldRepairPool:
     def _restore(self,value):
         if type(value)is not dict or set(value)!={'version','binding','policy','stats','results','failures','pending','masters','digest'} or len(_encoded(value))>MAX_BYTES:
             raise ValueError('Invalid Gold pool checkpoint shape.')
-        if type(value['version'])is not int or value['version']!=1 or value['binding']!=self.binding or value['policy']!=self.policy or type(value['policy'])is not dict or any(type(v)is not int for v in value['policy'].values()) or value['digest']!=_digest({k:v for k,v in value.items() if k!='digest'}):
+        from r27_incumbent_compat import compatible_identity
+        if type(value['version'])is not int or value['version']!=1 or not compatible_identity(value['binding'],self.binding,self._identity) or value['policy']!=self.policy or type(value['policy'])is not dict or any(type(v)is not int for v in value['policy'].values()) or value['digest']!=_digest({k:v for k,v in value.items() if k!='digest'}):
             raise ValueError('Gold pool checkpoint binding mismatch.')
         stats=value['stats']
         if type(stats)is not dict or set(stats)!=set(STAT_KEYS) or any(not _integer(v,0,10**100) for v in stats.values()): raise ValueError('Invalid Gold pool counters.')

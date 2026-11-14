@@ -711,7 +711,7 @@ def solve(problem, *, seconds=10, seed=0, target='gold', replicas=128, backend='
     very long run; construction/native return can overrun cooperative budgets.
     Resume skips both phases and preserves the exact DFS stack.
     """
-    if (options and (options.get('durable_hybrid') or options.get('retained_repair'))) or (isinstance(resume,dict) and resume.get('hybrid_version')==3):
+    if (options and (options.get('durable_hybrid') or options.get('retained_repair') or options.get('incumbent_polish'))) or (isinstance(resume,dict) and resume.get('hybrid_version')==3):
         from gpu_hybrid_resume_round25 import solve as durable_solve
         return durable_solve(problem,seconds=seconds,seed=seed,target=target,replicas=replicas,backend=backend,
             sampling_fraction=sampling_fraction,repair_fraction=repair_fraction,hints=hints,seed_board=seed_board,

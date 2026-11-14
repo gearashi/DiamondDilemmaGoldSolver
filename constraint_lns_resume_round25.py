@@ -89,8 +89,19 @@ class RepairSession:
         expected={'repair_session_version','config','current','best','archive','seen','cache','pending','index','size_index','stalls','seed_cursor','previous_size','rng',
             'elapsed','done','status','reason','experiment_index','experiment_pending','experiment_elapsed','experimental_reports','stats','digest'}
         if self.retained:expected.update(('retained_service','experiment_order','experiment_budgets'))
+        from r27_incumbent_compat import compatible_sources
+        old_config=value.get('config') if isinstance(value,dict) else None
+        compatible=(isinstance(old_config,dict) and compatible_sources(old_config.get('sources'),self.config['sources'])
+                    and {**old_config,'sources':self.config['sources']}==self.config)
         if (not isinstance(value,dict) or set(value)!=expected or type(value['repair_session_version'])is not int or value['repair_session_version']!=1
-                or value['digest']!=digest({k:v for k,v in value.items() if k!='digest'}) or value['config']!=self.config):raise ValueError('Durable repair input/policy differs.')
+                or value['digest']!=digest({k:v for k,v in value.items() if k!='digest'}) or not compatible):raise ValueError('Durable repair input/policy differs.')
+        if old_config!=self.config:
+            value=deepcopy(value)
+            for item in [*value['cache'],value['pending']]:
+                if item is not None and isinstance(item,dict) and {'board','patch','key'}<=set(item):
+                    old_key=digest({'board':item['board'],'patch':item['patch'],'scope':old_config})
+                    if item['key']!=old_key:raise ValueError('Repair query context differs.')
+                    item['key']=self._key(item['board'],item['patch'])
         if self.retained:
             order=value['experiment_order'];budgets=value['experiment_budgets'];names={'mode:'+name for name in self.config['experiments']}|{'ordinary'}
             if not isinstance(order,list) or sorted(order)!=sorted(self.config['experiments']) or not isinstance(budgets,dict) or set(budgets)!=names or any(type(v)not in (int,float) or not math.isfinite(v) or v<0 for v in budgets.values()) or abs(sum(budgets.values())-self.config['phase_seconds'])>1e-7*max(1,self.config['phase_seconds']):raise ValueError('Invalid retained repair allocation.')

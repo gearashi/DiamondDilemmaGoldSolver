@@ -1,0 +1,1010 @@
+{
+  "finite": {
+    "released": {
+      "pair": {
+        "dfs": {
+          "status": "solved",
+          "nodes": 2,
+          "complete": true
+        },
+        "sat": {
+          "status": "solved",
+          "nodes": 8,
+          "complete": true
+        }
+      },
+      "pair-multiple-loops": {
+        "dfs": {
+          "status": "infeasible",
+          "nodes": 1,
+          "complete": true
+        },
+        "sat": {
+          "status": "infeasible",
+          "nodes": 40,
+          "complete": true
+        }
+      },
+      "tetra": {
+        "dfs": {
+          "status": "solved",
+          "nodes": 2,
+          "complete": true
+        },
+        "sat": {
+          "status": "solved",
+          "nodes": 9,
+          "complete": true
+        }
+      },
+      "ring4": {
+        "dfs": {
+          "status": "solved",
+          "nodes": 4,
+          "complete": true
+        },
+        "sat": {
+          "status": "solved",
+          "nodes": 11,
+          "complete": true
+        }
+      },
+      "ring6": {
+        "dfs": {
+          "status": "solved",
+          "nodes": 6,
+          "complete": true
+        },
+        "sat": {
+          "status": "solved",
+          "nodes": 18,
+          "complete": true
+        }
+      }
+    },
+    "split": {
+      "calibration": {
+        "seed": 271609,
+        "scopes": 70,
+        "totals": {
+          "mrv": {
+            "work": 3794,
+            "nodes": 289,
+            "pair_checks": 3505
+          },
+          "strong": {
+            "work": 12891,
+            "nodes": 245,
+            "pair_checks": 12646,
+            "probe_children": 898
+          },
+          "backdoor": {
+            "work": 3368,
+            "nodes": 222,
+            "cutset_trials": 103,
+            "forest_calls": 50,
+            "pair_checks": 1680,
+            "matching_remainders": 64,
+            "forest_failures": 2,
+            "matching_gold_fallbacks": 23
+          },
+          "backjump": {
+            "work": 5983,
+            "assignments": 462,
+            "pair_checks": 2380,
+            "discarded_assignments": 55,
+            "jumps": 237,
+            "replayed_reasons": 763,
+            "reused_reasons": 477,
+            "reason_literal_checks": 542
+          },
+          "dynamic": {
+            "work": 5931,
+            "assignments": 439,
+            "pair_checks": 2291,
+            "retained_assignments": 77,
+            "jumps": 255,
+            "replayed_reasons": 899,
+            "reused_reasons": 607,
+            "reason_literal_checks": 531
+          }
+        },
+        "positive_witness": {
+          "strong": {
+            "case": "ring6",
+            "domains": [
+              [
+                0,
+                3,
+                9,
+                12
+              ],
+              [
+                0,
+                6
+              ],
+              [
+                0,
+                3,
+                9
+              ],
+              [
+                0,
+                3,
+                12
+              ],
+              [
+                0,
+                3,
+                6,
+                12
+              ],
+              [
+                0,
+                6,
+                12
+              ]
+            ],
+            "gain": 10,
+            "base": {
+              "work": 413,
+              "nodes": 15,
+              "pair_checks": 398
+            },
+            "candidate": {
+              "work": 628,
+              "nodes": 5,
+              "pair_checks": 623,
+              "probe_children": 22
+            }
+          },
+          "backdoor": {
+            "case": "ring6",
+            "domains": [
+              [
+                0,
+                3,
+                9,
+                12
+              ],
+              [
+                0,
+                6
+              ],
+              [
+                0,
+                3,
+                9
+              ],
+              [
+                0,
+                3,
+                12
+              ],
+              [
+                0,
+                3,
+                6,
+                12
+              ],
+              [
+                0,
+                6,
+                12
+              ]
+            ],
+            "gain": 14,
+            "base": {
+              "work": 413,
+              "nodes": 15,
+              "pair_checks": 398
+            },
+            "candidate": {
+              "work": 48,
+              "nodes": 1,
+              "matching_remainders": 1
+            }
+          },
+          "dynamic": {
+            "case": "ring6",
+            "domains": [
+              [
+                0,
+                3,
+                9,
+                15
+              ],
+              [
+                0,
+                3,
+                6,
+                9,
+                12
+              ],
+              [
+                0,
+                3,
+                6,
+                12,
+                15
+              ],
+              [
+                6,
+                15
+              ],
+              [
+                6,
+                9
+              ],
+              [
+                0,
+                3,
+                6
+              ]
+            ],
+            "gain": 5,
+            "base": {
+              "work": 132,
+              "assignments": 12,
+              "pair_checks": 76,
+              "discarded_assignments": 3,
+              "jumps": 3,
+              "replayed_reasons": 3,
+              "reason_literal_checks": 6,
+              "reused_reasons": 3
+            },
+            "candidate": {
+              "work": 72,
+              "assignments": 7,
+              "pair_checks": 41,
+              "retained_assignments": 2,
+              "jumps": 1,
+              "replayed_reasons": 1,
+              "reason_literal_checks": 2,
+              "reused_reasons": 1
+            }
+          }
+        },
+        "heldout_reliability": {}
+      },
+      "heldout": {
+        "seed": 271611,
+        "scopes": 70,
+        "totals": {
+          "mrv": {
+            "work": 3324,
+            "nodes": 301,
+            "pair_checks": 3023
+          },
+          "strong": {
+            "work": 12025,
+            "nodes": 258,
+            "pair_checks": 11767,
+            "probe_children": 954
+          },
+          "backdoor": {
+            "work": 3511,
+            "nodes": 254,
+            "cutset_trials": 110,
+            "forest_calls": 54,
+            "pair_checks": 1809,
+            "matching_remainders": 64,
+            "matching_gold_fallbacks": 25,
+            "forest_failures": 1
+          },
+          "backjump": {
+            "work": 5607,
+            "assignments": 438,
+            "pair_checks": 2150,
+            "discarded_assignments": 42,
+            "jumps": 246,
+            "replayed_reasons": 719,
+            "reused_reasons": 544,
+            "reason_literal_checks": 307
+          },
+          "dynamic": {
+            "work": 5687,
+            "assignments": 426,
+            "pair_checks": 2131,
+            "retained_assignments": 46,
+            "jumps": 264,
+            "replayed_reasons": 833,
+            "reused_reasons": 666,
+            "reason_literal_checks": 292
+          },
+          "learned": {
+            "work": 5132,
+            "nodes": 383,
+            "learned_choices": 161,
+            "pair_checks": 3349
+          }
+        },
+        "positive_witness": {
+          "strong": {
+            "case": "tetra",
+            "domains": [
+              [
+                0,
+                2,
+                3,
+                7,
+                8,
+                10,
+                11
+              ],
+              [
+                2,
+                3,
+                5,
+                6,
+                7,
+                8,
+                9,
+                11
+              ],
+              [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                7,
+                8,
+                10
+              ],
+              [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                7,
+                8,
+                10,
+                11
+              ]
+            ],
+            "gain": 7,
+            "base": {
+              "work": 161,
+              "nodes": 13,
+              "pair_checks": 148
+            },
+            "candidate": {
+              "work": 309,
+              "nodes": 6,
+              "pair_checks": 303,
+              "probe_children": 32
+            }
+          },
+          "backdoor": {
+            "case": "ring6",
+            "domains": [
+              [
+                6,
+                12,
+                15
+              ],
+              [
+                0,
+                6,
+                9,
+                12
+              ],
+              [
+                0,
+                3,
+                6,
+                12,
+                15
+              ],
+              [
+                3,
+                12
+              ],
+              [
+                0,
+                3,
+                12,
+                15
+              ],
+              [
+                6,
+                9
+              ]
+            ],
+            "gain": 6,
+            "base": {
+              "work": 171,
+              "nodes": 7,
+              "pair_checks": 164
+            },
+            "candidate": {
+              "work": 38,
+              "nodes": 1,
+              "matching_remainders": 1
+            }
+          },
+          "dynamic": {
+            "case": "ring6",
+            "domains": [
+              [
+                0,
+                3,
+                6,
+                9
+              ],
+              [
+                3,
+                6,
+                12
+              ],
+              [
+                0,
+                12,
+                15
+              ],
+              [
+                3,
+                12,
+                15
+              ],
+              [
+                9,
+                12
+              ],
+              [
+                0,
+                3,
+                12
+              ]
+            ],
+            "gain": 5,
+            "base": {
+              "work": 157,
+              "assignments": 15,
+              "pair_checks": 82,
+              "discarded_assignments": 4,
+              "jumps": 5,
+              "replayed_reasons": 8,
+              "reason_literal_checks": 13,
+              "reused_reasons": 6
+            },
+            "candidate": {
+              "work": 119,
+              "assignments": 10,
+              "pair_checks": 64,
+              "retained_assignments": 5,
+              "jumps": 4,
+              "replayed_reasons": 5,
+              "reason_literal_checks": 9,
+              "reused_reasons": 5
+            }
+          }
+        },
+        "heldout_reliability": {
+          "strong_win": 24,
+          "learned_tie": 55,
+          "strong_tie": 35,
+          "strong_loss": 11,
+          "learned_loss": 14,
+          "learned_win": 1
+        }
+      }
+    },
+    "dynamic": {},
+    "cost": {
+      "vac_stronger": 35,
+      "shift_stronger": 0,
+      "cold": {
+        "probes": 2256,
+        "arc_visits": 10772,
+        "factor_pairs": 13736,
+        "evaluated_pairs": 13736
+      },
+      "incremental": {
+        "probes": 2256,
+        "arc_visits": 10772,
+        "factor_pairs": 13736,
+        "evaluated_pairs": 5868,
+        "projection_hits": 484
+      }
+    },
+    "algebra": {
+      "lp": {
+        "counts": {
+          "(False, False)": 49,
+          "(True, True)": 13
+        }
+      },
+      "gf2": {
+        "counts": {
+          "(False, False)": 49,
+          "(False, True)": 13
+        },
+        "additional": {
+          "rows": [
+            [
+              3,
+              5
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          "generated": [
+            4,
+            24
+          ]
+        }
+      },
+      "odd_cycles": {
+        "lp": [
+          {
+            "status": "unknown",
+            "variables": 12,
+            "rows": 60
+          },
+          {
+            "status": "certified_infeasible",
+            "variables": 12,
+            "rows": 1080
+          }
+        ],
+        "gf2": [
+          {
+            "status": "unknown",
+            "variables": 12,
+            "rows": 12
+          },
+          {
+            "status": "certified_infeasible",
+            "variables": 12,
+            "rows": 167
+          }
+        ]
+      }
+    },
+    "orbits": {
+      "pair": {
+        "before": 6,
+        "after": 1,
+        "status": "completed",
+        "work": 4670,
+        "mrv": {
+          "status": "solved",
+          "stats": {
+            "work": 9,
+            "nodes": 2,
+            "pair_checks": 7
+          }
+        },
+        "orbit": {
+          "status": "solved",
+          "stats": {
+            "work": 4679,
+            "nodes": 2,
+            "orbit_mappings": 5,
+            "pair_checks": 7
+          }
+        }
+      },
+      "pair-multiple-loops": {
+        "before": 6,
+        "after": 1,
+        "status": "completed",
+        "work": 13163,
+        "mrv": {
+          "status": "infeasible",
+          "stats": {
+            "work": 53,
+            "nodes": 11,
+            "pair_checks": 42
+          }
+        },
+        "orbit": {
+          "status": "infeasible",
+          "stats": {
+            "work": 13172,
+            "nodes": 2,
+            "orbit_mappings": 5,
+            "pair_checks": 7
+          }
+        }
+      },
+      "tetra": {
+        "before": 12,
+        "after": 6,
+        "status": "bounded",
+        "work": 60001
+      },
+      "ring4": {
+        "before": 4,
+        "after": 1,
+        "status": "completed",
+        "work": 2657,
+        "mrv": {
+          "status": "solved",
+          "stats": {
+            "work": 45,
+            "nodes": 4,
+            "pair_checks": 41
+          }
+        },
+        "orbit": {
+          "status": "solved",
+          "stats": {
+            "work": 3806,
+            "nodes": 4,
+            "orbit_mappings": 6,
+            "pair_checks": 41
+          }
+        }
+      },
+      "ring6": {
+        "before": 6,
+        "after": 1,
+        "status": "completed",
+        "work": 12192,
+        "mrv": {
+          "status": "solved",
+          "stats": {
+            "work": 191,
+            "nodes": 6,
+            "pair_checks": 185
+          }
+        },
+        "orbit": {
+          "status": "solved",
+          "stats": {
+            "work": 21684,
+            "nodes": 6,
+            "orbit_mappings": 15,
+            "pair_checks": 185
+          }
+        }
+      }
+    },
+    "parallel": {
+      "pair_0": {
+        "status": "solved",
+        "stats": {
+          "owner_calls": 1,
+          "owner_conflicts": 0
+        }
+      },
+      "pair_3": {
+        "status": "solved",
+        "stats": {
+          "pilot_calls": 2,
+          "pilot_conflicts": 1,
+          "owner_calls": 1,
+          "owner_conflicts": 0,
+          "helper_formula_clauses": 132
+        }
+      },
+      "pair-multiple-loops_0": {
+        "status": "infeasible",
+        "stats": {
+          "owner_calls": 7,
+          "owner_conflicts": 9,
+          "gold_cuts": 6
+        }
+      },
+      "pair-multiple-loops_3": {
+        "status": "infeasible",
+        "stats": {
+          "pilot_calls": 4,
+          "pilot_conflicts": 2,
+          "owner_calls": 5,
+          "owner_conflicts": 8,
+          "gold_cuts": 6,
+          "pilot_completed_queue": 1,
+          "helper_formula_clauses": 114
+        }
+      },
+      "tetra_0": {
+        "status": "solved",
+        "stats": {
+          "owner_calls": 1,
+          "owner_conflicts": 0
+        }
+      },
+      "tetra_3": {
+        "status": "solved",
+        "stats": {
+          "pilot_calls": 2,
+          "pilot_conflicts": 14,
+          "owner_calls": 1,
+          "owner_conflicts": 0,
+          "helper_formula_clauses": 552
+        }
+      },
+      "ring4_0": {
+        "status": "solved",
+        "stats": {
+          "owner_calls": 1,
+          "owner_conflicts": 3
+        }
+      },
+      "ring4_3": {
+        "status": "solved",
+        "stats": {
+          "pilot_calls": 2,
+          "pilot_conflicts": 1,
+          "owner_calls": 1,
+          "owner_conflicts": 3,
+          "helper_formula_clauses": 108
+        }
+      },
+      "ring6_0": {
+        "status": "solved",
+        "stats": {
+          "owner_calls": 1,
+          "owner_conflicts": 5
+        }
+      },
+      "ring6_3": {
+        "status": "solved",
+        "stats": {
+          "pilot_calls": 2,
+          "pilot_conflicts": 2,
+          "owner_calls": 1,
+          "owner_conflicts": 5,
+          "helper_formula_clauses": 258
+        }
+      }
+    },
+    "predictor_training": {
+      "features": 38,
+      "stats": {
+        "work": 3548,
+        "pair_checks": 3137,
+        "training_children": 300
+      }
+    }
+  },
+  "original": {
+    "seed_score": 207,
+    "scope": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "threshold_test": {
+      "status": "unknown",
+      "target": "gold",
+      "edge_upper_bound": 240,
+      "target_threshold": 208,
+      "calls": 33,
+      "gold_cuts": 0,
+      "scope": "entire_board",
+      "defect_bound": {
+        "lower_bound": 0,
+        "shift_bound": 0,
+        "vac_bound": 0,
+        "stats": {
+          "probes": 1,
+          "arc_visits": 480
+        },
+        "infeasible_domain": false
+      },
+      "clauses": 749040,
+      "placement_variables": 76800,
+      "base_variables": 269920,
+      "cardinality_clauses": 8774,
+      "native": {
+        "restarts": 115,
+        "conflicts": 25730,
+        "decisions": 2005585,
+        "propagations": 87341011
+      },
+      "matched_edges": 207,
+      "gold_valid": false,
+      "seconds": 27.360000000000582
+    },
+    "root_cost": {
+      "lower_bound": 0,
+      "shift_bound": 0,
+      "vac_bound": 0,
+      "stats": {
+        "probes": 1,
+        "arc_visits": 480
+      },
+      "infeasible_domain": false
+    },
+    "checkpoint_scopes": [
+      {
+        "stack_depth": 0,
+        "active": 160,
+        "placement_variables": 76800,
+        "orbits": "skipped",
+        "gf2": "skipped",
+        "lp": "skipped",
+        "defect_bound": 0,
+        "defect_work": {
+          "probes": 1,
+          "arc_visits": 480
+        },
+        "backdoor": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "nodes": 1
+          }
+        },
+        "dynamic": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "assignments": 12,
+            "pair_checks": 8127,
+            "retained_assignments": 0,
+            "jumps": 1,
+            "replayed_reasons": 1,
+            "reason_literal_checks": 6,
+            "reused_reasons": 1
+          }
+        },
+        "strong": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "nodes": 1,
+            "pair_checks": 9999
+          }
+        },
+        "mrv": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "nodes": 2,
+            "pair_checks": 9998
+          }
+        },
+        "backjump": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "assignments": 12,
+            "pair_checks": 8127,
+            "discarded_assignments": 0,
+            "jumps": 1,
+            "replayed_reasons": 1,
+            "reason_literal_checks": 6,
+            "reused_reasons": 1
+          }
+        }
+      },
+      {
+        "stack_depth": 12,
+        "active": 144,
+        "placement_variables": 50766,
+        "orbits": "skipped",
+        "gf2": "skipped",
+        "lp": "skipped",
+        "defect_bound": 0,
+        "defect_work": {
+          "probes": 1,
+          "arc_visits": 480,
+          "factor_pairs": 25000,
+          "evaluated_pairs": 25000
+        },
+        "backdoor": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "nodes": 1,
+            "pair_checks": 9999
+          }
+        },
+        "dynamic": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "assignments": 11,
+            "pair_checks": 8050,
+            "retained_assignments": 0,
+            "jumps": 2,
+            "replayed_reasons": 3,
+            "reason_literal_checks": 18,
+            "reused_reasons": 3
+          }
+        },
+        "strong": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "nodes": 1,
+            "pair_checks": 9999
+          }
+        },
+        "mrv": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "nodes": 1,
+            "pair_checks": 9999
+          }
+        },
+        "backjump": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "assignments": 11,
+            "pair_checks": 8050,
+            "discarded_assignments": 0,
+            "jumps": 2,
+            "replayed_reasons": 3,
+            "reason_literal_checks": 18,
+            "reused_reasons": 3
+          }
+        }
+      },
+      {
+        "stack_depth": 24,
+        "active": 122,
+        "placement_variables": 23538,
+        "orbits": "skipped",
+        "gf2": "skipped",
+        "lp": "skipped",
+        "defect_bound": 0,
+        "defect_work": {
+          "probes": 1,
+          "arc_visits": 8160,
+          "factor_pairs": 25000,
+          "evaluated_pairs": 25000
+        },
+        "backdoor": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "nodes": 1,
+            "pair_checks": 9999
+          }
+        },
+        "dynamic": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "assignments": 19,
+            "pair_checks": 7802,
+            "retained_assignments": 17,
+            "jumps": 13,
+            "replayed_reasons": 42,
+            "reason_literal_checks": 111,
+            "reused_reasons": 38
+          }
+        },
+        "strong": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "nodes": 1,
+            "pair_checks": 9999
+          }
+        },
+        "mrv": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "nodes": 1,
+            "pair_checks": 9999
+          }
+        },
+        "backjump": {
+          "status": "unknown",
+          "stats": {
+            "work": 10001,
+            "assignments": 33,
+            "pair_checks": 8897,
+            "discarded_assignments": 7,
+            "jumps": 5,
+            "replayed_reasons": 10,
+            "reason_literal_checks": 10,
+            "reused_reasons": 6
+          }
+        }
+      }
+    ]
+  }
+}

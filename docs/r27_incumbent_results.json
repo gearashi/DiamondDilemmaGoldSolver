@@ -1,0 +1,4805 @@
+{
+  "original_code_digest": "d1ec7565405d793085ce5394867e416ff3c1d1ef675fa72e2ec18827091a9c42",
+  "screen": [
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "rotations",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "last_bound": 209,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 9429912,
+      "seconds": 1.41456
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "block",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 201180,
+      "seconds": 0.1332
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "alternating",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 52,
+      "gold": false,
+      "last_bound": 209,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 9401025,
+      "seconds": 1.16683
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "patch",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "attempts": 18,
+      "patch_nodes": null,
+      "seconds": 4.18259
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "exchange",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 283,
+      "extra": 0,
+      "seconds": 0.27652
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "tabu",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 220,
+      "extra": 0,
+      "seconds": 0.27988
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "penalty",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 215,
+      "extra": 0,
+      "seconds": 0.3388
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "archive",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 280,
+      "extra": 0,
+      "seconds": 0.78467
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "niche",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 267,
+      "extra": 2042,
+      "seconds": 6.44367
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "population",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 148,
+      "extra": 0,
+      "seconds": 0.30953
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "flat",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 525,
+      "extra": 0,
+      "seconds": 0.27231
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "cross_entropy",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 253,
+      "extra": 6144000,
+      "seconds": 1.33642
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "belief",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "work": 1619787,
+      "constructed": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "seconds": 0.3402
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "belief_decimation",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "work": 1619787,
+      "constructed": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "seconds": 0.24896
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "fractional",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "work": 2782758,
+      "constructed": {
+        "score": 164,
+        "components": 107,
+        "gold": false
+      },
+      "seconds": 0.26962
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "geometric",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "children": 16,
+      "best_child": 190,
+      "post_repair": 191,
+      "seconds": 0.7457
+    },
+    {
+      "seed": 0,
+      "start": "incumbent",
+      "method": "independent_parent",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "second_parent_score": 198,
+      "children": 16,
+      "best_child": 207,
+      "post_repair": 207,
+      "seconds": 0.7814
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "rotations",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 173,
+      "components": 91,
+      "gold": false,
+      "last_bound": 173,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 2154924,
+      "seconds": 0.92043
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "block",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 185,
+      "components": 82,
+      "gold": false,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 205554,
+      "seconds": 0.08927
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "alternating",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 187,
+      "components": 75,
+      "gold": false,
+      "last_bound": 187,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 953877,
+      "seconds": 0.89767
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "patch",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 159,
+      "components": 110,
+      "gold": false,
+      "attempts": 18,
+      "patch_nodes": null,
+      "seconds": 3.45875
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "exchange",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 156,
+      "components": 116,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 400,
+      "extra": 0,
+      "seconds": 0.36411
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "tabu",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 155,
+      "components": 116,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 341,
+      "extra": 0,
+      "seconds": 0.34319
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "penalty",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 157,
+      "components": 110,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 335,
+      "extra": 0,
+      "seconds": 0.33504
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "archive",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 162,
+      "components": 107,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 366,
+      "extra": 0,
+      "seconds": 0.8836
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "niche",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 158,
+      "components": 115,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 372,
+      "extra": 1711,
+      "seconds": 6.3077
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "population",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 163,
+      "components": 107,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 255,
+      "extra": 0,
+      "seconds": 0.45714
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "flat",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 157,
+      "components": 113,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 614,
+      "extra": 0,
+      "seconds": 0.3118
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "cross_entropy",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 159,
+      "components": 114,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 371,
+      "extra": 6144000,
+      "seconds": 1.06424
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "belief",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 194,
+      "components": 67,
+      "gold": false,
+      "work": 1578750,
+      "constructed": {
+        "score": 194,
+        "components": 67,
+        "gold": false
+      },
+      "seconds": 0.24591
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "belief_decimation",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 194,
+      "components": 67,
+      "gold": false,
+      "work": 1578750,
+      "constructed": {
+        "score": 194,
+        "components": 67,
+        "gold": false
+      },
+      "seconds": 0.23507
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "fractional",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 152,
+      "components": 120,
+      "gold": false,
+      "work": 2769264,
+      "constructed": {
+        "score": 145,
+        "components": 138,
+        "gold": false
+      },
+      "seconds": 0.29689
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "geometric",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 160,
+      "components": 104,
+      "gold": false,
+      "children": 16,
+      "best_child": 140,
+      "post_repair": 160,
+      "seconds": 0.94615
+    },
+    {
+      "seed": 0,
+      "start": "perturbed",
+      "method": "independent_parent",
+      "initial": {
+        "score": 152,
+        "components": 120,
+        "gold": false
+      },
+      "score": 185,
+      "components": 78,
+      "gold": false,
+      "second_parent_score": 184,
+      "children": 16,
+      "best_child": 179,
+      "post_repair": 185,
+      "seconds": 1.06042
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "rotations",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 39,
+      "components": 278,
+      "gold": false,
+      "last_bound": 39,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 14904,
+      "seconds": 0.57976
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "block",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 156,
+      "components": 126,
+      "gold": false,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 208923,
+      "seconds": 0.08543
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "alternating",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 154,
+      "components": 131,
+      "gold": false,
+      "last_bound": 154,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 255675,
+      "seconds": 0.76234
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "patch",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 52,
+      "components": 272,
+      "gold": false,
+      "attempts": 18,
+      "patch_nodes": null,
+      "seconds": 3.10702
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "exchange",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 22,
+      "components": 295,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 949,
+      "extra": 0,
+      "seconds": 0.35164
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "tabu",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 22,
+      "components": 295,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 933,
+      "extra": 0,
+      "seconds": 0.39743
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "penalty",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 20,
+      "components": 298,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 906,
+      "extra": 0,
+      "seconds": 0.43892
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "archive",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 21,
+      "components": 299,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 879,
+      "extra": 0,
+      "seconds": 1.24079
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "niche",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 24,
+      "components": 300,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 899,
+      "extra": 1465,
+      "seconds": 6.31089
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "population",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 23,
+      "components": 290,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 888,
+      "extra": 0,
+      "seconds": 0.27904
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "flat",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 19,
+      "components": 294,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 938,
+      "extra": 0,
+      "seconds": 0.27342
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "cross_entropy",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 21,
+      "components": 296,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 903,
+      "extra": 6144000,
+      "seconds": 0.98988
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "belief",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 40,
+      "components": 284,
+      "gold": false,
+      "work": 1383240,
+      "constructed": {
+        "score": 40,
+        "components": 284,
+        "gold": false
+      },
+      "seconds": 0.17439
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "belief_decimation",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 45,
+      "components": 274,
+      "gold": false,
+      "work": 1383288,
+      "constructed": {
+        "score": 45,
+        "components": 274,
+        "gold": false
+      },
+      "seconds": 0.17267
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "fractional",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 102,
+      "components": 198,
+      "gold": false,
+      "work": 2766204,
+      "constructed": {
+        "score": 102,
+        "components": 198,
+        "gold": false
+      },
+      "seconds": 0.19379
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "geometric",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 44,
+      "components": 279,
+      "gold": false,
+      "children": 16,
+      "best_child": 7,
+      "post_repair": 44,
+      "seconds": 0.49048
+    },
+    {
+      "seed": 0,
+      "start": "fresh",
+      "method": "independent_parent",
+      "initial": {
+        "score": 4,
+        "components": 310,
+        "gold": false
+      },
+      "score": 114,
+      "components": 186,
+      "gold": false,
+      "second_parent_score": 113,
+      "children": 16,
+      "best_child": 113,
+      "post_repair": 114,
+      "seconds": 0.49315
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "rotations",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "last_bound": 209,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 9429912,
+      "seconds": 0.89931
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "block",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 52,
+      "gold": false,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 202716,
+      "seconds": 0.07818
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "alternating",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 52,
+      "gold": false,
+      "last_bound": 209,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 9572913,
+      "seconds": 0.86948
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "patch",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "attempts": 18,
+      "patch_nodes": null,
+      "seconds": 3.11433
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "exchange",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 313,
+      "extra": 0,
+      "seconds": 0.28324
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "tabu",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 247,
+      "extra": 0,
+      "seconds": 0.28886
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "penalty",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 223,
+      "extra": 0,
+      "seconds": 0.30611
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "archive",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 307,
+      "extra": 0,
+      "seconds": 0.70961
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "niche",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 305,
+      "extra": 1946,
+      "seconds": 5.15568
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "population",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 146,
+      "extra": 0,
+      "seconds": 0.25374
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "flat",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 496,
+      "extra": 0,
+      "seconds": 0.25573
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "cross_entropy",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 254,
+      "extra": 6144000,
+      "seconds": 0.77915
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "belief",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "work": 1619787,
+      "constructed": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "seconds": 0.16976
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "belief_decimation",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "work": 1619787,
+      "constructed": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "seconds": 0.17927
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "fractional",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "work": 2768676,
+      "constructed": {
+        "score": 164,
+        "components": 109,
+        "gold": false
+      },
+      "seconds": 0.14472
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "geometric",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "children": 16,
+      "best_child": 189,
+      "post_repair": 189,
+      "seconds": 0.52584
+    },
+    {
+      "seed": 1,
+      "start": "incumbent",
+      "method": "independent_parent",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "second_parent_score": 195,
+      "children": 16,
+      "best_child": 207,
+      "post_repair": 207,
+      "seconds": 0.63638
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "rotations",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 152,
+      "components": 121,
+      "gold": false,
+      "last_bound": 152,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 91368,
+      "seconds": 0.63332
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "block",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 190,
+      "components": 79,
+      "gold": false,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 205173,
+      "seconds": 0.07662
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "alternating",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 193,
+      "components": 67,
+      "gold": false,
+      "last_bound": 193,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 1143702,
+      "seconds": 0.63309
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "patch",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 154,
+      "components": 116,
+      "gold": false,
+      "attempts": 18,
+      "patch_nodes": null,
+      "seconds": 2.41401
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "exchange",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 147,
+      "components": 124,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 426,
+      "extra": 0,
+      "seconds": 0.2583
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "tabu",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 147,
+      "components": 124,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 391,
+      "extra": 0,
+      "seconds": 0.25031
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "penalty",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 147,
+      "components": 124,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 348,
+      "extra": 0,
+      "seconds": 0.30141
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "archive",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 148,
+      "components": 121,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 422,
+      "extra": 0,
+      "seconds": 0.67532
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "niche",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 149,
+      "components": 123,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 400,
+      "extra": 2142,
+      "seconds": 5.11178
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "population",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 146,
+      "components": 126,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 245,
+      "extra": 0,
+      "seconds": 0.24652
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "flat",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 146,
+      "components": 126,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 651,
+      "extra": 0,
+      "seconds": 0.25705
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "cross_entropy",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 147,
+      "components": 124,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 362,
+      "extra": 6144000,
+      "seconds": 0.84291
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "belief",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 152,
+      "components": 126,
+      "gold": false,
+      "work": 1387476,
+      "constructed": {
+        "score": 152,
+        "components": 126,
+        "gold": false
+      },
+      "seconds": 0.18222
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "belief_decimation",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 152,
+      "components": 126,
+      "gold": false,
+      "work": 1387476,
+      "constructed": {
+        "score": 152,
+        "components": 126,
+        "gold": false
+      },
+      "seconds": 0.19728
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "fractional",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 146,
+      "components": 126,
+      "gold": false,
+      "work": 2768178,
+      "constructed": {
+        "score": 142,
+        "components": 138,
+        "gold": false
+      },
+      "seconds": 0.15324
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "geometric",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 146,
+      "components": 126,
+      "gold": false,
+      "children": 16,
+      "best_child": 134,
+      "post_repair": 141,
+      "seconds": 0.54277
+    },
+    {
+      "seed": 1,
+      "start": "perturbed",
+      "method": "independent_parent",
+      "initial": {
+        "score": 146,
+        "components": 126,
+        "gold": false
+      },
+      "score": 170,
+      "components": 103,
+      "gold": false,
+      "second_parent_score": 171,
+      "children": 16,
+      "best_child": 166,
+      "post_repair": 170,
+      "seconds": 0.49844
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "rotations",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 42,
+      "components": 277,
+      "gold": false,
+      "last_bound": 42,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 14364,
+      "seconds": 0.42137
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "block",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 152,
+      "components": 140,
+      "gold": false,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 203871,
+      "seconds": 0.05343
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "alternating",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 151,
+      "components": 133,
+      "gold": false,
+      "last_bound": 151,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 238038,
+      "seconds": 0.53996
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "patch",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 58,
+      "components": 255,
+      "gold": false,
+      "attempts": 18,
+      "patch_nodes": null,
+      "seconds": 2.14314
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "exchange",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 17,
+      "components": 309,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 930,
+      "extra": 0,
+      "seconds": 0.29351
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "tabu",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 17,
+      "components": 309,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 915,
+      "extra": 0,
+      "seconds": 0.29162
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "penalty",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 18,
+      "components": 300,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 933,
+      "extra": 0,
+      "seconds": 0.34609
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "archive",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 23,
+      "components": 296,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 907,
+      "extra": 0,
+      "seconds": 0.73614
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "niche",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 26,
+      "components": 295,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 874,
+      "extra": 1603,
+      "seconds": 4.43575
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "population",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 27,
+      "components": 291,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 857,
+      "extra": 0,
+      "seconds": 0.27781
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "flat",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 19,
+      "components": 311,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 907,
+      "extra": 0,
+      "seconds": 0.33953
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "cross_entropy",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 26,
+      "components": 302,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 893,
+      "extra": 6144000,
+      "seconds": 1.02035
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "belief",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 42,
+      "components": 289,
+      "gold": false,
+      "work": 1383198,
+      "constructed": {
+        "score": 42,
+        "components": 289,
+        "gold": false
+      },
+      "seconds": 0.18543
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "belief_decimation",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 73,
+      "components": 245,
+      "gold": false,
+      "work": 1383648,
+      "constructed": {
+        "score": 73,
+        "components": 245,
+        "gold": false
+      },
+      "seconds": 0.23655
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "fractional",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 104,
+      "components": 191,
+      "gold": false,
+      "work": 2766396,
+      "constructed": {
+        "score": 104,
+        "components": 191,
+        "gold": false
+      },
+      "seconds": 0.1686
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "geometric",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 43,
+      "components": 276,
+      "gold": false,
+      "children": 16,
+      "best_child": 7,
+      "post_repair": 43,
+      "seconds": 0.42492
+    },
+    {
+      "seed": 1,
+      "start": "fresh",
+      "method": "independent_parent",
+      "initial": {
+        "score": 5,
+        "components": 308,
+        "gold": false
+      },
+      "score": 101,
+      "components": 203,
+      "gold": false,
+      "second_parent_score": 112,
+      "children": 16,
+      "best_child": 96,
+      "post_repair": 101,
+      "seconds": 0.45405
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "rotations",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "last_bound": 209,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 9429912,
+      "seconds": 0.76975
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "block",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 197205,
+      "seconds": 0.05548
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "alternating",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 52,
+      "gold": false,
+      "last_bound": 210,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 9548568,
+      "seconds": 1.06584
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "patch",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "attempts": 18,
+      "patch_nodes": null,
+      "seconds": 3.12851
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "exchange",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 306,
+      "extra": 0,
+      "seconds": 0.41022
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "tabu",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 233,
+      "extra": 0,
+      "seconds": 0.34698
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "penalty",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 223,
+      "extra": 0,
+      "seconds": 0.33403
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "archive",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 287,
+      "extra": 0,
+      "seconds": 0.83637
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "niche",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 311,
+      "extra": 2038,
+      "seconds": 6.83779
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "population",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 162,
+      "extra": 0,
+      "seconds": 0.24997
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "flat",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 488,
+      "extra": 0,
+      "seconds": 0.27622
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "cross_entropy",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 258,
+      "extra": 6144000,
+      "seconds": 0.87394
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "belief",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "work": 1619787,
+      "constructed": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "seconds": 0.17653
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "belief_decimation",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "work": 1619787,
+      "constructed": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "seconds": 0.19338
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "fractional",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "work": 2870952,
+      "constructed": {
+        "score": 186,
+        "components": 77,
+        "gold": false
+      },
+      "seconds": 0.15446
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "geometric",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "children": 16,
+      "best_child": 194,
+      "post_repair": 194,
+      "seconds": 0.51649
+    },
+    {
+      "seed": 2,
+      "start": "incumbent",
+      "method": "independent_parent",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "second_parent_score": 199,
+      "children": 16,
+      "best_child": 207,
+      "post_repair": 207,
+      "seconds": 0.59212
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "rotations",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 170,
+      "components": 97,
+      "gold": false,
+      "last_bound": 170,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 226908,
+      "seconds": 0.62907
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "block",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 190,
+      "components": 76,
+      "gold": false,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 203793,
+      "seconds": 0.06105
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "alternating",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 193,
+      "components": 67,
+      "gold": false,
+      "last_bound": 193,
+      "rounds": 18,
+      "exact_orientation_rounds": 16,
+      "table_entries": 2597877,
+      "seconds": 0.68968
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "patch",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 161,
+      "components": 118,
+      "gold": false,
+      "attempts": 18,
+      "patch_nodes": null,
+      "seconds": 2.88549
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "exchange",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 157,
+      "components": 120,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 404,
+      "extra": 0,
+      "seconds": 0.29279
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "tabu",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 157,
+      "components": 120,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 360,
+      "extra": 0,
+      "seconds": 0.27401
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "penalty",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 158,
+      "components": 118,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 377,
+      "extra": 0,
+      "seconds": 0.32856
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "archive",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 166,
+      "components": 109,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 384,
+      "extra": 0,
+      "seconds": 0.669
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "niche",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 156,
+      "components": 124,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 395,
+      "extra": 1999,
+      "seconds": 5.42915
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "population",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 155,
+      "components": 125,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 246,
+      "extra": 0,
+      "seconds": 0.31851
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "flat",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 155,
+      "components": 125,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 617,
+      "extra": 0,
+      "seconds": 0.30006
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "cross_entropy",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 156,
+      "components": 124,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 384,
+      "extra": 6144000,
+      "seconds": 0.93745
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "belief",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 198,
+      "components": 65,
+      "gold": false,
+      "work": 1553895,
+      "constructed": {
+        "score": 198,
+        "components": 65,
+        "gold": false
+      },
+      "seconds": 0.2055
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "belief_decimation",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 198,
+      "components": 65,
+      "gold": false,
+      "work": 1553895,
+      "constructed": {
+        "score": 198,
+        "components": 65,
+        "gold": false
+      },
+      "seconds": 0.20179
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "fractional",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 155,
+      "components": 125,
+      "gold": false,
+      "work": 2768772,
+      "constructed": {
+        "score": 152,
+        "components": 127,
+        "gold": false
+      },
+      "seconds": 0.17632
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "geometric",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 160,
+      "components": 111,
+      "gold": false,
+      "children": 16,
+      "best_child": 146,
+      "post_repair": 160,
+      "seconds": 0.61337
+    },
+    {
+      "seed": 2,
+      "start": "perturbed",
+      "method": "independent_parent",
+      "initial": {
+        "score": 155,
+        "components": 125,
+        "gold": false
+      },
+      "score": 177,
+      "components": 93,
+      "gold": false,
+      "second_parent_score": 175,
+      "children": 16,
+      "best_child": 171,
+      "post_repair": 177,
+      "seconds": 0.56862
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "rotations",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 35,
+      "components": 281,
+      "gold": false,
+      "last_bound": 35,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 13500,
+      "seconds": 0.41118
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "block",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 145,
+      "components": 141,
+      "gold": false,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 204828,
+      "seconds": 0.06649
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "alternating",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 148,
+      "components": 134,
+      "gold": false,
+      "last_bound": 148,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 239118,
+      "seconds": 0.94931
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "patch",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 67,
+      "components": 256,
+      "gold": false,
+      "attempts": 18,
+      "patch_nodes": null,
+      "seconds": 2.5802
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "exchange",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 21,
+      "components": 307,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 922,
+      "extra": 0,
+      "seconds": 0.3921
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "tabu",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 21,
+      "components": 307,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 901,
+      "extra": 0,
+      "seconds": 0.61904
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "penalty",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 21,
+      "components": 300,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 890,
+      "extra": 0,
+      "seconds": 0.66259
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "archive",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 24,
+      "components": 301,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 892,
+      "extra": 0,
+      "seconds": 1.0618
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "niche",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 23,
+      "components": 303,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 882,
+      "extra": 1835,
+      "seconds": 8.58382
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "population",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 31,
+      "components": 286,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 772,
+      "extra": 0,
+      "seconds": 0.67965
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "flat",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 20,
+      "components": 301,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 918,
+      "extra": 0,
+      "seconds": 0.77346
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "cross_entropy",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 21,
+      "components": 304,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 892,
+      "extra": 6144000,
+      "seconds": 1.74947
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "belief",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 35,
+      "components": 293,
+      "gold": false,
+      "work": 1383150,
+      "constructed": {
+        "score": 35,
+        "components": 293,
+        "gold": false
+      },
+      "seconds": 0.23908
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "belief_decimation",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 41,
+      "components": 279,
+      "gold": false,
+      "work": 1383216,
+      "constructed": {
+        "score": 41,
+        "components": 279,
+        "gold": false
+      },
+      "seconds": 0.28353
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "fractional",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 107,
+      "components": 187,
+      "gold": false,
+      "work": 2766330,
+      "constructed": {
+        "score": 107,
+        "components": 187,
+        "gold": false
+      },
+      "seconds": 0.2072
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "geometric",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 44,
+      "components": 281,
+      "gold": false,
+      "children": 16,
+      "best_child": 12,
+      "post_repair": 44,
+      "seconds": 0.59165
+    },
+    {
+      "seed": 2,
+      "start": "fresh",
+      "method": "independent_parent",
+      "initial": {
+        "score": 8,
+        "components": 322,
+        "gold": false
+      },
+      "score": 110,
+      "components": 189,
+      "gold": false,
+      "second_parent_score": 109,
+      "children": 16,
+      "best_child": 107,
+      "post_repair": 110,
+      "seconds": 0.59613
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "rotations",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "last_bound": 209,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 9429912,
+      "seconds": 0.86532
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "block",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 53,
+      "gold": false,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 204192,
+      "seconds": 0.0606
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "alternating",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 52,
+      "gold": false,
+      "last_bound": 209,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 9528222,
+      "seconds": 1.70405
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "patch",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "attempts": 18,
+      "patch_nodes": null,
+      "seconds": 3.34277
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "exchange",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 318,
+      "extra": 0,
+      "seconds": 0.39824
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "tabu",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 246,
+      "extra": 0,
+      "seconds": 0.39476
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "penalty",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 249,
+      "extra": 0,
+      "seconds": 0.46591
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "archive",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 293,
+      "extra": 0,
+      "seconds": 0.98524
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "niche",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 264,
+      "extra": 2063,
+      "seconds": 7.30454
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "population",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 166,
+      "extra": 0,
+      "seconds": 0.28866
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "flat",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 527,
+      "extra": 0,
+      "seconds": 0.31042
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "cross_entropy",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 247,
+      "extra": 6144000,
+      "seconds": 0.93882
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "belief",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "work": 1619787,
+      "constructed": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "seconds": 0.18551
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "belief_decimation",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "work": 1619787,
+      "constructed": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "seconds": 0.20615
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "fractional",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "work": 2772450,
+      "constructed": {
+        "score": 158,
+        "components": 116,
+        "gold": false
+      },
+      "seconds": 0.20325
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "geometric",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "children": 16,
+      "best_child": 187,
+      "post_repair": 187,
+      "seconds": 0.59967
+    },
+    {
+      "seed": 3,
+      "start": "incumbent",
+      "method": "independent_parent",
+      "initial": {
+        "score": 207,
+        "components": 54,
+        "gold": false
+      },
+      "score": 207,
+      "components": 54,
+      "gold": false,
+      "second_parent_score": 192,
+      "children": 16,
+      "best_child": 202,
+      "post_repair": 202,
+      "seconds": 1.1245
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "rotations",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 155,
+      "components": 115,
+      "gold": false,
+      "last_bound": 155,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 100224,
+      "seconds": 0.82733
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "block",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 186,
+      "components": 78,
+      "gold": false,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 204276,
+      "seconds": 0.101
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "alternating",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 184,
+      "components": 83,
+      "gold": false,
+      "last_bound": 184,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 1116489,
+      "seconds": 0.71435
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "patch",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 155,
+      "components": 125,
+      "gold": false,
+      "attempts": 18,
+      "patch_nodes": null,
+      "seconds": 2.68542
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "exchange",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 146,
+      "components": 129,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 432,
+      "extra": 0,
+      "seconds": 0.3479
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "tabu",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 146,
+      "components": 129,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 396,
+      "extra": 0,
+      "seconds": 0.31943
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "penalty",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 142,
+      "components": 141,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 349,
+      "extra": 0,
+      "seconds": 0.33392
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "archive",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 146,
+      "components": 134,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 429,
+      "extra": 0,
+      "seconds": 0.78068
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "niche",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 145,
+      "components": 136,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 412,
+      "extra": 1715,
+      "seconds": 5.58932
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "population",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 146,
+      "components": 138,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 259,
+      "extra": 0,
+      "seconds": 0.3481
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "flat",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 143,
+      "components": 141,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 643,
+      "extra": 0,
+      "seconds": 0.36401
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "cross_entropy",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 143,
+      "components": 141,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 379,
+      "extra": 6144000,
+      "seconds": 1.1796
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "belief",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 155,
+      "components": 121,
+      "gold": false,
+      "work": 1387968,
+      "constructed": {
+        "score": 155,
+        "components": 121,
+        "gold": false
+      },
+      "seconds": 0.24308
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "belief_decimation",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 163,
+      "components": 114,
+      "gold": false,
+      "work": 1403598,
+      "constructed": {
+        "score": 163,
+        "components": 114,
+        "gold": false
+      },
+      "seconds": 0.22655
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "fractional",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 142,
+      "components": 141,
+      "gold": false,
+      "work": 2766990,
+      "constructed": {
+        "score": 137,
+        "components": 149,
+        "gold": false
+      },
+      "seconds": 0.16727
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "geometric",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 143,
+      "components": 138,
+      "gold": false,
+      "children": 16,
+      "best_child": 126,
+      "post_repair": 143,
+      "seconds": 0.52422
+    },
+    {
+      "seed": 3,
+      "start": "perturbed",
+      "method": "independent_parent",
+      "initial": {
+        "score": 142,
+        "components": 141,
+        "gold": false
+      },
+      "score": 173,
+      "components": 100,
+      "gold": false,
+      "second_parent_score": 176,
+      "children": 16,
+      "best_child": 169,
+      "post_repair": 173,
+      "seconds": 0.57037
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "rotations",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 38,
+      "components": 275,
+      "gold": false,
+      "last_bound": 38,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 14148,
+      "seconds": 0.51991
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "block",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 156,
+      "components": 118,
+      "gold": false,
+      "rounds": 18,
+      "exact_orientation_rounds": 0,
+      "table_entries": 201234,
+      "seconds": 0.07454
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "alternating",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 152,
+      "components": 130,
+      "gold": false,
+      "last_bound": 152,
+      "rounds": 18,
+      "exact_orientation_rounds": 18,
+      "table_entries": 236289,
+      "seconds": 0.82934
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "patch",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 52,
+      "components": 255,
+      "gold": false,
+      "attempts": 18,
+      "patch_nodes": null,
+      "seconds": 2.78855
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "exchange",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 20,
+      "components": 302,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 932,
+      "extra": 0,
+      "seconds": 0.29516
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "tabu",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 20,
+      "components": 302,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 912,
+      "extra": 0,
+      "seconds": 0.3146
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "penalty",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 19,
+      "components": 297,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 895,
+      "extra": 0,
+      "seconds": 0.35102
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "archive",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 22,
+      "components": 290,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 870,
+      "extra": 0,
+      "seconds": 0.83452
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "niche",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 26,
+      "components": 298,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 870,
+      "extra": 1678,
+      "seconds": 5.97543
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "population",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 28,
+      "components": 286,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 843,
+      "extra": 0,
+      "seconds": 0.38215
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "flat",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 20,
+      "components": 295,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 909,
+      "extra": 0,
+      "seconds": 0.39929
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "cross_entropy",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 23,
+      "components": 291,
+      "gold": false,
+      "proposals": 1024,
+      "first208": null,
+      "accepted": 878,
+      "extra": 6144000,
+      "seconds": 0.9117
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "belief",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 38,
+      "components": 284,
+      "gold": false,
+      "work": 1383186,
+      "constructed": {
+        "score": 38,
+        "components": 284,
+        "gold": false
+      },
+      "seconds": 0.16068
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "belief_decimation",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 77,
+      "components": 238,
+      "gold": false,
+      "work": 1383570,
+      "constructed": {
+        "score": 77,
+        "components": 238,
+        "gold": false
+      },
+      "seconds": 0.16263
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "fractional",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 105,
+      "components": 190,
+      "gold": false,
+      "work": 2766318,
+      "constructed": {
+        "score": 105,
+        "components": 190,
+        "gold": false
+      },
+      "seconds": 0.14152
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "geometric",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 43,
+      "components": 287,
+      "gold": false,
+      "children": 16,
+      "best_child": 9,
+      "post_repair": 43,
+      "seconds": 0.41722
+    },
+    {
+      "seed": 3,
+      "start": "fresh",
+      "method": "independent_parent",
+      "initial": {
+        "score": 7,
+        "components": 302,
+        "gold": false
+      },
+      "score": 116,
+      "components": 194,
+      "gold": false,
+      "second_parent_score": 114,
+      "children": 16,
+      "best_child": 111,
+      "post_repair": 116,
+      "seconds": 0.6586
+    }
+  ],
+  "holdout": {
+    "ensemble": [
+      {
+        "seed": 0,
+        "start": "original",
+        "method": "exchange",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.1174010999966413
+      },
+      {
+        "seed": 0,
+        "start": "original",
+        "method": "population",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.0611757000006037
+      },
+      {
+        "seed": 0,
+        "start": "original",
+        "method": "flat",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.0869496000086656
+      },
+      {
+        "seed": 0,
+        "start": "original",
+        "method": "cross_entropy",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 25804800,
+        "seconds": 4.36988410000049
+      },
+      {
+        "seed": 0,
+        "start": "fresh",
+        "method": "exchange",
+        "score": 34,
+        "components": 284,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.1231098999996902
+      },
+      {
+        "seed": 0,
+        "start": "fresh",
+        "method": "population",
+        "score": 44,
+        "components": 281,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.3779719000012847
+      },
+      {
+        "seed": 0,
+        "start": "fresh",
+        "method": "flat",
+        "score": 31,
+        "components": 297,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.2304767000023276
+      },
+      {
+        "seed": 0,
+        "start": "fresh",
+        "method": "cross_entropy",
+        "score": 39,
+        "components": 279,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 25804800,
+        "seconds": 4.660004899997148
+      },
+      {
+        "seed": 1,
+        "start": "original",
+        "method": "exchange",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.2181363999989117
+      },
+      {
+        "seed": 1,
+        "start": "original",
+        "method": "population",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.5685448000003817
+      },
+      {
+        "seed": 1,
+        "start": "original",
+        "method": "flat",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.520988700009184
+      },
+      {
+        "seed": 1,
+        "start": "original",
+        "method": "cross_entropy",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 25804800,
+        "seconds": 4.083458499997505
+      },
+      {
+        "seed": 1,
+        "start": "fresh",
+        "method": "exchange",
+        "score": 40,
+        "components": 282,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.0806744000001345
+      },
+      {
+        "seed": 1,
+        "start": "fresh",
+        "method": "population",
+        "score": 46,
+        "components": 271,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.1707958999904804
+      },
+      {
+        "seed": 1,
+        "start": "fresh",
+        "method": "flat",
+        "score": 30,
+        "components": 295,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.2523321000044234
+      },
+      {
+        "seed": 1,
+        "start": "fresh",
+        "method": "cross_entropy",
+        "score": 33,
+        "components": 291,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 25804800,
+        "seconds": 3.7740319999866188
+      },
+      {
+        "seed": 2,
+        "start": "original",
+        "method": "exchange",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.0235114999959478
+      },
+      {
+        "seed": 2,
+        "start": "original",
+        "method": "population",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.1027888000098756
+      },
+      {
+        "seed": 2,
+        "start": "original",
+        "method": "flat",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.1461517999996431
+      },
+      {
+        "seed": 2,
+        "start": "original",
+        "method": "cross_entropy",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 25804800,
+        "seconds": 3.7749685000017053
+      },
+      {
+        "seed": 2,
+        "start": "fresh",
+        "method": "exchange",
+        "score": 43,
+        "components": 293,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.1658750000060536
+      },
+      {
+        "seed": 2,
+        "start": "fresh",
+        "method": "population",
+        "score": 50,
+        "components": 268,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.5253742000058992
+      },
+      {
+        "seed": 2,
+        "start": "fresh",
+        "method": "flat",
+        "score": 30,
+        "components": 283,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.1391966999944998
+      },
+      {
+        "seed": 2,
+        "start": "fresh",
+        "method": "cross_entropy",
+        "score": 39,
+        "components": 281,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 25804800,
+        "seconds": 4.959460700003547
+      },
+      {
+        "seed": 3,
+        "start": "original",
+        "method": "exchange",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.2993538000009721
+      },
+      {
+        "seed": 3,
+        "start": "original",
+        "method": "population",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 2.0951226000033785
+      },
+      {
+        "seed": 3,
+        "start": "original",
+        "method": "flat",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.5642381999932695
+      },
+      {
+        "seed": 3,
+        "start": "original",
+        "method": "cross_entropy",
+        "score": 207,
+        "components": 54,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 25804800,
+        "seconds": 6.039361599992844
+      },
+      {
+        "seed": 3,
+        "start": "fresh",
+        "method": "exchange",
+        "score": 34,
+        "components": 285,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.615377800000715
+      },
+      {
+        "seed": 3,
+        "start": "fresh",
+        "method": "population",
+        "score": 47,
+        "components": 273,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 1.3548811999935424
+      },
+      {
+        "seed": 3,
+        "start": "fresh",
+        "method": "flat",
+        "score": 29,
+        "components": 300,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 0,
+        "seconds": 2.0284680999902776
+      },
+      {
+        "seed": 3,
+        "start": "fresh",
+        "method": "cross_entropy",
+        "score": 35,
+        "components": 278,
+        "first208": null,
+        "proposals": 4096,
+        "extra": 25804800,
+        "seconds": 4.745802699995693
+      }
+    ],
+    "rank": [
+      {
+        "seed": 0,
+        "mode": "support",
+        "score": 13,
+        "gold": false,
+        "seconds": 0.002042099993559532,
+        "work": 108
+      },
+      {
+        "seed": 0,
+        "mode": "belief",
+        "score": 13,
+        "gold": false,
+        "seconds": 0.009572599999955855,
+        "work": 5484
+      },
+      {
+        "seed": 0,
+        "mode": "belief_pin",
+        "score": 13,
+        "gold": false,
+        "seconds": 0.008085499997832812,
+        "work": 5484
+      },
+      {
+        "seed": 0,
+        "mode": "fractional",
+        "score": 13,
+        "gold": false,
+        "seconds": 0.008860999994794838,
+        "work": 10884
+      },
+      {
+        "seed": 1,
+        "mode": "support",
+        "score": 11,
+        "gold": false,
+        "seconds": 0.0015306999994209036,
+        "work": 108
+      },
+      {
+        "seed": 1,
+        "mode": "belief",
+        "score": 13,
+        "gold": false,
+        "seconds": 0.00877920001221355,
+        "work": 5520
+      },
+      {
+        "seed": 1,
+        "mode": "belief_pin",
+        "score": 13,
+        "gold": false,
+        "seconds": 0.009534299999359064,
+        "work": 5520
+      },
+      {
+        "seed": 1,
+        "mode": "fractional",
+        "score": 13,
+        "gold": false,
+        "seconds": 0.007565399995655753,
+        "work": 10884
+      },
+      {
+        "seed": 2,
+        "mode": "support",
+        "score": 15,
+        "gold": true,
+        "seconds": 0.0012718000070890412,
+        "work": 108
+      },
+      {
+        "seed": 2,
+        "mode": "belief",
+        "score": 15,
+        "gold": true,
+        "seconds": 0.008483000012347475,
+        "work": 5436
+      },
+      {
+        "seed": 2,
+        "mode": "belief_pin",
+        "score": 15,
+        "gold": true,
+        "seconds": 0.00976460000674706,
+        "work": 5436
+      },
+      {
+        "seed": 2,
+        "mode": "fractional",
+        "score": 15,
+        "gold": true,
+        "seconds": 0.0037789999914821237,
+        "work": 5436
+      },
+      {
+        "seed": 3,
+        "mode": "support",
+        "score": 13,
+        "gold": false,
+        "seconds": 0.0017629000067245215,
+        "work": 108
+      },
+      {
+        "seed": 3,
+        "mode": "belief",
+        "score": 15,
+        "gold": true,
+        "seconds": 0.009650700012571178,
+        "work": 5448
+      },
+      {
+        "seed": 3,
+        "mode": "belief_pin",
+        "score": 15,
+        "gold": true,
+        "seconds": 0.011121000003186055,
+        "work": 5448
+      },
+      {
+        "seed": 3,
+        "mode": "fractional",
+        "score": 15,
+        "gold": true,
+        "seconds": 0.006136199997854419,
+        "work": 7248
+      },
+      {
+        "seed": 4,
+        "mode": "support",
+        "score": 15,
+        "gold": true,
+        "seconds": 0.001436399994418025,
+        "work": 108
+      },
+      {
+        "seed": 4,
+        "mode": "belief",
+        "score": 15,
+        "gold": true,
+        "seconds": 0.009517299986327998,
+        "work": 5436
+      },
+      {
+        "seed": 4,
+        "mode": "belief_pin",
+        "score": 15,
+        "gold": true,
+        "seconds": 0.008134400006383657,
+        "work": 5436
+      },
+      {
+        "seed": 4,
+        "mode": "fractional",
+        "score": 15,
+        "gold": true,
+        "seconds": 0.005215099998167716,
+        "work": 5436
+      }
+    ]
+  },
+  "long_repairs": [
+    {
+      "seed": 0,
+      "method": "tabu",
+      "epochs": 700,
+      "score": 207,
+      "components": 52,
+      "first208": null,
+      "price_terms": 31645782,
+      "seconds": 7.401157500004047
+    },
+    {
+      "seed": 0,
+      "method": "penalty",
+      "epochs": 700,
+      "score": 207,
+      "components": 52,
+      "first208": null,
+      "price_terms": 31867050,
+      "seconds": 6.746853100004955
+    },
+    {
+      "seed": 1,
+      "method": "tabu",
+      "epochs": 700,
+      "score": 207,
+      "components": 52,
+      "first208": null,
+      "price_terms": 31619604,
+      "seconds": 7.519429899999523
+    },
+    {
+      "seed": 1,
+      "method": "penalty",
+      "epochs": 700,
+      "score": 207,
+      "components": 52,
+      "first208": null,
+      "price_terms": 31620633,
+      "seconds": 5.939388900005724
+    },
+    {
+      "seed": 2,
+      "method": "tabu",
+      "epochs": 700,
+      "score": 207,
+      "components": 52,
+      "first208": null,
+      "price_terms": 31645443,
+      "seconds": 6.250856399987242
+    },
+    {
+      "seed": 2,
+      "method": "penalty",
+      "epochs": 700,
+      "score": 207,
+      "components": 52,
+      "first208": null,
+      "price_terms": 31698300,
+      "seconds": 6.981158400012646
+    },
+    {
+      "seed": 3,
+      "method": "tabu",
+      "epochs": 700,
+      "score": 207,
+      "components": 52,
+      "first208": null,
+      "price_terms": 31708470,
+      "seconds": 7.093263100003242
+    },
+    {
+      "seed": 3,
+      "method": "penalty",
+      "epochs": 700,
+      "score": 207,
+      "components": 52,
+      "first208": null,
+      "price_terms": 31770867,
+      "seconds": 6.768292900000233
+    }
+  ],
+  "rewiring": [
+    {
+      "problem": "original",
+      "seed": 0,
+      "guided": false,
+      "proposals": 256,
+      "checked": 239,
+      "accepted": 239,
+      "min_vertex_defect": 60,
+      "loops_at_minimum": 11,
+      "embeddings": 0,
+      "validated_gold": 0,
+      "embedding_work": 0
+    },
+    {
+      "problem": "original",
+      "seed": 0,
+      "guided": true,
+      "proposals": 256,
+      "checked": 225,
+      "accepted": 30,
+      "min_vertex_defect": 60,
+      "loops_at_minimum": 7,
+      "embeddings": 0,
+      "validated_gold": 0,
+      "embedding_work": 0
+    },
+    {
+      "problem": "original",
+      "seed": 1,
+      "guided": false,
+      "proposals": 256,
+      "checked": 241,
+      "accepted": 241,
+      "min_vertex_defect": 60,
+      "loops_at_minimum": 9,
+      "embeddings": 0,
+      "validated_gold": 0,
+      "embedding_work": 0
+    },
+    {
+      "problem": "original",
+      "seed": 1,
+      "guided": true,
+      "proposals": 256,
+      "checked": 231,
+      "accepted": 43,
+      "min_vertex_defect": 58,
+      "loops_at_minimum": 9,
+      "embeddings": 0,
+      "validated_gold": 0,
+      "embedding_work": 0
+    },
+    {
+      "problem": "original",
+      "seed": 2,
+      "guided": false,
+      "proposals": 256,
+      "checked": 242,
+      "accepted": 242,
+      "min_vertex_defect": 56,
+      "loops_at_minimum": 11,
+      "embeddings": 0,
+      "validated_gold": 0,
+      "embedding_work": 0
+    },
+    {
+      "problem": "original",
+      "seed": 2,
+      "guided": true,
+      "proposals": 256,
+      "checked": 221,
+      "accepted": 33,
+      "min_vertex_defect": 56,
+      "loops_at_minimum": 6,
+      "embeddings": 0,
+      "validated_gold": 0,
+      "embedding_work": 0
+    },
+    {
+      "problem": "planted_multi",
+      "seed": 0,
+      "guided": false,
+      "proposals": 256,
+      "checked": 138,
+      "accepted": 138,
+      "min_vertex_defect": 0,
+      "loops_at_minimum": 3,
+      "embeddings": 0,
+      "validated_gold": 0,
+      "embedding_work": 0
+    },
+    {
+      "problem": "planted_multi",
+      "seed": 0,
+      "guided": true,
+      "proposals": 256,
+      "checked": 117,
+      "accepted": 38,
+      "min_vertex_defect": 0,
+      "loops_at_minimum": 3,
+      "embeddings": 0,
+      "validated_gold": 0,
+      "embedding_work": 0
+    },
+    {
+      "problem": "planted_multi",
+      "seed": 1,
+      "guided": false,
+      "proposals": 256,
+      "checked": 146,
+      "accepted": 146,
+      "min_vertex_defect": 0,
+      "loops_at_minimum": 3,
+      "embeddings": 0,
+      "validated_gold": 0,
+      "embedding_work": 0
+    },
+    {
+      "problem": "planted_multi",
+      "seed": 1,
+      "guided": true,
+      "proposals": 256,
+      "checked": 75,
+      "accepted": 9,
+      "min_vertex_defect": 0,
+      "loops_at_minimum": 3,
+      "embeddings": 0,
+      "validated_gold": 0,
+      "embedding_work": 0
+    },
+    {
+      "problem": "planted_multi",
+      "seed": 2,
+      "guided": false,
+      "proposals": 256,
+      "checked": 117,
+      "accepted": 117,
+      "min_vertex_defect": 0,
+      "loops_at_minimum": 3,
+      "embeddings": 0,
+      "validated_gold": 0,
+      "embedding_work": 0
+    },
+    {
+      "problem": "planted_multi",
+      "seed": 2,
+      "guided": true,
+      "proposals": 256,
+      "checked": 55,
+      "accepted": 1,
+      "min_vertex_defect": 0,
+      "loops_at_minimum": 3,
+      "embeddings": 0,
+      "validated_gold": 0,
+      "embedding_work": 0
+    }
+  ],
+  "trade_frontier": {
+    "score": 207,
+    "components": 52,
+    "expanded": 4000,
+    "unique": 38869,
+    "pair_scores": 49920000,
+    "seconds": 9.763666800005012
+  },
+  "rotation_certificates": [
+    {
+      "matched_edges": 207,
+      "upper_bound": 207,
+      "exact": true,
+      "branches": 12187,
+      "components": 54
+    },
+    {
+      "matched_edges": 206,
+      "upper_bound": 206,
+      "exact": true,
+      "branches": 12511,
+      "components": 54
+    },
+    {
+      "matched_edges": 206,
+      "upper_bound": 206,
+      "exact": true,
+      "branches": 12511,
+      "components": 55
+    },
+    {
+      "matched_edges": 206,
+      "upper_bound": 206,
+      "exact": true,
+      "branches": 13072,
+      "components": 55
+    },
+    {
+      "matched_edges": 206,
+      "upper_bound": 206,
+      "exact": true,
+      "branches": 13072,
+      "components": 55
+    },
+    {
+      "matched_edges": 206,
+      "upper_bound": 206,
+      "exact": true,
+      "branches": 13651,
+      "components": 54
+    },
+    {
+      "matched_edges": 206,
+      "upper_bound": 206,
+      "exact": true,
+      "branches": 13651,
+      "components": 56
+    },
+    {
+      "matched_edges": 206,
+      "upper_bound": 206,
+      "exact": true,
+      "branches": 14281,
+      "components": 54
+    }
+  ],
+  "gpu": {
+    "native-seeded.json": [
+      {
+        "seed": 0,
+        "seeded": false,
+        "replicas": 128,
+        "dispatches": 32,
+        "proposals": 262144,
+        "first208": null,
+        "score": 207,
+        "components": 54,
+        "native_hash": "fdabdde784555afde22285fc90fa480d53d34ef707da269c6d9d7dba51731921",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 3.1826081999897724,
+        "final_native_score": 72
+      },
+      {
+        "seed": 0,
+        "seeded": true,
+        "replicas": 128,
+        "dispatches": 32,
+        "proposals": 262144,
+        "first208": null,
+        "score": 207,
+        "components": 54,
+        "native_hash": "0aeaa9ed7445e4b5c1b2864bdde902d58e0f3327b83820a211b9b71bb6f9b002",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 1.905629000000772,
+        "split_restore_equal": true,
+        "final_native_score": 207
+      },
+      {
+        "seed": 1,
+        "seeded": false,
+        "replicas": 128,
+        "dispatches": 32,
+        "proposals": 262144,
+        "first208": null,
+        "score": 207,
+        "components": 54,
+        "native_hash": "215ecc931273ebb51b30fdc0707ebffaf658a862a18f65906f5561e28a93399c",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 1.4215453999931924,
+        "final_native_score": 76
+      },
+      {
+        "seed": 1,
+        "seeded": true,
+        "replicas": 128,
+        "dispatches": 32,
+        "proposals": 262144,
+        "first208": null,
+        "score": 207,
+        "components": 54,
+        "native_hash": "273e8cda9b1c769ffc6292444d21b0f169aabd2b27820121eae282ef0a78f429",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 1.9770613000000594,
+        "final_native_score": 207
+      },
+      {
+        "seed": 2,
+        "seeded": false,
+        "replicas": 128,
+        "dispatches": 32,
+        "proposals": 262144,
+        "first208": null,
+        "score": 207,
+        "components": 54,
+        "native_hash": "a7a702fcf6faa9f023801d4fce4e63453ee8913fc05c3b035867be9f4872bb85",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 1.497673300007591,
+        "final_native_score": 76
+      },
+      {
+        "seed": 2,
+        "seeded": true,
+        "replicas": 128,
+        "dispatches": 32,
+        "proposals": 262144,
+        "first208": null,
+        "score": 207,
+        "components": 54,
+        "native_hash": "2698ff71d16c9341aef030f2e33d932dc6f22ebb62545ab096b081c3ab241840",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 1.9901711999991676,
+        "final_native_score": 207
+      },
+      {
+        "seed": 3,
+        "seeded": false,
+        "replicas": 128,
+        "dispatches": 32,
+        "proposals": 262144,
+        "first208": null,
+        "score": 207,
+        "components": 54,
+        "native_hash": "d2c51d57e8a6ea39ad1de080c9b5dbcf0ae7bc1a8045b9a8d2ae5913aea94598",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 1.5657617999968352,
+        "final_native_score": 72
+      },
+      {
+        "seed": 3,
+        "seeded": true,
+        "replicas": 128,
+        "dispatches": 32,
+        "proposals": 262144,
+        "first208": null,
+        "score": 207,
+        "components": 54,
+        "native_hash": "70c812d86507a0a232cd391fb9824cf3b2f4e49141e26a74ae4506b4508cad1d",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 1.9859937000001082,
+        "final_native_score": 207
+      }
+    ],
+    "native-webgpu-restore.json": [
+      {
+        "seed": 0,
+        "seeded": false,
+        "replicas": 32,
+        "dispatches": 2,
+        "proposals": 4096,
+        "first208": null,
+        "score": 207,
+        "components": 54,
+        "native_hash": "66072a03aedb1986d15249a171f00b33a8ddb703217214164e962af1c4a9168a",
+        "backend": "webgpu",
+        "device": "NVIDIA GeForce RTX 2060 [Vulkan]",
+        "seconds": 4.149217199999839,
+        "final_native_score": 27
+      },
+      {
+        "seed": 0,
+        "seeded": true,
+        "replicas": 32,
+        "dispatches": 2,
+        "proposals": 4096,
+        "first208": null,
+        "score": 207,
+        "components": 54,
+        "native_hash": "85518e9dd1c018cebffea7070cdac831baecf5200df768bb091e035fdd5d0281",
+        "backend": "webgpu",
+        "device": "NVIDIA GeForce RTX 2060 [Vulkan]",
+        "seconds": 1.006394399999408,
+        "split_restore_equal": true,
+        "final_native_score": 207
+      }
+    ],
+    "native-seeded-deep.json": [
+      {
+        "seed": 0,
+        "seeded": false,
+        "replicas": 1024,
+        "dispatches": 192,
+        "proposals": 12582912,
+        "first208": null,
+        "score": 207,
+        "components": 52,
+        "native_hash": "02517a58c725e3a12b7d0d8461bb39d4b0b0b179303dd9381fd925b3592678a4",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 20.95134610000241,
+        "final_native_score": 115
+      },
+      {
+        "seed": 0,
+        "seeded": true,
+        "replicas": 1024,
+        "dispatches": 192,
+        "proposals": 12582912,
+        "first208": null,
+        "score": 207,
+        "components": 52,
+        "native_hash": "469135c95c4f4028ec0da58ba8725d2869eb5de1427e4c000194162218648368",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 10.864969100002781,
+        "final_native_score": 207
+      },
+      {
+        "seed": 1,
+        "seeded": false,
+        "replicas": 1024,
+        "dispatches": 192,
+        "proposals": 12582912,
+        "first208": null,
+        "score": 207,
+        "components": 52,
+        "native_hash": "c014cd5861c55990a706f3741abd42a2b16396a65221482272da9fa253921447",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 12.006890599994222,
+        "final_native_score": 118
+      },
+      {
+        "seed": 1,
+        "seeded": true,
+        "replicas": 1024,
+        "dispatches": 192,
+        "proposals": 12582912,
+        "first208": null,
+        "score": 207,
+        "components": 52,
+        "native_hash": "b4e68bf8988e744d531a2792355297710b78c212ad3266697febefcbe5c7128e",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 10.700341500007198,
+        "final_native_score": 207
+      },
+      {
+        "seed": 2,
+        "seeded": false,
+        "replicas": 1024,
+        "dispatches": 192,
+        "proposals": 12582912,
+        "first208": null,
+        "score": 207,
+        "components": 52,
+        "native_hash": "1404083e8ef9fb390bd39314a4ac8bc3b5ab55d452cae27c455fce753db48c61",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 12.56403059999866,
+        "final_native_score": 116
+      },
+      {
+        "seed": 2,
+        "seeded": true,
+        "replicas": 1024,
+        "dispatches": 192,
+        "proposals": 12582912,
+        "first208": null,
+        "score": 207,
+        "components": 52,
+        "native_hash": "9c30b2c6ee12d48ba1bb1ad7d6106dca039b49a98128a0d12c18caee86d27632",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 11.400748500003829,
+        "final_native_score": 207
+      },
+      {
+        "seed": 3,
+        "seeded": false,
+        "replicas": 1024,
+        "dispatches": 192,
+        "proposals": 12582912,
+        "first208": null,
+        "score": 207,
+        "components": 52,
+        "native_hash": "8cf76001483982c5f3b313e9674e00882b6dda44bb0f1343ef503aea3a7b26e3",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 13.006878100000904,
+        "final_native_score": 115
+      },
+      {
+        "seed": 3,
+        "seeded": true,
+        "replicas": 1024,
+        "dispatches": 192,
+        "proposals": 12582912,
+        "first208": null,
+        "score": 207,
+        "components": 52,
+        "native_hash": "096cee11ab0c079e46d3541c41582e61d4ae25ab9e08433dceeadf284a2d52c5",
+        "backend": "cuda",
+        "device": "NVIDIA GeForce RTX 2060",
+        "seconds": 9.352083999998285,
+        "final_native_score": 207
+      }
+    ]
+  }
+}

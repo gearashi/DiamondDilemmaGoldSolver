@@ -63,6 +63,11 @@ def relative_cycles(left, right):
     return tuple(result)
 
 
+def _compatible_binding(controller,saved):
+    from r27_incumbent_compat import compatible_identity
+    return compatible_identity(saved,controller.binding,controller._identity)
+
+
 class CycleCrossover:
     def __init__(self, problem, *, gold_aware=False, max_pairs=4, max_candidates=16,
                  history_limit=256, resume=None):
@@ -78,7 +83,7 @@ class CycleCrossover:
                        'stats': {key: 0 for key in STAT_KEYS}}
         if resume is not None: self._restore(resume)
 
-    def _identity(self):
+    def _identity(self,profile=None):
         p = self.problem
         sources = ('sampling_crossover_round25.py', 'gpu_sampling.py', 'constraint_lns.py',
                    'search_problem.py', 'validator.py', 'geometry.py')
@@ -88,6 +93,11 @@ class CycleCrossover:
                     'masks': p.masks.tolist(), 'neighbors': p.neighbors.tolist(), 'sides': p.sides.tolist(),
                     'segments': p.total_segments, 'segment_ports': p._segment_ports,
                     'sources': {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest() for name in sources}}
+        if profile is not None:
+            from r27_incumbent_compat import legacy_sources
+            sources=legacy_sources(identity['sources'],profile)
+            if sources is None:return None
+            identity['sources']=sources
         return _digest(identity)
 
     def _check_scope(self):
@@ -112,7 +122,7 @@ class CycleCrossover:
         if type(value) is not dict or set(value) != {'cycle_crossover_version', 'binding', 'policy', 'state', 'digest'}:
             raise ValueError('Invalid crossover checkpoint envelope.')
         policy = value['policy']
-        if type(value['cycle_crossover_version']) is not int or value['cycle_crossover_version'] != VERSION or value['binding'] != self.binding or type(policy) is not dict or set(policy) != set(self.policy) or any(type(policy[key]) is not type(expected) or policy[key] != expected for key, expected in self.policy.items()):
+        if type(value['cycle_crossover_version']) is not int or value['cycle_crossover_version'] != VERSION or not _compatible_binding(self,value['binding']) or type(policy) is not dict or set(policy) != set(self.policy) or any(type(policy[key]) is not type(expected) or policy[key] != expected for key, expected in self.policy.items()):
             raise ValueError('Crossover checkpoint scope/source/policy differs.')
         if type(value['digest']) is not str or value['digest'] != _digest({key: data for key, data in value.items() if key != 'digest'}):
             raise ValueError('Crossover checkpoint digest mismatch.')

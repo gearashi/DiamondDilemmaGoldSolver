@@ -1,0 +1,635 @@
+{
+  "incumbent": {
+    "eliminate": {
+      "clauses": 1350,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 0,
+        "propagations": 173,
+        "restarts": 0
+      },
+      "solutions": 0,
+      "units": 4149,
+      "work": {
+        "literals": 3537,
+        "sat_calls": 1,
+        "seam_candidates": 240,
+        "shortcut_pairs": 22,
+        "variables": 371
+      }
+    },
+    "lazy": {
+      "clauses": 353,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 0,
+        "propagations": 160,
+        "restarts": 0
+      },
+      "solutions": 0,
+      "units": 1140,
+      "work": {
+        "literals": 739,
+        "sat_calls": 1,
+        "seam_candidates": 240,
+        "variables": 160
+      }
+    },
+    "matched": 207,
+    "mod365": {
+      "clauses": 49908,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 0,
+        "propagations": 173,
+        "restarts": 0
+      },
+      "solutions": 0,
+      "units": 201370,
+      "work": {
+        "literals": 187393,
+        "sat_calls": 1,
+        "seam_candidates": 240,
+        "variables": 13736
+      }
+    },
+    "mod5": {
+      "clauses": 17690,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 0,
+        "propagations": 173,
+        "restarts": 0
+      },
+      "solutions": 0,
+      "units": 67765,
+      "work": {
+        "literals": 62548,
+        "sat_calls": 1,
+        "seam_candidates": 240,
+        "variables": 4976
+      }
+    },
+    "mod73": {
+      "clauses": 39777,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 0,
+        "propagations": 173,
+        "restarts": 0
+      },
+      "solutions": 0,
+      "units": 159390,
+      "work": {
+        "literals": 148333,
+        "sat_calls": 1,
+        "seam_candidates": 240,
+        "variables": 10816
+      }
+    },
+    "segments": 365
+  },
+  "original": {
+    "coarse": {
+      "complete": false,
+      "solutions": 0,
+      "units": 89968,
+      "work": {
+        "arc_alternatives": 89938,
+        "coarse_decisions": 28,
+        "search_nodes": 2
+      }
+    },
+    "crossing_tiles": 0,
+    "directed-tour": {
+      "complete": false,
+      "solutions": 0,
+      "units": 90000,
+      "work": {
+        "physical_occurrences": 1440,
+        "physical_pair_tests": 24864,
+        "search_nodes": 80,
+        "sewing_decisions": 79,
+        "trail_steps": 57481,
+        "vertex_link_steps": 6056
+      }
+    },
+    "eliminate": {
+      "clauses": 907,
+      "complete": false,
+      "sat": {},
+      "solutions": 0,
+      "units": 79999,
+      "work": {
+        "literals": 3199,
+        "variables": 76800
+      }
+    },
+    "embedded": {
+      "complete": false,
+      "solutions": 0,
+      "units": 90000,
+      "work": {
+        "partial_embedding_links": 48698,
+        "partial_embedding_seeds": 1885,
+        "physical_occurrences": 1440,
+        "physical_pair_tests": 24864,
+        "search_nodes": 114,
+        "sewing_decisions": 117,
+        "vertex_link_steps": 12882
+      }
+    },
+    "euler": {
+      "removed": 0,
+      "work": {
+        "euler_sums": 382560,
+        "planarity_checks": 480
+      }
+    },
+    "glue": {
+      "complete": false,
+      "solutions": 0,
+      "units": 90000,
+      "work": {
+        "physical_occurrences": 1440,
+        "physical_pair_tests": 24864,
+        "search_nodes": 255,
+        "sewing_decisions": 254,
+        "vertex_link_steps": 63187
+      }
+    },
+    "mod365": {
+      "clauses": 907,
+      "complete": false,
+      "sat": {},
+      "solutions": 0,
+      "units": 79999,
+      "work": {
+        "literals": 3199,
+        "variables": 76800
+      }
+    },
+    "mod5": {
+      "clauses": 907,
+      "complete": false,
+      "sat": {},
+      "solutions": 0,
+      "units": 79999,
+      "work": {
+        "literals": 3199,
+        "variables": 76800
+      }
+    },
+    "mod73": {
+      "clauses": 907,
+      "complete": false,
+      "sat": {},
+      "solutions": 0,
+      "units": 79999,
+      "work": {
+        "literals": 3199,
+        "variables": 76800
+      }
+    },
+    "partners": {
+      "removed": 0,
+      "work": {
+        "dense_partner_classes_certified": 1,
+        "partner_alternating_edges": 26070,
+        "partner_augment_edges": 4608,
+        "partner_matching_states": 1554,
+        "partner_placement_checks": 1440,
+        "physical_occurrences": 1440,
+        "physical_pair_tests": 24864
+      }
+    },
+    "passages": {
+      "removed": 0,
+      "work": {
+        "dual_interval_visits": 778400,
+        "limit_hits": 1,
+        "planarity_checks": 21600
+      }
+    },
+    "physical": {
+      "forced": 7,
+      "unsupported_pairs": 0,
+      "work": {
+        "dense_partner_classes_certified": 1,
+        "partner_alternating_edges": 26070,
+        "partner_augment_edges": 4608,
+        "partner_matching_states": 1554,
+        "physical_occurrences": 1440,
+        "physical_pair_tests": 24864
+      }
+    },
+    "regions": {
+      "removed": 0,
+      "work": {
+        "dual_interval_visits": 17280,
+        "planarity_checks": 480
+      }
+    },
+    "seam": {
+      "complete": false,
+      "solutions": 0,
+      "units": 89877,
+      "work": {
+        "arc_alternatives": 89792,
+        "seam_decisions": 83,
+        "search_nodes": 2
+      }
+    },
+    "seam-table": {
+      "complete": false,
+      "solutions": 0,
+      "units": 89960,
+      "work": {
+        "arc_alternatives": 89626,
+        "compiled_table_entries": 249,
+        "seam_decisions": 83,
+        "search_nodes": 2
+      }
+    },
+    "segments": 365,
+    "separator": {
+      "removed": 0,
+      "work": {
+        "physical_occurrences": 1440,
+        "physical_pair_tests": 24864,
+        "separator_graph_visits": 2087298
+      }
+    },
+    "tour": {
+      "complete": false,
+      "solutions": 0,
+      "units": 90000,
+      "work": {
+        "physical_occurrences": 1440,
+        "physical_pair_tests": 24864,
+        "search_nodes": 79,
+        "sewing_decisions": 78,
+        "trail_steps": 57521,
+        "vertex_link_steps": 6018
+      }
+    }
+  },
+  "planted160": {
+    "cell": {
+      "complete": true,
+      "solutions": 4,
+      "units": 6802,
+      "work": {
+        "arc_alternatives": 6785,
+        "independent_checks": 4,
+        "placement_decisions": 6,
+        "search_nodes": 7
+      }
+    },
+    "coarse": {
+      "complete": true,
+      "solutions": 4,
+      "units": 6802,
+      "work": {
+        "arc_alternatives": 6785,
+        "independent_checks": 4,
+        "placement_decisions": 6,
+        "search_nodes": 7
+      }
+    },
+    "cover": {
+      "complete": true,
+      "solutions": 4,
+      "units": 701,
+      "work": {
+        "cover_rows": 168,
+        "independent_checks": 4,
+        "purified_color_classes": 360,
+        "search_nodes": 169
+      }
+    },
+    "directed-tour": {
+      "complete": false,
+      "solutions": 0,
+      "units": 500000,
+      "work": {
+        "physical_occurrences": 528,
+        "physical_pair_tests": 370,
+        "search_nodes": 669,
+        "sewing_decisions": 668,
+        "trail_steps": 302661,
+        "vertex_link_steps": 195104
+      }
+    },
+    "embedded": {
+      "complete": true,
+      "solutions": 4,
+      "units": 231042,
+      "work": {
+        "embedding_checks": 1920,
+        "embedding_seeds": 1920,
+        "independent_checks": 4,
+        "partial_embedding_links": 119777,
+        "partial_embedding_seeds": 6022,
+        "physical_occurrences": 528,
+        "physical_pair_tests": 370,
+        "search_nodes": 332,
+        "sewing_decisions": 659,
+        "vertex_link_steps": 99510
+      }
+    },
+    "euler": {
+      "removed": 0,
+      "work": {
+        "euler_sums": 1394,
+        "planarity_checks": 176
+      }
+    },
+    "face-pairs": {
+      "complete": true,
+      "solutions": 4,
+      "units": 1390,
+      "work": {
+        "boundary_key_bytes": 40,
+        "boundary_pattern_object_bytes": 1360,
+        "boundary_unions": 20,
+        "region_histories": 5,
+        "region_joins": 1,
+        "region_nodes": 182,
+        "regional_states": 2,
+        "regional_strands": 1182
+      }
+    },
+    "face-trees": {
+      "complete": true,
+      "solutions": 4,
+      "units": 3879,
+      "work": {
+        "boundary_key_bytes": 6,
+        "boundary_pattern_object_bytes": 56,
+        "determinant_updates": 2109,
+        "matrix_entries": 400,
+        "region_histories": 5,
+        "region_joins": 1,
+        "region_nodes": 182,
+        "regional_states": 2,
+        "regional_strands": 1182
+      }
+    },
+    "face-word": {
+      "complete": true,
+      "solutions": 4,
+      "units": 1390,
+      "work": {
+        "boundary_key_bytes": 6,
+        "boundary_pattern_object_bytes": 56,
+        "boundary_unions": 20,
+        "region_histories": 5,
+        "region_joins": 1,
+        "region_nodes": 182,
+        "regional_states": 2,
+        "regional_strands": 1182
+      }
+    },
+    "free_cells": 8,
+    "glue": {
+      "complete": false,
+      "solutions": 0,
+      "units": 500000,
+      "work": {
+        "physical_occurrences": 528,
+        "physical_pair_tests": 370,
+        "search_nodes": 1622,
+        "sewing_decisions": 1621,
+        "vertex_link_steps": 495859
+      }
+    },
+    "hemisphere-pairs": {
+      "complete": true,
+      "solutions": 4,
+      "units": 1805,
+      "work": {
+        "boundary_key_bytes": 184,
+        "boundary_pattern_object_bytes": 6208,
+        "boundary_unions": 48,
+        "region_histories": 10,
+        "region_joins": 2,
+        "region_nodes": 177,
+        "regional_states": 8,
+        "regional_strands": 1568
+      }
+    },
+    "hemisphere-trees": {
+      "complete": true,
+      "solutions": 4,
+      "units": 10499,
+      "work": {
+        "boundary_key_bytes": 24,
+        "boundary_pattern_object_bytes": 224,
+        "determinant_updates": 7590,
+        "matrix_entries": 1152,
+        "region_histories": 10,
+        "region_joins": 2,
+        "region_nodes": 177,
+        "regional_states": 8,
+        "regional_strands": 1568
+      }
+    },
+    "hemisphere-word": {
+      "complete": true,
+      "solutions": 4,
+      "units": 1805,
+      "work": {
+        "boundary_key_bytes": 24,
+        "boundary_pattern_object_bytes": 224,
+        "boundary_unions": 48,
+        "region_histories": 10,
+        "region_joins": 2,
+        "region_nodes": 177,
+        "regional_states": 8,
+        "regional_strands": 1568
+      }
+    },
+    "partners": {
+      "removed": 180,
+      "work": {
+        "partner_alternating_edges": 1200,
+        "partner_augment_edges": 220,
+        "partner_matching_states": 553,
+        "partner_placement_checks": 723,
+        "physical_occurrences": 528,
+        "physical_pair_tests": 370
+      }
+    },
+    "passages": {
+      "removed": 0,
+      "work": {
+        "dual_interval_visits": 486096,
+        "limit_hits": 1,
+        "planarity_checks": 13904
+      }
+    },
+    "regions": {
+      "removed": 0,
+      "work": {
+        "dual_interval_visits": 6120,
+        "planarity_checks": 176
+      }
+    },
+    "seam": {
+      "complete": true,
+      "solutions": 4,
+      "units": 6802,
+      "work": {
+        "arc_alternatives": 6785,
+        "independent_checks": 4,
+        "placement_decisions": 6,
+        "search_nodes": 7
+      }
+    },
+    "seam-table": {
+      "complete": true,
+      "solutions": 4,
+      "units": 6820,
+      "work": {
+        "arc_alternatives": 6785,
+        "compiled_table_entries": 18,
+        "independent_checks": 4,
+        "placement_decisions": 6,
+        "search_nodes": 7
+      }
+    },
+    "separator": {
+      "removed": 0,
+      "work": {
+        "physical_occurrences": 528,
+        "physical_pair_tests": 370,
+        "separator_graph_visits": 354090
+      }
+    },
+    "source": "synthetic noncrossing on the 160-cell board",
+    "strip-pairs": {
+      "complete": true,
+      "solutions": 4,
+      "units": 1449,
+      "work": {
+        "boundary_key_bytes": 118,
+        "boundary_pattern_object_bytes": 3976,
+        "boundary_unions": 48,
+        "region_histories": 7,
+        "region_joins": 2,
+        "region_nodes": 183,
+        "regional_states": 5,
+        "regional_strands": 1209
+      }
+    },
+    "strip-trees": {
+      "complete": true,
+      "solutions": 4,
+      "units": 10143,
+      "work": {
+        "boundary_key_bytes": 15,
+        "boundary_pattern_object_bytes": 140,
+        "determinant_updates": 7590,
+        "matrix_entries": 1152,
+        "region_histories": 7,
+        "region_joins": 2,
+        "region_nodes": 183,
+        "regional_states": 5,
+        "regional_strands": 1209
+      }
+    },
+    "strip-word": {
+      "complete": true,
+      "solutions": 4,
+      "units": 1449,
+      "work": {
+        "boundary_key_bytes": 15,
+        "boundary_pattern_object_bytes": 140,
+        "boundary_unions": 48,
+        "region_histories": 7,
+        "region_joins": 2,
+        "region_nodes": 183,
+        "regional_states": 5,
+        "regional_strands": 1209
+      }
+    },
+    "tour": {
+      "complete": false,
+      "solutions": 0,
+      "units": 500000,
+      "work": {
+        "physical_occurrences": 528,
+        "physical_pair_tests": 370,
+        "search_nodes": 669,
+        "sewing_decisions": 668,
+        "trail_steps": 302661,
+        "vertex_link_steps": 195104
+      }
+    }
+  },
+  "positive365": {
+    "365": {
+      "clauses": 52337,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 3,
+        "propagations": 13847,
+        "restarts": 1
+      },
+      "solutions": 1,
+      "units": 211102,
+      "work": {
+        "literals": 197013,
+        "projected_models": 1,
+        "sat_calls": 2,
+        "seam_candidates": 240,
+        "variables": 13846
+      }
+    },
+    "5": {
+      "clauses": 18751,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 3,
+        "propagations": 5087,
+        "restarts": 1
+      },
+      "solutions": 1,
+      "units": 72025,
+      "work": {
+        "literals": 66696,
+        "projected_models": 1,
+        "sat_calls": 2,
+        "seam_candidates": 240,
+        "variables": 5086
+      }
+    },
+    "73": {
+      "clauses": 41750,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 3,
+        "propagations": 10927,
+        "restarts": 1
+      },
+      "solutions": 1,
+      "units": 167298,
+      "work": {
+        "literals": 156129,
+        "projected_models": 1,
+        "sat_calls": 2,
+        "seam_candidates": 240,
+        "variables": 10926
+      }
+    }
+  }
+}

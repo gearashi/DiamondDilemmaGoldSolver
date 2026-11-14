@@ -5,6 +5,8 @@ import hashlib,math,time
 from pathlib import Path
 from constraint_work import digest
 
+from r27_incumbent_compat import compatible_sources
+
 class _SamplingInterrupted(InterruptedError):pass
 
 class SamplerSession:
@@ -52,8 +54,11 @@ class SamplerSession:
         if self.crossover is not None:expected.update(('crossover','crossover_parents'))
         if self.temperatures is not None:expected.add('temperatures')
         if self.optimal:expected.add('crossover_due')
+        saved_config=value.get('config') if isinstance(value,dict) else None
+        compatible=(isinstance(saved_config,dict) and compatible_sources(saved_config.get('sources'),self.config['sources'])
+                    and {**saved_config,'sources':self.config['sources']}==self.config)
         if (not isinstance(value,dict) or set(value)!=expected or type(value['sampler_session_version'])is not int or value['sampler_session_version']!=(4 if self.optimal else (3 if self.temperatures is not None else (2 if self.crossover is not None else 1)))
-                or value['digest']!=digest({k:v for k,v in value.items() if k!='digest'}) or value['config']!=self.config):raise ValueError('Durable sampler input or policy differs.')
+                or value['digest']!=digest({k:v for k,v in value.items() if k!='digest'}) or not compatible):raise ValueError('Durable sampler input or policy differs.')
         if value['selected'] not in (None,'cuda','webgpu') or self.backend!='auto' and value['selected'] not in (None,self.backend):raise ValueError('Unfinished sampler requires the saved backend.')
         if (type(value['launches'])is not int or value['launches']<0 or type(value['last_collected'])is not int or not -1<=value['last_collected']<=value['launches']
                 or type(value['done'])is not bool or type(value['elapsed'])not in (int,float) or not math.isfinite(value['elapsed']) or value['elapsed']<0):raise ValueError('Invalid sampler controller progress.')

@@ -8,6 +8,12 @@ The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaap
 
 The [v1.7.0 results and recommended settings](docs/ROUND26_RESULTS.md) cover 17 workstreams and 81 scoped evaluations. They include exact CPU and CUDA search, shared SAT reasoning, disk-backed progress, regional pruning, incremental GPU scoring and repair. The [workstream register](docs/round26-workstreams.json) records which candidates reduced steps, which saved repeated work and where extra work outweighed the benefit. Earlier evaluations are available for [Round 25](docs/ROUND25_RESULTS.md), [Round 24](docs/ROUND24.md) and [Round 23](docs/ROUND23.md).
 
+## Search improvements in v1.8.0
+
+The hybrid dashboard can optimize a saved board by reassigning nonadjacent pieces and then optimizing their rotations. Choose **Experimental GPU sampling + repair + DFS**, and enable **Optimize the saved board by reassigning pieces and rotations** in the advanced controls. In DFS, **Solve small remaining branches with matching and forest search** enables the bounded endgame check. Native CUDA branch donation also reuses established assignments and strand joins when lane balancing is enabled.
+
+The [35-proposal register and results](docs/ROUND27_RESULTS.md) give the scope of each experiment, exact thresholds, diagnostic commands, and results on the original board.
+
 ## Requirements
 
 Use **Python 3.12, 64-bit** for all search engines, or **standard Python 3.15, 64-bit** for DFS and WebGPU, a compatible GPU and its driver for GPU modes, and enough free RAM and disk space for the selected population and checkpoints. Initial dependency installation and puzzle-data preparation need internet access.

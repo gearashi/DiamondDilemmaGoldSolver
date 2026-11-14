@@ -1,0 +1,310 @@
+{
+  "donation": [
+    {
+      "shared": false,
+      "assigned": [
+        0,
+        0
+      ],
+      "unions": [
+        0,
+        0
+      ],
+      "solutions": 2,
+      "bytes": 53232,
+      "strand_joins": 24,
+      "checks": 32,
+      "decisions": 0
+    },
+    {
+      "shared": true,
+      "assigned": [
+        10,
+        10
+      ],
+      "unions": [
+        9,
+        9
+      ],
+      "solutions": 2,
+      "bytes": 53232,
+      "strand_joins": 6,
+      "checks": 32,
+      "decisions": 0
+    }
+  ],
+  "dispatch": [
+    {
+      "lanes": 1,
+      "cooperative": false,
+      "quantum": 64,
+      "steps": 7,
+      "decisions": 2,
+      "solutions": 0,
+      "seconds": [
+        0.002295,
+        0.006693
+      ],
+      "p99_ms": [
+        0.519,
+        1.375
+      ]
+    },
+    {
+      "lanes": 1,
+      "cooperative": false,
+      "quantum": 256,
+      "steps": 2,
+      "decisions": 2,
+      "solutions": 0,
+      "seconds": [
+        0.001409,
+        0.002456
+      ],
+      "p99_ms": [
+        0.876,
+        1.403
+      ]
+    },
+    {
+      "lanes": 1,
+      "cooperative": true,
+      "quantum": 64,
+      "steps": 7,
+      "decisions": 2,
+      "solutions": 0,
+      "seconds": [
+        0.001946,
+        0.005572
+      ],
+      "p99_ms": [
+        0.486,
+        1.003
+      ]
+    },
+    {
+      "lanes": 1,
+      "cooperative": true,
+      "quantum": 256,
+      "steps": 2,
+      "decisions": 2,
+      "solutions": 0,
+      "seconds": [
+        0.001452,
+        0.002949
+      ],
+      "p99_ms": [
+        0.963,
+        1.796
+      ]
+    },
+    {
+      "lanes": 8,
+      "cooperative": false,
+      "quantum": 64,
+      "steps": 2,
+      "decisions": 0,
+      "solutions": 0,
+      "seconds": [
+        0.001047,
+        0.0021
+      ],
+      "p99_ms": [
+        0.63,
+        1.211
+      ]
+    },
+    {
+      "lanes": 8,
+      "cooperative": false,
+      "quantum": 256,
+      "steps": 1,
+      "decisions": 0,
+      "solutions": 0,
+      "seconds": [
+        0.00083,
+        0.001332
+      ],
+      "p99_ms": [
+        0.83,
+        1.332
+      ]
+    },
+    {
+      "lanes": 8,
+      "cooperative": true,
+      "quantum": 64,
+      "steps": 2,
+      "decisions": 0,
+      "solutions": 0,
+      "seconds": [
+        0.001046,
+        0.002836
+      ],
+      "p99_ms": [
+        0.643,
+        1.918
+      ]
+    },
+    {
+      "lanes": 8,
+      "cooperative": true,
+      "quantum": 256,
+      "steps": 1,
+      "decisions": 0,
+      "solutions": 0,
+      "seconds": [
+        0.000752,
+        0.001617
+      ],
+      "p99_ms": [
+        0.752,
+        1.617
+      ]
+    },
+    {
+      "lanes": 128,
+      "cooperative": false,
+      "quantum": 64,
+      "steps": 1,
+      "decisions": 0,
+      "solutions": 0,
+      "seconds": [
+        0.000649,
+        0.000984
+      ],
+      "p99_ms": [
+        0.649,
+        0.984
+      ]
+    },
+    {
+      "lanes": 128,
+      "cooperative": false,
+      "quantum": 256,
+      "steps": 1,
+      "decisions": 0,
+      "solutions": 0,
+      "seconds": [
+        0.000707,
+        0.001239
+      ],
+      "p99_ms": [
+        0.707,
+        1.239
+      ]
+    },
+    {
+      "lanes": 128,
+      "cooperative": true,
+      "quantum": 64,
+      "steps": 1,
+      "decisions": 0,
+      "solutions": 0,
+      "seconds": [
+        0.000634,
+        0.001135
+      ],
+      "p99_ms": [
+        0.634,
+        1.135
+      ]
+    },
+    {
+      "lanes": 128,
+      "cooperative": true,
+      "quantum": 256,
+      "steps": 1,
+      "decisions": 0,
+      "solutions": 0,
+      "seconds": [
+        0.000585,
+        0.000905
+      ],
+      "p99_ms": [
+        0.585,
+        0.905
+      ]
+    }
+  ],
+  "original_128_lane": [
+    {
+      "repeat": 0,
+      "grouped": false,
+      "lanes": 128,
+      "dispatches": 12,
+      "seconds": 0.049394,
+      "max_dispatch_ms": 16.659,
+      "devices_bytes": 120630272,
+      "decisions": 0,
+      "support_checks": 392320,
+      "removals": 883,
+      "final_state_sha256": "e3e4b4c48a808158c018ab0b9ee9045429211214f4eb83e8ac6e28723e726660"
+    },
+    {
+      "repeat": 0,
+      "grouped": true,
+      "lanes": 128,
+      "dispatches": 12,
+      "seconds": 0.053954,
+      "max_dispatch_ms": 16.596,
+      "devices_bytes": 120630272,
+      "decisions": 0,
+      "support_checks": 392320,
+      "removals": 883,
+      "final_state_sha256": "e3e4b4c48a808158c018ab0b9ee9045429211214f4eb83e8ac6e28723e726660"
+    },
+    {
+      "repeat": 1,
+      "grouped": true,
+      "lanes": 128,
+      "dispatches": 12,
+      "seconds": 0.055939,
+      "max_dispatch_ms": 15.918,
+      "devices_bytes": 120630272,
+      "decisions": 0,
+      "support_checks": 392320,
+      "removals": 883,
+      "final_state_sha256": "e3e4b4c48a808158c018ab0b9ee9045429211214f4eb83e8ac6e28723e726660"
+    },
+    {
+      "repeat": 1,
+      "grouped": false,
+      "lanes": 128,
+      "dispatches": 12,
+      "seconds": 0.050189,
+      "max_dispatch_ms": 15.518,
+      "devices_bytes": 120630272,
+      "decisions": 0,
+      "support_checks": 392320,
+      "removals": 883,
+      "final_state_sha256": "e3e4b4c48a808158c018ab0b9ee9045429211214f4eb83e8ac6e28723e726660"
+    },
+    {
+      "repeat": 2,
+      "grouped": false,
+      "lanes": 128,
+      "dispatches": 12,
+      "seconds": 0.048957,
+      "max_dispatch_ms": 15.723,
+      "devices_bytes": 120630272,
+      "decisions": 0,
+      "support_checks": 392320,
+      "removals": 883,
+      "final_state_sha256": "e3e4b4c48a808158c018ab0b9ee9045429211214f4eb83e8ac6e28723e726660"
+    },
+    {
+      "repeat": 2,
+      "grouped": true,
+      "lanes": 128,
+      "dispatches": 12,
+      "seconds": 0.05341,
+      "max_dispatch_ms": 15.553,
+      "devices_bytes": 120630272,
+      "decisions": 0,
+      "support_checks": 392320,
+      "removals": 883,
+      "final_state_sha256": "e3e4b4c48a808158c018ab0b9ee9045429211214f4eb83e8ac6e28723e726660"
+    }
+  ]
+}

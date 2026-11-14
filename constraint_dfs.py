@@ -60,7 +60,9 @@ from constraint_branching_round24 import RoutingBranching, CompletionOrdering, L
 VERSION = 2
 GUIDANCE_STAT_KEYS = ('failure_guided_choices','failure_weight_updates','lookahead_probes','lookahead_prunes','lookahead_failures','lookahead_aborted',
                       'lookahead_complete_passes','lookahead_common_prunes','regional_solutions_validated',
-                      'lookahead_probe_propagations','lookahead_probe_arc_revisions') + CACHE_STAT_KEYS + PAIR_STAT_KEYS + PROBE_PLAN_STATS
+                      'lookahead_probe_propagations','lookahead_probe_arc_revisions',
+                      'easy_remainder_calls','easy_remainder_work','easy_remainder_witnesses',
+                      'easy_remainder_infeasible','easy_remainder_unknown') + CACHE_STAT_KEYS + PAIR_STAT_KEYS + PROBE_PLAN_STATS
 KNOWLEDGE_STAT_KEYS = ('loop_witnesses',)
 EXPLANATION_STAT_KEYS = ('explanation_probes', 'explanation_literals_removed', 'explanation_aborted', 'explanation_skipped', 'explanation_time_ns', 'backjumps', 'backjump_levels', 'native_basic_passes_skipped')
 # Every v2 checkpoint contains these six counters. Later counters default to zero on resume.
@@ -1407,6 +1409,11 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                     continue
                 if not queue: return True
 
+        tail_solver = None
+        if options.get('easy_remainder'):
+            from r27_reason_tail import bounded_tail
+            tail_solver = bounded_tail
+
         def evaluate(frame):
             """Shared strong pruning/branch policy for Python and native control loops."""
             nonlocal nodes,probe_deadline
@@ -1515,6 +1522,30 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                         cells=([cell for cell,code in witness] if all(domains[cell]==1<<code for cell,code in witness) else range(n))
                         if reason is not None:reason.failure=reason.causes(cells)
                     return failure(gold=assigned,cells=cells)
+                if tail_solver is not None:
+                    tail = tail_solver(problem,domains,target,check)
+                    if tail is not None:
+                        status,codes,work = tail
+                        stats['easy_remainder_calls'] += 1
+                        stats['easy_remainder_work'] += work
+                        if status == 'witness':
+                            if (len(codes)!=n or any(type(v) is not int or not 0<=v<count
+                                    or not (mask & (1<<v)) for mask,v in zip(domains,codes))):
+                                raise RuntimeError('Tail witness escapes its DFS frame.')
+                            report = problem.validate(codes)
+                            if not (report['valid'] or target=='edges' and report['unique_tiles']
+                                    and report['matched_edges']==len(problem.edges)):
+                                raise RuntimeError('Tail witness failed independent validation.')
+                            stats['easy_remainder_witnesses'] += 1
+                            return {'action':'solved','codes':codes,'validation':report}
+                        if status == 'infeasible':
+                            # The complete queried frame is the proof scope. A
+                            # failed matching or Gold candidate inside it alone
+                            # cannot justify a shorter globally reusable clause.
+                            stats['easy_remainder_infeasible'] += 1
+                            return {'action':'reject','decisions':decisions,'reason':None,
+                                    'lcg_clause':None,'_residual_input':residual_input}
+                        stats['easy_remainder_unknown'] += 1
                 if gold_oracle is not None and gold_oracle.should_query(domains,node=nodes):
                     answer=gold_oracle.query(domains,check,seconds=.5,node=nodes)
                     if answer.status=='solved':

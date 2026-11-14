@@ -53,7 +53,7 @@ class LanePool:
         del self.queue[:count];del self.queued_owners[:count]
         self.counters['gpu_lane_refills']+=count;self.counters['gpu_lane_rebuilt_roots']+=count
         return True
-    def donate(self,engine):
+    def donate(self,engine,*,share_prefix=True):
         """At most one donor; return its retired work counts, or no mutation.
 
         All exact remaining boxes move together. The donor and receiver take one
@@ -64,19 +64,31 @@ class LanePool:
         meta=engine.state[:3].get()
         active=[i for i,owner in enumerate(self.lanes) if owner is not None and meta[0,i]==0]
         if not active:return None
-        donor=max(active,key=lambda i:(int(meta[1,i]),-i));parts=engine.remaining_domain_cubes([donor])
+        donor=max(active,key=lambda i:(int(meta[1,i]),-i))
+        prefix=None
+        if share_prefix and engine.incremental_strands:
+            from r27_gpu_snapshots import PropagatedPrefix,donation_prefixes
+            column=engine.state[:,donor].get()
+            parts=engine.remaining_domain_cubes([donor],lane_column=column)
+            marks=donation_prefixes(engine,column,parts)
+            prefix=PropagatedPrefix.capture(engine,column)
+        else:
+            parts=engine.remaining_domain_cubes([donor])
         if len(parts)==1:
             row=parts[0];width,axis=max((v.bit_count(),i) for i,v in enumerate(row))
             if width>1:
                 mask=row[axis];part=0
                 for _ in range(width//2):bit=mask&-mask;part|=bit;mask^=bit
+                if prefix is not None:marks=marks*2
                 left=list(row);right=list(row);left[axis]=part;right[axis]=mask;parts=[tuple(left),tuple(right)]
         if len(parts)<2 or len(self.queue)+len(parts)-2>MAX_DONATION_QUEUE:
             self.counters['gpu_lane_balance_deferrals']+=1;return None
         receiver=idle[0];owner=self.lanes[donor];old=engine.stats([donor])
         # Both new device columns are committed before any ownership/queue is
         # published. No search kernel can run during this synchronous transfer.
-        engine.replace_lanes({donor:parts[0],receiver:parts[1]})
+        replacements={donor:parts[0],receiver:parts[1]}
+        if prefix is None:engine.replace_lanes(replacements)
+        else:engine.replace_lanes(replacements,prefixes=(prefix,marks[:2]))
         self.lanes[receiver]=owner;self.queue.extend(parts[2:]);self.queued_owners.extend([owner]*(len(parts)-2))
         self.queue_peak=max(self.queue_peak,len(self.queue))
         self.counters['gpu_lane_donations']+=1;self.counters['gpu_lane_rebuilt_roots']+=2

@@ -10,7 +10,7 @@ import hashlib,math,time
 from pathlib import Path
 from constraint_work import digest
 from constraint_lns import score,diverse_archive
-from gpu_sampling_resume_round25 import SamplerSession
+from gpu_sampling_resume_round25 import SamplerSession, compatible_sources
 from constraint_lns_resume_round25 import RepairSession
 
 SAMPLING=('ejection_chains','move_tabu','replica_exchange','obstruction_chains','cycle_crossover','lazy_gold_scoring','adaptive_temperatures','incremental_sampling','optimal_crossover')
@@ -35,6 +35,8 @@ def solve(problem,*,seconds=10,seed=0,target='gold',replicas=128,backend='auto',
     began=time.monotonic();last_save=began;sampler=None;repair=None
     sampling_policy={'seed':seed,'replicas':replicas,'gold_aware':bool(options.get('gpu_gold_sampling') and target=='gold'),
                      'experiments':{name:True for name in SAMPLING if options.get(name)}}
+    if options.get('incumbent_polish'):
+        sampling_policy['incumbent_polish']=True
     repair_policy={'seed':seed,'dependency_chains':bool(options.get('dependency_repair')),
                    'experiments':{name:True for name in REPAIR if options.get(name)}}
     if options.get('retained_repair'):repair_policy['retained']=True
@@ -48,20 +50,35 @@ def solve(problem,*,seconds=10,seed=0,target='gold',replicas=128,backend='auto',
         'sampling_policy':sampling_policy,'repair_policy':repair_policy,'sampler_state':None,'repair_state':None,
         'sampling':None,'repair':None,'dfs':None,'hints':deepcopy(hints),'candidates':[],
         'repair_inputs':None,'checked':0,'resumes':0,'transitions':0,'claims_offered':False}
+    if options.get('incumbent_polish'):
+        state['polish_rounds']=0
+        state['polish_cursor']=None
+        state['sources']['r27_incumbent.py']=hashlib.sha256((Path(__file__).parent/'r27_incumbent.py').read_bytes()).hexdigest()
     if resume is not None:
         if isinstance(resume,dict) and resume.get('hybrid_version')==3:
             expected=set(state)|{'digest'}
             if set(resume)!=expected or type(resume['hybrid_version'])is not int or resume['digest']!=digest({k:v for k,v in resume.items() if k!='digest'}) or resume['scope']!=scope:raise ValueError('Invalid durable hybrid checkpoint scope/digest.')
             if resume['phase'] not in ('sampling','repair','exact_dfs'):raise ValueError('Invalid saved hybrid phase.')
-            if resume['phase']!='exact_dfs' and resume['sources']!=state['sources']:raise ValueError('Unfinished heuristic controller requires matching source semantics.')
+            if resume['phase']!='exact_dfs' and not compatible_sources(resume['sources'],state['sources']):raise ValueError('Unfinished heuristic controller requires matching source semantics.')
             if resume['phase']=='sampling' and resume['sampling_policy']!=sampling_policy:raise ValueError('Unfinished sampler requires saved replicas/seed/policy.')
             if resume['phase'] in ('sampling','repair') and resume['repair_policy']!=repair_policy:raise ValueError('Unfinished hybrid requires the saved repair policy.')
             if (not isinstance(resume['budgets'],dict) or set(resume['budgets'])!={'sampling','repair'}
                 or any(type(resume['budgets'][name])not in (int,float) or not math.isfinite(resume['budgets'][name]) or not 0<=resume['budgets'][name]<=cap for name,cap in (('sampling',30),('repair',60)))):raise ValueError('Invalid saved hybrid budget.')
+            if 'polish_rounds' in resume and (type(resume['polish_rounds']) is not int or not 0<=resume['polish_rounds']<=8):
+                raise ValueError('Invalid local optimization cursor.')
+            if 'polish_cursor' in resume:
+                cursor=resume['polish_cursor']
+                if (cursor is None)!=(resume['polish_rounds'] in (0,8)):
+                    raise ValueError('Missing or obsolete local optimization state.')
+                if cursor is not None and (not isinstance(cursor,dict) or set(cursor)!={'board','rng'}
+                        or score(problem,cursor['board'])['domain_violations'] or not isinstance(cursor['rng'],dict)):
+                    raise ValueError('Invalid local optimization state.')
             for key in ('checked','resumes','transitions'):
                 if type(resume[key])is not int or resume[key]<0:raise ValueError('Invalid hybrid counter.')
             if type(resume['claims_offered'])is not bool or not isinstance(resume['candidates'],list) or len(resume['candidates'])>10:raise ValueError('Invalid hybrid archive.')
+            current_sources=state['sources']
             state=deepcopy({k:v for k,v in resume.items() if k!='digest'});state['resumes']+=1
+            state['sources']=current_sources
             for values in state['candidates']:score(problem,values)
             if state['phase']=='repair' and state['repair_inputs'] is None:raise ValueError('Missing saved repair input.')
             if state['repair_inputs'] is not None:
@@ -139,7 +156,42 @@ def solve(problem,*,seconds=10,seed=0,target='gold',replicas=128,backend='auto',
             for values in state['candidates']:
                 result=certificate(values,'saved_hint')
                 if result:return result
-            sampler=SamplerSession(problem,backend=backend,target=target,resume=state['sampler_state'],**state['sampling_policy'])
+            policy=dict(state['sampling_policy'])
+            if policy.pop('incumbent_polish',False) and state['polish_rounds']<8:
+                from r27_incumbent import BoardModel, polish_step
+                import numpy as np
+                # Keep a single resumable best candidate in the bounded archive.
+                eligible=[v for v in state['candidates'] if not score(problem,v)['domain_violations']]
+                if eligible:
+                    board=max(eligible,key=lambda v:(score(problem,v)['matched_edges'],-problem.validate(v)['line_components']))
+                    quality=(score(problem,board)['matched_edges'],-problem.validate(board)['line_components'])
+                    model=BoardModel(problem)
+                    rng=np.random.default_rng(seed)
+                    cursor=state['polish_cursor']
+                    if cursor is not None:
+                        board=cursor['board']
+                        rng.bit_generator.state=cursor['rng']
+                    board=model.legal_board(board)
+                    while state['polish_rounds']<8 and not stop() and remaining():
+                        board,report=polish_step(model,board,rng)
+                        codes=board.tolist()
+                        state['polish_rounds']+=1
+                        state['polish_cursor']=({'board':codes,'rng':deepcopy(rng.bit_generator.state)}
+                                                if state['polish_rounds']<8 else None)
+                        trial=(report['matched_edges'],-report['line_components'])
+                        if trial>=quality:
+                            state['candidates']=[codes]+[v for v in state['candidates'] if v!=codes][:7]
+                        if trial>quality:
+                            quality=trial
+                            if progress is not None:
+                                progress({'event':'incumbent_polish','phase':'incumbent_polish','codes':codes,
+                                          'best_score':trial[0],'line_components':-trial[1],'round':state['polish_rounds'],
+                                          'elapsed_seconds':time.monotonic()-began})
+                        result=certificate(codes,'incumbent_polish')
+                        if result:return result
+                    if stop() or not remaining():return interrupted()
+                else:state['polish_rounds']=8
+            sampler=SamplerSession(problem,backend=backend,target=target,resume=state['sampler_state'],**policy)
             emit({'event':'phase','budget_seconds':max(0.,state['budgets']['sampling']-sampler.elapsed)})
             sampler.advance(min(remaining(),max(0.,state['budgets']['sampling']-sampler.elapsed)),stop=stop,progress=emit)
             state['sampling']=sampler.report()

@@ -72,7 +72,7 @@ def run_solver(problem, algorithm, **kwargs):
 def load_seed_board(problem, paths):
     """Use saved permutations as heuristic seeds only, with fresh CPU scoring."""
     from gpu_sampling import score_board
-    best, objective = None, -1
+    best, rank = None, None
     for path in paths:
         try:
             saved = read_json_shared(path)
@@ -80,8 +80,10 @@ def load_seed_board(problem, paths):
             metrics = score_board(problem, codes)
         except (OSError, ValueError, TypeError, KeyError, AttributeError):
             continue
-        if metrics['objective'] > objective:
-            best, objective = list(map(int, codes)), metrics['objective']
+        if rank is None or metrics['objective'] >= rank[0]:
+            quality=(metrics['objective'],-problem.validate(codes)['line_components'])
+            if rank is None or quality>rank:
+                best, rank = list(map(int, codes)), quality
     return best
 
 
@@ -374,11 +376,14 @@ def main(argv=None):
         last_snapshot = record
         if kind in ('gpu_sample', 'repair_sample') and record['validation']:
             # Keep a useful full-board heuristic result without calling it Gold.
-            atomic_json(folder/'heuristic-best.json', record)
-            previous_codes = load_seed_board(problem, [run/'best.json'])
-            previous_score = problem.validate(previous_codes)['matched_edges'] if previous_codes is not None else -1
-            if record['validation']['matched_edges'] > previous_score:
-                atomic_json(run/'best.json', {**record, 'solved': False})
+            from gpu_sampling import score_board
+            def rank_board(values, validation):
+                return score_board(problem,values)['objective'], -validation['line_components']
+            rank=rank_board(codes,record['validation'])
+            for path in (folder/'heuristic-best.json',run/'best.json'):
+                previous=load_seed_board(problem,[path])
+                if previous is None or rank>rank_board(previous,problem.validate(previous)):
+                    atomic_json(path,{**record,'solved':bool(record['validation']['valid'])} if path.parent==run else record)
         if kind == 'search':
             state['max_depth'] = max(state.get('max_depth', 0), assigned)
         if record['validation'] and record['validation']['matched_edges'] == len(problem.edges) and not record['validation']['valid']:
@@ -433,6 +438,11 @@ def main(argv=None):
             sampling(event, show_sample=True)
         elif event.get('gpu_sampling') is not None:
             sampling(event['gpu_sampling'], show_sample=last_snapshot is None)
+        if event.get('event') == 'incumbent_polish':
+            write_live(event['codes'],kind='repair_sample',sample_metrics={
+                'best_score':event['best_score'],'line_components':event['line_components'],
+                'round':event['round'],'source':'incumbent_polish'})
+            return
         is_repair = event.get('event') == 'repair' or (event.get('phase') == 'repair' and event.get('event') != 'phase')
         if is_repair:
             repair_report(event, show_sample=True)
@@ -578,7 +588,7 @@ def main(argv=None):
         # New reasoning modules must travel with each run's reproducible source snapshot.
         source_names = set(source_names) | {p.name for p in ROOT.iterdir()
             if p.is_file() and p.suffix in ('.py','.c','.cu','.wgsl')
-            and p.name.startswith(('constraint_','gpu_','domain_','sampling_','dfs_'))}
+            and p.name.startswith(('constraint_','gpu_','domain_','sampling_','dfs_','r27_'))}
         for name in sorted(source_names):
             path = ROOT/name
             if path.exists():

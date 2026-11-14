@@ -49,7 +49,7 @@ DIST=np.array([distances(route(ENDPOINTS[a],ENDPOINTS[b])) for a,b in CANDIDATES
 COVER=DIST<2.1
 CORE=DIST<0.7
 
-def extract_tile(tile, required_endpoints):
+def extract_tile(tile, required_endpoints, *, report_alternatives=0):
     pix=np.array(tile.convert('RGB')).astype(float).reshape(-1,3)
     gold=(pix[:,0]-pix[:,2]>20)&(pix[:,1]-pix[:,2]>20)&(np.abs(pix[:,0]-pix[:,1])<40)
     strong=(pix[:,0]-pix[:,2]>60)&(pix[:,1]-pix[:,2]>60)&(np.abs(pix[:,0]-pix[:,1])<40)
@@ -89,6 +89,11 @@ def extract_tile(tile, required_endpoints):
     segments=[[list(ENDPOINTS[a]),list(ENDPOINTS[b])] for a,b in (CANDIDATES[k] for k in chosen)]
     explained=gold&~unexplained
     quality={'gold_pixels':int(gold.sum()),'strong_pixels':int(strong.sum()),'unexplained_gold':int(unexplained.sum()),'unexplained_strong':int((unexplained&strong).sum()),'coverage':round(float(explained.sum()/max(1,gold.sum())),5),'penalties':[int(penalties[k]) for k in chosen],'pairing_loss':round(ranked[0][0],3),'pairing_margin':round(ranked[1][0]-ranked[0][0],3) if len(ranked)>1 else None,'pairings_considered':len(ranked)}
+    if report_alternatives:
+        quality['alternatives']=[
+            {'loss':round(float(loss),3),
+             'segments':[[list(ENDPOINTS[a]),list(ENDPOINTS[b])] for a,b in (CANDIDATES[k] for k in indices)]}
+            for loss,indices in ranked[1:1+report_alternatives]]
     return segments,quality,unexplained.reshape(71,82)
 
 def main():

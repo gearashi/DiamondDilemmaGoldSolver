@@ -234,18 +234,27 @@ class Neighborhood:
         self.stack=state['stack'];self.best=best;self.complete=state['complete'];self.cuts=cuts;self.stats=state['stats'];self.factor_cache=factors
 
 
+def _compatible_binding(controller,saved):
+    from r27_incumbent_compat import compatible_identity
+    return compatible_identity(saved,controller.binding,controller._identity)
+
+
 class OptimizingCrossover:
     def __init__(self,problem,*,gold_aware=False,max_nodes=256,max_models=8,history_limit=256,max_parents=4,resume=None):
         if not _integer(problem.n,1,160) or type(gold_aware)is not bool or not _integer(max_nodes,1,65536) or not _integer(max_models,1,64) or not _integer(history_limit,1,4096) or not _integer(max_parents,2,8):raise ValueError('Invalid recombination policy.')
         self.problem=problem;self.policy={'gold_aware':gold_aware,'max_nodes':max_nodes,'max_models':max_models,'history_limit':history_limit,'max_parents':max_parents}
         self.binding=self._identity();self._stats=dict.fromkeys(STAT_KEYS,0);self.models=OrderedDict();self.last={};self.pairs=OrderedDict();self.history=OrderedDict();self.outcomes=OrderedDict();self.pending=False;self.pending_offer=None
         if resume is not None:self._restore(resume)
-    def _identity(self):
+    def _identity(self,profile=None):
         from constraint_region_compiler_round26 import _source
         p=self.problem
         sources=dict(_source())
         for name in ('sampling_crossover_round26.py','sampling_crossover_round25.py','gpu_sampling.py','constraint_lns.py','search_problem.py','validator.py','geometry.py'):
             sources[name]=sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
+        if profile is not None:
+            from r27_incumbent_compat import legacy_sources
+            sources=legacy_sources(sources,profile)
+            if sources is None:return None
         return _digest({'version':VERSION,'policy':self.policy,'fingerprint':p.fingerprint,'tiles':p.tiles,'edges':p.edges,'board_edges':p.board.edges,'fixed':sorted(p.fixed.items()),'domains':p.domains,'masks':p.masks.tolist(),'neighbors':p.neighbors.tolist(),'sides':p.sides.tolist(),'segments':p.total_segments,'segment_ports':p._segment_ports,'sources':sources})
     def _check(self):
         if self._identity()!=self.binding:raise ValueError('Recombination source/input/policy changed.')
@@ -364,7 +373,7 @@ class OptimizingCrossover:
             if len(_encoded(value))>MAX_SNAPSHOT_BYTES:raise ValueError('Recombination continuation exceeds byte cap.')
             value=json.loads(_encoded(value))
         except (TypeError,OverflowError,RecursionError) as error:raise ValueError('Malformed recombination continuation.') from error
-        if type(value)is not dict or set(value)!={'optimizing_crossover_version','binding','policy','state','digest'} or not _integer(value['optimizing_crossover_version'],VERSION,VERSION) or value['binding']!=self.binding or type(value['policy'])is not dict or set(value['policy'])!=set(self.policy) or any(type(value['policy'][k])is not type(v) or value['policy'][k]!=v for k,v in self.policy.items()) or value['digest']!=_digest({k:v for k,v in value.items() if k!='digest'}):raise ValueError('Recombination source/scope/policy/digest differs.')
+        if type(value)is not dict or set(value)!={'optimizing_crossover_version','binding','policy','state','digest'} or not _integer(value['optimizing_crossover_version'],VERSION,VERSION) or not _compatible_binding(self,value['binding']) or type(value['policy'])is not dict or set(value['policy'])!=set(self.policy) or any(type(value['policy'][k])is not type(v) or value['policy'][k]!=v for k,v in self.policy.items()) or value['digest']!=_digest({k:v for k,v in value.items() if k!='digest'}):raise ValueError('Recombination source/scope/policy/digest differs.')
         state=value['state']
         if type(state)is not dict or set(state)!={'stats','pending','pending_offer','pairs','history','models','outcomes'} or type(state['pending'])is not bool or type(state['stats'])is not dict or set(state['stats'])!=set(STAT_KEYS) or any(not _integer(v,0,2**53-1) for v in state['stats'].values()):raise ValueError('Invalid recombination controller state.')
         if not state['stats']['recombination_injections']<=state['stats']['recombination_offers'] or state['pending'] and state['stats']['recombination_injections']>=state['stats']['recombination_offers']:raise ValueError('Invalid recombination injection state.')

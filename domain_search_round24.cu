@@ -622,13 +622,8 @@ struct Context {
 #endif
 
 };
-extern "C" __global__ void domain_search(unsigned *state,const unsigned *tables,int lanes,int work){
-#if COOPERATIVE
- int lane=(blockIdx.x*blockDim.x+threadIdx.x)/32,rank=threadIdx.x&31;
-#else
- int lane=blockIdx.x*blockDim.x+threadIdx.x,rank=0;
-#endif
- if(lane>=lanes)return;Context ctx{state,tables,lanes,lane};
+__device__ void search_lane(unsigned *state,const unsigned *tables,int lanes,int work,int lane,int rank){
+ Context ctx{state,tables,lanes,lane};
  for(int step=0;step<work;step++){
   int status=rank==0?ctx.meta(0):0,phase=rank==0?ctx.meta(6):0;
 #if COOPERATIVE
@@ -649,6 +644,22 @@ extern "C" __global__ void domain_search(unsigned *state,const unsigned *tables,
   __syncwarp();
 #endif
  }
+}
+extern "C" __global__ void domain_search(unsigned *state,const unsigned *tables,int lanes,int work){
+#if COOPERATIVE
+ int lane=(blockIdx.x*blockDim.x+threadIdx.x)/32,rank=threadIdx.x&31;
+#else
+ int lane=blockIdx.x*blockDim.x+threadIdx.x,rank=0;
+#endif
+ if(lane<lanes)search_lane(state,tables,lanes,work,lane,rank);
+}
+extern "C" __global__ void domain_ordered(unsigned *state,const unsigned *tables,int lanes,int work,const int *ids,int count){
+#if COOPERATIVE
+ int lane=(blockIdx.x*blockDim.x+threadIdx.x)/32,rank=threadIdx.x&31;
+#else
+ int lane=blockIdx.x*blockDim.x+threadIdx.x,rank=0;
+#endif
+ if(lane<count)search_lane(state,tables,lanes,work,ids[lane],rank);
 }
 extern "C" __global__ void domain_ack(unsigned *state,const int *ids,int lanes,int count){
  int index=blockIdx.x*blockDim.x+threadIdx.x;if(index>=count)return;int lane=ids[index];Context ctx{state,nullptr,lanes,lane};

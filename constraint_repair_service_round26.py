@@ -297,7 +297,11 @@ class RetainedRepairService:
         if len(json.dumps(value,indent=2).encode())>MAX_SNAPSHOT_BYTES:raise ValueError('Retained repair snapshot exceeds32MiB; no partial state published.')
         return value
     def _restore(self,value):
-        if not isinstance(value,dict) or len(json.dumps(value,indent=2).encode())>MAX_SNAPSHOT_BYTES or set(value)!={'retained_repair_version','binding','results','pending','witnesses','outcomes','turn','stats','gold_pool','digest'} or type(value['retained_repair_version'])is not int or value['retained_repair_version']!=1 or value['digest']!=digest({k:v for k,v in value.items() if k!='digest'}) or value['binding']!=self.binding:raise ValueError('Retained repair snapshot binding/integrity mismatch.')
+        from r27_incumbent_compat import compatible_sources
+        saved=value.get('binding') if isinstance(value,dict) else None
+        compatible=(isinstance(saved,dict) and compatible_sources(saved.get('sources'),self.binding['sources'])
+                    and {**saved,'sources':self.binding['sources']}==self.binding)
+        if not isinstance(value,dict) or len(json.dumps(value,indent=2).encode())>MAX_SNAPSHOT_BYTES or set(value)!={'retained_repair_version','binding','results','pending','witnesses','outcomes','turn','stats','gold_pool','digest'} or type(value['retained_repair_version'])is not int or value['retained_repair_version']!=1 or value['digest']!=digest({k:v for k,v in value.items() if k!='digest'}) or not compatible:raise ValueError('Retained repair snapshot binding/integrity mismatch.')
         for name,limit in (('results',self.policy['cache_limit']),('pending',self.policy['cache_limit']),('witnesses',self.policy['cut_limit'])):
             if not isinstance(value[name],list) or len(value[name])>limit:raise ValueError('Retained repair record cap exceeded.')
         for name in ('results','pending'):

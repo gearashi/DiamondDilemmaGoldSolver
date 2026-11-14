@@ -68,7 +68,7 @@ def _seconds(seconds):
         raise ValueError('Repair slice seconds must be finite and nonnegative.')
 
 
-def _binding(problem, kind, inputs, policy):
+def _binding(problem, kind, inputs, policy, profile=None):
     if not _integer(problem.n, 1, MAX_CELLS):
         raise ValueError('Repair continuation cell limit exceeded.')
     domains = [list(row) for row in problem.domains]
@@ -82,6 +82,10 @@ def _binding(problem, kind, inputs, policy):
                     'validator.py', 'geometry.py')
     sources = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
                for name in source_names}
+    if profile is not None:
+        from r27_incumbent_compat import legacy_sources
+        sources=legacy_sources(sources,profile)
+        if sources is None:return None
     return _digest({'version': VERSION, 'target': 'gold', 'kind': kind,
                     'fingerprint': problem.fingerprint, 'tiles': problem.tiles,
                     'edges': list(problem.edges), 'board_edges': list(problem.board.edges),
@@ -231,7 +235,9 @@ def _load(problem, kind, inputs, policy, resume, *, trade=None, fragments=None):
         record = json.loads(raw)
         if type(record) is not dict or set(record) != {'version', 'kind', 'binding', 'state', 'digest'}:
             raise ValueError('Invalid repair continuation envelope.')
-        if type(record['version']) is not int or record['version'] != VERSION or record['kind'] != kind or record['binding'] != binding:
+        from r27_incumbent_compat import compatible_identity
+        if (type(record['version']) is not int or record['version'] != VERSION or record['kind'] != kind
+                or not compatible_identity(record['binding'],binding,lambda profile:_binding(problem,kind,inputs,policy,profile))):
             raise ValueError('Repair continuation scope, policy or source mismatch.')
         unsigned = {key: value for key, value in record.items() if key != 'digest'}
         if type(record['digest']) is not str or record['digest'] != _digest(unsigned):

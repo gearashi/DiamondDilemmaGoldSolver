@@ -1,0 +1,1847 @@
+{
+  "legacy-four": {
+    "cell": {
+      "complete": true,
+      "solutions": 6,
+      "units": 783,
+      "work": {
+        "arc_alternatives": 715,
+        "independent_checks": 15,
+        "placement_decisions": 26,
+        "search_nodes": 27
+      }
+    },
+    "circuit": {
+      "branches": 595,
+      "complete": true,
+      "conflicts": 1,
+      "solutions": 6
+    },
+    "coarse": {
+      "complete": true,
+      "solutions": 6,
+      "units": 783,
+      "work": {
+        "arc_alternatives": 715,
+        "independent_checks": 15,
+        "placement_decisions": 26,
+        "search_nodes": 27
+      }
+    },
+    "cover": {
+      "complete": true,
+      "solutions": 6,
+      "units": 213,
+      "work": {
+        "cover_rows": 43,
+        "independent_checks": 6,
+        "purified_color_classes": 129,
+        "search_nodes": 35
+      }
+    },
+    "directed-tour": {
+      "unsupported": "Physical assembly requires a connected oriented triangle sphere."
+    },
+    "eliminate": {
+      "clauses": 2161,
+      "complete": true,
+      "sat": {
+        "conflicts": 47,
+        "decisions": 175,
+        "propagations": 9619,
+        "restarts": 7
+      },
+      "solutions": 6,
+      "units": 8261,
+      "work": {
+        "literals": 7297,
+        "projected_models": 6,
+        "sat_calls": 7,
+        "seam_candidates": 404,
+        "shortcut_pairs": 141,
+        "variables": 547
+      }
+    },
+    "embedded": {
+      "unsupported": "Physical assembly requires a connected oriented triangle sphere."
+    },
+    "filter": {
+      "euler": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {}
+      },
+      "partners": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "partner_matching_states": 51,
+          "partner_placement_checks": 99,
+          "physical_occurrences": 99,
+          "physical_pair_tests": 226
+        }
+      },
+      "passages": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {}
+      },
+      "regions": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {}
+      },
+      "separator": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "physical_occurrences": 99,
+          "physical_pair_tests": 226,
+          "separator_graph_visits": 1352
+        }
+      }
+    },
+    "glue": {
+      "unsupported": "Physical assembly requires a connected oriented triangle sphere."
+    },
+    "independent": 6,
+    "lazy": {
+      "clauses": 392,
+      "complete": true,
+      "sat": {
+        "conflicts": 35,
+        "decisions": 192,
+        "propagations": 903,
+        "restarts": 16
+      },
+      "solutions": 6,
+      "units": 1694,
+      "work": {
+        "literals": 1226,
+        "projected_models": 15,
+        "sat_calls": 16,
+        "seam_candidates": 404,
+        "variables": 33
+      }
+    },
+    "mod-full": {
+      "clauses": 4092,
+      "complete": true,
+      "sat": {
+        "conflicts": 108,
+        "decisions": 289,
+        "propagations": 16989,
+        "restarts": 7
+      },
+      "solutions": 6,
+      "units": 15220,
+      "work": {
+        "literals": 14242,
+        "projected_models": 6,
+        "sat_calls": 7,
+        "seam_candidates": 404,
+        "variables": 561
+      }
+    },
+    "mod-small": {
+      "clauses": 3346,
+      "complete": true,
+      "sat": {
+        "conflicts": 100,
+        "decisions": 308,
+        "propagations": 8572,
+        "restarts": 7
+      },
+      "solutions": 6,
+      "units": 12240,
+      "work": {
+        "literals": 11358,
+        "projected_models": 6,
+        "sat_calls": 7,
+        "seam_candidates": 404,
+        "variables": 465
+      }
+    },
+    "ordinary_remaining": 33,
+    "reach": {
+      "clauses": 22609,
+      "complete": true,
+      "sat": {
+        "conflicts": 5012,
+        "decisions": 18441,
+        "propagations": 935377,
+        "restarts": 13
+      },
+      "solutions": 6,
+      "units": 82921,
+      "work": {
+        "literals": 75084,
+        "projected_models": 6,
+        "sat_calls": 7,
+        "seam_candidates": 404,
+        "variables": 7420
+      }
+    },
+    "released_dfs": {
+      "complete": true,
+      "nodes": 2,
+      "status": "solved"
+    },
+    "seam": {
+      "complete": true,
+      "solutions": 6,
+      "units": 866,
+      "work": {
+        "arc_alternatives": 792,
+        "independent_checks": 15,
+        "placement_decisions": 25,
+        "seam_decisions": 4,
+        "search_nodes": 30
+      }
+    },
+    "seam-table": {
+      "complete": true,
+      "solutions": 6,
+      "units": 872,
+      "work": {
+        "arc_alternatives": 792,
+        "compiled_table_entries": 6,
+        "independent_checks": 15,
+        "placement_decisions": 25,
+        "seam_decisions": 4,
+        "search_nodes": 30
+      }
+    },
+    "tour": {
+      "unsupported": "Physical assembly requires a connected oriented triangle sphere."
+    }
+  },
+  "repeated-types": {
+    "cell": {
+      "complete": true,
+      "solutions": 120,
+      "units": 12898,
+      "work": {
+        "arc_alternatives": 12367,
+        "independent_checks": 120,
+        "placement_decisions": 205,
+        "search_nodes": 206
+      }
+    },
+    "circuit": {
+      "branches": 66424,
+      "complete": true,
+      "conflicts": 10049,
+      "solutions": 120
+    },
+    "coarse": {
+      "complete": true,
+      "solutions": 120,
+      "units": 12898,
+      "work": {
+        "arc_alternatives": 12367,
+        "independent_checks": 120,
+        "placement_decisions": 205,
+        "search_nodes": 206
+      }
+    },
+    "cover": {
+      "complete": true,
+      "solutions": 120,
+      "units": 1763,
+      "work": {
+        "cover_rows": 330,
+        "independent_checks": 120,
+        "purified_color_classes": 982,
+        "search_nodes": 331
+      }
+    },
+    "directed-tour": {
+      "complete": false,
+      "solutions": 2,
+      "units": 500000,
+      "work": {
+        "embedding_checks": 75,
+        "embedding_seeds": 120,
+        "independent_checks": 2,
+        "physical_occurrences": 60,
+        "physical_pair_tests": 299,
+        "search_nodes": 11299,
+        "sewing_decisions": 11298,
+        "trail_steps": 203764,
+        "vertex_link_steps": 273083
+      }
+    },
+    "eliminate": {
+      "clauses": 2679,
+      "complete": true,
+      "sat": {
+        "conflicts": 341,
+        "decisions": 1036,
+        "propagations": 45120,
+        "restarts": 120
+      },
+      "solutions": 120,
+      "units": 10364,
+      "work": {
+        "literals": 8670,
+        "projected_models": 120,
+        "sat_calls": 121,
+        "seam_candidates": 1009,
+        "shortcut_pairs": 110,
+        "variables": 444
+      }
+    },
+    "embedded": {
+      "complete": true,
+      "solutions": 120,
+      "units": 179238,
+      "work": {
+        "embedding_checks": 3600,
+        "embedding_seeds": 3600,
+        "independent_checks": 120,
+        "partial_embedding_links": 93982,
+        "partial_embedding_seeds": 49140,
+        "physical_occurrences": 60,
+        "physical_pair_tests": 299,
+        "search_nodes": 1050,
+        "sewing_decisions": 4157,
+        "vertex_link_steps": 23230
+      }
+    },
+    "filter": {
+      "euler": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "euler_sums": 10,
+          "planarity_checks": 20
+        }
+      },
+      "partners": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "partner_matching_states": 110,
+          "partner_placement_checks": 75,
+          "physical_occurrences": 60,
+          "physical_pair_tests": 114
+        }
+      },
+      "passages": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "dual_interval_visits": 288,
+          "planarity_checks": 20
+        }
+      },
+      "regions": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "dual_interval_visits": 288,
+          "planarity_checks": 20
+        }
+      },
+      "separator": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "physical_occurrences": 60,
+          "physical_pair_tests": 114,
+          "separator_graph_visits": 2166
+        }
+      }
+    },
+    "glue": {
+      "complete": false,
+      "solutions": 2,
+      "units": 500000,
+      "work": {
+        "embedding_checks": 76,
+        "embedding_seeds": 120,
+        "independent_checks": 2,
+        "physical_occurrences": 60,
+        "physical_pair_tests": 299,
+        "search_nodes": 19549,
+        "sewing_decisions": 19548,
+        "vertex_link_steps": 460346
+      }
+    },
+    "independent": null,
+    "lazy": {
+      "clauses": 1450,
+      "complete": true,
+      "sat": {
+        "conflicts": 135,
+        "decisions": 802,
+        "propagations": 3567,
+        "restarts": 120
+      },
+      "solutions": 120,
+      "units": 5800,
+      "work": {
+        "literals": 4470,
+        "projected_models": 120,
+        "sat_calls": 121,
+        "seam_candidates": 1009,
+        "variables": 80
+      }
+    },
+    "mod-full": {
+      "clauses": 6706,
+      "complete": true,
+      "sat": {
+        "conflicts": 145,
+        "decisions": 969,
+        "propagations": 60244,
+        "restarts": 120
+      },
+      "solutions": 120,
+      "units": 24893,
+      "work": {
+        "literals": 22936,
+        "projected_models": 120,
+        "sat_calls": 121,
+        "seam_candidates": 1009,
+        "variables": 707
+      }
+    },
+    "mod-small": {
+      "clauses": 5137,
+      "complete": true,
+      "sat": {
+        "conflicts": 168,
+        "decisions": 1042,
+        "propagations": 35480,
+        "restarts": 120
+      },
+      "solutions": 120,
+      "units": 18605,
+      "work": {
+        "literals": 16864,
+        "projected_models": 120,
+        "sat_calls": 121,
+        "seam_candidates": 1009,
+        "variables": 491
+      }
+    },
+    "ordinary_remaining": 30,
+    "reach": {
+      "clauses": 14429,
+      "complete": true,
+      "sat": {
+        "conflicts": 871,
+        "decisions": 45002,
+        "propagations": 567579,
+        "restarts": 121
+      },
+      "solutions": 120,
+      "units": 53286,
+      "work": {
+        "literals": 47578,
+        "projected_models": 120,
+        "sat_calls": 121,
+        "seam_candidates": 1009,
+        "variables": 4458
+      }
+    },
+    "regional": {
+      "face-pairs": {
+        "complete": true,
+        "solutions": 120,
+        "units": 2683,
+        "work": {
+          "boundary_key_bytes": 12,
+          "boundary_pattern_object_bytes": 464,
+          "boundary_unions": 6,
+          "region_histories": 121,
+          "region_joins": 1,
+          "region_nodes": 752,
+          "regional_states": 2,
+          "regional_strands": 1803
+        }
+      },
+      "face-trees": {
+        "complete": true,
+        "solutions": 120,
+        "units": 2743,
+        "work": {
+          "boundary_key_bytes": 2,
+          "boundary_pattern_object_bytes": 56,
+          "determinant_updates": 30,
+          "matrix_entries": 36,
+          "region_histories": 121,
+          "region_joins": 1,
+          "region_nodes": 752,
+          "regional_states": 2,
+          "regional_strands": 1803
+        }
+      },
+      "face-word": {
+        "complete": true,
+        "solutions": 120,
+        "units": 2683,
+        "work": {
+          "boundary_key_bytes": 2,
+          "boundary_pattern_object_bytes": 56,
+          "boundary_unions": 6,
+          "region_histories": 121,
+          "region_joins": 1,
+          "region_nodes": 752,
+          "regional_states": 2,
+          "regional_strands": 1803
+        }
+      },
+      "hemisphere-pairs": {
+        "complete": true,
+        "solutions": 120,
+        "units": 1012,
+        "work": {
+          "boundary_key_bytes": 120,
+          "boundary_pattern_object_bytes": 4640,
+          "boundary_unions": 60,
+          "region_histories": 80,
+          "region_joins": 10,
+          "region_nodes": 142,
+          "regional_states": 20,
+          "regional_strands": 720
+        }
+      },
+      "hemisphere-trees": {
+        "complete": true,
+        "solutions": 120,
+        "units": 1612,
+        "work": {
+          "boundary_key_bytes": 20,
+          "boundary_pattern_object_bytes": 560,
+          "determinant_updates": 300,
+          "matrix_entries": 360,
+          "region_histories": 80,
+          "region_joins": 10,
+          "region_nodes": 142,
+          "regional_states": 20,
+          "regional_strands": 720
+        }
+      },
+      "hemisphere-word": {
+        "complete": true,
+        "solutions": 120,
+        "units": 1012,
+        "work": {
+          "boundary_key_bytes": 20,
+          "boundary_pattern_object_bytes": 560,
+          "boundary_unions": 60,
+          "region_histories": 80,
+          "region_joins": 10,
+          "region_nodes": 142,
+          "regional_states": 20,
+          "regional_strands": 720
+        }
+      },
+      "strip-pairs": {
+        "complete": true,
+        "solutions": 120,
+        "units": 2333,
+        "work": {
+          "boundary_key_bytes": 16,
+          "boundary_pattern_object_bytes": 592,
+          "boundary_unions": 8,
+          "region_histories": 121,
+          "region_joins": 1,
+          "region_nodes": 757,
+          "regional_states": 2,
+          "regional_strands": 1446
+        }
+      },
+      "strip-trees": {
+        "complete": true,
+        "solutions": 120,
+        "units": 2480,
+        "work": {
+          "boundary_key_bytes": 2,
+          "boundary_pattern_object_bytes": 56,
+          "determinant_updates": 91,
+          "matrix_entries": 64,
+          "region_histories": 121,
+          "region_joins": 1,
+          "region_nodes": 757,
+          "regional_states": 2,
+          "regional_strands": 1446
+        }
+      },
+      "strip-word": {
+        "complete": true,
+        "solutions": 120,
+        "units": 2333,
+        "work": {
+          "boundary_key_bytes": 2,
+          "boundary_pattern_object_bytes": 56,
+          "boundary_unions": 8,
+          "region_histories": 121,
+          "region_joins": 1,
+          "region_nodes": 757,
+          "regional_states": 2,
+          "regional_strands": 1446
+        }
+      }
+    },
+    "released_dfs": {
+      "complete": true,
+      "nodes": 5,
+      "status": "solved"
+    },
+    "seam": {
+      "complete": true,
+      "solutions": 120,
+      "units": 12898,
+      "work": {
+        "arc_alternatives": 12367,
+        "independent_checks": 120,
+        "placement_decisions": 205,
+        "search_nodes": 206
+      }
+    },
+    "seam-table": {
+      "complete": true,
+      "solutions": 120,
+      "units": 12904,
+      "work": {
+        "arc_alternatives": 12367,
+        "compiled_table_entries": 6,
+        "independent_checks": 120,
+        "placement_decisions": 205,
+        "search_nodes": 206
+      }
+    },
+    "tour": {
+      "complete": false,
+      "solutions": 1,
+      "units": 500000,
+      "work": {
+        "embedding_checks": 38,
+        "embedding_seeds": 60,
+        "independent_checks": 1,
+        "physical_occurrences": 60,
+        "physical_pair_tests": 299,
+        "search_nodes": 11513,
+        "sewing_decisions": 11512,
+        "trail_steps": 204627,
+        "vertex_link_steps": 271890
+      }
+    }
+  },
+  "sealed-split": {
+    "cell": {
+      "complete": true,
+      "solutions": 0,
+      "units": 32,
+      "work": {
+        "arc_alternatives": 30,
+        "independent_checks": 1,
+        "search_nodes": 1
+      }
+    },
+    "circuit": {
+      "branches": 0,
+      "complete": true,
+      "conflicts": 0,
+      "solutions": 0
+    },
+    "coarse": {
+      "complete": true,
+      "solutions": 0,
+      "units": 32,
+      "work": {
+        "arc_alternatives": 30,
+        "independent_checks": 1,
+        "search_nodes": 1
+      }
+    },
+    "cover": {
+      "complete": true,
+      "solutions": 0,
+      "units": 4,
+      "work": {
+        "cover_rows": 2,
+        "search_nodes": 2
+      }
+    },
+    "directed-tour": {
+      "complete": true,
+      "solutions": 0,
+      "units": 122,
+      "work": {
+        "physical_occurrences": 30,
+        "physical_pair_tests": 15,
+        "search_nodes": 2,
+        "sewing_decisions": 1,
+        "trail_steps": 72,
+        "vertex_link_steps": 2
+      }
+    },
+    "eliminate": {
+      "clauses": 103,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 0,
+        "propagations": 19,
+        "restarts": 0
+      },
+      "solutions": 0,
+      "units": 352,
+      "work": {
+        "literals": 304,
+        "sat_calls": 1,
+        "seam_candidates": 15,
+        "shortcut_pairs": 12,
+        "variables": 32
+      }
+    },
+    "embedded": {
+      "complete": true,
+      "solutions": 0,
+      "units": 632,
+      "work": {
+        "embedding_checks": 30,
+        "embedding_seeds": 30,
+        "independent_checks": 1,
+        "partial_embedding_links": 240,
+        "partial_embedding_seeds": 15,
+        "physical_occurrences": 30,
+        "physical_pair_tests": 15,
+        "search_nodes": 16,
+        "sewing_decisions": 15,
+        "vertex_link_steps": 240
+      }
+    },
+    "filter": {
+      "euler": {
+        "infeasible": true,
+        "removed": 10,
+        "work": {
+          "euler_rejections": 1,
+          "euler_sums": 10,
+          "planarity_checks": 10
+        }
+      },
+      "partners": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "partner_matching_states": 30,
+          "partner_placement_checks": 30,
+          "physical_occurrences": 30,
+          "physical_pair_tests": 15
+        }
+      },
+      "passages": {
+        "infeasible": true,
+        "removed": 10,
+        "work": {
+          "dual_interval_visits": 360,
+          "dual_pocket_rejections": 1,
+          "planarity_checks": 10
+        }
+      },
+      "regions": {
+        "infeasible": true,
+        "removed": 10,
+        "work": {
+          "dual_interval_visits": 360,
+          "dual_pocket_rejections": 1,
+          "planarity_checks": 10
+        }
+      },
+      "separator": {
+        "infeasible": true,
+        "removed": 10,
+        "work": {
+          "physical_occurrences": 30,
+          "physical_pair_tests": 15,
+          "separator_graph_visits": 50
+        }
+      }
+    },
+    "glue": {
+      "complete": true,
+      "solutions": 0,
+      "units": 377,
+      "work": {
+        "embedding_checks": 30,
+        "embedding_seeds": 30,
+        "independent_checks": 1,
+        "physical_occurrences": 30,
+        "physical_pair_tests": 15,
+        "search_nodes": 16,
+        "sewing_decisions": 15,
+        "vertex_link_steps": 240
+      }
+    },
+    "independent": 0,
+    "lazy": {
+      "clauses": 20,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 2,
+        "propagations": 11,
+        "restarts": 1
+      },
+      "solutions": 0,
+      "units": 68,
+      "work": {
+        "literals": 40,
+        "projected_models": 1,
+        "sat_calls": 2,
+        "seam_candidates": 15,
+        "variables": 10
+      }
+    },
+    "mod-full": {
+      "clauses": 1492,
+      "complete": true,
+      "sat": {
+        "conflicts": 2,
+        "decisions": 4,
+        "propagations": 103,
+        "restarts": 1
+      },
+      "solutions": 0,
+      "units": 5827,
+      "work": {
+        "literals": 5414,
+        "sat_calls": 1,
+        "seam_candidates": 15,
+        "variables": 397
+      }
+    },
+    "mod-small": {
+      "clauses": 643,
+      "complete": true,
+      "sat": {
+        "conflicts": 2,
+        "decisions": 4,
+        "propagations": 77,
+        "restarts": 1
+      },
+      "solutions": 0,
+      "units": 2419,
+      "work": {
+        "literals": 2222,
+        "sat_calls": 1,
+        "seam_candidates": 15,
+        "variables": 181
+      }
+    },
+    "ordinary_remaining": 10,
+    "reach": {
+      "clauses": 8481,
+      "complete": true,
+      "sat": {
+        "conflicts": 3121,
+        "decisions": 8282,
+        "propagations": 284241,
+        "restarts": 7
+      },
+      "solutions": 0,
+      "units": 30993,
+      "work": {
+        "literals": 28086,
+        "sat_calls": 1,
+        "seam_candidates": 15,
+        "variables": 2891
+      }
+    },
+    "regional": {
+      "face-pairs": {
+        "complete": true,
+        "solutions": 0,
+        "units": 39,
+        "work": {
+          "boundary_key_bytes": 12,
+          "boundary_pattern_object_bytes": 464,
+          "boundary_unions": 6,
+          "region_histories": 2,
+          "region_joins": 1,
+          "region_nodes": 12,
+          "regional_states": 2,
+          "regional_strands": 18
+        }
+      },
+      "face-trees": {
+        "complete": true,
+        "solutions": 0,
+        "units": 85,
+        "work": {
+          "boundary_key_bytes": 2,
+          "boundary_pattern_object_bytes": 56,
+          "determinant_updates": 16,
+          "matrix_entries": 36,
+          "region_histories": 2,
+          "region_joins": 1,
+          "region_nodes": 12,
+          "regional_states": 2,
+          "regional_strands": 18
+        }
+      },
+      "face-word": {
+        "complete": true,
+        "solutions": 0,
+        "units": 39,
+        "work": {
+          "boundary_key_bytes": 2,
+          "boundary_pattern_object_bytes": 56,
+          "boundary_unions": 6,
+          "region_histories": 2,
+          "region_joins": 1,
+          "region_nodes": 12,
+          "regional_states": 2,
+          "regional_strands": 18
+        }
+      },
+      "hemisphere-pairs": {
+        "complete": true,
+        "solutions": 0,
+        "units": 31,
+        "work": {
+          "boundary_key_bytes": 4,
+          "boundary_pattern_object_bytes": 168,
+          "region_histories": 1,
+          "region_nodes": 12,
+          "regional_states": 1,
+          "regional_strands": 18
+        }
+      },
+      "hemisphere-trees": {
+        "complete": true,
+        "solutions": 0,
+        "units": 31,
+        "work": {
+          "boundary_key_bytes": 1,
+          "boundary_pattern_object_bytes": 28,
+          "region_histories": 1,
+          "region_nodes": 12,
+          "regional_states": 1,
+          "regional_strands": 18
+        }
+      },
+      "hemisphere-word": {
+        "complete": true,
+        "solutions": 0,
+        "units": 31,
+        "work": {
+          "boundary_key_bytes": 1,
+          "boundary_pattern_object_bytes": 28,
+          "region_histories": 1,
+          "region_nodes": 12,
+          "regional_states": 1,
+          "regional_strands": 18
+        }
+      },
+      "strip-pairs": {
+        "complete": true,
+        "solutions": 0,
+        "units": 31,
+        "work": {
+          "boundary_key_bytes": 4,
+          "boundary_pattern_object_bytes": 168,
+          "region_histories": 1,
+          "region_nodes": 12,
+          "regional_states": 1,
+          "regional_strands": 18
+        }
+      },
+      "strip-trees": {
+        "complete": true,
+        "solutions": 0,
+        "units": 31,
+        "work": {
+          "boundary_key_bytes": 1,
+          "boundary_pattern_object_bytes": 28,
+          "region_histories": 1,
+          "region_nodes": 12,
+          "regional_states": 1,
+          "regional_strands": 18
+        }
+      },
+      "strip-word": {
+        "complete": true,
+        "solutions": 0,
+        "units": 31,
+        "work": {
+          "boundary_key_bytes": 1,
+          "boundary_pattern_object_bytes": 28,
+          "region_histories": 1,
+          "region_nodes": 12,
+          "regional_states": 1,
+          "regional_strands": 18
+        }
+      }
+    },
+    "released_dfs": {
+      "complete": true,
+      "nodes": 1,
+      "status": "infeasible"
+    },
+    "seam": {
+      "complete": true,
+      "solutions": 0,
+      "units": 32,
+      "work": {
+        "arc_alternatives": 30,
+        "independent_checks": 1,
+        "search_nodes": 1
+      }
+    },
+    "seam-table": {
+      "complete": true,
+      "solutions": 0,
+      "units": 47,
+      "work": {
+        "arc_alternatives": 30,
+        "compiled_table_entries": 15,
+        "independent_checks": 1,
+        "search_nodes": 1
+      }
+    },
+    "tour": {
+      "complete": true,
+      "solutions": 0,
+      "units": 122,
+      "work": {
+        "physical_occurrences": 30,
+        "physical_pair_tests": 15,
+        "search_nodes": 2,
+        "sewing_decisions": 1,
+        "trail_steps": 72,
+        "vertex_link_steps": 2
+      }
+    }
+  },
+  "sphere-seven-free": {
+    "cell": {
+      "complete": true,
+      "solutions": 2,
+      "units": 332,
+      "work": {
+        "arc_alternatives": 325,
+        "independent_checks": 2,
+        "placement_decisions": 2,
+        "search_nodes": 3
+      }
+    },
+    "circuit": {
+      "branches": 0,
+      "complete": true,
+      "conflicts": 0,
+      "solutions": 2
+    },
+    "coarse": {
+      "complete": true,
+      "solutions": 2,
+      "units": 332,
+      "work": {
+        "arc_alternatives": 325,
+        "independent_checks": 2,
+        "placement_decisions": 2,
+        "search_nodes": 3
+      }
+    },
+    "cover": {
+      "complete": true,
+      "solutions": 2,
+      "units": 205,
+      "work": {
+        "cover_rows": 15,
+        "independent_checks": 2,
+        "purified_color_classes": 172,
+        "search_nodes": 16
+      }
+    },
+    "directed-tour": {
+      "complete": false,
+      "solutions": 0,
+      "units": 500000,
+      "work": {
+        "embedding_checks": 144,
+        "embedding_seeds": 120,
+        "physical_occurrences": 72,
+        "physical_pair_tests": 270,
+        "search_nodes": 11342,
+        "sewing_decisions": 11341,
+        "trail_steps": 205272,
+        "vertex_link_steps": 271439
+      }
+    },
+    "eliminate": {
+      "clauses": 7764,
+      "complete": true,
+      "sat": {
+        "conflicts": 3,
+        "decisions": 14,
+        "propagations": 1083,
+        "restarts": 2
+      },
+      "solutions": 2,
+      "units": 28894,
+      "work": {
+        "literals": 24771,
+        "projected_models": 2,
+        "sat_calls": 3,
+        "seam_candidates": 3235,
+        "shortcut_pairs": 221,
+        "variables": 883
+      }
+    },
+    "embedded": {
+      "complete": true,
+      "solutions": 2,
+      "units": 5073,
+      "work": {
+        "embedding_checks": 100,
+        "embedding_seeds": 60,
+        "independent_checks": 2,
+        "partial_embedding_links": 2749,
+        "partial_embedding_seeds": 1227,
+        "physical_occurrences": 72,
+        "physical_pair_tests": 270,
+        "search_nodes": 30,
+        "sewing_decisions": 85,
+        "vertex_link_steps": 478
+      }
+    },
+    "filter": {
+      "euler": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "euler_sums": 10,
+          "planarity_checks": 12
+        }
+      },
+      "partners": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "partner_matching_states": 36,
+          "partner_placement_checks": 36,
+          "physical_occurrences": 36,
+          "physical_pair_tests": 21
+        }
+      },
+      "passages": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "dual_interval_visits": 360,
+          "planarity_checks": 12
+        }
+      },
+      "regions": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "dual_interval_visits": 360,
+          "planarity_checks": 12
+        }
+      },
+      "separator": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "physical_occurrences": 36,
+          "physical_pair_tests": 21,
+          "separator_graph_visits": 1178
+        }
+      }
+    },
+    "glue": {
+      "complete": false,
+      "solutions": 0,
+      "units": 500000,
+      "work": {
+        "physical_occurrences": 72,
+        "physical_pair_tests": 270,
+        "search_nodes": 19197,
+        "sewing_decisions": 19196,
+        "vertex_link_steps": 461265
+      }
+    },
+    "independent": null,
+    "lazy": {
+      "clauses": 5116,
+      "complete": true,
+      "sat": {
+        "conflicts": 2,
+        "decisions": 8,
+        "propagations": 164,
+        "restarts": 2
+      },
+      "solutions": 2,
+      "units": 18998,
+      "work": {
+        "literals": 15608,
+        "projected_models": 2,
+        "sat_calls": 3,
+        "seam_candidates": 3235,
+        "variables": 150
+      }
+    },
+    "mod-full": {
+      "clauses": 10484,
+      "complete": true,
+      "sat": {
+        "conflicts": 3,
+        "decisions": 27,
+        "propagations": 1695,
+        "restarts": 2
+      },
+      "solutions": 2,
+      "units": 38987,
+      "work": {
+        "literals": 34800,
+        "projected_models": 2,
+        "sat_calls": 3,
+        "seam_candidates": 3235,
+        "variables": 947
+      }
+    },
+    "mod-small": {
+      "clauses": 8963,
+      "complete": true,
+      "sat": {
+        "conflicts": 3,
+        "decisions": 24,
+        "propagations": 1057,
+        "restarts": 3
+      },
+      "solutions": 2,
+      "units": 32891,
+      "work": {
+        "literals": 28920,
+        "projected_models": 2,
+        "sat_calls": 3,
+        "seam_candidates": 3235,
+        "variables": 731
+      }
+    },
+    "ordinary_remaining": 12,
+    "reach": {
+      "clauses": 97911,
+      "complete": true,
+      "sat": {
+        "conflicts": 523,
+        "decisions": 6512,
+        "propagations": 167155,
+        "restarts": 3
+      },
+      "solutions": 2,
+      "units": 358583,
+      "work": {
+        "literals": 323962,
+        "projected_models": 2,
+        "sat_calls": 3,
+        "seam_candidates": 3235,
+        "variables": 31381
+      }
+    },
+    "regional": {
+      "face-pairs": {
+        "complete": true,
+        "solutions": 2,
+        "units": 189,
+        "work": {
+          "boundary_key_bytes": 84,
+          "boundary_pattern_object_bytes": 3568,
+          "boundary_unions": 6,
+          "region_histories": 23,
+          "region_joins": 1,
+          "region_nodes": 90,
+          "regional_states": 22,
+          "regional_strands": 69
+        }
+      },
+      "face-trees": {
+        "complete": true,
+        "solutions": 2,
+        "units": 249,
+        "work": {
+          "boundary_key_bytes": 22,
+          "boundary_pattern_object_bytes": 616,
+          "determinant_updates": 30,
+          "matrix_entries": 36,
+          "region_histories": 23,
+          "region_joins": 1,
+          "region_nodes": 90,
+          "regional_states": 22,
+          "regional_strands": 69
+        }
+      },
+      "face-word": {
+        "complete": true,
+        "solutions": 2,
+        "units": 189,
+        "work": {
+          "boundary_key_bytes": 22,
+          "boundary_pattern_object_bytes": 616,
+          "boundary_unions": 6,
+          "region_histories": 23,
+          "region_joins": 1,
+          "region_nodes": 90,
+          "regional_states": 22,
+          "regional_strands": 69
+        }
+      },
+      "hemisphere-pairs": {
+        "complete": true,
+        "solutions": 2,
+        "units": 473,
+        "work": {
+          "boundary_key_bytes": 116,
+          "boundary_pattern_object_bytes": 4552,
+          "boundary_unions": 12,
+          "region_histories": 26,
+          "region_joins": 2,
+          "region_nodes": 178,
+          "regional_states": 21,
+          "regional_strands": 255
+        }
+      },
+      "hemisphere-trees": {
+        "complete": true,
+        "solutions": 2,
+        "units": 593,
+        "work": {
+          "boundary_key_bytes": 21,
+          "boundary_pattern_object_bytes": 588,
+          "determinant_updates": 60,
+          "matrix_entries": 72,
+          "region_histories": 26,
+          "region_joins": 2,
+          "region_nodes": 178,
+          "regional_states": 21,
+          "regional_strands": 255
+        }
+      },
+      "hemisphere-word": {
+        "complete": true,
+        "solutions": 2,
+        "units": 473,
+        "work": {
+          "boundary_key_bytes": 21,
+          "boundary_pattern_object_bytes": 588,
+          "boundary_unions": 12,
+          "region_histories": 26,
+          "region_joins": 2,
+          "region_nodes": 178,
+          "regional_states": 21,
+          "regional_strands": 255
+        }
+      },
+      "strip-pairs": {
+        "complete": true,
+        "solutions": 2,
+        "units": 952,
+        "work": {
+          "boundary_key_bytes": 40,
+          "boundary_pattern_object_bytes": 1520,
+          "boundary_unions": 8,
+          "region_histories": 10,
+          "region_joins": 1,
+          "region_nodes": 794,
+          "regional_states": 6,
+          "regional_strands": 139
+        }
+      },
+      "strip-trees": {
+        "complete": true,
+        "solutions": 2,
+        "units": 1099,
+        "work": {
+          "boundary_key_bytes": 6,
+          "boundary_pattern_object_bytes": 168,
+          "determinant_updates": 91,
+          "matrix_entries": 64,
+          "region_histories": 10,
+          "region_joins": 1,
+          "region_nodes": 794,
+          "regional_states": 6,
+          "regional_strands": 139
+        }
+      },
+      "strip-word": {
+        "complete": true,
+        "solutions": 2,
+        "units": 952,
+        "work": {
+          "boundary_key_bytes": 6,
+          "boundary_pattern_object_bytes": 168,
+          "boundary_unions": 8,
+          "region_histories": 10,
+          "region_joins": 1,
+          "region_nodes": 794,
+          "regional_states": 6,
+          "regional_strands": 139
+        }
+      }
+    },
+    "released_dfs": {
+      "complete": true,
+      "nodes": 2,
+      "status": "solved"
+    },
+    "seam": {
+      "complete": true,
+      "solutions": 2,
+      "units": 332,
+      "work": {
+        "arc_alternatives": 325,
+        "independent_checks": 2,
+        "placement_decisions": 2,
+        "search_nodes": 3
+      }
+    },
+    "seam-table": {
+      "complete": true,
+      "solutions": 2,
+      "units": 347,
+      "work": {
+        "arc_alternatives": 325,
+        "compiled_table_entries": 15,
+        "independent_checks": 2,
+        "placement_decisions": 2,
+        "search_nodes": 3
+      }
+    },
+    "tour": {
+      "complete": false,
+      "solutions": 0,
+      "units": 500000,
+      "work": {
+        "embedding_checks": 46,
+        "embedding_seeds": 60,
+        "physical_occurrences": 72,
+        "physical_pair_tests": 270,
+        "search_nodes": 11452,
+        "sewing_decisions": 11451,
+        "trail_steps": 204408,
+        "vertex_link_steps": 272241
+      }
+    }
+  },
+  "sphere-three-free": {
+    "cell": {
+      "complete": true,
+      "solutions": 1,
+      "units": 77,
+      "work": {
+        "arc_alternatives": 75,
+        "independent_checks": 1,
+        "search_nodes": 1
+      }
+    },
+    "circuit": {
+      "branches": 0,
+      "complete": true,
+      "conflicts": 0,
+      "solutions": 1
+    },
+    "coarse": {
+      "complete": true,
+      "solutions": 1,
+      "units": 77,
+      "work": {
+        "arc_alternatives": 75,
+        "independent_checks": 1,
+        "search_nodes": 1
+      }
+    },
+    "cover": {
+      "complete": true,
+      "solutions": 1,
+      "units": 70,
+      "work": {
+        "cover_rows": 10,
+        "independent_checks": 1,
+        "purified_color_classes": 48,
+        "search_nodes": 11
+      }
+    },
+    "directed-tour": {
+      "complete": true,
+      "solutions": 1,
+      "units": 10196,
+      "work": {
+        "embedding_checks": 30,
+        "embedding_seeds": 30,
+        "independent_checks": 1,
+        "physical_occurrences": 48,
+        "physical_pair_tests": 53,
+        "search_nodes": 213,
+        "sewing_decisions": 212,
+        "trail_steps": 5976,
+        "vertex_link_steps": 3633
+      }
+    },
+    "eliminate": {
+      "clauses": 747,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 2,
+        "propagations": 171,
+        "restarts": 1
+      },
+      "solutions": 1,
+      "units": 2743,
+      "work": {
+        "literals": 2419,
+        "projected_models": 1,
+        "sat_calls": 2,
+        "seam_candidates": 151,
+        "shortcut_pairs": 59,
+        "variables": 170
+      }
+    },
+    "embedded": {
+      "complete": true,
+      "solutions": 1,
+      "units": 813,
+      "work": {
+        "embedding_checks": 30,
+        "embedding_seeds": 30,
+        "independent_checks": 1,
+        "partial_embedding_links": 334,
+        "partial_embedding_seeds": 39,
+        "physical_occurrences": 48,
+        "physical_pair_tests": 53,
+        "search_nodes": 16,
+        "sewing_decisions": 22,
+        "vertex_link_steps": 240
+      }
+    },
+    "filter": {
+      "euler": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "euler_sums": 10,
+          "planarity_checks": 10
+        }
+      },
+      "partners": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "partner_matching_states": 30,
+          "partner_placement_checks": 30,
+          "physical_occurrences": 30,
+          "physical_pair_tests": 15
+        }
+      },
+      "passages": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "dual_interval_visits": 360,
+          "planarity_checks": 10
+        }
+      },
+      "regions": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "dual_interval_visits": 360,
+          "planarity_checks": 10
+        }
+      },
+      "separator": {
+        "infeasible": false,
+        "removed": 0,
+        "work": {
+          "physical_occurrences": 30,
+          "physical_pair_tests": 15,
+          "separator_graph_visits": 1026
+        }
+      }
+    },
+    "glue": {
+      "complete": true,
+      "solutions": 1,
+      "units": 2641,
+      "work": {
+        "embedding_checks": 30,
+        "embedding_seeds": 30,
+        "independent_checks": 1,
+        "physical_occurrences": 48,
+        "physical_pair_tests": 53,
+        "search_nodes": 103,
+        "sewing_decisions": 102,
+        "vertex_link_steps": 2274
+      }
+    },
+    "independent": 1,
+    "lazy": {
+      "clauses": 322,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 2,
+        "propagations": 35,
+        "restarts": 1
+      },
+      "solutions": 1,
+      "units": 1182,
+      "work": {
+        "literals": 994,
+        "projected_models": 1,
+        "sat_calls": 2,
+        "seam_candidates": 151,
+        "variables": 34
+      }
+    },
+    "mod-full": {
+      "clauses": 2559,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 3,
+        "propagations": 479,
+        "restarts": 1
+      },
+      "solutions": 1,
+      "units": 9766,
+      "work": {
+        "literals": 9134,
+        "projected_models": 1,
+        "sat_calls": 2,
+        "seam_candidates": 151,
+        "variables": 478
+      }
+    },
+    "mod-small": {
+      "clauses": 1494,
+      "complete": true,
+      "sat": {
+        "conflicts": 0,
+        "decisions": 3,
+        "propagations": 263,
+        "restarts": 1
+      },
+      "solutions": 1,
+      "units": 5494,
+      "work": {
+        "literals": 5078,
+        "projected_models": 1,
+        "sat_calls": 2,
+        "seam_candidates": 151,
+        "variables": 262
+      }
+    },
+    "ordinary_remaining": 10,
+    "reach": {
+      "clauses": 21918,
+      "complete": true,
+      "sat": {
+        "conflicts": 940,
+        "decisions": 4221,
+        "propagations": 102685,
+        "restarts": 3
+      },
+      "solutions": 1,
+      "units": 80160,
+      "work": {
+        "literals": 72604,
+        "projected_models": 1,
+        "sat_calls": 2,
+        "seam_candidates": 151,
+        "variables": 7402
+      }
+    },
+    "regional": {
+      "face-pairs": {
+        "complete": true,
+        "solutions": 1,
+        "units": 39,
+        "work": {
+          "boundary_key_bytes": 12,
+          "boundary_pattern_object_bytes": 464,
+          "boundary_unions": 6,
+          "region_histories": 2,
+          "region_joins": 1,
+          "region_nodes": 12,
+          "regional_states": 2,
+          "regional_strands": 18
+        }
+      },
+      "face-trees": {
+        "complete": true,
+        "solutions": 1,
+        "units": 99,
+        "work": {
+          "boundary_key_bytes": 2,
+          "boundary_pattern_object_bytes": 56,
+          "determinant_updates": 30,
+          "matrix_entries": 36,
+          "region_histories": 2,
+          "region_joins": 1,
+          "region_nodes": 12,
+          "regional_states": 2,
+          "regional_strands": 18
+        }
+      },
+      "face-word": {
+        "complete": true,
+        "solutions": 1,
+        "units": 39,
+        "work": {
+          "boundary_key_bytes": 2,
+          "boundary_pattern_object_bytes": 56,
+          "boundary_unions": 6,
+          "region_histories": 2,
+          "region_joins": 1,
+          "region_nodes": 12,
+          "regional_states": 2,
+          "regional_strands": 18
+        }
+      },
+      "hemisphere-pairs": {
+        "complete": true,
+        "solutions": 1,
+        "units": 37,
+        "work": {
+          "boundary_key_bytes": 8,
+          "boundary_pattern_object_bytes": 336,
+          "boundary_unions": 4,
+          "region_histories": 2,
+          "region_joins": 1,
+          "region_nodes": 12,
+          "regional_states": 2,
+          "regional_strands": 18
+        }
+      },
+      "hemisphere-trees": {
+        "complete": true,
+        "solutions": 1,
+        "units": 54,
+        "work": {
+          "boundary_key_bytes": 2,
+          "boundary_pattern_object_bytes": 56,
+          "determinant_updates": 5,
+          "matrix_entries": 16,
+          "region_histories": 2,
+          "region_joins": 1,
+          "region_nodes": 12,
+          "regional_states": 2,
+          "regional_strands": 18
+        }
+      },
+      "hemisphere-word": {
+        "complete": true,
+        "solutions": 1,
+        "units": 37,
+        "work": {
+          "boundary_key_bytes": 2,
+          "boundary_pattern_object_bytes": 56,
+          "boundary_unions": 4,
+          "region_histories": 2,
+          "region_joins": 1,
+          "region_nodes": 12,
+          "regional_states": 2,
+          "regional_strands": 18
+        }
+      },
+      "strip-pairs": {
+        "complete": true,
+        "solutions": 1,
+        "units": 37,
+        "work": {
+          "boundary_key_bytes": 8,
+          "boundary_pattern_object_bytes": 336,
+          "boundary_unions": 4,
+          "region_histories": 2,
+          "region_joins": 1,
+          "region_nodes": 12,
+          "regional_states": 2,
+          "regional_strands": 18
+        }
+      },
+      "strip-trees": {
+        "complete": true,
+        "solutions": 1,
+        "units": 54,
+        "work": {
+          "boundary_key_bytes": 2,
+          "boundary_pattern_object_bytes": 56,
+          "determinant_updates": 5,
+          "matrix_entries": 16,
+          "region_histories": 2,
+          "region_joins": 1,
+          "region_nodes": 12,
+          "regional_states": 2,
+          "regional_strands": 18
+        }
+      },
+      "strip-word": {
+        "complete": true,
+        "solutions": 1,
+        "units": 37,
+        "work": {
+          "boundary_key_bytes": 2,
+          "boundary_pattern_object_bytes": 56,
+          "boundary_unions": 4,
+          "region_histories": 2,
+          "region_joins": 1,
+          "region_nodes": 12,
+          "regional_states": 2,
+          "regional_strands": 18
+        }
+      }
+    },
+    "released_dfs": {
+      "complete": true,
+      "nodes": 1,
+      "status": "solved"
+    },
+    "seam": {
+      "complete": true,
+      "solutions": 1,
+      "units": 77,
+      "work": {
+        "arc_alternatives": 75,
+        "independent_checks": 1,
+        "search_nodes": 1
+      }
+    },
+    "seam-table": {
+      "complete": true,
+      "solutions": 1,
+      "units": 92,
+      "work": {
+        "arc_alternatives": 75,
+        "compiled_table_entries": 15,
+        "independent_checks": 1,
+        "search_nodes": 1
+      }
+    },
+    "tour": {
+      "complete": true,
+      "solutions": 1,
+      "units": 9162,
+      "work": {
+        "embedding_checks": 30,
+        "embedding_seeds": 30,
+        "independent_checks": 1,
+        "physical_occurrences": 48,
+        "physical_pair_tests": 53,
+        "search_nodes": 189,
+        "sewing_decisions": 188,
+        "trail_steps": 5112,
+        "vertex_link_steps": 3511
+      }
+    }
+  }
+}

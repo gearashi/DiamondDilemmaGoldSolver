@@ -104,7 +104,7 @@ class DomainCUDA:
                    'TOTAL_SEGMENTS':problem.total_segments,'JOINT_SUPPORT':int(joint_support),'EVENT_PROPAGATION':int(event_propagation),'PRECISE_REASONS':int(precise_reasons),'RS':self.reason_slots,'PROOF_TRANSPORT':int(proof_transport),'COOPERATIVE':int(cooperative),'GLOBAL_MATCHING':int(global_matching),'WATCHED_CLAUSES':int(watched_clauses),'CLAUSE_METRICS':int(self.clause_metrics),'SUPPORT_REUSE':int(support_reuse),'SUPPORT_METRICS':int(self.support_metrics),'SS':self.support_slots,'TW':(n+31)//32,**{key.upper():value for key,value in self.offsets.items()}}
         prefix='\n'.join(f'#define {name} {value}' for name,value in constants.items())+'\n'
         self.module=cp.RawModule(code=prefix+(ROOT/'domain_search_round24.cu').read_text(),options=('--std=c++17',),
-                                 name_expressions=('domain_search','domain_ack','domain_propagate','domain_share'))
+                                 name_expressions=('domain_search','domain_ack','domain_propagate','domain_share','domain_ordered'))
         self.kernel=self.module.get_function('domain_search');self.ack_kernel=self.module.get_function('domain_ack')
         self.propagate_kernel=self.module.get_function('domain_propagate')
         self.share_kernel=self.module.get_function('domain_share')
@@ -170,6 +170,21 @@ class DomainCUDA:
         self.kernel(((self.lanes+3)//4,) if self.cooperative else ((self.lanes+63)//64,),(128,) if self.cooperative else (64,),(self.state,self.tables,np.int32(self.lanes),np.int32(work)))
         self.cp.cuda.get_current_stream().synchronize()
         return self.state[self.offsets['meta']].get().astype(int)
+    def step_grouped(self,work=1024):
+        """Compact runnable lanes by operation at a bounded dispatch boundary."""
+        if type(work) is not int or not 1<=work<=1000000:
+            raise ValueError('Work quantum must be 1..1000000.')
+        cp=self.cp
+        ids=cp.flatnonzero(self.state[0]==0).astype(cp.int32)
+        if ids.size:
+            order=cp.argsort(self.state[6,ids])
+            ids=ids[order]
+            width,threads=(4,128) if self.cooperative else (64,64)
+            kernel=self.module.get_function('domain_ordered')
+            kernel(((ids.size+width-1)//width,),(threads,),
+                   (self.state,self.tables,np.int32(self.lanes),np.int32(work),ids,np.int32(ids.size)))
+        return self.state[0].get().astype(int)
+
     def propagate_root(self,work=1024):
         """Advance root inference only; phase2 is a resumable fixed-point barrier."""
         if type(work)is not int or not 1<=work<=1000000:raise ValueError('Work quantum must be1..1000000.')
@@ -331,9 +346,15 @@ class DomainCUDA:
     def _mask(self,data,lane,cell):
         offset=self.offsets['domain']+cell*self.words
         return sum(int(data[offset+word,lane])<<(32*word) for word in range(self.words))
-    def remaining_domain_cubes(self,lanes=None,*,snapshot=None):
+    def remaining_domain_cubes(self,lanes=None,*,snapshot=None,lane_column=None):
         ids=self._lane_ids(lanes)
-        data=(self.state.get() if lanes is None else self.state[:,ids].get()) if snapshot is None else (snapshot if lanes is None else snapshot[:,ids]);result=[]
+        if lane_column is not None:
+            if len(ids)!=1 or snapshot is not None or lane_column.shape!=(self.rows,):
+                raise ValueError("Expected a single native donation column")
+            data=lane_column[:,None]
+        else:
+            data=(self.state.get() if lanes is None else self.state[:,ids].get()) if snapshot is None else (snapshot if lanes is None else snapshot[:,ids])
+        result=[]
         for lane in range(len(ids)):
             if data[0,lane]==2:continue
             current=[self._mask(data,lane,cell) for cell in range(self.n)]
@@ -360,7 +381,7 @@ class DomainCUDA:
         row_ids=self.cp.asarray(rows);lane_ids=self.cp.asarray(ids)
         self.state[row_ids[:,None],lane_ids[None,:]]=0
         self.cp.cuda.get_current_stream().synchronize()
-    def replace_lanes(self,replacements):
+    def replace_lanes(self,replacements,*,prefixes=None):
         """Rebase explicitly transferred task roots without touching other lanes.
 
         The coordinator proves coverage transfer. This method enforces domain
@@ -376,7 +397,16 @@ class DomainCUDA:
         if not disjoint(updated):raise ValueError('Replacement lane roots overlap.')
         # Allocation and validation occur before mutation. If the copy fails,
         # restore selected old columns when the CUDA context remains usable.
-        previous=self.state[:,ids].get();incoming=self.cp.asarray(self._initial_state(roots))
+        prepared=self._initial_state(roots)
+        if prefixes:
+            prefix,marks=prefixes
+            if len(marks)!=len(roots):raise ValueError("Donation prefix count differs from lane count")
+            for i,(assigned,joined) in enumerate(marks):
+                prefix.install(self,prepared[:,i],roots[i],assigned,joined)
+        previous=self.state[:,ids].get()
+        if np.any(previous[0] == 1):
+            raise ValueError('Cannot replace a lane with an unacknowledged candidate.')
+        incoming=self.cp.asarray(prepared)
         try:
             self.state[:,ids]=incoming;self.cp.cuda.get_current_stream().synchronize()
         except BaseException:
@@ -385,7 +415,7 @@ class DomainCUDA:
     def checkpoint(self):
         # Native arrays are retained exactly; portable cube transport separately
         # preserves remaining coverage while intentionally losing engine scratch.
-        data=self.state.get()
+        data=np.ascontiguousarray(self.state.get())
         return {'schema':self.schema,'binding':self.binding,'cubes':[[hex(v) for v in cube] for cube in self.cubes],
                 'state':data,'state_sha256':hashlib.sha256(memoryview(data).cast('B')).hexdigest(),'delivered':list(self.delivered),'rows':self.rows}
     def restore(self,checkpoint):

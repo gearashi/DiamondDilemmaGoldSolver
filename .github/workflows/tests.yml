@@ -49,6 +49,9 @@ jobs:
       - name: Confirm tests use synthetic puzzle data
         run: python -c "from pathlib import Path; assert not Path('data/tiles.json').exists()"
 
+      - name: Check round 27 candidates and regressions
+        run: python -B -m unittest discover -v -p "test_r27*.py"
+
       - name: Run CPU-only tests
         env:
           DIAMOND_REQUIRE_NATIVE: '1'

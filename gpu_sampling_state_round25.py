@@ -30,7 +30,14 @@ def decode(problem,table,engine,value):
     if (not isinstance(value,dict) or set(value)!={'sampling_state_version','binding','bytes','sha256','compressed','digest'}
             or type(value['sampling_state_version'])is not int or value['sampling_state_version']!=1
             or value['digest']!=digest({k:v for k,v in value.items() if k!='digest'})):raise ValueError('Invalid sampler checkpoint integrity.')
-    if value['binding']!=binding(problem,table,engine):raise ValueError('Sampler backend, device/runtime, policy, replica count or input changed; exact sampler resume is unavailable.')
+    from r27_incumbent_compat import compatible_sources
+    current=binding(problem,table,engine)
+    saved=value['binding']
+    name=('sampling_round24.cu' if current['runtime']['backend']=='cuda' else 'sampling_round24.wgsl') if engine.flags else 'sampling_kernels.wgsl'
+    if (not isinstance(saved,dict) or {**saved,'kernel_sha256':current['kernel_sha256']}!=current
+            or not compatible_sources({name:saved.get('kernel_sha256')},{name:current['kernel_sha256']})):
+        raise ValueError('Sampler backend, device/runtime, policy, replica count or input changed; exact sampler resume is unavailable.')
+
     size=(2*engine.n+engine.meta_rows)*engine.r*4
     if type(value['bytes'])is not int or value['bytes']!=size or not 0<size<=MAX_BYTES:raise ValueError('Invalid sampler checkpoint dimensions.')
     if not isinstance(value['compressed'],str) or len(value['compressed'])>MAX_BYTES*2:raise ValueError('Oversized sampler checkpoint.')
