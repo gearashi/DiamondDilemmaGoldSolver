@@ -115,9 +115,10 @@ def legal_cell_rotations(model):
     return transforms
 
 
-def owner_copies(model, centers, current, size):
+def owner_copies(model, centers, current, size, *, transforms=None, with_transform=False):
     """Only retain copies whose radius or completed shell can intersect this shell."""
-    transforms = legal_cell_rotations(model)
+    if transforms is None:
+        transforms = legal_cell_rotations(model)
     seen = set()
     inverse = np.argsort(current)
     for other,radius in centers:
@@ -130,7 +131,7 @@ def owner_copies(model, centers, current, size):
             limit = radius if radius>=0 else 6
             if diff <= size+limit and key not in seen:
                 seen.add(key)
-                yield key
+                yield (*key, perm) if with_transform else key
 
 
 def support_owned(owners,cells):

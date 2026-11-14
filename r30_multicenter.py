@@ -1,8 +1,8 @@
 """Search ranked supports across a union of centers, sharing score terms and checkpoints."""
 import argparse
-from collections import Counter
+from collections import Counter, defaultdict
 from contextlib import closing
-from functools import lru_cache
+from functools import cached_property, lru_cache
 import hashlib
 import itertools
 import json
@@ -17,10 +17,12 @@ from r27_incumbent import BoardModel
 from r28_exchange import ExchangeBound, combination_batch, domain_binding, read_json
 from r28_exchange_rotations import RotationOracle
 from r29_exchange_clusters import StarClusters
-from r29_exchange_route import existing_balls, is_owned, owner_copies, physical_hash, rotation_optimum, swap_orders
+from r29_exchange_route import existing_balls, is_owned, legal_cell_rotations, owner_copies, physical_hash, rotation_optimum
 from r29_move_cores import load_cores
 from r30_donor_dd import screened_diagram
-from r30_gpu_filters import contact_counts, core_passes
+from r30_gpu_filters import CudaPageFilters, contact_counts, core_passes
+from r30_cycles import FOUR_FAMILIES
+from r34_cycle_orders import CycleOrders, FIVE_FAMILIES
 from search_problem import SearchProblem
 
 
@@ -43,8 +45,9 @@ def cycles(order):
 
 @lru_cache(maxsize=16)
 def orders(family):
-    k = sum(family)
-    return tuple(order for order in swap_orders(k,k-len(family)) if cycles(order)==family)
+    ranked = CycleOrders(family)
+    # The existing cut masks repeatedly index small four-swap families.
+    return tuple(ranked) if family in FOUR_FAMILIES else ranked
 
 
 def sparse_cycle_type(source, mapping):
@@ -75,14 +78,19 @@ class SharedSupports:
         self.free = tuple(sorted(model.free))
         self.parity = {sum(f)-len(f) & 1 for f in families}
         self.reuse = reuse
+        self.model = model
+        self.indices = {cell:i for i,cell in enumerate(self.free)}
         self.copies = []
         for ix,b in enumerate(self.bounds):
             copies = []
-            for donor in self.bounds[:ix]:
-                for mapping,_ in owner_copies(model,[(donor.tiles,8)],b.tiles,8):
+            for earlier, donor in enumerate(self.bounds[:ix]):
+                size = max(map(sum,self.families))
+                for mapping, _, transform in owner_copies(model, [(donor.tiles,size)], b.tiles, size,
+                                                         transforms=self.transforms, with_transform=True):
                     if sum(length - 1 for length in cycles(mapping)) % 2 and len(self.parity)==1:
                         continue
-                    copies.append({i:j for i,j in enumerate(mapping) if i!=j})
+                    sparse = {i:j for i,j in enumerate(mapping) if i!=j}
+                    copies.append((sparse, earlier, np.argsort(transform)))
             self.copies.append(copies)
         self.fringes = []
         for i,b in enumerate(self.bounds):
@@ -93,11 +101,26 @@ class SharedSupports:
                     changed.update(int(j) for a in list(changed) for j in b.neighbors[a] if j!=b.n)
                 self.fringes[-1].append(frozenset(changed))
 
-    def covered_by_earlier(self,index,cells,order):
-        if not self.copies[index]:
-            return False
-        mapped = {c:cells[j] for c,j in zip(cells,order)}
-        return any(sparse_cycle_type(mapped,other) in self.families for other in self.copies[index])
+    @cached_property
+    def transforms(self):
+        return legal_cell_rotations(self.model)
+
+    def earlier_support(self, index, cells, order):
+        """Return the prior center and ranked support under the same successful rotation."""
+        from r32_route_store import colex
+        if self.copies[index]:
+            mapped = {c:cells[j] for c,j in zip(cells,order)}
+            for other, earlier, inverse_cells in self.copies[index]:
+                if sparse_cycle_type(mapped, other) not in self.families:
+                    continue
+                changed = [int(inverse_cells[c]) for c in mapped.keys() | other.keys()
+                           if mapped.get(c,c) != other.get(c,c)]
+                if all(c in self.indices for c in changed):
+                    return earlier, colex(changed, self.indices)
+        return None
+
+    def covered_by_earlier(self, index, cells, order):
+        return self.earlier_support(index, cells, order) is not None
 
     def upper(self,index,cells,values,cache,work):
         b = self.bounds[index]
@@ -153,6 +176,31 @@ def released_six(binding,physical,families,target):
         return False
 
 
+def _page_result(db, key, limit, finished, new_pages, work):
+    covered = db.execute("SELECT coalesce(sum(hi-lo),0) FROM r30_pages WHERE scope=?", (key,)).fetchone()[0]
+    best = None
+    for raw, in db.execute("SELECT best FROM r30_pages WHERE scope=? AND best!='null' ORDER BY lo", (key,)):
+        item = json.loads(raw)
+        if best is None or item['score'] > best['score']:
+            best = item
+    return dict(scope=key, covered_supports=covered, total_supports=limit, complete=covered==limit,
+                range_finished=finished, remaining_supports=limit-covered, best=best, new_pages=new_pages, work=dict(work))
+
+
+def _covered_prefix(db, key, start, stop):
+    """Advance over adjacent committed pages, including a page that straddles start."""
+    first = db.execute("SELECT hi FROM r30_pages WHERE scope=? AND lo<=? ORDER BY lo DESC LIMIT 1",
+                       (key, start)).fetchone()
+    cursor = start if first is None else max(start, first[0])
+    if cursor < stop:
+        for lo, hi in db.execute("SELECT lo,hi FROM r30_pages WHERE scope=? AND lo>=? AND lo<? ORDER BY lo",
+                                 (key, cursor, stop)):
+            if lo > cursor:
+                break
+            cursor = hi
+    return min(cursor, stop)
+
+
 def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop=None,
         page=64,seconds=0,max_pages=None,filters=('contact','core','connected','star','family','ranges'),share=True,triage=False,backend='cpu',reuse_release=True,progress=None):
     """Negative coverage applies to the union of listed families and centers.
@@ -163,13 +211,14 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
     if backend not in ('cpu','cuda'):
         raise ValueError("Unknown support filter backend.")
     families = tuple(sorted({tuple(sorted(f)) for f in families}))
-    if not families or any(f not in ((2,4),(3,3),(2,2,3),(2,2,2,2)) for f in families):
-        raise ValueError("Expected a physical four-swap cycle partition.")
+    if not families or any(f not in FOUR_FAMILIES + FIVE_FAMILIES for f in families):
+        raise ValueError("Expected a supported four- or five-swap cycle partition.")
     sizes = {sum(f) for f in families}
     if (len(sizes)!=1 or len(filters)!=len(set(filters)) or set(filters)-{'contact','core','connected','star','family','diagram','ranges','orderprice'}
             or not 0<=target<=len(problem.edges) or seconds<0 or page<1 or max_pages is not None and max_pages<0):
         raise ValueError("Invalid multi-center search scope or page settings.")
     k, = sizes
+    swap_budget = max(k-len(f) for f in families)
     model = BoardModel(problem)
     physical = {}
     for board in boards:
@@ -186,6 +235,13 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
     if reuse_release and released_six(binding,physical,families,target):
         return dict(scope=key,covered_supports=limit,total_supports=limit,complete=True,range_finished=True,
                     evidence='docs/R30_ROUTES_RESULTS.json',remaining_supports=0,best=None,new_pages=0,work={})
+    # Page ownership is append-only. A later worker can only fill a remaining hole.
+    if Path(database).is_file():
+        with closing(sqlite3.connect(database, timeout=90)) as previous:
+            if previous.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='r30_pages'").fetchone():
+                start = _covered_prefix(previous, key, start, stop)
+                if start == stop:
+                    return _page_result(previous, key, limit, True, 0, {})
     center_boards = [physical[t] for t in sorted(physical)]
     from r30_bounds import budget_upper, defect_packings
     bounds = [ExchangeBound(model,board) for board in center_boards]
@@ -195,19 +251,19 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
         budgets.execute("CREATE TABLE IF NOT EXISTS r30_budget(cap_key TEXT PRIMARY KEY,cap INTEGER NOT NULL)")
         caps = []
         for bound in bounds:
-            ckey = binding+':4:'+physical_hash(bound.tiles)
+            ckey = f'{binding}:{swap_budget}:'+physical_hash(bound.tiles)
             with budgets:
                 budgets.execute("BEGIN IMMEDIATE")
                 saved = budgets.execute("SELECT cap FROM r30_budget WHERE cap_key=?",(ckey,)).fetchone()
                 if saved:
                     cap = saved[0]
                 else:
-                    cap = budget_upper(bound,defect_packings(bound),4)
+                    cap = budget_upper(bound,defect_packings(bound),swap_budget)
                     budgets.execute('INSERT INTO r30_budget VALUES(?,?)',(ckey,cap))
                 caps.append(cap)
     if max(caps)<target:
         return dict(scope=key,covered_supports=limit,total_supports=limit,complete=True,range_finished=True,
-                    remaining_supports=0,upper_bounds=caps,evidence='four-swap defect budget',best=None,new_pages=0,work={})
+                    remaining_supports=0,upper_bounds=caps,evidence=f'{swap_budget}-swap defect budget',best=None,new_pages=0,work={})
     graph = SharedSupports(model,center_boards,families,share,bounds=bounds)
     db = sqlite3.connect(database,timeout=90)
     t0 = time.monotonic()
@@ -220,12 +276,36 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
         from r31_route_coverage import inherited_end, register
         owners = tuple(physical_hash(b.tiles) for b in graph.bounds)
         register(db,key,binding,families,target,owners)
-        from r32_route_store import Dependencies, RootCoverage, publish_page
+        from r32_route_store import PageProofs, RootCoverage, publish_page, publish_scores
+        page_proofs = PageProofs(db, target)
         root_coverage = {(i,f):RootCoverage(db,binding,owner,f,target) for i,owner in enumerate(owners) for f in families}
-        dependency = Dependencies(model,graph.bounds,owners,families) if len(owners)>1 else None
+        deferred = defaultdict(set)
         from r30_cycles import Predecessors, canonical_cycles
         predecessor = {}
         previous_shells = {}
+        undo_checks = {}
+        support_indices = {c:i for i,c in enumerate(graph.free)}
+
+        def make_undo(index):
+            from r34_exchange_undo import CoveredUndo
+            from r32_route_store import colex
+
+            @lru_cache(maxsize=8192)
+            def covered(group):
+                cells = sorted(c for cycle in group for c in cycle)
+                indices = {c:i for i,c in enumerate(cells)}
+                moves = {c:d for cycle in group for c,d in zip(cycle,(*cycle[1:],cycle[0]))}
+                order = tuple(indices[moves[c]] for c in cells)
+                if is_owned(previous_shells[index],cells,order):
+                    return True
+                family = tuple(sorted(map(len,group)))
+                if family not in FOUR_FAMILIES:
+                    return False
+                rank = colex(cells,support_indices)
+                return inherited_end(db,key,binding,(family,),target,(owners[index],),rank,rank+1)>rank
+
+            return CoveredUndo(graph.bounds[index],covered)
+
         closed_centers = existing_balls(model,target)
         if closed_centers:
             record = read_json(Path(__file__).parent/'docs/R29_EXCHANGE_RESULTS.json')
@@ -261,6 +341,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
         current, new_pages = start, 0
         previous_report = t0
         work = Counter()
+        device_filters = None
         while current<stop and (max_pages is None or new_pages<max_pages) and (not seconds or time.monotonic()-t0<seconds):
             db.execute("BEGIN IMMEDIATE")
             prev = db.execute("SELECT hi FROM r30_pages WHERE scope=? AND lo<=? ORDER BY lo DESC LIMIT 1",
@@ -271,12 +352,14 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                 continue
             next_lo = db.execute("SELECT min(lo) FROM r30_pages WHERE scope=? AND lo>?",(key,current)).fetchone()[0]
             end = min(stop,current+page,next_lo if next_lo is not None else stop)
-            inherited = inherited_end(db,key,binding,families,target,owners,current,end)
+            inherited = inherited_end(db,key,binding,families,target,owners,current,end,proofs=page_proofs)
             if inherited>current:
                 endpoints = (inherited-current)*multiplicity*len(owners)
                 inherited_work = {'first_prior_page':endpoints,'raw_center_endpoints':endpoints}
                 db.execute("INSERT INTO r30_pages VALUES(?,?,?,?,?)",
                            (key,current,inherited,json.dumps(inherited_work),'null'))
+                if len(owners) > 1:
+                    publish_page(db, key, current, inherited, owners, {})
                 db.commit()
                 work.update(inherited_work)
                 new_pages += 1
@@ -287,11 +370,23 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
             chunks = [combination_batch(graph.free,k,lo,hi-lo) for lo,hi in spans]
             cells_batch = np.concatenate(chunks) if chunks else np.empty((0,k),dtype=int)
             counters['first_rank_interval'] = counters['supports_before_generation'] * len(owners) * multiplicity
-            if dependency is not None:
-                dependency.deferred.clear()
+            deferred.clear()
             page_best = None
-            allowed = core_passes(cells_batch,cores,model.n,backend) if 'core' in filters and len(cells_batch) else None
-            pairs = contact_counts(cells_batch,graph.clusters[0].close,backend) if any(required) and len(cells_batch) else None
+            scores = {}
+            use_cores = 'core' in filters
+            use_contacts = any(required)
+            allowed = pairs = None
+            if len(cells_batch) and (use_cores or use_contacts):
+                if backend == 'cuda':
+                    if device_filters is None:
+                        device_filters = CudaPageFilters(model.n, cores if use_cores else None,
+                                                         graph.clusters[0].close if use_contacts else None)
+                    allowed, pairs = device_filters.evaluate(cells_batch)
+                else:
+                    if use_cores:
+                        allowed = core_passes(cells_batch, cores, model.n)
+                    if use_contacts:
+                        pairs = contact_counts(cells_batch, graph.clusters[0].close)
             # An entire support can be discarded across every center with vector operations.
             indices = np.arange(len(cells_batch))
             row_rules = tuple(rule for rule in filters if rule!='ranges')
@@ -368,7 +463,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                     for f in left:
                         for order in active_orders[f]:
                             if ix not in previous_shells:
-                                previous_shells[ix] = list(owner_copies(model,closed_centers,b.tiles,k))
+                                previous_shells[ix] = list(owner_copies(model,closed_centers,b.tiles,k,transforms=graph.transforms) if closed_centers else ())
                             rc = root_coverage[ix,f]
                             if rc.scopes and rc.covered(cells,order,graph.clusters[ix].close):
                                 counters['first_root'] += 1
@@ -376,13 +471,21 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                             if is_owned(previous_shells[ix],cells,order):
                                 counters['first_owned'] += 1
                                 continue
-                            if graph.covered_by_earlier(ix,cells,order):
-                                dependency.record(ix,cells,order)
+                            previous = graph.earlier_support(ix, cells, order)
+                            if previous is not None:
+                                earlier, rank = previous
+                                deferred[owners[ix]].add((owners[earlier], rank))
                                 counters['first_owned'] += 1
                                 continue
-                            if ix not in predecessor:
-                                predecessor[ix] = Predecessors(b,target)
-                            reason = predecessor[ix].reject(canonical_cycles(cells,order))
+                            group = canonical_cycles(cells,order)
+                            if f in FIVE_FAMILIES:
+                                if ix not in undo_checks:
+                                    undo_checks[ix] = make_undo(ix)
+                                reason = undo_checks[ix].rejects(group)
+                            else:
+                                if ix not in predecessor:
+                                    predecessor[ix] = Predecessors(b,target)
+                                reason = predecessor[ix].reject(group)
                             if reason:
                                 counters['first_predecessor'] += 1
                                 continue
@@ -409,6 +512,8 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                         db.execute('INSERT INTO optima VALUES(?,?)',(perm,json.dumps(item)))
                         counters['exact_solved'] += 1
                     if item['score']>=target:
+                        section = (ix, cycles(order))
+                        scores[section] = max(item['score'], scores.get(section,-1))
                         counters['hits'] += 1
                         if page_best is None or item['score']>page_best['score']:
                             page_best = item
@@ -419,8 +524,11 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
             counters['raw_center_endpoints'] = endpoints
             db.execute("INSERT INTO r30_pages VALUES(?,?,?,?,?)",
                        (key,current,end,json.dumps(counters),json.dumps(page_best)))
-            if dependency is not None:
-                publish_page(db,key,current,end,owners,dependency.deferred)
+            detailed_scores = page_best is not None and (len(owners)>1 or len(families)>1)
+            if len(owners)>1 or detailed_scores:
+                publish_page(db,key,current,end,owners,deferred)
+            if detailed_scores:
+                publish_scores(db,key,current,owners,families,scores)
             db.commit()
             work.update(counters)
             current = end
@@ -430,14 +538,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                 progress(dict(scope=key,next_support=current,covered_supports=covered,remaining_supports=limit-covered,
                               raw_endpoints_this_run=work['raw_center_endpoints'],exact_solves_this_run=work['exact_solved']))
                 previous_report = time.monotonic()
-        covered = db.execute("SELECT coalesce(sum(hi-lo),0) FROM r30_pages WHERE scope=?",(key,)).fetchone()[0]
-        best = None
-        for raw, in db.execute("SELECT best FROM r30_pages WHERE scope=? AND best!='null'",(key,)):
-            item = json.loads(raw)
-            if best is None or item['score']>best['score']:
-                best = item
-        return dict(scope=key,covered_supports=covered,total_supports=limit,complete=covered==limit,
-                    range_finished=current>=stop,remaining_supports=limit-covered,best=best,new_pages=new_pages,work=dict(work))
+        return _page_result(db, key, limit, current >= stop, new_pages, work)
     finally:
         db.close()
 
@@ -447,7 +548,7 @@ def main():
     p.add_argument('--tiles',default='data/tiles.json')
     p.add_argument('--database',required=True)
     p.add_argument('--incumbent',action='append',help='Repeat for a union of saved boards; default is the released three.')
-    p.add_argument('--family',action='append',choices=('2,4','3,3','2,2,3','2,2,2,2'))
+    p.add_argument('--family',action='append',choices=[','.join(map(str,f)) for f in FOUR_FAMILIES+FIVE_FAMILIES])
     p.add_argument('--target',type=int,default=208)
     p.add_argument('--start',type=int,default=0)
     p.add_argument('--stop',type=int)

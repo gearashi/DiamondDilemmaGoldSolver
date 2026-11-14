@@ -19,7 +19,7 @@ from r30_cycles import canonical_cycles
 from r30_multicenter import released_six
 from r31_route_geometry import ConnectedJoin,proved_connected
 from r31_route_price import DefectPrices,comparison_relations
-from r32_exterior import CompactExterior
+from r32_exterior import CompactExterior,ExteriorCache
 
 
 def rank(cells,free):
@@ -44,6 +44,7 @@ def search(problem,board,cells,family,target,*,database=':memory:',price=True,
     if compare and not released_six(binding,[tiles],[(2,4),(3,3)],target):
         raise ValueError("This scope lacks a verified six-cell comparison bound.")
     oracle = RotationOracle(model)
+    exterior_cache = ExteriorCache(b) if exterior else None
     exterior_cell = None
     envelope = None
     best = None
@@ -83,7 +84,8 @@ def search(problem,board,cells,family,target,*,database=':memory:',price=True,
                     continue
             if exterior:
                 if support!=exterior_cell:
-                    envelope = CompactExterior(b,support)
+                    envelope = CompactExterior(b,support,cache=exterior_cache)
+                    count.update({k:v for k,v in envelope.work.items() if k.startswith(('reused_','avoided_'))})
                     exterior_cell = support
                 cap = envelope.score(order)
                 if cap is not None and cap<target:

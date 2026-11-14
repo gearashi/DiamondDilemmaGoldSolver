@@ -139,14 +139,18 @@ class ConnectedJoin:
             from r32_route_pool import load_prefix_certificates
             self._checked_prefixes = load_prefix_certificates(self.bound,self.target,self.family)
             self._verified_prefixes = {}
+            from r32_route_pool import CoverCores
+            self._cover_cores = CoverCores()
         group = tuple(group)
         if group not in self._checked_prefixes:
             return False
         if group not in self._verified_prefixes:
             from r32_route_pool import defect_cover
             try:
-                result = defect_cover(self.bound,group,self.bound.model.free,3,208)
+                result = defect_cover(self.bound,group,self.bound.model.free,3,208,cores=self._cover_cores)
             except ImportError:
+                return False
+            if result['status'] == 'UNKNOWN':
                 return False
             self._verified_prefixes[group] = result['closed']
         if self._verified_prefixes[group]:

@@ -46,7 +46,8 @@ class SharedTests(unittest.TestCase):
         c = self.codes
         other = list(c)
         other[0],other[1],other[3] = other[1],other[3],other[0]
-        graph = SharedSupports(self.model,[c,other],[(2,4)])
+        with patch('r30_multicenter.legal_cell_rotations', return_value=[range(self.model.n)]):
+            graph = SharedSupports(self.model,[c,other],[(2,4)])
         stats = Counter()
         for cells in list(itertools.combinations(range(len(c)),6))[::23]:
             out = {}
@@ -59,8 +60,6 @@ class SharedTests(unittest.TestCase):
         self.assertGreater(stats['local_term_hits'],0)
         c0 = np.asarray(c)//3
         # One three-cycle between the centers permits intersection of their even shells.
-        identity = tuple(map(int,np.argsort(np.asarray(other)//3)[c0]))
-        graph.copies[1] = [{i:j for i,j in enumerate(identity) if i!=j}]
         seen = set()
         for o in orders((2,4)):
             cells = tuple(range(6))

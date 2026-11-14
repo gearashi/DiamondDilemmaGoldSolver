@@ -1,0 +1,70 @@
+{
+  "cold": {
+    "seconds": 8.610972,
+    "result": {
+      "status": "INFEASIBLE",
+      "loss_budget": 15,
+      "checked_layers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "all_outside_layers": true,
+      "completed_prefixes": 273940,
+      "total_prefixes": 273940,
+      "new_pages": 38,
+      "work": {
+        "suffix_rows": 28681,
+        "prefixes": 273940,
+        "bucket_prices_reused": 305153,
+        "indexed_tails": 1202013,
+        "joint_queries": 1357,
+        "unowned_tail_visits_skipped": 11879451,
+        "suffix_table_reuses": 32
+      }
+    }
+  },
+  "inherited": {
+    "seconds": 0.039579,
+    "result": {
+      "status": "INFEASIBLE",
+      "loss_budget": 15,
+      "checked_layers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "all_outside_layers": true,
+      "completed_prefixes": 273940,
+      "total_prefixes": 273940,
+      "new_pages": 0,
+      "work": {}
+    }
+  },
+  "inherited_integer": {
+    "seconds": 0.037047,
+    "result": {
+      "status": "INFEASIBLE",
+      "loss_budget": 15,
+      "checked_layers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "all_outside_layers": true,
+      "completed_prefixes": 273940,
+      "total_prefixes": 273940,
+      "new_pages": 0,
+      "work": {}
+    }
+  }
+}

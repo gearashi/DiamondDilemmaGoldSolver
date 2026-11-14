@@ -1,10 +1,31 @@
 """Joint defect-cover bounds for forced donor prefixes with a small remaining mover budget."""
-from collections import Counter
+from collections import Counter, deque
 from itertools import combinations
 import numpy as np
 
 
-def defect_cover(bound, group, free, remaining, target, *, seconds=0.5):
+class CoverCores:
+    """Infeasible sets of seam-failure or optional-mover clauses."""
+    def __init__(self):
+        self.cores = deque(maxlen=1024)
+        self.work = Counter()
+
+    def covered(self, rows, remaining, failures):
+        # Each new clause on the same geographic failures with fewer eligible
+        # movers entails its saved counterpart. Smaller budgets are stronger.
+        by_edges = {}
+        for edges,movers in rows:
+            by_edges.setdefault(edges,[]).append(movers)
+        return any(remaining<=limit and failures<=cap and all(
+            any(mask & ~old == 0 for mask in by_edges.get(edges,())) for edges,old in core)
+            for limit,cap,core in self.cores)
+
+    def add(self, rows, remaining, failures):
+        self.cores.append((remaining,failures,tuple(rows)))
+        self.work['saved_clauses'] += len(rows)
+
+
+def defect_cover(bound, group, free, remaining, target, *, seconds=0.5, cores=None):
     """A true seam failure can cover several obstructions; each equally changed cell can deactivate several."""
     from ortools.sat.python import cp_model
     from r31_route_geometry import cycle_mapping
@@ -33,25 +54,44 @@ def defect_cover(bound, group, free, remaining, target, *, seconds=0.5):
                 if not np.logical_and.reduce([mask for _,_,mask in row]).any():
                     requirements.append((tuple(sorted(edges)),{cell, *(b for _,b,_ in row)}))
                     smaller.append(edges)
+    failures = len(inventory.edges)-target
+    rows = [(edges,sum(1<<int(c) for c in available.intersection(cells))) for edges,cells in requirements]
+    if cores is not None and cores.covered(rows,remaining,failures):
+        cores.work['avoided_solves'] += 1
+        return dict(closed=True,status='CACHED_INFEASIBLE',clauses=len(rows),branches=0)
+
     model = cp_model.CpModel()
-    failed, moved = {}, {}
-    for edges,cells in requirements:
+    failed, moved, assumptions = {}, {}, {}
+    for edges,mask in rows:
         clause = []
         for e in edges:
             if e not in failed:
                 failed[e] = model.new_bool_var('failed')
             clause.append(failed[e])
-        for c in available.intersection(cells):
-            if c not in moved:
-                moved[c] = model.new_bool_var('moved')
-            clause.append(moved[c])
-        model.add_bool_or(clause)
+        bits = mask
+        while bits:
+            bit = bits & -bits
+            bits ^= bit
+            if bit not in moved:
+                moved[bit] = model.new_bool_var('moved')
+            clause.append(moved[bit])
+        requirement = model.add_bool_or(clause)
+        if cores is not None:
+            flag = model.new_bool_var('required')
+            requirement.only_enforce_if(flag)
+            model.add_assumption(flag)
+            assumptions[flag.index] = (edges,mask)
     model.add(sum(moved.values())<=remaining)
-    model.add(sum(failed.values())<=len(inventory.edges)-target)
+    model.add(sum(failed.values())<=failures)
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = seconds
     solver.parameters.num_search_workers = 1
     status = solver.solve(model)
+    if cores is not None:
+        cores.work['native_calls'] += 1
+        if status==cp_model.INFEASIBLE:
+            core = [assumptions[i] for i in solver.sufficient_assumptions_for_infeasibility()]
+            cores.add(core,remaining,failures)
     return dict(closed=status==cp_model.INFEASIBLE,status=solver.status_name(status),
                 clauses=len(requirements),branches=solver.num_branches)
 
@@ -236,6 +276,7 @@ def stream_prefixes(problem, boards, pool, family, target, database, *, start=0,
     def expired():
         return seconds and monotonic()-clock>=seconds
     prev_id = None
+    cover_cores = CoverCores() if cover else None
     with closing(sqlite3.connect(database,timeout=90)) as db:
         db.execute('CREATE TABLE IF NOT EXISTS r32_joint_pages(scope TEXT,lo INTEGER,hi INTEGER,best TEXT,PRIMARY KEY(scope,lo))')
         db.execute('CREATE TABLE IF NOT EXISTS optima(key TEXT PRIMARY KEY,result TEXT NOT NULL)')
@@ -260,7 +301,7 @@ def stream_prefixes(problem, boards, pool, family, target, database, *, start=0,
                 if prices is None:
                     active = []
                     for i,j in enumerate(joins):
-                        if cover and defect_cover(j.bound,prefix,pool,4,target)['closed']:
+                        if cover and defect_cover(j.bound,prefix,pool,4,target,cores=cover_cores)['closed']:
                             w['overlap_closed']+=1
                         else:
                             active.append(i)
@@ -318,6 +359,8 @@ def stream_prefixes(problem, boards, pool, family, target, database, *, start=0,
         best=max((json.loads(row) for row, in db.execute("SELECT best FROM r32_joint_pages WHERE scope=? AND best!='null'",(scope,))),
                  key=lambda r:r['score'],default=None)
         done=db.execute('SELECT coalesce(sum(hi-lo),0) FROM r32_joint_pages WHERE scope=?',(scope,)).fetchone()[0]
+    if cover_cores is not None:
+        work.update({'cover_'+k:v for k,v in cover_cores.work.items()})
     return dict(scope=scope,completed_items=done,total_items=total,range_finished=current>=stop,
                 next_item=current,complete=done==total,best=best,new_pages=pages,work=dict(work))
 

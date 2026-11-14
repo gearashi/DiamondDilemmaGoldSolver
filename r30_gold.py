@@ -193,6 +193,22 @@ class GoldMatching:
             physical = inventory(problem)
             banned.update(physical.forbidden)
             wanted.update(physical.required)
+            if physical.closed_surface and (bonds or forbidden or domains != domain_bits(problem)):
+                from r27_structure_filters import Work, WorkLimit
+                from r32_gold_bonds import gold_matching_supports
+                fixed = dict(wanted)
+                fixed.update({b: a for a, b in wanted})
+                rows = [set() for _ in range(3*problem.n)]
+                for a, b in options:
+                    if (a,b) not in banned and fixed.get(a,b) == b and fixed.get(b,a) == a:
+                        rows[a].add(b)
+                        rows[b].add(a)
+                try:
+                    supported = gold_matching_supports(problem, rows, Work(200000))
+                except WorkLimit:
+                    supported = rows
+                options = [] if supported is None else [
+                    (a,b) for a,b in options if b in supported[a]]
         by_side=defaultdict(list)
         for a,b in options:
             if (a,b) in banned:

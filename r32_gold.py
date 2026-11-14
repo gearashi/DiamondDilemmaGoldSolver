@@ -29,6 +29,33 @@ def _advance_saved(db, scopes, errors, start, covered=None):
     return current
 
 
+def _higher_loss_scopes(db, identity, upper, reference_size, refined):
+    """Find extant negative-page scopes from weaker models on the same coordinates."""
+    if db.execute("SELECT 1 FROM r32_loss_pages LIMIT 1").fetchone() is None:
+        return ()
+    # Pre-v1.15 scopes had only an opaque digest. Every physically distinct
+    # useful loss cap is bounded by the number of reference bonds.
+    caps = set(range(upper+1,reference_size+1))
+    if db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='r34_loss_caps'").fetchone():
+        caps.update(row[0] for row in db.execute(
+            "SELECT cap FROM r34_loss_caps WHERE identity=? AND cap>?",
+            (digest(identity),upper)))
+    candidates = []
+    for cap in sorted(caps):
+        plain = digest([*identity,cap])
+        candidates.append(plain)
+        if refined:
+            candidates.append(digest([plain,'integer-pattern-v1']))
+    found = []
+    for i in range(0,len(candidates),128):
+        batch = candidates[i:i+128]
+        values = ",".join(["(?)"]*len(batch))
+        found.extend(row[0] for row in db.execute(
+            f"WITH wanted(scope) AS (VALUES {values}) SELECT scope FROM wanted "
+            "WHERE EXISTS (SELECT 1 FROM r32_loss_pages p WHERE p.scope=wanted.scope)",batch))
+    return tuple(found)
+
+
 def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False):
     """Save completed disjoint prefix ranges together with their negative result."""
     if page<1 or seconds<0:raise ValueError('Expected positive page size and nonnegative duration')
@@ -36,22 +63,40 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     packed, required, outside = layout
     max_error = min(len(outside), max(0, upper-len(packed)))
     indices = list(range(max_error+1)) if indices is None else list(indices)
-    scope = digest([3,problem.fingerprint,sorted(ref),sorted(required),[sorted(c) for c in packed],upper])
+    identity = [3,problem.fingerprint,sorted(ref),sorted(required),[sorted(c) for c in packed]]
+    scope = digest([*identity,upper])
     # A plain negative page excludes every integer-feasible pattern inside it.
     # A plain hit can coexist with further candidates in the same prefix.
     plain_scope = scope
     if refine_integer:
         scope = digest([plain_scope, 'integer-pattern-v1'])
     read_scopes = (plain_scope, scope) if refine_integer else (scope,)
+    searched_caps = registered_cap = False
     budget = monotonic()+seconds if seconds else float('inf')
     pattern_filter = None
+    excludes = None
+    saved_hints = None
+
+    def get_filter():
+        nonlocal pattern_filter, excludes
+        if pattern_filter is None:
+            from r33_gold_refine import IntegerCoreStore, IntegerPatternFilter
+            pattern_filter = IntegerPatternFilter(problem,ref,packed,required,outside,upper,
+                                                  store=IntegerCoreStore(db,scope),work=work)
+            excludes = getattr(pattern_filter,"excludes",None)
+        return pattern_filter
 
     def accept_errors(indices, deadline):
-        nonlocal pattern_filter
-        if pattern_filter is None:
-            from r33_gold_refine import IntegerPatternFilter
-            pattern_filter = IntegerPatternFilter(problem,ref,packed,required,outside,upper)
-        return pattern_filter(indices, deadline)
+        return get_filter()(indices,deadline)
+
+    def reject_before_joint(indices, deadline):
+        nonlocal saved_hints
+        if saved_hints is None:
+            exists = db.execute("SELECT 1 FROM sqlite_master WHERE name='r34_integer_cores' AND type='table'").fetchone()
+            saved_hints = bool(exists and db.execute("SELECT 1 FROM r34_integer_cores WHERE scope=? LIMIT 1",(scope,)).fetchone())
+            if saved_hints:
+                get_filter()
+        return excludes is not None and excludes(indices,deadline)
 
     work = {}
     total = solved = pages = 0
@@ -71,6 +116,12 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
             if known:
                 return dict(json.loads(known[0]), reused=True, pages=pages, work=work)
             current = _advance_saved(db, read_scopes, errors, 0)
+            if current < count and not searched_caps:
+                higher = _higher_loss_scopes(db, identity, upper, len(ref), refine_integer)
+                searched_caps = True
+                if higher:
+                    read_scopes += higher
+                    current = _advance_saved(db, read_scopes, errors, 0)
             while current < count:
                 if query is None:
                     query = OutsideSyndromes(problem, ref, groups, required, layout=layout)
@@ -99,11 +150,18 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
                                            (source, errors, current)).fetchone()[0]
                         if other is not None:
                             end = min(end, other)
-                    options = {'accept_errors':accept_errors} if refine_integer else {}
+                    options = {'accept_errors':accept_errors, 'reject_before_joint':reject_before_joint} if refine_integer else {}
                     out=query.indexed(upper,errors,remaining,start=current,stop=end,**options)
                     for k,v in out['work'].items():work[k]=work.get(k,0)+v
                     stop=out['next_rank']
                     if stop>current:
+                        # Caps beyond the size of the reference are equivalent
+                        # physically but their historical scope hashes differ.
+                        if upper > len(ref) and not registered_cap:
+                            db.execute("CREATE TABLE IF NOT EXISTS r34_loss_caps(identity TEXT, cap INTEGER, "
+                                       "PRIMARY KEY(identity,cap))")
+                            db.execute("INSERT OR IGNORE INTO r34_loss_caps VALUES (?,?)",(digest(identity),upper))
+                            registered_cap = True
                         db.execute('INSERT INTO r32_loss_pages VALUES(?,?,?,?)',(scope,errors,current,stop))
                         pages+=1
                     current=stop

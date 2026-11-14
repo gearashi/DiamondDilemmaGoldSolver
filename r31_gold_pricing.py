@@ -6,6 +6,56 @@ from r27_structure_filters import _vertex_links
 from validator import reverse_mask
 
 
+def _odd_mate_sets(sides, values, scale):
+    """Find candidate odd boundaries of a large physical matching class.
+
+    A Gomory-Hu tree supplies the minimum odd cut when the class has even
+    order. Integer flow capacities propose partitions; the caller prices
+    every crossing with the original LP values before installing a cut.
+    """
+    from ortools.graph.python.max_flow import SimpleMaxFlow
+    if len(sides) % 2:
+        # Every candidate mate is within this mask class.
+        yield set(sides)
+        return
+    indices = {dart: i for i, dart in enumerate(sides)}
+    weights = [(indices[a], indices[b], w) for (a,b), w in values.items()
+               if a in indices and b in indices and w > 1e-9]
+    if not any(w < 1-1e-7 for a,b,w in weights):
+        return
+    flow = SimpleMaxFlow()
+    # Register isolated vertices even if their rounded incident capacity is zero.
+    flow.add_arc_with_capacity(len(sides)-1, len(sides)-1, 0)
+    for a,b,weight in weights:
+        cap = round(weight*scale)
+        flow.add_arc_with_capacity(a,b,cap)
+        flow.add_arc_with_capacity(b,a,cap)
+    parent = [0]*len(sides)
+    for source in range(1,len(sides)):
+        target = parent[source]
+        if flow.solve(source,target) != flow.OPTIMAL:
+            return
+        cut = set(flow.get_source_side_min_cut())
+        for v in cut:
+            if v != source and parent[v] == target:
+                parent[v] = source
+        if target and parent[target] in cut:
+            parent[source], parent[target] = parent[target], source
+    children = [[] for _ in sides]
+    for i in range(1,len(sides)):
+        children[parent[i]].append(i)
+    for root in range(1,len(sides)):
+        part = {root}
+        stack = [root]
+        while stack:
+            branch = children[stack.pop()]
+            part.update(branch)
+            stack.extend(branch)
+        # Singletons already have a degree-one equation.
+        if len(part)%2 and 1 < len(part) < len(sides)-1:
+            yield {sides[i] for i in part}
+
+
 def fractional_cuts(check, bonds=(), pins=None, limit=12, scale=100000):
     """GLOP proposes structural inequalities; only valid integer inequalities enter CP."""
     from ortools.graph.python.max_flow import SimpleMaxFlow
@@ -76,14 +126,15 @@ def fractional_cuts(check, bonds=(), pins=None, limit=12, scale=100000):
                 by_mask[mask].append(a)
         for sides in by_mask.values():
             if len(sides)>14:
-                continue
-            for width in range(3,len(sides)//2+1,2):
-                for subset in combinations(sides,width):
-                    part = set(subset)
-                    if add_cut('odd-sides',{p:1 for p in x if (p[0] in part)!=(p[1] in part)},1):
-                        changed = True
-                        break
-                if changed:break
+                values = {p: v.solution_value() for p,v in x.items()}
+                subsets = _odd_mate_sets(sides,values,scale)
+            else:
+                subsets = (set(subset) for width in range(3,len(sides)//2+1,2)
+                           for subset in combinations(sides,width))
+            for part in subsets:
+                if add_cut('odd-sides',{p:1 for p in x if (p[0] in part)!=(p[1] in part)},1):
+                    changed = True
+                    break
             if changed:break
         if changed:continue
         # Test three disjoint two-strand teeth crossing a fractional handle.

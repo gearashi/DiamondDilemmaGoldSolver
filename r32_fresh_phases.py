@@ -85,7 +85,9 @@ def lift_cube(problem, required, pins, domains=None, seconds=1, cache=None):
     """Record a failed cube only after a checked full one-loop geographic decision."""
     from r29_gold_geography import checked_domains
     from r30_gold import restriction_binding
+    from r34_phase_cache import checked_witness, negative, schema, witness
     domains = checked_domains(problem, domains)
+    required = tuple(sorted(tuple(sorted(pair)) for pair in required))
     scope = restriction_binding(problem, domains) + repr(sorted(required))
     pins = checked_pins(problem.n, pins)
     def solve(p):
@@ -93,13 +95,22 @@ def lift_cube(problem, required, pins, domains=None, seconds=1, cache=None):
                       channel=True, seconds=seconds)
     if cache:
         with closing(sqlite3.connect(cache, timeout=60)) as conn, conn:
-            conn.execute('CREATE TABLE IF NOT EXISTS r32_phase_cuts (scope TEXT, pins TEXT, PRIMARY KEY(scope,pins))')
-            for (raw,) in conn.execute('SELECT pins FROM r32_phase_cuts WHERE scope=?', (scope,)):
-                core = json.loads(raw)
-                if all(pins.get(tile) == phase for tile, phase in core):
-                    return dict(status='INFEASIBLE', reused=True, pins=core, lift_calls=0)
+            schema(conn)
+            core = negative(conn,scope,pins)
+            if core is not None:
+                return dict(status='INFEASIBLE',reused=True,pins=core,lift_calls=0)
+            saved = witness(conn,problem,domains,pins,required)
+            if saved is not None:
+                return saved
     row = solve(pins)
     row['lift_calls'] = 1
+    if row['status'] == 'GOLD' and cache:
+        checked = checked_witness(problem,row['codes'],row['phases'],domains,pins,required)
+        if checked is None:
+            raise ValueError('Geographic phase lift failed independent witness validation.')
+        with closing(sqlite3.connect(cache,timeout=60)) as conn, conn:
+            conn.execute('INSERT OR IGNORE INTO r34_phase_witnesses VALUES(?,?,?)',
+                         (problem.fingerprint,json.dumps(row['codes']),json.dumps(row['phases'])))
     if row['status'] == 'INFEASIBLE' and cache:
         kept = dict(pins)
         for tile in sorted(pins):

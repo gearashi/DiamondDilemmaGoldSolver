@@ -77,10 +77,51 @@ class GeographicConflicts:
         return core
 
 
+def _partner_channel(check):
+    """Connect geographic dart IDs through one shared partner variable per physical side."""
+    from ortools.sat.python import cp_model
+    p, m = check.problem, check.m
+    n = 3*p.n
+    possible = [[] for _ in range(n)]
+    for a,b in check.mate:
+        possible[a].append(b)
+        possible[b].append(a)
+    if any(not row for row in possible) or any(not row for row in check.domains):
+        m.add_bool_or([])
+        return dict(status='CHANNELLED',encoding='partner-elements',entries=0,geographic_seams=len(p.edges))
+    partner = [m.new_int_var_from_domain(cp_model.Domain.from_values(row),'partner') for row in possible]
+    for (a,b),chosen in check.mate.items():
+        m.add(partner[a]==b).only_enforce_if(chosen)
+        m.add(partner[b]==a).only_enforce_if(chosen)
+    tiles = []
+    darts = []
+    for domain in check.domains:
+        pose = m.new_int_var_from_domain(cp_model.Domain.from_values(list(bits(domain))),'placement')
+        tile = m.new_int_var(0,p.n-1,'tile')
+        rot = m.new_int_var(0,2,'rotation')
+        tiles.append(tile)
+        m.add(pose==3*tile+rot)
+        row = []
+        for side in range(3):
+            local = m.new_int_var(0,2,'physical_side')
+            m.add_element(rot,[(side-i)%3 for i in range(3)],local)
+            dart = m.new_int_var(0,n-1,'physical_dart')
+            m.add(dart==3*tile+local)
+            row.append(dart)
+        darts.append(row)
+    m.add_all_different(tiles)
+    for a,s,b,t in p.edges:
+        m.add_element(darts[a][s],partner,darts[b][t])
+    return dict(status='CHANNELLED',encoding='partner-elements',entries=len(p.edges)*n,
+                geographic_seams=len(p.edges))
+
+
 def channel_geographic(check, max_rows=120000):
     """Channel each mesh seam to its physical bond and both signed placements."""
     p, ds = check.problem, check.domains
     if sum(ds[a].bit_count()*ds[b].bit_count() for a, _, b, _ in p.edges) > max_rows:
+        if len(p.edges)*3*p.n <= max_rows:
+            return _partner_channel(check)
         return {'status':'SIZE_LIMIT'}
     from ortools.sat.python import cp_model
     m = check.m

@@ -28,6 +28,36 @@ def _matching(domains):
     return all(augment(c,set()) for c in sorted(range(len(domains)),key=lambda c:domains[c].bit_count()))
 
 
+class _SkeletonMatching:
+    def __init__(self, rows):
+        self.rows = list(rows)
+        self.owner = [-1]*len(rows)
+        self.tile = [-1]*len(rows)
+        self.feasible = all(self.augment(c,set()) for c in sorted(range(len(rows)),key=lambda c:rows[c].bit_count()))
+
+    def augment(self, cell, seen):
+        for t in bits(self.rows[cell]):
+            if t in seen:
+                continue
+            seen.add(t)
+            if self.owner[t] < 0 or self.augment(self.owner[t],seen):
+                self.owner[t] = cell
+                self.tile[cell] = t
+                return True
+        return False
+
+    def restrict(self, c, row):
+        self.rows[c] = row
+        old = self.tile[c]
+        if row >> old & 1:
+            return True
+        self.owner[old] = -1
+        if self.augment(c,set()):
+            return True
+        self.owner[old] = c
+        return False
+
+
 def _apex_path(problem):
     """For an odd strand count on a noncrossing sphere, the two odd-degree apices differ in color."""
     if problem.total_segments % 2 == 0:
@@ -60,7 +90,7 @@ def _apex_path(problem):
     raise ValueError('Disconnected geographic mesh.')
 
 
-def skeletons(problem, domains=None, *, max_nodes=25000, limit=1, apex=True, merge=True):
+def skeletons(problem, domains=None, *, max_nodes=25000, limit=1, apex=True, merge=True, early_hall=True):
     """Enumerate geographic odd-edge patterns. Only completely failed continuations are cached."""
     if max_nodes<1 or limit<1:
         raise ValueError('Positive skeleton budget and result limit required.')
@@ -89,6 +119,17 @@ def skeletons(problem, domains=None, *, max_nodes=25000, limit=1, apex=True, mer
     answers=[]
     negative=set()
     work=Counter()
+    matcher = None
+    if early_hall and not full:
+        tile_rows = []
+        for groups in by_pattern:
+            row = 0
+            for tiles in groups.values():
+                row |= tiles
+            tile_rows.append(row)
+        matcher = _SkeletonMatching(tile_rows)
+        if not matcher.feasible:
+            return dict(patterns=[],active=active,complete=True,work={'early_hall_rejections':1})
     class Capped(Exception):
         pass
     def visit(c,frontier,path,r,available):
@@ -97,7 +138,7 @@ def skeletons(problem, domains=None, *, max_nodes=25000, limit=1, apex=True, mer
         if c==n:
             if apex_path and not path:
                 return False
-            if not full:
+            if not full and matcher is None:
                 work['hall_checks']+=1
                 if not _matching(available):
                     return False
@@ -125,9 +166,18 @@ def skeletons(problem, domains=None, *, max_nodes=25000, limit=1, apex=True, mer
                     closed |= 1<<j
                 else:
                     opened |= 1<<j
+            if matcher is not None:
+                work['early_hall_checks'] += 1
+                if not matcher.restrict(c,tiles):
+                    matcher.rows[c] = tile_rows[c]
+                    work['early_hall_rejections'] += 1
+                    continue
             prefix[c]=pattern
             found |= visit(c+1,(frontier & ~closed)|opened,path^((opened&path_mask).bit_count()%2),
                            r-bool(pattern),() if full else (*available,tiles))
+            if matcher is not None:
+                # The matching from a child also satisfies its widened parent row.
+                matcher.rows[c] = tile_rows[c]
             if len(answers)==limit:
                 raise Capped
         if merge and not found:

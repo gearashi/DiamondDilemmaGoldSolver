@@ -142,7 +142,7 @@ def fresh(problem, seed, *, rounds=32, cube_bits=2, refit=0, merges=0, cache=Non
         stats=Counter()
         if contour:
             from r32_fresh_skeleton import parity_seed
-            skeleton = parity_seed(problem,seed)
+            skeleton = parity_seed(problem,seed,conditioned=contour=='conditioned')
             if 'codes' in skeleton:
                 board = model.legal_board(skeleton['codes'])
             stats['contour_trials'] = skeleton['trials']
@@ -242,6 +242,8 @@ def main():
     cli.add_argument('--layers',type=int,nargs='+',default=[0])
     cli.add_argument('--lift',action='store_true')
     cli.add_argument('--contour',action='store_true',help='Sample a geographic odd-seam skeleton before placing tiles.')
+    cli.add_argument('--conditioned-contour',dest='contour',action='store_const',const='conditioned',
+                     help='Fill independent vertex colors to reach the required active-cell count.')
     args=cli.parse_args()
     p=SearchProblem(read_json(args.tiles))
     request=read_json(args.request) if args.request else {}
@@ -273,7 +275,7 @@ def main():
         from r32_fresh_geometry import skeletons, skeleton_domains
         if args.contour:
             from r32_fresh_skeleton import parity_seed
-            sample=parity_seed(p,args.seed,domains=ds,trials=args.nodes)
+            sample=parity_seed(p,args.seed,domains=ds,trials=args.nodes,conditioned=args.contour=='conditioned')
             answer=dict(sample=sample,patterns=[sample['patterns']] if 'patterns' in sample else [],complete=False)
         else:
             answer=skeletons(p,ds,max_nodes=args.nodes,limit=args.limit)

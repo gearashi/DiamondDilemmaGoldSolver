@@ -68,6 +68,57 @@ def ring_census(problem, options, *, max_work=500000, seconds=3):
     return dict(status=solver.status_name(r),columns=len(cols),examined=visits,complete_columns=True)
 
 
+def _pack_footprints(groups, max_steps):
+    """Decide disjoint occupancy independently for groups with disjoint cell unions."""
+    groups = sorted(groups,key=len)
+    blocks = []
+    for options in groups:
+        footprint = 0
+        for pose in options:
+            footprint |= pose
+        joined = [options]
+        independent = []
+        for cells, existing in blocks:
+            if cells & footprint:
+                joined.extend(existing)
+                footprint |= cells
+            else:
+                independent.append((cells,existing))
+        blocks = [*independent, (footprint,joined)]
+    nodes = 0
+    for _, block in blocks:
+        block.sort(key=len)
+        suffix = [0]*(len(block)+1)
+        for i in range(len(block)-1,-1,-1):
+            cells = suffix[i+1]
+            for pose in block[i]:
+                cells |= pose
+            suffix[i] = cells
+        memo = set()
+        def visit(i, occupied):
+            nonlocal nodes
+            if i == len(block):
+                return True
+            key = i, occupied & suffix[i]
+            if key in memo:
+                return False
+            if nodes >= max_steps:
+                return None
+            nodes += 1
+            for pose in block[i]:
+                if pose & occupied:
+                    continue
+                result = visit(i+1,occupied | pose)
+                if result is not False:
+                    return result
+            memo.add(key)
+            return False
+        result = visit(0,0)
+        if result is not True:
+            return result,nodes
+    return True,nodes
+
+
 class PosePacking:
     """Cache all poses by physical component; test simultaneous disjoint occupancy."""
     def __init__(self, problem, domains=None):
@@ -75,11 +126,15 @@ class PosePacking:
         self.ds = domain_bits(problem) if domains is None else tuple(domains)
         if len(self.ds) != problem.n or any(d<0 or d & ~b for d,b in zip(self.ds,domain_bits(problem))):
             raise ValueError("Invalid domain restriction.")
+        self.root_counts = [0]*problem.n
+        for domain, multiplicity in Counter(self.ds).items():
+            for code in bits(domain):
+                self.root_counts[code//3] += multiplicity
         self.poses = lru_cache(maxsize=256)(self._component)
 
     def _component(self,tiles,edges):
         problem = self.problem
-        root = min(tiles)
+        root = min(tiles,key=self.root_counts.__getitem__)
         bonds = _bonds(problem,edges)
         poses = set()
         for start,domain in enumerate(self.ds):
@@ -132,22 +187,7 @@ class PosePacking:
             if not options:return dict(feasible=False,independent=False,nodes=0)
             if len(tiles) == 1 and len(options) == self.problem.n:continue
             groups.append(options)
-        groups.sort(key=len)
-        memo = set()
-        nodes = 0
-        def visit(i,occupied):
-            nonlocal nodes
-            if i == len(groups):return True
-            if (i,occupied) in memo:return False
-            nodes += 1
-            if nodes > max_steps:return None
-            for pose in groups[i]:
-                if pose & occupied:continue
-                result = visit(i+1,occupied|pose)
-                if result is not False:return result
-            memo.add((i,occupied))
-            return False
-        result = visit(0,0)
+        result,nodes = _pack_footprints(groups,max_steps)
         return dict(feasible=result,independent=True,nodes=nodes)
 
 

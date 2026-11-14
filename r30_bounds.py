@@ -269,21 +269,8 @@ class RotationRegions:
         return pack(0,0)
 
 
-def _assignment(weights, allowed):
-    if len(weights)==0:
-        return 0
-    if not allowed.any(1).all() or not allowed.any(0).all():
-        return None
-    shift = int(weights[allowed].min())
-    rows = [[int(w)-shift if ok else None for w,ok in zip(row,flags)]
-            for row,flags in zip(weights,allowed)]
-    result = assignment_upper_bound(rows)
-    if not all(allowed[c,j] for c,j in enumerate(result['assignment'])):
-        return None
-    return result['bound']+len(rows)*shift
-
-
-def family_upper(clusters, active, *, fixed_donors=None, candidates=None, extra=None):
+def family_upper(clusters, active, *, fixed_donors=None, candidates=None, extra=None,
+                 certificate=None, hint=None):
     """Union of a specified interaction cluster and ANY disjoint isolated changes.
 
     All extra moved cells must have disjoint closed stars both from the given
@@ -350,18 +337,18 @@ def family_upper(clusters, active, *, fixed_donors=None, candidates=None, extra=
         else:
             const += int(scores.max())
     # Penalize extra moved rows and restore at most the specified count.
-    penalties = (0,1,2) if extra is not None else (0,)
-    best = None
+    from r34_quota import quota_price
     dirty = np.zeros_like(allowed)
     dirty[extra_indices,:] = True
     np.fill_diagonal(dirty,False)
-    for penalty in penalties:
-        optimum = _assignment(matrix-penalty*dirty,allowed)
-        if optimum is None:
-            return -1
-        upper = const+optimum+penalty*(extra or 0)
-        best = upper if best is None else min(best,upper)
-    return best
+    price = quota_price(matrix,allowed,dirty,extra,hint)
+    if price is None:
+        return -1
+    if certificate is not None:
+        certificate.update(slope=price['slope'],calls=price['calls'],
+                           forced={c:{d:const+int(price['forced'][pos[c],pos[d]]) for d in pool
+                                      if allowed[pos[c],pos[d]]} for c in active})
+    return const+price['upper']
 
 
 class RotationForest:
@@ -496,12 +483,16 @@ def report_family(clusters,cells,target,extra,*,candidates=None,nodes=128):
     pool = [c for c in (range(bound.n) if candidates is None else candidates)
             if c in cells or not any(clusters.close[c,a] for a in cells)]
     pool = sorted(set(pool)|set(cells))
-    def visit(pins):
-        nonlocal seen,closed,root_upper
+    cuts = queries = 0
+    def visit(pins,hint=None):
+        nonlocal seen,closed,root_upper,cuts,queries
         if seen>=nodes:
             return False
         seen += 1
-        upper = family_upper(clusters,cells,fixed_donors=pins,candidates=candidates,extra=extra)
+        dual = {}
+        upper = family_upper(clusters,cells,fixed_donors=pins,candidates=candidates,extra=extra,
+                             certificate=dual,hint=hint)
+        queries += dual.get('calls',0)
         if not pins:
             root_upper = upper
         if upper<2*target:
@@ -511,11 +502,17 @@ def report_family(clusters,cells,target,extra,*,candidates=None,nodes=128):
             return False
         cell = cells[len(pins)]
         for j in pool:
-            if j!=cell and j not in pins.values() and not visit(pins|{cell:j}):
+            if j==cell or j in pins.values():
+                continue
+            if dual['forced'][cell].get(j,-1)<2*target:
+                cuts += 1
+                continue
+            if not visit(pins|{cell:j},dual['slope']):
                 return False
         return True
     status = visit({})
-    return dict(closed=status,upper_twice=root_upper,nodes=seen,proved=closed)
+    return dict(closed=status,upper_twice=root_upper,nodes=seen,proved=closed,
+                dual_pruned_donors=cuts,assignment_queries=queries)
 
 
 def grouped_rotation_bound(bound,cell,donors,*,neighbor_domains=None,response_cache=None):

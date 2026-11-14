@@ -1,0 +1,36 @@
+# Round 34 reference-bond loss experiments
+
+The control is the released v1.14.0 implementation at `8e010cc`. Candidate and control traverse identical original-puzzle prefix intervals and reject every arriving candidate in the experiment callback so the entire interval is compared. A rejection in this callback is an experimental trace, never a saved negative proof.
+
+| Register ID | Mechanism and measurement |
+| --- | --- |
+| 1 | Reuse verified signed-inventory cores before joint branching. The published 73-literal core covers two real, distinct four-error arrivals. Independent replay in the smaller unrestricted integer model lets one proof cover both. |
+| 2 | The second projected group splits dense first-anchor buckets into ordered position masks. The full (cap 14, four outside errors) layer admitted 52,859 suffix visits versus 487,928 in v1.14, with 58 joint calls in both arms. A distant 8,192-prefix sample at cap 16, six errors admitted 7,124 versus 105,225 suffixes, with five joint calls in each arm. |
+| 3 | The 120 outside-phase equations and dependent rows are compiled once. Each grouped bond is also reduced by that basis once, leaving free variables and an affine RHS for each joint call. Exhaustive tile-phase controls check every error set and budget on two fixtures, including dependent equations, positive witnesses and deadline expiry. |
+| 4 | Projection fields share a packed integer. Lexicographic neighbors reuse their common leading prefix and each suffix contributes a single cached XOR across all groups. The packed-only arm preserves the control's counts for both intervals above. Wall time and memory are secondary metrics. |
+
+## Verified work reductions
+
+The paired experiment in [R34_LOSS_MEASUREMENTS.json](R34_LOSS_MEASUREMENTS.json) covers six original-puzzle intervals. All arms returned identical ordered arrivals, including the three phase-feasible four-error patterns at cap 17. All six had the same joint-query counts. At cap 17, four errors, the secondary group did not split any eligible buckets. At cap 17, five errors, on 1,024 prefixes, it reduced suffix visits from 212,674 to 72,098. Retained traced index memory at cap 15 rose from 1,383,148 bytes to about 2.29 MB.
+
+IDs **3 and 46** were tested separately. On seven direct joint queries, four negatives and three positives, fresh phase elimination took 28,248 row inserts and 800,625 pivot XORs. Precompiling the outside equations alone cut these counts to 27,408 and 795,151. Reducing the group equations by the compiled outside basis cut the latter to 19,239. Every decision matched. Retain both.
+
+For **4**, the full cap-14 four-error layer requires 151,866 prefix projection XORs in the release and 7,020 with packed common prefixes. For a distant 8,192-prefix six-error sample, these fall from 360,448 to 8,489. The cached suffix contributes one packed XOR at each visit. Retain packed updates and the selective second-group index from **2**.
+
+**42** searches for existing negative pages at higher loss caps on identical reference/error coordinates. The integer filter can inherit weaker phase exclusions. A phase-only search can inherit phase-only exclusions. Completed spans can be combined across eligible caps. The caller still searches at its own cap for a witness. The release cap-16 SQLite proof replayed read-only at cap 15 under plain and integer modes, with all 273,940 prefixes, zero recompilations and zero page writes. The cold run searched 1,202,013 tails and made 1,357 joint queries. See [R34_CAP_REPLAY.json](R34_CAP_REPLAY.json). A legacy database can be used directly. Caps above the reference size also use a scope registry when newly written. Retain.
+
+## Experiment commands
+
+Run `python bench_r34_gold_loss.py --tiles ../data/tiles.json --released ../round33/r32_gold_syndrome.py --output docs/R34_LOSS_MEASUREMENTS.json` for the six-interval comparison, and `python bench_r34_loss_caps.py --tiles ../data/tiles.json --database ../round33/audit/r33/verify-cap16.sqlite --output docs/R34_CAP_REPLAY.json` for the read-only cap comparison. The 29 targeted tests include exhaustive finite tile phases, true and false signed core hints, partial and read-only replay, cross-cap direction, payload ordering and timeouts.
+
+## Integer-core outcome
+
+**1** was tested on the entire cap-17 four-error layer and the first 65,536 five-error prefixes, which produced seven distinct phase-feasible patterns. All seven failed independent integer verification. Learning native cores alone still took seven native calls. The 73-literal published core matches two of the patterns. Its original unrestricted integer model verified the partial contradiction in about 0.17 seconds. With this checked core, all seven decisions took six native calls. Replaying the same hint under the larger budget model had timed out twice; that route was replaced.
+
+With a restart between the disjoint error layers, early checked cores removed three of 4,626 four-error joint queries, and 48 of 11,081 five-error joint queries, preserving every integer decision. To isolate SQLite persistence, a separate test selected eight disjoint five-error prefixes by matching a previously learned four-error core. A single check of that saved core removed nine joint searches (231 down to 222) on the eight prefixes with identical outcomes. The example database occupies 12,288 bytes, with six rows and 307 hexadecimal characters across masks and values. These eight targeted prefixes are an applicability test, not a random hit-rate estimate.
+
+**Retain checked native and published core reuse, disk replay and early joint exclusion.** Keep deterministic chunk-deletion shrinking in the benchmark only. It made 559 native calls, including 520 UNKNOWN probe results, and eliminated no additional complete-pattern solve in this trace. UNKNOWN never contributed a proof. See [final comparison](R34_INTEGER_CORES_FINAL.json) and [original larger-model replay](R34_INTEGER_CORES.json). Run `python bench_r34_integer_cores.py --tiles ../data/tiles.json --output docs/R34_INTEGER_CORES_FINAL.json` for fresh collection and shrinking. The optional `--previous docs/R34_INTEGER_CORES.json` reuses the matched native arrival and shrinking trace.
+
+## Open
+
+**41** is unimplemented. Resume a partial prefix with a versioned ordering fingerprint, current first-anchor price entry, lexicographic suffix coordinate, and oracle stage. Bind the cursor to the exact loss/refinement scope. Retry the current oracle on UNKNOWN, skip only definitively rejected earlier suffixes, and resume a known phase-positive candidate directly at integer verification where its exact coordinates and oracle stage are recorded. Exercise interrupted and uninterrupted order with two candidate tails in one prefix and a stale/malformed cursor. Coordinate durable mid-page publication with #38's fenced lease ownership; a cursor must never be published by an expired worker.

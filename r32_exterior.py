@@ -1,5 +1,5 @@
 """Exact rotation responses with domain slicing, additive factors and bounded conditioning."""
-from collections import Counter
+from collections import Counter, OrderedDict
 from math import prod
 import numpy as np
 
@@ -18,7 +18,32 @@ def factor(keys,values):
     return [(tuple(keys),v)]
 
 
-def eliminate(rows, variables, widths, cap, work):
+class ExteriorCache:
+    """Shared immutable leaf tables and exact separator responses for one center."""
+    def __init__(self,bound,max_bytes=8*1024*1024):
+        self.bound = bound
+        self.edges = {}
+        self.responses = OrderedDict()
+        self.bytes = 0
+        self.max_bytes = max_bytes
+
+    def key(self,cell,scope,dims,rows):
+        # Preserve multiplicity; row order has no effect on an integer sum.
+        if sum(t.nbytes for _,t in rows)>self.max_bytes//4:
+            return None
+        return (cell,tuple(scope),dims,tuple(sorted((k,t.shape,t.tobytes()) for k,t in rows)))
+
+    def put(self,key,result):
+        size = 96+sum(96+len(v) for _,_,v in key[-1])+sum(96+t.nbytes for _,t in result)
+        if size<=self.max_bytes:
+            while self.bytes+size>self.max_bytes:
+                _,(_,evicted) = self.responses.popitem(last=False)
+                self.bytes -= evicted
+            self.responses[key] = result,size
+            self.bytes += size
+
+
+def eliminate(rows, variables, widths, cap, work, cache=None):
     rows = list(rows)
     pending = set(variables)
     while pending:
@@ -32,26 +57,38 @@ def eliminate(rows, variables, widths, cap, work):
         dims = tuple(widths[j] for j in scope)
         if prod(dims)>cap:
             return None,c
-        total = np.zeros(dims,dtype=np.int32)
-        keep = []
+        used,keep = [],[]
         for keys,table in rows:
-            if c not in keys:
-                keep.append((keys,table))
-                continue
-            total += table.reshape(tuple(widths[j] if j in keys else 1 for j in scope))
-        keep.extend(factor([j for j in scope if j!=c],total.max(axis=scope.index(c))))
-        rows = keep
-        work['table_entries'] += prod(dims)
+            (used if c in keys else keep).append((keys,table))
+        key = cache.key(c,scope,dims,used) if cache is not None else None
+        cached = cache.responses.get(key) if key is not None else None
+        if cached is None:
+            total = np.zeros(dims,dtype=np.int32)
+            for keys,table in used:
+                total += table.reshape(tuple(widths[j] if j in keys else 1 for j in scope))
+            result = factor([j for j in scope if j!=c],total.max(axis=scope.index(c)))
+            work['table_entries'] += prod(dims)
+            if key is not None:
+                cache.put(key,result)
+        else:
+            result = cached[0]
+            cache.responses.move_to_end(key)
+            work['reused_responses'] += 1
+            work['avoided_table_entries'] += prod(dims)
+        rows = keep+result
         work['eliminated_variables'] += 1
         pending.remove(c)
     return rows,None
 
 
 class CompactExterior:
-    def __init__(self,bound,cells,cap=65536,condition=1):
+    def __init__(self,bound,cells,cap=65536,condition=1,cache=None):
         if cap<1 or condition<0:
             raise ValueError("Invalid exterior budget.")
         self.b = bound
+        if cache is not None and cache.bound is not bound:
+            raise ValueError("Exterior cache belongs to another center.")
+        self.cache = cache
         self.cells = tuple(cells)
         self.cap = cap
         self.work = Counter()
@@ -67,7 +104,14 @@ class CompactExterior:
                 self.dynamic.append(e)
                 boundary.update({a,b}-moved)
             else:
-                fixed.extend(self.edge(e,bound.tiles,domains))
+                if cache is None:
+                    fixed.extend(self.edge(e,bound.tiles,domains))
+                else:
+                    if e not in cache.edges:
+                        cache.edges[e] = self.edge(e,bound.tiles,domains)
+                    else:
+                        self.work['reused_fixed_edges'] += 1
+                    fixed.extend(cache.edges[e])
         self.active = moved|boundary
         self.leaves = []
         outside = set(range(bound.n))-self.active
@@ -86,7 +130,7 @@ class CompactExterior:
 
     def compile(self,rows,variables,domains,budget):
         widths = {k:len(v) for k,v in domains.items()}
-        reduced,pivot = eliminate(rows,variables,widths,self.cap,self.work)
+        reduced,pivot = eliminate(rows,variables,widths,self.cap,self.work,self.cache)
         if reduced is not None:
             self.leaves.append(reduced)
             return True

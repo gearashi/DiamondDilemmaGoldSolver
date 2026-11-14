@@ -52,6 +52,94 @@ class BondInventory:
     closed_surface: bool
 
 
+def _open_paths(arcs, mandatory, sides):
+    """Pair the exposed ends of every path after sewing all mandatory mates."""
+    sewn = {}
+    for a, b in mandatory:
+        for k in sides[a]:
+            left, right = (a, k), (b, 12-k)
+            sewn[left], sewn[right] = right, left
+    paths = {}
+    for start in arcs:
+        if start in sewn or start in paths:
+            continue
+        end = arcs[start]
+        length = 1
+        while end in sewn:
+            end = arcs[sewn[end]]
+            length += 1
+        paths[start], paths[end] = (end, length), (start, length)
+    return paths
+
+
+def _closes_path(paths, sides, a, b, total):
+    seen = set()
+    for dart in (a, b):
+        for k in sides[dart]:
+            start = dart, k
+            if start in seen:
+                continue
+            current = start
+            length = 0
+            while current[0] in (a, b) and current not in seen:
+                seen.add(current)
+                opposite = b if current[0] == a else a
+                current, added = paths[opposite, 12-current[1]]
+                length += added
+            if current == start and length < total:
+                return True
+    return False
+
+
+def gold_matching_supports(problem, graph, work):
+    """Alternate perfect-mate support and premature-loop pruning to closure."""
+    arcs = endpoints(problem)
+    sides = [[] for _ in graph]
+    for dart, k in arcs:
+        sides[dart].append(k)
+    while True:
+        rows = _perfect_supports(graph, work)
+        if rows is None:
+            return None
+        forced = {(min(a, b), max(a, b)) for a, row in enumerate(rows)
+                  if len(row) == 1 for b in row}
+        # A large sparse nonbipartite family can be left unfiltered by the
+        # matching budget. A forced slot still excludes every rival incident mate.
+        rivals = {(min(u, other), max(u, other))
+                  for a, b in forced for u, v in ((a, b), (b, a))
+                  for other in rows[u] if other != v}
+        if rivals & forced:
+            return None
+        if rivals:
+            for a, b in rivals:
+                rows[a].remove(b)
+                rows[b].remove(a)
+            work.counters['mandatory_partner_eliminations'] += len(rivals)
+            graph = rows
+            continue
+        if loop_groups(arcs, sides, forced, problem.total_segments):
+            work.counters['mandatory_proper_circuits'] += 1
+            return None
+        paths = _open_paths(arcs, forced, sides)
+        removed = []
+        for a, row in enumerate(rows):
+            if len(row) < 2 or not sides[a]:
+                continue
+            for b in row:
+                if b <= a:
+                    continue
+                work.tick('open_path_mate_checks')
+                if _closes_path(paths, sides, a, b, problem.total_segments):
+                    removed.append((a, b))
+        if not removed:
+            return rows
+        work.counters['open_path_mates_removed'] += len(removed)
+        for a, b in removed:
+            rows[a].remove(b)
+            rows[b].remove(a)
+        graph = rows
+
+
 def inventory(problem):
     saved = getattr(problem, '_gold_bond_inventory', None)
     if saved is not None:
@@ -77,7 +165,7 @@ def inventory(problem):
             rows[a].add(b)
             rows[b].add(a)
         try:
-            rows = _perfect_supports(rows, Work(200000))
+            rows = gold_matching_supports(problem, rows, Work(200000))
         except WorkLimit:
             # These rows still contain every perfect sewing.
             pass

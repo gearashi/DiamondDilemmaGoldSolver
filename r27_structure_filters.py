@@ -314,27 +314,41 @@ def _perfect_supports(edges, work):
             if min(len(edges[v]) for v in nodes)>=len(nodes)//2+1:
                 work.counters['dense_partner_classes_certified']+=1
                 continue
-            work.counters['large_partner_classes_skipped']+=1
-            continue
         index={v:i for i,v in enumerate(nodes)}
         masks=[sum(1<<index[w] for w in edges[v]) for v in nodes]
+        large = len(nodes)>18
+        local_states = 0
         @lru_cache(None)
         def feasible(rem):
+            nonlocal local_states
+            # Keep an unresolved edge if its search allowance runs out. Reserve
+            # the outer WorkLimit for the caller's whole-operation budget.
+            if large and local_states >= 8192:
+                return None
             work.tick('partner_matching_states')
+            local_states += 1
             if not rem:return True
             i=min(bits(rem),key=lambda k:(masks[k]&rem).bit_count())
             after=rem^(1<<i)
-            return any(feasible(after^(1<<j)) for j in bits(after&masks[i]))
+            for j in bits(after&masks[i]):
+                result = feasible(after^(1<<j))
+                if result is not False:
+                    return result
+            return False
         full=(1<<len(nodes))-1
-        if not feasible(full):
+        if feasible(full) is False:
             return None
         for i,v in enumerate(nodes):
-            allowed[v]={nodes[j] for j in bits(masks[i]) if feasible(full^(1<<i)^(1<<j))}
+            allowed[v]={nodes[j] for j in bits(masks[i]) if feasible(full^(1<<i)^(1<<j)) is not False}
+        if large:
+            key = 'large_partner_classes_incomplete' if local_states>=8192 else 'large_partner_classes_checked'
+            work.counters[key] += 1
     return allowed
 
 
 def _filter_partners(problem, domains, graph, work):
-    allowed=_perfect_supports(graph,work)
+    from r32_gold_bonds import gold_matching_supports
+    allowed=gold_matching_supports(problem,graph,work)
     if allowed is None:
         return (0,)*problem.n
     # The same opposite domain and side recur across the 240 seams. Cache

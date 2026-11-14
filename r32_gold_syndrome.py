@@ -14,8 +14,8 @@ from r29_gold_phase import SignedParity
 from r32_gold_partition import insert, maximize_disjoint
 
 
-def projection(base, equations):
-    """Bit j of each output column participates in independent consistency check j."""
+def eliminate_phases(base, equations):
+    """Eliminate tile phases while keeping an affine RHS in the outside-error bits."""
     rows=dict(base)
     checks=[]
     for index,(mask,rhs) in enumerate(equations):
@@ -31,18 +31,29 @@ def projection(base, equations):
             symbol^=constant
         else:
             if symbol:checks.append(symbol)
+    return rows, checks
+
+
+def check_columns(checks, size):
     col=[sum(1<<j for j,row in enumerate(checks) if row>>i&1)
-         for i in range(len(equations)+1)]
+         for i in range(size+1)]
     return col[0], col[1:]
+
+
+def projection(base, equations):
+    """Bit j of each output column participates in independent consistency check j."""
+    _, checks = eliminate_phases(base, equations)
+    return check_columns(checks, len(equations))
 
 
 @dataclass(frozen=True)
 class _SuffixTable:
     anchor: tuple | None
-    rhs: int
-    columns: tuple
     prices: tuple
     buckets: dict
+    packed_tails: dict
+    secondary: tuple | None
+    split_buckets: dict
 
 
 class OutsideSyndromes:
@@ -53,7 +64,7 @@ class OutsideSyndromes:
         outside = tuple(sorted(set(reference) - set().union(*packed) - required))
         return packed, required, outside
 
-    def __init__(self, problem, reference, groups, required=(), *, reuse_suffix_tables=True, seek_ordered_tails=True, use_bucket_price=True, layout=None):
+    def __init__(self, problem, reference, groups, required=(), *, reuse_suffix_tables=True, seek_ordered_tails=True, use_bucket_price=True, use_second_group=True, layout=None):
         self.groups, self.required, self.outside = (
             self.layout(reference, groups, required) if layout is None else layout)
         # This index belongs to this fixed reference and projection. Only the
@@ -61,6 +72,7 @@ class OutsideSyndromes:
         self.reuse_suffix_tables = reuse_suffix_tables
         self.seek_ordered_tails = seek_ordered_tails
         self.use_bucket_price = use_bucket_price
+        self.use_second_group = use_second_group
         self._suffix_cache = None
         data=SignedParity(problem)
         # Eliminate phase columns only. Symbol bit zero is RHS; others represent errors.
@@ -85,10 +97,37 @@ class OutsideSyndromes:
                 if rhs:self.inconsistent=True
         self.out_eq=[self.eq[p] for p in self.outside]
         self.tables=[self.compile([g]) for g in self.groups]
-        rhs,cols=projection(self.base,self.out_eq)
+        phase_rows, dependencies = eliminate_phases(self.base, self.out_eq)
+        # Quotient each group equation by this fixed echelon basis. The
+        # remaining variables are free, and the RHS is affine in the errors.
+        self._joint_bonds = {}
+        pivots = sorted(phase_rows.items(), reverse=True)
+        for bond in set().union(*self.groups):
+            mask, symbol = self.eq[bond]
+            for pivot, (row, constant) in pivots:
+                if (mask >> pivot) & 1:
+                    mask ^= row
+                    symbol ^= constant
+            self._joint_bonds[bond] = mask << 1, symbol
+        self._joint_dependencies = tuple(dependencies)
+        rhs,cols=check_columns(dependencies,len(self.out_eq))
         self.outside_check=rhs,tuple(cols)
         # Check constrained groups first, reducing per-branch projection work.
         self.tables.sort(key=lambda row:len(row[2]))
+        # Put independent projections in nonoverlapping bit fields so that a
+        # single XOR updates every residual at once.
+        self._fields = {}
+        self._packed_rhs = 0
+        self._packed_cols = [0] * len(self.outside)
+        offset = 0
+        for table in (self.outside_check, *self.tables):
+            rhs, cols = table[:2]
+            width = max(rhs, max(cols, default=0)).bit_length()
+            self._fields[id(table)] = (offset, (1 << width)-1)
+            self._packed_rhs |= rhs << offset
+            for i, col in enumerate(cols):
+                self._packed_cols[i] |= col << offset
+            offset += width
 
     def compile(self, groups):
         bonds=[sorted(g-self.required) for g in groups]
@@ -129,9 +168,14 @@ class OutsideSyndromes:
 
     def joint(self, flipped, budget, deadline):
         """Independent exact cross-group consistency test once the cheap projections pass."""
-        basis={pivot+1:(row<<1)|const for pivot,(row,const) in self.base.items()}
-        for i,(row,bit) in enumerate(self.out_eq):
-            if not insert(basis,(row<<1)|(bit^(i in flipped))):return False
+        if time.monotonic() >= deadline:
+            raise TimeoutError
+        errors = 1 | sum(1 << (i+1) for i in flipped)
+        if any((condition & errors).bit_count() & 1 for condition in self._joint_dependencies):
+            return False
+        rows = {bond: row | ((symbol & errors).bit_count() & 1)
+                for bond, (row, symbol) in self._joint_bonds.items()}
+        basis = {}
         def resolve(base,groups,left):
             if time.monotonic()>=deadline:raise TimeoutError
             if not groups:return True
@@ -140,19 +184,18 @@ class OutsideSyndromes:
             for size in range(1,min(left-len(groups)+1,len(available))+1):
                 for omitted in combinations(available,size):
                     child=base.copy()
-                    if all(insert(child,(self.eq[p][0]<<1)|self.eq[p][1]) for p in group-set(omitted)):
+                    if all(insert(child,rows[p]) for p in group-set(omitted)):
                         if resolve(child,groups[1:],left-size):return True
             return False
         # Try the group with the fewest admissible single drops first.
         def difficulty(group):
-            return sum(all(insert(child,(self.eq[p][0]<<1)|self.eq[p][1]) for p in group-{q})
+            return sum(all(insert(child,rows[p]) for p in group-{q})
                        for q in group-self.required for child in [basis.copy()])
         return resolve(basis,sorted(self.groups,key=difficulty),budget-len(flipped))
 
     def _build_suffix_table(self, cap, errors):
         n = len(self.outside)
         length = min(errors, 2)
-        _, columns = self.outside_check
         # A projected group further subdivides suffixes. Their lookup
         # keys are exact XOR syndromes; omitted high-cost keys cannot fit cap.
         spare=cap-errors-len(self.groups)
@@ -167,19 +210,44 @@ class OutsideSyndromes:
                        for row in trials),sum(v<=1+spare for v in lookup.values())
         anchor=min(self.tables,key=estimated_hits,default=None)
         if anchor is not None:
-            group_rhs, group_cols, prices = anchor
+            _, _, prices = anchor
             charges = tuple((syndrome, cost-1) for syndrome, cost in prices.items() if cost<=1+spare)
         else:
-            group_rhs, group_cols, charges = 0, (0,)*n, ((0, 0),)
+            charges = ((0, 0),)
         buckets=defaultdict(list)
+        packed_tails = {}
+        outside_offset, outside_mask = self._fields[id(self.outside_check)]
+        anchor_offset, anchor_mask = self._fields[id(anchor)] if anchor is not None else (0,0)
         for indices in combinations(range(n),length):
-            value=0
-            local=0
+            packed = 0
             for i in indices:
-                value^=columns[i]
-                local^=group_cols[i]
-            buckets[value,local].append(indices)
-        return _SuffixTable(anchor, group_rhs, group_cols, charges, dict(buckets))
+                packed ^= self._packed_cols[i]
+            key = (packed >> outside_offset) & outside_mask, (packed >> anchor_offset) & anchor_mask
+            buckets[key].append(indices)
+            packed_tails[indices] = packed
+        secondary = None
+        split_buckets = {}
+        if self.use_second_group and self.use_bucket_price and charges:
+            # The first lookup already enforces outside consistency. Estimate
+            # remaining selectivity over the reachable prices of each group.
+            def permitted_fraction(table):
+                prices = table[2]
+                return sum(v <= spare+1 for v in prices.values()) / max(1, len(prices))
+
+            candidates = [t for t in self.tables if t is not anchor and permitted_fraction(t)<0.5]
+            secondary = min(candidates, key=permitted_fraction, default=None)
+        if secondary is not None:
+            offset, mask = self._fields[id(secondary)]
+            for key, bucket in buckets.items():
+                if len(bucket) < 8:
+                    continue
+                positions = defaultdict(int)
+                for ordinal, tail in enumerate(bucket):
+                    value = (packed_tails[tail] >> offset) & mask
+                    positions[value] |= 1 << ordinal
+                split_buckets[key] = dict(positions)
+        return _SuffixTable(anchor, charges, dict(buckets),
+                            packed_tails, secondary, split_buckets)
 
     @staticmethod
     def _owned_tails(bucket, last, stats):
@@ -194,7 +262,24 @@ class OutsideSyndromes:
         stats['unowned_tail_visits_skipped'] += first
         return bucket[first:]
 
-    def indexed(self, cap, errors, seconds=60, start=0, stop=None, *, accept_errors=None):
+    @staticmethod
+    def _secondary_tails(bucket, positions, prefix, prices, spare, last, stats):
+        """Emit surviving tails in the original first-anchor and tuple order."""
+        selected = 0
+        for value, ordinals in positions.items():
+            if prices.get(value ^ prefix, spare+2) <= spare+1:
+                selected |= ordinals
+        if selected and last >= 0:
+            cut = bisect_left(bucket, (last+1,))
+            unowned = selected & ((1 << cut)-1)
+            stats['unowned_tail_visits_skipped'] += unowned.bit_count()
+            selected ^= unowned
+        while selected:
+            first = selected & -selected
+            yield bucket[first.bit_length()-1]
+            selected ^= first
+
+    def indexed(self, cap, errors, seconds=60, start=0, stop=None, *, accept_errors=None, reject_before_joint=None):
         """Index all suffixes of size at most two by their outside-only syndrome.
 
         The owned prefix ranks have a different scope from check()'s full-set ranks.
@@ -216,7 +301,6 @@ class OutsideSyndromes:
         if self.inconsistent or len(self.groups)+errors>cap:return report('INFEASIBLE',end)
         if start == end:
             return report('INFEASIBLE', end)
-        rhs,columns=self.outside_check
         signature = (cap, errors)
         cached = self._suffix_cache
         if cached is not None and cached[0] == signature:
@@ -234,43 +318,61 @@ class OutsideSyndromes:
         # projected cost. The remaining group tests and the joint check still run.
         prepaid = self.use_bucket_price and table.anchor is not None
         checks = tuple(t for t in self.tables if t is not table.anchor) if prepaid else self.tables
+        packed_checks = tuple((*self._fields[id(t)], t[2]) for t in checks)
+        outside_offset, outside_mask = self._fields[id(self.outside_check)]
+        anchor_offset, anchor_mask = self._fields[id(table.anchor)] if table.anchor is not None else (0, 0)
+        prefix_states = [self._packed_rhs] + [0]*prefix_size
+        previous = [-1]*prefix_size
         spare = cap - errors - len(self.groups)
         duration=time.monotonic()+seconds
         for rank,prefix in ranked_combinations(n-length,prefix_size,start,end):
             if rank%64==0 and time.monotonic()>=duration:return report('UNKNOWN',rank)
             stats['prefixes']+=1
-            key=rhs
-            local=table.rhs
-            for i in prefix:
-                key^=columns[i]
-                local^=table.columns[i]
-            base=[]
-            for val,cols,lookup in checks:
-                for i in prefix:val^=cols[i]
-                base.append((val,cols,lookup))
+            # Lexicographic successors retain most leading indices. Rebuild
+            # cumulative states starting at the first changed index.
+            for position, index in enumerate(prefix):
+                if previous[position] != index:
+                    for j in range(position, prefix_size):
+                        previous[j] = prefix[j]
+                        prefix_states[j+1] = prefix_states[j] ^ self._packed_cols[prefix[j]]
+                    break
+            state = prefix_states[-1]
+            key = (state >> outside_offset) & outside_mask
+            local = (state >> anchor_offset) & anchor_mask
             last=prefix[-1] if prefix else -1
             for syndrome, charge in table.prices:
-                bucket = table.buckets.get((key, local ^ syndrome), ())
-                if self.seek_ordered_tails:
-                    bucket = self._owned_tails(bucket, last, stats)
+                bucket_key = (key, local ^ syndrome)
+                bucket = table.buckets.get(bucket_key, ())
                 available = spare - charge if prepaid else spare
-                if bucket and prepaid:
-                    stats['bucket_prices_reused'] += 1
+                split = table.split_buckets.get(bucket_key)
+                if split:
+                    offset, mask = self._fields[id(table.secondary)]
+                    prefix_value = (state >> offset) & mask
+                    bucket = self._secondary_tails(bucket, split, prefix_value, table.secondary[2],
+                                                   available, last if self.seek_ordered_tails else -1, stats)
+                elif self.seek_ordered_tails:
+                    bucket = self._owned_tails(bucket, last, stats)
                 for ntail,tail in enumerate(bucket):
+                    if ntail == 0 and prepaid:
+                        stats['bucket_prices_reused'] += 1
                     if ntail%4096==0 and time.monotonic()>=duration:return report('UNKNOWN',rank)
                     if not self.seek_ordered_tails and tail and tail[0] <= last:
                         stats['unowned_tail_visits'] += 1
                         continue
                     stats['indexed_tails']+=1
                     slack = available
-                    for val,cols,lookup in base:
-                        for i in tail:val^=cols[i]
-                        slack-=lookup.get(val,cap+2)-1
+                    residual = state ^ table.packed_tails[tail]
+                    for offset, mask, lookup in packed_checks:
+                        price = lookup.get((residual >> offset) & mask, cap+2)
+                        slack -= price - 1
                         if slack<0:break
                     else:
-                        stats['joint_queries']+=1
+                        errors_here = set(chain(prefix, tail))
                         try:
-                            errors_here = set(chain(prefix, tail))
+                            if reject_before_joint is not None and reject_before_joint(errors_here,duration):
+                                stats['integer_core_joint_queries_avoided'] += 1
+                                continue
+                            stats['joint_queries']+=1
                             if not self.joint(errors_here, cap, duration):
                                 continue
                             status = 'PHASE_RELAXATION_FEASIBLE'

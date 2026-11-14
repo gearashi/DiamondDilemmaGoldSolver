@@ -175,9 +175,14 @@ class Assemblies:
         return best
 
 
-def joint_repair(model, values, cells, *, adjacent=False, effort=0.05):
+def joint_repair(model, values, cells, *, adjacent=False, effort=0.05, contacts=None,
+                 disjoint=False):
     """Choose donor cycles, their support and rotations in one bounded CP model."""
     from ortools.sat.python import cp_model
+    limit = (-1 if disjoint else int(adjacent)) if contacts is None else contacts
+    if type(limit) is not int or limit < -1:
+        raise ValueError("Contact limit must be nonnegative or -1 for unrestricted.")
+    allow_contacts = limit != 0
     board=model.legal_board(values)
     cells=tuple(sorted(set(map(int,cells))))
     if any(c<0 or c>=model.n or c in model.problem.fixed for c in cells):
@@ -209,7 +214,7 @@ def joint_repair(model, values, cells, *, adjacent=False, effort=0.05):
         labels[c],changed[c]=label,flag
         gain=np.zeros(len(flat),dtype=int)
         for s,neighbor in enumerate(model.problem.neighbors[c]):
-            if neighbor<0 or (adjacent and neighbor in local):
+            if neighbor<0 or (allow_contacts and neighbor in local):
                 continue
             side=model.problem.sides[c,s]
             gain+=(model.masks[flat,s]==model.reverse[model.masks[board[neighbor],side]])
@@ -221,16 +226,21 @@ def joint_repair(model, values, cells, *, adjacent=False, effort=0.05):
             terms.append(value)
     cp.add_all_different(donors)
     shared=[]
+    incident={c:[] for c in cells}
     for a,s,b,t in model.problem.edges:
         if a not in local or b not in local:
             continue
-        if not adjacent:
+        if not allow_contacts:
             cp.add_at_most_one(changed[a],changed[b])
             continue
-        both=cp.new_bool_var('')
-        cp.add_bool_and([changed[a],changed[b]]).only_enforce_if(both)
-        cp.add_bool_or([~changed[a],~changed[b],both])
-        shared.append(both)
+        if limit > 0 or disjoint:
+            both=cp.new_bool_var('')
+            cp.add_bool_and([changed[a],changed[b]]).only_enforce_if(both)
+            cp.add_bool_or([~changed[a],~changed[b],both])
+            shared.append(both)
+            if disjoint:
+                incident[a].append(both)
+                incident[b].append(both)
         left=cp.new_int_var(0,2047,'')
         right=cp.new_int_var(0,2047,'')
         cp.add_element(labels[a],model.masks[flat,s].tolist(),left)
@@ -239,8 +249,12 @@ def joint_repair(model, values, cells, *, adjacent=False, effort=0.05):
         cp.add(left==right).only_enforce_if(match)
         cp.add(left!=right).only_enforce_if(~match)
         terms.append(match)
-    if shared:
-        cp.add(sum(shared)<=1)
+    if shared and limit >= 0:
+        cp.add(sum(shared)<=limit)
+    if disjoint:
+        for edges in incident.values():
+            if len(edges)>1:
+                cp.add_at_most_one(edges)
     cp.maximize(sum(terms))
     solver=cp_model.CpSolver()
     solver.parameters.max_deterministic_time=effort
@@ -332,7 +346,7 @@ def relink(model, first, second, assemblies, limit=6):
     return out
 
 
-def simultaneous_swaps(model, board, allowed, prices):
+def simultaneous_swaps(model, board, allowed, prices, *, exact=False):
     """Compare all two-cycles and pack compatible positive gains across the full board."""
     cells=np.array(sorted(allowed),dtype=int)
     if not len(cells):
@@ -351,7 +365,13 @@ def simultaneous_swaps(model, board, allowed, prices):
     ii,jj=np.nonzero(np.triu(gains,1)>0)
     excluded=set()
     candidate=board.copy()
-    for index in np.argsort(-gains[ii,jj],kind='stable'):
+    order=np.argsort(-gains[ii,jj],kind='stable')
+    if exact:
+        from r34_swap_packing import pack_swaps
+        pairs=[(int(cells[ii[t]]),int(cells[jj[t]])) for t in order]
+        weight=[int(gains[ii[t],jj[t]]) for t in order]
+        order=order[pack_swaps(model,pairs,weight)]
+    for index in order:
         i,j=ii[index],jj[index]
         a,b=cells[i],cells[j]
         if a in excluded or b in excluded:
@@ -475,12 +495,20 @@ def diverse(model, rows, limit):
 
 class Engine:
     def __init__(self,problem,*,bonds=False,joint=False,adjacent=False,ties=0,fork=False,
-                 relink=False,slate=1,pool=10,tie_slack=0,cycle_budget=0):
+                 relink=False,slate=1,pool=10,tie_slack=0,cycle_budget=0,contacts=None,disjoint=False,exact_packing=False,pair_cycles=0):
         if min(slate,pool)<1 or min(ties,cycle_budget)<0 or tie_slack not in (0,1,2):
             raise ValueError("Invalid candidate or repair limits.")
         self.model=BoardModel(problem)
         self.assemblies=Assemblies(self.model) if bonds else None
-        self.joint=joint or adjacent or cycle_budget>0
+        if contacts is not None and (type(contacts) is not int or contacts < -1):
+            raise ValueError("Invalid joint-repair contact limit.")
+        if pair_cycles not in (0,2,3):
+            raise ValueError("Expected zero, two or three for local cycle pairs.")
+        self.pair_cycles=pair_cycles
+        self.exact_packing=exact_packing
+        self.contacts=contacts
+        self.disjoint=disjoint
+        self.joint=joint or adjacent or cycle_budget>0 or contacts is not None or disjoint or exact_packing or pair_cycles>0
         self.cycle_budget=cycle_budget
         self.adjacent=adjacent
         self.ties=ties
@@ -500,7 +528,7 @@ class Engine:
             protected=[]
         available=np.setdiff1d(model.free,protected)
         if self.joint and len(available):
-            board,n=simultaneous_swaps(model,board,available,prices)
+            board,n=simultaneous_swaps(model,board,available,prices,exact=self.exact_packing)
             stats['positive_swap_pairs']+=n
             stats['potential_pairs_priced']+=len(available)*(len(available)-1)//2
             if self.cycle_budget:
@@ -509,7 +537,12 @@ class Engine:
                     stats['full_cycle_'+key]+=value
             # A capped model also explores longer donor cycles inside this variable pool.
             chosen=rng.choice(available,min(len(available),self.pool),replace=False)
-            board,info=joint_repair(model,board,chosen,adjacent=self.adjacent)
+            if self.pair_cycles:
+                from r34_pair_cycles import pair_repair
+                board,pair_work=pair_repair(model,board,chosen,self.pair_cycles)
+                stats.update(pair_work)
+            board,info=joint_repair(model,board,chosen,adjacent=self.adjacent,
+                                   contacts=self.contacts,disjoint=self.disjoint)
             stats['joint_'+info['status']]+=1
             stats['joint_branches']+=info['branches']
         cells=np.setdiff1d(model.independent_set(board,rng),protected)
@@ -577,6 +610,12 @@ class Engine:
         if reusable:
             config=dict(bonds=self.assemblies is not None,joint=self.joint,adjacent=self.adjacent,
                         cycle_budget=self.cycle_budget,pool=self.pool,ties=self.ties,tie_slack=self.tie_slack)
+            if self.pair_cycles:
+                config['pair_cycles']=self.pair_cycles
+            if self.exact_packing:
+                config['exact_packing']=True
+            if self.contacts is not None or self.disjoint:
+                config.update(contacts=self.contacts,disjoint=self.disjoint)
             key=[2 if self.assemblies else 1,domain_binding(model),config,seed,backend,replicas,dispatches,ranked,list(hints)]
             scope=hashlib.sha256(json.dumps(key,sort_keys=True).encode()).hexdigest()
             with closing(sqlite3.connect(trajectory_db,timeout=60)) as db,db:
@@ -715,6 +754,10 @@ def main():
     parser.add_argument('--slate',type=int,default=1)
     parser.add_argument('--pool',type=int,default=10)
     parser.add_argument('--cycle-budget',type=int,default=0,help='Full-board assignment relaxations per repair.')
+    parser.add_argument('--contacts',type=int,help='Maximum contacting changed pairs in joint repair (-1 for unlimited).')
+    parser.add_argument('--pair-cycles',type=int,choices=(0,2,3),default=0,help='Price interacting donor cycles in the joint pool up to this length.')
+    parser.add_argument('--exact-packing',action='store_true',help='Solve small and bipartite swap conflicts exactly.')
+    parser.add_argument('--disjoint-contacts',action='store_true',help='Permit at most one changed neighbor per changed cell.')
     parser.add_argument('--ties',type=int,default=0)
     parser.add_argument('--tie-slack',type=int,choices=(0,1,2),default=0)
     parser.add_argument('--database',required=True,type=Path)
@@ -727,6 +770,12 @@ def main():
     from r31_sampling import run_seeds
     p=SearchProblem(read_json(args.tiles))
     config={k:getattr(args,k) for k in ('bonds','joint','adjacent','ties','tie_slack','fork','relink','slate','pool','cycle_budget')}
+    if args.pair_cycles:
+        config['pair_cycles']=args.pair_cycles
+    if args.exact_packing:
+        config['exact_packing']=True
+    if args.contacts is not None or args.disjoint_contacts:
+        config.update(contacts=args.contacts,disjoint=args.disjoint_contacts)
     engine=Engine(p,**config)
     experiment={k:getattr(args,k) for k in ('backend','dispatches','replicas','rounds','ranked')}
     hints=[engine.model.legal_board(read_json(path)['codes']).tolist() for path in args.hint]

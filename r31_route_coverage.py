@@ -15,7 +15,7 @@ def register(db,scope,binding,families,target,owners):
     db.commit()
 
 
-def inherited_end(db,scope,binding,families,target,owners,start,stop):
+def inherited_end(db,scope,binding,families,target,owners,start,stop,*,proofs=None):
     """An owner can be deferred to another page in a multicenter run.
 
     Legacy multicenter pages lack owner information. New pages can supply
@@ -25,6 +25,9 @@ def inherited_end(db,scope,binding,families,target,owners,start,stop):
     A higher target can also consume a completed lower-target page if the
     recorded maximum among its threshold hits is lower than the new target.
     """
+    from r32_route_store import PageProofs
+    if proofs is None:
+        proofs = PageProofs(db, target)
     until = stop
     for f in families:
         for owner in owners:
@@ -36,8 +39,9 @@ def inherited_end(db,scope,binding,families,target,owners,start,stop):
                 """,(binding,json.dumps(f),owner,target,scope,start,start))
             end = max((hi for hi,best in records if best=='null' or json.loads(best)['score']<target),
                       default=start)
-            until = min(until,end)
-            if until==start:
-                from r32_route_store import inherited
-                return inherited(db,scope,binding,families,target,owners,start,stop)
+            if end < until:
+                end = max(end, proofs.owner_end(scope, binding, f, owner, start, until))
+            until = min(until, end)
+            if until <= start:
+                return start
     return until
