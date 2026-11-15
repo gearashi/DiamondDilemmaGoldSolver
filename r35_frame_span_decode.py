@@ -12,10 +12,19 @@ def native_merge(library):
     fn.restype=ctypes.c_int
     def merge(fields,ids,marks,widths,packet):
         del widths
+        if len(fields)!=4 or fields[0].ndim!=2:
+            raise ValueError('Expected four physical frame arrays.')
         n=fields[0].shape[1]
         if (any(f.shape!=(160,n) for f in fields) or marks.shape!=ids.shape or
                 packet.size>np.iinfo(np.uint32).max or len(ids)>n):
             raise ValueError('Invalid physical frame arrays.')
+        if len(ids):
+            if not fields[2].flags.writeable:
+                raise ValueError('Native cursor output is read-only.')
+            if not all(fields[i].flags.writeable for i in (0,1,3)):
+                # Cursor-only packets deliberately share the frozen noncursor fields.
+                if int(np.bitwise_or.reduce(marks)) & 65535:
+                    raise ValueError('Native initialized frame output is read-only.')
         if not fn(n,len(ids),len(packet),ids,marks,packet,*fields):
             raise ValueError('Invalid physical frame bounds or packet length.')
     return merge

@@ -13,6 +13,32 @@ def mark(a,b,c,d):
     return np.uint32(a|(b<<8)|(c<<16)|(d<<24))
 
 
+class ReadOnlyDestinationTests(unittest.TestCase):
+    def test_native_writes_must_respect_frozen_snapshot_fields(self):
+        from r35_frame_span_decode import native_merge
+        invoked=[]
+        def decoder(*args):
+            invoked.append(True)
+            return 1
+        merge=native_merge(SimpleNamespace(dd_merge_frame_spans=decoder))
+        fields=[np.zeros((160,1),np.uint16) for _ in FIELDS]
+        lanes=np.zeros(1,np.uint32)
+        packet=np.zeros(2,np.uint32)
+        cursor=np.array([mark(0,0,1,1)])
+        initialized=np.array([mark(1,1,1,1)])
+        fields[2].flags.writeable=False
+        with self.assertRaisesRegex(ValueError,'read-only'):
+            merge(fields,lanes,cursor,None,packet[:1])
+        fields[2].flags.writeable=True
+        for i in (0,1,3):
+            fields[i].flags.writeable=False
+            with self.assertRaisesRegex(ValueError,'read-only'):
+                merge(fields,lanes,initialized,None,packet)
+        self.assertEqual(invoked,[])
+        merge(fields,lanes,cursor,None,packet[:1])
+        self.assertEqual(invoked,[True])
+
+
 class TypeCheckedMemory(FrameSpans):
     """Independent interpreter of the transfer descriptor and little-endian wire packet."""
     def __init__(self,physical,**kwargs):

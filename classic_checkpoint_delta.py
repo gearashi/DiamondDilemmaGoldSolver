@@ -146,7 +146,7 @@ def verified_decoder(directory=None):
         array=np.ctypeslib.ndpointer
         fn.argtypes=[ctypes.c_int]*3+[array(dtype=np.int32,ndim=1,flags=('C_CONTIGUOUS','ALIGNED'))]+[
             array(dtype=np.uint32,ndim=1,flags=('C_CONTIGUOUS','ALIGNED'))]*4+[
-            array(dtype=d,ndim=2,flags=('C_CONTIGUOUS','ALIGNED')) for d in (np.int16,np.uint32)]
+            array(dtype=d,ndim=2,flags=('C_CONTIGUOUS','ALIGNED','WRITEABLE')) for d in (np.int16,np.uint32)]
         fn.restype=ctypes.c_int
         return fn
     except (OSError,ValueError,TypeError,KeyError,AttributeError):
