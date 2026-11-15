@@ -26,23 +26,29 @@ def _digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _build_metadata(path):
+    return json.loads(path.read_text(encoding='utf-8'))
+
+
 def _native_explanation_build(root=None, *, display=False):
     """Check the required local build without loading executable native code."""
     root=Path(root) if root is not None else Path(__file__).resolve().parent
     reason='Native explanations require a matching local compiled search library. Run python build_native.py in this installation first.'
     try:
         folder=root/'.native'
-        metadata=json.loads((folder/'search-build.json').read_text(encoding='utf-8'))
+        load_metadata = _build_metadata
+        digest = _digest
+        if display:
+            from functools import partial
+            from dashboard_snapshots import read_display_file
+            load_metadata = partial(read_display_file, reader=_build_metadata)
+            digest = partial(read_display_file, reader=_digest)
+        metadata = load_metadata(folder/'search-build.json')
         name=metadata.get('library')
         if (metadata.get('abi')!=1 or metadata.get('platform')!=sys.platform
                 or metadata.get('machine')!=platform.machine()
                 or not isinstance(name,str) or not name or Path(name).name!=name):
             return {'available':False,'reason':reason,'detection':'native_build_metadata'}
-        digest = _digest
-        if display:
-            from functools import partial
-            from dashboard_snapshots import read_display_file
-            digest = partial(read_display_file, reader=_digest)
         available=(metadata.get('source_sha256')==digest(root/'constraint_native_search.c')
                    and metadata.get('library_sha256')==digest(folder/name))
     except (OSError,ValueError,TypeError,AttributeError):available=False

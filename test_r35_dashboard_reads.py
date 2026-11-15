@@ -131,7 +131,8 @@ class DashboardReadTests(unittest.TestCase):
                       source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
                       library_sha256=hashlib.sha256(native.read_bytes()).hexdigest())
         atomic_json(folder/'search-build.json',manifest)
-        with patch.object(runtime_capabilities,'_digest',wraps=runtime_capabilities._digest) as digest:
+        with patch.object(runtime_capabilities,'_digest',wraps=runtime_capabilities._digest) as digest, \
+                patch.object(runtime_capabilities,'_build_metadata',wraps=runtime_capabilities._build_metadata) as metadata:
             for _ in range(3):
                 self.assertTrue(runtime_capabilities._native_explanation_build(root,display=True)['available'])
             self.assertEqual(digest.call_count,2)
@@ -144,3 +145,10 @@ class DashboardReadTests(unittest.TestCase):
             self.assertEqual(digest.call_count,5)
             self.assertFalse(runtime_capabilities._native_explanation_build(root)['available'])
             self.assertEqual(digest.call_count,7)
+            self.assertEqual(metadata.call_count,3)
+            # Failed parses never enter the cache. A replace repairs the display.
+            (folder/'search-build.json').write_text('{')
+            self.assertFalse(runtime_capabilities._native_explanation_build(root,display=True)['available'])
+            atomic_json(folder/'search-build.json',{**manifest,'library_sha256':hashlib.sha256(b'changed').hexdigest()})
+            self.assertTrue(runtime_capabilities._native_explanation_build(root,display=True)['available'])
+            self.assertEqual(metadata.call_count,5)
