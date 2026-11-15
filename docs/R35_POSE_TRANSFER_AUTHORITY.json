@@ -1,0 +1,292 @@
+{
+  "workstream": 89,
+  "source_catalogues_sha256_stripped": {
+    "R35_REPAIR_PLACEMENTS": "d72d6c147d3af5798f9f53a96832adf1ac82ae7e4fdc9f009c48700ddf020818",
+    "R35_REPAIR_REFINED": "3369433c96e41f6af984ba4d8fed42998d26b62538f7920395b1df7a16719397",
+    "R35_REPAIR_REGIONAL": "5ae4ed6a4af821eb01d653e11d202aa5122ce73334f1c15114745c17768d4c61",
+    "R35_REGIONAL_REPAIR_PROOF": "1e69943dde427ea7b19add2bada26d4f54662a4f8366f5a765995371f7771eed"
+  },
+  "mesh": "All 480 oriented root darts extended by reciprocal triangle adjacency reconstructed from ordered corner triples. The oracle does not call proper_rotations or use its barycentric permutation implementation.",
+  "source_obligations": {
+    "master_rows": 4225,
+    "master_row_width_histogram": {
+      "2": 366,
+      "3": 3453,
+      "4": 266,
+      "5": 45,
+      "6": 58,
+      "7": 27,
+      "8": 6,
+      "9": 3,
+      "10": 1
+    },
+    "source_literal_counts": 13002,
+    "regional_cap_excluded": 94,
+    "proved_changed_cells": 95,
+    "prior_external_drat_steps": 33196790,
+    "regional_asset_sha256": "3a015c4f9b8c802763e9f775c45f55b9965d9a9c244d1043b594a550154e3066",
+    "additional_post_master": 4,
+    "note": "The prior cap-94 DRAT uses exactly 4,225 master rows. Four later no-goods are independently replayed here, outside that cardinality proof."
+  },
+  "orientation_checks": {
+    "attempted_root_darts": 480,
+    "whole_mesh_bijections": 10,
+    "catalogue_clause_images": 42250,
+    "transported_master_literals": 130020,
+    "images": [
+      {
+        "target_cell_of_0": 0,
+        "side_offset_at_0": 0,
+        "transported_rows": 4225,
+        "transported_poses": 13002,
+        "ordered_row_sha256": "dbdf921ec785147d66e4e5557b65719f1fd4d8902e41ff892f2cfdd8921a6f46",
+        "original": {
+          "matched_edges": 207,
+          "components": 52
+        },
+        "planted": {
+          "matched_edges": 240,
+          "components": 1,
+          "segments": 318
+        }
+      },
+      {
+        "target_cell_of_0": 16,
+        "side_offset_at_0": 0,
+        "transported_rows": 4225,
+        "transported_poses": 13002,
+        "ordered_row_sha256": "86f221b7a091059672d0a1dd7c9e5799f52e7f18af9cbf2e6c565ff933f42517",
+        "original": {
+          "matched_edges": 207,
+          "components": 52
+        },
+        "planted": {
+          "matched_edges": 240,
+          "components": 1,
+          "segments": 318
+        }
+      },
+      {
+        "target_cell_of_0": 32,
+        "side_offset_at_0": 0,
+        "transported_rows": 4225,
+        "transported_poses": 13002,
+        "ordered_row_sha256": "68db963392e78eb856292f894a3b4e95c3bfecf23856e0732f0e7c486ef9f5d4",
+        "original": {
+          "matched_edges": 207,
+          "components": 52
+        },
+        "planted": {
+          "matched_edges": 240,
+          "components": 1,
+          "segments": 318
+        }
+      },
+      {
+        "target_cell_of_0": 48,
+        "side_offset_at_0": 0,
+        "transported_rows": 4225,
+        "transported_poses": 13002,
+        "ordered_row_sha256": "bf7920c544c3fdfd542004d10fcd2eb745c611c4bb0f8100566d1e2bc8a821a6",
+        "original": {
+          "matched_edges": 207,
+          "components": 52
+        },
+        "planted": {
+          "matched_edges": 240,
+          "components": 1,
+          "segments": 318
+        }
+      },
+      {
+        "target_cell_of_0": 64,
+        "side_offset_at_0": 0,
+        "transported_rows": 4225,
+        "transported_poses": 13002,
+        "ordered_row_sha256": "35251b1383c8e6dce16e2a2c8601d38c2d578fbe50a0bd3194f8c211903f94c0",
+        "original": {
+          "matched_edges": 207,
+          "components": 52
+        },
+        "planted": {
+          "matched_edges": 240,
+          "components": 1,
+          "segments": 318
+        }
+      },
+      {
+        "target_cell_of_0": 80,
+        "side_offset_at_0": 0,
+        "transported_rows": 4225,
+        "transported_poses": 13002,
+        "ordered_row_sha256": "7b885a18b5f0876677fa901905abce929fa9bb80d74e44841da0b95e5bf853d2",
+        "original": {
+          "matched_edges": 207,
+          "components": 52
+        },
+        "planted": {
+          "matched_edges": 240,
+          "components": 1,
+          "segments": 318
+        }
+      },
+      {
+        "target_cell_of_0": 96,
+        "side_offset_at_0": 0,
+        "transported_rows": 4225,
+        "transported_poses": 13002,
+        "ordered_row_sha256": "67ca7815c791d21bc4400709753fb10793ab52a353ee0a129cf3f09a9c7981ea",
+        "original": {
+          "matched_edges": 207,
+          "components": 52
+        },
+        "planted": {
+          "matched_edges": 240,
+          "components": 1,
+          "segments": 318
+        }
+      },
+      {
+        "target_cell_of_0": 112,
+        "side_offset_at_0": 0,
+        "transported_rows": 4225,
+        "transported_poses": 13002,
+        "ordered_row_sha256": "535c9d2a160d7bb66f794a0aa2dd1edf96b0816df9d424d5af2ef64a49601017",
+        "original": {
+          "matched_edges": 207,
+          "components": 52
+        },
+        "planted": {
+          "matched_edges": 240,
+          "components": 1,
+          "segments": 318
+        }
+      },
+      {
+        "target_cell_of_0": 128,
+        "side_offset_at_0": 0,
+        "transported_rows": 4225,
+        "transported_poses": 13002,
+        "ordered_row_sha256": "0e9f952fc283df5d02812ef87a30b5cb17759ce156144d443620eab39a47371f",
+        "original": {
+          "matched_edges": 207,
+          "components": 52
+        },
+        "planted": {
+          "matched_edges": 240,
+          "components": 1,
+          "segments": 318
+        }
+      },
+      {
+        "target_cell_of_0": 144,
+        "side_offset_at_0": 0,
+        "transported_rows": 4225,
+        "transported_poses": 13002,
+        "ordered_row_sha256": "3bf94e0143e68ea39049966aca13f9e5d6a44e11f8b240ab969e0808e3f00bb1",
+        "original": {
+          "matched_edges": 207,
+          "components": 52
+        },
+        "planted": {
+          "matched_edges": 240,
+          "components": 1,
+          "segments": 318
+        }
+      }
+    ]
+  },
+  "extra_independent_bond_support_sat": {
+    "solver": "g42, explicit per-placement atoms and independent mate validation",
+    "cnf_clauses": 690240,
+    "cnf_variables": 230080,
+    "permitted_mate_pairs": 3036,
+    "raw_candidate_pairs": 3060,
+    "independently_removed_closed_loops": 21,
+    "independently_removed_by_exact_mating": 3,
+    "rows": [
+      {
+        "source_cells": [
+          117,
+          123,
+          132,
+          134,
+          142,
+          149,
+          150,
+          153
+        ],
+        "checked_infeasible_images": 10,
+        "one_pose_deletion_nonterminal": 80
+      },
+      {
+        "source_cells": [
+          117,
+          121,
+          134,
+          138,
+          139,
+          140
+        ],
+        "checked_infeasible_images": 10,
+        "one_pose_deletion_nonterminal": 60
+      },
+      {
+        "source_cells": [
+          116,
+          123,
+          132,
+          142,
+          150,
+          153
+        ],
+        "checked_infeasible_images": 10,
+        "one_pose_deletion_nonterminal": 60
+      },
+      {
+        "source_cells": [
+          117,
+          121,
+          132,
+          142,
+          143
+        ],
+        "checked_infeasible_images": 10,
+        "one_pose_deletion_nonterminal": 50
+      }
+    ]
+  },
+  "transfer_controls": {
+    "changed_original_with_identical_side_masks": "Swapping two internal partners preserved all oriented seam masks. The original-only exclusions were bypassed.",
+    "planted_same_original_codes": "The boundary of a doubled spanning tree gave a noncrossing 160-piece Gold. Piece naming and artwork orientation were rearranged so the planted Gold uses exactly the 160 placement codes of the 207-edge reference in all ten positions of the mesh.",
+    "planted_public_result": {
+      "status": "GOLD",
+      "matched_edges": 240,
+      "cp_calls": 1,
+      "branches": 0,
+      "scope": "All 160 original pose literals fixed under the changed artwork. Direct r30_gold.search received reference_bound=True."
+    },
+    "compound_error_regression": "In the prior implementation a direct-pair terminal masked invalid strand cuts, endpoint type cuts and malformed physical_loss. The corrected path raises ValueError on all three and on an empty bridge.",
+    "valid_compound_case": {
+      "given": "held placement codes at original cells 1 and 12, plus strand cut [0]",
+      "status": "INFEASIBLE",
+      "validated_strand_cuts": 1,
+      "cp_calls": 0
+    }
+  },
+  "reproduction": "python -m unittest -v test_r35_pose_transfer_authority. Original-specific tests use a prepared data/tiles.json in the checkout or its parent. Native geometric search uses OR-Tools; the 40 independent SAT refutations use python-sat.",
+  "local_tests": {
+    "3.12": {
+      "pass": 6,
+      "skip": 0
+    },
+    "3.15": {
+      "pass": 3,
+      "skip": 3,
+      "missing_native_backends": [
+        "ortools",
+        "pysat"
+      ]
+    }
+  }
+}
