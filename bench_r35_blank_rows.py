@@ -33,7 +33,7 @@ def compare(tiles, output, seconds, cases, policies):
             raise ValueError('Policies use parity count, pair rows and the neighbor flag, such as 2-weak-n.')
         if pairs == 'none' and neighbors == 'n':
             raise ValueError('At least one condition must rule out forbidden pairs.')
-        def install(engine, flags, sides, blocked):
+        def install(engine, flags, sides, blocked, **_):
             post_rows(engine, flags, sides, blocked, int(parity), pairs, neighbors == 'y')
         with patch('r35_mip_pairing.blank_rows', install):
             path = output.with_name(f'{output.name}-{policy}.json')

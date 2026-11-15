@@ -46,5 +46,5 @@ if __name__=='__main__':
     ap.add_argument('--output',type=Path,required=True)
     ap.add_argument('--seconds',type=float,default=45)
     ap.add_argument('--cases',nargs='+',default=['a/0/33/cold','a/0/34/cold','b/48/38/cold'])
-    ap.add_argument('--modes',choices=('explicit','blank','flow','both'),nargs='+',required=True)
+    ap.add_argument('--modes',choices=('explicit','blank','blank-neighbors','flow','both'),nargs='+',required=True)
     run(**vars(ap.parse_args()))

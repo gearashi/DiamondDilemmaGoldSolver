@@ -132,7 +132,7 @@ class BlankFamilyTests(TestCase):
                 with patch.object(sys,'argv',args),redirect_stdout(output),redirect_stderr(StringIO()):
                     main()
                 return json.loads(output.getvalue())
-            found=invoke({'0':1},'--physical-pairing')
+            found=invoke({'0':1},'--physical-pairing','blank-neighbors')
             self.assertEqual(int(found['phase'],16)&1,1)
             self.assertEqual(found['phase_pins'],{'0':1})
             self.assertEqual(found['work']['nodes'],0)
@@ -186,7 +186,7 @@ class PhysicalSolverTests(TestCase):
             p,ref,groups,req,_=fixture(split,uniform)
             for cap in (0,4,15):
                 outcomes=[]
-                for mode in ('explicit','blank','flow','both'):
+                for mode in ('explicit','blank','blank-neighbors','flow','both'):
                     row=decide(p,ref,groups,req,cap,0,sphere=True,mode=mode)
                     outcomes.append(row['status']!='INFEASIBLE')
                     if outcomes[-1]:

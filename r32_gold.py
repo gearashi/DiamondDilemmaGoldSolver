@@ -407,7 +407,7 @@ def main():
     parser.add_argument('--page',type=int,default=8192)
     parser.add_argument('--refine-integer',action='store_true',help='In loss mode, check signed integer inventories before accepting a phase pattern (wide phase images use OR-Tools).')
     parser.add_argument('--integer-backend',choices=('sat','scip'),default='sat',help='The signed-inventory engine for integer-bound. SCIP branches on the physical variables.')
-    parser.add_argument('--physical-pairing',nargs='?',const='blank',choices=('blank','flow','both'),help='In integer-bound use SCIP to choose all physical mates with variable tile signs. The default projects blank sides. flow uses bipartite flows, and both combines the projections.')
+    parser.add_argument('--physical-pairing',nargs='?',const='blank',choices=('blank','blank-neighbors','flow','both'),help='In integer-bound use SCIP to choose all physical mates with variable tile signs. The default projects blank sides. blank-neighbors adds explicit partner bounds for a cold retry. flow uses bipartite flows, and both combines the default blank and flow projections.')
     parser.add_argument('--independent-native',action='store_true',help='Replay every supplied claim live. Rerun integer-bound without published decisions, or phase-sewing without bundled or saved witness hints.')
     parser.add_argument('--sphere-euler',action='store_true',help='Require the spherical one-loop Euler equation in signed integer search.')
     parser.add_argument('--mate-cost',action='store_true',help='Price lost reference pairs in small reciprocal classes, extending to twelve sides for broad overlapping departures.')

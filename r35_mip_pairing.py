@@ -46,18 +46,25 @@ def blank_completion(sides, blocked):
     return None
 
 
-def blank_rows(engine, flags, sides, blocked):
+def blank_rows(engine, flags, sides, blocked, *, legal_neighbors=False):
     for active in flags:
         count = sum(active)
         engine.Add(count==2*engine.IntVar(0,len(sides)//2,''))
         by_side = dict(zip(sides,active))
+        if legal_neighbors:
+            # An active side needs a selected partner outside itself and its
+            # forbidden neighbors. This strengthens fractional solutions.
+            for a in sides:
+                unavailable = [by_side[b if a == c else c] for b, c in blocked if a in (b, c)]
+                engine.Add(count >= 2 * by_side[a] + sum(unavailable))
         # An even residual of four or more vertices always admits a matching.
         # For a forbidden residual pair at exactly two, require another vertex.
         for a,b in sorted(blocked):
-            engine.Add(count >= 2*(by_side[a]+by_side[b])-1)
+            factor = 3 if legal_neighbors else 2
+            engine.Add(count >= factor * (by_side[a] + by_side[b]) - (factor - 1))
 
 
-def project_blanks(engine, phase, losses, labels, sides, legal, reference, required):
+def project_blanks(engine, phase, losses, labels, sides, legal, reference, required, *, legal_neighbors=False):
     family = set(sides)
     named = {p for p in reference|required if p[0] in family or p[1] in family}
     if any(a not in family or b not in family for a,b in named):
@@ -84,7 +91,7 @@ def project_blanks(engine, phase, losses, labels, sides, legal, reference, requi
         engine.Add(dark>=residual+color-1)
         flags[1].append(dark)
         flags[0].append(residual-dark)
-    blank_rows(engine, flags, sides, blocked)
+    blank_rows(engine, flags, sides, blocked, legal_neighbors=legal_neighbors)
     return blocked
 
 
@@ -229,11 +236,14 @@ def decide(problem, reference, groups, required, cap, seconds, *, sphere=False, 
         edges = raw_edges(labels,family,allowed)
         legal = {(a,b) for a,b,_ in edges}
         slots = labels[family[0]][0]
-        if not slots and mode in ('blank','both'):
-            blocked = project_blanks(engine,phase,loss,labels,family,legal,reference,required)
+        if not slots and mode in ('blank','blank-neighbors','both'):
+            neighbors = mode == 'blank-neighbors'
+            blocked = project_blanks(engine,phase,loss,labels,family,legal,reference,required, legal_neighbors=neighbors)
             if blocked is not None:
                 modeled.append(('blank',family,blocked))
                 work.update(blank_projected_sides=len(family),blank_omitted_edges=len(edges))
+                if neighbors:
+                    work['blank_legal_neighbor_rows'] = 2 * len(family)
                 continue
         bipartite = slots != tuple(12-k for k in reversed(slots)) or len(slots)%2
         flow = bipartite and mode in ('flow','both')
