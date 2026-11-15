@@ -40,12 +40,15 @@ fn scan(@builtin(workgroup_id) group:vec3<u32>) {
                 low=min(low,128u*g+32u*w+firstTrailingBit(m));high=128u*g+32u*w+firstLeadingBit(m)+1u;
                 seen+=countOneBits(m);
             }
-            let range=work[pos+5u+w];lo[w]=min(lo[w],range&65535u);hi[w]=max(hi[w],range>>16u);
         }
+        let ranges=vec4<u32>(work[pos+5u],work[pos+6u],work[pos+7u],work[pos+8u]);
+        lo=min(lo,ranges&vec4<u32>(65535u));hi=max(hi,ranges>>vec4<u32>(16u));
     }
     let base=5u+7u*row;
     atomicStore(&out[base],seen);atomicStore(&out[base+1u],low);atomicStore(&out[base+2u],high);
-    for(var f=0u;f<4u;f++){atomicStore(&out[base+3u+f],lo[f]|(hi[f]<<16u));}
+    let bounds=lo|(hi<<vec4<u32>(16u));
+    atomicStore(&out[base+3u],bounds.x);atomicStore(&out[base+4u],bounds.y);
+    atomicStore(&out[base+5u],bounds.z);atomicStore(&out[base+6u],bounds.w);
     if seen!=0u {atomicOr(&out[row/32u],1u<<(row%32u));}
 }
 @compute @workgroup_size(128)
