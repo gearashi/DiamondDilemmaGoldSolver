@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from classic_checkpoint_ranges import CheckpointRanges, FRAME_FIELDS, _frame_windows
+from classic_checkpoint_ranges import CheckpointRanges, FRAME_FIELDS, _frame_windows, _attained_bounds
 from dfs_gpu import DFS, fill_order
 from systematic_jobs import JobLedger
 from test_replica_resize import host_dfs, frontier
@@ -67,6 +67,44 @@ class HostTests(unittest.TestCase):
                 covered[a:b,subset] = True
             expected = (np.arange(160)[:,None]>=floor)&(np.arange(160)[:,None]<=high)
             self.assertFalse(np.any((expected|reset)&~covered))
+
+    def test_placement_bounds_cover_every_short_walk_including_unbilled_rewinds(self):
+        import itertools
+        # Starts, filled-rank counters, and final depths are all the proof can use.
+        # Include ordinary increments/decrements, a same-rank candidate, and a
+        # multi-rank host/Gold rewind that consumes no placement.
+        cases=[]
+        for start in range(5):
+            for path in itertools.product(range(4),repeat=5):
+                d=start
+                placed=0
+                touched=[]
+                for move in path:
+                    if move==0:
+                        touched.extend((d,d+1))
+                        d+=1
+                        placed+=1
+                    elif move==1:
+                        d=max(0,d-1)
+                    elif move==2:
+                        touched.append(d)
+                    else:
+                        d//=2
+                if touched:
+                    cases.append((start,d,placed,min(touched),max(touched)))
+        start,final,placed,low,top=np.array(cases,dtype=np.int16).T
+        n=len(cases)
+        counters=np.zeros((3,n),np.uint64)
+        prior={'depths':start,'counters':counters}
+        now={'depths':final,'counters':np.stack((np.ones(n),placed,np.zeros(n))).astype(np.uint64),
+             'floors':np.zeros(n,np.int16),'maxdepths':np.full(n,160,np.int16)}
+        lanes,begin,end=_attained_bounds(prior,now,np.arange(n),np.zeros(n,bool),True)
+        self.assertEqual(len(lanes),n)
+        self.assertTrue(np.all(begin<=low))
+        self.assertTrue(np.all(end>=top))
+        _,begin,end=_attained_bounds(prior,now,np.arange(n),np.zeros(n,bool),False)
+        np.testing.assert_array_equal(begin,now['floors'])
+        np.testing.assert_array_equal(end,now['maxdepths'])
 
     def test_backend_without_range_support_preserves_its_capture_contract(self):
         gpu = SimpleNamespace(snapshot_checkpoint=lambda: {'native':'full'})
@@ -147,7 +185,8 @@ class NativeControls:
         for raw,value in zip(reader._frames(windows),source):
             want=np.concatenate([value[a:b,cols].ravel() for a,b,cols in windows])
             np.testing.assert_array_equal(raw,want)
-        self.assertEqual(reader.maps,4)
+        self.assertEqual(reader.maps,1)
+        self.assertEqual(reader.read_bytes,8*sum((b-a)*len(cols) for a,b,cols in windows))
 
     def test_legacy_gold_rewind_to_exhaustion(self):
         from test_gpu_gold import gold_fixture

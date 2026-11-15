@@ -265,6 +265,11 @@ __device__ int gold_closed_rank(const short *board, const unsigned char *partner
     }
     return -1;
 }
+__device__ unsigned merge_frame_span(unsigned prior,int first,int last) {
+    if(last<first) return prior;
+    unsigned lo=prior&255u,hi=(prior>>8)&255u;
+    return (lo?min(lo,(unsigned)(first+1)):(unsigned)(first+1))|(max(hi,(unsigned)(last+1))<<8);
+}
 extern "C" __global__ void dfs_search(
     short *board, unsigned int *used, short *depths, short *maximum,
     const short *floors, unsigned char *states, unsigned short *firsts, unsigned short *lengths,
@@ -275,7 +280,7 @@ extern "C" __global__ void dfs_search(
     const int *single_offsets, const int *pair_offsets, const short *pool,
     const unsigned char *gold_partners, const short *gold_ranks, unsigned char *gold_checked,
     const unsigned int *policy, const unsigned int *blocked, int flags,
-    int gold_total, int colors, int n, int budget
+    int gold_total, int colors, int n, int budget, unsigned *frame_marks, int track_frames
 ) {
     flags = REASONING_FLAGS;
     int tid = blockIdx.x * blockDim.x + threadIdx.x;
@@ -283,6 +288,7 @@ extern "C" __global__ void dfs_search(
     if (states[tid] != 0 && !(gold_total && states[tid] == 1 && gold_checked[tid] != 255)) return;
     int depth = depths[tid], high = maximum[tid], floor = floors[tid];
     unsigned int random = rng[tid];
+    int first_init=160,last_init=-1,first_cursor=160,last_cursor=-1;
     Reasoning reasoning={board,used,faces,reverse,neighbors,sides,single_offsets,pair_offsets,pool,gold_partners,policy,blocked,colors,n,tid,flags};
     short private_ranks[160]; const short *ranks=gold_ranks;
     if(flags&12) {ranks=private_ranks;for(int i=0;i<depth;++i) private_ranks[selected_cell(i,floor,order,firsts,shifts,n,tid,flags)]=i;}
@@ -332,6 +338,7 @@ extern "C" __global__ void dfs_search(
         int location = depth * n + tid;
         // 65535 marks a freshly entered stack frame.
         if (cursors[location] == 65535u) {
+            if(track_frames) {first_init=min(first_init,depth);last_init=max(last_init,depth);}
             int first, length, cell=order[depth], one_index=0;bool forced=false;
             if(flags&12) cell=reasoning.choose(order,one_index,forced);
             bucket(board, reverse, neighbors, sides, single_offsets, pair_offsets, colors,
@@ -358,6 +365,7 @@ extern "C" __global__ void dfs_search(
             continue;
         }
         int code = pool[(firsts[location]&4095) + (cursor + (shifts[location]&4095)) % length];
+        if(track_frames) {first_cursor=min(first_cursor,depth);last_cursor=max(last_cursor,depth);}
         cursors[location] = cursor + 1; ++tried;
         int tile = code / 3, cell = selected_cell(depth,floor,order,firsts,shifts,n,tid,flags);
         if (!reasoning.allowed(cell,code) || taken(used, tile, n, tid) || !matches_after_bucket(board, used, faces, reverse, neighbors, sides, blocked, cell, code, n, tid)) continue;
@@ -385,7 +393,14 @@ extern "C" __global__ void dfs_search(
         ++depth; ++placed;
         if (depth > high) high = depth;
         if (depth == 160) { states[tid] = 1; break; }
+        if(track_frames) last_cursor=max(last_cursor,depth);
         cursors[depth * n + tid] = 65535u;
+    }
+    if(track_frames && (last_init>=0 || last_cursor>=0)) {
+        unsigned prior=frame_marks[tid];
+        unsigned init=merge_frame_span(prior&65535u,first_init,last_init);
+        unsigned cursor=merge_frame_span(prior>>16,min(first_init,first_cursor),max(last_init,last_cursor));
+        frame_marks[tid]=init|(cursor<<16);
     }
     depths[tid] = depth; maximum[tid] = high; rng[tid] = random;
     counters[tid] += tried; counters[n + tid] += placed; counters[2 * n + tid] += backed;

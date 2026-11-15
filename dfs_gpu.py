@@ -352,7 +352,8 @@ class DFS:
                 self.maxdepths, self.floors, self.states, self.firsts, self.lengths, self.cursors, self.shifts,
                 self.rng, self.counters, self.device_order, *self.tables, self.single_offsets,
                 self.pair_offsets, self.pool, self.gold_partners, self.gold_ranks, self.gold_checked, self.device_policy, self.device_gold_blocked, np.int32(self.feature_bits),
-                np.int32(self.gold_segments), np.int32(self.colors), np.int32(self.n), np.int32(nodes)))
+                np.int32(self.gold_segments), np.int32(self.colors), np.int32(self.n), np.int32(nodes),
+                getattr(self,'_frame_marks',self.rng),np.int32(getattr(self,'_frame_mark_owner',None) is not None)))
             end.record()
             end.synchronize()
             return float(cp.cuda.get_elapsed_time(start, end))

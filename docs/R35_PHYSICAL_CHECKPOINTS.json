@@ -1,0 +1,1060 @@
+{
+  "scope": "Native classic checkpoint transport. Every measured candidate board, used mask, stack, scalar, ownership field and dtype was compared with a fresh full snapshot. No change to the search order.",
+  "hardware": "RTX 2060, 6 GB",
+  "timing": "Source, driver warmup and other experiments varied. These comparisons measure work and bytes. Dedicated codec timings are separate.",
+  "board_recovery": "Physical deltas, all 9/16-bit modes, every raw inventory bit, corrupt CPU frame/depth inputs, sparse/dense directories, 65536 boundary, 131072 lanes, invalid packet fallback and immutable generations were checked against independent native readback.",
+  "decision": "Reuse an independent device mirror when available. Price actual changes, compact the directory on device, retain exact changed-cell masks to avoid a second full scan of dirty lanes. Stateless physical fallback reads original board cells and the five actual inventory words.",
+  "rejected": "Native frame reconstruction could disagree with physical cells for stale host depths or cursors. Independent mirrored reconstruction required more host uploads, and CPU-planned deltas repeated lane/extent transfers.",
+  "measurements": {
+    "CUDA": {
+      "cpu descriptors": {
+        "131072/512/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 216924160,
+            "read": 27140,
+            "maps": 10,
+            "board_read": 2052,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 216924160,
+            "read": 139876,
+            "maps": 11,
+            "board_read": 28884,
+            "board_upload": 8212,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 216924160,
+            "read": 186808,
+            "maps": 11,
+            "board_read": 21408,
+            "board_upload": 8212,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 216924160,
+            "read": 210516,
+            "maps": 11,
+            "board_read": 21980,
+            "board_upload": 8212,
+            "board_fallbacks": 0
+          }
+        ],
+        "131072/131072/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 216924160,
+            "read": 5909592,
+            "maps": 11,
+            "board_read": 535640,
+            "board_upload": 19412,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 216924160,
+            "read": 26086676,
+            "maps": 11,
+            "board_read": 6560688,
+            "board_upload": 2597220,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 216924160,
+            "read": 33118175,
+            "maps": 11,
+            "board_read": 5144816,
+            "board_upload": 2541904,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 216924160,
+            "read": 36580090,
+            "maps": 11,
+            "board_read": 5443336,
+            "board_upload": 2542924,
+            "board_fallbacks": 0
+          }
+        ]
+      },
+      "device descriptors, second scan": {
+        "131072/512/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 216924160,
+            "read": 25108,
+            "maps": 10,
+            "board_read": 20,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 216924160,
+            "read": 138884,
+            "maps": 11,
+            "board_read": 27892,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 216924160,
+            "read": 185816,
+            "maps": 11,
+            "board_read": 20416,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 216924160,
+            "read": 209524,
+            "maps": 11,
+            "board_read": 20988,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          }
+        ],
+        "131072/131072/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 216924160,
+            "read": 5395032,
+            "maps": 11,
+            "board_read": 21080,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 216924160,
+            "read": 25826988,
+            "maps": 11,
+            "board_read": 6301000,
+            "board_upload": 519452,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 216924160,
+            "read": 32863907,
+            "maps": 11,
+            "board_read": 4890548,
+            "board_upload": 508616,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 216924160,
+            "read": 36325830,
+            "maps": 11,
+            "board_read": 5189076,
+            "board_upload": 508596,
+            "board_fallbacks": 0
+          }
+        ]
+      },
+      "device descriptors, saved changed rows": {
+        "131072/512/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 216924160,
+            "read": 25108,
+            "maps": 10,
+            "board_read": 20,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 216924160,
+            "read": 138884,
+            "maps": 11,
+            "board_read": 27892,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 216924160,
+            "read": 185816,
+            "maps": 11,
+            "board_read": 20416,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 216924160,
+            "read": 209524,
+            "maps": 11,
+            "board_read": 20988,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          }
+        ],
+        "131072/131072/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 216924160,
+            "read": 5395032,
+            "maps": 11,
+            "board_read": 21080,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 216924160,
+            "read": 25826988,
+            "maps": 11,
+            "board_read": 6301000,
+            "board_upload": 519452,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 216924160,
+            "read": 32863907,
+            "maps": 11,
+            "board_read": 4890548,
+            "board_upload": 508616,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 216924160,
+            "read": 36325830,
+            "maps": 11,
+            "board_read": 5189076,
+            "board_upload": 508596,
+            "board_fallbacks": 0
+          }
+        ]
+      },
+      "packed frames and counter windows": {
+        "131072/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 216924160,
+            "read": 16916,
+            "maps": 6,
+            "board_read": 20,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 216924160,
+            "read": 16916,
+            "maps": 6,
+            "board_read": 20,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 216924160,
+            "read": 71268,
+            "maps": 8,
+            "board_read": 17508,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 216924160,
+            "read": 163924,
+            "maps": 8,
+            "board_read": 20052,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 216924160,
+            "read": 185304,
+            "maps": 8,
+            "board_read": 19904,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 216924160,
+            "read": 209500,
+            "maps": 8,
+            "board_read": 20964,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          }
+        ],
+        "131072/131072/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 216924160,
+            "read": 4325396,
+            "maps": 6,
+            "board_read": 20,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 216924160,
+            "read": 4356152,
+            "maps": 8,
+            "board_read": 21080,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 216924160,
+            "read": 13445240,
+            "maps": 8,
+            "board_read": 3457556,
+            "board_upload": 519452,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 216924160,
+            "read": 24560731,
+            "maps": 8,
+            "board_read": 5123012,
+            "board_upload": 508616,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 216924160,
+            "read": 32810167,
+            "maps": 8,
+            "board_read": 4809592,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 216924160,
+            "read": 36329670,
+            "maps": 8,
+            "board_read": 5189900,
+            "board_upload": 508596,
+            "board_fallbacks": 0
+          }
+        ]
+      }
+    },
+    "Vulkan": {
+      "cpu descriptors": {
+        "131072/512/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 40964,
+            "maps": 6,
+            "board_read": 2052,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 239604,
+            "maps": 7,
+            "board_read": 28884,
+            "board_upload": 8212,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 340944,
+            "maps": 7,
+            "board_read": 21408,
+            "board_upload": 8212,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 387788,
+            "maps": 7,
+            "board_read": 21980,
+            "board_upload": 8212,
+            "board_fallbacks": 0
+          }
+        ],
+        "131072/131072/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 8399960,
+            "maps": 7,
+            "board_read": 535640,
+            "board_upload": 19412,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 42809072,
+            "maps": 7,
+            "board_read": 6560688,
+            "board_upload": 2597220,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 58466736,
+            "maps": 7,
+            "board_read": 5144816,
+            "board_upload": 2541904,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 65092376,
+            "maps": 7,
+            "board_read": 5443336,
+            "board_upload": 2542924,
+            "board_fallbacks": 0
+          }
+        ]
+      },
+      "device descriptors, second scan": {
+        "131072/512/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 38932,
+            "maps": 6,
+            "board_read": 20,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 238612,
+            "maps": 7,
+            "board_read": 27892,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 339952,
+            "maps": 7,
+            "board_read": 20416,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 386796,
+            "maps": 7,
+            "board_read": 20988,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          }
+        ],
+        "131072/131072/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 7885400,
+            "maps": 7,
+            "board_read": 21080,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 42549384,
+            "maps": 7,
+            "board_read": 6301000,
+            "board_upload": 519452,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 58212468,
+            "maps": 7,
+            "board_read": 4890548,
+            "board_upload": 508616,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 64838116,
+            "maps": 7,
+            "board_read": 5189076,
+            "board_upload": 508596,
+            "board_fallbacks": 0
+          }
+        ]
+      },
+      "device descriptors, saved changed rows": {
+        "131072/512/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 38932,
+            "maps": 6,
+            "board_read": 20,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 238612,
+            "maps": 7,
+            "board_read": 27892,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 339952,
+            "maps": 7,
+            "board_read": 20416,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 386796,
+            "maps": 7,
+            "board_read": 20988,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          }
+        ],
+        "131072/131072/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 7885400,
+            "maps": 7,
+            "board_read": 21080,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 42549384,
+            "maps": 7,
+            "board_read": 6301000,
+            "board_upload": 519452,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 58212468,
+            "maps": 7,
+            "board_read": 4890548,
+            "board_upload": 508616,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 64838116,
+            "maps": 7,
+            "board_read": 5189076,
+            "board_upload": 508596,
+            "board_fallbacks": 0
+          }
+        ]
+      },
+      "packed frames and counter windows": {
+        "131072/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 427819008,
+            "read": 22548,
+            "maps": 2,
+            "board_read": 20,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 22548,
+            "maps": 2,
+            "board_read": 20,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 427819008,
+            "read": 76900,
+            "maps": 4,
+            "board_read": 17508,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 169556,
+            "maps": 4,
+            "board_read": 20052,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 190936,
+            "maps": 4,
+            "board_read": 19904,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 215132,
+            "maps": 4,
+            "board_read": 20964,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          }
+        ],
+        "131072/131072/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 427819008,
+            "read": 5767188,
+            "maps": 2,
+            "board_read": 20,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 5797944,
+            "maps": 4,
+            "board_read": 21080,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 427819008,
+            "read": 14927028,
+            "maps": 4,
+            "board_read": 3457556,
+            "board_upload": 519452,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 26131916,
+            "maps": 4,
+            "board_read": 5123012,
+            "board_upload": 508616,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 34381352,
+            "maps": 4,
+            "board_read": 4809592,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 37901020,
+            "maps": 4,
+            "board_read": 5189900,
+            "board_upload": 508596,
+            "board_fallbacks": 0
+          }
+        ]
+      }
+    },
+    "D3D12": {
+      "cpu descriptors": {
+        "131072/512/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 40964,
+            "maps": 6,
+            "board_read": 2052,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 239604,
+            "maps": 7,
+            "board_read": 28884,
+            "board_upload": 8212,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 340944,
+            "maps": 7,
+            "board_read": 21408,
+            "board_upload": 8212,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 387788,
+            "maps": 7,
+            "board_read": 21980,
+            "board_upload": 8212,
+            "board_fallbacks": 0
+          }
+        ],
+        "131072/131072/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 8399960,
+            "maps": 7,
+            "board_read": 535640,
+            "board_upload": 19412,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 42809072,
+            "maps": 7,
+            "board_read": 6560688,
+            "board_upload": 2597220,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 58466736,
+            "maps": 7,
+            "board_read": 5144816,
+            "board_upload": 2541904,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 65092376,
+            "maps": 7,
+            "board_read": 5443336,
+            "board_upload": 2542924,
+            "board_fallbacks": 0
+          }
+        ]
+      },
+      "device descriptors, second scan": {
+        "131072/512/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 38932,
+            "maps": 6,
+            "board_read": 20,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 238612,
+            "maps": 7,
+            "board_read": 27892,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 339952,
+            "maps": 7,
+            "board_read": 20416,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 386796,
+            "maps": 7,
+            "board_read": 20988,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          }
+        ],
+        "131072/131072/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 7885400,
+            "maps": 7,
+            "board_read": 21080,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 42549384,
+            "maps": 7,
+            "board_read": 6301000,
+            "board_upload": 519452,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 58212468,
+            "maps": 7,
+            "board_read": 4890548,
+            "board_upload": 508616,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 64838116,
+            "maps": 7,
+            "board_read": 5189076,
+            "board_upload": 508596,
+            "board_fallbacks": 0
+          }
+        ]
+      },
+      "device descriptors, saved changed rows": {
+        "131072/512/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 38932,
+            "maps": 6,
+            "board_read": 20,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 238612,
+            "maps": 7,
+            "board_read": 27892,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 339952,
+            "maps": 7,
+            "board_read": 20416,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 386796,
+            "maps": 7,
+            "board_read": 20988,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          }
+        ],
+        "131072/131072/False": [
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 7885400,
+            "maps": 7,
+            "board_read": 21080,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 42549384,
+            "maps": 7,
+            "board_read": 6301000,
+            "board_upload": 519452,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 58212468,
+            "maps": 7,
+            "board_read": 4890548,
+            "board_upload": 508616,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 64838116,
+            "maps": 7,
+            "board_read": 5189076,
+            "board_upload": 508596,
+            "board_fallbacks": 0
+          }
+        ]
+      },
+      "packed frames and counter windows": {
+        "131072/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 427819008,
+            "read": 22548,
+            "maps": 2,
+            "board_read": 20,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 22548,
+            "maps": 2,
+            "board_read": 20,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 427819008,
+            "read": 76900,
+            "maps": 4,
+            "board_read": 17508,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 169556,
+            "maps": 4,
+            "board_read": 20052,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 190936,
+            "maps": 4,
+            "board_read": 19904,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 215132,
+            "maps": 4,
+            "board_read": 20964,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          }
+        ],
+        "131072/131072/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 427819008,
+            "read": 5767188,
+            "maps": 2,
+            "board_read": 20,
+            "board_upload": 12,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 427819008,
+            "read": 5797944,
+            "maps": 4,
+            "board_read": 21080,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 427819008,
+            "read": 14927028,
+            "maps": 4,
+            "board_read": 3457556,
+            "board_upload": 519452,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 427819008,
+            "read": 26131916,
+            "maps": 4,
+            "board_read": 5123012,
+            "board_upload": 508616,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 512,
+            "baseline_bytes": 427819008,
+            "read": 34381352,
+            "maps": 4,
+            "board_read": 4809592,
+            "board_upload": 0,
+            "board_fallbacks": 0
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 427819008,
+            "read": 37901020,
+            "maps": 4,
+            "board_read": 5189900,
+            "board_upload": 508596,
+            "board_fallbacks": 0
+          }
+        ]
+      }
+    }
+  }
+}

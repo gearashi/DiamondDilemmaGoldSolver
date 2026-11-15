@@ -1,5 +1,7 @@
 """Capture only classic DFS lanes and stack frames that can have changed."""
-from pathlib import Path
+from r35_board_codec import PhysicalBoardCodec
+from classic_checkpoint_delta import BoardDelta
+from classic_frame_packet import FramePacket
 
 import numpy as np
 
@@ -12,8 +14,28 @@ def _selection(lanes):
     return lanes
 
 
+def _attained_bounds(prior, current, lanes, installed, native_only):
+    """Bound touched ranks using actual placements since the last frozen snapshot."""
+    floors, high = current['floors'], current['maxdepths']
+    if not native_only:
+        # A CPU endgame may install a whole solved suffix in a single operation.
+        return lanes,floors,high
+    # A native placement is the only operation which increases depth. Every
+    # touched rank can be reached from the start, and must be able to reach the
+    # final depth, using at most this many placements in either segment.
+    added = np.minimum(current['counters'][1]-prior['counters'][1],160).astype(np.int16)
+    low = np.maximum(floors,current['depths']-added)
+    top = np.minimum(high,prior['depths']+added)
+    # Initializing a frame consumes a candidate or a backtrack in that same
+    # iteration. A newly installed job resets all rows independently of counters.
+    changed = np.any(current['counters'][:,lanes]!=prior['counters'][:,lanes],axis=0)
+    return lanes[changed|installed[lanes]],low,top
+
+
 def _frame_windows(lanes, floors, maximum, installed):
     """Priced rectangles around all writable frames, including full lane installs."""
+    if not len(lanes):
+        return []
     low = floors[lanes].astype(int)
     high = np.minimum(160, maximum[lanes].astype(int) + 1)
     resets = installed[lanes]
@@ -79,17 +101,85 @@ def _packed_frames(n, windows):
 
 class CheckpointRanges:
     """One search-thread reader for the lifetime of one native engine and ledger."""
-    def __init__(self, gpu, ledger):
+    def __init__(self, gpu, ledger, *, board_mode=None, trace=False):
         self.gpu = gpu
         self.ledger = ledger
         self.prior = None
         self.frame_kernel = None
+        self.board_mode = board_mode
+        self.trace = trace
+        self.trace_owner = object()
+        self.trace_rows = None
+        self.board_projection = None
+        self.board_fallbacks = 0
+        self.delta_disabled = False
+        self.physical_disabled = False
+        self.board_delta = None
         self.enabled = callable(getattr(type(gpu), '_checkpoint_payload', None))
         self.web = getattr(gpu, 'backend', None) == 'webgpu'
         self.read_bytes = 0
         self.maps = 0
         if self.enabled:
             ledger.checkpoint_installs = np.zeros(gpu.n, bool)
+
+    def _want_delta(self):
+        native = self.web or hasattr(self.gpu.cp,'RawKernel')
+        return native and self.board_mode not in ('physical','ranges')
+
+    def _disable_delta(self):
+        self.delta_disabled = True
+        self.board_fallbacks += 1
+        if self.board_delta is not None:
+            self.board_delta.close()
+            self.board_delta = None
+
+    def _arm_trace(self, first):
+        gpu = self.gpu
+        if not self.trace or getattr(gpu,'cpu_assist',None) is not None:
+            return
+        if not first and getattr(gpu,'_frame_mark_owner',None) is not self.trace_owner:
+            return
+        try:
+            if self.web:
+                encoder = gpu.gpu_device.create_command_encoder()
+                encoder.clear_buffer(gpu.buffers[5],12*gpu.n*4,gpu.n*4)
+                gpu.queue.submit([encoder.finish()])
+            elif hasattr(gpu.cp,'RawKernel'):
+                if not hasattr(gpu,'_frame_marks'):
+                    gpu._frame_marks = gpu.cp.zeros(gpu.n,gpu.cp.uint32)
+                else:
+                    gpu._frame_marks.fill(0)
+            else:
+                return
+            gpu._frame_mark_owner = self.trace_owner
+        except Exception:
+            gpu._frame_mark_owner = None
+            self.trace = False
+
+    def _trace_bounds(self, lanes, low, high, installed):
+        gpu = self.gpu
+        if (not len(lanes) or getattr(gpu,'cpu_assist',None) is not None
+                or getattr(gpu,'_frame_mark_owner',None) is not self.trace_owner):
+            return lanes,low,high
+        try:
+            marks = self._physical(5,12,13,lanes)[0] if self.web else self._read('_frame_marks',lanes)
+        except Exception:
+            gpu._frame_mark_owner = None
+            self.trace = False
+            return lanes,low,high
+        start=((marks>>16)&255).astype(np.int16)-1
+        stop=(marks>>24).astype(np.int16)-1
+        init_start=(marks&255).astype(np.int16)-1
+        init_stop=((marks>>8)&255).astype(np.int16)-1
+        usable=(~installed[lanes])&(start>=0)&(stop>=start)&(stop<160)
+        if np.any((marks!=0)&~(usable|installed[lanes])):
+            return lanes,low,high
+        self.trace_rows=(int(np.maximum(0,stop-start+1)[usable].sum()),
+                         int(np.where(init_start>=0,init_stop-init_start+1,0)[usable].sum()))
+        ids=lanes[usable]
+        low[ids]=np.maximum(low[ids],start[usable])
+        high[ids]=np.minimum(high[ids],stop[usable])
+        return lanes[(marks!=0)|installed[lanes]],low,high
 
     def _read(self, name, lanes, start=None, stop=None):
         arr = getattr(self.gpu, name)
@@ -108,24 +198,30 @@ class CheckpointRanges:
         return result
 
     def _frames(self, windows):
-        gpu = self.gpu
-        params,width,total = _packed_frames(gpu.n,windows)
-        if self.web:
-            packed = gpu._columns().frames(params,width,total)
-        else:
-            cp = gpu.cp
-            if self.frame_kernel is None:
-                source = (Path(__file__).resolve().parent / 'dfs_checkpoint_frames.cu').read_text(encoding='utf8')
-                self.frame_kernel = cp.RawKernel(source,'gather_frames')
-            description = cp.asarray(params)
-            target = cp.empty(total,cp.uint16)
-            packed = []
-            for name in FRAME_FIELDS:
-                self.frame_kernel(((width+63)//64,160),(64,),(getattr(gpu,name),description,target))
-                packed.append(target.get())
-        self.maps += len(FRAME_FIELDS)
-        self.read_bytes += total*(4 if self.web else 2)*len(FRAME_FIELDS)
-        return packed
+        if self.frame_kernel is None:
+            self.frame_kernel = FramePacket(self.gpu)
+        result = self.frame_kernel.capture(windows)
+        self.maps += self.frame_kernel.maps
+        self.read_bytes += self.frame_kernel.read_bytes
+        return result
+
+    def _physical_board(self, fields, lanes):
+        if (self.physical_disabled or self.board_mode=='ranges'
+                or not (self.web or self.board_mode=='physical')):
+            return None
+        try:
+            if self.board_projection is None:
+                self.board_projection = PhysicalBoardCodec(self.gpu)
+            result = self.board_projection.capture(fields,lanes)
+        except Exception:
+            self.physical_disabled = True
+            result = None
+        if self.board_projection is not None:
+            self.maps += self.board_projection.maps
+            self.read_bytes += self.board_projection.read_bytes
+        if result is None:
+            self.board_fallbacks += 1
+        return result
 
     def capture(self):
         gpu = self.gpu
@@ -135,8 +231,19 @@ class CheckpointRanges:
         installed = self.ledger.checkpoint_installs
         if self.prior is None or np.all(installed):
             before = getattr(gpu, 'readback_bytes', 0)
-            payload = gpu.snapshot_checkpoint()
-            self.maps = 6 if self.web else len(gpu.DEVICE_FIELDS)
+            if self.web and hasattr(gpu,'_snapshot_fields'):
+                payload = gpu._snapshot_fields(self)
+            else:
+                payload = gpu.snapshot_checkpoint()
+                self.maps = 6 if self.web else len(gpu.DEVICE_FIELDS)
+            if self._want_delta() and not self.delta_disabled:
+                try:
+                    if self.board_delta is None:
+                        self.board_delta = BoardDelta(gpu, native=self.board_mode!='device')
+                    self.board_delta.seed(payload)
+                except Exception:
+                    # Optional GPU workspace may exceed the available memory.
+                    self._disable_delta()
             self.read_bytes = (gpu.readback_bytes-before if self.web else
                                sum(payload[name].nbytes for name in gpu.DEVICE_FIELDS))
         else:
@@ -179,11 +286,8 @@ class CheckpointRanges:
                     counts = raw[6::2].astype(np.uint64) << np.uint64(32)
                     counts |= raw[5::2]
                     put('counters',counts,lanes)
-                    raw = self._physical(0,0,165,lanes)
-                    put('boards',raw[:160].astype(np.int16),lanes)
-                    put('used',raw[160:].copy(),lanes)
                 else:
-                    for name in ('boards','used','depths','maxdepths','states','rng','counters'):
+                    for name in ('depths','maxdepths','states','rng','counters'):
                         put(name,self._read(name,lanes),lanes)
                     resets = np.flatnonzero(installed)
                     if len(resets):
@@ -192,9 +296,18 @@ class CheckpointRanges:
                 # prefix or beyond the highest attained depth and its next cursor.
                 # Replacing a lane can overwrite all 160 rows, even if it retires
                 # again before this capture. Preserve arbitrary old bytes elsewhere.
-                windows = _frame_windows(lanes,fields['floors'],fields['maxdepths'],installed)
-                packed = (self._frames(windows) if len(windows)>1 and
-                          (self.web or hasattr(gpu.cp,'RawKernel')) else None)
+                frame_lanes,low,high = _attained_bounds(self.prior,fields,lanes,installed,
+                                                        getattr(gpu,'cpu_assist',None) is None)
+                frame_lanes,low,high = self._trace_bounds(frame_lanes,low,high,installed)
+                windows = _frame_windows(frame_lanes,low,high,installed)
+                packed = None
+                cells = sum((b-a)*len(ids) for a,b,ids in windows)
+                if windows and (self.web or hasattr(gpu.cp,'RawKernel')) and (len(windows)>1 or cells>=1024):
+                    try:
+                        packed = self._frames(windows)
+                    except Exception:
+                        # Read the same individual fields if extra GPU workspace is unavailable.
+                        packed = None
                 offset = 0
                 for a,b,ids in windows:
                     size = (b-a)*len(ids)
@@ -207,7 +320,30 @@ class CheckpointRanges:
                             values = self._read(name,ids,a,b)
                         put(name,values,ids,a)
                     offset += size
+                projected = None
+                if self.board_delta is not None:
+                    codec = self.board_delta
+                    try:
+                        projected = codec.capture(lanes)
+                    except Exception:
+                        # An interrupted dispatch may already have advanced its device mirror.
+                        self._disable_delta()
+                    self.maps += codec.maps
+                    self.read_bytes += codec.read_bytes
+                if projected is None:
+                    projected = self._physical_board(fields,lanes)
+                if projected is not None:
+                    put('boards',projected[0],lanes)
+                    put('used',projected[1],lanes)
+                elif self.web:
+                    raw = self._physical(0,0,165,lanes)
+                    put('boards',raw[:160].astype(np.int16),lanes)
+                    put('used',raw[160:].copy(),lanes)
+                else:
+                    for name in ('boards','used'):
+                        put(name,self._read(name,lanes),lanes)
             payload = gpu._checkpoint_payload(fields, fixed=None if np.any(installed) else self.prior)
+        self._arm_trace(first=self.prior is None)
         self.prior = {k:payload[k] for k in (*gpu.DEVICE_FIELDS,'roots','order','prefix_codes')}
         installed.fill(False)
         return payload

@@ -370,7 +370,7 @@ class WebGPUDFS(DFS):
                                  self.neighbors.ravel(), self.neighbor_sides.ravel(),
                                  self.host_single_offsets, self.host_pair_offsets, self.host_pool,
                                  self.host_gold_partners.ravel(), self.order_rank, self.host_policy, self.host_gold_rules)).astype(np.uint32)
-        sizes = [165 * n * 4] + [160 * n * 4] * 4 + [12 * n * 4, tables.nbytes]
+        sizes = [165 * n * 4] + [160 * n * 4] * 4 + [13 * n * 4, tables.nbytes]
         limits = self.adapter.limits
         if max(sizes) > limits['max-storage-buffer-binding-size'] or max(sizes) > limits['max-buffer-size']:
             raise ValueError('Requested replica pool exceeds this GPU storage-buffer limit; select fewer replicas.')
@@ -503,7 +503,7 @@ class WebGPUDFS(DFS):
     def _dispatch_step(self, nodes):
         if type(nodes) is not int or not 1 <= nodes <= 512:
             raise ValueError('Use a bounded work budget of 1..512 per launch.')
-        self.queue.write_buffer(self.parameters, 0, np.array([self.n, nodes, self.colors, self.gold_segments, self.feature_bits, len(self.host_policy) if self.host_gold_blocked.ndim==2 else 0, int(bool(self.host_future_poses.size)), 0], np.uint32))
+        self.queue.write_buffer(self.parameters, 0, np.array([self.n, nodes, self.colors, self.gold_segments, self.feature_bits, len(self.host_policy) if self.host_gold_blocked.ndim==2 else 0, int(bool(self.host_future_poses.size)), int(getattr(self,'_frame_mark_owner',None) is not None)], np.uint32))
         encoder = self.gpu_device.create_command_encoder()
         compute = encoder.begin_compute_pass()
         compute.set_pipeline(self.pipeline)
@@ -537,6 +537,9 @@ class WebGPUDFS(DFS):
 
     def snapshot_checkpoint(self):
         """Capture independent frozen logical arrays from six storage buffers."""
+        return self._snapshot_fields()
+
+    def _snapshot_fields(self, reader=None):
         # The first synchronous map fences all prior queue work. There are no
         # submissions between these reads on the search thread. Decode each mapping
         # before releasing it; no returned array aliases device/staging memory.
@@ -546,15 +549,9 @@ class WebGPUDFS(DFS):
             raw = np.frombuffer(self.queue.read_buffer(self.buffers[index], 0, size),
                                 dtype=np.uint32).reshape(rows, self.n)
             self.readback_bytes += size
+            if reader is not None:
+                reader.maps += 1
             return raw
-        raw = read(0, 165)
-        fields['boards'] = raw[:160].astype(np.int16)
-        fields['used'] = raw[160:].astype(np.uint32, copy=True)
-        del raw
-        for index, name in enumerate(('firsts', 'lengths', 'cursors', 'shifts'), 1):
-            raw = read(index, 160)
-            fields[name] = raw.astype(np.uint16)
-            del raw
         raw = read(5, 11)
         for name, offset, dtype in (('depths', 0, np.int16), ('maxdepths', 1, np.int16),
                                    ('floors', 2, np.int16), ('states', 3, np.uint8),
@@ -565,6 +562,28 @@ class WebGPUDFS(DFS):
         counters |= raw[5::2]
         fields['counters'] = counters
         del raw
+        lanes = np.arange(self.n,dtype=np.int32) if reader is not None else None
+        projected = reader._physical_board(fields,lanes) if reader is not None else None
+        if projected is None:
+            raw = read(0, 165)
+            fields['boards'] = raw[:160].astype(np.int16)
+            fields['used'] = raw[160:].copy()
+            del raw
+        else:
+            fields['boards'],fields['used'] = projected
+        packed = None
+        if reader is not None:
+            try:
+                packed = reader._frames([(0,160,lanes)])
+            except Exception:
+                pass  # Limited staging memory: copy the physical buffers below.
+        for i,name in enumerate(('firsts','lengths','cursors','shifts')):
+            if packed is None:
+                raw = read(1+i,160)
+                fields[name] = raw.astype(np.uint16)
+                del raw
+            else:
+                fields[name] = packed[i].reshape(160,self.n)
         return self._checkpoint_payload(fields)
 
     def _counter_totals(self):

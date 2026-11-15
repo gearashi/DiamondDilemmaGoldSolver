@@ -98,7 +98,7 @@ class Ranges:
         return result,dict(read=read,maps=maps,reset=False,span=hi-lo,rows=extent,seconds=round(perf_counter()-start,6))
 
 
-def run(p,n,used,api,consume,wide,production=False,scatter=False,budgets=None):
+def run(p,n,used,api,consume,wide,production=False,scatter=False,budgets=None,board_mode=None,dynamic=False,trace=False):
     args,prefixes,lengths=inputs(p,used,consume)
     if api=='CUDA':
         factory,extra=DFS,{}
@@ -109,6 +109,8 @@ def run(p,n,used,api,consume,wide,production=False,scatter=False,budgets=None):
         adapter=next(a for a in wgpu.gpu.enumerate_adapters_sync()
                      if a.info['backend_type']==api and a.info['adapter_type']=='DiscreteGPU')
         extra=dict(adapter=adapter)
+    if dynamic:
+        args['gpu_features']={'dynamic_mrv':True,'forced':True}
     gpu=factory(**args,n=n,seed=35068,prefixes=[],**extra)
     ledger=JobLedger.empty(len(prefixes),n)
     if scatter and len(prefixes)<n:
@@ -120,7 +122,7 @@ def run(p,n,used,api,consume,wide,production=False,scatter=False,budgets=None):
     else:
         ledger.refill(gpu,prefixes,lengths)
     if production:
-        reader=CheckpointRanges(gpu,ledger)
+        reader=CheckpointRanges(gpu,ledger,board_mode=board_mode,trace=trace)
         first=reader.capture()
         old={k:v.copy() for k,v in first.items()}
     else:
@@ -129,9 +131,10 @@ def run(p,n,used,api,consume,wide,production=False,scatter=False,budgets=None):
     try:
         for nodes in (budgets or ((0,1,8,64,256,4096,32768) if wide else (0,1,8,64,256))):
             left=nodes
+            gpu_ms=0.0
             while left:
                 k=min(512,left)
-                gpu.step(k)
+                gpu_ms+=gpu.step(k)
                 ledger.refill(gpu,prefixes,lengths)
                 left-=k
             start=perf_counter()
@@ -147,7 +150,15 @@ def run(p,n,used,api,consume,wide,production=False,scatter=False,budgets=None):
             if production:
                 start=perf_counter()
                 actual=reader.capture()
-                metrics=dict(read=reader.read_bytes,maps=reader.maps,seconds=round(perf_counter()-start,6))
+                metrics=dict(read=reader.read_bytes,maps=reader.maps,seconds=round(perf_counter()-start,6),
+                             active=int(np.count_nonzero(expected['states']<=1)),board_fallbacks=reader.board_fallbacks,
+                             gpu_ms=round(gpu_ms,3),frame_rows=reader.trace_rows)
+                if reader.board_projection is not None:
+                    metrics['board_upload']=reader.board_projection.upload_bytes
+                    metrics['board_read']=reader.board_projection.read_bytes
+                if reader.board_delta is not None:
+                    metrics.update(board_upload=reader.board_delta.upload_bytes,board_read=reader.board_delta.read_bytes,
+                                   modes=reader.board_delta.distribution)
                 assert set(actual)==set(expected)
                 for k in first:
                     np.testing.assert_array_equal(old[k],first[k],err_msg=k)
@@ -173,7 +184,16 @@ if __name__=='__main__':
     cli.add_argument('--scatter',action='store_true')
     cli.add_argument('--maximum',action='store_true')
     cli.add_argument('--budgets',nargs='+',type=int)
+    cli.add_argument('--board-mode',choices=('device','device-native','physical','ranges'))
+    cli.add_argument('--dynamic',action='store_true')
+    cli.add_argument('--trace',action='store_true')
+    cli.add_argument('--decoder-dir',type=Path)
     args=cli.parse_args()
+    if args.decoder_dir:
+        import classic_checkpoint_delta as board_module
+        from functools import partial
+        board_module.verified_decoder=partial(board_module.verified_decoder,args.decoder_dir)
+
     p=SearchProblem(json.loads(args.tiles.read_bytes()))
     cases=[(128,128,False),(2048,128,False),(2048,2048,False),(128,4096,True)]
     if args.wide:
@@ -184,5 +204,5 @@ if __name__=='__main__':
         cases=[(131072,512,False),(131072,131072,False)]
     out={}
     for n,used,consume in cases:
-        out[f'{n}/{used}/{consume}']=run(p,n,used,args.api,consume,args.wide,args.production,args.scatter,args.budgets)
+        out[f'{n}/{used}/{consume}']=run(p,n,used,args.api,consume,args.wide,args.production,args.scatter,args.budgets,args.board_mode,args.dynamic,args.trace)
         args.output.write_text(json.dumps(out,indent=2)+'\n',encoding='utf8')
