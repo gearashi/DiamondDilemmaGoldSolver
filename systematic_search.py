@@ -415,6 +415,9 @@ def main():
             ledger.validate(payload['states'])
             ledger.validate_prefixes(payload['prefix_codes'],payload['floors'],prefixes,lengths)
             payload.update(ledger.fields())
+            next_lane = getattr(gpu, '_next_page_lane', None)
+            if next_lane is not None:
+                payload['exact_next_page_lane'] = np.int32(next_lane)
             payload.update(exact_proof_backends=np.array(json.dumps(used_backends)),exact_gpu_features=np.array(json.dumps(feature_identity(gpu_features),sort_keys=True)),exact_frontier_sha256=np.array(frontier_hash),exact_data_sha256=np.array(data_sha),
                            exact_generation=np.array(generation,np.int64),exact_max_depth=np.array(maximum,np.int16),
                            exact_candidates=np.array(checked,np.int64),
@@ -472,9 +475,16 @@ def main():
         # Larger pools did not show a stable full-iteration benefit. Use the
         # actual restored/resized engine size and retain ordinary step above it.
         if hasattr(gpu,'_page_stop'):
-            gpu._page_stop=dispatch_stopped
+            def yield_page():
+                return dispatch_stopped() or time.monotonic() >= service_at
+            gpu._page_stop=yield_page
         step_and_states=getattr(gpu,'step_and_states',None) if gpu.n<=4096 else None
         while not dispatch_stopped():
+            # A dense sweep can take minutes. Return between pages when the live
+            # display or the next eligible checkpoint needs this search thread.
+            service_at = began + last_status + 1
+            if writer.future is None:
+                service_at = min(service_at, writer.last_completed_at + args.checkpoint_seconds)
             trusted=False
             batch_started=time.perf_counter()
             if step_and_states is None:

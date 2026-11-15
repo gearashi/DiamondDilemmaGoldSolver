@@ -504,6 +504,7 @@ class WebGPUDFS(DFS):
         if type(nodes) is not int or not 1 <= nodes <= 512:
             raise ValueError('Use a bounded work budget of 1..512 per launch.')
         pages = dispatch_pages(self,nodes)
+        self._next_page_lane = None
         interrupt = getattr(self,'_page_stop',None)
         for page,(first,count) in enumerate(pages):
             self.queue.write_buffer(self.parameters, 0, np.array([self.n, nodes, self.colors, self.gold_segments, self.feature_bits, len(self.host_policy) if self.host_gold_blocked.ndim==2 else 0, int(bool(self.host_future_poses.size)), (first<<1)|int(getattr(self,'_frame_mark_owner',None) is not None)], np.uint32))
@@ -518,6 +519,7 @@ class WebGPUDFS(DFS):
                 if interrupt is not None:
                     flags=self.states[first:first+count].get()
                     if interrupt() or np.any(flags==1):
+                        self._next_page_lane = pages[page+1][0]
                         break
                 else:
                     self._synchronize()

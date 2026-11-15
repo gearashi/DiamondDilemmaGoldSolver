@@ -122,6 +122,11 @@ def dispatch_pages(gpu, nodes):
         first = int(active[a])//128*128
         end = min(gpu.n,(int(active[b-1])//128+1)*128)
         spans.append((first,end-first))
+    resume = getattr(gpu, '_next_page_lane', None)
+    if resume is not None:
+        # Features and the budget can change page widths between dispatches.
+        pivot = next((i for i,(start,count) in enumerate(spans) if start+count > resume), 0)
+        spans = spans[pivot:] + spans[:pivot]
     return spans
 
 
@@ -377,6 +382,7 @@ class DFS:
         start.record()
         try:
             pages = dispatch_pages(self,nodes)
+            self._next_page_lane = None
             interrupt = getattr(self,'_page_stop',None)
             for page,(first,count) in enumerate(pages):
                 self.kernel(((count + 127) // 128,), (128,), (self.boards, self.used, self.depths,
@@ -391,6 +397,7 @@ class DFS:
                     if interrupt is not None:
                         flags = self.states[first:first+count].get()
                         if interrupt() or np.any(flags==1):
+                            self._next_page_lane = pages[page+1][0]
                             break
                     else:
                         cp.cuda.get_current_stream().synchronize()
@@ -869,6 +876,7 @@ class DFS:
             CPUAssist.validate_ownership(decoded, [checked] if _cpu_owner_payloads is None else _cpu_owner_payloads)
             if decoded.get('fingerprint')!=self.fingerprint:raise ValueError('CPU assistance checkpoint binding differs.')
         self._install_lanes(checked, np.arange(self.n, dtype=np.int32))
+        self._next_page_lane = None
         if 'cpu_assist_state' in checked:
             self.cpu_assist.restore(decoded)
         return True

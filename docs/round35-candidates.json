@@ -1380,7 +1380,7 @@
       "source_id": "follow-up to #73 and #75",
       "title": "Restrict cap-20 losses to minimum loss sets for their exact phase",
       "mechanism": "TIGHT-DISJOINT-LOSS-AT-OPTIMUM",
-      "state": "keep verified all-group lower bound and exact-threshold restriction",
+      "state": "keep verified minimum and exact-threshold restriction; all eight original subset cases closed",
       "proposal_and_validation": "The ten disjoint departure groups have certified minimum cost 20. Any feasible 344-group solution at this cap must attain its own phase minimum on and outside the disjoint groups. Test the implied restrictions with complete finite controls and compare original warm/cold CP and SAT at fixed work; independently replay any witness/negative. Preserve unknown scopes.",
       "decision": "Ten disjoint obligations have attainable minimum 20. With thirteen original obligations independent CaDiCaL plus DRAT refutes cap 20; direct physical repricing attains 21 and hits all 344 obligations. Apply 21 only when the required puzzle, reference, packed partition and additional groups match. Geographic retention becomes 186. The later verified eleven-group proof isolates the three-bond proper loop as sufficient. All eight subsets of the three original extra obligations have exact lower and upper decisions, recorded separately.",
       "measurement": "All 431 local clauses matched independent truth-table and GF(2) reconstruction. CaDiCaL 1,007,545 decisions, drat-trim 31,101,252 resolution steps. Three hash seeds reproduce the exact 9,191-variable/19,872-clause input. Across 48 real near-reference residuals 28 to 40 immediate exclusions, and all eight remaining saturations remove 21 optional mates. Ordinary Glucose screened 1,760,202 decisions in 480s without a decision, versus 1,079,124 decisions and a negative at the strengthened all-344 boundary.",
@@ -1393,7 +1393,8 @@
         "docs/R35_MINIMAL_LOOP_PROOF.json"
       ],
       "proof_archive_sha256": "e60b84ab532ab90f25cc47d2b1ec0b738bd06316a4ebf39749886135d7582b63",
-      "subset_proof_archive_sha256": "daf4eb92b2e1138d29c0be57d8c24ab4d99766cbce26fdd5ce5df0b957d0a62b"
+      "subset_proof_archive_sha256": "daf4eb92b2e1138d29c0be57d8c24ab4d99766cbce26fdd5ce5df0b957d0a62b",
+      "final_scope": "Adding the original three-bond proper loop to the authentic ten disjoint groups suffices for cost 21. All four original surplus-group subsets containing this loop have minimum 21. The other four attain cost 20. The independently verified cap-20 eleven-group refutation used 71,845,277 resolution steps. Each positive is physically repriced. This settles the subset lookup and all-group geographic threshold."
     },
     {
       "id": 77,
@@ -1401,8 +1402,17 @@
       "source_id": "new stronger boundary after #76",
       "title": "Apply spherical Euler at the original all-group loss threshold",
       "mechanism": "LOSS-EULER-THRESHOLD",
-      "state": "testing",
-      "proposal_and_validation": "The known physical cost-21 signed phase misses the possible sphere Euler values by 38 units; the separate cost-22 phase satisfies Euler +3. Search every phase at 21 with an exact weighted-sum encoder and inclusion-minimal departures, checking an independent 22 positive and a native CP encoding. Require independent proof for a stronger bound."
+      "state": "keep optional checked Euler-model restriction; unrestricted 21 still unknown",
+      "proposal_and_validation": "The known physical cost-21 signed phase misses the possible sphere Euler values by 38 units; the separate cost-22 phase satisfies Euler +3. Search every phase at 21 with an exact weighted-sum encoder and inclusion-minimal departures, checking an independent 22 positive and a native CP encoding. Require independent proof for a stronger bound.",
+      "decision": "Keep the optional full spherical Euler and an independent 320-weight raw disk/corner reconstruction. The all-group signed+Euler minimum is 21 or 22; cost 22 is attained and an unqualified lower bound of 22 is unsupported.",
+      "measurement": "On the exact known 21-cost outside pattern all 16 affine images were excluded at caps 21–23. Native CP and Glucose at 720 s, CaDiCaL at 900 s, and two exhaustive 540-s branches returned UNKNOWN at the unrestricted cap21. The independent CP recovers the cost22 positive in zero branches.",
+      "evidence": [
+        "docs/ROUND35_SIGNED_CONDITIONS.md",
+        "docs/R35_SIGNED_CONDITIONS.json",
+        "verify_r35_loss_euler.py",
+        "test_r35_loss_euler.py"
+      ],
+      "reopen_if": "A distinct physical Euler-feasible 21 phase or independently checkable cap21 refutation changes the scalar bound."
     },
     {
       "id": 78,
@@ -1411,7 +1421,8 @@
       "title": "Bound expensive native GPU dispatches and stop between disjoint lane pages",
       "mechanism": "GPU-BOUNDED-PHYSICAL-LANE-DISPATCH",
       "state": "testing",
-      "proposal_and_validation": "Actual Windows Display event 4101 during a dense 131072-lane Direct3D MRV search. Bound the width and work of each dispatch, skip idle pages by synchronized device state, and let public Stop or pending Gold save exact partially advanced cursors. Compare against single-launch physical fields on safe configurations, resume a partially completed interval, test static and dynamic original at 131072, and record device recovery and search overhead."
+      "proposal_and_validation": "Actual Windows Display event 4101 during a dense 131072-lane Direct3D MRV search. Bound the width and work of each dispatch, skip idle pages by synchronized device state, and let public Stop or pending Gold save exact partially advanced cursors. Compare against single-launch physical fields on safe configurations, resume a partially completed interval, test static and dynamic original at 131072, and record device recovery and search overhead.",
+      "interrupted_sweeps": "On the prior public runner three short visits advanced the same 128 jobs three times, leaving the other 128 untouched. Testing continuation on actual page boundaries across active, pending, sparse, resized, cold and legacy states."
     },
     {
       "id": 79,
@@ -1419,8 +1430,17 @@
       "source_id": "fresh-board follow-up to #15 and #77",
       "title": "Reject phase-only reference-loss assignments without a complete physical mating",
       "mechanism": "GLOBAL-PHASE-PHYSICAL-MATE-SUPPORT",
-      "state": "testing",
-      "proposal_and_validation": "Check every fixed phase for at least one legal mate per physical side and joint Hall support by signed class. Test both physically repriced low-loss phases, accepted abstract tours, positive and deficient cases, then compare ranked/global work with proper scope and independent replay."
+      "state": "keep scoped signed support and lazy small-family Hall checks",
+      "proposal_and_validation": "Check every fixed phase for at least one legal mate per physical side and joint Hall support by signed class. Test both physically repriced low-loss phases, accepted abstract tours, positive and deficient cases, then compare ranked/global work with proper scope and independent replay.",
+      "decision": "Keep direct reciprocal support and exact per-phase matching through sixteen physical sides. Shrink and cache genuine Hall contradictions, with separate flags and checkpoint identities. Eager enumeration of all clauses adds no completed unrestricted cap21 query. Optionally price all lost named pairs on classes of up to eight sides and combine their overlapping obligations. A held-out four-flip phase supplies an authenticated positive.",
+      "measurement": "742 direct clauses; exhaustive local compilation on 39 classes and 9776 balanced assignments produced 552 more clauses. Two zero rows excluded one real boundary phase; an independently paired fourteen-side family excluded the other using ten pins. Both actual connected tours and complements pass. The two original fixed outside patterns are both closed through 23 under mate support. A 540-second all-phase eager upper-cap check returned UNKNOWN in 2251834 decisions. On the held-out 23 phase (Euler -3), joint class cost raises 23 to 24 for 13 and 344 groups, or 24 to 25 with both geographic obligations. Complete native mating independently optimizes 24, with five proper subloops in its matching. Class limits 8 through 18 agree.",
+      "evidence": [
+        "docs/ROUND35_SIGNED_CONDITIONS.md",
+        "docs/R35_SIGNED_CONDITIONS.json",
+        "test_r35_signed_mate_support.py",
+        "test_r35_mate_price.py"
+      ],
+      "reopen_if": "An independently checked lower-cost phase with a larger-family residual obstruction justifies expanding the existing sixteen-side ceiling."
     },
     {
       "id": 80,

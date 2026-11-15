@@ -1,0 +1,53 @@
+{
+  "area": "Interrupted classic native dispatch",
+  "released_predecessor": "a4b8904",
+  "setup": {
+    "resident_jobs": 256,
+    "page_lanes": 128,
+    "per_job_units": 3,
+    "per_session_pages": 1
+  },
+  "prior": [
+    {
+      "session": 1,
+      "unique_jobs": 128,
+      "per_job_units": {
+        "1": 128
+      }
+    },
+    {
+      "session": 2,
+      "unique_jobs": 128,
+      "per_job_units": {
+        "2": 128
+      }
+    },
+    {
+      "session": 3,
+      "unique_jobs": 128,
+      "per_job_units": {
+        "3": 128
+      }
+    },
+    {
+      "session": 4,
+      "unique_jobs": 256,
+      "per_job_units": {
+        "1": 128,
+        "3": 128
+      }
+    }
+  ],
+  "continuation_after_two": {
+    "physical_page_calls": 2,
+    "distinct_jobs_advanced": 256,
+    "duplicate_job_and_cursor": 0
+  },
+  "validations": [
+    "test_r35_public_pages.PublicPageTests.test_two_short_sessions_give_every_resident_job_its_first_step",
+    "test_r35_public_pages.PublicPageTests.test_stop_after_first_page_resume_shrinks_then_exhausts_without_replay",
+    "test_r35_dispatch_pages.PagePlanTests.test_interrupted_dispatch_rotates_sparse_pages_and_accepts_new_width",
+    "test_r35_dispatch_pages.PagePlanTests.test_resume_width_and_adverse_order_hints_preserve_all_physical_stacks"
+  ],
+  "scope": "The improvement changes which unfinished branches advance after an interrupted page. Individual DFS cursors still define attempted positions. In the prior control the second visits advanced a different state within the same job. The original-instance time to Gold is unknown."
+}

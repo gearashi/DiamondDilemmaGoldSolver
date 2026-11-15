@@ -277,10 +277,20 @@ class JobLedger:
         if 'cpu_assist_state' in saved:
             from gpu_cpu_assist import CPUAssist
             CPUAssist.validate_ownership(json.loads(str(saved['cpu_assist_state'])),[saved,bank])
+        next_lane = 0
+        if 'exact_next_page_lane' in archive:
+            hint = np.asarray(archive['exact_next_page_lane'])
+            if hint.shape == () and hint.dtype.kind in 'iu' and 0 <= int(hint) < len(previous.ids):
+                next_lane = int(hint)
         selection = []
         for state in (1, 0):  # Pending certificates must be surfaced before doing more search.
             for source_index, (payload, ids) in enumerate(sources):
-                selection.extend((source_index, int(i)) for i in np.flatnonzero((ids >= 0) & (payload['states'] == state)))
+                indices = np.flatnonzero((ids >= 0) & (payload['states'] == state))
+                if next_lane and state == 0 and source_index == 0:
+                    # Rotate resident jobs before resizing; their complete stacks travel with them.
+                    pivot = indices.searchsorted(next_lane)
+                    indices = np.concatenate((indices[pivot:], indices[:pivot]))
+                selection.extend((source_index, int(i)) for i in indices)
         active_selection, paused_selection = selection[:gpu.n], selection[gpu.n:]
         target = gpu.snapshot_checkpoint()
         if np.any(target['states'] != 3) or np.any(target['counters']):

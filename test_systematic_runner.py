@@ -264,11 +264,11 @@ class Scenario:
 
         return FakeDFS
 
-    def execute(self, resume=False, replicas=4, seconds=1000, target='edges'):
+    def execute(self, resume=False, replicas=4, seconds=1000, target='edges', checkpoint_seconds=1000):
         self.steps_this_run = 0
         command = [
             str(ROOT / 'systematic_search.py'), '--backend', 'cuda', '--seconds', str(seconds),
-            '--replicas', str(replicas), '--nodes', '4', '--checkpoint-seconds', '1000',
+            '--replicas', str(replicas), '--nodes', '4', '--checkpoint-seconds', str(checkpoint_seconds),
             '--data', str(self.source), '--output', str(self.output), '--target', target,
         ]
         if resume:

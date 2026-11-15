@@ -33,13 +33,31 @@ def inspect(output):
                 paused=len(full['exact_paused_job_ids']),counters=list(map(int,counters)))
 
 
-def job(output,tiles,size,action,previous=None):
+def child_interpreter():
     # Launch the interpreter itself. The Windows venv redirector has its own
     # PID and terminating it alone can leave its actual solver child running.
     exe=sys._base_executable if os.name=='nt' else sys.executable
     env=dict(os.environ)
     if os.name=='nt':
         env['__PYVENV_LAUNCHER__']=sys.executable
+    return exe,env
+
+
+def preserve_solution(output, tiles, destination):
+    certificate = output/'solution.json'
+    if certificate.is_file():
+        from io_utils import atomic_json
+        from validator import validate_arrangement
+        record = json.loads(certificate.read_bytes())
+        check = validate_arrangement(json.loads(tiles.read_bytes()), record['codes'])
+        if not check['valid']:
+            raise ValueError('The saved Gold certificate failed independent validation.')
+        atomic_json(destination, {**record, 'validation': check})
+        raise SystemExit(f'Verified Gold saved to {destination}.')
+
+
+def job(output,tiles,size,action,previous=None,*,solution_destination):
+    exe,env=child_interpreter()
     cmd=[exe,'-B',str(ROOT/'systematic_search.py'),'--backend','cuda','--target','gold',
          '--data',str(tiles),'--output',str(output),'--replicas',str(size),'--seconds','0','--nodes','8',
          '--fixed-nodes','--checkpoint-seconds','.25']
@@ -81,6 +99,7 @@ def job(output,tiles,size,action,previous=None):
             if proc.poll() is None:
                 proc.kill()
                 proc.wait(timeout=30)
+            preserve_solution(output,tiles,solution_destination)
     return inspect(output)
 
 
@@ -91,9 +110,10 @@ if __name__=='__main__':
     args=cli.parse_args()
     with TemporaryDirectory(dir=ROOT/'audit/r35',prefix='isolated-crash-') as tmp:
         run=Path(tmp)/'run'
-        first=job(run,args.tiles.resolve(),2048,'stop')
-        interrupted=job(run,args.tiles.resolve(),128,'crash',first)
-        resumed=job(run,args.tiles.resolve(),64,'stop',interrupted)
+        receipt=args.output.resolve().with_name('crash-test-verified-gold.json')
+        first=job(run,args.tiles.resolve(),2048,'stop',solution_destination=receipt)
+        interrupted=job(run,args.tiles.resolve(),128,'crash',first,solution_destination=receipt)
+        resumed=job(run,args.tiles.resolve(),64,'stop',interrupted,solution_destination=receipt)
         assert not first['external'] and interrupted['external'] and not resumed['external']
         assert first['total']==interrupted['total']==resumed['total']
         assert all(a<=b<=c for a,b,c in zip(first['counters'],interrupted['counters'],resumed['counters']))

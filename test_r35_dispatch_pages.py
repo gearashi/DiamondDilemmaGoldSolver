@@ -33,8 +33,65 @@ class PagePlanTests(unittest.TestCase):
                     self.assertLessEqual(cover.max(),1)
 
 
+    def test_interrupted_dispatch_rotates_sparse_pages_and_accepts_new_width(self):
+        states=np.full(4096,3,np.uint8)
+        states[[45,1054,2097,3102]]=0
+        gpu=SimpleNamespace(n=len(states),feature_bits=1,states=SimpleNamespace(get=lambda:states))
+        initial=dispatch_pages(gpu,8)
+        for hint in (1024,1100,3000,3900):
+            gpu._next_page_lane=hint
+            for nodes in (8,512):
+                pages=dispatch_pages(gpu,nodes)
+                reference=sorted(pages)
+                pivot=next((i for i,(start,count) in enumerate(reference) if start+count>hint),0)
+                self.assertEqual(pages,reference[pivot:]+reference[:pivot])
+                self.assertEqual(len(pages),len(initial))
+
+    def test_resume_width_and_adverse_order_hints_preserve_all_physical_stacks(self):
+        from systematic_jobs import JobLedger
+        from test_replica_resize import frontier,host_dfs,owned_states,snapshot
+        source=host_dfs(8)
+        rows,lengths=frontier(10)
+        ledger=JobLedger.empty(len(rows),8)
+        ledger.refill(source,rows,lengths)
+        raw=snapshot(source,ledger)
+        expected=owned_states(source,ledger)
+        for hint,first in ((None,0),(np.int32(5),5),(-1,0),(80,0),('x',0),([3,4],0)):
+            archive=raw.copy()
+            if hint is not None:archive['exact_next_page_lane']=np.asarray(hint)
+            resized=host_dfs(3)
+            active=JobLedger.resume(resized,archive,rows,lengths)
+            self.assertEqual(int(active.ids[0]),first)
+            actual=owned_states(resized,active)
+            self.assertEqual(actual.keys(),expected.keys())
+            for job,fields in expected.items():
+                for field,value in fields.items():
+                    np.testing.assert_array_equal(actual[job][field],value)
+
+
 class NativePageChecks:
     pool=NativeControls.pool
+
+    def test_successive_page_stops_advance_each_sparse_job_once(self):
+        data,board=varied_gold_fixture()
+        gpu=self.pool(data,board,512,gold_data=data,gpu_features={'dynamic_mrv':True,'forced':True})
+        lanes=np.asarray([4,129,259,489],np.int32)
+        gpu.load_prefixes([[3*i] for i in range(len(lanes))],lanes=lanes)
+        initial=gpu.snapshot_checkpoint()
+        gpu.step(512)
+        expected=gpu.snapshot_checkpoint()
+        gpu.restore_checkpoint(initial)
+        gpu._page_stop=lambda:True
+        for j in range(2):
+            gpu.step(512)
+            observed=gpu.snapshot_checkpoint()
+            for field in gpu.DEVICE_FIELDS:
+                np.testing.assert_array_equal(observed[field][...,lanes[:j+1]],
+                                              expected[field][...,lanes[:j+1]],err_msg=field)
+                np.testing.assert_array_equal(observed[field][...,lanes[j+1:]],
+                                              initial[field][...,lanes[j+1:]],err_msg=field)
+        gpu.restore_checkpoint(initial)
+        self.assertIsNone(gpu._next_page_lane)
 
     def test_subdividing_and_stopping_preserve_every_physical_field(self):
         data,board=varied_gold_fixture()

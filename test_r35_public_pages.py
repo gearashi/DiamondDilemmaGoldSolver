@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import numpy as np
 
-from dfs_gpu import DFS
+from dfs_gpu import DFS, dispatch_pages
 from test_gpu_gold import gold_fixture, validate_arrangement
 from test_systematic_runner import Scenario, read, scratch
 
@@ -34,7 +34,8 @@ class PagedScenario(Scenario):
                     Event=Event,get_elapsed_time=lambda *_:0,
                     get_current_stream=lambda:SimpleNamespace(synchronize=lambda:None)))
                 self.tables=()
-                self.colors=self.gold_segments=self.feature_bits=0
+                self.colors=self.gold_segments=0
+                self.feature_bits=1
                 self.device_order=self.order
                 for name in ('single_offsets','pair_offsets','pool','gold_partners','gold_ranks',
                              'gold_checked','device_policy','device_gold_blocked'):
@@ -88,11 +89,10 @@ class PagedScenario(Scenario):
 
         return Paged
 
-    def run_pages(self, *, resume=False, width=256, seconds=1000, target='edges'):
-        def pages(gpu,budget):
-            return [(i,min(128,gpu.n-i)) for i in range(0,gpu.n,128)]
-        with patch('dfs_gpu.dispatch_pages',side_effect=pages):
-            self.execute(resume=resume,replicas=width,seconds=seconds,target=target)
+    def run_pages(self, *, resume=False, width=256, seconds=1000, target='edges', checkpoint_seconds=1000):
+        # Use the production sparse 128-lane page plan with a finite host kernel.
+        with patch('dfs_gpu.dispatch_pages',side_effect=lambda gpu,budget:dispatch_pages(gpu,512)):
+            self.execute(resume=resume,replicas=width,seconds=seconds,target=target,checkpoint_seconds=checkpoint_seconds)
 
 
 def write_gold_input(source):
@@ -137,6 +137,36 @@ class PublicPageTests(unittest.TestCase):
             s.run_pages(seconds=.125)
             self.assert_first_page_saved(s)
             self.assertFalse((s.output/'stop.request').exists())
+
+    def test_two_short_sessions_give_every_resident_job_its_first_step(self):
+        with scratch() as (root,source):
+            s=PagedScenario(root/'run',source,'duration')
+            s.run_pages(seconds=.125)
+            with np.load(s.output/'systematic'/'checkpoint.npz',allow_pickle=False) as saved:
+                self.assertEqual(int(saved['exact_next_page_lane']),128)
+            s.run_pages(resume=True,seconds=.125)
+            self.assertEqual(len(s.advanced),256)
+            self.assertEqual(set(s.advanced),{((code,),0) for code in range(256)})
+
+    def test_updates_dashboard_and_saves_before_a_large_sweep_finishes(self):
+        from classic_parked_storage import ParkedCheckpointWriter
+        original=ParkedCheckpointWriter.write
+        received=[]
+        def capture(writer,packet):
+            payload,_,_,running=packet
+            received.append((running,int(payload['counters'][0].sum())))
+            return original(writer,packet)
+        with scratch() as (root,source):
+            s=PagedScenario(root/'run',source,'duration')
+            s.pause_seconds=.65
+            with patch.object(ParkedCheckpointWriter,'write',capture):
+                s.run_pages(width=512,seconds=2.25,checkpoint_seconds=.5)
+            self.assertEqual(len(s.loaded_jobs),512)
+            self.assertTrue(any(live and 0<count<len(s.loaded_jobs) for live,count in received),received)
+            self.assertEqual(set(s.advanced),{(prefix,0) for prefix in s.loaded_jobs})
+            self.assertEqual(len(s.advanced),len(s.loaded_jobs))
+            self.assertLess(read(s.output/'live.json')['elapsed_seconds'],2.25)
+            self.assertEqual(read(s.output/'status.json')['state'],'stopped')
 
     def test_deadline_after_retirement_leaves_unassigned_queue_uninstalled(self):
         with scratch() as (root,source):
