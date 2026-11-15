@@ -1,0 +1,115 @@
+[
+  {
+    "omitted": 20,
+    "case": 0,
+    "cap": 15,
+    "verdict": false,
+    "full_choices": 8028,
+    "interrupted_choices": 4816,
+    "cold_choices_after_interruption": 8028,
+    "resumed_choices": 3219,
+    "inner_path": [
+      0,
+      0,
+      1,
+      11,
+      3,
+      0,
+      4
+    ]
+  },
+  {
+    "omitted": 20,
+    "case": 1,
+    "cap": 17,
+    "verdict": true,
+    "full_choices": 1315,
+    "interrupted_choices": 789,
+    "cold_choices_after_interruption": 1315,
+    "resumed_choices": 533,
+    "inner_path": [
+      57,
+      0,
+      0,
+      0,
+      5,
+      0,
+      0
+    ]
+  },
+  {
+    "omitted": 24,
+    "case": 1,
+    "cap": 16,
+    "verdict": false,
+    "full_choices": 380,
+    "interrupted_choices": 228,
+    "cold_choices_after_interruption": 380,
+    "resumed_choices": 157,
+    "inner_path": [
+      83,
+      0,
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "omitted": 24,
+    "case": 6,
+    "cap": 16,
+    "verdict": false,
+    "full_choices": 16416,
+    "interrupted_choices": 9849,
+    "cold_choices_after_interruption": 16416,
+    "resumed_choices": 6574,
+    "inner_path": [
+      0,
+      0,
+      1,
+      12,
+      5,
+      5,
+      2
+    ]
+  },
+  {
+    "omitted": 32,
+    "case": 3,
+    "cap": 17,
+    "verdict": true,
+    "full_choices": 6024,
+    "interrupted_choices": 3614,
+    "cold_choices_after_interruption": 6024,
+    "resumed_choices": 2418,
+    "inner_path": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      30,
+      23
+    ]
+  },
+  {
+    "omitted": 32,
+    "case": 4,
+    "cap": 16,
+    "verdict": true,
+    "full_choices": 1018,
+    "interrupted_choices": 610,
+    "cold_choices_after_interruption": 1018,
+    "resumed_choices": 415,
+    "inner_path": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      28
+    ]
+  }
+]

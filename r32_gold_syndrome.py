@@ -12,6 +12,7 @@ from math import comb
 from hashlib import sha256
 import json
 
+from r35_group_drops import GroupDropTimeout, reuse_drops
 from r29_gold_phase import SignedParity
 from r32_gold_partition import insert, maximize_disjoint
 
@@ -81,6 +82,10 @@ class OutsideSyndromes:
         self.use_bucket_price = use_bucket_price
         self.use_second_group = use_second_group
         self._suffix_cache = None
+        self._catalogues = {}
+        self._primary_index = None
+        self._secondary_index = None
+        self.index_work = Counter()
         data=SignedParity(problem)
         # Eliminate phase columns only. Symbol bit zero is RHS; others represent errors.
         self.base={i:(m,b) for i,(m,b,_) in data.base.pivots.items()}
@@ -117,6 +122,8 @@ class OutsideSyndromes:
                     symbol ^= constant
             self._joint_bonds[bond] = mask << 1, symbol
         self._joint_dependencies = tuple(dependencies)
+        from r35_group_images import GroupImages
+        self._joint_images = GroupImages.compile(self.groups, self.required, self._joint_bonds, len(self.outside))
         rhs,cols=check_columns(dependencies,len(self.out_eq))
         self.outside_check=rhs,tuple(cols)
         # Check constrained groups first, reducing per-branch projection work.
@@ -173,32 +180,18 @@ class OutsideSyndromes:
             sums=combine
         return rhs,tuple(cols[:len(self.outside)]),sums
 
-    def joint(self, flipped, budget, deadline):
+    def joint(self, flipped, budget, deadline, *, inner=(), checkpoint=None):
         """Independent exact cross-group consistency test once the cheap projections pass."""
         if time.monotonic() >= deadline:
             raise TimeoutError
         errors = 1 | sum(1 << (i+1) for i in flipped)
         if any((condition & errors).bit_count() & 1 for condition in self._joint_dependencies):
             return False
-        rows = {bond: row | ((symbol & errors).bit_count() & 1)
-                for bond, (row, symbol) in self._joint_bonds.items()}
-        basis = {}
-        def resolve(base,groups,left):
-            if time.monotonic()>=deadline:raise TimeoutError
-            if not groups:return True
-            group=groups[0]
-            available=sorted(group-self.required)
-            for size in range(1,min(left-len(groups)+1,len(available))+1):
-                for omitted in combinations(available,size):
-                    child=base.copy()
-                    if all(insert(child,rows[p]) for p in group-set(omitted)):
-                        if resolve(child,groups[1:],left-size):return True
+        if self.inconsistent or len(flipped) + len(self.groups) > budget:
             return False
-        # Try the group with the fewest admissible single drops first.
-        def difficulty(group):
-            return sum(all(insert(child,rows[p]) for p in group-{q})
-                       for q in group-self.required for child in [basis.copy()])
-        return resolve(basis,sorted(self.groups,key=difficulty),budget-len(flipped))
+        if self._joint_images is not None:
+            return self._joint_images.minimum(flipped, deadline) <= budget - len(flipped)
+        return reuse_drops(self, flipped, budget, deadline, Counter(), resume=inner, checkpoint=checkpoint)
 
     def _build_suffix_table(self, cap, errors):
         n = len(self.outside)
@@ -221,17 +214,34 @@ class OutsideSyndromes:
             charges = tuple((syndrome, cost-1) for syndrome, cost in prices.items() if cost<=1+spare)
         else:
             charges = ((0, 0),)
-        buckets=defaultdict(list)
-        packed_tails = {}
-        outside_offset, outside_mask = self._fields[id(self.outside_check)]
-        anchor_offset, anchor_mask = self._fields[id(anchor)] if anchor is not None else (0,0)
-        for indices in combinations(range(n),length):
-            packed = 0
-            for i in indices:
-                packed ^= self._packed_cols[i]
-            key = (packed >> outside_offset) & outside_mask, (packed >> anchor_offset) & anchor_mask
-            buckets[key].append(indices)
-            packed_tails[indices] = packed
+        catalogue = self._catalogues.get(length) if self.reuse_suffix_tables else None
+        if catalogue is None:
+            packed_tails = {}
+            by_outside = defaultdict(list)
+            offset, mask = self._fields[id(self.outside_check)]
+            for indices in combinations(range(n),length):
+                packed = 0
+                for i in indices:
+                    packed ^= self._packed_cols[i]
+                packed_tails[indices] = packed
+                by_outside[(packed >> offset) & mask].append(indices)
+            self.index_work['catalogue_rows'] += len(packed_tails)
+            catalogue = packed_tails, by_outside
+            if self.reuse_suffix_tables:
+                self._catalogues[length] = catalogue
+        packed_tails, by_outside = catalogue
+        anchor_key = (length,id(anchor))
+        if self._primary_index is not None and self._primary_index[0] == anchor_key:
+            buckets = self._primary_index[1]
+        else:
+            buckets = defaultdict(list)
+            offset, mask = self._fields[id(anchor)] if anchor is not None else (0,0)
+            for outside, tails in by_outside.items():
+                for tail in tails:
+                    buckets[outside,(packed_tails[tail] >> offset) & mask].append(tail)
+            self.index_work['primary_rows'] += len(packed_tails)
+            if self.reuse_suffix_tables:
+                self._primary_index = anchor_key,buckets
         secondary = None
         split_buckets = {}
         if self.use_second_group and self.use_bucket_price and charges:
@@ -243,7 +253,10 @@ class OutsideSyndromes:
 
             candidates = [t for t in self.tables if t is not anchor and permitted_fraction(t)<0.5]
             secondary = min(candidates, key=permitted_fraction, default=None)
-        if secondary is not None:
+        secondary_key = (anchor_key,id(secondary))
+        if secondary is not None and self._secondary_index is not None and self._secondary_index[0] == secondary_key:
+            split_buckets = self._secondary_index[1]
+        elif secondary is not None:
             offset, mask = self._fields[id(secondary)]
             for key, bucket in buckets.items():
                 if len(bucket) < 8:
@@ -253,11 +266,14 @@ class OutsideSyndromes:
                     value = (packed_tails[tail] >> offset) & mask
                     positions[value] |= 1 << ordinal
                 split_buckets[key] = dict(positions)
+                self.index_work['secondary_rows'] += len(bucket)
+            if self.reuse_suffix_tables:
+                self._secondary_index = secondary_key,split_buckets
         # Tails are lexicographic within each first-anchor bucket. Bind the
         # precise bucket ordering to any later suffix resume token.
         order_key = sha256(repr((1,self._cursor_scope,cap,errors,self.outside_check,
                                 anchor[:2] if anchor is not None else (),charges)).encode()).hexdigest()
-        return _SuffixTable(anchor, charges, dict(buckets),
+        return _SuffixTable(anchor, charges, buckets,
                             packed_tails, secondary, split_buckets, order_key)
 
     @staticmethod
@@ -332,30 +348,39 @@ class OutsideSyndromes:
         checkpoint = self.checkpoint_progress if checkpoint is None else checkpoint
         refined = accept_errors is not None
 
-        def make_cursor(rank, price, tail, stage):
-            payload = [table.order_key,refined,rank,price,list(tail),stage]
+        def make_cursor(rank, price, tail, stage, inner=None):
+            payload = [table.order_key,refined,rank,price,list(tail)]
+            if inner:
+                payload.append([1,list(inner)])
+            payload.append(stage)
             return [payload,sha256(json.dumps(payload,separators=(',',':')).encode()).hexdigest()]
 
         resume = None
         if isinstance(cursor,(tuple,list)) and len(cursor)==2:
             try:
-                key,mode,rank,price,tail,stage = cursor[0]
+                key,mode,rank,price,tail,*extra,stage = cursor[0]
+                inner = ()
+                if extra:
+                    tag,inner = extra[0]
+                    if (len(extra)!=1 or tag!=1 or stage!='joint' or not isinstance(inner,list)
+                            or len(inner)>len(self.groups) or any(type(i) is not int or i<0 for i in inner)):
+                        raise ValueError('Invalid group cursor')
                 tail = tuple(tail)
                 if (key==table.order_key and mode is refined and type(rank) is int and rank==start
                         and type(price) is int and 0<=price<len(table.prices)
                         and len(tail)==length and all(type(t) is int and 0<=t<n for t in tail)
                         and tuple(sorted(set(tail)))==tail and stage in ('tail','joint','integer')
                         and (stage!='integer' or refined)
-                        and make_cursor(rank,price,tail,stage)[1]==cursor[1]):
-                    resume = price,tail,stage
+                        and make_cursor(rank,price,tail,stage,inner)[1]==cursor[1]):
+                    resume = price,tail,stage,inner
             except (TypeError,ValueError):
                 pass
         next_flush = time.monotonic()+2.0
 
-        def flush(rank, price, tail, stage, force=False):
+        def flush(rank, price, tail, stage, force=False, inner=None):
             nonlocal next_flush
             if checkpoint is not None and (force or time.monotonic()>=next_flush):
-                checkpoint(rank,make_cursor(rank,price,tail,stage))
+                checkpoint(rank,make_cursor(rank,price,tail,stage,inner))
                 next_flush=time.monotonic()+2.0
 
         # For the anchor group, a matched bucket already determines its exact
@@ -386,7 +411,7 @@ class OutsideSyndromes:
             last=prefix[-1] if prefix else -1
             start_price = 0
             if rank==start and resume is not None:
-                price,tail,stage = resume
+                price,tail,stage,_ = resume
                 coordinate = (key,local ^ table.prices[price][0])
                 bucket = table.buckets.get(coordinate,())
                 i = bisect_left(bucket,tail)
@@ -419,12 +444,13 @@ class OutsideSyndromes:
                         stats['unowned_tail_visits'] += 1
                         continue
                     resume_integer = tail==resume_tail and resume[2]=='integer'
+                    inner = resume[3] if tail==resume_tail and resume[2]=='joint' else ()
                     if ntail%4096==0:
                         if time.monotonic()>=duration:
-                            stage='integer' if resume_integer else 'tail'
-                            return report('UNKNOWN',rank,cursor=make_cursor(rank,price_index,tail,stage))
+                            stage='integer' if resume_integer else ('joint' if inner else 'tail')
+                            return report('UNKNOWN',rank,cursor=make_cursor(rank,price_index,tail,stage,inner))
                         if checkpoint is not None:
-                            flush(rank,price_index,tail,'integer' if resume_integer else 'tail')
+                            flush(rank,price_index,tail,'integer' if resume_integer else ('joint' if inner else 'tail'),inner=inner)
                     stats['indexed_tails']+=1
                     slack = available
                     residual = state ^ table.packed_tails[tail]
@@ -443,9 +469,14 @@ class OutsideSyndromes:
                                 stats['saved_joint_decisions_reused'] += 1
                             else:
                                 if checkpoint is not None:
-                                    flush(rank,price_index,tail,'joint')
+                                    flush(rank,price_index,tail,'joint',inner=inner)
                                 stats['joint_queries']+=1
-                                if not self.joint(errors_here, cap, duration):
+                                options = {}
+                                if self._joint_images is None and (inner or checkpoint is not None):
+                                    options['inner'] = inner
+                                    if checkpoint is not None:
+                                        options['checkpoint'] = lambda path: flush(rank,price_index,tail,'joint',inner=path)
+                                if not self.joint(errors_here, cap, duration, **options):
                                     continue
                             status = 'PHASE_RELAXATION_FEASIBLE'
                             if accept_errors is not None:
@@ -458,8 +489,9 @@ class OutsideSyndromes:
                                     continue
                                 status = 'INTEGER_RELAXATION_FEASIBLE'
                             return report(status, rank, outside_errors=[self.outside[i] for i in chain(prefix, tail)])
-                        except TimeoutError:
-                            return report('UNKNOWN',rank,cursor=make_cursor(rank,price_index,tail,stage))
+                        except TimeoutError as exc:
+                            saved = exc.path if isinstance(exc,GroupDropTimeout) else (inner if stage=='joint' else ())
+                            return report('UNKNOWN',rank,cursor=make_cursor(rank,price_index,tail,stage,saved))
         return report('INFEASIBLE',end)
 
     def check(self, cap, errors, seconds=60, start=0, stop=None):

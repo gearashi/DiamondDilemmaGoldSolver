@@ -1,0 +1,80 @@
+{
+  "54": {
+    "decision": "keep",
+    "scope": "bounded exact coset minima",
+    "evidence": "R35_GROUP_IMAGES.json",
+    "four": {
+      "queries": 4626,
+      "unique_costs": 4221
+    },
+    "five": {
+      "queries": 11081,
+      "unique_costs": 10220
+    }
+  },
+  "55": {
+    "decision": "keep-scoped",
+    "scope": "higher rank single-drop bases and stronger floors",
+    "evidence": "R35_GROUP_WORK.json",
+    "limit_insertions": 65536,
+    "two_orders": 2,
+    "widths_per_order": 5,
+    "cases_per_width": 16
+  },
+  "56": {
+    "decision": "benchmark-only",
+    "scope": "one extra high-rank completion twice, adverse completion counts elsewhere",
+    "evidence": "R35_GROUP_WORK.json",
+    "lookthrough_results": [
+      [
+        15,
+        14
+      ],
+      [
+        11,
+        10
+      ]
+    ],
+    "adverse_results": [
+      [
+        0,
+        2
+      ],
+      [
+        7,
+        11
+      ]
+    ]
+  },
+  "57": {
+    "decision": "keep-scoped",
+    "scope": "direct rank <=14, higher ranks use drop fallback; bounded min-plus remained a comparator",
+    "evidence": "R35_GROUP_REFERENCES.json",
+    "real_references": 9,
+    "heldout_decided": 128,
+    "baseline_decided": 48,
+    "minplus_slices": 8,
+    "minplus_completed_without_additional_verdict": 6
+  },
+  "58": {
+    "decision": "keep-scoped",
+    "scope": "high-rank group drop cursor only",
+    "evidence": "R35_GROUP_RESUME.json",
+    "positive": 3,
+    "negative": 3,
+    "cold_retry": 33181,
+    "inner_retry": 13316
+  },
+  "48": {
+    "decision": "keep-scoped",
+    "scope": "in-process multi-layer catalogue and index reuse; decline disk transfer",
+    "evidence": "R35_LOSS_CATALOGUES.json",
+    "layers": 28,
+    "cold_rows": 199920,
+    "constructed": 7140,
+    "cold_primary": 199920,
+    "primary": 135660,
+    "cold_secondary": 126758,
+    "secondary": 88176
+  }
+}

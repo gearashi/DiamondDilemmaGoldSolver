@@ -1,0 +1,962 @@
+[
+  {
+    "omitted": 0,
+    "estimated_entry_cap": 150000,
+    "compiled": true,
+    "leaf": 75,
+    "joins": 75,
+    "verdicts": [
+      {
+        "local": [],
+        "cap": 32,
+        "cost": 33,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 33,
+        "cost": 33,
+        "baseline": true
+      },
+      {
+        "local": [
+          7,
+          84,
+          109,
+          117
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          7,
+          84,
+          109,
+          117
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          11,
+          81,
+          92,
+          105
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          11,
+          81,
+          92,
+          105
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          79,
+          84,
+          109,
+          117
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          79,
+          84,
+          109,
+          117
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          1,
+          11,
+          55,
+          65,
+          102
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          1,
+          11,
+          55,
+          65,
+          102
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          2,
+          11,
+          60,
+          69,
+          110
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          2,
+          11,
+          60,
+          69,
+          110
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          7,
+          40,
+          47,
+          57,
+          86
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          7,
+          40,
+          47,
+          57,
+          86
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          7,
+          105,
+          109,
+          110,
+          117
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          7,
+          105,
+          109,
+          110,
+          117
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      }
+    ]
+  },
+  {
+    "omitted": 8,
+    "estimated_entry_cap": 150000,
+    "compiled": true,
+    "leaf": 964,
+    "joins": 1700,
+    "verdicts": [
+      {
+        "local": [],
+        "cap": 24,
+        "cost": 25,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 25,
+        "cost": 25,
+        "baseline": true
+      },
+      {
+        "local": [
+          7,
+          77,
+          101,
+          109
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          7,
+          77,
+          101,
+          109
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          11,
+          74,
+          84,
+          97
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          11,
+          74,
+          84,
+          97
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          72,
+          77,
+          101,
+          109
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          72,
+          77,
+          101,
+          109
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          1,
+          11,
+          50,
+          60,
+          94
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          1,
+          11,
+          50,
+          60,
+          94
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          2,
+          11,
+          55,
+          64,
+          102
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          2,
+          11,
+          55,
+          64,
+          102
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          7,
+          44,
+          52,
+          79
+        ],
+        "cap": 15,
+        "cost": 16,
+        "baseline": false
+      },
+      {
+        "local": [
+          7,
+          44,
+          52,
+          79
+        ],
+        "cap": 16,
+        "cost": 16,
+        "baseline": true
+      },
+      {
+        "local": [
+          7,
+          97,
+          101,
+          102,
+          109
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          7,
+          97,
+          101,
+          102,
+          109
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      }
+    ]
+  },
+  {
+    "omitted": 16,
+    "estimated_entry_cap": 150000,
+    "compiled": true,
+    "leaf": 1796,
+    "joins": 24230,
+    "verdicts": [
+      {
+        "local": [],
+        "cap": 18,
+        "cost": 19,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 19,
+        "cost": 19,
+        "baseline": true
+      },
+      {
+        "local": [
+          7,
+          70,
+          94,
+          102
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          7,
+          70,
+          94,
+          102
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          10,
+          67,
+          77,
+          90
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          10,
+          67,
+          77,
+          90
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          65,
+          70,
+          94,
+          102
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          65,
+          70,
+          94,
+          102
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          1,
+          10,
+          45,
+          53,
+          87
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          1,
+          10,
+          45,
+          53,
+          87
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          2,
+          10,
+          49,
+          57,
+          95
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          2,
+          10,
+          49,
+          57,
+          95
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      },
+      {
+        "local": [
+          7,
+          39,
+          47,
+          72
+        ],
+        "cap": 15,
+        "cost": 16,
+        "baseline": false
+      },
+      {
+        "local": [
+          7,
+          39,
+          47,
+          72
+        ],
+        "cap": 16,
+        "cost": 16,
+        "baseline": true
+      },
+      {
+        "local": [
+          7,
+          90,
+          94,
+          95,
+          102
+        ],
+        "cap": 16,
+        "cost": 17,
+        "baseline": false
+      },
+      {
+        "local": [
+          7,
+          90,
+          94,
+          95,
+          102
+        ],
+        "cap": 17,
+        "cost": 17,
+        "baseline": true
+      }
+    ]
+  },
+  {
+    "omitted": 32,
+    "estimated_entry_cap": 150000,
+    "compiled": false
+  },
+  {
+    "omitted": 59,
+    "estimated_entry_cap": 150000,
+    "compiled": false
+  },
+  {
+    "omitted": 65,
+    "estimated_entry_cap": 150000,
+    "compiled": true,
+    "leaf": 34596,
+    "joins": 31010,
+    "verdicts": [
+      {
+        "local": [],
+        "cap": 9,
+        "cost": 10,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 10,
+        "cost": 10,
+        "baseline": true
+      },
+      {
+        "local": [
+          4,
+          54
+        ],
+        "cap": 11,
+        "cost": 12,
+        "baseline": false
+      },
+      {
+        "local": [
+          4,
+          54
+        ],
+        "cap": 12,
+        "cost": 12,
+        "baseline": true
+      },
+      {
+        "local": [
+          34
+        ],
+        "cap": 10,
+        "cost": 11,
+        "baseline": false
+      },
+      {
+        "local": [
+          34
+        ],
+        "cap": 11,
+        "cost": 11,
+        "baseline": true
+      },
+      {
+        "local": [
+          32,
+          54
+        ],
+        "cap": 11,
+        "cost": 12,
+        "baseline": false
+      },
+      {
+        "local": [
+          32,
+          54
+        ],
+        "cap": 12,
+        "cost": 12,
+        "baseline": true
+      },
+      {
+        "local": [
+          0,
+          22,
+          26,
+          46
+        ],
+        "cap": 13,
+        "cost": 14,
+        "baseline": false
+      },
+      {
+        "local": [
+          0,
+          22,
+          26,
+          46
+        ],
+        "cap": 14,
+        "cost": 14,
+        "baseline": true
+      },
+      {
+        "local": [
+          1,
+          50
+        ],
+        "cap": 11,
+        "cost": 12,
+        "baseline": false
+      },
+      {
+        "local": [
+          1,
+          50
+        ],
+        "cap": 12,
+        "cost": 12,
+        "baseline": true
+      },
+      {
+        "local": [
+          4,
+          21,
+          37
+        ],
+        "cap": 12,
+        "cost": 13,
+        "baseline": false
+      },
+      {
+        "local": [
+          4,
+          21,
+          37
+        ],
+        "cap": 13,
+        "cost": 13,
+        "baseline": true
+      },
+      {
+        "local": [
+          4,
+          50,
+          54
+        ],
+        "cap": 12,
+        "cost": 13,
+        "baseline": false
+      },
+      {
+        "local": [
+          4,
+          50,
+          54
+        ],
+        "cap": 13,
+        "cost": 13,
+        "baseline": true
+      }
+    ]
+  },
+  {
+    "omitted": 80,
+    "estimated_entry_cap": 150000,
+    "compiled": true,
+    "leaf": 67876,
+    "joins": 21,
+    "verdicts": [
+      {
+        "local": [],
+        "cap": 9,
+        "cost": 10,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 10,
+        "cost": 10,
+        "baseline": true
+      },
+      {
+        "local": [
+          4,
+          39
+        ],
+        "cap": 11,
+        "cost": 12,
+        "baseline": false
+      },
+      {
+        "local": [
+          4,
+          39
+        ],
+        "cap": 12,
+        "cost": 12,
+        "baseline": true
+      },
+      {
+        "local": [],
+        "cap": 9,
+        "cost": 10,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 10,
+        "cost": 10,
+        "baseline": true
+      },
+      {
+        "local": [
+          39
+        ],
+        "cap": 10,
+        "cost": 11,
+        "baseline": false
+      },
+      {
+        "local": [
+          39
+        ],
+        "cap": 11,
+        "cost": 11,
+        "baseline": true
+      },
+      {
+        "local": [
+          0,
+          18,
+          20,
+          34
+        ],
+        "cap": 13,
+        "cost": 14,
+        "baseline": false
+      },
+      {
+        "local": [
+          0,
+          18,
+          20,
+          34
+        ],
+        "cap": 14,
+        "cost": 14,
+        "baseline": true
+      },
+      {
+        "local": [
+          1,
+          36
+        ],
+        "cap": 11,
+        "cost": 12,
+        "baseline": false
+      },
+      {
+        "local": [
+          1,
+          36
+        ],
+        "cap": 12,
+        "cost": 12,
+        "baseline": true
+      },
+      {
+        "local": [
+          4,
+          17,
+          26
+        ],
+        "cap": 12,
+        "cost": 13,
+        "baseline": false
+      },
+      {
+        "local": [
+          4,
+          17,
+          26
+        ],
+        "cap": 13,
+        "cost": 13,
+        "baseline": true
+      },
+      {
+        "local": [
+          4,
+          36,
+          39
+        ],
+        "cap": 12,
+        "cost": 13,
+        "baseline": false
+      },
+      {
+        "local": [
+          4,
+          36,
+          39
+        ],
+        "cap": 13,
+        "cost": 13,
+        "baseline": true
+      }
+    ]
+  },
+  {
+    "omitted": 120,
+    "estimated_entry_cap": 150000,
+    "compiled": true,
+    "leaf": 67876,
+    "joins": 12,
+    "verdicts": [
+      {
+        "local": [],
+        "cap": 9,
+        "cost": 10,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 10,
+        "cost": 10,
+        "baseline": true
+      },
+      {
+        "local": [],
+        "cap": 9,
+        "cost": 10,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 10,
+        "cost": 10,
+        "baseline": true
+      },
+      {
+        "local": [],
+        "cap": 9,
+        "cost": 10,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 10,
+        "cost": 10,
+        "baseline": true
+      },
+      {
+        "local": [],
+        "cap": 9,
+        "cost": 10,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 10,
+        "cost": 10,
+        "baseline": true
+      },
+      {
+        "local": [],
+        "cap": 9,
+        "cost": 10,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 10,
+        "cost": 10,
+        "baseline": true
+      },
+      {
+        "local": [],
+        "cap": 9,
+        "cost": 10,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 10,
+        "cost": 10,
+        "baseline": true
+      },
+      {
+        "local": [],
+        "cap": 9,
+        "cost": 10,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 10,
+        "cost": 10,
+        "baseline": true
+      },
+      {
+        "local": [],
+        "cap": 9,
+        "cost": 10,
+        "baseline": false
+      },
+      {
+        "local": [],
+        "cap": 10,
+        "cost": 10,
+        "baseline": true
+      }
+    ]
+  }
+]

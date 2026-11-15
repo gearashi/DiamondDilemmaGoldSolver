@@ -1,0 +1,254 @@
+[
+  {
+    "seed": 35,
+    "row_insertion_limit": 65536,
+    "cases": [
+      {
+        "removed": 8,
+        "count": 16,
+        "summary": {
+          "drop": {
+            "completed": 14,
+            "positive": 7,
+            "all_completed": 14,
+            "insertions_common": 15196
+          },
+          "reused": {
+            "completed": 14,
+            "positive": 7,
+            "all_completed": 14,
+            "insertions_common": 9717
+          },
+          "circuit": {
+            "completed": 14,
+            "positive": 7,
+            "all_completed": 14,
+            "insertions_common": 184585
+          }
+        }
+      },
+      {
+        "removed": 16,
+        "count": 16,
+        "summary": {
+          "drop": {
+            "completed": 11,
+            "positive": 4,
+            "all_completed": 10,
+            "insertions_common": 61445
+          },
+          "reused": {
+            "completed": 11,
+            "positive": 4,
+            "all_completed": 10,
+            "insertions_common": 44545
+          },
+          "circuit": {
+            "completed": 10,
+            "positive": 3,
+            "all_completed": 10,
+            "insertions_common": 206288
+          }
+        }
+      },
+      {
+        "removed": 32,
+        "count": 16,
+        "summary": {
+          "drop": {
+            "completed": 2,
+            "positive": 2,
+            "all_completed": 0,
+            "insertions_common": 0
+          },
+          "reused": {
+            "completed": 2,
+            "positive": 2,
+            "all_completed": 0,
+            "insertions_common": 0
+          },
+          "circuit": {
+            "completed": 0,
+            "positive": 0,
+            "all_completed": 0,
+            "insertions_common": 0
+          }
+        }
+      },
+      {
+        "removed": 56,
+        "count": 16,
+        "summary": {
+          "drop": {
+            "completed": 14,
+            "positive": 14,
+            "all_completed": 14,
+            "insertions_common": 101051
+          },
+          "reused": {
+            "completed": 14,
+            "positive": 14,
+            "all_completed": 14,
+            "insertions_common": 89573
+          },
+          "circuit": {
+            "completed": 15,
+            "positive": 15,
+            "all_completed": 14,
+            "insertions_common": 254318
+          }
+        }
+      },
+      {
+        "removed": 80,
+        "count": 16,
+        "summary": {
+          "drop": {
+            "completed": 16,
+            "positive": 16,
+            "all_completed": 16,
+            "insertions_common": 13952
+          },
+          "reused": {
+            "completed": 16,
+            "positive": 16,
+            "all_completed": 16,
+            "insertions_common": 9168
+          },
+          "circuit": {
+            "completed": 16,
+            "positive": 16,
+            "all_completed": 16,
+            "insertions_common": 7128
+          }
+        }
+      }
+    ]
+  },
+  {
+    "seed": 71,
+    "row_insertion_limit": 65536,
+    "cases": [
+      {
+        "removed": 8,
+        "count": 16,
+        "summary": {
+          "drop": {
+            "completed": 14,
+            "positive": 7,
+            "all_completed": 13,
+            "insertions_common": 32422
+          },
+          "reused": {
+            "completed": 14,
+            "positive": 7,
+            "all_completed": 13,
+            "insertions_common": 25820
+          },
+          "circuit": {
+            "completed": 13,
+            "positive": 6,
+            "all_completed": 13,
+            "insertions_common": 76993
+          }
+        }
+      },
+      {
+        "removed": 16,
+        "count": 16,
+        "summary": {
+          "drop": {
+            "completed": 11,
+            "positive": 4,
+            "all_completed": 7,
+            "insertions_common": 24057
+          },
+          "reused": {
+            "completed": 11,
+            "positive": 4,
+            "all_completed": 7,
+            "insertions_common": 21017
+          },
+          "circuit": {
+            "completed": 7,
+            "positive": 0,
+            "all_completed": 7,
+            "insertions_common": 63709
+          }
+        }
+      },
+      {
+        "removed": 32,
+        "count": 16,
+        "summary": {
+          "drop": {
+            "completed": 0,
+            "positive": 0,
+            "all_completed": 0,
+            "insertions_common": 0
+          },
+          "reused": {
+            "completed": 0,
+            "positive": 0,
+            "all_completed": 0,
+            "insertions_common": 0
+          },
+          "circuit": {
+            "completed": 0,
+            "positive": 0,
+            "all_completed": 0,
+            "insertions_common": 0
+          }
+        }
+      },
+      {
+        "removed": 56,
+        "count": 16,
+        "summary": {
+          "drop": {
+            "completed": 10,
+            "positive": 10,
+            "all_completed": 8,
+            "insertions_common": 122716
+          },
+          "reused": {
+            "completed": 10,
+            "positive": 10,
+            "all_completed": 8,
+            "insertions_common": 125976
+          },
+          "circuit": {
+            "completed": 11,
+            "positive": 11,
+            "all_completed": 8,
+            "insertions_common": 173429
+          }
+        }
+      },
+      {
+        "removed": 80,
+        "count": 16,
+        "summary": {
+          "drop": {
+            "completed": 16,
+            "positive": 16,
+            "all_completed": 16,
+            "insertions_common": 13952
+          },
+          "reused": {
+            "completed": 16,
+            "positive": 16,
+            "all_completed": 16,
+            "insertions_common": 9168
+          },
+          "circuit": {
+            "completed": 16,
+            "positive": 16,
+            "all_completed": 16,
+            "insertions_common": 9214
+          }
+        }
+      }
+    ]
+  }
+]

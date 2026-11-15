@@ -1,0 +1,2380 @@
+{
+  "timeout": 0.5,
+  "layout_seed": 35,
+  "cases": [
+    {
+      "omitted": 4,
+      "image_count": 64,
+      "cases": [
+        {
+          "outside": [],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 7,
+              "multiple_drop_subsets": 454
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 550,
+              "insertions": 3342,
+              "circuits": 356
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.015
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 35,
+              "multiple_drop_subsets": 4024
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.016,
+              "nodes": 1828,
+              "insertions": 12862,
+              "circuits": 1188
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            80,
+            105,
+            113
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 11,
+              "multiple_drop_subsets": 64
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 79,
+              "insertions": 413,
+              "circuits": 40
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            80,
+            105,
+            113
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 20,
+              "multiple_drop_subsets": 130
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 148,
+              "insertions": 1890,
+              "circuits": 83
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            11,
+            77,
+            88,
+            101
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 1,
+              "multiple_drop_subsets": 55
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 192,
+              "insertions": 2086,
+              "circuits": 107
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            11,
+            77,
+            88,
+            101
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.015,
+              "nodes": 14,
+              "multiple_drop_subsets": 97
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 604,
+              "insertions": 9718,
+              "circuits": 389
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            75,
+            80,
+            105,
+            113
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 11,
+              "multiple_drop_subsets": 64
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 79,
+              "insertions": 413,
+              "circuits": 40
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            75,
+            80,
+            105,
+            113
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 20,
+              "multiple_drop_subsets": 130
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 148,
+              "insertions": 1890,
+              "circuits": 83
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            1,
+            11,
+            52,
+            62,
+            98
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 5
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 73,
+              "insertions": 1049,
+              "circuits": 39
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            1,
+            11,
+            52,
+            62,
+            98
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 12,
+              "multiple_drop_subsets": 140
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.016,
+              "nodes": 248,
+              "insertions": 4278,
+              "circuits": 161
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            2,
+            11,
+            57,
+            66,
+            106
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 1
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 79,
+              "insertions": 993,
+              "circuits": 38
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            2,
+            11,
+            57,
+            66,
+            106
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 86,
+              "multiple_drop_subsets": 145
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 230,
+              "insertions": 3596,
+              "circuits": 127
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            44,
+            54,
+            82
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 1,
+              "multiple_drop_subsets": 36
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 164,
+              "insertions": 2310,
+              "circuits": 104
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            44,
+            54,
+            82
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11,
+              "multiple_drop_subsets": 43
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 187,
+              "insertions": 2745,
+              "circuits": 118
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            101,
+            105,
+            106,
+            113
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 6
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.016,
+              "nodes": 56,
+              "insertions": 787,
+              "circuits": 27
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            101,
+            105,
+            106,
+            113
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11,
+              "multiple_drop_subsets": 136
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 263,
+              "insertions": 4242,
+              "circuits": 169
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "omitted": 8,
+      "image_count": 512,
+      "cases": [
+        {
+          "outside": [],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 1623,
+              "multiple_drop_subsets": 262422
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.094,
+              "nodes": 11197,
+              "insertions": 88624,
+              "circuits": 6366
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.516
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 1322,
+              "multiple_drop_subsets": 278729
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.422,
+              "nodes": 43734,
+              "insertions": 394254,
+              "circuits": 27443
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            77,
+            101,
+            109
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.015,
+              "nodes": 11,
+              "multiple_drop_subsets": 64
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 382,
+              "insertions": 3778,
+              "circuits": 181
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            77,
+            101,
+            109
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 12,
+              "multiple_drop_subsets": 102
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.047,
+              "nodes": 3429,
+              "insertions": 43759,
+              "circuits": 1962
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            11,
+            74,
+            84,
+            97
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 1,
+              "multiple_drop_subsets": 55
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 428,
+              "insertions": 3510,
+              "circuits": 184
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            11,
+            74,
+            84,
+            97
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 14,
+              "multiple_drop_subsets": 97
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.047,
+              "nodes": 4034,
+              "insertions": 48572,
+              "circuits": 2264
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            72,
+            77,
+            101,
+            109
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 11,
+              "multiple_drop_subsets": 64
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 382,
+              "insertions": 3778,
+              "circuits": 181
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            72,
+            77,
+            101,
+            109
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.016
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 12,
+              "multiple_drop_subsets": 102
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.031,
+              "nodes": 3429,
+              "insertions": 43759,
+              "circuits": 1962
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            1,
+            11,
+            50,
+            60,
+            94
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 15
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.015,
+              "nodes": 99,
+              "insertions": 880,
+              "circuits": 36
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            1,
+            11,
+            50,
+            60,
+            94
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11,
+              "multiple_drop_subsets": 140
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 720,
+              "insertions": 9311,
+              "circuits": 390
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            2,
+            11,
+            55,
+            64,
+            102
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.016
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 15
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 99,
+              "insertions": 834,
+              "circuits": 34
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            2,
+            11,
+            55,
+            64,
+            102
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11,
+              "multiple_drop_subsets": 145
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.016,
+              "nodes": 728,
+              "insertions": 8611,
+              "circuits": 362
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            44,
+            52,
+            79
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 1,
+              "multiple_drop_subsets": 36
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 389,
+              "insertions": 4088,
+              "circuits": 192
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            44,
+            52,
+            79
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 14,
+              "multiple_drop_subsets": 98
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 467,
+              "insertions": 5247,
+              "circuits": 250
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            97,
+            101,
+            102,
+            109
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 15
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 73,
+              "insertions": 795,
+              "circuits": 32
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            97,
+            101,
+            102,
+            109
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11,
+              "multiple_drop_subsets": 136
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.015,
+              "nodes": 580,
+              "insertions": 7663,
+              "circuits": 311
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "omitted": 16,
+      "image_count": 16384,
+      "cases": [
+        {
+          "outside": [],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 8106,
+              "multiple_drop_subsets": 208102
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 54554,
+              "insertions": 475388,
+              "circuits": 25010
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.016
+            }
+          }
+        },
+        {
+          "outside": [],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 2621,
+              "multiple_drop_subsets": 232091
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 50386,
+              "insertions": 442321,
+              "circuits": 22296
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            70,
+            94,
+            102
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 31,
+              "multiple_drop_subsets": 227
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 1423,
+              "insertions": 11455,
+              "circuits": 557
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.031
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            70,
+            94,
+            102
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.203
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.141,
+              "nodes": 692,
+              "multiple_drop_subsets": 38005
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.218,
+              "nodes": 20615,
+              "insertions": 215916,
+              "circuits": 10206
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            10,
+            67,
+            77,
+            90
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 1,
+              "multiple_drop_subsets": 55
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.016,
+              "nodes": 1623,
+              "insertions": 12633,
+              "circuits": 593
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.031
+            }
+          }
+        },
+        {
+          "outside": [
+            10,
+            67,
+            77,
+            90
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 52,
+              "multiple_drop_subsets": 236
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.172,
+              "nodes": 17549,
+              "insertions": 164883,
+              "circuits": 7466
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            65,
+            70,
+            94,
+            102
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.016
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 31,
+              "multiple_drop_subsets": 227
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.015,
+              "nodes": 1423,
+              "insertions": 11455,
+              "circuits": 557
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            65,
+            70,
+            94,
+            102
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.328
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.313,
+              "nodes": 692,
+              "multiple_drop_subsets": 38005
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.453,
+              "nodes": 20615,
+              "insertions": 215916,
+              "circuits": 10206
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            1,
+            10,
+            45,
+            53,
+            87
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 65
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.016,
+              "nodes": 271,
+              "insertions": 2304,
+              "circuits": 85
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.031
+            }
+          }
+        },
+        {
+          "outside": [
+            1,
+            10,
+            45,
+            53,
+            87
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.484
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 3074,
+              "multiple_drop_subsets": 25974
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.157,
+              "nodes": 6507,
+              "insertions": 82094,
+              "circuits": 2885
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            2,
+            10,
+            49,
+            57,
+            95
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 53
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 254,
+              "insertions": 1731,
+              "circuits": 70
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.031
+            }
+          }
+        },
+        {
+          "outside": [
+            2,
+            10,
+            49,
+            57,
+            95
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.078
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.031,
+              "nodes": 823,
+              "multiple_drop_subsets": 5887
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.078,
+              "nodes": 3835,
+              "insertions": 38017,
+              "circuits": 1446
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            39,
+            47,
+            72
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 1,
+              "multiple_drop_subsets": 36
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.032,
+              "nodes": 1583,
+              "insertions": 11960,
+              "circuits": 526
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.062
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            39,
+            47,
+            72
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.016
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.015,
+              "nodes": 353,
+              "multiple_drop_subsets": 705
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.078,
+              "nodes": 5346,
+              "insertions": 50620,
+              "circuits": 2170
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            90,
+            94,
+            95,
+            102
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.016,
+              "nodes": 20
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.0,
+              "nodes": 219,
+              "insertions": 1438,
+              "circuits": 62
+            },
+            "image": {
+              "answer": false,
+              "sec": 0.031
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            90,
+            94,
+            95,
+            102
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11,
+              "multiple_drop_subsets": 136
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.11,
+              "nodes": 6163,
+              "insertions": 64675,
+              "circuits": 2750
+            },
+            "image": {
+              "answer": true,
+              "sec": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "omitted": 32,
+      "image_count": null,
+      "cases": [
+        {
+          "outside": [],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 1699,
+              "multiple_drop_subsets": 106035
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 29207,
+              "insertions": 242034,
+              "circuits": 7225
+            }
+          }
+        },
+        {
+          "outside": [],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 1282,
+              "multiple_drop_subsets": 125369
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 31672,
+              "insertions": 232512,
+              "circuits": 6773
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            59,
+            80,
+            86
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 4333,
+              "multiple_drop_subsets": 10230
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 12646,
+              "insertions": 119183,
+              "circuits": 3619
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            59,
+            80,
+            86
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 2399,
+              "multiple_drop_subsets": 41710
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 28223,
+              "insertions": 229114,
+              "circuits": 7200
+            }
+          }
+        },
+        {
+          "outside": [
+            10,
+            56,
+            65
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 4268,
+              "multiple_drop_subsets": 30778
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 18149,
+              "insertions": 131663,
+              "circuits": 4483
+            }
+          }
+        },
+        {
+          "outside": [
+            10,
+            56,
+            65
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 1370,
+              "multiple_drop_subsets": 49330
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 23987,
+              "insertions": 151388,
+              "circuits": 4771
+            }
+          }
+        },
+        {
+          "outside": [
+            54,
+            59,
+            80,
+            86
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 7364,
+              "multiple_drop_subsets": 16117
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 24153,
+              "insertions": 227325,
+              "circuits": 6725
+            }
+          }
+        },
+        {
+          "outside": [
+            54,
+            59,
+            80,
+            86
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 3758,
+              "multiple_drop_subsets": 57376
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 30827,
+              "insertions": 252234,
+              "circuits": 7914
+            }
+          }
+        },
+        {
+          "outside": [
+            1,
+            10,
+            38,
+            44,
+            74
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": false,
+              "sec": 0.141
+            },
+            "reused_drop": {
+              "answer": false,
+              "sec": 0.125,
+              "nodes": 2509
+            },
+            "circuit": {
+              "answer": false,
+              "sec": 0.156,
+              "nodes": 9207,
+              "insertions": 79627,
+              "circuits": 2259
+            }
+          }
+        },
+        {
+          "outside": [
+            1,
+            10,
+            38,
+            44,
+            74
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.031
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.032,
+              "nodes": 323,
+              "multiple_drop_subsets": 3023
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 18922,
+              "insertions": 176789,
+              "circuits": 5202
+            }
+          }
+        },
+        {
+          "outside": [
+            2,
+            10,
+            40,
+            81
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 10621,
+              "multiple_drop_subsets": 12891
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 27883,
+              "insertions": 213688,
+              "circuits": 6720
+            }
+          }
+        },
+        {
+          "outside": [
+            2,
+            10,
+            40,
+            81
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.015
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.032,
+              "nodes": 129,
+              "multiple_drop_subsets": 2502
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 24574,
+              "insertions": 168580,
+              "circuits": 5649
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            33,
+            61
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.515,
+              "nodes": 2914,
+              "multiple_drop_subsets": 22360
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 11049,
+              "insertions": 88689,
+              "circuits": 2767
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            33,
+            61
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 1023,
+              "multiple_drop_subsets": 53939
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 15854,
+              "insertions": 131233,
+              "circuits": 4030
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            80,
+            81,
+            86
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 9320,
+              "multiple_drop_subsets": 17589
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 39188,
+              "insertions": 246802,
+              "circuits": 8327
+            }
+          }
+        },
+        {
+          "outside": [
+            7,
+            80,
+            81,
+            86
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": null,
+              "sec": 0.5
+            },
+            "reused_drop": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 4690,
+              "multiple_drop_subsets": 66974
+            },
+            "circuit": {
+              "answer": null,
+              "sec": 0.5,
+              "nodes": 35655,
+              "insertions": 221236,
+              "circuits": 7912
+            }
+          }
+        }
+      ]
+    },
+    {
+      "omitted": 80,
+      "image_count": null,
+      "cases": [
+        {
+          "outside": [],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.016
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [
+            4,
+            39
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [
+            4,
+            39
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [
+            39
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.015,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [
+            39
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [
+            0,
+            18,
+            20,
+            34
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [
+            0,
+            18,
+            20,
+            34
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [
+            1,
+            36
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [
+            1,
+            36
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [
+            4,
+            17,
+            26
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 449,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [
+            4,
+            17,
+            26
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 449,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [
+            4,
+            36,
+            39
+          ],
+          "cap": 15,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        },
+        {
+          "outside": [
+            4,
+            36,
+            39
+          ],
+          "cap": 17,
+          "arms": {
+            "drop": {
+              "answer": true,
+              "sec": 0.0
+            },
+            "reused_drop": {
+              "answer": true,
+              "sec": 0.0,
+              "nodes": 11
+            },
+            "circuit": {
+              "answer": true,
+              "sec": 0.016,
+              "nodes": 10,
+              "insertions": 445,
+              "circuits": 9
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

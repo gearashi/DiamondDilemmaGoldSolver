@@ -1,0 +1,138 @@
+{
+  "reference": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "cap": 17,
+  "image_count": 16,
+  "original": [
+    {
+      "errors": 4,
+      "stop": 6903,
+      "indexed_tails": 1090000,
+      "full": {
+        "scope": "all phase arrivals",
+        "queries": 4626,
+        "feasible": 3,
+        "drop_seconds": 23.51194,
+        "image_seconds": 0.0731,
+        "baseline_insertions": null,
+        "images_priced": 68496,
+        "complete_cost_reuses": 345,
+        "unique_cosets": 4221
+      },
+      "stratified": {
+        "scope": "systematic sample of at least 128",
+        "queries": 129,
+        "feasible": 0,
+        "drop_seconds": 0.46804,
+        "image_seconds": 0.00161,
+        "baseline_insertions": 650797,
+        "images_priced": 2048,
+        "complete_cost_reuses": 1,
+        "unique_cosets": 128
+      }
+    },
+    {
+      "errors": 5,
+      "stop": 65536,
+      "indexed_tails": 3400598,
+      "full": {
+        "scope": "all phase arrivals",
+        "queries": 11081,
+        "feasible": 4,
+        "drop_seconds": 19.05576,
+        "image_seconds": 0.15894,
+        "baseline_insertions": null,
+        "images_priced": 168048,
+        "complete_cost_reuses": 578,
+        "unique_cosets": 10220
+      },
+      "stratified": {
+        "scope": "systematic sample of at least 128",
+        "queries": 129,
+        "feasible": 0,
+        "drop_seconds": 0.18552,
+        "image_seconds": 0.00159,
+        "baseline_insertions": 330945,
+        "images_priced": 2048,
+        "complete_cost_reuses": 1,
+        "unique_cosets": 128
+      }
+    }
+  ],
+  "after_integer_cores": [
+    {
+      "scope": "after checked integer cores",
+      "queries": 4622,
+      "feasible": 1,
+      "drop_seconds": 19.52469,
+      "image_seconds": 0.05492,
+      "baseline_insertions": null,
+      "images_priced": 68432,
+      "complete_cost_reuses": 345,
+      "unique_cosets": 4218
+    },
+    {
+      "scope": "after checked integer cores",
+      "queries": 11033,
+      "feasible": 4,
+      "drop_seconds": 17.61415,
+      "image_seconds": 0.19214,
+      "baseline_insertions": null,
+      "images_priced": 167168,
+      "complete_cost_reuses": 585,
+      "unique_cosets": 10172
+    }
+  ],
+  "integer_work": {
+    "integer_core_replays": 1,
+    "integer_native_calls": 6,
+    "integer_cores_learned": 5
+  },
+  "phase_hits": [
+    [
+      7,
+      84,
+      109,
+      117
+    ],
+    [
+      11,
+      81,
+      92,
+      105
+    ],
+    [
+      79,
+      84,
+      109,
+      117
+    ],
+    [
+      1,
+      11,
+      55,
+      65,
+      102
+    ],
+    [
+      2,
+      11,
+      60,
+      69,
+      110
+    ],
+    [
+      7,
+      40,
+      47,
+      57,
+      86
+    ],
+    [
+      7,
+      105,
+      109,
+      110,
+      117
+    ]
+  ]
+}

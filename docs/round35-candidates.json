@@ -463,7 +463,23 @@
       "source_id": 1,
       "title": "Share the cap-independent suffix catalogue across error layers",
       "proposal_and_validation": "The R33 lookup already survives every page of one layer. In `OutsideSyndromes.indexed`, the single retained table is still keyed by (cap, errors). For every layer with at least two errors, the same 7,140 position pairs, their packed column XORs and outside-check projections are independent of cap and total error count. Separate those facts from the cap-dependent first/second anchors, admissible charges, bucket order and ordinal masks. Count repeated catalogue/anchor builds in real multi-layer runs and on independent workers. Only share projected subindexes when the actual layout and anchor fields match. Cross-process materialization is a follow-up if repeated builds survive in practice. Preserve rank order and validate the old cursor when just the implementation changes.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "mechanism": "in-process multi-layer catalogue and index reuse; decline disk transfer",
+      "evidence": [
+        "docs/ROUND35_LOSS.md",
+        "docs/R35_LOSS_CATALOGUES.json"
+      ],
+      "measurement": {
+        "layers": 28,
+        "cold_rows": 199920,
+        "constructed": 7140,
+        "cold_primary": 199920,
+        "primary": 135660,
+        "cold_secondary": 126758,
+        "secondary": 88176
+      },
+      "decision": "keep-scoped",
+      "reopen_if": "A normal multi-process handoff reconstructs fewer rows than computation, including verification and tuple decoding."
     },
     {
       "id": 49,
@@ -471,7 +487,8 @@
       "source_id": 2,
       "title": "Exact suffix block filtering with verified integer cores",
       "proposal_and_validation": "The retained R34 core filter sees a full error mask just before a joint call. At a fixed prefix and bucket, compile each already-verified core’s required-one and required-zero masks into eligible suffix ordinals, subtract its mask before iterating tails, and OR together overlapping exclusions. A core can rule out an entire prefix only if *every* still-owned suffix is covered. Use the prefix’s actual allowed indices, exact suffix cardinality and the first-anchor order to avoid counting already-filtered tails twice. Measure eliminated iterations in the original 17/four and 17/five traces, including the seven observed arrivals and the 73-literal checked core. A dormant or UNKNOWN hint cannot remove ordinals. Sparse-core and no-core controls bound the overhead.",
-      "state": "open"
+      "state": "in progress",
+      "decision_changing_followups": "Compare actual retained integer core rejection before ordinal iteration against the checked per-tail filter."
     },
     {
       "id": 50,
@@ -511,7 +528,24 @@
       "source_id": 7,
       "title": "Cache a canonical affine residual across different outside error masks",
       "proposal_and_validation": "After outside dependencies pass, `joint` prices the grouped bonds using fixed coefficient rows and an RHS affine in the chosen errors. Two RHS vectors differing by the coefficient matrix times a common free phase assignment have precisely the same achievable mismatch patterns. Precompute a canonical coset remainder, screen the rate of actual collisions across distinct tails, then cache exact exclusions or an attained minimum cost for that grouped problem. Translate a witness via the corresponding free-phase difference and verify in the destination. The downstream signed-integer and physical constraints still require the destination’s actual outside pattern. Report work without counting repeats already removed by learned integer cores.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "mechanism": "bounded exact coset minima",
+      "evidence": [
+        "docs/ROUND35_LOSS.md",
+        "docs/R35_GROUP_IMAGES.json"
+      ],
+      "measurement": {
+        "four": {
+          "queries": 4626,
+          "unique_costs": 4221
+        },
+        "five": {
+          "queries": 11081,
+          "unique_costs": 10220
+        }
+      },
+      "decision": "keep",
+      "reopen_if": "A destination outside-pattern witness or persistent cap transfer needs reconstruction; tracked at 59."
     },
     {
       "id": 55,
@@ -519,7 +553,20 @@
       "source_id": 8,
       "title": "Reuse the single-drop elimination performed when ordering joint groups",
       "proposal_and_validation": "`joint.difficulty` constructs a basis for each candidate single loss, and `resolve` rebuilds the same root cases. Retain the admissible child basis or a compact row delta for the selected group. Follow with prefix/suffix elimination over candidate dropped bonds, and a reversible echelon trail when enumerating multi-drop candidates. Include dependent rows, contradictory zero rows, changed affine RHS, sibling rollback and interruption. Count actual row insertions, XORs and saved candidate branches against the precompiled R34 basis. Leave the old path for instances where storing the bases costs more and does not save meaningful work.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "mechanism": "higher rank single-drop bases and stronger floors",
+      "evidence": [
+        "docs/ROUND35_LOSS.md",
+        "docs/R35_GROUP_WORK.json"
+      ],
+      "measurement": {
+        "limit_insertions": 65536,
+        "two_orders": 2,
+        "widths_per_order": 5,
+        "cases_per_width": 16
+      },
+      "decision": "keep-scoped",
+      "reopen_if": "A wider supported layout shows materially repeated multi-drop elimination after the gate and cursor."
     },
     {
       "id": 56,
@@ -527,7 +574,36 @@
       "source_id": 9,
       "title": "Branch on a contradictory parity circuit",
       "proposal_and_validation": "The current loop enumerates dropped-bond combinations up to the remaining cap. Start from kept equations, attach provenance to reductions, and when inconsistent, branch only on dropping an eligible member of the checked contradiction. Make descendants disjoint by requiring all earlier eligible members to remain. Also enforce at least one physical loss in every disjoint mandatory-drop group even when its phase equations happen to be consistent; a required bond cannot be dropped. Independently replay every circuit before pruning. Test alternative order by shared incidence/remaining group slack, subsumed conflict removal and prefix-state reuse only after basic coverage matches direct enumeration. Report search nodes, circuits, and work per actually closed original tail.",
-      "state": "open"
+      "state": "benchmark only",
+      "mechanism": "one extra high-rank completion twice, adverse completion counts elsewhere",
+      "evidence": [
+        "docs/ROUND35_LOSS.md",
+        "docs/R35_GROUP_WORK.json"
+      ],
+      "measurement": {
+        "lookthrough_results": [
+          [
+            15,
+            14
+          ],
+          [
+            11,
+            10
+          ]
+        ],
+        "adverse_results": [
+          [
+            0,
+            2
+          ],
+          [
+            7,
+            11
+          ]
+        ]
+      },
+      "decision": "benchmark-only",
+      "reopen_if": "A genuine full-board rank above the bounded image gate presents useful independently reproduced circuit strict wins."
     },
     {
       "id": 57,
@@ -535,10 +611,21 @@
       "source_id": 10,
       "title": "Compute minimum grouped cost in free-phase coordinates",
       "proposal_and_validation": "For fixed free phases, each disjoint group costs at least one and otherwise exactly its number of incompatible optional bonds. Every additional mandatory drop must remain legal. Try enumerating the rank of the grouped free coefficients, with Gray-code updates only to incident groups. If the global rank is too large, eliminate low-width connected components of the group/free-coordinate incidence graph and project each component to its true boundary bits with a min-plus table. Stop when estimated table width exceeds the measured R34 cost and fall back. This concerns the grouped reference-loss oracle; the physical inventory colleague’s lattice/coupling experiment targets different equations. Compare minimum against exhaustive phase+drop enumeration at *every* budget; include groups with no removable bonds, couplings that prevent independent minima, and positive assignment reconstruction. A finite minimum can answer multiple cap queries.",
-      "state": "in progress",
-      "decision_changing_followups": [
-        "On the original reference, 80 grouped equations after outside elimination have rank four, allowing 16 grouped mismatch vectors. Compare all seven archived integer arrivals, coset reuse, independent enumeration, changed ranks, timeout and viable examples. Distinguish phase minima from a geographic Gold proof."
-      ]
+      "state": "keep with exact scope",
+      "mechanism": "direct rank <=14, higher ranks use drop fallback; bounded min-plus remained a comparator",
+      "evidence": [
+        "docs/ROUND35_LOSS.md",
+        "docs/R35_GROUP_REFERENCES.json"
+      ],
+      "measurement": {
+        "real_references": 9,
+        "heldout_decided": 128,
+        "baseline_decided": 48,
+        "minplus_slices": 8,
+        "minplus_completed_without_additional_verdict": 6
+      },
+      "decision": "keep-scoped",
+      "reopen_if": "A supported wide reference both exceeds the direct image gate and remains unresolved with a small interface."
     },
     {
       "id": 58,
@@ -546,7 +633,20 @@
       "source_id": 11,
       "title": "Persist inner joint progress after an actual long interruption",
       "proposal_and_validation": "The R34 cursor saves a tail/stage; an interrupted `joint` still restarts at that candidate’s first branch. Profile actual interrupted joint calls, distinguishing their native work from saved outer suffix work. If material, persist only a bounded disjoint group/drop frontier and verified finished siblings, keyed by full coefficient/RHS/group order, objective budget and cursor generation. Reconstruct fresh bases on reopening and preserve a deep positive sibling. Prefer L9 or L10’s stable state if either wins. Test killed workers, stale fenced writes, incompatible search-order versions and at least one case where the old retry is cheaper.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "mechanism": "high-rank group drop cursor only",
+      "evidence": [
+        "docs/ROUND35_LOSS.md",
+        "docs/R35_GROUP_RESUME.json"
+      ],
+      "measurement": {
+        "positive": 3,
+        "negative": 3,
+        "cold_retry": 33181,
+        "inner_retry": 13316
+      },
+      "decision": "keep-scoped",
+      "reopen_if": "An incompatible new branch order or larger group residual exposes substantial unseekable replay."
     },
     {
       "id": 59,

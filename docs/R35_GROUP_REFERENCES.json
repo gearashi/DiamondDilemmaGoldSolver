@@ -1,0 +1,880 @@
+[
+  {
+    "backend": "cpu",
+    "seed": 0,
+    "score": 183,
+    "group_count": 5,
+    "images": 1,
+    "cases": [
+      {
+        "errors": 77,
+        "cap": 91,
+        "minimum": 92,
+        "drop_result": false
+      },
+      {
+        "errors": 77,
+        "cap": 92,
+        "minimum": 92,
+        "drop_result": true
+      },
+      {
+        "errors": 66,
+        "cap": 82,
+        "minimum": 83,
+        "drop_result": null
+      },
+      {
+        "errors": 66,
+        "cap": 83,
+        "minimum": 83,
+        "drop_result": true
+      },
+      {
+        "errors": 88,
+        "cap": 102,
+        "minimum": 103,
+        "drop_result": false
+      },
+      {
+        "errors": 88,
+        "cap": 103,
+        "minimum": 103,
+        "drop_result": true
+      },
+      {
+        "errors": 80,
+        "cap": 96,
+        "minimum": 97,
+        "drop_result": false
+      },
+      {
+        "errors": 80,
+        "cap": 97,
+        "minimum": 97,
+        "drop_result": true
+      },
+      {
+        "errors": 89,
+        "cap": 99,
+        "minimum": 100,
+        "drop_result": false
+      },
+      {
+        "errors": 89,
+        "cap": 100,
+        "minimum": 100,
+        "drop_result": true
+      },
+      {
+        "errors": 87,
+        "cap": 101,
+        "minimum": 102,
+        "drop_result": false
+      },
+      {
+        "errors": 87,
+        "cap": 102,
+        "minimum": 102,
+        "drop_result": true
+      },
+      {
+        "errors": 79,
+        "cap": 91,
+        "minimum": 92,
+        "drop_result": false
+      },
+      {
+        "errors": 79,
+        "cap": 92,
+        "minimum": 92,
+        "drop_result": true
+      },
+      {
+        "errors": 76,
+        "cap": 90,
+        "minimum": 91,
+        "drop_result": false
+      },
+      {
+        "errors": 76,
+        "cap": 91,
+        "minimum": 91,
+        "drop_result": true
+      }
+    ],
+    "work": {
+      "drop_seconds": 0.7996537999715656,
+      "drop_completed": 15,
+      "drop_unknown": 1
+    }
+  },
+  {
+    "backend": "cpu",
+    "seed": 1,
+    "score": 180,
+    "group_count": 7,
+    "images": 4,
+    "cases": [
+      {
+        "errors": 60,
+        "cap": 84,
+        "minimum": 85,
+        "drop_result": null
+      },
+      {
+        "errors": 60,
+        "cap": 85,
+        "minimum": 85,
+        "drop_result": true
+      },
+      {
+        "errors": 79,
+        "cap": 105,
+        "minimum": 106,
+        "drop_result": null
+      },
+      {
+        "errors": 79,
+        "cap": 106,
+        "minimum": 106,
+        "drop_result": null
+      },
+      {
+        "errors": 65,
+        "cap": 91,
+        "minimum": 92,
+        "drop_result": null
+      },
+      {
+        "errors": 65,
+        "cap": 92,
+        "minimum": 92,
+        "drop_result": null
+      },
+      {
+        "errors": 66,
+        "cap": 88,
+        "minimum": 89,
+        "drop_result": null
+      },
+      {
+        "errors": 66,
+        "cap": 89,
+        "minimum": 89,
+        "drop_result": null
+      },
+      {
+        "errors": 62,
+        "cap": 90,
+        "minimum": 91,
+        "drop_result": null
+      },
+      {
+        "errors": 62,
+        "cap": 91,
+        "minimum": 91,
+        "drop_result": null
+      },
+      {
+        "errors": 64,
+        "cap": 92,
+        "minimum": 93,
+        "drop_result": null
+      },
+      {
+        "errors": 64,
+        "cap": 93,
+        "minimum": 93,
+        "drop_result": null
+      },
+      {
+        "errors": 56,
+        "cap": 86,
+        "minimum": 87,
+        "drop_result": null
+      },
+      {
+        "errors": 56,
+        "cap": 87,
+        "minimum": 87,
+        "drop_result": null
+      },
+      {
+        "errors": 55,
+        "cap": 77,
+        "minimum": 78,
+        "drop_result": null
+      },
+      {
+        "errors": 55,
+        "cap": 78,
+        "minimum": 78,
+        "drop_result": null
+      }
+    ],
+    "work": {
+      "drop_seconds": 7.792737899930216,
+      "drop_unknown": 15,
+      "drop_completed": 1
+    }
+  },
+  {
+    "backend": "cpu",
+    "seed": 2,
+    "score": 183,
+    "group_count": 7,
+    "images": 1,
+    "cases": [
+      {
+        "errors": 89,
+        "cap": 107,
+        "minimum": 108,
+        "drop_result": false
+      },
+      {
+        "errors": 89,
+        "cap": 108,
+        "minimum": 108,
+        "drop_result": true
+      },
+      {
+        "errors": 75,
+        "cap": 93,
+        "minimum": 94,
+        "drop_result": false
+      },
+      {
+        "errors": 75,
+        "cap": 94,
+        "minimum": 94,
+        "drop_result": true
+      },
+      {
+        "errors": 70,
+        "cap": 82,
+        "minimum": 83,
+        "drop_result": false
+      },
+      {
+        "errors": 70,
+        "cap": 83,
+        "minimum": 83,
+        "drop_result": true
+      },
+      {
+        "errors": 76,
+        "cap": 88,
+        "minimum": 89,
+        "drop_result": false
+      },
+      {
+        "errors": 76,
+        "cap": 89,
+        "minimum": 89,
+        "drop_result": true
+      },
+      {
+        "errors": 73,
+        "cap": 93,
+        "minimum": 94,
+        "drop_result": false
+      },
+      {
+        "errors": 73,
+        "cap": 94,
+        "minimum": 94,
+        "drop_result": true
+      },
+      {
+        "errors": 69,
+        "cap": 85,
+        "minimum": 86,
+        "drop_result": null
+      },
+      {
+        "errors": 69,
+        "cap": 86,
+        "minimum": 86,
+        "drop_result": true
+      },
+      {
+        "errors": 80,
+        "cap": 94,
+        "minimum": 95,
+        "drop_result": false
+      },
+      {
+        "errors": 80,
+        "cap": 95,
+        "minimum": 95,
+        "drop_result": true
+      },
+      {
+        "errors": 70,
+        "cap": 88,
+        "minimum": 89,
+        "drop_result": false
+      },
+      {
+        "errors": 70,
+        "cap": 89,
+        "minimum": 89,
+        "drop_result": true
+      }
+    ],
+    "work": {
+      "drop_seconds": 0.27607350004836917,
+      "drop_completed": 15,
+      "drop_unknown": 1
+    }
+  },
+  {
+    "backend": "cpu",
+    "seed": 3,
+    "score": 182,
+    "group_count": 7,
+    "images": 1024,
+    "cases": [
+      {
+        "errors": 44,
+        "cap": 68,
+        "minimum": 69,
+        "drop_result": null
+      },
+      {
+        "errors": 44,
+        "cap": 69,
+        "minimum": 69,
+        "drop_result": null
+      },
+      {
+        "errors": 56,
+        "cap": 80,
+        "minimum": 81,
+        "drop_result": null
+      },
+      {
+        "errors": 56,
+        "cap": 81,
+        "minimum": 81,
+        "drop_result": null
+      },
+      {
+        "errors": 50,
+        "cap": 70,
+        "minimum": 71,
+        "drop_result": null
+      },
+      {
+        "errors": 50,
+        "cap": 71,
+        "minimum": 71,
+        "drop_result": null
+      },
+      {
+        "errors": 55,
+        "cap": 77,
+        "minimum": 78,
+        "drop_result": null
+      },
+      {
+        "errors": 55,
+        "cap": 78,
+        "minimum": 78,
+        "drop_result": true
+      },
+      {
+        "errors": 48,
+        "cap": 74,
+        "minimum": 75,
+        "drop_result": null
+      },
+      {
+        "errors": 48,
+        "cap": 75,
+        "minimum": 75,
+        "drop_result": null
+      },
+      {
+        "errors": 57,
+        "cap": 85,
+        "minimum": 86,
+        "drop_result": null
+      },
+      {
+        "errors": 57,
+        "cap": 86,
+        "minimum": 86,
+        "drop_result": null
+      },
+      {
+        "errors": 55,
+        "cap": 79,
+        "minimum": 80,
+        "drop_result": null
+      },
+      {
+        "errors": 55,
+        "cap": 80,
+        "minimum": 80,
+        "drop_result": null
+      },
+      {
+        "errors": 54,
+        "cap": 82,
+        "minimum": 83,
+        "drop_result": null
+      },
+      {
+        "errors": 54,
+        "cap": 83,
+        "minimum": 83,
+        "drop_result": null
+      }
+    ],
+    "work": {
+      "drop_seconds": 3.6044427000160795,
+      "drop_unknown": 15,
+      "drop_completed": 1
+    }
+  },
+  {
+    "backend": "cuda",
+    "seed": 0,
+    "score": 179,
+    "group_count": 5,
+    "images": 32,
+    "cases": [
+      {
+        "errors": 55,
+        "cap": 81,
+        "minimum": 82,
+        "drop_result": null
+      },
+      {
+        "errors": 55,
+        "cap": 82,
+        "minimum": 82,
+        "drop_result": null
+      },
+      {
+        "errors": 56,
+        "cap": 82,
+        "minimum": 83,
+        "drop_result": null
+      },
+      {
+        "errors": 56,
+        "cap": 83,
+        "minimum": 83,
+        "drop_result": null
+      },
+      {
+        "errors": 60,
+        "cap": 76,
+        "minimum": 77,
+        "drop_result": null
+      },
+      {
+        "errors": 60,
+        "cap": 77,
+        "minimum": 77,
+        "drop_result": true
+      },
+      {
+        "errors": 59,
+        "cap": 83,
+        "minimum": 84,
+        "drop_result": null
+      },
+      {
+        "errors": 59,
+        "cap": 84,
+        "minimum": 84,
+        "drop_result": null
+      },
+      {
+        "errors": 56,
+        "cap": 74,
+        "minimum": 75,
+        "drop_result": null
+      },
+      {
+        "errors": 56,
+        "cap": 75,
+        "minimum": 75,
+        "drop_result": null
+      },
+      {
+        "errors": 70,
+        "cap": 96,
+        "minimum": 97,
+        "drop_result": null
+      },
+      {
+        "errors": 70,
+        "cap": 97,
+        "minimum": 97,
+        "drop_result": null
+      },
+      {
+        "errors": 64,
+        "cap": 88,
+        "minimum": 89,
+        "drop_result": null
+      },
+      {
+        "errors": 64,
+        "cap": 89,
+        "minimum": 89,
+        "drop_result": null
+      },
+      {
+        "errors": 57,
+        "cap": 81,
+        "minimum": 82,
+        "drop_result": null
+      },
+      {
+        "errors": 57,
+        "cap": 82,
+        "minimum": 82,
+        "drop_result": null
+      }
+    ],
+    "work": {
+      "drop_seconds": 3.315130700037116,
+      "drop_unknown": 15,
+      "drop_completed": 1
+    }
+  },
+  {
+    "backend": "cuda",
+    "seed": 1,
+    "score": 188,
+    "group_count": 6,
+    "images": 2,
+    "cases": [
+      {
+        "errors": 89,
+        "cap": 106,
+        "minimum": 107,
+        "drop_result": false
+      },
+      {
+        "errors": 89,
+        "cap": 107,
+        "minimum": 107,
+        "drop_result": true
+      },
+      {
+        "errors": 69,
+        "cap": 84,
+        "minimum": 85,
+        "drop_result": false
+      },
+      {
+        "errors": 69,
+        "cap": 85,
+        "minimum": 85,
+        "drop_result": true
+      },
+      {
+        "errors": 72,
+        "cap": 87,
+        "minimum": 88,
+        "drop_result": false
+      },
+      {
+        "errors": 72,
+        "cap": 88,
+        "minimum": 88,
+        "drop_result": true
+      },
+      {
+        "errors": 76,
+        "cap": 91,
+        "minimum": 92,
+        "drop_result": false
+      },
+      {
+        "errors": 76,
+        "cap": 92,
+        "minimum": 92,
+        "drop_result": true
+      },
+      {
+        "errors": 80,
+        "cap": 97,
+        "minimum": 98,
+        "drop_result": false
+      },
+      {
+        "errors": 80,
+        "cap": 98,
+        "minimum": 98,
+        "drop_result": true
+      },
+      {
+        "errors": 75,
+        "cap": 92,
+        "minimum": 93,
+        "drop_result": null
+      },
+      {
+        "errors": 75,
+        "cap": 93,
+        "minimum": 93,
+        "drop_result": true
+      },
+      {
+        "errors": 75,
+        "cap": 90,
+        "minimum": 91,
+        "drop_result": false
+      },
+      {
+        "errors": 75,
+        "cap": 91,
+        "minimum": 91,
+        "drop_result": true
+      },
+      {
+        "errors": 78,
+        "cap": 95,
+        "minimum": 96,
+        "drop_result": false
+      },
+      {
+        "errors": 78,
+        "cap": 96,
+        "minimum": 96,
+        "drop_result": true
+      }
+    ],
+    "work": {
+      "drop_seconds": 0.2843944999622181,
+      "drop_completed": 15,
+      "drop_unknown": 1
+    }
+  },
+  {
+    "backend": "cuda",
+    "seed": 2,
+    "score": 185,
+    "group_count": 11,
+    "images": 1024,
+    "cases": [
+      {
+        "errors": 58,
+        "cap": 86,
+        "minimum": 87,
+        "drop_result": null
+      },
+      {
+        "errors": 58,
+        "cap": 87,
+        "minimum": 87,
+        "drop_result": null
+      },
+      {
+        "errors": 66,
+        "cap": 88,
+        "minimum": 89,
+        "drop_result": null
+      },
+      {
+        "errors": 66,
+        "cap": 89,
+        "minimum": 89,
+        "drop_result": null
+      },
+      {
+        "errors": 54,
+        "cap": 78,
+        "minimum": 79,
+        "drop_result": null
+      },
+      {
+        "errors": 54,
+        "cap": 79,
+        "minimum": 79,
+        "drop_result": null
+      },
+      {
+        "errors": 48,
+        "cap": 74,
+        "minimum": 75,
+        "drop_result": null
+      },
+      {
+        "errors": 48,
+        "cap": 75,
+        "minimum": 75,
+        "drop_result": null
+      },
+      {
+        "errors": 50,
+        "cap": 78,
+        "minimum": 79,
+        "drop_result": null
+      },
+      {
+        "errors": 50,
+        "cap": 79,
+        "minimum": 79,
+        "drop_result": null
+      },
+      {
+        "errors": 49,
+        "cap": 79,
+        "minimum": 80,
+        "drop_result": null
+      },
+      {
+        "errors": 49,
+        "cap": 80,
+        "minimum": 80,
+        "drop_result": null
+      },
+      {
+        "errors": 57,
+        "cap": 83,
+        "minimum": 84,
+        "drop_result": null
+      },
+      {
+        "errors": 57,
+        "cap": 84,
+        "minimum": 84,
+        "drop_result": null
+      },
+      {
+        "errors": 53,
+        "cap": 79,
+        "minimum": 80,
+        "drop_result": null
+      },
+      {
+        "errors": 53,
+        "cap": 80,
+        "minimum": 80,
+        "drop_result": null
+      }
+    ],
+    "work": {
+      "drop_seconds": 2.4821107999887317,
+      "drop_unknown": 16
+    }
+  },
+  {
+    "backend": "cuda",
+    "seed": 3,
+    "score": 183,
+    "group_count": 11,
+    "images": 32,
+    "cases": [
+      {
+        "errors": 54,
+        "cap": 85,
+        "minimum": 86,
+        "drop_result": null
+      },
+      {
+        "errors": 54,
+        "cap": 86,
+        "minimum": 86,
+        "drop_result": null
+      },
+      {
+        "errors": 59,
+        "cap": 84,
+        "minimum": 85,
+        "drop_result": null
+      },
+      {
+        "errors": 59,
+        "cap": 85,
+        "minimum": 85,
+        "drop_result": null
+      },
+      {
+        "errors": 60,
+        "cap": 87,
+        "minimum": 88,
+        "drop_result": null
+      },
+      {
+        "errors": 60,
+        "cap": 88,
+        "minimum": 88,
+        "drop_result": null
+      },
+      {
+        "errors": 56,
+        "cap": 85,
+        "minimum": 86,
+        "drop_result": null
+      },
+      {
+        "errors": 56,
+        "cap": 86,
+        "minimum": 86,
+        "drop_result": null
+      },
+      {
+        "errors": 64,
+        "cap": 90,
+        "minimum": 91,
+        "drop_result": null
+      },
+      {
+        "errors": 64,
+        "cap": 91,
+        "minimum": 91,
+        "drop_result": null
+      },
+      {
+        "errors": 65,
+        "cap": 94,
+        "minimum": 95,
+        "drop_result": null
+      },
+      {
+        "errors": 65,
+        "cap": 95,
+        "minimum": 95,
+        "drop_result": null
+      },
+      {
+        "errors": 56,
+        "cap": 82,
+        "minimum": 83,
+        "drop_result": null
+      },
+      {
+        "errors": 56,
+        "cap": 83,
+        "minimum": 83,
+        "drop_result": null
+      },
+      {
+        "errors": 49,
+        "cap": 72,
+        "minimum": 73,
+        "drop_result": null
+      },
+      {
+        "errors": 49,
+        "cap": 73,
+        "minimum": 73,
+        "drop_result": null
+      }
+    ],
+    "work": {
+      "drop_seconds": 2.628763999964576,
+      "drop_unknown": 16
+    }
+  }
+]
