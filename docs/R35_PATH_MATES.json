@@ -1,0 +1,562 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "paths_per_target": 2,
+  "maximum_path_length": 10,
+  "sources": {
+    "reference": {
+      "paths": 344,
+      "zero_geometry": 0,
+      "zero_compatible": 77,
+      "new_rules": 245,
+      "with_implication": 202,
+      "width_1": 245
+    },
+    "raw": {
+      "paths": 477,
+      "zero_geometry": 50,
+      "zero_compatible": 129,
+      "new_rules": 7,
+      "with_implication": 7,
+      "width_1": 7
+    },
+    "contract": {
+      "paths": 475,
+      "zero_geometry": 56,
+      "zero_compatible": 102,
+      "new_rules": 2,
+      "with_implication": 2,
+      "width_1": 2
+    },
+    "near0": {
+      "paths": 478,
+      "zero_geometry": 29,
+      "zero_compatible": 82,
+      "reused_paths": 131,
+      "new_rules": 115,
+      "with_implication": 110,
+      "width_1": 115
+    },
+    "near1": {
+      "reused_paths": 265,
+      "paths": 480,
+      "zero_geometry": 37,
+      "zero_compatible": 100,
+      "new_rules": 103,
+      "with_implication": 99,
+      "width_1": 103
+    },
+    "trade": {
+      "paths": 478,
+      "zero_geometry": 48,
+      "zero_compatible": 118,
+      "reused_paths": 8,
+      "new_rules": 4,
+      "with_implication": 4,
+      "width_1": 4
+    },
+    "cp": {
+      "paths": 479,
+      "zero_geometry": 37,
+      "zero_compatible": 114,
+      "new_rules": 1,
+      "with_implication": 1,
+      "width_1": 1,
+      "reused_paths": 2
+    },
+    "contact": {
+      "paths": 474,
+      "zero_geometry": 39,
+      "zero_compatible": 91,
+      "reused_paths": 234,
+      "new_rules": 100,
+      "with_implication": 98,
+      "width_1": 100
+    }
+  },
+  "public_cases": [
+    {
+      "donor": "reference",
+      "required": [
+        [
+          4,
+          273
+        ],
+        [
+          30,
+          385
+        ],
+        [
+          31,
+          464
+        ],
+        [
+          274,
+          299
+        ],
+        [
+          297,
+          384
+        ]
+      ],
+      "forbidden": [
+        3,
+        462
+      ],
+      "runs": {
+        "plain": {
+          "status": "UNKNOWN",
+          "cp_calls": 5,
+          "branches": 184554
+        },
+        "units": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "path_mates": {
+            "components": 1,
+            "geometric_roots": 450,
+            "compatible_roots": 450,
+            "distinct_patterns": 0,
+            "added_required": 0,
+            "added_forbidden": 0,
+            "status": "INFEASIBLE"
+          }
+        },
+        "table": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "path_mates": {
+            "components": 1,
+            "geometric_roots": 450,
+            "compatible_roots": 450,
+            "distinct_patterns": 0,
+            "added_required": 0,
+            "added_forbidden": 0,
+            "status": "INFEASIBLE"
+          }
+        }
+      }
+    },
+    {
+      "donor": "raw",
+      "required": [
+        [
+          35,
+          85
+        ],
+        [
+          86,
+          169
+        ],
+        [
+          170,
+          182
+        ],
+        [
+          180,
+          361
+        ],
+        [
+          235,
+          362
+        ]
+      ],
+      "forbidden": [
+        34,
+        236
+      ],
+      "runs": {
+        "plain": {
+          "status": "UNKNOWN",
+          "cp_calls": 6,
+          "branches": 276306
+        },
+        "units": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "path_mates": {
+            "components": 1,
+            "geometric_roots": 450,
+            "compatible_roots": 450,
+            "distinct_patterns": 0,
+            "added_required": 0,
+            "added_forbidden": 0,
+            "status": "INFEASIBLE"
+          }
+        },
+        "table": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "path_mates": {
+            "components": 1,
+            "geometric_roots": 450,
+            "compatible_roots": 450,
+            "distinct_patterns": 0,
+            "added_required": 0,
+            "added_forbidden": 0,
+            "status": "INFEASIBLE"
+          }
+        }
+      }
+    },
+    {
+      "donor": "contract",
+      "required": [
+        [
+          28,
+          171
+        ],
+        [
+          29,
+          249
+        ],
+        [
+          86,
+          169
+        ],
+        [
+          122,
+          250
+        ],
+        [
+          126,
+          168
+        ],
+        [
+          128,
+          239
+        ],
+        [
+          173,
+          416
+        ],
+        [
+          238,
+          415
+        ]
+      ],
+      "forbidden": [
+        120,
+        237
+      ],
+      "runs": {
+        "plain": {
+          "status": "UNKNOWN",
+          "cp_calls": 4,
+          "branches": 159183
+        },
+        "units": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "path_mates": {
+            "components": 1,
+            "geometric_roots": 430,
+            "compatible_roots": 420,
+            "distinct_patterns": 0,
+            "added_required": 0,
+            "added_forbidden": 0,
+            "status": "INFEASIBLE"
+          }
+        },
+        "table": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "path_mates": {
+            "components": 1,
+            "geometric_roots": 430,
+            "compatible_roots": 420,
+            "distinct_patterns": 0,
+            "added_required": 0,
+            "added_forbidden": 0,
+            "status": "INFEASIBLE"
+          }
+        }
+      }
+    },
+    {
+      "donor": "near0",
+      "required": [
+        [
+          8,
+          121
+        ],
+        [
+          87,
+          251
+        ],
+        [
+          88,
+          113
+        ],
+        [
+          111,
+          361
+        ],
+        [
+          122,
+          250
+        ]
+      ],
+      "forbidden": [
+        7,
+        362
+      ],
+      "runs": {
+        "plain": {
+          "status": "UNKNOWN",
+          "cp_calls": 5,
+          "branches": 183081
+        },
+        "units": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "path_mates": {
+            "components": 1,
+            "geometric_roots": 450,
+            "compatible_roots": 450,
+            "distinct_patterns": 0,
+            "added_required": 0,
+            "added_forbidden": 0,
+            "status": "INFEASIBLE"
+          }
+        },
+        "table": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "path_mates": {
+            "components": 1,
+            "geometric_roots": 450,
+            "compatible_roots": 450,
+            "distinct_patterns": 0,
+            "added_required": 0,
+            "added_forbidden": 0,
+            "status": "INFEASIBLE"
+          }
+        }
+      }
+    },
+    {
+      "donor": "cp",
+      "required": [
+        [
+          21,
+          80
+        ],
+        [
+          22,
+          341
+        ],
+        [
+          51,
+          150
+        ],
+        [
+          52,
+          99
+        ],
+        [
+          79,
+          249
+        ],
+        [
+          101,
+          245
+        ],
+        [
+          152,
+          153
+        ],
+        [
+          155,
+          468
+        ],
+        [
+          334,
+          470
+        ],
+        [
+          335,
+          340
+        ]
+      ],
+      "forbidden": [
+        100,
+        333
+      ],
+      "runs": {
+        "plain": {
+          "status": "UNKNOWN",
+          "cp_calls": 5,
+          "branches": 173701
+        },
+        "units": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "path_mates": {
+            "components": 1,
+            "geometric_roots": 450,
+            "compatible_roots": 390,
+            "distinct_patterns": 0,
+            "added_required": 0,
+            "added_forbidden": 0,
+            "status": "INFEASIBLE"
+          }
+        },
+        "table": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "path_mates": {
+            "components": 1,
+            "geometric_roots": 450,
+            "compatible_roots": 390,
+            "distinct_patterns": 0,
+            "added_required": 0,
+            "added_forbidden": 0,
+            "status": "INFEASIBLE"
+          }
+        }
+      }
+    },
+    {
+      "donor": "contact",
+      "required": [
+        [
+          8,
+          121
+        ],
+        [
+          87,
+          251
+        ],
+        [
+          88,
+          113
+        ],
+        [
+          111,
+          361
+        ],
+        [
+          122,
+          250
+        ]
+      ],
+      "forbidden": [
+        7,
+        362
+      ],
+      "runs": {
+        "plain": {
+          "status": "UNKNOWN",
+          "cp_calls": 5,
+          "branches": 183081
+        },
+        "units": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "path_mates": {
+            "components": 1,
+            "geometric_roots": 450,
+            "compatible_roots": 450,
+            "distinct_patterns": 0,
+            "added_required": 0,
+            "added_forbidden": 0,
+            "status": "INFEASIBLE"
+          }
+        },
+        "table": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "path_mates": {
+            "components": 1,
+            "geometric_roots": 450,
+            "compatible_roots": 450,
+            "distinct_patterns": 0,
+            "added_required": 0,
+            "added_forbidden": 0,
+            "status": "INFEASIBLE"
+          }
+        }
+      }
+    }
+  ],
+  "lower_bound_witness": {
+    "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "unique_rules": 277,
+    "counts": {
+      "applicable": 201,
+      "violations": 6,
+      "forces_dropped_reference": 6,
+      "closes_proper_circuit": 6
+    },
+    "examples": {
+      "forces_dropped_reference": {
+        "premise": [
+          [
+            48,
+            290
+          ],
+          [
+            49,
+            169
+          ],
+          [
+            170,
+            182
+          ],
+          [
+            175,
+            289
+          ],
+          [
+            180,
+            381
+          ]
+        ],
+        "consequence": [
+          174,
+          382
+        ]
+      },
+      "closes_proper_circuit": {
+        "premise": [
+          [
+            48,
+            290
+          ],
+          [
+            49,
+            169
+          ],
+          [
+            170,
+            182
+          ],
+          [
+            175,
+            289
+          ],
+          [
+            180,
+            381
+          ]
+        ],
+        "consequence": [
+          174,
+          382
+        ]
+      }
+    }
+  }
+}

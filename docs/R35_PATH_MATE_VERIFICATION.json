@@ -1,0 +1,45 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "sources": {
+    "reference": {
+      "cases": 202,
+      "implications": 245,
+      "labelled_roots": 96960
+    },
+    "raw": {
+      "cases": 7,
+      "implications": 7,
+      "labelled_roots": 3360
+    },
+    "contract": {
+      "cases": 2,
+      "implications": 2,
+      "labelled_roots": 960
+    },
+    "near0": {
+      "cases": 110,
+      "implications": 115,
+      "labelled_roots": 52800
+    },
+    "near1": {
+      "cases": 99,
+      "implications": 103,
+      "labelled_roots": 47520
+    },
+    "trade": {
+      "cases": 4,
+      "implications": 4,
+      "labelled_roots": 1920
+    },
+    "cp": {
+      "cases": 1,
+      "implications": 1,
+      "labelled_roots": 480
+    },
+    "contact": {
+      "cases": 98,
+      "implications": 100,
+      "labelled_roots": 47040
+    }
+  }
+}

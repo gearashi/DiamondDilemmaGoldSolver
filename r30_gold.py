@@ -407,7 +407,7 @@ class GoldMatching:
 
 def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=(), matching=True,
            geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=(),
-           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), edge_perfect_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None, joint_poses=False, reference_bound=False, mate_correlations=False, phase_anchors=None):
+           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), edge_perfect_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None, joint_poses=False, reference_bound=False, mate_correlations=False, phase_anchors=None, path_mates=None):
     if seconds<=0 or max_rounds<1 or (geography and not matching):
         raise ValueError("Invalid Gold solve budget or mode.")
     pins=None if pins is None else checked_pins(problem.n,pins)
@@ -434,6 +434,9 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
     started=time.monotonic()
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
     phase_rules=()
+    mate_tables=()
+    if path_mates is not None and (not geography or path_mates not in ('units','table')):
+        raise ValueError('Geographic path mates require embed and a supported mode.')
     if phase_anchors is not None and (not geography or phase_anchors not in ('off','rules','roots','shared')):
         raise ValueError('Geographic phase anchors require embed and a supported anchor mode.')
     # Preserve validation of caller-supplied cuts and certificates in the native path.
@@ -469,6 +472,24 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             return dict(status='INFEASIBLE',**stats)
         if time.monotonic()>=started+seconds:
             return dict(status='UNKNOWN',reason='phase-anchor budget',**stats)
+    if path_mates:
+        from r28_geo_color import _sphere
+        from r35_path_mates import propagate
+        _sphere(problem)
+        required=list(bonds);blocked=list(forbidden)
+        if physical_support:
+            from r32_gold_bonds import inventory
+            physical=inventory(problem)
+            required.extend(physical.required);blocked.extend(physical.forbidden)
+        status,forced,absent,mate_tables,stats['path_mates']=propagate(
+            problem,domains,required,blocked,started+seconds)
+        stats['path_mates']['status']=status
+        if status=='INFEASIBLE':
+            return dict(status=status,**stats)
+        if status=='LIMIT':
+            return dict(status='UNKNOWN',reason='geographic path mate budget',**stats)
+        bonds=[*bonds,*sorted(forced)]
+        forbidden=[*forbidden,*sorted(absent)]
     replayed_geography=();replayed_contacts=()
     if edge_perfect_cores and not geography:
         raise ValueError('Induced physical contacts require the embed search objective.')
@@ -526,6 +547,9 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             project_blanks = False
         check=GoldMatching(problem,domains,pins,bonds,cutsets,forbidden,physical_support=physical_support,
                            project_blanks=project_blanks,corner_mode=corner_mode,neighbor_mode=neighbor_mode,turn_length=turn_length,tour_mode=tour_mode)
+        if path_mates=='table':
+            from r35_path_mates import post_tables
+            stats['path_mates'].update(post_tables(check,mate_tables))
         if mate_correlations:
             from r35_mate_correlations import post_correlations
             stats['mate_correlations']=post_correlations(check,pins,bonds,signed_only=mate_correlations=='signed')
@@ -709,6 +733,7 @@ def main():
     cli.add_argument("--seconds",type=float,default=5)
     cli.add_argument("--rounds",type=int,default=32)
     cli.add_argument("--mate-correlations",nargs="?",const="full",choices=("full","signed"),help="Post verified conditional mate implications in represented reciprocal classes.")
+    cli.add_argument("--path-mates",choices=("units","table"),help="Check joins forced by all geographic placements of required physical bonds.")
     cli.add_argument("--phase-anchors",choices=("off","rules","roots","shared"),help="Use stored geographic exclusions, probe scarce tile placements, or disable the automatic conditioned lookup.")
     cli.add_argument("--reference-bound",action="store_true",help="Apply the published certified incumbent-loss bound in geographic Gold.")
     cli.add_argument("--joint-poses",action="store_true",help="Prune unsupported simultaneous mandatory component poses before geographic search.")
@@ -769,6 +794,9 @@ def main():
             cli.error("Departure branch index is out of range.")
         opts['bonds']=[*opts['bonds'],*core[:index]]
         opts['forbidden']=[*opts['forbidden'],core[index]]
+    path_mates=data.get('path_mates',args.path_mates)
+    if path_mates is not None and args.method!='embed':
+        cli.error('--path-mates requires embed.')
     phase_anchors=data.get('phase_anchors',args.phase_anchors)
     if phase_anchors is not None and args.method!='embed':
         cli.error('--phase-anchors requires embed.')
@@ -790,7 +818,7 @@ def main():
                    cutsets=data.get('strand_cuts',()),type_cuts=reusable,max_rounds=args.rounds,
                    learned_geometry=args.method=="embed" and data.get("learn_geography",True),
                    channel=data.get("channel",args.method=="embed" and not project_blanks and not corner_mode and not neighbor_mode and not turn_length and not tour_mode),
-                   corner_mode=corner_mode,neighbor_mode=neighbor_mode,turn_length=turn_length,tour_mode=tour_mode,joint_poses=joint_poses,reference_bound=reference_bound,mate_correlations=mate_correlations,phase_anchors=phase_anchors,
+                   corner_mode=corner_mode,neighbor_mode=neighbor_mode,turn_length=turn_length,tour_mode=tour_mode,joint_poses=joint_poses,reference_bound=reference_bound,mate_correlations=mate_correlations,phase_anchors=phase_anchors,path_mates=path_mates,
                    project_blanks=project_blanks,fraction=data.get("fractional",False),
                    bridges=[*data.get("bridges",()),*prior.get("bridge_hints",())],
                    geographic_cores=prior.get("geographic_cores",()) if args.method=="embed" else (),
