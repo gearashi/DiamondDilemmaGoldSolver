@@ -129,10 +129,15 @@
         "docs/ROUND35_ALTERNATING_SEWINGS.md",
         "docs/R35_ALTERNATING_SEWINGS.json",
         "docs/R35_EXCHANGE_PARENTS.json",
-        "test_r35_alternating_sewings.py"
+        "test_r35_alternating_sewings.py",
+        "docs/ROUND35_MIXED_SEWINGS.md",
+        "docs/R35_MIXED_SEWINGS.json",
+        "docs/R35_NEAR_TOUR_EXCHANGES.json",
+        "docs/R35_MIXED_CONTACT_DONOR.json",
+        "test_r35_mixed_sewings.py"
       ],
-      "decision": "Retain compatible alternating-cycle recombination with rollback, blank projection and bounded frontier memoization. In the original 17-nonblank/3-blank-cycle family it counts exactly 15,464 connected full sewings using 5,676 versus 11,586 rollback nodes. A common obstruction excludes all 1,048,576 possible geographic choices. A distinct CP-generated 47-cycle family is geographically excluded in full despite an incomplete abstract count. No verified geographic Gold on the original.",
-      "reopen_if": "A new phase-compatible pair survives the common geographic pose and genus checks, or a different remaining-frontier invariant materially extends the proven geographic scope."
+      "decision": "Retain the original common-phase search plus exact child-specific XOR phases, forced alternating cycles, signed frontier caching and the all-donor geographic root check. Thirteen complete original physical counts and planted real Gold children agree with independent verification. The combined 793 physical seams of eight recorded donors, including the connected contact-priced repair, exclude all 480 geographic roots by independent SAT unit propagation. Every iterated recombination confined to those seams is geographically exhausted. Two larger purely abstract counts remain bounded diagnostics.",
+      "reopen_if": "A new physical donor supplies seams outside the documented union and at least one root survives the combined geographic test, or a material application requires one of the two unresolved physical-only counts. The three full signed mate pools admit geographic roots and remain distinct from the named donor family."
     },
     {
       "id": 9,

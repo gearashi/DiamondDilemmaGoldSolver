@@ -1,0 +1,3343 @@
+{
+  "original_pairs": {
+    "raw+contract": {
+      "parent_union_phase": "NO_COMMON_PHASE",
+      "raw_children": 281474976710656,
+      "common_seams": 64,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3130
+        },
+        "possible_full_sewings": 281474976710656,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 14692,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "physical": {
+        "static_direct": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 652,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 9008,
+            "decision_half_tests": 16712,
+            "phase_conflicts": 6502,
+            "proper_loops": 1203
+          },
+          "memo_entries": 0
+        },
+        "static_memo": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 652,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 5876,
+            "decision_half_tests": 10860,
+            "phase_conflicts": 4545,
+            "cache_hits": 444,
+            "proper_loops": 440
+          },
+          "memo_entries": 5430
+        },
+        "window_1": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 652,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3531,
+            "lookahead_half_tests": 6306,
+            "decision_half_tests": 5100,
+            "forced_cycles": 1414,
+            "phase_conflicts": 1273,
+            "proper_loops": 297,
+            "cache_hits": 374,
+            "dead_lookaheads": 604
+          },
+          "memo_entries": 3154
+        },
+        "window_2": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 652,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 2844,
+            "lookahead_half_tests": 8642,
+            "decision_half_tests": 3950,
+            "forced_cycles": 1491,
+            "proper_loops": 365,
+            "phase_conflicts": 742,
+            "cache_hits": 303,
+            "dead_lookaheads": 559
+          },
+          "memo_entries": 2534
+        },
+        "window_4": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 652,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 1621,
+            "lookahead_half_tests": 7864,
+            "decision_half_tests": 2076,
+            "forced_cycles": 1355,
+            "proper_loops": 207,
+            "dead_lookaheads": 309,
+            "cache_hits": 267,
+            "phase_conflicts": 249
+          },
+          "memo_entries": 1347
+        },
+        "window_8": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 652,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 1102,
+            "lookahead_half_tests": 7422,
+            "decision_half_tests": 1340,
+            "forced_cycles": 1072,
+            "proper_loops": 176,
+            "dead_lookaheads": 164,
+            "cache_hits": 263,
+            "phase_conflicts": 63
+          },
+          "memo_entries": 834
+        },
+        "window_16": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 652,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 914,
+            "lookahead_half_tests": 7482,
+            "decision_half_tests": 1088,
+            "forced_cycles": 601,
+            "proper_loops": 154,
+            "dead_lookaheads": 103,
+            "cache_hits": 262,
+            "phase_conflicts": 21
+          },
+          "memo_entries": 647
+        },
+        "window_48": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 652,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 798,
+            "lookahead_half_tests": 7424,
+            "decision_half_tests": 966,
+            "forced_cycles": 348,
+            "proper_loops": 153,
+            "dead_lookaheads": 48,
+            "cache_hits": 262,
+            "phase_conflicts": 16
+          },
+          "memo_entries": 531
+        },
+        "repeat_forcing": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 652,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 767,
+            "lookahead_half_tests": 8628,
+            "decision_half_tests": 920,
+            "forced_cycles": 321,
+            "proper_loops": 150,
+            "dead_lookaheads": 40,
+            "cache_hits": 262,
+            "phase_conflicts": 4
+          },
+          "memo_entries": 500
+        }
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 2,
+          "connected": 1,
+          "nodes": 3
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        }
+      ],
+      "with_parent_phases": [
+        646,
+        6
+      ],
+      "both_parent_phases": 0,
+      "requiring_different_phase": 0,
+      "disjoint_phase_scopes": [
+        {
+          "connected_full": 646,
+          "work": {
+            "nodes": 492,
+            "lookahead_half_tests": 2316,
+            "forced_cycles": 113,
+            "decision_half_tests": 574,
+            "proper_loops": 83,
+            "dead_lookaheads": 12,
+            "cache_hits": 191
+          }
+        },
+        {
+          "connected_full": 6,
+          "work": {
+            "nodes": 13,
+            "lookahead_half_tests": 48,
+            "forced_cycles": 4,
+            "decision_half_tests": 16,
+            "proper_loops": 4,
+            "dead_lookaheads": 1,
+            "cache_hits": 1
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "nodes": 793,
+            "lookahead_half_tests": 7424,
+            "decision_half_tests": 966,
+            "forced_cycles": 348,
+            "covered_phase_scopes": 5,
+            "proper_loops": 153,
+            "dead_lookaheads": 48,
+            "cache_hits": 262,
+            "phase_conflicts": 16
+          }
+        }
+      ]
+    },
+    "raw+near0": {
+      "parent_union_phase": "NO_COMMON_PHASE",
+      "raw_children": 35184372088832,
+      "common_seams": 46,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3430
+        },
+        "possible_full_sewings": 35184372088832,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 16412,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "physical": {
+        "static_direct": {
+          "complete": true,
+          "possible_full_sewings": 35184372088832,
+          "connected_full": 4492,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 48318,
+            "decision_half_tests": 87652,
+            "proper_loops": 14150,
+            "phase_conflicts": 25185
+          },
+          "memo_entries": 0
+        },
+        "static_memo": {
+          "complete": true,
+          "possible_full_sewings": 35184372088832,
+          "connected_full": 4492,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 7969,
+            "decision_half_tests": 12890,
+            "proper_loops": 998,
+            "phase_conflicts": 3924,
+            "cache_hits": 1521
+          },
+          "memo_entries": 6445
+        },
+        "window_1": {
+          "complete": true,
+          "possible_full_sewings": 35184372088832,
+          "connected_full": 4492,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 4948,
+            "lookahead_half_tests": 7188,
+            "decision_half_tests": 6820,
+            "forced_cycles": 1728,
+            "proper_loops": 777,
+            "phase_conflicts": 1096,
+            "cache_hits": 1345,
+            "dead_lookaheads": 186
+          },
+          "memo_entries": 3596
+        },
+        "window_2": {
+          "complete": true,
+          "possible_full_sewings": 35184372088832,
+          "connected_full": 4492,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3724,
+            "lookahead_half_tests": 8366,
+            "decision_half_tests": 4696,
+            "forced_cycles": 2166,
+            "proper_loops": 840,
+            "cache_hits": 1200,
+            "phase_conflicts": 133,
+            "dead_lookaheads": 169
+          },
+          "memo_entries": 2517
+        },
+        "window_4": {
+          "complete": true,
+          "possible_full_sewings": 35184372088832,
+          "connected_full": 4492,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3458,
+            "lookahead_half_tests": 12478,
+            "decision_half_tests": 4380,
+            "forced_cycles": 2189,
+            "proper_loops": 876,
+            "cache_hits": 1067,
+            "phase_conflicts": 47,
+            "dead_lookaheads": 162
+          },
+          "memo_entries": 2352
+        },
+        "window_8": {
+          "complete": true,
+          "possible_full_sewings": 35184372088832,
+          "connected_full": 4492,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 2740,
+            "lookahead_half_tests": 13152,
+            "decision_half_tests": 3176,
+            "forced_cycles": 1831,
+            "proper_loops": 409,
+            "cache_hits": 993,
+            "dead_lookaheads": 120,
+            "phase_conflicts": 28
+          },
+          "memo_entries": 1708
+        },
+        "window_16": {
+          "complete": true,
+          "possible_full_sewings": 35184372088832,
+          "connected_full": 4492,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 2553,
+            "lookahead_half_tests": 12508,
+            "decision_half_tests": 2918,
+            "forced_cycles": 543,
+            "proper_loops": 351,
+            "cache_hits": 980,
+            "phase_conflicts": 15,
+            "dead_lookaheads": 75
+          },
+          "memo_entries": 1534
+        },
+        "window_48": {
+          "complete": true,
+          "possible_full_sewings": 35184372088832,
+          "connected_full": 4492,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 2537,
+            "lookahead_half_tests": 14668,
+            "decision_half_tests": 2890,
+            "forced_cycles": 426,
+            "proper_loops": 344,
+            "cache_hits": 980,
+            "phase_conflicts": 10,
+            "dead_lookaheads": 73
+          },
+          "memo_entries": 1518
+        },
+        "repeat_forcing": {
+          "complete": true,
+          "possible_full_sewings": 35184372088832,
+          "connected_full": 4492,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 2511,
+            "lookahead_half_tests": 15984,
+            "decision_half_tests": 2856,
+            "forced_cycles": 443,
+            "proper_loops": 338,
+            "cache_hits": 971,
+            "phase_conflicts": 8,
+            "dead_lookaheads": 73
+          },
+          "memo_entries": 1501
+        }
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        }
+      ],
+      "with_parent_phases": [
+        16,
+        4476
+      ],
+      "both_parent_phases": 0,
+      "requiring_different_phase": 0,
+      "disjoint_phase_scopes": [
+        {
+          "connected_full": 16,
+          "work": {
+            "nodes": 31,
+            "lookahead_half_tests": 136,
+            "forced_cycles": 8,
+            "decision_half_tests": 44,
+            "proper_loops": 14,
+            "cache_hits": 7
+          }
+        },
+        {
+          "connected_full": 4476,
+          "work": {
+            "nodes": 1187,
+            "lookahead_half_tests": 6046,
+            "forced_cycles": 116,
+            "decision_half_tests": 1324,
+            "proper_loops": 138,
+            "cache_hits": 490,
+            "dead_lookaheads": 16
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "nodes": 2486,
+            "lookahead_half_tests": 14660,
+            "decision_half_tests": 2880,
+            "forced_cycles": 426,
+            "covered_phase_scopes": 45,
+            "proper_loops": 340,
+            "phase_conflicts": 10,
+            "dead_lookaheads": 73,
+            "cache_hits": 973
+          }
+        }
+      ]
+    },
+    "raw+near1": {
+      "parent_union_phase": "NO_COMMON_PHASE",
+      "raw_children": 70368744177664,
+      "common_seams": 46,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3430
+        },
+        "possible_full_sewings": 70368744177664,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 16412,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "physical": {
+        "static_direct": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 5560,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 84795,
+            "decision_half_tests": 158470,
+            "proper_loops": 29579,
+            "phase_conflicts": 44097
+          },
+          "memo_entries": 0
+        },
+        "static_memo": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 5560,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 12990,
+            "decision_half_tests": 20390,
+            "cache_hits": 2793,
+            "proper_loops": 1846,
+            "phase_conflicts": 5555
+          },
+          "memo_entries": 10195
+        },
+        "window_1": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 5560,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 8512,
+            "lookahead_half_tests": 13272,
+            "decision_half_tests": 11472,
+            "forced_cycles": 1841,
+            "cache_hits": 1873,
+            "proper_loops": 1015,
+            "phase_conflicts": 1946,
+            "dead_lookaheads": 901
+          },
+          "memo_entries": 6637
+        },
+        "window_2": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 5560,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 5081,
+            "lookahead_half_tests": 12108,
+            "decision_half_tests": 5568,
+            "forced_cycles": 2362,
+            "cache_hits": 1418,
+            "proper_loops": 319,
+            "dead_lookaheads": 877,
+            "phase_conflicts": 169
+          },
+          "memo_entries": 3661
+        },
+        "window_4": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 5560,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 4501,
+            "lookahead_half_tests": 17110,
+            "decision_half_tests": 4952,
+            "forced_cycles": 2372,
+            "cache_hits": 1249,
+            "proper_loops": 316,
+            "phase_conflicts": 136,
+            "dead_lookaheads": 774
+          },
+          "memo_entries": 3250
+        },
+        "window_8": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 5560,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 2459,
+            "lookahead_half_tests": 16636,
+            "decision_half_tests": 2802,
+            "forced_cycles": 1310,
+            "cache_hits": 625,
+            "proper_loops": 275,
+            "phase_conflicts": 69,
+            "dead_lookaheads": 431
+          },
+          "memo_entries": 1832
+        },
+        "window_16": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 5560,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 1676,
+            "lookahead_half_tests": 12136,
+            "decision_half_tests": 1932,
+            "forced_cycles": 538,
+            "cache_hits": 586,
+            "proper_loops": 234,
+            "phase_conflicts": 23,
+            "dead_lookaheads": 122
+          },
+          "memo_entries": 1088
+        },
+        "window_48": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 5560,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 1558,
+            "lookahead_half_tests": 14184,
+            "decision_half_tests": 1786,
+            "forced_cycles": 493,
+            "cache_hits": 577,
+            "proper_loops": 215,
+            "phase_conflicts": 14,
+            "dead_lookaheads": 86
+          },
+          "memo_entries": 979
+        },
+        "repeat_forcing": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 5560,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 1531,
+            "lookahead_half_tests": 16148,
+            "decision_half_tests": 1752,
+            "forced_cycles": 501,
+            "cache_hits": 575,
+            "proper_loops": 218,
+            "phase_conflicts": 4,
+            "dead_lookaheads": 78
+          },
+          "memo_entries": 954
+        }
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 2,
+          "connected": 1,
+          "nodes": 2
+        }
+      ],
+      "with_parent_phases": [
+        16,
+        5544
+      ],
+      "both_parent_phases": 0,
+      "requiring_different_phase": 0,
+      "disjoint_phase_scopes": [
+        {
+          "connected_full": 16,
+          "work": {
+            "nodes": 18,
+            "lookahead_half_tests": 82,
+            "forced_cycles": 7,
+            "decision_half_tests": 24,
+            "cache_hits": 4,
+            "proper_loops": 7
+          }
+        },
+        {
+          "connected_full": 5544,
+          "work": {
+            "nodes": 775,
+            "lookahead_half_tests": 4318,
+            "forced_cycles": 135,
+            "decision_half_tests": 900,
+            "proper_loops": 126,
+            "cache_hits": 302,
+            "dead_lookaheads": 21
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "nodes": 1428,
+            "lookahead_half_tests": 14174,
+            "decision_half_tests": 1778,
+            "forced_cycles": 493,
+            "covered_phase_scopes": 124,
+            "proper_loops": 213,
+            "phase_conflicts": 14,
+            "dead_lookaheads": 86,
+            "cache_hits": 453
+          }
+        }
+      ]
+    },
+    "raw+trade": {
+      "parent_union_phase": "NO_COMMON_PHASE",
+      "raw_children": 70368744177664,
+      "common_seams": 55,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3150
+        },
+        "possible_full_sewings": 70368744177664,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 16142,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "physical": {
+        "static_direct": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 28,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 2651,
+            "decision_half_tests": 5246,
+            "phase_conflicts": 2316,
+            "proper_loops": 280
+          },
+          "memo_entries": 0
+        },
+        "static_memo": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 28,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 2267,
+            "decision_half_tests": 4480,
+            "phase_conflicts": 2053,
+            "proper_loops": 161,
+            "cache_hits": 26
+          },
+          "memo_entries": 2240
+        },
+        "window_1": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 28,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 1317,
+            "lookahead_half_tests": 2586,
+            "decision_half_tests": 2026,
+            "forced_cycles": 550,
+            "phase_conflicts": 674,
+            "proper_loops": 36,
+            "cache_hits": 23,
+            "dead_lookaheads": 280
+          },
+          "memo_entries": 1293
+        },
+        "window_2": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 28,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 973,
+            "lookahead_half_tests": 3262,
+            "decision_half_tests": 1410,
+            "forced_cycles": 579,
+            "phase_conflicts": 409,
+            "proper_loops": 29,
+            "cache_hits": 22,
+            "dead_lookaheads": 245
+          },
+          "memo_entries": 950
+        },
+        "window_4": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 28,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 617,
+            "lookahead_half_tests": 3636,
+            "decision_half_tests": 890,
+            "forced_cycles": 558,
+            "proper_loops": 18,
+            "cache_hits": 17,
+            "phase_conflicts": 256,
+            "dead_lookaheads": 148
+          },
+          "memo_entries": 593
+        },
+        "window_8": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 28,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 404,
+            "lookahead_half_tests": 4510,
+            "decision_half_tests": 530,
+            "forced_cycles": 525,
+            "proper_loops": 10,
+            "cache_hits": 18,
+            "dead_lookaheads": 116,
+            "phase_conflicts": 117
+          },
+          "memo_entries": 381
+        },
+        "window_16": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 28,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 303,
+            "lookahead_half_tests": 6040,
+            "decision_half_tests": 358,
+            "forced_cycles": 475,
+            "proper_loops": 10,
+            "cache_hits": 9,
+            "dead_lookaheads": 105,
+            "phase_conflicts": 46
+          },
+          "memo_entries": 284
+        },
+        "window_48": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 28,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 164,
+            "lookahead_half_tests": 6062,
+            "forced_cycles": 253,
+            "decision_half_tests": 184,
+            "proper_loops": 10,
+            "cache_hits": 9,
+            "dead_lookaheads": 53,
+            "phase_conflicts": 11
+          },
+          "memo_entries": 145
+        },
+        "repeat_forcing": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 28,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 134,
+            "lookahead_half_tests": 6646,
+            "forced_cycles": 227,
+            "decision_half_tests": 146,
+            "proper_loops": 10,
+            "cache_hits": 9,
+            "dead_lookaheads": 42,
+            "phase_conflicts": 3
+          },
+          "memo_entries": 115
+        }
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 2,
+          "connected": 1,
+          "nodes": 3
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 1,
+          "connected": 0,
+          "nodes": 0
+        }
+      ],
+      "with_parent_phases": [
+        28,
+        0
+      ],
+      "both_parent_phases": 0,
+      "requiring_different_phase": 0,
+      "disjoint_phase_scopes": [
+        {
+          "connected_full": 28,
+          "work": {
+            "nodes": 54,
+            "lookahead_half_tests": 212,
+            "forced_cycles": 12,
+            "decision_half_tests": 60,
+            "proper_loops": 7,
+            "cache_hits": 10,
+            "dead_lookaheads": 5
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {}
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "nodes": 154,
+            "lookahead_half_tests": 6062,
+            "forced_cycles": 253,
+            "decision_half_tests": 184,
+            "covered_phase_scopes": 10,
+            "proper_loops": 10,
+            "cache_hits": 9,
+            "dead_lookaheads": 53,
+            "phase_conflicts": 11
+          }
+        }
+      ]
+    },
+    "raw+cp": {
+      "parent_union_phase": "NO_COMMON_PHASE",
+      "raw_children": 140737488355328,
+      "common_seams": 51,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3130
+        },
+        "possible_full_sewings": 140737488355328,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 24524,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "physical": {
+        "static_direct": {
+          "complete": true,
+          "possible_full_sewings": 140737488355328,
+          "connected_full": 1500,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 16056,
+            "decision_half_tests": 29112,
+            "phase_conflicts": 8813,
+            "proper_loops": 4244
+          },
+          "memo_entries": 0
+        },
+        "static_memo": {
+          "complete": true,
+          "possible_full_sewings": 140737488355328,
+          "connected_full": 1500,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 2468,
+            "decision_half_tests": 3848,
+            "phase_conflicts": 1044,
+            "cache_hits": 542,
+            "proper_loops": 337
+          },
+          "memo_entries": 1924
+        },
+        "window_1": {
+          "complete": true,
+          "possible_full_sewings": 140737488355328,
+          "connected_full": 1500,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 1666,
+            "lookahead_half_tests": 2536,
+            "decision_half_tests": 2206,
+            "forced_cycles": 504,
+            "phase_conflicts": 285,
+            "proper_loops": 256,
+            "cache_hits": 393,
+            "dead_lookaheads": 166
+          },
+          "memo_entries": 1269
+        },
+        "window_2": {
+          "complete": true,
+          "possible_full_sewings": 140737488355328,
+          "connected_full": 1500,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 1355,
+            "lookahead_half_tests": 3220,
+            "decision_half_tests": 1700,
+            "forced_cycles": 722,
+            "phase_conflicts": 110,
+            "proper_loops": 236,
+            "cache_hits": 381,
+            "dead_lookaheads": 115
+          },
+          "memo_entries": 965
+        },
+        "window_4": {
+          "complete": true,
+          "possible_full_sewings": 140737488355328,
+          "connected_full": 1500,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 1030,
+            "lookahead_half_tests": 3674,
+            "decision_half_tests": 1278,
+            "forced_cycles": 676,
+            "proper_loops": 222,
+            "cache_hits": 305,
+            "dead_lookaheads": 73,
+            "phase_conflicts": 27
+          },
+          "memo_entries": 712
+        },
+        "window_8": {
+          "complete": true,
+          "possible_full_sewings": 140737488355328,
+          "connected_full": 1500,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 853,
+            "lookahead_half_tests": 4114,
+            "decision_half_tests": 1014,
+            "forced_cycles": 492,
+            "proper_loops": 152,
+            "cache_hits": 288,
+            "dead_lookaheads": 40,
+            "phase_conflicts": 10
+          },
+          "memo_entries": 547
+        },
+        "window_16": {
+          "complete": true,
+          "possible_full_sewings": 140737488355328,
+          "connected_full": 1500,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 770,
+            "lookahead_half_tests": 4358,
+            "decision_half_tests": 916,
+            "forced_cycles": 213,
+            "proper_loops": 139,
+            "cache_hits": 271,
+            "dead_lookaheads": 27,
+            "phase_conflicts": 8
+          },
+          "memo_entries": 485
+        },
+        "window_48": {
+          "complete": true,
+          "possible_full_sewings": 140737488355328,
+          "connected_full": 1500,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 765,
+            "lookahead_half_tests": 5500,
+            "decision_half_tests": 910,
+            "forced_cycles": 168,
+            "proper_loops": 139,
+            "cache_hits": 271,
+            "dead_lookaheads": 25,
+            "phase_conflicts": 7
+          },
+          "memo_entries": 480
+        },
+        "repeat_forcing": {
+          "complete": true,
+          "possible_full_sewings": 140737488355328,
+          "connected_full": 1500,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 749,
+            "lookahead_half_tests": 6440,
+            "decision_half_tests": 882,
+            "forced_cycles": 186,
+            "proper_loops": 129,
+            "cache_hits": 262,
+            "dead_lookaheads": 27,
+            "phase_conflicts": 5
+          },
+          "memo_entries": 468
+        }
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        }
+      ],
+      "with_parent_phases": [
+        768,
+        732
+      ],
+      "both_parent_phases": 0,
+      "requiring_different_phase": 0,
+      "disjoint_phase_scopes": [
+        {
+          "connected_full": 768,
+          "work": {
+            "nodes": 300,
+            "lookahead_half_tests": 1622,
+            "decision_half_tests": 364,
+            "proper_loops": 65,
+            "cache_hits": 112,
+            "forced_cycles": 40,
+            "dead_lookaheads": 4
+          }
+        },
+        {
+          "connected_full": 732,
+          "work": {
+            "nodes": 382,
+            "lookahead_half_tests": 1538,
+            "forced_cycles": 34,
+            "decision_half_tests": 422,
+            "proper_loops": 41,
+            "dead_lookaheads": 4,
+            "cache_hits": 155
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "nodes": 751,
+            "lookahead_half_tests": 5500,
+            "decision_half_tests": 910,
+            "forced_cycles": 168,
+            "covered_phase_scopes": 14,
+            "proper_loops": 139,
+            "cache_hits": 271,
+            "dead_lookaheads": 25,
+            "phase_conflicts": 7
+          }
+        }
+      ]
+    },
+    "contract+near0": {
+      "parent_union_phase": "NO_COMMON_PHASE",
+      "raw_children": 17592186044416,
+      "common_seams": 36,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3240
+        },
+        "possible_full_sewings": 17592186044416,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 34575,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "physical": {
+        "static_direct": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 7251,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 75425,
+            "decision_half_tests": 136348,
+            "phase_conflicts": 27378,
+            "proper_loops": 33546
+          },
+          "memo_entries": 0
+        },
+        "static_memo": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 7251,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 17995,
+            "decision_half_tests": 28748,
+            "phase_conflicts": 5647,
+            "proper_loops": 5107,
+            "cache_hits": 3619
+          },
+          "memo_entries": 14374
+        },
+        "window_1": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 7251,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 10984,
+            "lookahead_half_tests": 15016,
+            "decision_half_tests": 14172,
+            "forced_cycles": 5008,
+            "phase_conflicts": 2190,
+            "cache_hits": 3466,
+            "proper_loops": 999,
+            "dead_lookaheads": 424
+          },
+          "memo_entries": 7510
+        },
+        "window_2": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 7251,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 9539,
+            "lookahead_half_tests": 21994,
+            "decision_half_tests": 12104,
+            "forced_cycles": 4938,
+            "phase_conflicts": 148,
+            "proper_loops": 2418,
+            "cache_hits": 3101,
+            "dead_lookaheads": 371
+          },
+          "memo_entries": 6423
+        },
+        "window_4": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 7251,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 7512,
+            "lookahead_half_tests": 24612,
+            "decision_half_tests": 8722,
+            "forced_cycles": 5533,
+            "proper_loops": 1146,
+            "phase_conflicts": 65,
+            "cache_hits": 2591,
+            "dead_lookaheads": 271
+          },
+          "memo_entries": 4632
+        },
+        "window_8": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 7251,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 6508,
+            "lookahead_half_tests": 28616,
+            "decision_half_tests": 7432,
+            "forced_cycles": 4408,
+            "proper_loops": 877,
+            "phase_conflicts": 48,
+            "dead_lookaheads": 210,
+            "cache_hits": 2117
+          },
+          "memo_entries": 3926
+        },
+        "window_16": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 7251,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 5835,
+            "lookahead_half_tests": 21318,
+            "decision_half_tests": 6648,
+            "forced_cycles": 1087,
+            "proper_loops": 777,
+            "phase_conflicts": 37,
+            "dead_lookaheads": 48,
+            "cache_hits": 1883
+          },
+          "memo_entries": 3372
+        },
+        "window_48": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 7251,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 5820,
+            "lookahead_half_tests": 22736,
+            "decision_half_tests": 6618,
+            "forced_cycles": 896,
+            "proper_loops": 776,
+            "phase_conflicts": 23,
+            "dead_lookaheads": 48,
+            "cache_hits": 1883
+          },
+          "memo_entries": 3357
+        },
+        "repeat_forcing": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 7251,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 5765,
+            "lookahead_half_tests": 25900,
+            "decision_half_tests": 6526,
+            "forced_cycles": 905,
+            "proper_loops": 755,
+            "phase_conflicts": 7,
+            "dead_lookaheads": 43,
+            "cache_hits": 1870
+          },
+          "memo_entries": 3306
+        }
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        }
+      ],
+      "with_parent_phases": [
+        11,
+        7240
+      ],
+      "both_parent_phases": 0,
+      "requiring_different_phase": 0,
+      "disjoint_phase_scopes": [
+        {
+          "connected_full": 11,
+          "work": {
+            "nodes": 34,
+            "lookahead_half_tests": 90,
+            "forced_cycles": 12,
+            "decision_half_tests": 46,
+            "proper_loops": 13
+          }
+        },
+        {
+          "connected_full": 7240,
+          "work": {
+            "nodes": 4216,
+            "lookahead_half_tests": 15414,
+            "forced_cycles": 578,
+            "decision_half_tests": 4692,
+            "proper_loops": 477,
+            "cache_hits": 1590,
+            "dead_lookaheads": 13
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "nodes": 5240,
+            "lookahead_half_tests": 22736,
+            "decision_half_tests": 6618,
+            "forced_cycles": 896,
+            "covered_phase_scopes": 580,
+            "proper_loops": 776,
+            "phase_conflicts": 23,
+            "dead_lookaheads": 48,
+            "cache_hits": 1883
+          }
+        }
+      ]
+    },
+    "contract+near1": {
+      "parent_union_phase": "NO_COMMON_PHASE",
+      "raw_children": 17592186044416,
+      "common_seams": 36,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3240
+        },
+        "possible_full_sewings": 17592186044416,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 34575,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "physical": {
+        "static_direct": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 3000,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 35985,
+            "decision_half_tests": 65970,
+            "phase_conflicts": 12845,
+            "proper_loops": 17141
+          },
+          "memo_entries": 0
+        },
+        "static_memo": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 3000,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 10216,
+            "decision_half_tests": 16214,
+            "phase_conflicts": 3215,
+            "proper_loops": 2784,
+            "cache_hits": 2107
+          },
+          "memo_entries": 8107
+        },
+        "window_1": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 3000,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 6430,
+            "lookahead_half_tests": 9142,
+            "decision_half_tests": 8316,
+            "forced_cycles": 2818,
+            "phase_conflicts": 1331,
+            "cache_hits": 1851,
+            "proper_loops": 556,
+            "dead_lookaheads": 414
+          },
+          "memo_entries": 4572
+        },
+        "window_2": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 3000,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 5309,
+            "lookahead_half_tests": 13222,
+            "decision_half_tests": 6998,
+            "forced_cycles": 2751,
+            "phase_conflicts": 169,
+            "proper_loops": 1521,
+            "cache_hits": 1424,
+            "dead_lookaheads": 373
+          },
+          "memo_entries": 3872
+        },
+        "window_4": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 3000,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3785,
+            "lookahead_half_tests": 12506,
+            "decision_half_tests": 4388,
+            "forced_cycles": 2762,
+            "proper_loops": 523,
+            "dead_lookaheads": 290,
+            "cache_hits": 1058,
+            "phase_conflicts": 81
+          },
+          "memo_entries": 2484
+        },
+        "window_8": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 3000,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 2990,
+            "lookahead_half_tests": 13510,
+            "decision_half_tests": 3548,
+            "forced_cycles": 1825,
+            "proper_loops": 497,
+            "dead_lookaheads": 149,
+            "phase_conflicts": 62,
+            "cache_hits": 760
+          },
+          "memo_entries": 1923
+        },
+        "window_16": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 3000,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 2683,
+            "lookahead_half_tests": 11114,
+            "decision_half_tests": 3208,
+            "forced_cycles": 515,
+            "proper_loops": 491,
+            "cache_hits": 663,
+            "phase_conflicts": 35,
+            "dead_lookaheads": 65
+          },
+          "memo_entries": 1669
+        },
+        "window_48": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 3000,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 2653,
+            "lookahead_half_tests": 12408,
+            "decision_half_tests": 3156,
+            "forced_cycles": 407,
+            "proper_loops": 489,
+            "cache_hits": 663,
+            "phase_conflicts": 15,
+            "dead_lookaheads": 61
+          },
+          "memo_entries": 1639
+        },
+        "repeat_forcing": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 3000,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 2591,
+            "lookahead_half_tests": 14378,
+            "decision_half_tests": 3044,
+            "forced_cycles": 444,
+            "proper_loops": 448,
+            "cache_hits": 660,
+            "phase_conflicts": 6,
+            "dead_lookaheads": 55
+          },
+          "memo_entries": 1577
+        }
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        }
+      ],
+      "with_parent_phases": [
+        20,
+        2980
+      ],
+      "both_parent_phases": 0,
+      "requiring_different_phase": 0,
+      "disjoint_phase_scopes": [
+        {
+          "connected_full": 20,
+          "work": {
+            "nodes": 60,
+            "lookahead_half_tests": 174,
+            "forced_cycles": 16,
+            "decision_half_tests": 82,
+            "proper_loops": 23,
+            "cache_hits": 4
+          }
+        },
+        {
+          "connected_full": 2980,
+          "work": {
+            "nodes": 1887,
+            "lookahead_half_tests": 7214,
+            "forced_cycles": 191,
+            "decision_half_tests": 2196,
+            "proper_loops": 310,
+            "cache_hits": 622,
+            "dead_lookaheads": 25
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "nodes": 2302,
+            "lookahead_half_tests": 12408,
+            "decision_half_tests": 3156,
+            "forced_cycles": 407,
+            "covered_phase_scopes": 351,
+            "proper_loops": 489,
+            "cache_hits": 663,
+            "phase_conflicts": 15,
+            "dead_lookaheads": 61
+          }
+        }
+      ]
+    },
+    "contract+trade": {
+      "parent_union_phase": "COMPATIBLE",
+      "raw_children": 1048576,
+      "common_seams": 164,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3140
+        },
+        "possible_full_sewings": 1048576,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 3234,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "physical": {
+        "static_direct": {
+          "complete": true,
+          "possible_full_sewings": 1048576,
+          "connected_full": 15464,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 38648,
+            "decision_half_tests": 46368,
+            "proper_loops": 7721
+          },
+          "memo_entries": 0
+        },
+        "static_memo": {
+          "complete": true,
+          "possible_full_sewings": 1048576,
+          "connected_full": 15464,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 5682,
+            "decision_half_tests": 7470,
+            "cache_hits": 1945,
+            "proper_loops": 1789
+          },
+          "memo_entries": 3735
+        },
+        "window_1": {
+          "complete": true,
+          "possible_full_sewings": 1048576,
+          "connected_full": 15464,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 4375,
+            "lookahead_half_tests": 5640,
+            "decision_half_tests": 5012,
+            "forced_cycles": 906,
+            "cache_hits": 1552,
+            "dead_lookaheads": 315,
+            "proper_loops": 638
+          },
+          "memo_entries": 2821
+        },
+        "window_2": {
+          "complete": true,
+          "possible_full_sewings": 1048576,
+          "connected_full": 15464,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3784,
+            "lookahead_half_tests": 8550,
+            "decision_half_tests": 4432,
+            "forced_cycles": 926,
+            "cache_hits": 1298,
+            "proper_loops": 649,
+            "dead_lookaheads": 268
+          },
+          "memo_entries": 2484
+        },
+        "window_4": {
+          "complete": true,
+          "possible_full_sewings": 1048576,
+          "connected_full": 15464,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3484,
+            "lookahead_half_tests": 14864,
+            "decision_half_tests": 4070,
+            "forced_cycles": 734,
+            "cache_hits": 1204,
+            "proper_loops": 587,
+            "dead_lookaheads": 243
+          },
+          "memo_entries": 2278
+        },
+        "window_8": {
+          "complete": true,
+          "possible_full_sewings": 1048576,
+          "connected_full": 15464,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3436,
+            "lookahead_half_tests": 24004,
+            "forced_cycles": 592,
+            "decision_half_tests": 4012,
+            "cache_hits": 1202,
+            "proper_loops": 577,
+            "dead_lookaheads": 226
+          },
+          "memo_entries": 2232
+        },
+        "window_16": {
+          "complete": true,
+          "possible_full_sewings": 1048576,
+          "connected_full": 15464,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3436,
+            "lookahead_half_tests": 25594,
+            "forced_cycles": 592,
+            "decision_half_tests": 4012,
+            "cache_hits": 1202,
+            "proper_loops": 577,
+            "dead_lookaheads": 226
+          },
+          "memo_entries": 2232
+        },
+        "window_48": {
+          "complete": true,
+          "possible_full_sewings": 1048576,
+          "connected_full": 15464,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3436,
+            "lookahead_half_tests": 25608,
+            "forced_cycles": 592,
+            "decision_half_tests": 4012,
+            "cache_hits": 1202,
+            "proper_loops": 577,
+            "dead_lookaheads": 226
+          },
+          "memo_entries": 2232
+        },
+        "repeat_forcing": {
+          "complete": true,
+          "possible_full_sewings": 1048576,
+          "connected_full": 15464,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3384,
+            "lookahead_half_tests": 30496,
+            "forced_cycles": 610,
+            "decision_half_tests": 3904,
+            "cache_hits": 1197,
+            "proper_loops": 521,
+            "dead_lookaheads": 233
+          },
+          "memo_entries": 2185
+        }
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 256,
+          "connected": 18,
+          "nodes": 41
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 256,
+          "connected": 2,
+          "nodes": 8
+        }
+      ],
+      "with_parent_phases": [
+        15464,
+        15464
+      ],
+      "both_parent_phases": 15464,
+      "requiring_different_phase": 0,
+      "disjoint_phase_scopes": [
+        {
+          "connected_full": 15464,
+          "work": {
+            "nodes": 3436,
+            "lookahead_half_tests": 25608,
+            "forced_cycles": 592,
+            "decision_half_tests": 4012,
+            "cache_hits": 1202,
+            "proper_loops": 577,
+            "dead_lookaheads": 226
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "covered_phase_scopes": 1
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "covered_phase_scopes": 1
+          }
+        }
+      ]
+    },
+    "contract+cp": {
+      "parent_union_phase": "COMPATIBLE",
+      "raw_children": 140737488355328,
+      "common_seams": 94,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3140
+        },
+        "possible_full_sewings": 140737488355328,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 48476,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 256,
+          "connected": 23,
+          "nodes": 87
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 256,
+          "connected": 2,
+          "nodes": 18
+        }
+      ],
+      "bounded_physical": {
+        "connected_full": 220447,
+        "complete": false,
+        "work": {
+          "nodes": 100000,
+          "lookahead_half_tests": 502338,
+          "decision_half_tests": 112926,
+          "forced_cycles": 17950,
+          "proper_loops": 12926,
+          "cache_hits": 41033,
+          "dead_lookaheads": 1704
+        }
+      }
+    },
+    "near0+near1": {
+      "parent_union_phase": "COMPATIBLE",
+      "raw_children": 64,
+      "common_seams": 225,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3120
+        },
+        "possible_full_sewings": 64,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 3027,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "physical": {
+        "static_direct": {
+          "complete": true,
+          "possible_full_sewings": 64,
+          "connected_full": 12,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 42,
+            "decision_half_tests": 60,
+            "proper_loops": 19
+          },
+          "memo_entries": 0
+        },
+        "static_memo": {
+          "complete": true,
+          "possible_full_sewings": 64,
+          "connected_full": 12,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 16,
+            "decision_half_tests": 20,
+            "proper_loops": 5,
+            "cache_hits": 4
+          },
+          "memo_entries": 10
+        },
+        "window_1": {
+          "complete": true,
+          "possible_full_sewings": 64,
+          "connected_full": 12,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 14,
+            "lookahead_half_tests": 12,
+            "decision_half_tests": 16,
+            "forced_cycles": 2,
+            "proper_loops": 3,
+            "cache_hits": 4
+          },
+          "memo_entries": 8
+        },
+        "window_2": {
+          "complete": true,
+          "possible_full_sewings": 64,
+          "connected_full": 12,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 14,
+            "lookahead_half_tests": 22,
+            "decision_half_tests": 16,
+            "forced_cycles": 2,
+            "proper_loops": 3,
+            "cache_hits": 4
+          },
+          "memo_entries": 8
+        },
+        "window_4": {
+          "complete": true,
+          "possible_full_sewings": 64,
+          "connected_full": 12,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 14,
+            "lookahead_half_tests": 38,
+            "decision_half_tests": 16,
+            "forced_cycles": 2,
+            "proper_loops": 3,
+            "cache_hits": 4
+          },
+          "memo_entries": 8
+        },
+        "window_8": {
+          "complete": true,
+          "possible_full_sewings": 64,
+          "connected_full": 12,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 14,
+            "lookahead_half_tests": 40,
+            "decision_half_tests": 16,
+            "forced_cycles": 2,
+            "proper_loops": 3,
+            "cache_hits": 4
+          },
+          "memo_entries": 8
+        },
+        "window_16": {
+          "complete": true,
+          "possible_full_sewings": 64,
+          "connected_full": 12,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 14,
+            "lookahead_half_tests": 40,
+            "decision_half_tests": 16,
+            "forced_cycles": 2,
+            "proper_loops": 3,
+            "cache_hits": 4
+          },
+          "memo_entries": 8
+        },
+        "window_48": {
+          "complete": true,
+          "possible_full_sewings": 64,
+          "connected_full": 12,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 14,
+            "lookahead_half_tests": 40,
+            "decision_half_tests": 16,
+            "forced_cycles": 2,
+            "proper_loops": 3,
+            "cache_hits": 4
+          },
+          "memo_entries": 8
+        },
+        "repeat_forcing": {
+          "complete": true,
+          "possible_full_sewings": 64,
+          "connected_full": 12,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 14,
+            "lookahead_half_tests": 48,
+            "decision_half_tests": 16,
+            "forced_cycles": 2,
+            "proper_loops": 3,
+            "cache_hits": 4
+          },
+          "memo_entries": 8
+        }
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 64,
+          "signed": 64,
+          "connected": 12,
+          "nodes": 14
+        },
+        {
+          "anchor": 1,
+          "total": 64,
+          "signed": 64,
+          "connected": 12,
+          "nodes": 14
+        }
+      ],
+      "with_parent_phases": [
+        12,
+        12
+      ],
+      "both_parent_phases": 12,
+      "requiring_different_phase": 0,
+      "disjoint_phase_scopes": [
+        {
+          "connected_full": 12,
+          "work": {
+            "nodes": 14,
+            "lookahead_half_tests": 40,
+            "decision_half_tests": 16,
+            "forced_cycles": 2,
+            "proper_loops": 3,
+            "cache_hits": 4
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "covered_phase_scopes": 1
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "covered_phase_scopes": 1
+          }
+        }
+      ]
+    },
+    "near0+trade": {
+      "parent_union_phase": "NO_COMMON_PHASE",
+      "raw_children": 281474976710656,
+      "common_seams": 40,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3260
+        },
+        "possible_full_sewings": 281474976710656,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 34651,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "physical": {
+        "static_direct": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 25702,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 249492,
+            "decision_half_tests": 447580,
+            "phase_conflicts": 61834,
+            "proper_loops": 136255
+          },
+          "memo_entries": 0
+        },
+        "static_memo": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 25702,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 31754,
+            "decision_half_tests": 48198,
+            "phase_conflicts": 7798,
+            "proper_loops": 8647,
+            "cache_hits": 7654
+          },
+          "memo_entries": 22471
+        },
+        "window_1": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 25702,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 20680,
+            "lookahead_half_tests": 26818,
+            "decision_half_tests": 25712,
+            "forced_cycles": 8567,
+            "proper_loops": 1676,
+            "phase_conflicts": 3357,
+            "cache_hits": 7256,
+            "dead_lookaheads": 555
+          },
+          "memo_entries": 13411
+        },
+        "window_2": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 25702,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 19579,
+            "lookahead_half_tests": 41396,
+            "decision_half_tests": 23978,
+            "forced_cycles": 8176,
+            "proper_loops": 4116,
+            "dead_lookaheads": 318,
+            "cache_hits": 7228,
+            "phase_conflicts": 284
+          },
+          "memo_entries": 12307
+        },
+        "window_4": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 25702,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 16126,
+            "lookahead_half_tests": 57190,
+            "decision_half_tests": 18366,
+            "forced_cycles": 8861,
+            "proper_loops": 2094,
+            "cache_hits": 6038,
+            "dead_lookaheads": 734,
+            "phase_conflicts": 147
+          },
+          "memo_entries": 9917
+        },
+        "window_8": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 25702,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 14053,
+            "lookahead_half_tests": 65684,
+            "forced_cycles": 5053,
+            "decision_half_tests": 15912,
+            "proper_loops": 1775,
+            "cache_hits": 5442,
+            "dead_lookaheads": 419,
+            "phase_conflicts": 85
+          },
+          "memo_entries": 8375
+        },
+        "window_16": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 25702,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 12417,
+            "lookahead_half_tests": 65446,
+            "forced_cycles": 1980,
+            "decision_half_tests": 14214,
+            "proper_loops": 1752,
+            "cache_hits": 4975,
+            "dead_lookaheads": 108,
+            "phase_conflicts": 46
+          },
+          "memo_entries": 7215
+        },
+        "window_48": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 25702,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 12297,
+            "lookahead_half_tests": 67586,
+            "forced_cycles": 1670,
+            "decision_half_tests": 14066,
+            "proper_loops": 1750,
+            "cache_hits": 4971,
+            "dead_lookaheads": 66,
+            "phase_conflicts": 20
+          },
+          "memo_entries": 7099
+        },
+        "repeat_forcing": {
+          "complete": true,
+          "possible_full_sewings": 281474976710656,
+          "connected_full": 25702,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 12236,
+            "lookahead_half_tests": 75724,
+            "forced_cycles": 1698,
+            "decision_half_tests": 13952,
+            "proper_loops": 1713,
+            "cache_hits": 4970,
+            "dead_lookaheads": 61,
+            "phase_conflicts": 4
+          },
+          "memo_entries": 7037
+        }
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 1,
+          "connected": 0,
+          "nodes": 1
+        }
+      ],
+      "with_parent_phases": [
+        25702,
+        0
+      ],
+      "both_parent_phases": 0,
+      "requiring_different_phase": 0,
+      "disjoint_phase_scopes": [
+        {
+          "connected_full": 25702,
+          "work": {
+            "nodes": 8725,
+            "lookahead_half_tests": 47028,
+            "forced_cycles": 868,
+            "decision_half_tests": 9532,
+            "proper_loops": 808,
+            "cache_hits": 3894,
+            "dead_lookaheads": 1
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {}
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "nodes": 12070,
+            "lookahead_half_tests": 67586,
+            "forced_cycles": 1670,
+            "decision_half_tests": 14066,
+            "covered_phase_scopes": 227,
+            "proper_loops": 1750,
+            "cache_hits": 4971,
+            "dead_lookaheads": 66,
+            "phase_conflicts": 20
+          }
+        }
+      ]
+    },
+    "near0+cp": {
+      "parent_union_phase": "NO_COMMON_PHASE",
+      "raw_children": 8796093022208,
+      "common_seams": 51,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3120
+        },
+        "possible_full_sewings": 8796093022208,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 35002,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "physical": {
+        "static_direct": {
+          "complete": true,
+          "possible_full_sewings": 8796093022208,
+          "connected_full": 40136,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 297682,
+            "decision_half_tests": 515092,
+            "proper_loops": 123164,
+            "phase_conflicts": 94247
+          },
+          "memo_entries": 0
+        },
+        "static_memo": {
+          "complete": true,
+          "possible_full_sewings": 8796093022208,
+          "connected_full": 40136,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 76807,
+            "decision_half_tests": 105230,
+            "proper_loops": 13202,
+            "phase_conflicts": 15222,
+            "cache_hits": 24190
+          },
+          "memo_entries": 27568
+        },
+        "window_1": {
+          "complete": true,
+          "possible_full_sewings": 8796093022208,
+          "connected_full": 40136,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 47056,
+            "lookahead_half_tests": 54620,
+            "decision_half_tests": 52068,
+            "forced_cycles": 8084,
+            "proper_loops": 3307,
+            "cache_hits": 19734,
+            "phase_conflicts": 1706,
+            "dead_lookaheads": 1278
+          },
+          "memo_entries": 26621
+        },
+        "window_2": {
+          "complete": true,
+          "possible_full_sewings": 8796093022208,
+          "connected_full": 40136,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 41393,
+            "lookahead_half_tests": 81438,
+            "decision_half_tests": 43904,
+            "forced_cycles": 11015,
+            "proper_loops": 2372,
+            "cache_hits": 17162,
+            "dead_lookaheads": 1981,
+            "phase_conflicts": 140
+          },
+          "memo_entries": 23933
+        },
+        "window_4": {
+          "complete": true,
+          "possible_full_sewings": 8796093022208,
+          "connected_full": 40136,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 36626,
+            "lookahead_half_tests": 123428,
+            "decision_half_tests": 40142,
+            "forced_cycles": 12045,
+            "proper_loops": 3410,
+            "cache_hits": 15226,
+            "dead_lookaheads": 964,
+            "phase_conflicts": 107
+          },
+          "memo_entries": 21035
+        },
+        "window_8": {
+          "complete": true,
+          "possible_full_sewings": 8796093022208,
+          "connected_full": 40136,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 30626,
+            "lookahead_half_tests": 143174,
+            "decision_half_tests": 33626,
+            "forced_cycles": 7774,
+            "proper_loops": 2970,
+            "cache_hits": 12766,
+            "dead_lookaheads": 372,
+            "phase_conflicts": 31
+          },
+          "memo_entries": 17185
+        },
+        "window_16": {
+          "complete": true,
+          "possible_full_sewings": 8796093022208,
+          "connected_full": 40136,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 30409,
+            "lookahead_half_tests": 146918,
+            "decision_half_tests": 33332,
+            "forced_cycles": 4964,
+            "proper_loops": 2911,
+            "cache_hits": 12748,
+            "dead_lookaheads": 322,
+            "phase_conflicts": 13
+          },
+          "memo_entries": 16988
+        },
+        "window_48": {
+          "complete": true,
+          "possible_full_sewings": 8796093022208,
+          "connected_full": 40136,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 30390,
+            "lookahead_half_tests": 147902,
+            "decision_half_tests": 33304,
+            "forced_cycles": 4910,
+            "proper_loops": 2907,
+            "cache_hits": 12748,
+            "dead_lookaheads": 317,
+            "phase_conflicts": 8
+          },
+          "memo_entries": 16969
+        },
+        "repeat_forcing": {
+          "complete": true,
+          "possible_full_sewings": 8796093022208,
+          "connected_full": 40136,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 30239,
+            "lookahead_half_tests": 168238,
+            "decision_half_tests": 33032,
+            "forced_cycles": 5000,
+            "proper_loops": 2791,
+            "cache_hits": 12627,
+            "dead_lookaheads": 333,
+            "phase_conflicts": 3
+          },
+          "memo_entries": 16849
+        }
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 2,
+          "connected": 1,
+          "nodes": 3
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        }
+      ],
+      "with_parent_phases": [
+        40006,
+        130
+      ],
+      "both_parent_phases": 0,
+      "requiring_different_phase": 0,
+      "disjoint_phase_scopes": [
+        {
+          "connected_full": 40006,
+          "work": {
+            "nodes": 16864,
+            "lookahead_half_tests": 98012,
+            "decision_half_tests": 18254,
+            "forced_cycles": 2848,
+            "proper_loops": 1391,
+            "cache_hits": 7370,
+            "dead_lookaheads": 192
+          }
+        },
+        {
+          "connected_full": 130,
+          "work": {
+            "nodes": 131,
+            "lookahead_half_tests": 452,
+            "forced_cycles": 24,
+            "decision_half_tests": 144,
+            "proper_loops": 14,
+            "cache_hits": 47
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "nodes": 28873,
+            "lookahead_half_tests": 147902,
+            "decision_half_tests": 33300,
+            "forced_cycles": 4910,
+            "covered_phase_scopes": 1515,
+            "proper_loops": 2905,
+            "cache_hits": 11906,
+            "dead_lookaheads": 317,
+            "phase_conflicts": 8
+          }
+        }
+      ]
+    },
+    "near1+trade": {
+      "parent_union_phase": "NO_COMMON_PHASE",
+      "raw_children": 70368744177664,
+      "common_seams": 38,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3260
+        },
+        "possible_full_sewings": 70368744177664,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 34651,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "physical": {
+        "static_direct": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 4245,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 35269,
+            "decision_half_tests": 62048,
+            "proper_loops": 21694,
+            "phase_conflicts": 5086
+          },
+          "memo_entries": 0
+        },
+        "static_memo": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 4245,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 10194,
+            "decision_half_tests": 16598,
+            "proper_loops": 3146,
+            "cache_hits": 1893,
+            "phase_conflicts": 3259
+          },
+          "memo_entries": 8299
+        },
+        "window_1": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 4245,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 6167,
+            "lookahead_half_tests": 9000,
+            "decision_half_tests": 8426,
+            "forced_cycles": 2882,
+            "proper_loops": 1156,
+            "cache_hits": 1655,
+            "phase_conflicts": 1104,
+            "dead_lookaheads": 289
+          },
+          "memo_entries": 4502
+        },
+        "window_2": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 4245,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 5534,
+            "lookahead_half_tests": 13048,
+            "decision_half_tests": 7428,
+            "forced_cycles": 2734,
+            "proper_loops": 1767,
+            "cache_hits": 1575,
+            "dead_lookaheads": 232,
+            "phase_conflicts": 128
+          },
+          "memo_entries": 3946
+        },
+        "window_4": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 4245,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 4567,
+            "lookahead_half_tests": 15888,
+            "decision_half_tests": 5554,
+            "forced_cycles": 2936,
+            "proper_loops": 927,
+            "cache_hits": 1523,
+            "dead_lookaheads": 175,
+            "phase_conflicts": 61
+          },
+          "memo_entries": 2952
+        },
+        "window_8": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 4245,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3901,
+            "lookahead_half_tests": 17748,
+            "forced_cycles": 1531,
+            "decision_half_tests": 4634,
+            "proper_loops": 714,
+            "cache_hits": 1328,
+            "dead_lookaheads": 155,
+            "phase_conflicts": 20
+          },
+          "memo_entries": 2472
+        },
+        "window_16": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 4245,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3675,
+            "lookahead_half_tests": 19566,
+            "forced_cycles": 684,
+            "decision_half_tests": 4524,
+            "proper_loops": 836,
+            "cache_hits": 1271,
+            "dead_lookaheads": 41,
+            "phase_conflicts": 14
+          },
+          "memo_entries": 2303
+        },
+        "window_48": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 4245,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3645,
+            "lookahead_half_tests": 20210,
+            "forced_cycles": 557,
+            "decision_half_tests": 4488,
+            "proper_loops": 837,
+            "cache_hits": 1271,
+            "dead_lookaheads": 29,
+            "phase_conflicts": 7
+          },
+          "memo_entries": 2273
+        },
+        "repeat_forcing": {
+          "complete": true,
+          "possible_full_sewings": 70368744177664,
+          "connected_full": 4245,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 3609,
+            "lookahead_half_tests": 22438,
+            "forced_cycles": 578,
+            "decision_half_tests": 4432,
+            "proper_loops": 820,
+            "cache_hits": 1252,
+            "dead_lookaheads": 26,
+            "phase_conflicts": 4
+          },
+          "memo_entries": 2242
+        }
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 1,
+          "connected": 0,
+          "nodes": 1
+        }
+      ],
+      "with_parent_phases": [
+        4245,
+        0
+      ],
+      "both_parent_phases": 0,
+      "requiring_different_phase": 0,
+      "disjoint_phase_scopes": [
+        {
+          "connected_full": 4245,
+          "work": {
+            "nodes": 3595,
+            "lookahead_half_tests": 18052,
+            "forced_cycles": 466,
+            "decision_half_tests": 4430,
+            "proper_loops": 836,
+            "cache_hits": 1268,
+            "dead_lookaheads": 11
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {}
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "nodes": 1287,
+            "lookahead_half_tests": 14906,
+            "forced_cycles": 212,
+            "decision_half_tests": 2354,
+            "covered_phase_scopes": 844,
+            "cache_hits": 86,
+            "proper_loops": 217,
+            "dead_lookaheads": 24,
+            "phase_conflicts": 7
+          }
+        }
+      ]
+    },
+    "near1+cp": {
+      "parent_union_phase": "NO_COMMON_PHASE",
+      "raw_children": 17592186044416,
+      "common_seams": 50,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3120
+        },
+        "possible_full_sewings": 17592186044416,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 35002,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "physical": {
+        "static_direct": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 10254,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 134028,
+            "decision_half_tests": 247548,
+            "proper_loops": 67471,
+            "phase_conflicts": 46050
+          },
+          "memo_entries": 0
+        },
+        "static_memo": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 10254,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 25550,
+            "decision_half_tests": 32678,
+            "proper_loops": 2902,
+            "phase_conflicts": 4227,
+            "cache_hits": 9209
+          },
+          "memo_entries": 16339
+        },
+        "window_1": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 10254,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 20650,
+            "lookahead_half_tests": 23486,
+            "decision_half_tests": 22704,
+            "forced_cycles": 4400,
+            "proper_loops": 593,
+            "cache_hits": 8901,
+            "phase_conflicts": 1462,
+            "dead_lookaheads": 393
+          },
+          "memo_entries": 11745
+        },
+        "window_2": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 10254,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 18311,
+            "lookahead_half_tests": 33330,
+            "decision_half_tests": 18924,
+            "forced_cycles": 5172,
+            "proper_loops": 346,
+            "cache_hits": 8140,
+            "dead_lookaheads": 647,
+            "phase_conflicts": 268
+          },
+          "memo_entries": 10109
+        },
+        "window_4": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 10254,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 15410,
+            "lookahead_half_tests": 52000,
+            "decision_half_tests": 16166,
+            "forced_cycles": 5358,
+            "proper_loops": 615,
+            "cache_hits": 6172,
+            "dead_lookaheads": 1038,
+            "phase_conflicts": 142
+          },
+          "memo_entries": 9121
+        },
+        "window_8": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 10254,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 10705,
+            "lookahead_half_tests": 51658,
+            "decision_half_tests": 12368,
+            "forced_cycles": 3990,
+            "proper_loops": 1609,
+            "cache_hits": 3799,
+            "dead_lookaheads": 373,
+            "phase_conflicts": 55
+          },
+          "memo_entries": 6557
+        },
+        "window_16": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 10254,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 10395,
+            "lookahead_half_tests": 47320,
+            "decision_half_tests": 11914,
+            "forced_cycles": 1482,
+            "proper_loops": 1499,
+            "cache_hits": 3747,
+            "dead_lookaheads": 346,
+            "phase_conflicts": 21
+          },
+          "memo_entries": 6303
+        },
+        "window_48": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 10254,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 10361,
+            "lookahead_half_tests": 47884,
+            "decision_half_tests": 11864,
+            "forced_cycles": 1358,
+            "proper_loops": 1495,
+            "cache_hits": 3747,
+            "dead_lookaheads": 337,
+            "phase_conflicts": 9
+          },
+          "memo_entries": 6269
+        },
+        "repeat_forcing": {
+          "complete": true,
+          "possible_full_sewings": 17592186044416,
+          "connected_full": 10254,
+          "gold": null,
+          "geographic_status": null,
+          "work": {
+            "nodes": 10280,
+            "lookahead_half_tests": 52748,
+            "decision_half_tests": 11716,
+            "forced_cycles": 1403,
+            "proper_loops": 1432,
+            "cache_hits": 3734,
+            "dead_lookaheads": 333,
+            "phase_conflicts": 5
+          },
+          "memo_entries": 6191
+        }
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 2,
+          "connected": 2,
+          "nodes": 4
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 1,
+          "connected": 1,
+          "nodes": 2
+        }
+      ],
+      "with_parent_phases": [
+        10124,
+        130
+      ],
+      "both_parent_phases": 0,
+      "requiring_different_phase": 0,
+      "disjoint_phase_scopes": [
+        {
+          "connected_full": 10124,
+          "work": {
+            "nodes": 6149,
+            "lookahead_half_tests": 32558,
+            "forced_cycles": 904,
+            "decision_half_tests": 6706,
+            "proper_loops": 558,
+            "cache_hits": 2480,
+            "dead_lookaheads": 229
+          }
+        },
+        {
+          "connected_full": 130,
+          "work": {
+            "nodes": 131,
+            "lookahead_half_tests": 452,
+            "forced_cycles": 24,
+            "decision_half_tests": 144,
+            "proper_loops": 14,
+            "cache_hits": 47
+          }
+        },
+        {
+          "connected_full": 0,
+          "work": {
+            "nodes": 9998,
+            "lookahead_half_tests": 47884,
+            "decision_half_tests": 11860,
+            "forced_cycles": 1358,
+            "covered_phase_scopes": 361,
+            "proper_loops": 1493,
+            "cache_hits": 3731,
+            "dead_lookaheads": 337,
+            "phase_conflicts": 9
+          }
+        }
+      ]
+    },
+    "trade+cp": {
+      "parent_union_phase": "COMPATIBLE",
+      "raw_children": 36028797018963968,
+      "common_seams": 86,
+      "geographic": {
+        "complete": true,
+        "geographic_status": "INFEASIBLE",
+        "geographic_roots": {
+          "checked_roots": 480,
+          "survivors": [],
+          "cell_revisions": 3150
+        },
+        "possible_full_sewings": 36028797018963968,
+        "connected_full": null,
+        "gold": null,
+        "work": {
+          "nodes": 0
+        },
+        "examples": []
+      },
+      "independent_geographic": {
+        "survivors": [],
+        "concrete_partial_assignments": 48596,
+        "depth_limit": 45,
+        "capped_roots": 0
+      },
+      "independent_finite": [
+        {
+          "anchor": 0,
+          "total": 256,
+          "signed": 256,
+          "connected": 0,
+          "nodes": 1
+        },
+        {
+          "anchor": 1,
+          "total": 256,
+          "signed": 256,
+          "connected": 5,
+          "nodes": 23
+        }
+      ],
+      "bounded_physical": {
+        "connected_full": 180649,
+        "complete": false,
+        "work": {
+          "nodes": 100000,
+          "lookahead_half_tests": 528074,
+          "forced_cycles": 18066,
+          "decision_half_tests": 108375,
+          "proper_loops": 8375,
+          "cache_hits": 44270,
+          "dead_lookaheads": 734
+        }
+      }
+    }
+  },
+  "combined_unions": {
+    "five_connected": {
+      "donors": [
+        "raw",
+        "contract",
+        "near0",
+        "near1",
+        "cp"
+      ],
+      "physical_seams": 714,
+      "propagated": {
+        "checked_roots": 480,
+        "survivors": [],
+        "cell_revisions": 11280
+      },
+      "independent_cnf": {
+        "clauses": 460480,
+        "variables": 76800,
+        "checked_roots": 480,
+        "roots_rejected_by_unit_propagation": 480,
+        "unresolved_roots": 0
+      }
+    },
+    "all_six": {
+      "donors": [
+        "raw",
+        "contract",
+        "near0",
+        "near1",
+        "trade",
+        "cp"
+      ],
+      "physical_seams": 773,
+      "propagated": {
+        "checked_roots": 480,
+        "survivors": [],
+        "cell_revisions": 10860
+      },
+      "independent_cnf": {
+        "clauses": 460480,
+        "variables": 76800,
+        "checked_roots": 480,
+        "roots_rejected_by_unit_propagation": 480,
+        "unresolved_roots": 0
+      }
+    },
+    "contact_extension": {
+      "donors": [
+        "raw",
+        "contract",
+        "near0",
+        "near1",
+        "trade",
+        "cp",
+        "contact"
+      ],
+      "physical_seams": 792,
+      "propagated": {
+        "checked_roots": 480,
+        "survivors": [],
+        "cell_revisions": 10860
+      },
+      "independent_cnf": {
+        "clauses": 460480,
+        "variables": 76800,
+        "checked_roots": 480,
+        "roots_rejected_by_unit_propagation": 480,
+        "unresolved_roots": 0
+      }
+    },
+    "connected_contact_extension": {
+      "donors": [
+        "raw",
+        "contract",
+        "near0",
+        "near1",
+        "trade",
+        "cp",
+        "contact",
+        "contact_switched"
+      ],
+      "physical_seams": 793,
+      "propagated": {
+        "checked_roots": 480,
+        "survivors": [],
+        "cell_revisions": 10860
+      },
+      "independent_cnf": {
+        "clauses": 460480,
+        "variables": 76800,
+        "checked_roots": 480,
+        "roots_rejected_by_unit_propagation": 480,
+        "unresolved_roots": 0
+      }
+    },
+    "outside_recorded_donors": {
+      "0x11dd1924c56c109dc8801f0d1d8f435119f1920": {
+        "physical_seams": 1708,
+        "surviving_roots": 430
+      },
+      "0x998e5d18e3d15cf020e4db269f8d8d051a38e042": {
+        "physical_seams": 1608,
+        "surviving_roots": 460
+      },
+      "0xd237aba7e91101e88041413e8c589902021e5126": {
+        "physical_seams": 1864,
+        "surviving_roots": 460
+      },
+      "all_phase_mates": {
+        "physical_seams": 2782,
+        "surviving_roots": 480
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-"""Exchange whole alternating cycles between phase-compatible complete physical sewings."""
+"""Exchange whole alternating cycles between complete physical sewings."""
 import argparse
 from collections import Counter
 import json
@@ -30,12 +30,22 @@ def complete(problem,pairs,phases,inputs):
 
 
 def common_phases(problem,first,second,seconds=5):
-    from ortools.sat.python import cp_model
+    from r35_mixed_sewings import PhaseComponents
     inputs=EndpointCuts(problem)
     a=complete(problem,first['pairs'],first['phases'],inputs)
     b=complete(problem,second['pairs'],second['phases'],inputs)
     pins=(dict(enumerate(first['phases'])) if first['phases']==second['phases'] else None)
     seams={(u,v) for mate in (a,b) for u,v in mate.items() if u<v}
+    parity=PhaseComponents(problem.n)
+    if not parity.push((u//3,v//3,inputs.sides[u][1]^inputs.sides[v][1]^
+                        (inputs.sides[u][0].bit_count()&1)) for u,v in seams):
+        return None,'NO_COMMON_PHASE'
+    try:
+        from ortools.sat.python import cp_model
+    except ModuleNotFoundError as exc:
+        if exc.name and exc.name.split('.')[0]=='ortools':
+            return None,'OPTIONAL_CP_UNAVAILABLE'
+        raise
     m,variables=signed_phase_model(problem,pins=pins,bonds=seams)
     solver=cp_model.CpSolver();solver.parameters.max_time_in_seconds=seconds
     solver.parameters.num_search_workers=1
@@ -92,7 +102,8 @@ class Family:
         self.problem=problem
         self.inputs=EndpointCuts(problem)
         self.phases=phases
-        a,b=(complete(problem,record['pairs'],phases,self.inputs) for record in (first,second))
+        a,b=(complete(problem,record['pairs'],record['phases'] if phases is None else phases,self.inputs)
+             for record in (first,second))
         self.fixed,groups=difference(a,b)
         self.blanks=[g for g in groups if not self.inputs.sides[g[0][0][0]][0]]
         self.groups=sorted((g for g in groups if self.inputs.sides[g[0][0][0]][0]),
@@ -122,6 +133,9 @@ class Family:
         return selected
 
     def solve(self,*,max_nodes=1000000,memo=True,geography=False,domains=None,count_after_exclusion=False):
+        if self.phases is None:
+            from r35_mixed_sewings import mixed_solve
+            return mixed_solve(self,max_nodes=max_nodes,memo=memo,geography=geography,domains=domains)
         domains=domain_bits(self.problem) if domains is None else domains
         stats=Counter()
         paths=RollbackPaths(self.n)
@@ -148,10 +162,17 @@ class Family:
                     certificate=dict(kind='positive_genus',pairs=sorted(core),genus=ribbon_genus(self.problem,core))
                 else:
                     certificate=dict(kind='impossible_common_poses',pairs=sorted(core))
-                if not count_after_exclusion:
-                    return dict(complete=True,geographic_status='INFEASIBLE',gold=None,
-                                possible_full_sewings=raw,connected_full=None,geographic_certificate=certificate,
-                                work=dict(stats))
+            else:
+                from r35_mixed_sewings import geographic_roots
+                roots=geographic_roots(self.problem,domains,base_allowed)
+                if not roots['survivors']:
+                    stats['allowed_mate_exclusions']+=1
+                    geo=False
+                    certificate=dict(kind='no_allowed_geographic_root',**roots)
+            if certificate is not None and not count_after_exclusion:
+                return dict(complete=True,geographic_status='INFEASIBLE',gold=None,
+                            possible_full_sewings=raw,connected_full=None,geographic_certificate=certificate,
+                            work=dict(stats))
         # A connectivity-only key cannot carry named geographic exclusions or witnesses.
         use_memo=memo and not geo
         blank=BlankProjection(self.inputs.sides,base_allowed,self.fixed)
@@ -211,16 +232,22 @@ def main():
     from search_problem import SearchProblem
     cli=argparse.ArgumentParser(description=__doc__)
     cli.add_argument('--tiles',default='data/tiles.json')
-    cli.add_argument('--parents',type=Path,required=True,help='JSON array of two objects with phases and pairs.')
+    cli.add_argument('--parents',type=Path,required=True,help='JSON array of complete donors with phases and pairs.')
     cli.add_argument('--max-nodes',type=int,default=1000000)
     cli.add_argument('--geography',action='store_true')
+    cli.add_argument('--union-roots',action='store_true',help='Check geographic roots for every matching using only the supplied donor seams.')
     args=cli.parse_args()
     p=SearchProblem(read_json(args.tiles))
-    first,second=read_json(args.parents)
+    parents=read_json(args.parents)
+    if args.union_roots:
+        from r35_mixed_sewings import donor_geography
+        print(json.dumps(donor_geography(p,parents),indent=2))
+        return
+    if len(parents)!=2:cli.error('Provide two donors for a crossover search or use --union-roots.')
+    first,second=parents
     phases,state=common_phases(p,first,second)
     result=dict(phase_status=state)
-    if phases is not None:
-        result.update(Family(p,first,second,phases).solve(max_nodes=args.max_nodes,geography=args.geography))
+    result.update(Family(p,first,second,phases).solve(max_nodes=args.max_nodes,geography=args.geography))
     print(json.dumps(result,indent=2))
 
 
