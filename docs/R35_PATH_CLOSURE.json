@@ -1,0 +1,71 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "reference": 207,
+  "reachable_rules": 258,
+  "reachable_mates": 208,
+  "additional_loops": 0,
+  "waves": [
+    {
+      "paths": 258,
+      "new_mates": 0
+    }
+  ],
+  "phases": {
+    "raw31": {
+      "published": {
+        "status": "OPTIMAL",
+        "lower": 33.0,
+        "loss": 33,
+        "nodes": 1
+      },
+      "closure": {
+        "status": "OPTIMAL",
+        "lower": 33.0,
+        "loss": 33,
+        "nodes": 1
+      }
+    },
+    "euler33": {
+      "published": {
+        "status": "OPTIMAL",
+        "lower": 35.0,
+        "loss": 35,
+        "nodes": 1
+      },
+      "closure": {
+        "status": "OPTIMAL",
+        "lower": 35.0,
+        "loss": 35,
+        "nodes": 1
+      }
+    },
+    "euler33b": {
+      "published": {
+        "status": "OPTIMAL",
+        "lower": 33.0,
+        "loss": 33,
+        "nodes": 1
+      },
+      "closure": {
+        "status": "OPTIMAL",
+        "lower": 33.0,
+        "loss": 33,
+        "nodes": 1
+      }
+    },
+    "donor37": {
+      "published": {
+        "status": "OPTIMAL",
+        "lower": 38.0,
+        "loss": 38,
+        "nodes": 1
+      },
+      "closure": {
+        "status": "OPTIMAL",
+        "lower": 38.0,
+        "loss": 38,
+        "nodes": 1
+      }
+    }
+  }
+}

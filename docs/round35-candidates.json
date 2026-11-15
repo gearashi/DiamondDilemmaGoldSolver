@@ -1579,7 +1579,7 @@
       "state": "keep geographic boundary support; reject scored-start ranking",
       "proposal_and_validation": "Compare occupancy-only joint support and speculative merges to actual signed/unsigned oriented seam compatibility where different components touch. Preserve all Gold on tiny exact boards, test restricted original domino packings and nine-tile construction joins. Test soft scoring separately for incomplete-edge objectives before retaining any non-Gold ordering.",
       "decision": "Resolve oriented physical and pinned XOR seam compatibility across disjoint compulsory poses and explicit joins of up to nine tiles. Keep budgeted exact support for small jointly interacting families, the non-touching count and ordinary scored-search eligibility. Reject both simple tie ordering and a minimum-loss first tier for 208.",
-      "measurement": "Four real restrictions lost 270, 314, 272 and 1304 additional codes. Two of six independent restricted local packings became impossible, including one requiring simultaneous labels. Of 29,510 fresh nine-piece poses 9,390 forced a seam mismatch and 17/64 entire named conditions failed. A prior native call spent 45,319 branches and remained unresolved. The new geographic check proved the same assumption infeasible with zero native branches. Full phase pins removed 8â€“10 more codes and unpinned relative tests across 6,451,200 paired dominoes added zero. Scored first-tier trials lost five matched edges over sixteen 64-round trajectories.",
+      "measurement": "Four real restrictions lost 270, 314, 272 and 1304 additional codes. Two of six independent restricted local packings became impossible, including one requiring simultaneous labels. Of 29,510 fresh nine-piece poses 9,390 forced a seam mismatch and 17/64 entire named conditions failed. A prior native call spent 45,319 branches and remained unresolved. The new geographic check proved the same assumption infeasible with zero native branches. Full phase pins removed 8\u00e2\u20ac\u201c10 more codes and unpinned relative tests across 6,451,200 paired dominoes added zero. Scored first-tier trials lost five matched edges over sixteen 64-round trajectories.",
       "evidence": [
         "docs/ROUND35_POSE_CONTACTS.md",
         "docs/R35_POSE_CONTACTS.json",
@@ -1598,8 +1598,22 @@
       "source_id": "#4 short turn words, #15 reciprocal-family correlations, #81 induced contacts",
       "title": "Infer compatible physical mates forced by a retained geographic path",
       "mechanism": "GEOGRAPHIC-PATH-IMPLIED-MATES",
-      "state": "testing",
-      "proposal_and_validation": "Enumerate all matched geographic root poses of retained named paths. Extract mandatory additional physical joins or a small disjunction, independently replay every antecedent and allowed alternative. Compare to footprint conflicts, physical correlations, and direct embedding on actual input, including inference of forbidden mates and proper loops. Restrict use to geographic edge-perfect or Gold queries and report increases in native work or absence of practical gain."
+      "state": "keep with exact scope",
+      "proposal_and_validation": "Enumerate all matched geographic root poses of retained named paths. Extract mandatory additional physical joins or a small disjunction, independently replay every antecedent and allowed alternative. Compare to footprint conflicts, physical correlations, and direct embedding on actual input, including inference of forbidden mates and proper loops. Restrict use to geographic edge-perfect or Gold queries and report increases in native work or absence of practical gain.",
+      "decision": "Retain complete pose-implied joins for conditioned geographic searches and 19 verified path-to-proper-loop departures. Six matched queries avoided native CP. Global signed native nodes at loss caps 31/32/33 fell 1257/5167/1519 to 753/2199/1052. Two of three real donors increased their minimum single-loop loss; the independent second signed 33-loss assignment still survives. Simultaneously posting all 258 reachable joins did not change any of the four fixed-phase optima. Translation to 9,120 pinned roots added no new obstruction. Branched contact tables exclude eight extra joint assignments across four of 1,200 cases, with mixed actual native branch work; keep them opt-in.",
+      "evidence": [
+        "docs/ROUND35_PATH_MATES.md",
+        "docs/R35_PATH_MATES.json",
+        "docs/R35_PATH_MATE_VERIFICATION.json",
+        "docs/R35_PATH_CIRCUITS.json",
+        "docs/R35_PATH_CIRCUIT_AUDIT.json",
+        "docs/R35_PATH_CLOSURE.json",
+        "docs/R35_BRANCHED_PATH_MATES.json",
+        "docs/R35_MIP_CONDITIONS.json",
+        "test_r35_path_mates.py",
+        "test_r35_path_circuits.py"
+      ],
+      "reopen_if": "A different donor or reference yields a newly reachable nonreference seam, more than one necessary alternative, a surviving incompatible correlated pattern with measured pruning, or an obstruction beyond the ordinary placed-edge and loop checks."
     }
   ],
   "priorities": [

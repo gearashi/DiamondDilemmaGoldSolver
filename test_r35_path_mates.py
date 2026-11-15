@@ -51,6 +51,19 @@ class PathMateTests(unittest.TestCase):
         self.assertEqual(alternatives(set()),())
         self.assertEqual(alternatives({*rows,frozenset()}),())
 
+    def test_projected_blank_remains_possible_and_missing_nonblank_is_false(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        from r35_path_mates import post_tables
+        a,b,c=(3,6),(4,8),(5,10)
+        tables=[((a,b,c),[frozenset((a,c)),frozenset((b,))])]
+        check=SimpleNamespace(m=Mock(),mate={a:"a"},blank_projection=SimpleNamespace(allowed={c}))
+        self.assertEqual(post_tables(check,tables),dict(tables=1,rows=1,unsupported_patterns=1))
+        check.m.add_allowed_assignments.assert_called_once_with(["a"],[(1,)])
+        check.blank_projection=None
+        self.assertEqual(post_tables(check,tables),dict(tables=1,rows=0,unsupported_patterns=2))
+        check.m.add_bool_or.assert_called_once_with([])
+
     def test_expired_scan_and_conflicting_side_ownership(self):
         p,donors,boards=ring_donors(103)
         pairs=set(map(tuple,donors[0]['pairs']))

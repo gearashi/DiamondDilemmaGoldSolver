@@ -69,9 +69,26 @@ def main():
     cli.add_argument("--limit",type=int,default=1)
     cli.add_argument("--length",type=int,default=9)
     cli.add_argument("--sources",nargs="+",default=["reference"])
+    cli.add_argument("--public-controls",action="store_true",help="Repeat the six published path and forbidden-mate cases.")
+    cli.add_argument("--seconds",type=float,default=5)
     args=cli.parse_args()
     problem=SearchProblem(read_json(args.tiles))
     docs=Path(__file__).parent/"docs"
+    if args.public_controls:
+        from r30_gold import search
+        source=read_json(docs/"R35_PATH_MATES.json")
+        if source["fingerprint"]!=problem.fingerprint:
+            raise ValueError("Published controls require the original puzzle.")
+        cases=[]
+        for case in source["public_cases"]:
+            runs={}
+            for name,mode in (("plain",None),("units","units"),("table","table")):
+                out=search(problem,geography=True,bonds=case["required"],forbidden=[case["forbidden"]],
+                           phase_anchors="off",path_mates=mode,seconds=args.seconds)
+                runs[name]={k:out[k] for k in ("status","branches","cp_calls","path_mates") if k in out}
+            cases.append(dict(donor=case["donor"],runs=runs))
+        atomic_json(args.output,dict(fingerprint=problem.fingerprint,seconds=args.seconds,cases=cases))
+        return
     ref=reference_groups(problem,read_json(docs/"R29_INCUMBENT.json")["codes"])[0]
     donors={k:{tuple(sorted(b)) for b in row["pairs"]} for k,row in original_sources().items()}
     donors["reference"]=set(ref)

@@ -407,7 +407,7 @@ class GoldMatching:
 
 def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=(), matching=True,
            geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=(),
-           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), edge_perfect_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None, joint_poses=False, reference_bound=False, mate_correlations=False, phase_anchors=None, path_mates=None):
+           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), edge_perfect_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None, joint_poses=False, reference_bound=False, mate_correlations=False, phase_anchors=None, path_mates=None, gold_path_circuits=()):
     if seconds<=0 or max_rounds<1 or (geography and not matching):
         raise ValueError("Invalid Gold solve budget or mode.")
     pins=None if pins is None else checked_pins(problem.n,pins)
@@ -435,6 +435,8 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
     phase_rules=()
     mate_tables=()
+    if gold_path_circuits and not geography:
+        raise ValueError("Geographic path-loop implications require embed.")
     if path_mates is not None and (not geography or path_mates not in ('units','table')):
         raise ValueError('Geographic path mates require embed and a supported mode.')
     if phase_anchors is not None and (not geography or phase_anchors not in ('off','rules','roots','shared')):
@@ -442,7 +444,7 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
     # Preserve validation of caller-supplied cuts and certificates in the native path.
     automatic_rules=(phase_anchors is None and geography and problem.n==160 and (pins or bonds)
                      and not (cutsets or type_cuts or bridges or geographic_cores or edge_perfect_cores
-                              or departure_rules or physical_loss or reference_bound))
+                              or departure_rules or gold_path_circuits or physical_loss or reference_bound))
     if automatic_rules or phase_anchors in ('rules','roots','shared'):
         from r28_geo_color import _sphere
         _sphere(problem)
@@ -490,22 +492,28 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             return dict(status='UNKNOWN',reason='geographic path mate budget',**stats)
         bonds=[*bonds,*sorted(forced)]
         forbidden=[*forbidden,*sorted(absent)]
-    replayed_geography=();replayed_contacts=()
+    replayed_geography=();replayed_contacts=();replayed_circuits=()
     if edge_perfect_cores and not geography:
         raise ValueError('Induced physical contacts require the embed search objective.')
-    if (geographic_cores or edge_perfect_cores) and geography:
+    if (geographic_cores or edge_perfect_cores or gold_path_circuits) and geography:
         from r35_geographic_replay import replay_for
         replayed_geography=replay_for(problem).check(domains,geographic_cores)
         from r35_induced_contacts import verified_contacts
         replayed_contacts=verified_contacts(problem,edge_perfect_cores)
+        if gold_path_circuits:
+            from r35_path_mates import verified_circuits
+            replayed_circuits=verified_circuits(problem,gold_path_circuits)
+            stats["verified_gold_path_circuits"]=len(replayed_circuits)
         fixed={tuple(sorted(e)) for e in bonds}
         if physical_support:
             from r32_gold_bonds import inventory
             fixed.update(inventory(problem).required)
         forbidden=list(forbidden)
-        for core in (*replayed_geography,*replayed_contacts):
+        for core in (*replayed_geography,*replayed_contacts,*replayed_circuits):
             missing=core-fixed
             if not missing:
+                if core in replayed_circuits:
+                    return dict(status='INFEASIBLE',gold_path_conflict=sorted(core),**stats)
                 kind='geographic_cores' if core in replayed_geography else 'edge_perfect_cores'
                 return dict(status='INFEASIBLE',**{kind:[sorted(core)]},**stats)
             if len(missing)==1:forbidden.extend(missing)
@@ -589,6 +597,9 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
                     m.add_bool_or([~check.mate[p] for p in pairs])
                 check.geo_conflicts.cores.append(pairs)
             stats['geographic_cores']=[sorted(c) for c in check.geo_conflicts.cores]
+        for core in replayed_circuits:
+            if core <= check.mate.keys():
+                check.m.add_bool_or([~check.mate[p] for p in core])
         if replayed_contacts:
             stats['edge_perfect_cores']=[sorted(core) for core in replayed_contacts]
             for core in replayed_contacts:
@@ -823,6 +834,7 @@ def main():
                    bridges=[*data.get("bridges",()),*prior.get("bridge_hints",())],
                    geographic_cores=prior.get("geographic_cores",()) if args.method=="embed" else (),
                    edge_perfect_cores=prior.get("edge_perfect_cores",()) if args.method=="embed" else (),
+                   gold_path_circuits=prior.get("gold_path_circuits",()) if args.method=="embed" else (),
                    departure_rules=prior.get("cores",()),**opts)
     if args.departure_branch is not None:
         out["covered_departure_branch"]={"required":core[:index],"forbidden":core[index],"total":len(core)}

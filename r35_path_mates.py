@@ -127,15 +127,70 @@ def propagate(problem, domains, required, forbidden, deadline=float("inf")):
 
 
 def post_tables(check, tables):
-    posted = rows = 0
-    for variables,patterns in tables:
+    posted = rows = unsupported = 0
+    projected = check.blank_projection.allowed if check.blank_projection is not None else ()
+    for variables, patterns in tables:
         columns = [bond for bond in variables if bond in check.mate]
+        unavailable = set(variables).difference(columns, projected)
+        surviving = [row for row in patterns if not unavailable.intersection(row)]
+        unsupported += len(patterns) - len(surviving)
+        if not surviving:
+            check.m.add_bool_or([])
+            posted += 1
+            break
         if not columns:
             continue
-        values = {tuple(int(bond in row) for bond in columns) for row in patterns}
-        if len(values)==1<<len(columns):
+        values = {tuple(int(bond in row) for bond in columns) for row in surviving}
+        if len(values) == 1 << len(columns):
             continue
-        check.m.add_allowed_assignments([check.mate[bond] for bond in columns],sorted(values))
+        check.m.add_allowed_assignments([check.mate[bond] for bond in columns], sorted(values))
         posted += 1
         rows += len(values)
-    return dict(tables=posted,rows=rows)
+    return dict(tables=posted, rows=rows, unsupported_patterns=unsupported)
+
+
+def verified_circuits(problem, hints, allowed=None):
+    """Substitute a geographically forced extra mate into a strict physical loop."""
+    from r32_gold_bonds import endpoints, loop_groups
+    from r35_geographic_replay import replay_for
+    from r35_loss_witness import raw_sides
+
+    if not hints:
+        return ()
+    normalizer = replay_for(problem)
+    checker = PathMates(problem)
+    arcs = endpoints(problem)
+    sides = [slots for slots, _ in raw_sides(problem.tiles)]
+    common_by_path = {}
+    proved_loops = {}
+    groups = set()
+    for hint in hints:
+        if not isinstance(hint, dict):
+            continue
+        path = normalizer.normalize(hint.get("path", ()))
+        circuit = normalizer.normalize(hint.get("loop", ()))
+        single = normalizer.normalize([hint.get("mate")])
+        if not path or not circuit or not single or not single <= circuit or path & single:
+            continue
+        group = path | (circuit - single)
+        if allowed is not None and not group <= allowed:
+            continue
+        if circuit not in proved_loops:
+            proved_loops[circuit] = circuit in loop_groups(arcs, sides, circuit, problem.total_segments)
+        if not proved_loops[circuit]:
+            continue
+        if path not in common_by_path:
+            try:
+                patterns, _, _ = checker.patterns(path)
+            except ValueError:
+                patterns = set()
+            common_by_path[path] = frozenset.intersection(*patterns) if patterns else frozenset()
+        if single <= common_by_path[path]:
+            groups.add(group)
+    return tuple(sorted(groups, key=lambda g: (len(g), sorted(g))))
+
+
+def circuit_departures(problem, reference, required, hints):
+    required = frozenset(required)
+    rows = verified_circuits(problem, hints, frozenset(reference) | required)
+    return tuple(sorted({row-required for row in rows}, key=lambda g: (len(g),sorted(g))))

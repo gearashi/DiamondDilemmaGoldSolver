@@ -76,15 +76,17 @@ def _negative_page(db, scope, errors, start, stop):
     return inserted
 
 
-def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False, all_groups=False, sphere_euler=False, mate_support=False, mate_cost=False, geographic_hints=(), contact_hints=()):
+def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False, all_groups=False, sphere_euler=False, mate_support=False, mate_cost=False, geographic_hints=(), contact_hints=(), circuit_hints=()):
     """Replay optional geometric evidence before handing it to the ranked loss search."""
     from r35_geographic_replay import geographic_departures
     ref=frozenset(ref)
     geo=geographic_departures(problem,ref,inventory(problem).required,geographic_hints) if geographic_hints else ()
     from r35_induced_contacts import contact_departures
     contact=contact_departures(problem,ref,inventory(problem).required,contact_hints) if contact_hints else ()
+    from r35_path_mates import circuit_departures
+    circuits=circuit_departures(problem,ref,inventory(problem).required,circuit_hints) if circuit_hints else ()
     result=_ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refine_integer,
-                        all_groups,sphere_euler,mate_support,mate_cost,tuple(dict.fromkeys((*geo,*contact))),contacts_present=bool(contact))
+                        all_groups,sphere_euler,mate_support,mate_cost,tuple(dict.fromkeys((*geo,*contact,*circuits))),contacts_present=bool(contact))
     if geo:
         result.update(verified_geographic_departures=len(geo),
                       relaxation=('signed_inventory_with_geographic_departures' if refine_integer
@@ -93,6 +95,8 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
         result.update(verified_edge_perfect_departures=len(contact),
                       relaxation=('signed_inventory_with_edge_perfect_departures' if refine_integer
                                   else 'parity_with_edge_perfect_departures'))
+    if circuits:
+        result.update(verified_gold_path_circuits=len(circuits),relaxation="gold_geographic_departures")
     return result
 
 
@@ -443,12 +447,13 @@ def main():
                  single_bond_loops=sorted(rules.loops))
     else:
         codes=case['codes'] if 'codes' in case else read_json(args.center)['codes']
-        extra=[];geographic_hints=[];contact_hints=[]
+        extra=[];geographic_hints=[];contact_hints=[];circuit_hints=[]
         for file in args.claims:
             hints=read_json(file)
             extra.extend(hints.get('clauses',()))
             geographic_hints.extend(hints.get('geographic_cores',()))
             contact_hints.extend(hints.get('edge_perfect_cores',()))
+            circuit_hints.extend(hints.get('gold_path_circuits',()))
         ref,cert,groups=reference_groups(p,codes,extra)
         for pair in [*case.get('required',[]),*case.get('forbidden',[])]:
             if (not isinstance(pair,(list,tuple)) or len(pair)!=2 or
@@ -464,7 +469,7 @@ def main():
             indices=None if args.outside is None else [args.outside]
             out=run_syndrome(p,ref,groups,args.upper,indices,args.database,args.seconds,args.page,
                              refine_integer=args.refine_integer,all_groups=args.all_groups,sphere_euler=args.sphere_euler,
-                             mate_support=args.mate_support,mate_cost=args.mate_cost,geographic_hints=geographic_hints,contact_hints=contact_hints)
+                             mate_support=args.mate_support,mate_cost=args.mate_cost,geographic_hints=geographic_hints,contact_hints=contact_hints,circuit_hints=circuit_hints)
         elif args.mode=='phase-sewing':
             if case.keys()-{'codes'} or args.outside is not None:
                 parser.error('phase-sewing accepts an unrestricted reference and one tile-color assignment')
@@ -473,6 +478,8 @@ def main():
             from r35_phase_sewing import search as phase_sewing
             geo=geographic_departures(p,ref,rules.required,geographic_hints)
             contacts=contact_departures(p,ref,rules.required,contact_hints)
+            from r35_path_mates import circuit_departures
+            circuits=circuit_departures(p,ref,rules.required,circuit_hints)
             from io_utils import atomic_json
             saved=None
             hint_path=args.sewing_hint or args.output
@@ -481,10 +488,11 @@ def main():
                     saved=read_json(hint_path)
                 except (ValueError,OSError):
                     saved=None
-            out=phase_sewing(p,ref,[*groups,*geo,*contacts],rules.required,args.phase,args.upper,args.seconds,
+            out=phase_sewing(p,ref,[*groups,*geo,*contacts,*circuits],rules.required,args.phase,args.upper,args.seconds,
                              switch_trials=args.switch_trials,saved=saved,published=not args.independent_native,
                              publish=(lambda row:atomic_json(Path(args.output),row)) if args.output else None)
             out.update(verified_geographic_departures=len(geo),verified_contact_departures=len(contacts))
+            if circuits:out['verified_gold_path_circuits']=len(circuits)
         elif args.mode=='integer-bound':
             if case.keys()-{'codes'} or args.outside is not None:
                 parser.error('integer-bound solves every outside pattern of one unrestricted reference')
@@ -495,7 +503,9 @@ def main():
             geographic_groups = geographic_departures(p, ref, mandatory, geographic_hints)
             from r35_induced_contacts import contact_departures
             contact_groups=contact_departures(p,ref,mandatory,contact_hints)
-            conditional_groups=tuple(dict.fromkeys((*geographic_groups,*contact_groups)))
+            from r35_path_mates import circuit_departures
+            circuits=circuit_departures(p,ref,mandatory,circuit_hints)
+            conditional_groups=tuple(dict.fromkeys((*geographic_groups,*contact_groups,*circuits)))
             contact_bound=0
             if contact_groups:
                 from r35_contact_certificate import checked_contact_bound
@@ -526,6 +536,8 @@ def main():
             if contact_groups:
                 out.update(relaxation='signed_inventory_with_edge_perfect_departures',
                            verified_edge_perfect_departures=len(contact_groups))
+            if circuits:
+                out.update(verified_gold_path_circuits=len(circuits),relaxation="gold_geographic_departures")
         elif args.mode=='master':
             out=master(p,ref,cert,args.upper,args.seconds,req,forbid,ds)
         elif args.mode=='geographic':

@@ -1,0 +1,964 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "sources": {
+    "reference": {
+      "counts": {
+        "checked": 240,
+        "compatible": 172,
+        "variable": 19,
+        "correlated": 2,
+        "joint_values_excluded": 6
+      },
+      "cases": [
+        {
+          "path": [
+            [
+              42,
+              478
+            ],
+            [
+              43,
+              438
+            ],
+            [
+              60,
+              118
+            ],
+            [
+              61,
+              230
+            ],
+            [
+              62,
+              447
+            ],
+            [
+              69,
+              76
+            ],
+            [
+              71,
+              449
+            ],
+            [
+              75,
+              477
+            ],
+            [
+              77,
+              154
+            ],
+            [
+              117,
+              463
+            ],
+            [
+              119,
+              279
+            ],
+            [
+              155,
+              189
+            ],
+            [
+              156,
+              479
+            ],
+            [
+              157,
+              257
+            ],
+            [
+              158,
+              436
+            ],
+            [
+              229,
+              232
+            ]
+          ],
+          "geometric": 400,
+          "compatible": 310,
+          "variables": [
+            [
+              70,
+              435
+            ],
+            [
+              280,
+              437
+            ]
+          ],
+          "allowed": [
+            [],
+            [
+              [
+                70,
+                435
+              ],
+              [
+                280,
+                437
+              ]
+            ]
+          ],
+          "runs": {
+            "units": {
+              "status": "UNKNOWN",
+              "cp_calls": 4,
+              "branches": 143603,
+              "path_mates": {
+                "components": 8,
+                "geometric_roots": 3760,
+                "compatible_roots": 3670,
+                "distinct_patterns": 9,
+                "added_required": 0,
+                "added_forbidden": 5,
+                "status": "SURVIVING"
+              }
+            },
+            "table": {
+              "status": "UNKNOWN",
+              "cp_calls": 5,
+              "branches": 179712,
+              "path_mates": {
+                "components": 8,
+                "geometric_roots": 3760,
+                "compatible_roots": 3670,
+                "distinct_patterns": 9,
+                "added_required": 0,
+                "added_forbidden": 5,
+                "status": "SURVIVING",
+                "tables": 1,
+                "rows": 2
+              }
+            }
+          }
+        },
+        {
+          "path": [
+            [
+              9,
+              316
+            ],
+            [
+              10,
+              328
+            ],
+            [
+              14,
+              473
+            ],
+            [
+              54,
+              433
+            ],
+            [
+              55,
+              356
+            ],
+            [
+              56,
+              445
+            ],
+            [
+              93,
+              227
+            ],
+            [
+              94,
+              209
+            ],
+            [
+              95,
+              317
+            ],
+            [
+              132,
+              321
+            ],
+            [
+              133,
+              354
+            ],
+            [
+              134,
+              147
+            ],
+            [
+              145,
+              208
+            ],
+            [
+              149,
+              379
+            ],
+            [
+              225,
+              472
+            ],
+            [
+              355,
+              471
+            ]
+          ],
+          "geometric": 390,
+          "compatible": 360,
+          "variables": [
+            [
+              13,
+              446
+            ],
+            [
+              144,
+              315
+            ],
+            [
+              226,
+              323
+            ]
+          ],
+          "allowed": [
+            [],
+            [
+              [
+                13,
+                446
+              ]
+            ],
+            [
+              [
+                144,
+                315
+              ]
+            ],
+            [
+              [
+                226,
+                323
+              ]
+            ]
+          ],
+          "runs": {
+            "units": {
+              "status": "INFEASIBLE",
+              "cp_calls": 1,
+              "branches": 0,
+              "path_mates": {
+                "components": 7,
+                "geometric_roots": 3270,
+                "compatible_roots": 3240,
+                "distinct_patterns": 10,
+                "added_required": 1,
+                "added_forbidden": 12,
+                "status": "SURVIVING"
+              }
+            },
+            "table": {
+              "status": "INFEASIBLE",
+              "cp_calls": 1,
+              "branches": 0,
+              "path_mates": {
+                "components": 7,
+                "geometric_roots": 3270,
+                "compatible_roots": 3240,
+                "distinct_patterns": 10,
+                "added_required": 1,
+                "added_forbidden": 12,
+                "status": "SURVIVING",
+                "tables": 0,
+                "rows": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "raw": {
+      "counts": {
+        "checked": 240,
+        "compatible": 111,
+        "variable": 7,
+        "correlated": 2,
+        "joint_values_excluded": 2
+      },
+      "cases": [
+        {
+          "path": [
+            [
+              8,
+              206
+            ],
+            [
+              21,
+              80
+            ],
+            [
+              22,
+              229
+            ],
+            [
+              23,
+              252
+            ],
+            [
+              50,
+              204
+            ],
+            [
+              78,
+              333
+            ],
+            [
+              159,
+              347
+            ],
+            [
+              160,
+              348
+            ],
+            [
+              161,
+              164
+            ],
+            [
+              163,
+              228
+            ],
+            [
+              205,
+              314
+            ],
+            [
+              254,
+              310
+            ],
+            [
+              311,
+              313
+            ],
+            [
+              312,
+              443
+            ],
+            [
+              350,
+              454
+            ],
+            [
+              371,
+              441
+            ]
+          ],
+          "geometric": 400,
+          "compatible": 350,
+          "variables": [
+            [
+              6,
+              253
+            ],
+            [
+              162,
+              453
+            ]
+          ],
+          "allowed": [
+            [],
+            [
+              [
+                6,
+                253
+              ]
+            ],
+            [
+              [
+                162,
+                453
+              ]
+            ]
+          ],
+          "runs": {
+            "units": {
+              "status": "UNKNOWN",
+              "cp_calls": 5,
+              "branches": 166281,
+              "path_mates": {
+                "components": 9,
+                "geometric_roots": 4240,
+                "compatible_roots": 4190,
+                "distinct_patterns": 11,
+                "added_required": 0,
+                "added_forbidden": 6,
+                "status": "SURVIVING"
+              }
+            },
+            "table": {
+              "status": "UNKNOWN",
+              "cp_calls": 5,
+              "branches": 167857,
+              "path_mates": {
+                "components": 9,
+                "geometric_roots": 4240,
+                "compatible_roots": 4190,
+                "distinct_patterns": 11,
+                "added_required": 0,
+                "added_forbidden": 6,
+                "status": "SURVIVING",
+                "tables": 1,
+                "rows": 3
+              }
+            }
+          }
+        },
+        {
+          "path": [
+            [
+              106,
+              264
+            ],
+            [
+              111,
+              327
+            ],
+            [
+              183,
+              297
+            ],
+            [
+              185,
+              317
+            ],
+            [
+              193,
+              329
+            ],
+            [
+              194,
+              298
+            ],
+            [
+              259,
+              266
+            ],
+            [
+              265,
+              299
+            ],
+            [
+              315,
+              319
+            ]
+          ],
+          "geometric": 460,
+          "compatible": 450,
+          "variables": [
+            [
+              105,
+              184
+            ],
+            [
+              192,
+              316
+            ]
+          ],
+          "allowed": [
+            [],
+            [
+              [
+                105,
+                184
+              ]
+            ],
+            [
+              [
+                192,
+                316
+              ]
+            ]
+          ],
+          "runs": {
+            "units": {
+              "status": "UNKNOWN",
+              "cp_calls": 5,
+              "branches": 173279,
+              "path_mates": {
+                "components": 7,
+                "geometric_roots": 3340,
+                "compatible_roots": 3290,
+                "distinct_patterns": 8,
+                "added_required": 0,
+                "added_forbidden": 1,
+                "status": "SURVIVING"
+              }
+            },
+            "table": {
+              "status": "UNKNOWN",
+              "cp_calls": 5,
+              "branches": 173279,
+              "path_mates": {
+                "components": 7,
+                "geometric_roots": 3340,
+                "compatible_roots": 3290,
+                "distinct_patterns": 8,
+                "added_required": 0,
+                "added_forbidden": 1,
+                "status": "SURVIVING",
+                "tables": 0,
+                "rows": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "contract": {
+      "counts": {
+        "checked": 240,
+        "compatible": 104,
+        "variable": 6
+      },
+      "cases": []
+    },
+    "near0": {
+      "counts": {
+        "checked": 240,
+        "compatible": 120,
+        "variable": 13
+      },
+      "cases": []
+    },
+    "near1": {
+      "counts": {
+        "checked": 240,
+        "compatible": 121,
+        "variable": 15
+      },
+      "cases": []
+    }
+  },
+  "one_round_profiles": {
+    "sparse": [
+      {
+        "source": "reference",
+        "case": 0,
+        "units": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 43268,
+          "path_mates": {
+            "components": 8,
+            "geometric_roots": 3760,
+            "compatible_roots": 3670,
+            "distinct_patterns": 9,
+            "added_required": 0,
+            "added_forbidden": 5,
+            "status": "SURVIVING"
+          }
+        },
+        "table": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 44294,
+          "path_mates": {
+            "components": 8,
+            "geometric_roots": 3760,
+            "compatible_roots": 3670,
+            "distinct_patterns": 9,
+            "added_required": 0,
+            "added_forbidden": 5,
+            "status": "SURVIVING",
+            "tables": 1,
+            "rows": 2,
+            "unsupported_patterns": 0
+          }
+        }
+      },
+      {
+        "source": "reference",
+        "case": 1,
+        "units": {
+          "status": "INFEASIBLE",
+          "cp_calls": 1,
+          "branches": 0,
+          "path_mates": {
+            "components": 7,
+            "geometric_roots": 3270,
+            "compatible_roots": 3240,
+            "distinct_patterns": 10,
+            "added_required": 1,
+            "added_forbidden": 12,
+            "status": "SURVIVING"
+          }
+        },
+        "table": {
+          "status": "INFEASIBLE",
+          "cp_calls": 1,
+          "branches": 0,
+          "path_mates": {
+            "components": 7,
+            "geometric_roots": 3270,
+            "compatible_roots": 3240,
+            "distinct_patterns": 10,
+            "added_required": 1,
+            "added_forbidden": 12,
+            "status": "SURVIVING",
+            "tables": 0,
+            "rows": 0,
+            "unsupported_patterns": 3
+          }
+        }
+      },
+      {
+        "source": "raw",
+        "case": 0,
+        "units": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 43468,
+          "path_mates": {
+            "components": 9,
+            "geometric_roots": 4240,
+            "compatible_roots": 4190,
+            "distinct_patterns": 11,
+            "added_required": 0,
+            "added_forbidden": 6,
+            "status": "SURVIVING"
+          }
+        },
+        "table": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 43458,
+          "path_mates": {
+            "components": 9,
+            "geometric_roots": 4240,
+            "compatible_roots": 4190,
+            "distinct_patterns": 11,
+            "added_required": 0,
+            "added_forbidden": 6,
+            "status": "SURVIVING",
+            "tables": 1,
+            "rows": 3,
+            "unsupported_patterns": 0
+          }
+        }
+      },
+      {
+        "source": "raw",
+        "case": 1,
+        "units": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 43398,
+          "path_mates": {
+            "components": 7,
+            "geometric_roots": 3340,
+            "compatible_roots": 3290,
+            "distinct_patterns": 8,
+            "added_required": 0,
+            "added_forbidden": 1,
+            "status": "SURVIVING"
+          }
+        },
+        "table": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 43398,
+          "path_mates": {
+            "components": 7,
+            "geometric_roots": 3340,
+            "compatible_roots": 3290,
+            "distinct_patterns": 8,
+            "added_required": 0,
+            "added_forbidden": 1,
+            "status": "SURVIVING",
+            "tables": 0,
+            "rows": 0,
+            "unsupported_patterns": 0
+          }
+        }
+      }
+    ],
+    "blank": [
+      {
+        "source": "reference",
+        "case": 0,
+        "units": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 25944,
+          "path_mates": {
+            "components": 8,
+            "geometric_roots": 3760,
+            "compatible_roots": 3670,
+            "distinct_patterns": 9,
+            "added_required": 0,
+            "added_forbidden": 5,
+            "status": "SURVIVING"
+          }
+        },
+        "table": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 26094,
+          "path_mates": {
+            "components": 8,
+            "geometric_roots": 3760,
+            "compatible_roots": 3670,
+            "distinct_patterns": 9,
+            "added_required": 0,
+            "added_forbidden": 5,
+            "status": "SURVIVING",
+            "tables": 1,
+            "rows": 2,
+            "unsupported_patterns": 0
+          }
+        }
+      },
+      {
+        "source": "reference",
+        "case": 1,
+        "units": {
+          "status": "INFEASIBLE",
+          "cp_calls": 1,
+          "branches": 0,
+          "path_mates": {
+            "components": 7,
+            "geometric_roots": 3270,
+            "compatible_roots": 3240,
+            "distinct_patterns": 10,
+            "added_required": 1,
+            "added_forbidden": 12,
+            "status": "SURVIVING"
+          }
+        },
+        "table": {
+          "status": "INFEASIBLE",
+          "cp_calls": 1,
+          "branches": 0,
+          "path_mates": {
+            "components": 7,
+            "geometric_roots": 3270,
+            "compatible_roots": 3240,
+            "distinct_patterns": 10,
+            "added_required": 1,
+            "added_forbidden": 12,
+            "status": "SURVIVING",
+            "tables": 0,
+            "rows": 0,
+            "unsupported_patterns": 3
+          }
+        }
+      },
+      {
+        "source": "raw",
+        "case": 0,
+        "units": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 25733,
+          "path_mates": {
+            "components": 9,
+            "geometric_roots": 4240,
+            "compatible_roots": 4190,
+            "distinct_patterns": 11,
+            "added_required": 0,
+            "added_forbidden": 6,
+            "status": "SURVIVING"
+          }
+        },
+        "table": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 25743,
+          "path_mates": {
+            "components": 9,
+            "geometric_roots": 4240,
+            "compatible_roots": 4190,
+            "distinct_patterns": 11,
+            "added_required": 0,
+            "added_forbidden": 6,
+            "status": "SURVIVING",
+            "tables": 1,
+            "rows": 3,
+            "unsupported_patterns": 0
+          }
+        }
+      },
+      {
+        "source": "raw",
+        "case": 1,
+        "units": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 28492,
+          "path_mates": {
+            "components": 7,
+            "geometric_roots": 3340,
+            "compatible_roots": 3290,
+            "distinct_patterns": 8,
+            "added_required": 0,
+            "added_forbidden": 1,
+            "status": "SURVIVING"
+          }
+        },
+        "table": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 28492,
+          "path_mates": {
+            "components": 7,
+            "geometric_roots": 3340,
+            "compatible_roots": 3290,
+            "distinct_patterns": 8,
+            "added_required": 0,
+            "added_forbidden": 1,
+            "status": "SURVIVING",
+            "tables": 0,
+            "rows": 0,
+            "unsupported_patterns": 0
+          }
+        }
+      }
+    ],
+    "channel": [
+      {
+        "source": "reference",
+        "case": 0,
+        "units": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 10242,
+          "path_mates": {
+            "components": 8,
+            "geometric_roots": 3760,
+            "compatible_roots": 3670,
+            "distinct_patterns": 9,
+            "added_required": 0,
+            "added_forbidden": 5,
+            "status": "SURVIVING"
+          }
+        },
+        "table": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 13692,
+          "path_mates": {
+            "components": 8,
+            "geometric_roots": 3760,
+            "compatible_roots": 3670,
+            "distinct_patterns": 9,
+            "added_required": 0,
+            "added_forbidden": 5,
+            "status": "SURVIVING",
+            "tables": 1,
+            "rows": 2
+          }
+        }
+      },
+      {
+        "source": "reference",
+        "case": 1,
+        "units": {
+          "status": "INFEASIBLE",
+          "cp_calls": 1,
+          "branches": 0,
+          "path_mates": {
+            "components": 7,
+            "geometric_roots": 3270,
+            "compatible_roots": 3240,
+            "distinct_patterns": 10,
+            "added_required": 1,
+            "added_forbidden": 12,
+            "status": "SURVIVING"
+          }
+        },
+        "table": {
+          "status": "INFEASIBLE",
+          "cp_calls": 1,
+          "branches": 0,
+          "path_mates": {
+            "components": 7,
+            "geometric_roots": 3270,
+            "compatible_roots": 3240,
+            "distinct_patterns": 10,
+            "added_required": 1,
+            "added_forbidden": 12,
+            "status": "SURVIVING",
+            "tables": 0,
+            "rows": 0
+          }
+        }
+      },
+      {
+        "source": "raw",
+        "case": 0,
+        "units": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 58324,
+          "path_mates": {
+            "components": 9,
+            "geometric_roots": 4240,
+            "compatible_roots": 4190,
+            "distinct_patterns": 11,
+            "added_required": 0,
+            "added_forbidden": 6,
+            "status": "SURVIVING"
+          }
+        },
+        "table": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 80360,
+          "path_mates": {
+            "components": 9,
+            "geometric_roots": 4240,
+            "compatible_roots": 4190,
+            "distinct_patterns": 11,
+            "added_required": 0,
+            "added_forbidden": 6,
+            "status": "SURVIVING",
+            "tables": 1,
+            "rows": 3
+          }
+        }
+      },
+      {
+        "source": "raw",
+        "case": 1,
+        "units": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 73942,
+          "path_mates": {
+            "components": 7,
+            "geometric_roots": 3340,
+            "compatible_roots": 3290,
+            "distinct_patterns": 8,
+            "added_required": 0,
+            "added_forbidden": 1,
+            "status": "SURVIVING"
+          }
+        },
+        "table": {
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 69210,
+          "path_mates": {
+            "components": 7,
+            "geometric_roots": 3340,
+            "compatible_roots": 3290,
+            "distinct_patterns": 8,
+            "added_required": 0,
+            "added_forbidden": 1,
+            "status": "SURVIVING",
+            "tables": 0,
+            "rows": 0
+          }
+        }
+      }
+    ]
+  },
+  "note": "Six-second sparse measurements are in the per-source entries. Fixed one-round trials report the actual native branches. Full geographic channel retains the unfiltered comparison, where the time budget may bind."
+}
