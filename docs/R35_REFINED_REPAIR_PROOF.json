@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "source_commit": "17ca0c730e9c1e09e354ff0124baf712c96a5ef6",
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "cap": 92,
+  "minimum_changed_cells": 93,
+  "original_rows": 3804,
+  "proved_extra_rows": 88,
+  "additional_verified": 32,
+  "reference_score": 207,
+  "physical_cells": 160,
+  "antecedent": {
+    "name": "DiamondDilemmaGoldSolver-R35-repair-distance-proof.zip",
+    "sha256": "80cb88afcf04ffe35be5fe146fddcf4993e7a687be6e4d776a7a87cfb171a7e1",
+    "bytes": 4003265
+  },
+  "dimacs_header": "p cnf 1344 17797",
+  "external_result": "VERIFIED",
+  "resolution_steps": 13977119,
+  "generator": "bench_r35_repair_refinement.py",
+  "files": {
+    "cap92.cnf": {
+      "bytes": 267173,
+      "sha256": "9c2d3de4cd62fb246fdce513862cd08707b4b1a810da188b782208acbe48496a"
+    },
+    "cap92.drat": {
+      "bytes": 36720775,
+      "sha256": "96e06d12ecf4cd8fd0696eeeee68b00cad35bd2f30a65f06f41f355173e9a94a"
+    },
+    "solve.log": {
+      "bytes": 21440,
+      "sha256": "b16bbb0d4ec9c70e0b7218593e70f852c84ce4cecb02e4af42214da70eaf9df3"
+    },
+    "check.log": {
+      "bytes": 483,
+      "sha256": "263c2131b3321062eeacfcbb54b3372566fc4c14cdb2748d05fe7d30dd1be743"
+    },
+    "refinement.json": {
+      "bytes": 3302,
+      "sha256": "f8ae3b5405b7613ad3d269001616c4fb4a11be4d1b8331fbc6a2062d5231107e"
+    },
+    "replay.json": {
+      "bytes": 740,
+      "sha256": "4b5a4ac9ab6481eabe86c330a882f56071cc87281338a9eb63d0adef3d0ddede"
+    },
+    "README.txt": {
+      "bytes": 1008,
+      "sha256": "7026351f5eb416d6fc07964dbf1c182c010f796f3616bf89662ff0e09f0f15fd"
+    }
+  },
+  "asset": {
+    "name": "DiamondDilemmaGoldSolver-R35-refined-repair-proof.zip",
+    "bytes": 18074519,
+    "sha256": "bd4d3ba6133a9ea832eed9674333b98f0259fb2d1a597d3bba12e07bbc464d07"
+  }
+}
