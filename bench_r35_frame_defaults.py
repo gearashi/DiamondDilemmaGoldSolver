@@ -22,12 +22,16 @@ def identity(payload):
 
 def measure(api,checkpoint,tiles,repeats,previous=None):
     p=SearchProblem(json.loads(tiles.read_bytes()))
+    begin=perf_counter()
     with np.load(checkpoint,allow_pickle=False) as archive:
         n=len(archive['states'])
         # Preserve H/W independent logical fields and metadata. Leave ledger installation to the runner.
         saved={k:archive[k] for k in (*DFS.DEVICE_FIELDS,'prefix_codes','order','roots','fingerprint','dfs_version')}
         for key in ('gold_fingerprint','gpu_features','cpu_assist_state'):
             if key in archive:saved[key]=archive[key]
+    load_seconds=perf_counter()-begin
+    frame_names=('firsts','lengths','cursors','shifts')
+    original_frame_hashes=identity({name:saved[name] for name in frame_names})
     options=dict(masks=p.masks,neighbors=p.neighbors,neighbor_sides=p.sides,n=n,prefixes=[],
                  order=fill_order(p.neighbors),gold_data=p.tiles)
     if api=='CUDA':gpu=DFS(**options)
@@ -65,6 +69,8 @@ def measure(api,checkpoint,tiles,repeats,previous=None):
         return s
     def stage(name):
         reference=identity(gpu.snapshot_checkpoint())
+        if name=='restored' and any(reference[k]!=v for k,v in original_frame_hashes.items()):
+            raise AssertionError('Physical stack fields differ from the validated NPZ input after installation.')
         samples={arm:[] for arm in arms}
         for it in range(repeats):
             for arm in (list(arms) if it%2==0 else reversed(list(arms))):
@@ -90,7 +96,8 @@ def measure(api,checkpoint,tiles,repeats,previous=None):
     finally:
         if api!='CUDA':gpu.close()
     return {'backend':api,'width':n,'checkpoint_sha256':hashlib.sha256(checkpoint.read_bytes()).hexdigest(),
-        'restore_seconds':restore_seconds,'stages':stages}
+        'npz_load_seconds':load_seconds,'restore_seconds':restore_seconds,
+        'original_npz_frame_sha256':original_frame_hashes,'native_frames_match_original_npz':True,'stages':stages}
 
 
 if __name__=='__main__':

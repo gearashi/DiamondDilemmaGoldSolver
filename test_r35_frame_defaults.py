@@ -164,13 +164,13 @@ class PriceControls(unittest.TestCase):
         plans=np.zeros((160,10),np.uint32)
         plans[:90,0]=1
         plans[:90,2]=plans[:90,5]=131072
-        self.assertTrue(_worth_unpacking(plans,web=False,native=False))
+        self.assertTrue(_worth_unpacking(131072,plans,web=False,native=False))
         plans[:90,9]=36
         for web in (True,False):
             for native in (True,False):
-                self.assertEqual(_worth_unpacking(plans,web=web,native=native),web and native)
+                self.assertEqual(_worth_unpacking(131072,plans,web=web,native=native),web and native)
         plans[1:,9]=0
-        self.assertTrue(_worth_unpacking(plans,web=False,native=False))
+        self.assertTrue(_worth_unpacking(131072,plans,web=False,native=False))
 
 
     def test_all_physical_directory_forms_and_batch_boundaries(self):
