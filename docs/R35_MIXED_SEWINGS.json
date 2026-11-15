@@ -3321,6 +3321,28 @@
         "unresolved_roots": 0
       }
     },
+    "later_contact_portfolios": {
+      "added_donors": [
+        "contact_cases.0.public",
+        "contact_cases.1.public",
+        "contact_cases.1.sat_without_exchange",
+        "contact_cases.2.public",
+        "contact_cases.2.sat_without_exchange"
+      ],
+      "physical_seams": 852,
+      "propagated": {
+        "checked_roots": 480,
+        "survivors": [],
+        "cell_revisions": 12150
+      },
+      "independent_cnf": {
+        "clauses": 460480,
+        "variables": 76800,
+        "checked_roots": 480,
+        "roots_rejected_by_unit_propagation": 480,
+        "unresolved_roots": 0
+      }
+    },
     "outside_recorded_donors": {
       "0x11dd1924c56c109dc8801f0d1d8f435119f1920": {
         "physical_seams": 1708,

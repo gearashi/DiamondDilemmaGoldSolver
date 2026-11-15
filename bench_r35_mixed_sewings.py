@@ -306,6 +306,28 @@ def union_controls(p,donors):
         independent=union_sat(p,edges)
         assert root['geographic_status']=='INFEASIBLE' and not independent['unresolved_roots']
         unions[label]=dict(donors=keys,physical_seams=len(edges),propagated=root['roots'],independent_cnf=independent)
+    portfolios=read_json(Path(__file__).resolve().parent/'docs/R35_MATE_PORTFOLIOS.json')
+    phase=[int(portfolios['phase'],0)>>t&1 for t in range(p.n)]
+    expanded=list(all_donors.values())
+    known={frozenset(map(tuple,rec['pairs'])) for rec in expanded}
+    new_names=[]
+    def include(node,label):
+        if not isinstance(node,dict):return
+        mesh=node.get('pairs')
+        if isinstance(mesh,list) and len(mesh)==3*p.n//2:
+            ident=frozenset(map(tuple,mesh))
+            if ident not in known:
+                known.add(ident)
+                expanded.append(dict(pairs=mesh,phases=phase))
+                new_names.append(label)
+        for key,child in node.items():include(child,label+'.'+key)
+    for i,case in enumerate(portfolios['contact_cases']):include(case,'contact_cases.'+str(i))
+    extended=donor_geography(p,expanded)
+    all_seams=set().union(*known)
+    independent=union_sat(p,all_seams)
+    assert extended['geographic_status']=='INFEASIBLE' and not independent['unresolved_roots']
+    unions['later_contact_portfolios']=dict(added_donors=new_names,physical_seams=len(all_seams),
+                                            propagated=extended['roots'],independent_cnf=independent)
     phases={tuple(rec['phases']) for rec in all_donors.values()}
     sides=EndpointCuts(p).sides
     unrestricted={}
