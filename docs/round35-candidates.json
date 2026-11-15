@@ -107,7 +107,16 @@
       "source_id": 7,
       "title": "Find stronger comb cuts with general handles and odd sets of teeth",
       "proposal_and_validation": "r31_gold_pricing.fractional_cuts selects the first twelve fractional edges, enumerates triples of disjoint two-strand teeth and eight three-strand handles per triple. For additional handles from actual min cuts or fractional clusters, price disjoint crossing two-strand teeth as a cardinality-constrained bipartite matching. With strand degree two, x(delta({u,v})) = 4 - 2*x_uv. For each odd t >= 3, choose t disjoint crossing pairs, maximizing the sum of 2*x_uv - 1. Directly reconstruct and evaluate x(delta(H)) + sum x(delta(T)) >= 3*t + 1 on the unrounded LP values, preserving every transition multiplicity supplied by one mate. Candidate discovery may be incomplete; mathematical verification of each installed row is sufficient. Consider larger multi-vertex teeth only if real fractional handles survive and two-strand rows leave measurable slack. Enumerate all handles/teeth on small graphs, check every cycle satisfies each reconstructed row, compare with published triples and odd *side* matching cuts on the original and pinned residuals. Count uniquely violated rows, integral matchings excluded early and ensuing CP calls/branches.",
-      "state": "in progress"
+      "state": "benchmark only",
+      "evidence": [
+        "docs/ROUND35_COMB_PRICING.md",
+        "docs/R35_COMB_ROOT.json",
+        "docs/R35_COMB_FIXED.json",
+        "docs/R35_COMB_PLANTED.json",
+        "test_r35_comb_pricing.py"
+      ],
+      "decision": "Keep the broader comb pricer as an explicit research diagnostic only. At the 16 completed prior-separation plateaus, 1,325 new handle screens plus 887 connected larger-tooth packing prices added zero CP inequalities. The synthetic five-tooth prism was detected and independently validated over all 362,880 rooted cycles, beyond the old three-teeth families.",
+      "reopen_if": "An actual strand LP witness violates a different handle/tooth family, or a changed relaxation reaches materially different fractional solutions."
     },
     {
       "id": 8,
@@ -621,10 +630,12 @@
       "source_id": 5,
       "title": "Amortize the integer relaxation across new full patterns",
       "proposal_and_validation": "The current filter preserves the CP-SAT model structure, but each undecided outside pattern invokes another native solve. Measure identical active assumptions, propagated equalities and integer solves in the 17-loss streams before coding. Compare a persistent incremental SAT or pseudo-Boolean encoding of this *specific* signed-inventory and reference-budget model under fully matched assumptions, with independently checked CP-SAT witnesses/negatives on finite scopes. Cache checked feasible assignments for cross-pattern reuse only when all physical bond assumptions and budget still validate. Repeated UNKNOWN on the same real pattern can justify splitting on remaining independent phase coordinates and committing disjoint completed children. Pricing/status from a partial child cannot exclude its parent.",
-      "state": "in progress",
+      "state": "keep with exact scope",
       "evidence": [
-        "docs/R35_INTEGER_LOSS.json"
-      ]
+        "docs/R35_INTEGER_LOSS.json",
+        "docs/R35_LOSS_PROOF.json"
+      ],
+      "mechanism": "complete signed phase images on compact residuals and a separately certificate-checked global SAT relaxation"
     },
     {
       "id": 53,
@@ -632,10 +643,13 @@
       "source_id": 6,
       "title": "Transport unconditional integer-core evidence between references",
       "proposal_and_validation": "Native cores currently belong to a budget/model-dependent scope. Besides the one published core, test whether learned contradictions still hold in the relaxed model containing only the puzzleâ€™s unconditional integer inventory plus a small set of physical bond equalities/inequalities. Encode by ordered physical side pairs and required polarity, replay the relaxed oracle first, and reuse across another outside layout only when the relevant physical pairs are present with the same semantics. Keep cap-specific proofs scoped. Measure genuinely different reference/layout hits, independent native replays and amortized calls. If the available references share no applicable verified proof, close this transfer path for current inputs.",
-      "state": "in progress",
+      "state": "keep with exact scope",
       "evidence": [
-        "docs/R35_LOSS_TRANSFERS.json"
-      ]
+        "docs/R35_LOSS_TRANSFERS.json",
+        "docs/R35_LOSS_TRANSFER_STREAMS.json",
+        "docs/R35_PHYSICAL_LOSS_CORES.json"
+      ],
+      "mechanism": "project sparse physical hints and independently replay at the destination before pruning"
     },
     {
       "id": 54,
@@ -769,7 +783,12 @@
       "source_id": 12,
       "title": "Reuse checked positive witnesses across compatible caps",
       "proposal_and_validation": "Existing cross-cap replay inherited completed *negative* intervals. A joint or integer witness with a reconstructed concrete assignment and verified attained loss can also answer a looser cap on the same reference, outside error count, required pairs and model. Phase/integer status alone in a legacy hit is insufficient: reconstruct and recheck the assignment once or treat it as a hint. Derive a physical drop set consistent with every compulsory group and pin, and verify requested rank ownership. A positive outside a requested page cannot mark the page searched. Screen actual replay requests before persisting a bound table; test smaller caps, directions of phase/integer implication and multiple hits sharing one prefix.",
-      "state": "in progress"
+      "state": "keep with exact scope",
+      "mechanism": "reprice physical signed witnesses at requested cap and outside layer; exact same-cap reads precede cross-cap checking",
+      "evidence": [
+        "docs/R35_LOSS_PROOF.json",
+        "test_r35_loss_frontiers.py"
+      ]
     },
     {
       "id": 60,
@@ -785,7 +804,10 @@
       "source_id": 14,
       "title": "Avoid phase refits that cannot improve the current board",
       "proposal_and_validation": "On a refit `fresh` computes the signed score and the set of scored physical bonds, and `fit` solves a new CP optimization. If the current score already reaches the count of permissible scored bonds, a strictly better refit is impossible. Across consecutive refits on the same pins/mandatory constraints, a certified upper bound for objective set A raises by at most the number of newly added unit-weight terms in B. Reuse that bound when it rules out a strict gain at B; account for removed terms conservatively, disconnected-inventory cuts and differing pins. R32's four seeds with unsuccessful refits are an opportunity screen, not a claim that they could all be skipped. Compare board, RNG and trajectories to the no-skip control and report native refits actually avoided.",
-      "state": "open"
+      "state": "in progress",
+      "evidence": [
+        "docs/R35_SIGNED_REFITS.json"
+      ]
     },
     {
       "id": 62,
@@ -793,7 +815,11 @@
       "source_id": 15,
       "title": "Reuse universally valid endpoint cuts across phase refits",
       "proposal_and_validation": "`fit` starts with fresh endpoint structures and an empty cut set at each board/objective. Compile the coefficient rows for a verified disconnected endpoint partition once per puzzle/mandatory model, then compare adding only previously violated endpoint cuts with rebuilding/refitting from scratch. Retain geometry-independent cuts only if their proof holds for all feasible phase vectors under the destination pins; do not transfer a bound learned from the previous objective. Compare exact feasible label sets on small models and calls, repeated cut discoveries and stricter optimum on held-out original refits. Merge accounting with the physical cut-pool proposal wherever it already provides an independently reusable proof.",
-      "state": "open"
+      "state": "in progress",
+      "evidence": [
+        "docs/R35_SIGNED_REFITS.json",
+        "docs/R35_REFIT_CUTS.json"
+      ]
     },
     {
       "id": 63,
@@ -801,7 +827,10 @@
       "source_id": 16,
       "title": "Incrementally update signed prices and scores across changed phase fits",
       "proposal_and_validation": "R34 snapshots and shares a complete price image at a particular phase vector. On a genuine improved refit, the signed price of donor dart j against exterior dart i depends on the phase XOR of their physical tiles. It is unchanged if both tiles changed phase or neither did. Intersect the XOR-change rows/columns with reciprocal capability and forbidden pairs, patch just the affected entries, and compare with cold `_DartPrices.price` for every bit; if there are no improved refits, this has no opportunity there. Likewise compare updating raw/signed/forbidden seam counts only for the union of incident edges of moved cells and flipped tiles. Preserve independent validation at best-board publication. Test full global phase complement, a single flip, blank sides, adjacent changed tiles, native checkpoint reopen, exact preserved trajectories and sparse/dense crossover. Do not reopen complete-price-image deduplication.",
-      "state": "open"
+      "state": "in progress",
+      "evidence": [
+        "docs/R35_SIGNED_REFITS.json"
+      ]
     },
     {
       "id": 64,
@@ -809,7 +838,12 @@
       "source_id": 17,
       "title": "Use tied signed optima to escape a demonstrably stalled trajectory",
       "proposal_and_validation": "`SignedRepair.block` optimizes a signed independent-cell assignment, while its retained incumbent also uses raw matched seams and components. Compare the existing signed-then-unchanged-pose tie break with signed-then-raw-then-unchanged-pose ordering, using an integer width/scale that remains exact up to 160 cells. Keep forbidden physical mates as hard constraints and count any newly repeated neutral moves. Only after a measured signed plateau try distinct equally scoring phase fits or equally optimal donor assignments chosen by changed effective dart relations, bounded in count and charged to the same repair budget. This changes discovery order; it cannot certify an excluded board or loss layer. Compare returns over held-out paired seeds, work/steps to a verified new best, distribution of both raw and signed scores, and distinct phases modulo the global complement. Account for already-tested general repair tie sets and slate/fork policies; test the additional signed refit/assignment interaction only.",
-      "state": "open"
+      "state": "in progress",
+      "evidence": [
+        "docs/R35_SIGNED_REFITS.json",
+        "docs/R35_SIGNED_DELAYED_TIES.json",
+        "docs/R35_SIGNED_PLATEAUS.json"
+      ]
     },
     {
       "id": 65,

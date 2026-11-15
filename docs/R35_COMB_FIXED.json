@@ -1,0 +1,56 @@
+{
+  "12": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {
+      "strand": 59,
+      "odd-sides": 130
+    },
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 851,
+      "handles": 160,
+      "connected_tooth_sets": 30843,
+      "larger_packing_prices": 111
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 3412,
+    "constraints_after": 3601
+  },
+  "48": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {
+      "odd-sides": 33,
+      "strand": 18
+    },
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 718,
+      "handles": 160,
+      "connected_tooth_sets": 21964,
+      "larger_packing_prices": 125
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 2567,
+    "constraints_after": 2618
+  },
+  "96": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {
+      "strand": 8,
+      "odd-sides": 37
+    },
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 473,
+      "handles": 160,
+      "connected_tooth_sets": 10768,
+      "larger_packing_prices": 144
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 1919,
+    "constraints_after": 1964
+  }
+}

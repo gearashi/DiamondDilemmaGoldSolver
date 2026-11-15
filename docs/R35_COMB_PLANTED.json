@@ -1,0 +1,202 @@
+{
+  "35_3": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {
+      "strand": 3
+    },
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 25,
+      "handles": 78,
+      "connected_tooth_sets": 381,
+      "larger_packing_prices": 53
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 86,
+    "constraints_after": 89
+  },
+  "35_6": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {},
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 40,
+      "handles": 78,
+      "connected_tooth_sets": 751,
+      "larger_packing_prices": 53
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 188,
+    "constraints_after": 188
+  },
+  "35_10": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {
+      "odd-sides": 3,
+      "strand": 1
+    },
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 49,
+      "handles": 64,
+      "connected_tooth_sets": 986,
+      "larger_packing_prices": 21
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 230,
+    "constraints_after": 234
+  },
+  "71_3": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {},
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 28,
+      "handles": 53,
+      "connected_tooth_sets": 429,
+      "larger_packing_prices": 36
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 82,
+    "constraints_after": 82
+  },
+  "71_6": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {
+      "strand": 7,
+      "odd-sides": 18
+    },
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 32,
+      "handles": 65,
+      "connected_tooth_sets": 515,
+      "larger_packing_prices": 34
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 141,
+    "constraints_after": 166
+  },
+  "71_10": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {
+      "strand": 30,
+      "odd-sides": 20
+    },
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 8,
+      "handles": 57,
+      "connected_tooth_sets": 118,
+      "larger_packing_prices": 57
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 230,
+    "constraints_after": 280
+  },
+  "103_3": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {},
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 12,
+      "handles": 41,
+      "connected_tooth_sets": 165,
+      "larger_packing_prices": 34
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 114,
+    "constraints_after": 114
+  },
+  "103_6": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {
+      "strand": 13,
+      "odd-sides": 7
+    },
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 23,
+      "handles": 81,
+      "connected_tooth_sets": 348,
+      "larger_packing_prices": 54
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 185,
+    "constraints_after": 205
+  },
+  "103_10": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {
+      "odd-sides": 18,
+      "strand": 48
+    },
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 0,
+      "integral_connected_tour": 1,
+      "handles": 36
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 230,
+    "constraints_after": 296
+  },
+  "157_3": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {},
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 8,
+      "handles": 41,
+      "connected_tooth_sets": 118,
+      "larger_packing_prices": 39
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 89,
+    "constraints_after": 89
+  },
+  "157_6": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {
+      "odd-sides": 14
+    },
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 32,
+      "handles": 55,
+      "connected_tooth_sets": 568,
+      "larger_packing_prices": 9
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 146,
+    "constraints_after": 160
+  },
+  "157_10": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {
+      "odd-sides": 18,
+      "strand": 48
+    },
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 0,
+      "integral_connected_tour": 1,
+      "handles": 36
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 230,
+    "constraints_after": 296
+  }
+}

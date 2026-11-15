@@ -56,7 +56,7 @@ def _odd_mate_sets(sides, values, scale):
             yield {sides[i] for i in part}
 
 
-def fractional_cuts(check, bonds=(), pins=None, limit=12, scale=100000):
+def fractional_cuts(check, bonds=(), pins=None, limit=12, scale=100000, extended_combs=False):
     """GLOP proposes structural inequalities; only valid integer inequalities enter CP."""
     from ortools.graph.python.max_flow import SimpleMaxFlow
     from ortools.linear_solver import pywraplp
@@ -81,6 +81,8 @@ def fractional_cuts(check, bonds=(), pins=None, limit=12, scale=100000):
         if tuple(sorted(pair)) in x:
             s.Add(x[tuple(sorted(pair))]==1)
     records = []
+    extended_work=Counter()
+    extended_rows=[]
     seen = set()
     def add_cut(kind, coeff, rhs):
         key = (tuple(sorted(coeff.items())),rhs)
@@ -109,10 +111,13 @@ def fractional_cuts(check, bonds=(), pins=None, limit=12, scale=100000):
             flow.add_arc_with_capacity(u,v,cap)
             flow.add_arc_with_capacity(v,u,cap)
         changed = False
+        handles=[]
         for t in range(1,check.strands):
             if flow.solve(0,t)!=flow.OPTIMAL:
                 continue
             part = set(flow.get_source_side_min_cut())
+            if extended_combs and 3<=len(part)<=check.strands-3:
+                handles.append(frozenset(part))
             if 0<len(part)<check.strands and flow.optimal_flow()<2*scale+check.strands:
                 if add_cut('strand',crossings(part),2):
                     changed = True
@@ -151,9 +156,40 @@ def fractional_cuts(check, bonds=(), pins=None, limit=12, scale=100000):
                     changed = True
                     break
             if changed:break
+        if not changed and extended_combs:
+            from itertools import chain
+            from r35_comb_pricing import rows as comb_rows,larger_rows
+            extended_work['plateaus']+=1
+            fractional_edges=[e for e,w in weights.items() if abs(w-round(w))>1e-7]
+            extended_work['fractional_strand_edges']+=len(fractional_edges)
+            if not fractional_edges:
+                adjacency=[set() for _ in range(check.strands)]
+                for (u,v),w in weights.items():
+                    if round(w)==1:
+                        adjacency[u].add(v);adjacency[v].add(u)
+                seen_t={0};stack_t=[0]
+                while stack_t:
+                    for u in adjacency[stack_t.pop()]-seen_t:
+                        seen_t.add(u);stack_t.append(u)
+                if len(seen_t)==check.strands and all(len(row)==2 for row in adjacency):
+                    extended_work['integral_connected_tour']+=1
+            candidates=comb_rows(check.strands,weights,handles,extended_work)
+            if fractional_edges:
+                candidates=chain(candidates,larger_rows(check.strands,weights,handles,extended_work))
+            for handle,teeth in candidates:
+                coeff=Counter(crossings(handle))
+                for tooth in teeth:
+                    coeff.update(crossings(set(tooth)))
+                if add_cut('wide_comb',dict(coeff),3*len(teeth)+1):
+                    extended_rows.append(dict(handle=sorted(handle),teeth=teeth))
+                    changed=True
+                    break
         if not changed:
             break
-    return dict(cuts=records,status='CANDIDATES_ONLY')
+    result=dict(cuts=records,status='CANDIDATES_ONLY')
+    if extended_combs:
+        result.update(extended_work=dict(extended_work),extended_rows=extended_rows)
+    return result
 
 
 def price_rings(problem, options, *, max_work=100000, limit=32):

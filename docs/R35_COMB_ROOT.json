@@ -1,0 +1,20 @@
+{
+  "unrestricted": {
+    "status": "CANDIDATES_ONLY",
+    "cuts": {
+      "strand": 62,
+      "odd-sides": 141
+    },
+    "extended": {
+      "plateaus": 1,
+      "fractional_strand_edges": 755,
+      "handles": 160,
+      "connected_tooth_sets": 22804,
+      "larger_packing_prices": 117
+    },
+    "new_combs": [],
+    "cut_budget": 256,
+    "constraints_before": 3616,
+    "constraints_after": 3819
+  }
+}
