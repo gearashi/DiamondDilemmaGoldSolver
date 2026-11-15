@@ -3,6 +3,7 @@ from itertools import combinations
 from math import ceil
 from time import monotonic
 
+from r29_gold_phase import checked_pins
 from r31_gold_connectivity import PhaseInterface
 from r32_gold_bonds import inventory
 from r35_contact_mip import build_model, checked_cycles
@@ -45,6 +46,17 @@ def blank_completion(sides, blocked):
     return None
 
 
+def blank_rows(engine, flags, sides, blocked):
+    for active in flags:
+        count = sum(active)
+        engine.Add(count==2*engine.IntVar(0,len(sides)//2,''))
+        by_side = dict(zip(sides,active))
+        # An even residual of four or more vertices always admits a matching.
+        # For a forbidden residual pair at exactly two, require another vertex.
+        for a,b in sorted(blocked):
+            engine.Add(count >= 2*(by_side[a]+by_side[b])-1)
+
+
 def project_blanks(engine, phase, losses, labels, sides, legal, reference, required):
     family = set(sides)
     named = {p for p in reference|required if p[0] in family or p[1] in family}
@@ -72,14 +84,7 @@ def project_blanks(engine, phase, losses, labels, sides, legal, reference, requi
         engine.Add(dark>=residual+color-1)
         flags[1].append(dark)
         flags[0].append(residual-dark)
-    for active in flags:
-        count = sum(active)
-        engine.Add(count==2*engine.IntVar(0,len(sides)//2,''))
-        by_side = dict(zip(sides,active))
-        # An even residual of four or more vertices always admits a matching.
-        # For a forbidden residual pair at exactly two, require another vertex.
-        for a,b in sorted(blocked):
-            engine.Add(count >= 2*(by_side[a]+by_side[b])-1)
+    blank_rows(engine, flags, sides, blocked)
     return blocked
 
 
@@ -162,14 +167,19 @@ def published_witness(problem, reference, required, groups, cap, allowed, sphere
 def decide(problem, reference, groups, required, cap, seconds, *, sphere=False, mode='blank', hint=None, pins=None, forbidden=(), published=False, full_hint=True):
     reference, required = set(reference), set(required)
     allowed = inventory(problem).possible-set(forbidden)
+    pins = checked_pins(problem.n, {} if pins is None else pins)
     if published and not pins:
         replay = published_witness(problem,reference,required,groups,cap,allowed,sphere)
         if replay is not None:
             return replay
-    engine, phase, loss = build_model(problem,reference,groups,required,cap,checked_cycles(problem,reference,required))
+    # The signed inventory is invariant under a global color flip. Absolute
+    # pins can select either representative of a complementary pair.
+    canonical_phase = not pins or pins.get(0) == 0
+    engine, phase, loss = build_model(problem,reference,groups,required,cap,checked_cycles(problem,reference,required),
+                                     canonical_phase=canonical_phase)
     if sphere:
         euler_row(engine,phase,PhaseInterface(problem))
-    for i,value in (pins or {}).items():
+    for i,value in pins.items():
         engine.Add(phase[i]==value)
     labels, families = reciprocal_classes(problem.tiles)
     modeled = []

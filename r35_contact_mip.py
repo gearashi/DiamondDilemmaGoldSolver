@@ -6,7 +6,7 @@ from r31_gold_connectivity import PhaseInterface
 from r35_loss_witness import cover_missing, physical_price, raw_sides
 
 
-def build_model(problem, reference, groups, required, cap, extra=()):
+def build_model(problem, reference, groups, required, cap, extra=(), *, canonical_phase=True):
     from ortools.linear_solver import pywraplp
 
     engine = pywraplp.Solver.CreateSolver('SCIP')
@@ -15,7 +15,8 @@ def build_model(problem, reference, groups, required, cap, extra=()):
     engine.SetNumThreads(1)
     phase = [engine.BoolVar('tile_'+str(i)) for i in range(problem.n)]
     loss = {bond:engine.BoolVar(f'lost_{bond[0]}_{bond[1]}') for bond in sorted(reference-required)}
-    engine.Add(phase[0] == 0)
+    if canonical_phase:
+        engine.Add(phase[0] == 0)
     interface = PhaseInterface(problem)
     for j, parity in enumerate(interface.mod[:-1]):
         constant = sum(low[j] for low, high in interface.rows)

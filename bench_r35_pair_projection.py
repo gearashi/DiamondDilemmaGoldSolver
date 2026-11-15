@@ -15,7 +15,8 @@ def run(tiles,output,modes,seconds,cases):
     d=root/'docs'
     groups=[*base[:13],*read_rows(d/'R35_GEOGRAPHIC_RESIDUALS.json','geographic_cores'),
             *read_rows(d/'R35_EDGE_CONTACTS.json','edge_perfect_cores')]
-    phases={'a':0xcc57eae4e99109f8b073557e8c590b9202465766,'b':0xcc778d82e99c517987f6b57ec15837c21207cf06}
+    phases={'a':0xcc57eae4e99109f8b073557e8c590b9202465766,'b':0xcc778d82e99c517987f6b57ec15837c21207cf06,
+            'c':0xd237aba7e91101e88041413e8c589902021e5126}
     primary=json.loads((d/'R35_MIXED_MIP_DONOR.json').read_bytes())
     donors=[primary,*primary['others']]
     rows=[]

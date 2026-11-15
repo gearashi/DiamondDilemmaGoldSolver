@@ -39,6 +39,32 @@ class BlankFamilyTests(TestCase):
         self.assertFalse(sparse_forbidden({(0,1),(0,2),(1,2)}))
         self.assertIsNone(blank_completion([0],set()))
 
+    def test_comparison_rows_accept_exactly_the_completable_even_residuals(self):
+        from bench_r35_blank_rows import post_rows
+        sides=tuple(range(6))
+        # The real solver already fixed the even parity of each color from
+        # signed inventory. Test the optional redundant rows with that premise.
+        class FixedEngine:
+            def __init__(self, halves):
+                self.halves=iter(halves)
+                self.rows=[]
+            def IntVar(self,*_):
+                return next(self.halves)
+            def Add(self,row):
+                self.rows.append(row)
+        for banned in (set(), {(0,1),(2,3),(4,5)}, {(0,1),(2,3),(4,5),(0,2)}):
+            for size in (0,2,4,6):
+                for remaining in combinations(sides,size):
+                    active=[int(v in remaining) for v in sides]
+                    flags=[active,[0]*len(active)]
+                    expected=brute(remaining,banned)
+                    for parity in (0,1,2):
+                        for pairs,neighbors in (('weak',False),('hull',False),('weak',True),
+                                                ('hull',True),('none',True)):
+                            engine=FixedEngine([size//2,0])
+                            post_rows(engine,flags,sides,banned,parity,pairs,neighbors)
+                            self.assertEqual(all(engine.rows),expected)
+
     def test_general_even_size_and_both_color_buckets(self):
         sides=tuple(range(46))
         banned={(2*i,2*i+1) for i in range(23)} | {(0,44)}
@@ -103,6 +129,22 @@ class PhysicalSolverTests(TestCase):
                         if row['status']=='GOLD':
                             self.assertTrue(p.validate(row['codes'])['valid'])
                 self.assertEqual(len(set(outcomes)),1)
+
+    def test_absolute_phase_pins_preserve_both_complements(self):
+        from r35_mip_pairing import decide
+        from test_r33_gold_refine import fixture
+        p,ref,groups,req,_=fixture(False,False)
+        for pins in ({0: 1}, {p.n-1: 1}, {0: 0}):
+            with self.subTest(pins=pins):
+                row=decide(p,ref,groups,req,0,4,sphere=True,pins=pins)
+                self.assertEqual(row['status'],'GOLD')
+                phase=int(row['phase'],16)
+                self.assertTrue(all(phase>>i&1==value for i,value in pins.items()))
+        conflict=decide(p,ref,groups,req,0,4,sphere=True,pins={0: 1, p.n-1: 0})
+        self.assertEqual(conflict['status'],'INFEASIBLE')
+        for pins in ({-1: 0}, {p.n: 1}, {0: 2}, {'0': 0}):
+            with self.subTest(pins=pins), self.assertRaises(ValueError):
+                decide(p,ref,groups,req,0,4,pins=pins)
 
     def test_dense_nonmatching_bans_fall_back(self):
         from ortools.linear_solver import pywraplp
