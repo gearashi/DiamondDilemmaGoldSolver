@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from time import perf_counter
 import numpy as np
-from bench_r35_parked_public import inputs
+from bench_r35_parked_public import inputs,save_pending_gold
 from dfs_gpu import DFS
 from search_problem import SearchProblem
 
@@ -44,19 +44,14 @@ def verify(api,n,budgets,tiles,output,dynamic):
             full._page_stop=poll
             elapsed=full.step(nodes)
             times.append(perf_counter())
+            flags=full.states.get()
+            save_pending_gold(problem,full,flags,output.with_name('page-verified-gold.json'))
             small.step(nodes)
             raw=small.snapshot_checkpoint()
             for field in full.DEVICE_FIELDS:
                 source=getattr(full,field)
                 subset=source[:,selected].get() if len(source.shape)==2 else source[selected].get()
                 np.testing.assert_array_equal(subset,raw[field],err_msg=field)
-            flags=full.states.get()
-            for lane in np.flatnonzero(flags==1):
-                codes=list(map(int,full.boards[:,lane].get()))
-                validated=problem.validate(codes)
-                if validated['valid']:
-                    output.with_name('page-verified-gold.json').write_text(json.dumps(dict(codes=codes,validation=validated)))
-                    return
             durations=np.diff(times)*1000
             records.append(dict(replicas=n,budget=nodes,completed_pages=len(durations),elapsed_ms=elapsed,
                                 page_max_ms=float(durations.max()),page_median_ms=float(np.median(durations)),

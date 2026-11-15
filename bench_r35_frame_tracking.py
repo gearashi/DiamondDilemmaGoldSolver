@@ -5,14 +5,14 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 import numpy as np
-from bench_r35_parked_public import inputs
+from bench_r35_parked_public import inputs,save_pending_gold
 from classic_checkpoint_ranges import CheckpointRanges
 from dfs_gpu import DFS
 from search_problem import SearchProblem
 from systematic_jobs import JobLedger
 
 
-def trial(api,profile,before,n,setup,budgets,reference):
+def trial(api,profile,before,n,setup,budgets,reference,problem,output):
     opts,prefixes,lengths=setup
     shader='dfs_kernels.cu' if api=='CUDA' else 'dfs_kernels.wgsl'
     original=Path.read_text
@@ -56,6 +56,7 @@ def trial(api,profile,before,n,setup,budgets,reference):
                     gpu_ms+=gpu.step(batch)
                 left-=batch
             direct=gpu.snapshot_checkpoint()
+            save_pending_gold(problem,gpu,direct['states'],output.with_name('tracking-verified-gold.json'),direct['boards'])
             exact=observer.capture()
             for field in direct:
                 np.testing.assert_array_equal(exact[field],direct[field],err_msg=field)
@@ -91,6 +92,6 @@ if __name__=='__main__':
     for cycle in range(args.rounds):
         profiles=('previous','untracked','tracked')
         for profile in profiles if cycle%2==0 else profiles[::-1]:
-            rows=trial(args.api,profile,args.previous.resolve(),args.lanes,setup,args.budgets,ref)
+            rows=trial(args.api,profile,args.previous.resolve(),args.lanes,setup,args.budgets,ref,p,args.output)
             result.append(dict(cycle=cycle,profile=profile,observations=rows))
             args.output.write_text(json.dumps(result,indent=2)+'\n',encoding='utf8')

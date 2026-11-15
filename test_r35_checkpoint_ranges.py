@@ -56,6 +56,25 @@ class HostTests(unittest.TestCase):
         compare(self,gpu,reader)
         self.assertEqual((reader.maps,reader.read_bytes),(0,0))
 
+    def test_direct_reinstall_and_restore_invalidate_each_live_checkpoint_reader(self):
+        gpu=host_dfs(4)
+        ledger=JobLedger.empty(4,4)
+        readers=[CheckpointRanges(gpu,ledger) for _ in range(2)]
+        frozen=[compare(self,gpu,r) for r in readers]
+        gpu.load_prefixes([[3]],lanes=np.array([2]))
+        for reader in readers:
+            value=compare(self,gpu,reader)
+            self.assertEqual(int(value['states'][2]),0)
+        for snapshot in frozen:
+            self.assertEqual(int(snapshot['states'][2]),3)
+        restored=gpu.snapshot_checkpoint()
+        restored['firsts']=restored['firsts'].copy()
+        restored['firsts'][137,3]=42930
+        gpu.restore_checkpoint(restored)
+        for reader in reversed(readers):
+            value=compare(self,gpu,reader)
+            self.assertEqual(int(value['firsts'][137,3]),42930)
+
     def test_every_valid_depth_floor_and_installed_window(self):
         pairs = np.array([(f,m) for f in range(161) for m in range(f,161)])
         floor,high = pairs.T

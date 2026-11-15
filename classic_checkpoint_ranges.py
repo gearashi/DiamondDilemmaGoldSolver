@@ -1,8 +1,10 @@
 """Capture only classic DFS lanes and stack frames that can have changed."""
 from r35_board_codec import PhysicalBoardCodec
 from classic_checkpoint_delta import BoardDelta
+from weakref import WeakSet
 from classic_frame_packet import FramePacket
 from classic_frame_defaults import FrameDefaults
+from r35_frame_spans import FrameSpans, rectangle_wire_bytes
 
 import numpy as np
 
@@ -113,6 +115,8 @@ class CheckpointRanges:
         self.trace = trace
         self.trace_owner = object()
         self.trace_rows = None
+        self.trace_scope = None
+        self.span_reader = None
         self.board_projection = None
         self.board_fallbacks = 0
         self.delta_disabled = False
@@ -123,7 +127,12 @@ class CheckpointRanges:
         self.read_bytes = 0
         self.maps = 0
         if self.enabled:
-            ledger.checkpoint_installs = np.zeros(gpu.n, bool)
+            self.installed = np.zeros(gpu.n, bool)
+            ledger.checkpoint_installs = self.installed
+            if callable(getattr(type(gpu),'_mark_checkpoint_installs',None)):
+                if not hasattr(gpu,'_checkpoint_readers'):
+                    gpu._checkpoint_readers = WeakSet()
+                gpu._checkpoint_readers.add(self)
 
     def _want_delta(self):
         native = self.web or hasattr(self.gpu.cp,'RawKernel')
@@ -175,10 +184,12 @@ class CheckpointRanges:
         init_start=(marks&255).astype(np.int16)-1
         init_stop=((marks>>8)&255).astype(np.int16)-1
         usable=(~installed[lanes])&(start>=0)&(stop>=start)&(stop<160)
-        if np.any((marks!=0)&~(usable|installed[lanes])):
+        init_good=((marks&65535)==0)|((init_start>=start)&(init_stop>=init_start)&(init_stop<=stop))
+        if np.any((marks!=0)&~((usable&init_good)|installed[lanes])):
             return lanes,low,high
         self.trace_rows=(int(np.maximum(0,stop-start+1)[usable].sum()),
                          int(np.where(init_start>=0,init_stop-init_start+1,0)[usable].sum()))
+        self.trace_scope = lanes,marks
         ids=lanes[usable]
         low[ids]=np.maximum(low[ids],start[usable])
         high[ids]=np.minimum(high[ids],stop[usable])
@@ -253,9 +264,10 @@ class CheckpointRanges:
     def capture(self):
         gpu = self.gpu
         self.maps = self.read_bytes = 0
+        self.trace_scope = self.trace_rows = None
         if not self.enabled:
             return gpu.snapshot_checkpoint()
-        installed = self.ledger.checkpoint_installs
+        installed = self.installed
         if self.prior is None or np.all(installed):
             before = getattr(gpu, 'readback_bytes', 0)
             if hasattr(gpu,'_snapshot_fields'):
@@ -328,6 +340,21 @@ class CheckpointRanges:
                                                         getattr(gpu,'cpu_assist',None) is None)
                 frame_lanes,low,high = self._trace_bounds(frame_lanes,low,high,installed)
                 windows = _frame_windows(frame_lanes,low,high,installed)
+                if self.trace_scope is not None and windows:
+                    traced,marks = self.trace_scope
+                    if self.span_reader is None:
+                        self.span_reader = FrameSpans(gpu)
+                    if self.span_reader.native:
+                        try:
+                            spans = self.span_reader.capture(tuple(self.prior[k] for k in FRAME_FIELDS),
+                                traced,marks,installed[traced],max_wire_bytes=rectangle_wire_bytes(gpu,windows))
+                        except Exception:
+                            spans = None
+                        self.maps += self.span_reader.maps
+                        self.read_bytes += self.span_reader.read_bytes
+                        if spans is not None:
+                            fields.update(zip(FRAME_FIELDS,spans))
+                            windows = []
                 packed = None
                 cells = sum((b-a)*len(ids) for a,b,ids in windows)
                 if windows and (self.web or hasattr(gpu.cp,'RawKernel')) and (len(windows)>1 or cells>=1024):

@@ -18,6 +18,19 @@ from systematic_search import atomic_npz
 import systematic_evidence as proof
 
 
+def save_pending_gold(problem,gpu,flags,destination,boards=None):
+    """Keep any independently verified original Gold before comparing benchmark controls."""
+    from io_utils import atomic_json
+    for lane in np.flatnonzero(flags==1):
+        values=gpu.boards[:,int(lane)].get() if boards is None else boards[:,int(lane)]
+        codes=list(map(int,values))
+        check=problem.validate(codes)
+        if check['valid']:
+            atomic_json(destination,dict(codes=codes,validation=check,replica=int(lane),
+                                        puzzle_fingerprint=problem.fingerprint))
+            raise SystemExit(f'Verified Gold saved to {destination}.')
+
+
 def inputs(p, total, consume):
     order=list(map(int,fill_order(p.neighbors)))
     if consume:

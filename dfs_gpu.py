@@ -350,6 +350,7 @@ class DFS:
         for word in range(5):
             used[:, word] = np.bitwise_or.reduce(np.where(valid & (pieces // 32 == word), bits, np.uint32(0)), axis=1)
         cp = self.cp
+        self._mark_checkpoint_installs(ids)
         self.gold_checked[ids] = 0
         self.boards[:, ids] = cp.asarray(boards.T.copy())
         self.used[:, ids] = cp.asarray(used.T.copy())
@@ -834,8 +835,15 @@ class DFS:
                       fingerprint=np.array(self.fingerprint), gold_fingerprint=np.array(self.gold_fingerprint), order=self.order.copy())
         return arrays
 
+    def _mark_checkpoint_installs(self, ids):
+        # Direct restores and prefix installs can take place outside JobLedger.refill.
+        # Mark before writing so a partial native copy also invalidates the old fields.
+        for reader in getattr(self,'_checkpoint_readers',()):
+            reader.installed[ids] = True
+
     def _install_lanes(self, payload, ids):
         cp = self.cp
+        self._mark_checkpoint_installs(ids)
         self.gold_checked[ids] = 0
         for field in self.DEVICE_FIELDS:
             target = getattr(self, field)

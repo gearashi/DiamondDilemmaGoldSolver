@@ -6,7 +6,7 @@ from time import perf_counter
 
 import numpy as np
 
-from bench_r35_parked_public import inputs
+from bench_r35_parked_public import inputs,save_pending_gold
 from classic_checkpoint_ranges import CheckpointRanges
 from dfs_gpu import DFS
 from search_problem import SearchProblem
@@ -140,13 +140,7 @@ def run(p,n,used,api,consume,wide,production=False,scatter=False,budgets=None,bo
             start=perf_counter()
             expected=gpu.snapshot_checkpoint()
             elapsed=perf_counter()-start
-            for lane in np.flatnonzero(expected['states']==1):
-                codes=list(map(int,expected['boards'][:,lane]))
-                data=p.validate(codes)
-                if data['valid']:
-                    (Path(__file__).parent/'audit/r35/checkpoint-gold.json').write_text(
-                        json.dumps({'codes':codes,'validation':data}),encoding='utf8')
-                    raise SystemExit('Verified Gold saved; search stopped.')
+            save_pending_gold(p,gpu,expected['states'],Path(__file__).parent/'audit/r35/checkpoint-gold.json',expected['boards'])
             if production:
                 start=perf_counter()
                 actual=reader.capture()
