@@ -52,31 +52,24 @@ class Assemblies:
     def protected(self, board):
         return np.array([j for j,v in enumerate(board) if v//3 in self.tiles], dtype=int)
 
-    def seed(self, hint, rng, work=20000):
+    def seed(self, hint, rng, work=20000, *, constructor=None, stats=None):
         model = self.model
         hint = model.legal_board(hint)
         bonds = physical_bonds(model,hint)
         if self.bonds <= bonds and not self.forbidden & bonds:
+            if stats is not None:stats['compatible_input']+=1
             return hint
         poses = []
+        preferred = []
         for _, fits in self.groups:
             # Preserve already present physical poses first. Otherwise try a fresh embedding.
-            order = rng.permutation(len(fits))
-            poses.append(sorted((fits[i] for i in order),
-                                key=lambda row:-sum(hint[c]==v for c,v in row)))
-        pending = [0]
-        def place(level, fixed):
-            if pending[0]>=work:
-                return None
-            if level < len(poses):
-                for row in poses[level]:
-                    if any(c in fixed for c,_ in row):
-                        continue
-                    pending[0]+=1
-                    child=place(level+1, fixed | dict(row))
-                    if child is not None or pending[0]>=work:
-                        return child
-                return None
+            order = sorted(map(int,rng.permutation(len(fits))),key=lambda i:-sum(hint[c]==v for c,v in fits[i]))
+            if constructor:
+                preferred.append(order)
+            else:
+                poses.append([fits[i] for i in order])
+        details=Counter()
+        def complete(fixed):
             board=hint.copy()
             for c,v in fixed.items():
                 board[c]=v
@@ -90,13 +83,43 @@ class Assemblies:
                 weights+=(8*model.n+1)*(hint[cells,None,None]==codes[None,:,:])
                 weights[~allowed]=-1
                 try:
-                    donors=assignment(weights.max(axis=2),allowed.any(axis=2))
+                    if constructor=='compact':
+                        from r35_pose_constructor import weighted_donors
+                        donors=weighted_donors(weights,allowed,details,compact=True)
+                    else:
+                        details['weighted_assignment_rows']+=len(cells)
+                        donors=assignment(weights.max(axis=2),allowed.any(axis=2))
                 except ValueError:
                     return None
                 rotations=weights[np.arange(len(cells)),donors].argmax(axis=1)
                 board[cells]=codes[donors,rotations]
             return self.clear_forbidden(model.legal_board(board), rng)
-        board=place(0,{})
+        pending = [0]
+        def place(level, fixed):
+            if pending[0]>=work:
+                details['budget_stops']+=1
+                return None
+            if level < len(poses):
+                for row in poses[level]:
+                    details['pose_rows_examined']+=1
+                    if any(c in fixed for c,_ in row):
+                        continue
+                    pending[0]+=1
+                    details['pose_nodes']+=1
+                    child=place(level+1, fixed | dict(row))
+                    if child is not None or pending[0]>=work:
+                        return child
+                return None
+            details['leaf_assignments']+=1
+            return complete(fixed)
+        if constructor:
+            from r35_pose_constructor import PoseConstructor
+            index=PoseConstructor.for_assemblies(self,details)
+            board=index.find(complete,work,'matching' if constructor=='compact' else constructor,details,preferred)
+        else:
+            board=place(0,{})
+        if stats is not None:
+            stats.update(details)
         if board is None:
             raise ValueError("No legal mandatory-bond start found within the pose budget.")
         if not self.bonds <= physical_bonds(model,board):
@@ -597,7 +620,7 @@ def forest_pool(model,board,available,size,rng):
 class Engine:
     def __init__(self,problem,*,bonds=False,joint=False,adjacent=False,ties=0,fork=False,
                  relink=False,slate=1,pool=10,tie_slack=0,cycle_budget=0,contacts=None,disjoint=False,exact_packing=False,pair_cycles=0,forest=False,contact_group=0,
-                 touch_packing=None,separator_packing=False,cycle_partition=None,regional_cycle_budget=0,regional_only=False,forbidden_repair=None,assembly_relocation=None):
+                 touch_packing=None,separator_packing=False,cycle_partition=None,regional_cycle_budget=0,regional_only=False,forbidden_repair=None,assembly_relocation=None,assembly_constructor=None):
         if min(slate,pool)<1 or min(ties,cycle_budget)<0 or tie_slack not in (0,1,2):
             raise ValueError("Invalid candidate or repair limits.")
         self.model=BoardModel(problem)
@@ -605,7 +628,10 @@ class Engine:
             raise ValueError("Unknown physical mate repair option.")
         if assembly_relocation not in (None,'priced','reciprocal','mutual'):
             raise ValueError("Unknown mandatory assembly relocation option.")
-        self.assemblies=Assemblies(self.model) if bonds or forbidden_repair or assembly_relocation else None
+        if assembly_constructor not in (None,'forward','hall','matching','compact'):
+            raise ValueError("Unknown mandatory pose construction policy.")
+        self.assembly_constructor=assembly_constructor
+        self.assemblies=Assemblies(self.model) if bonds or forbidden_repair or assembly_relocation or assembly_constructor else None
         self.assembly_relocation=assembly_relocation
         self.relocator=None
         if assembly_relocation:
@@ -811,6 +837,10 @@ class Engine:
         if reusable:
             config=dict(bonds=self.assemblies is not None,joint=self.joint,adjacent=self.adjacent,
                         cycle_budget=self.cycle_budget,pool=self.pool,ties=self.ties,tie_slack=self.tie_slack)
+            if self.assembly_constructor:
+                from importlib.util import find_spec
+                config['repair_native_assignment']=find_spec('ortools') is not None
+                config['assembly_constructor']=self.assembly_constructor
             if self.assembly_relocation:
                 config['assembly_relocation']=self.assembly_relocation
             if self.forbidden_repair:
@@ -872,7 +902,12 @@ class Engine:
             best=None
             for start in starters:
                 if self.assemblies:
-                    candidate=self.assemblies.seed(start['codes'],rng)
+                    if self.assembly_constructor:
+                        construction=Counter()
+                        candidate=self.assemblies.seed(start['codes'],rng,constructor=self.assembly_constructor,stats=construction)
+                        stats.update({'constructor_'+k:v for k,v in construction.items()})
+                    else:
+                        candidate=self.assemblies.seed(start['codes'],rng)
                     start=result(model,candidate)
                 states.append(dict(current=start,best=start,rng=np.random.default_rng(rng.integers(2**63)),
                                    prices=self.repair_prices()))
@@ -975,6 +1010,8 @@ def main():
     parser.add_argument('--slate',type=int,default=1)
     parser.add_argument('--pool',type=int,default=10)
     parser.add_argument('--cycle-budget',type=int,default=0,help='Full-board assignment relaxations per repair.')
+    parser.add_argument('--assembly-constructor',choices=('forward','hall','matching','compact'),
+                        help='Forward-check viable poses, small resource deficits, or complete residual matching.')
     parser.add_argument('--assembly-relocation',choices=('priced','reciprocal','mutual'),
                         help='Price displaced pieces and optionally move mutually blocking mandatory assemblies.')
     parser.add_argument('--forbidden-repair',choices=('project','prices','guarded'),
@@ -1023,6 +1060,8 @@ def main():
         config.update(bonds=True,forbidden_repair=args.forbidden_repair)
     if args.assembly_relocation:
         config.update(bonds=True,assembly_relocation=args.assembly_relocation)
+    if args.assembly_constructor:
+        config.update(bonds=True,assembly_constructor=args.assembly_constructor)
     if args.forest:
         config['forest']=True
     if args.pair_cycles:
@@ -1038,6 +1077,9 @@ def main():
     if args.contacts is not None or args.disjoint_contacts:
         config.update(contacts=args.contacts,disjoint=args.disjoint_contacts)
     engine=Engine(p,**config)
+    if args.assembly_constructor:
+        from importlib.util import find_spec
+        config['repair_native_assignment']=find_spec('ortools') is not None
     if args.regional_only:
         from importlib.util import find_spec
         config['regional_native_assignment']=find_spec('ortools') is not None

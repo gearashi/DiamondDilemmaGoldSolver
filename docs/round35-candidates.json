@@ -548,9 +548,19 @@
       "source_id": 24,
       "title": "Forward checks in the fresh constructor",
       "proposal_and_validation": "r31_fresh.Assemblies.seed visits groups in static order, tests footprint collisions and waits until the leaf for residual tile matching. Use occupancy-indexed viable pose lists, dynamic most-constrained assembly order, cheap residual slot/Hall checks and selective full matching. Compare with the existing geographic pose-packing and host Hall implementations, preserving this constructor's ranked/random/seed behavior under a separate policy. Count pose nodes, full assignments, found starts and failures by reason. On exhaustive pinned examples retain every feasible embedding; a bounded stochastic construction failure is not Gold infeasibility.",
-      "state": "open",
+      "state": "retain checked forward/physical matching and compact exact leaves",
       "decision_changing_followups": [
         "Share the independently deduplicated contour-lift audit under #9 when assembly seeding uses these contours; preserve different physical restrictions with the same coarse projection."
+      ],
+      "mechanism": "REPAIR-POSE-CONSTRUCTION",
+      "measurement": "32 unrestricted starts used 4,608 vs 241 weighted rows. Matching recovered all 24 genuinely feasible restricted starts, with exact path/cycle backfill using zero general weighted assignments. On 31 distinct contours, disjoint pool certificates saved all 279 matching calls, compact leaves reduced 4,464 weighted rows to 289, and all 31 legal starts survived. Warm geometry retained all 32 cold witnesses and saved 119,040 indexed pose rows.",
+      "closure_reason": "All forward, cheap, full-matching and compact policies were compared on paired original and restricted starts. Sparse assignment and contour-conditioned resource checks have direct finite-enumeration controls; bounded constructor failures remain unknown for Gold.",
+      "reopen_trigger": "A different physical domain distribution or required component type repeatedly evades these exact matching and checked pose-occupancy tests and supports a new separating certificate.",
+      "evidence": [
+        "docs/ROUND35_BONDED_REPAIR.md",
+        "docs/R35_POSE_CONSTRUCTOR.json",
+        "docs/R35_JOINT_POSES.json",
+        "test_r35_pose_constructor.py"
       ]
     },
     {

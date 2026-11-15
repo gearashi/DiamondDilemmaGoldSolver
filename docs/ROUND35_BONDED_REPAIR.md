@@ -56,6 +56,40 @@ Each profile used 16/64/320-round prefixes and a cold 64-round repeat on seed 35
 
 [Assembly controls, physical hashes and trajectories](R35_ASSEMBLY_RELOCATION.json). Use `bench_r35_assembly_relocation.py` for independent one-move comparisons and `bench_r35_trajectories.py` for saved prefixes.
 
+## 39. Forward-check fresh placements and complete their weighted donor assignment
+
+The optional `--assembly-constructor` modes order the remaining groups by viable poses. Occupancy bitsets remove overlapping candidates, and a run-level geometry index survives new seed-specific preferences. Matching and compact modes first test identical and small overlapping cell sets for a resource deficit. Disjoint ordinary slot pools can supply a certificate when each remaining rigid tile belongs to one pool and has enough alternatives for all its rigid peers. Where these tests leave uncertainty, a complete alternating-path matching checks the residual physical resources.
+
+`compact` preserves the constructor's randomly weighted objective. A surviving hint outweighs all random tie terms combined. If the surviving hints simultaneously extend, the maximum-weight assignment needs only the unused rows and donors. When every physical donor and cell has at most two legal partners, forced paths and the two alternatives on each alternating cycle determine the exact optimum. The solver falls back to full weighted matching when needed. Equal weighted optima may produce different physical starts.
+
+| Physical domain | Policy | Complete legal starts | Pose nodes | Weighted leaves visited | General weighted assignment rows |
+|---|---|---:|---:|---:|---:|
+| unrestricted | released | 32/32 | 256 | 32 | 4,608 |
+| unrestricted | forward | 32/32 | 256 | 32 | 4,608 |
+| unrestricted | hall | 32/32 | 256 | 32 | 4,608 |
+| unrestricted | matching | 32/32 | 256 | 32 | 4,608 |
+| unrestricted | final-compact | 32/32 | 256 | 32 | 241 |
+| two-extra | released | 5/16 | 26,150 | 16,589 | 2,388,816 |
+| two-extra | forward | 5/16 | 25,722 | 16,910 | 2,435,040 |
+| two-extra | hall | 16/16 | 4,551 | 521 | 75,024 |
+| two-extra | matching | 16/16 | 284 | 16 | 2,304 |
+| two-extra | final-compact | 16/16 | 284 | 16 | 0 |
+| five-extra | released | 0/8 | 16,000 | 12,888 | 1,855,872 |
+| five-extra | forward | 0/8 | 16,000 | 13,228 | 1,904,832 |
+| five-extra | hall | 1/8 | 15,707 | 1,413 | 203,472 |
+| five-extra | matching | 8/8 | 794 | 8 | 1,152 |
+| five-extra | final-compact | 8/8 | 794 | 8 | 0 |
+
+The 32 unrestricted starts each used eight obligatory placements. On those starts, compact assignment reduced 4,608 weighted rows to 241 and retained 4,367 hinted placements. The repeated-static-index comparison rebuilt 3,840 physical poses once and reused 119,040 later pose rows, preserving all 32 cold board witnesses. Changes to physical domains or to the actual pose list force a rebuild.
+
+Each restricted input admits a separately checked complete physical witness. Two or five additional candidate poses per mandatory group compete for scarce remaining cells. All five constructor policies received the same hint and seed and a 2,000-node budget. A bounded failure records a missed starting board. In all 24 sparse final lifts, exact path/cycle assignment handled the remaining 144 pieces without a general weighted matching. Full-resource matching recovered every known feasible restricted start; cheap Hall checks alone missed some five-extra cases.
+
+The Round 35 contour comparison emitted 35 source records representing 31 exact physical domain tuples. All 31 constructed complete legal starts on eight mandatory bonds. The disjoint-pool certificate replaced all 279 full matching checks at the same 248 pose nodes. Compact assignment reduced 4,464 ordinary weighted rows to 289. The separate four-cell conclusions on these contours retain their original pinned scope. Independent small tests enumerate every feasible labelled pose tuple, inspect every three-by-three graph of maximum degree two, account for failed hint extensions, and retry an interrupted constructor.
+
+**Decision.** Keep dynamic occupancy when repeated colliding pose rows are present, full relaxed matching for restricted placement, compact weighted leaves, and checked index reuse across independent starts. Cheap Hall and unrestricted forward checks alone have narrower effects. The constructor seeds heuristic discovery; its failure cannot close an exact Gold branch.
+
+[Constructor, contour and repeated-start receipts](R35_POSE_CONSTRUCTOR.json). Reproduce the conditional controls with `bench_r35_pose_constructor.py`, adding `--contours --work 100` for the published contour scopes or `--warm` for 32 repeated starts.
+
 ## 40. Join optional rigid components on the assumed physical mate
 
 `r32_fresh.py fresh --merges 8 --incremental-merges` joins verified component pose tables on one physical dart pair. Each left pose dictates the only possible anchored cell and rotation on the right. An ungrouped piece uses a direct domain lookup. When both sides are assemblies, the join indexes complete right poses by the anchored piece and rejects overlapping footprints. Tables bind the component tiles and the assumed physical edges within the current construction. Their sorted rows match full root traversal. Rebuilding a surviving component can reuse its table after a different optional edge is removed.
