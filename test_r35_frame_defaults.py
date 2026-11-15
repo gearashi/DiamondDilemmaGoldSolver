@@ -189,6 +189,37 @@ class PriceControls(unittest.TestCase):
         self.assertFalse(device.prefer_direct(depths[:5],floors))
         self.assertFalse(device.prefer_direct(None,None))
 
+    def test_cold_then_hot_same_reader_does_not_rebill_previous_default_summary(self):
+        from unittest.mock import Mock
+        from classic_checkpoint_ranges import CheckpointRanges
+        from systematic_jobs import JobLedger
+        from test_replica_resize import host_dfs
+        n=128
+        gpu=host_dfs(n)
+        gpu.cp.RawKernel=Mock(side_effect=AssertionError('Unexpected device work'))
+        reader=CheckpointRanges(gpu,JobLedger.empty(0,n),board_mode='ranges')
+        frame=reader.frame_defaults=FrameDefaults(gpu)
+        def cold():
+            frame.maps=1
+            frame.read_bytes=20
+            return tuple(getattr(gpu,k).get().ravel() for k in FIELDS)
+        frame.capture=Mock(side_effect=cold)
+        first=reader.capture()
+        self.assertEqual((frame.maps,frame.read_bytes),(1,20))
+        self.assertEqual(reader.maps,len(gpu.DEVICE_FIELDS)-4+1)
+        gpu.maxdepths[:]=100
+        gpu.floors[:]=32
+        gpu.shifts[154,92]=0xfe02
+        reader.installed[:]=True
+        expected=gpu.snapshot_checkpoint()
+        hot=reader.capture()
+        frame.capture.assert_called_once()
+        self.assertEqual((frame.maps,frame.read_bytes),(0,0))
+        self.assertEqual(reader.maps,len(gpu.DEVICE_FIELDS))
+        self.assertEqual(reader.read_bytes,sum(expected[key].nbytes for key in gpu.DEVICE_FIELDS))
+        for key in expected:np.testing.assert_array_equal(hot[key],expected[key])
+        self.assertEqual(int(first['shifts'][154,92]),0)
+
     def test_webgpu_high_water_price_falls_back_to_exact_physical_buffers(self):
         from classic_checkpoint_ranges import CheckpointRanges
         from systematic_jobs import JobLedger
