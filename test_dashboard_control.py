@@ -414,18 +414,20 @@ function Invoke-FakePython {
     if ([System.IO.Path]::GetFileName($seen[0]) -ne $expected) { throw 'Wrong solver script' }
     if ($seen -notcontains '--resume' -or $seen -notcontains '--stop-file-initialized') { throw 'Resume/stop contract missing' }
     if ($seen[$seen.IndexOf('--replicas')+1] -ne '128') { throw 'Replica argument missing' }
-    if ($seen[$seen.IndexOf('--backend')+1] -ne 'webgpu') { throw 'Backend argument missing' }
+    $engine = if ($global:AlgorithmUnderTest -eq 'gpu-domains') { 'cuda' } else { 'webgpu' }
+    if ($seen[$seen.IndexOf('--backend')+1] -ne $engine) { throw 'Backend argument missing' }
     if ($legacy -and $seen -contains '--algorithm') { throw 'Legacy launch was changed' }
     if (-not $legacy -and $seen[$seen.IndexOf('--algorithm')+1] -ne $global:AlgorithmUnderTest) { throw 'Algorithm argument missing' }
     Write-Output 'MOCKED_SOLVER_ARGUMENTS_OK'
     $global:LASTEXITCODE = 0
 }
 if ($Choice -eq 'default') { & $LauncherPath -Replicas 128 -Backend webgpu }
+elseif ($Choice -eq 'gpu-domains') { & $LauncherPath -Backend cuda -Algorithm $Choice -Unlimited }
 else { & $LauncherPath -Replicas 128 -Backend webgpu -Algorithm $Choice }
 """
         script = self.directory / 'algorithm-launcher-test.ps1'
         script.write_text(harness, encoding='utf-8')
-        for algorithm in ('default', 'gpu-dfs', 'dfs', 'cp', 'cp-sat', 'cp-sat-circuit', 'sat', 'hybrid', 'parallel-dfs'):
+        for algorithm in ('default', 'gpu-dfs', 'gpu-domains', 'dfs', 'cp', 'cp-sat', 'cp-sat-circuit', 'sat', 'hybrid', 'parallel-dfs'):
             with self.subTest(algorithm=algorithm):
                 result = subprocess.run([shutil.which('powershell.exe'), '-NoProfile', '-ExecutionPolicy', 'Bypass',
                     '-File', str(script), str(ROOT / 'StartSolver.ps1'), algorithm], cwd=ROOT,

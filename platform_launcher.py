@@ -121,11 +121,9 @@ def open_dashboard(port=8766, no_browser=False):
             print('Open the address above in your browser.', flush=True)
     return url
 
-def solver_command(hours=1, unlimited=False, replicas=4096, seed=20261007, backend='auto', fresh=False, algorithm=None, workers=4, search_options=None, gpu_features=None):
+def solver_command(hours=1, unlimited=False, replicas=None, seed=20261007, backend='auto', fresh=False, algorithm=None, workers=4, search_options=None, gpu_features=None):
     if not isinstance(hours, (int, float)) or isinstance(hours, bool) or not math.isfinite(hours) or hours < 0:
         raise ValueError('Hours must be finite and nonnegative.')
-    if type(replicas) is not int or not 128 <= replicas <= 131072:
-        raise ValueError('Choose between 128 and 131072 replicas.')
     if type(seed) is not int or not 0 <= seed < 2**32:
         raise ValueError('Seed must be a nonnegative 32-bit integer.')
     validate_workers(workers)
@@ -133,6 +131,10 @@ def solver_command(hours=1, unlimited=False, replicas=4096, seed=20261007, backe
     algorithm = 'gpu-dfs' if algorithm is None else algorithm
     if algorithm not in ALGORITHMS:
         raise ValueError('Unknown search algorithm.')
+    if replicas is None:
+        replicas = 128 if algorithm == 'gpu-domains' or options['coordinated_gpu'] else 4096
+    if type(replicas) is not int or not 128 <= replicas <= 131072:
+        raise ValueError('Choose between 128 and 131072 replicas.')
     features = normalize_features(gpu_features)
     if any(features.values()) and algorithm != 'gpu-dfs':
         raise ValueError('GPU reasoning options apply only to GPU DFS.')
@@ -141,7 +143,8 @@ def solver_command(hours=1, unlimited=False, replicas=4096, seed=20261007, backe
     if algorithm in ('gpu-dfs', 'hybrid'):
         choose_backend(backend)
     if algorithm=='gpu-domains':
-        if backend=='webgpu' or replicas>512:raise ValueError('GPU domain search requires CUDA and128..512 lanes; use --replicas128 initially.')
+        if backend == 'webgpu' or replicas > 512:
+            raise ValueError('GPU domain search requires CUDA and 128 to 512 lanes.')
         choose_backend('cuda')
     script = 'systematic_search.py' if algorithm == 'gpu-dfs' else 'constraint_search.py'
     command = [str(venv_python()), str(ROOT / script),
@@ -168,7 +171,7 @@ def main(argv=None):
     start = sub.add_parser('start', help='Run the selected search in this terminal')
     start.add_argument('--hours', type=float, default=1)
     start.add_argument('--unlimited', action='store_true')
-    start.add_argument('--replicas', type=int, default=4096)
+    start.add_argument('--replicas', type=int, help='Defaults to 128 for CUDA domains and 4096 for other searches.')
     start.add_argument('--seed', type=int, default=20261007)
     start.add_argument('--backend', choices=('auto', 'cuda', 'webgpu'), default='auto')
     start.add_argument('--workers', type=int, default=4)

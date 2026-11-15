@@ -8,6 +8,10 @@ The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaap
 
 The [v1.7.0 results and recommended settings](docs/ROUND26_RESULTS.md) cover 17 workstreams and 81 scoped evaluations. They include exact CPU and CUDA search, shared SAT reasoning, disk-backed progress, regional pruning, incremental GPU scoring and repair. The [workstream register](docs/round26-workstreams.json) records which candidates reduced steps, which saved repeated work and where extra work outweighed the benefit. Earlier evaluations are available for [Round 25](docs/ROUND25_RESULTS.md), [Round 24](docs/ROUND24.md) and [Round 23](docs/ROUND23.md).
 
+## Round 35 search results
+
+The saved reference board has 207 matched edges and predates this round. The new checks reduce search on measured Gold and scored-board queries. The results include tested dashboard settings for an RTX 2060 with 6 GB of VRAM, options for resuming a classic GPU search, and commands for the ranked CPU search toward 208. [Results, settings and benchmarks](docs/ROUND35_RESULTS.md)
+
 ## Search improvements in v1.15.0
 
 GPU domain search can lower its lane count and resume native branches in batches. The solver also reuses independently checked SAT results, skips disallowed physical mates in classic GPU DFS, and resumes phase searches across longer runs. The best verified original board has 207 matched seams. [Measurements, hardware settings and commands](docs/ROUND34_RESULTS.md)

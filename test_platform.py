@@ -433,6 +433,21 @@ class PortableLauncherTests(unittest.TestCase):
                     else: choose.assert_not_called()
                     self.assertIn('--resume', command)
 
+    def test_domain_launcher_uses_a_supported_default_and_preserves_explicit_lanes(self):
+        self.install()
+        with patch.object(launcher,'choose_backend',return_value='cuda'):
+            for flags,expected in (([],128),(['--replicas','256'],256)):
+                self.assertEqual(launcher.main(['start','--algorithm','gpu-domains','--unlimited',*flags]),0)
+                command=self.call.call_args.args[0]
+                self.assertEqual(command[command.index('--replicas')+1],str(expected))
+                self.assertEqual(command[command.index('--seconds')+1],'0')
+                self.assertIn('--resume',command)
+            for args in ({'replicas':4096},{'backend':'webgpu'}):
+                with self.assertRaisesRegex(ValueError,'CUDA'):
+                    launcher.solver_command(algorithm='gpu-domains',**args)
+            legacy=launcher.solver_command()
+            self.assertEqual(legacy[legacy.index('--replicas')+1],'4096')
+
     def test_cpu_algorithm_does_not_require_a_gpu_driver_and_cli_forwards_selection(self):
         self.install()
         with patch.object(launcher, 'choose_backend', side_effect=AssertionError('CPU search must not probe GPU drivers')):

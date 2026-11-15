@@ -22,6 +22,8 @@ The saved reference board has **207 of 240 matched edges**. It predates the curr
 
 **To start an unrestricted Gold search**, use full 64-bit Python 3.12, **CUDA domains + learned backjumping**, **128 lanes**, **scalar propagation** and **Unlimited**. Enable global GPU piece matching, GPU seam-support reuse, watched clauses, verified sharing and transport, and sharing completed exact regions. Leave cooperative propagation and smallest-remaining-domain splitting off for the unrestricted original. The inventory check closed 47 of the 128 original root boxes before GPU allocation. Those boxes have different sizes. [Original hardware comparisons](ROUND34_RESULTS.md)
 
+The **Search controls** panel exposes all of these propagation options. To launch the basic CUDA domain engine from a terminal, use `.\StartSolver.cmd -Algorithm gpu-domains -Backend cuda -Unlimited` on Windows or `bash StartSolver.sh --algorithm gpu-domains --backend cuda --unlimited` on Linux. Omitting the lane count selects 128 for that engine. The dashboard lets you select the full measured configuration.
+
 **To exhaust seven-piece routes to 208**, use the CPU ranked search, family 2,2,3 and 1,024-support pages. Reusing the same database resumes already-ranked work. The eight-piece family uses 2,2,2,2. [Ranked support controls](ROUND35_INCUMBENT_ROUTES.md)
 
 ```powershell
