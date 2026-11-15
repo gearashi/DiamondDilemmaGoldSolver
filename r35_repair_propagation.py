@@ -30,9 +30,10 @@ class RepairPropagation:
             return found
         self.supported=supported
 
-    def narrow(self,seed,anchors,max_domain=40,unique=True):
-        current=list(self.root)
+    def narrow(self,seed,anchors,max_domain=40,unique=True,*,domains=None):
+        current=list(self.root if domains is None else domains)
         queue=deque()
+        queued=[False]*len(current)
         owned={}
         for c in anchors:
             pose=1<<seed[c]
@@ -40,9 +41,12 @@ class RepairPropagation:
             current[c]=pose
         for c,d in enumerate(current):
             if not d:return None
-            if d.bit_count()<=max_domain:queue.append(c)
+            if d.bit_count()<=max_domain:
+                queue.append(c)
+                queued[c]=True
         while queue:
             c=queue.popleft()
+            queued[c]=False
             d=current[c]
             if unique:
                 tile=((d&-d).bit_length()-1)//3
@@ -54,14 +58,18 @@ class RepairPropagation:
                             revised=other&~tile_bits
                             if not revised:return None
                             current[b]=revised
-                            if revised.bit_count()<=max_domain:queue.append(b)
+                            if not queued[b] and revised.bit_count()<=max_domain:
+                                queue.append(b)
+                                queued[b]=True
             for s,(b,j) in enumerate(self.neighbors[c]):
                 if b<0:continue
                 revised=current[b]&self.supported(s,j,d)
                 if not revised:return None
                 if revised!=current[b]:
                     current[b]=revised
-                    if revised.bit_count()<=max_domain:queue.append(b)
+                    if not queued[b] and revised.bit_count()<=max_domain:
+                        queue.append(b)
+                        queued[b]=True
         return current
 
     def project(self,state,anchors,max_domain=40,unique=True):

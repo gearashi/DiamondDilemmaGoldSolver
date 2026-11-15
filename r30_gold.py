@@ -518,9 +518,22 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
                 return dict(status='INFEASIBLE',**{kind:[sorted(core)]},**stats)
             if len(missing)==1:forbidden.extend(missing)
     cardinality=None
+    deferred_pose_conflict=False
     if reference_bound:
         if not geography:
             raise ValueError('The certified reference bound requires geographic Gold.')
+        from r35_pose_departures import original_pose_departures
+        pose_domains,pose_result = original_pose_departures(problem,domains)
+        # These explicit arguments are validated against the original model below.
+        needs_model_validation = bool(cutsets or type_cuts or bridges or departure_rules or physical_loss is not None)
+        if pose_result is not None:
+            stats['certified_pose_departures'] = pose_result
+            if pose_result['over']:
+                if not needs_model_validation:
+                    return dict(status='INFEASIBLE',**stats)
+                deferred_pose_conflict = True
+            else:
+                domains = pose_domains
         from r35_geographic_loss import certified_reference,retained_bound
         cardinality=certified_reference(problem)
         if cardinality is not None:
@@ -531,7 +544,9 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             forbidden=[*forbidden,*restriction.pop('forbidden')]
             stats['certified_reference']=restriction
             if restriction['over'] or any(not mask for mask in domains):
-                return dict(status='INFEASIBLE',**stats)
+                if not needs_model_validation:
+                    return dict(status='INFEASIBLE',**stats)
+                deferred_pose_conflict = True
     if joint_poses:
         if not geography:
             raise ValueError('Compulsory joint poses require a geographic Gold search.')
@@ -651,6 +666,8 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
     stats['reused_type_cuts']=len(seen_types)
     stats['discovered_type_sets']=fresh
     stats['reusable_type_sets']=reusable
+    if deferred_pose_conflict:
+        return dict(status='INFEASIBLE',**stats)
     for _ in range(max_rounds):
         remaining=seconds-(time.monotonic()-started)
         if remaining<=0:
@@ -746,7 +763,7 @@ def main():
     cli.add_argument("--mate-correlations",nargs="?",const="full",choices=("full","signed"),help="Post verified conditional mate implications in represented reciprocal classes.")
     cli.add_argument("--path-mates",choices=("units","table"),help="Check joins forced by all geographic placements of required physical bonds.")
     cli.add_argument("--phase-anchors",choices=("off","rules","roots","shared"),help="Use stored geographic exclusions, probe scarce tile placements, or disable the automatic conditioned lookup.")
-    cli.add_argument("--reference-bound",action="store_true",help="Apply the published certified incumbent-loss bound in geographic Gold.")
+    cli.add_argument("--reference-bound",action="store_true",help="Apply published limits on retained physical bonds and oriented cell poses in geographic Gold.")
     cli.add_argument("--joint-poses",action="store_true",help="Prune unsupported simultaneous mandatory component poses before geographic search.")
     cli.add_argument("--tour-mode",choices=("raw","contract","sparse"),help="Post a circuit on mandatory physical strand paths.")
     cli.add_argument("--turn-length",type=int,help="Check mixed-turn physical polygons up to this length (3 to 16).")
