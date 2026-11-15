@@ -11,7 +11,6 @@ import unittest
 
 import numpy as np
 
-from classic_checkpoint_boards import BoardProjection
 from classic_checkpoint_ranges import CheckpointRanges
 from r35_board_codec import PhysicalBoardCodec,encode_layout,native_unpack,unpack,verified_decoder
 from systematic_jobs import JobLedger
@@ -136,8 +135,6 @@ class ProjectionNative:
         for dynamic in (False,True):
             gpu,ids=self.setup_lanes(dynamic)
             codec=PhysicalBoardCodec(gpu)
-            checked=BoardProjection(gpu)
-            idle=np.zeros(gpu.n,bool)
             for count in (0,3,17):
                 if count:gpu.step(count)
                 fields=gpu.snapshot_checkpoint()
@@ -145,9 +142,6 @@ class ProjectionNative:
                 for subset in (ids,ids[1:],ids[::2]):
                     with self.subTest(dynamic=dynamic,depth=count,subset=len(subset)):
                         self.assert_columns(arrays,codec.capture(fields,subset),subset)
-                        for mode in ('proof','direct','resident','native'):
-                            got=checked.capture(fields,subset,mode=mode,installed=idle)
-                            self.assert_columns(arrays,got,subset)
             # A later CPU table mutation cannot change a physical result.
             value=gpu.host_pool.copy()
             try:
@@ -176,12 +170,9 @@ class ProjectionNative:
         gpu,ids=self.setup_lanes()
         fields=gpu.snapshot_checkpoint()
         codec=PhysicalBoardCodec(gpu)
-        checked=BoardProjection(gpu)
         used=fields['used'].copy()
         used[4,ids[0]]^=np.uint32(1<<20)
         gpu.used[:,:]=gpu.cp.asarray(used)
-        for mode in ('resident','direct'):
-            self.assertIsNone(checked.capture(fields,ids,mode=mode,installed=np.zeros(gpu.n,bool)))
         self.assert_columns(self.arrays(gpu),codec.capture(fields,ids),ids)
         with self.assertRaises(ValueError):gpu.read_checkpoint(gpu.snapshot_checkpoint())
         raw=fields['boards'].copy()
@@ -196,10 +187,10 @@ class ProjectionNative:
         ledger=JobLedger.empty(0,gpu.n)
         reader=CheckpointRanges(gpu,ledger,board_mode='physical')
         reader.capture()
-        reader.board_projection=codec
         captured=reader.capture()
         np.testing.assert_array_equal(captured['boards'],raw)
         np.testing.assert_array_equal(captured['used'],used)
+        self.assertIsInstance(reader.board_projection,PhysicalBoardCodec)
         self.assertEqual(reader.board_fallbacks,1)
 
 
