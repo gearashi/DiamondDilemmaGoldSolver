@@ -715,7 +715,15 @@
       "source_id": 32,
       "title": "Screen whole-tile indistinguishability for the soft score",
       "proposal_and_validation": "Look for different real tile identities with exactly identical cyclically oriented seam-mask triples, taking legal placement domains into account. If none exist, close immediately for the original puzzle. Otherwise explore ordered representatives with multiplicities only in queries where the objective and current constraints are label-independent. For a swap-distance query reassigning labels may change distance; either prove transportation preserves it or use the grouping only in an admissible bound. Gold additionally needs per-piece strand data and pins. Compare against R25 verified complete residual Gold graph isomorphism and R32 numeric response classes, which do not establish global interchangeable identities. Check all labeled arrangements and physical label lifting in a small positive and a broken-symmetry control. Report actual distinct repeats available before implementing a general quotient.",
-      "state": "open"
+      "state": "reject original whole-tile quotient; no equivalent physical masks",
+      "mechanism": "ROT-WHOLE-TILE-IDENTITY",
+      "measurement": "All 160 physical tiles have distinct cyclic mask triples, and all 480 oriented triples are distinct. A rotated clone in an independently enumerated fixture produced 18 labelled placements in 9 two-element soft-score orbits. Pinning a labelled slot invalidated the exchange on all three remaining legal placements.",
+      "closure_reason": "There are no original physical label exchanges to quotient for the seam objective. The planted positive confirms cyclic offset handling and the pin control breaks the otherwise valid exchange. No production quotient is warranted.",
+      "reopen_trigger": "A changed physical dataset actually contains at least two identical cyclic seam-mask triples with compatible labelled placement domains, and the intended objective allows their exchange.",
+      "evidence": [
+        "docs/R35_TILE_CLASSES.json",
+        "bench_r35_tile_classes.py"
+      ]
     },
     {
       "id": 48,
