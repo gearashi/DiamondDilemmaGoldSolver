@@ -49,6 +49,27 @@ class IntegerCoreStore:
                         (self.scope,format(mask,'x'),format(value,'x')))
 
 
+def _validate_partition(problem, reference, packed_groups, required, outside, cap):
+    reference = set(reference)
+    required = set(required)
+    groups = [set(group) for group in packed_groups]
+    grouped = set().union(*groups)
+    if sum(map(len, groups)) != len(grouped):
+        raise ValueError("Reference loss groups must be disjoint.")
+    outside = tuple(outside)
+    if type(cap) is not int or cap < 0 or not grouped <= reference:
+        raise ValueError("Invalid reference loss budget or bond groups.")
+    if len(set(outside)) != len(outside) or set(outside) != reference - grouped - required:
+        raise ValueError("Outside bonds must cover exactly the ungrouped, nonmandatory reference bonds.")
+
+    sides = EndpointCuts(problem).sides
+    for a, b in reference | required:
+        if not (0 <= a < b < len(sides) and a//3 != b//3 and reverse_mask(sides[a][0]) == sides[b][0]):
+            raise ValueError("Expected a reciprocal between-tile physical bond.")
+
+    return required, groups, grouped, outside, sides
+
+
 class IntegerPatternFilter:
     """Test an exact outside error set under a physical-loss cap. Euler is omitted."""
 
@@ -58,22 +79,12 @@ class IntegerPatternFilter:
         except ImportError as exc:
             raise RuntimeError("Integer loss refinement requires OR-Tools in the full Python profile.") from exc
 
-        reference = set(reference)
-        required = set(required)
-        groups = [set(group) for group in packed_groups]
-        grouped = set().union(*groups)
-        outside = tuple(outside)
-        if type(cap) is not int or cap < 0 or not grouped <= reference:
-            raise ValueError("Invalid reference loss budget or bond groups.")
-        if len(set(outside)) != len(outside) or set(outside) != reference - grouped - required:
-            raise ValueError("Outside bonds must cover exactly the ungrouped, nonmandatory reference bonds.")
-
-        sides = EndpointCuts(problem).sides
-        for a, b in reference | required:
-            if not (0 <= a < b < len(sides) and a//3 != b//3 and reverse_mask(sides[a][0]) == sides[b][0]):
-                raise ValueError("Expected a reciprocal between-tile physical bond.")
+        required, groups, grouped, outside, sides = _validate_partition(
+            problem, reference, packed_groups, required, outside, cap)
 
         self.model, phases = signed_phase_model(problem, euler=False, pins={}, bonds=sorted(required))
+        self.phases = phases
+        self.last_witness = None
         self.solver = cp_model.CpSolver()
         self.solver.parameters.num_search_workers = 1
         self.cp = cp_model
@@ -216,7 +227,18 @@ class IntegerPatternFilter:
             self._learn(mask,value)
             return False
         if outcome in (self.cp.FEASIBLE, self.cp.OPTIMAL):
+            self.last_witness = None, sum(self.solver.value(x)<<i for i,x in enumerate(self.phases))
             return True
         if outcome == self.cp.UNKNOWN:
             raise TimeoutError("Integer pattern search returned UNKNOWN.")
         raise RuntimeError(f"Integer pattern search failed with status {outcome}.")
+
+
+def make_integer_filter(problem, reference, packed_groups, required, outside, cap, *, store=None, work=None):
+    """Select the exact finite phase model where the outside equations leave a small rank."""
+    from r35_integer_phases import EnumeratedPatternFilter, IntegerPhaseImages
+    _validate_partition(problem, reference, packed_groups, required, outside, cap)
+    image = IntegerPhaseImages.compile(problem, packed_groups, required, outside)
+    if image is not None:
+        return EnumeratedPatternFilter(image, outside, cap, store, work, _published_core(problem,outside))
+    return IntegerPatternFilter(problem, reference, packed_groups, required, outside, cap, store=store, work=work)

@@ -5,7 +5,7 @@ flip and at least one loss in each disjoint incompatible group is a lower bound.
 """
 from bisect import bisect_left
 from collections import Counter, defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from itertools import combinations
 import time
 from math import comb
@@ -58,6 +58,10 @@ class _SuffixTable:
     secondary: tuple | None
     split_buckets: dict
     order_key: str
+    weighted_reach: dict = field(default_factory=dict)
+    unions: dict = field(default_factory=dict)
+    memberships: dict = field(default_factory=dict)
+    allowed_ordinals: dict = field(default_factory=dict)
 
 
 class OutsideSyndromes:
@@ -68,7 +72,7 @@ class OutsideSyndromes:
         outside = tuple(sorted(set(reference) - set().union(*packed) - required))
         return packed, required, outside
 
-    def __init__(self, problem, reference, groups, required=(), *, reuse_suffix_tables=True, seek_ordered_tails=True, use_bucket_price=True, use_second_group=True, layout=None):
+    def __init__(self, problem, reference, groups, required=(), *, reuse_suffix_tables=True, seek_ordered_tails=True, use_bucket_price=True, use_second_group=True, layout=None, reuse_bucket_unions=True, prune_prefixes=True, pair_bounds=None, weighted_reach=False):
         self.groups, self.required, self.outside = (
             self.layout(reference, groups, required) if layout is None else layout)
         # This index belongs to this fixed reference and projection. Only the
@@ -81,6 +85,10 @@ class OutsideSyndromes:
         self.seek_ordered_tails = seek_ordered_tails
         self.use_bucket_price = use_bucket_price
         self.use_second_group = use_second_group
+        self.reuse_bucket_unions = reuse_bucket_unions
+        self.prune_prefixes = prune_prefixes
+        self.weighted_reach = weighted_reach
+        self._reachable = None
         self._suffix_cache = None
         self._catalogues = {}
         self._primary_index = None
@@ -121,6 +129,10 @@ class OutsideSyndromes:
                     mask ^= row
                     symbol ^= constant
             self._joint_bonds[bond] = mask << 1, symbol
+        if pair_bounds is None:
+            pair_bounds = 2 if len(self.outside) >= 32 and 2 <= len(self.groups) <= 12 else 0
+        if pair_bounds:
+            self.tables = self._paired_bounds(2 if pair_bounds is True else pair_bounds)
         self._joint_dependencies = tuple(dependencies)
         from r35_group_images import GroupImages
         self._joint_images = GroupImages.compile(self.groups, self.required, self._joint_bonds, len(self.outside))
@@ -142,6 +154,46 @@ class OutsideSyndromes:
             for i, col in enumerate(cols):
                 self._packed_cols[i] |= col << offset
             offset += width
+
+    def _paired_bounds(self, limit):
+        """Replace small disjoint pairs of individual charges by their common-phase price."""
+        def rank(rows):
+            pivots = {}
+            for value in rows:
+                while value:
+                    bit = value.bit_length()
+                    if bit not in pivots:
+                        pivots[bit] = value
+                        break
+                    value ^= pivots[bit]
+            return len(pivots)
+
+        rows = [[self._joint_bonds[bond][0] for bond in group] for group in self.groups]
+        ranks = list(map(rank,rows))
+        choices = []
+        for width in range(2,min(len(rows),limit)+1):
+            for indices in combinations(range(len(rows)),width):
+                size = sum(len(rows[i]) for i in indices)
+                if size>18 or any(ranks[i]==0 for i in indices):
+                    continue
+                shared = sum(ranks[i] for i in indices)-rank(v for i in indices for v in rows[i])
+                if shared:
+                    choices.append((-shared,size,indices))
+        used = set()
+        tables = []
+        for _,_,indices in sorted(choices):
+            if used.intersection(indices):
+                continue
+            rhs,cols,prices = self.compile([self.groups[i] for i in indices])
+            if len(prices)<=1:
+                continue
+            # Outside charges start at one per original physical group. Put
+            # the exact excess for this common-phase table on the same scale.
+            tables.append((rhs,cols,{key:cost-len(indices)+1 for key,cost in prices.items()}))
+            used.update(indices)
+            self.index_work['paired_group_prices'] += len(prices)
+            self.index_work['combined_size_'+str(len(indices))] += 1
+        return tables + [t for i,t in enumerate(self.tables) if i not in used]
 
     def compile(self, groups):
         bonds=[sorted(g-self.required) for g in groups]
@@ -290,12 +342,21 @@ class OutsideSyndromes:
         return bucket[first:]
 
     @staticmethod
-    def _secondary_tails(bucket, positions, prefix, prices, spare, last, stats, resume_tail=None):
-        """Emit surviving tails in the original first-anchor and tuple order."""
+    def _secondary_union(positions, prefix, prices, spare):
         selected = 0
         for value, ordinals in positions.items():
             if prices.get(value ^ prefix, spare+2) <= spare+1:
                 selected |= ordinals
+        return selected
+
+    @staticmethod
+    def _secondary_tails(bucket, positions, prefix, prices, spare, last, stats, resume_tail=None):
+        selected = OutsideSyndromes._secondary_union(positions,prefix,prices,spare)
+        return OutsideSyndromes._selected_tails(bucket,selected,last,stats,resume_tail)
+
+    @staticmethod
+    def _selected_tails(bucket, selected, last, stats, resume_tail=None, blocked=0):
+        """Intersect filters with the remaining ordinal interval before counting removed work."""
         if selected and last >= 0:
             cut = bisect_left(bucket, (last+1,))
             unowned = selected & ((1 << cut)-1)
@@ -304,12 +365,52 @@ class OutsideSyndromes:
         if selected and resume_tail is not None:
             cut = bisect_left(bucket,resume_tail)
             selected &= -(1 << cut)
+        if blocked:
+            removed = blocked & selected
+            stats['integer_core_suffixes_avoided'] += removed.bit_count()
+            selected ^= removed
         while selected:
             first = selected & -selected
             yield bucket[first.bit_length()-1]
             selected ^= first
 
-    def indexed(self, cap, errors, seconds=60, start=0, stop=None, *, accept_errors=None, reject_before_joint=None, cursor=None, checkpoint=None):
+    def _core_ordinals(self, table, key, bucket, prefix, last, length, verified):
+        blocked = 0
+        unavailable = (1 << (last+1))-1
+        for mask,ones in verified:
+            if prefix & mask & ~ones:
+                continue
+            needed = ones & ~prefix
+            if needed & unavailable or needed.bit_count()>length:
+                continue
+            membership = table.memberships.get(key)
+            if membership is None:
+                membership = {}
+                for ordinal,tail in enumerate(bucket):
+                    for i in tail:
+                        membership[i] = membership.get(i,0) | (1<<ordinal)
+                table.memberships[key] = membership
+                self.index_work['core_incidence_rows'] += len(bucket)
+            forbidden = mask ^ ones
+            cache_key = key,forbidden
+            eligible = table.allowed_ordinals.get(cache_key)
+            if eligible is None:
+                eligible = (1<<len(bucket))-1
+                for i, ordinals in membership.items():
+                    if forbidden >> i & 1:
+                        eligible &= ~ordinals
+                if len(table.allowed_ordinals)>=8192:
+                    table.allowed_ordinals.clear()
+                table.allowed_ordinals[cache_key] = eligible
+                self.index_work['core_forbidden_unions'] += 1
+            while eligible and needed:
+                bit = needed & -needed
+                eligible &= membership.get(bit.bit_length()-1,0)
+                needed ^= bit
+            blocked |= eligible
+        return blocked
+
+    def indexed(self, cap, errors, seconds=60, start=0, stop=None, *, accept_errors=None, reject_before_joint=None, verified_cores=None, cursor=None, checkpoint=None):
         """Index all suffixes of size at most two by their outside-only syndrome.
 
         The owned prefix ranks have a different scope from check()'s full-set ranks.
@@ -394,8 +495,26 @@ class OutsideSyndromes:
         previous = [-1]*prefix_size
         spare = cap - errors - len(self.groups)
         duration=time.monotonic()+seconds
-        for rank,prefix in ranked_combinations(n-length,prefix_size,start,end):
-            if rank%64==0 and time.monotonic()>=duration:return report('UNKNOWN',rank)
+        prefixes = ranked_combinations(n-length,prefix_size,start,end)
+        if self.prune_prefixes and n>=32 and 2<errors<=12 and end-start>=64:
+            from r35_suffix_reach import SuffixReachability
+            if self._reachable is None:
+                self._reachable = SuffixReachability(*self.outside_check)
+            companion = None
+            if self.weighted_reach and table.anchor is not None:
+                if not table.weighted_reach:
+                    outside_rhs, outside_columns = self.outside_check
+                    width = max([outside_rhs,*outside_columns]).bit_length()
+                    rhs, cols = table.anchor[:2]
+                    table.weighted_reach[0] = SuffixReachability(
+                        outside_rhs | (rhs << width),
+                        [a | (b << width) for a,b in zip(outside_columns,cols)],
+                        projected_bits=12, targets=(value << width for value,price in table.prices))
+                companion = table.weighted_reach[0]
+            if self._reachable.width or companion is not None:
+                prefixes = self._reachable.ranks(errors,start,end,duration,stats,companion)
+        for rank,prefix in prefixes:
+            if prefix is None or (rank%64==0 and time.monotonic()>=duration):return report('UNKNOWN',rank)
             stats['prefixes']+=1
             # Lexicographic successors retain most leading indices. Rebuild
             # cumulative states starting at the first changed index.
@@ -427,11 +546,27 @@ class OutsideSyndromes:
                 bucket = table.buckets.get(bucket_key, ())
                 available = spare - charge if prepaid else spare
                 split = table.split_buckets.get(bucket_key)
+                verified = verified_cores() if verified_cores is not None and refined and bucket else ()
+                blocked = (self._core_ordinals(table,bucket_key,bucket,
+                           sum(1<<i for i in prefix),last,length,verified) if verified else 0)
+                owned_last = last if self.seek_ordered_tails else -1
                 if split:
                     offset, mask = self._fields[id(table.secondary)]
                     prefix_value = (state >> offset) & mask
-                    bucket = self._secondary_tails(bucket, split, prefix_value, table.secondary[2],
-                                                   available, last if self.seek_ordered_tails else -1, stats, resume_tail)
+                    cost_key = (bucket_key,prefix_value,available)
+                    selected = table.unions.get(cost_key)
+                    if selected is None:
+                        selected = self._secondary_union(split,prefix_value,table.secondary[2],available)
+                        self.index_work['secondary_union_builds'] += 1
+                        if self.reuse_bucket_unions:
+                            if len(table.unions)>=4096:
+                                table.unions.clear()
+                            table.unions[cost_key] = selected
+                    else:
+                        self.index_work['secondary_union_reuses'] += 1
+                    bucket = self._selected_tails(bucket,selected,owned_last,stats,resume_tail,blocked)
+                elif blocked:
+                    bucket = self._selected_tails(bucket,(1<<len(bucket))-1,owned_last,stats,resume_tail,blocked)
                 else:
                     if self.seek_ordered_tails:
                         bucket = self._owned_tails(bucket, last, stats)

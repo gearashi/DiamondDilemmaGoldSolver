@@ -82,7 +82,8 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     layout = OutsideSyndromes.layout(ref, groups, inventory(problem).required)
     packed, required, outside = layout
     max_error = min(len(outside), max(0, upper-len(packed)))
-    indices = list(range(max_error+1)) if indices is None else list(indices)
+    all_layers_requested = indices is None
+    indices = list(range(max_error+1)) if all_layers_requested else list(indices)
     identity = [3,problem.fingerprint,sorted(ref),sorted(required),[sorted(c) for c in packed]]
     scope = digest([*identity,upper])
     # A plain negative page excludes every integer-feasible pattern inside it.
@@ -100,8 +101,8 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     def get_filter():
         nonlocal pattern_filter, excludes
         if pattern_filter is None:
-            from r33_gold_refine import IntegerCoreStore, IntegerPatternFilter
-            pattern_filter = IntegerPatternFilter(problem,ref,packed,required,outside,upper,
+            from r33_gold_refine import IntegerCoreStore, make_integer_filter
+            pattern_filter = make_integer_filter(problem,ref,packed,required,outside,upper,
                                                   store=IntegerCoreStore(db,scope),work=work)
             excludes = getattr(pattern_filter,"excludes",None)
         return pattern_filter
@@ -120,6 +121,20 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
 
     work = {}
     total = solved = pages = 0
+    witness_hits = None
+    identity_key = digest(identity)
+    from r35_loss_bound import CHECKED_LOWER_BOUND, REFERENCE_SCOPE, published_hit
+    if any(type(e) is not int or not 0 <= e <= len(outside) for e in indices) or type(upper) is not int or upper < 0:
+        raise ValueError('Invalid loss cap or outside-error layer')
+    if refine_integer and identity_key == REFERENCE_SCOPE and upper < CHECKED_LOWER_BOUND:
+        covered = sum(comb(len(outside)-min(e,2),max(0,e-2)) for e in indices)
+        return dict(status='INFEASIBLE',loss_budget=upper,checked_layers=indices,
+                    all_outside_layers=set(indices)>=set(range(max_error+1)),completed_prefixes=covered,
+                    total_prefixes=covered,new_pages=0,work={'reference_loss_certificate_reused':1},
+                    certified_minimum_loss=CHECKED_LOWER_BOUND)
+    public = published_hit(problem,ref,packed,required,outside,identity_key,upper,refine_integer)
+    if all_layers_requested and public is not None:
+        return dict(public,pages=0,work={})
     query = None
     from r34_rank_leases import RankedLeases, LostRankLease
     with closing(sqlite3.connect(db_path, timeout=30, uri=True, isolation_level=None)) as db, ExitStack() as renewal:
@@ -136,6 +151,13 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
             known = db.execute(hit_sql, (scope,errors)).fetchone()
             if known:
                 return dict(json.loads(known[0]), reused=True, pages=pages, work=work)
+            if witness_hits is None:
+                from r35_loss_witness import checked_hits
+                witness_hits = checked_hits(db,identity_key,problem,ref,packed,required,outside,upper,refine_integer)
+                if public is not None:
+                    witness_hits.setdefault(public['errors'],public)
+            if errors in witness_hits:
+                return dict(witness_hits[errors],pages=pages,work=work)
             current = _advance_saved(db, read_scopes, errors, 0)
             if current < count and not searched_caps:
                 higher = _higher_loss_scopes(db, identity, upper, len(ref), refine_integer)
@@ -220,7 +242,8 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
                 query.checkpoint_progress=checkpoint
                 try:
                     with leases.computing(claim):
-                        options = {'accept_errors':accept_errors, 'reject_before_joint':reject_before_joint} if refine_integer else {}
+                        options = {'accept_errors':accept_errors, 'reject_before_joint':reject_before_joint,
+                                   'verified_cores':lambda: getattr(pattern_filter,'verified',())} if refine_integer else {}
                         out=query.indexed(upper,errors,remaining,start=current,stop=end,**options)
                         for k,v in out['work'].items():work[k]=work.get(k,0)+v
                         with db:
@@ -229,6 +252,10 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
                             publish_partial(out['next_rank'],out.get('cursor'))
                             current=out['next_rank']
                             if out['status'] in ('PHASE_RELAXATION_FEASIBLE','INTEGER_RELAXATION_FEASIBLE'):
+                                witness = getattr(pattern_filter,'last_witness',None)
+                                if witness is not None and witness[1] is not None:
+                                    from r35_loss_witness import save_witness
+                                    save_witness(db,identity_key,witness[1])
                                 db.execute('INSERT OR IGNORE INTO r32_phase_hits VALUES(?,?,?)',(scope,errors,json.dumps(out)))
                                 saved=db.execute(hit_sql,(scope,errors)).fetchone()
                                 return dict(json.loads(saved[0]),pages=pages,work=work)
@@ -251,7 +278,7 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('mode',choices=('inventory','loss','dropout','master','geographic','poses','cores','loops','watch'))
+    parser.add_argument('mode',choices=('inventory','loss','integer-bound','dropout','master','geographic','poses','cores','loops','watch'))
     parser.add_argument('--tiles',default='data/tiles.json')
     parser.add_argument('--center',default='docs/R29_INCUMBENT.json')
     parser.add_argument('--backend',choices=('cpu','cuda'),default='cpu',help='Runtime for the checked placement watcher')
@@ -264,21 +291,18 @@ def main():
     parser.add_argument('--lower',type=int,default=0)
     parser.add_argument('--outside',type=int,help='In loss, outside phase errors. In geographic, exact physical bond losses outside the packed groups.')
     parser.add_argument('--page',type=int,default=8192)
-    parser.add_argument('--refine-integer',action='store_true',help='In loss mode, check signed integer inventories before accepting a phase pattern (requires OR-Tools).')
+    parser.add_argument('--refine-integer',action='store_true',help='In loss mode, check signed integer inventories before accepting a phase pattern (wide phase images use OR-Tools).')
     parser.add_argument('--stage',choices=('xor','integer','euler','mating'),default='integer')
     parser.add_argument('--branch',nargs='*',type=int,default=[])
     parser.add_argument('--limit',type=int,default=10000)
     parser.add_argument('--output')
     args=parser.parse_args()
-    if args.seconds<0 or args.limit<0 or args.page<1 or args.upper<0 or (args.mode!='loss' and args.seconds==0):
+    if args.seconds<0 or args.limit<0 or args.page<1 or args.upper<0 or (args.mode not in ('loss','integer-bound') and args.seconds==0):
         parser.error('Invalid budget')
     if args.backend!='cpu' and args.mode!='watch':parser.error('CUDA applies to watch mode')
     if args.refine_integer:
         if args.mode != 'loss':
             parser.error('--refine-integer is available in loss mode')
-        from importlib.util import find_spec
-        if find_spec('ortools') is None:
-            parser.error('--refine-integer requires OR-Tools from the full Python 3.12 setup')
     p=SearchProblem(read_json(args.tiles),physical_gold_support=True)
     case=read_json(args.case) if args.case else {}
     if 'domains' in case:
@@ -309,6 +333,12 @@ def main():
             indices=None if args.outside is None else [args.outside]
             out=run_syndrome(p,ref,groups,args.upper,indices,args.database,args.seconds,args.page,
                              refine_integer=args.refine_integer)
+        elif args.mode=='integer-bound':
+            if case.keys()-{'codes'} or args.outside is not None:
+                parser.error('integer-bound solves every outside pattern of one unrestricted reference')
+            from r35_loss_bound import global_integer
+            packed, mandatory, outside = OutsideSyndromes.layout(ref, groups, rules.required)
+            out = global_integer(p,ref,packed,mandatory,outside,args.upper,args.seconds)
         elif args.mode=='master':
             out=master(p,ref,cert,args.upper,args.seconds,req,forbid,ds)
         elif args.mode=='geographic':

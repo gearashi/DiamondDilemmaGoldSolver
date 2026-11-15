@@ -1,0 +1,562 @@
+[
+  {
+    "name": "center0",
+    "score": 205,
+    "outside": 118,
+    "overlap": 118,
+    "rows": [
+      {
+        "source": 47,
+        "available": 45,
+        "status": "False",
+        "seconds": 0.007695000007515773,
+        "certified": 31,
+        "work": {
+          "restarts": 1,
+          "conflicts": 10,
+          "decisions": 231,
+          "propagations": 7725
+        }
+      },
+      {
+        "source": 47,
+        "available": 45,
+        "status": "False",
+        "seconds": 0.018738900020252913,
+        "certified": 29,
+        "work": {
+          "restarts": 1,
+          "conflicts": 2,
+          "decisions": 1,
+          "propagations": 2196
+        }
+      },
+      {
+        "source": 45,
+        "available": 43,
+        "status": "False",
+        "seconds": 0.005238299985649064,
+        "certified": 34,
+        "work": {
+          "restarts": 1,
+          "conflicts": 49,
+          "decisions": 161,
+          "propagations": 12695
+        }
+      },
+      {
+        "source": 45,
+        "available": 43,
+        "status": "False",
+        "seconds": 0.0009121000184677541,
+        "certified": 34,
+        "work": {
+          "restarts": 1,
+          "conflicts": 7,
+          "decisions": 8,
+          "propagations": 6209
+        }
+      },
+      {
+        "source": 55,
+        "available": 53,
+        "status": "False",
+        "seconds": 0.0008669999951962382,
+        "certified": 8,
+        "work": {
+          "restarts": 1,
+          "conflicts": 7,
+          "decisions": 15,
+          "propagations": 5648
+        }
+      },
+      {
+        "source": 55,
+        "available": 53,
+        "status": "False",
+        "seconds": 0.0011187000200152397,
+        "certified": 34,
+        "work": {
+          "restarts": 1,
+          "conflicts": 6,
+          "decisions": 5,
+          "propagations": 7906
+        }
+      },
+      {
+        "source": 86,
+        "available": 84,
+        "status": "False",
+        "seconds": 0.015077600022777915,
+        "certified": 83,
+        "work": {
+          "restarts": 4,
+          "conflicts": 271,
+          "decisions": 429,
+          "propagations": 149492
+        }
+      },
+      {
+        "source": 73,
+        "available": 73,
+        "status": "False",
+        "seconds": 0.08510109997587278,
+        "certified": 73,
+        "work": {
+          "restarts": 18,
+          "conflicts": 1034,
+          "decisions": 1696,
+          "propagations": 852036
+        }
+      }
+    ]
+  },
+  {
+    "name": "center1",
+    "score": 207,
+    "outside": 120,
+    "overlap": 120,
+    "rows": [
+      {
+        "source": 47,
+        "available": 47,
+        "status": "False",
+        "seconds": 0.0013376999995671213,
+        "certified": 25,
+        "work": {
+          "restarts": 1,
+          "conflicts": 3,
+          "decisions": 10,
+          "propagations": 1300
+        }
+      },
+      {
+        "source": 47,
+        "available": 47,
+        "status": "False",
+        "seconds": 0.0006161000055726618,
+        "certified": 31,
+        "work": {
+          "restarts": 1,
+          "conflicts": 1,
+          "decisions": 0,
+          "propagations": 1400
+        }
+      },
+      {
+        "source": 45,
+        "available": 45,
+        "status": "False",
+        "seconds": 0.0017902000108733773,
+        "certified": 36,
+        "work": {
+          "restarts": 1,
+          "conflicts": 4,
+          "decisions": 72,
+          "propagations": 5408
+        }
+      },
+      {
+        "source": 45,
+        "available": 45,
+        "status": "False",
+        "seconds": 0.0009803000139072537,
+        "certified": 36,
+        "work": {
+          "restarts": 1,
+          "conflicts": 1,
+          "decisions": 0,
+          "propagations": 2676
+        }
+      },
+      {
+        "source": 55,
+        "available": 55,
+        "status": "False",
+        "seconds": 0.002356100012548268,
+        "certified": 10,
+        "work": {
+          "restarts": 1,
+          "conflicts": 7,
+          "decisions": 7,
+          "propagations": 2799
+        }
+      },
+      {
+        "source": 55,
+        "available": 55,
+        "status": "False",
+        "seconds": 0.0016342999879270792,
+        "certified": 44,
+        "work": {
+          "restarts": 1,
+          "conflicts": 1,
+          "decisions": 0,
+          "propagations": 3348
+        }
+      },
+      {
+        "source": 86,
+        "available": 86,
+        "status": "False",
+        "seconds": 0.011908500018762425,
+        "certified": 85,
+        "work": {
+          "restarts": 1,
+          "conflicts": 200,
+          "decisions": 304,
+          "propagations": 98554
+        }
+      },
+      {
+        "source": 73,
+        "available": 73,
+        "status": "False",
+        "seconds": 0.08937269999296404,
+        "certified": 73,
+        "work": {
+          "restarts": 18,
+          "conflicts": 1047,
+          "decisions": 1677,
+          "propagations": 867978
+        }
+      }
+    ]
+  },
+  {
+    "name": "center2",
+    "score": 206,
+    "outside": 136,
+    "overlap": 119,
+    "rows": [
+      {
+        "source": 47,
+        "available": 46,
+        "status": "False",
+        "seconds": 0.0023421999940183014,
+        "certified": 29,
+        "work": {
+          "restarts": 1,
+          "conflicts": 14,
+          "decisions": 97,
+          "propagations": 6754
+        }
+      },
+      {
+        "source": 47,
+        "available": 46,
+        "status": "False",
+        "seconds": 0.0006685999978799373,
+        "certified": 29,
+        "work": {
+          "restarts": 1,
+          "conflicts": 2,
+          "decisions": 1,
+          "propagations": 2571
+        }
+      },
+      {
+        "source": 45,
+        "available": 44,
+        "status": "False",
+        "seconds": 0.0011705999786499888,
+        "certified": 34,
+        "work": {
+          "restarts": 1,
+          "conflicts": 4,
+          "decisions": 25,
+          "propagations": 4843
+        }
+      },
+      {
+        "source": 45,
+        "available": 44,
+        "status": "False",
+        "seconds": 0.0008207999926526099,
+        "certified": 34,
+        "work": {
+          "restarts": 1,
+          "conflicts": 4,
+          "decisions": 3,
+          "propagations": 157
+        }
+      },
+      {
+        "source": 55,
+        "available": 54,
+        "status": "False",
+        "seconds": 0.001316600013524294,
+        "certified": 44,
+        "work": {
+          "restarts": 1,
+          "conflicts": 16,
+          "decisions": 22,
+          "propagations": 6049
+        }
+      },
+      {
+        "source": 55,
+        "available": 54,
+        "status": "False",
+        "seconds": 0.0007045000093057752,
+        "certified": 35,
+        "work": {
+          "restarts": 1,
+          "conflicts": 3,
+          "decisions": 7,
+          "propagations": 3845
+        }
+      },
+      {
+        "source": 86,
+        "available": 85,
+        "status": "False",
+        "seconds": 0.01758690000860952,
+        "certified": 83,
+        "work": {
+          "restarts": 1,
+          "conflicts": 268,
+          "decisions": 381,
+          "propagations": 140270
+        }
+      },
+      {
+        "source": 73,
+        "available": 73,
+        "status": "False",
+        "seconds": 0.10641579999355599,
+        "certified": 73,
+        "work": {
+          "restarts": 19,
+          "conflicts": 1047,
+          "decisions": 1656,
+          "propagations": 905390
+        }
+      }
+    ]
+  },
+  {
+    "name": "independent0",
+    "score": 183,
+    "outside": 172,
+    "overlap": 9,
+    "rows": [
+      {
+        "source": 47,
+        "available": 4,
+        "status": "True",
+        "seconds": 0.009795499994652346,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 53,
+          "decisions": 301,
+          "propagations": 48959
+        }
+      },
+      {
+        "source": 47,
+        "available": 4,
+        "status": "True",
+        "seconds": 0.001770899980328977,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 0,
+          "decisions": 78,
+          "propagations": 6904
+        }
+      },
+      {
+        "source": 45,
+        "available": 3,
+        "status": "True",
+        "seconds": 0.0017174000095110387,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 0,
+          "decisions": 82,
+          "propagations": 6904
+        }
+      },
+      {
+        "source": 45,
+        "available": 3,
+        "status": "True",
+        "seconds": 0.0021367000008467585,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 0,
+          "decisions": 83,
+          "propagations": 6904
+        }
+      },
+      {
+        "source": 55,
+        "available": 4,
+        "status": "True",
+        "seconds": 0.001632600004086271,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 1,
+          "decisions": 85,
+          "propagations": 7294
+        }
+      },
+      {
+        "source": 55,
+        "available": 4,
+        "status": "True",
+        "seconds": 0.001718400017125532,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 0,
+          "decisions": 89,
+          "propagations": 6904
+        }
+      },
+      {
+        "source": 86,
+        "available": 6,
+        "status": "True",
+        "seconds": 0.0019813000108115375,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 5,
+          "decisions": 126,
+          "propagations": 9734
+        }
+      },
+      {
+        "source": 73,
+        "available": 6,
+        "status": "True",
+        "seconds": 0.0016924999945331365,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 1,
+          "decisions": 78,
+          "propagations": 7106
+        }
+      }
+    ]
+  },
+  {
+    "name": "independent1",
+    "score": 188,
+    "outside": 176,
+    "overlap": 18,
+    "rows": [
+      {
+        "source": 47,
+        "available": 9,
+        "status": "True",
+        "seconds": 0.004671700007747859,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 28,
+          "decisions": 326,
+          "propagations": 32261
+        }
+      },
+      {
+        "source": 47,
+        "available": 9,
+        "status": "True",
+        "seconds": 0.0017059000092558563,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 0,
+          "decisions": 105,
+          "propagations": 6908
+        }
+      },
+      {
+        "source": 45,
+        "available": 9,
+        "status": "True",
+        "seconds": 0.009767100011231378,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 165,
+          "decisions": 417,
+          "propagations": 77522
+        }
+      },
+      {
+        "source": 45,
+        "available": 9,
+        "status": "True",
+        "seconds": 0.0014284999924711883,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 0,
+          "decisions": 97,
+          "propagations": 6908
+        }
+      },
+      {
+        "source": 55,
+        "available": 8,
+        "status": "True",
+        "seconds": 0.0015332999755628407,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 3,
+          "decisions": 103,
+          "propagations": 8221
+        }
+      },
+      {
+        "source": 55,
+        "available": 10,
+        "status": "True",
+        "seconds": 0.001667400007136166,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 4,
+          "decisions": 90,
+          "propagations": 7829
+        }
+      },
+      {
+        "source": 86,
+        "available": 12,
+        "status": "True",
+        "seconds": 0.0013882999774068594,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 2,
+          "decisions": 97,
+          "propagations": 6928
+        }
+      },
+      {
+        "source": 73,
+        "available": 10,
+        "status": "True",
+        "seconds": 0.0018304000259377062,
+        "certified": null,
+        "work": {
+          "restarts": 1,
+          "conflicts": 15,
+          "decisions": 136,
+          "propagations": 11638
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "cap": 14,
+    "errors": 4,
+    "start": 0,
+    "stop": 6903,
+    "weighted": false,
+    "prefix_work": 5139,
+    "joint": 14,
+    "outside_states": 474,
+    "weighted_states": 0
+  },
+  {
+    "cap": 14,
+    "errors": 4,
+    "start": 0,
+    "stop": 6903,
+    "weighted": true,
+    "prefix_work": 5138,
+    "joint": 14,
+    "outside_states": 474,
+    "weighted_states": 474
+  },
+  {
+    "cap": 16,
+    "errors": 6,
+    "start": 7044800,
+    "stop": 7052992,
+    "weighted": false,
+    "prefix_work": 4693,
+    "joint": 3,
+    "outside_states": 705,
+    "weighted_states": 0
+  },
+  {
+    "cap": 16,
+    "errors": 6,
+    "start": 7044800,
+    "stop": 7052992,
+    "weighted": true,
+    "prefix_work": 4693,
+    "joint": 3,
+    "outside_states": 705,
+    "weighted_states": 705
+  },
+  {
+    "cap": 17,
+    "errors": 4,
+    "start": 0,
+    "stop": 6903,
+    "weighted": false,
+    "prefix_work": 5139,
+    "joint": 1103,
+    "outside_states": 474,
+    "weighted_states": 0
+  },
+  {
+    "cap": 17,
+    "errors": 4,
+    "start": 0,
+    "stop": 6903,
+    "weighted": true,
+    "prefix_work": 5139,
+    "joint": 1103,
+    "outside_states": 474,
+    "weighted_states": 474
+  },
+  {
+    "cap": 17,
+    "errors": 5,
+    "start": 0,
+    "stop": 65536,
+    "weighted": false,
+    "prefix_work": 47614,
+    "joint": 1860,
+    "outside_states": 590,
+    "weighted_states": 0
+  },
+  {
+    "cap": 17,
+    "errors": 5,
+    "start": 0,
+    "stop": 65536,
+    "weighted": true,
+    "prefix_work": 47614,
+    "joint": 1860,
+    "outside_states": 590,
+    "weighted_states": 590
+  },
+  {
+    "cap": 18,
+    "errors": 5,
+    "start": 33361,
+    "stop": 33617,
+    "weighted": false,
+    "prefix_work": 232,
+    "joint": 173,
+    "outside_states": 590,
+    "weighted_states": 0
+  },
+  {
+    "cap": 18,
+    "errors": 5,
+    "start": 33361,
+    "stop": 33617,
+    "weighted": true,
+    "prefix_work": 232,
+    "joint": 173,
+    "outside_states": 590,
+    "weighted_states": 590
+  }
+]

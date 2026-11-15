@@ -1,0 +1,216 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "checked_cores": 6,
+  "cases": [
+    {
+      "cap": 14,
+      "errors": 4,
+      "start": 0,
+      "stop": 6903,
+      "arms": {
+        "cold-unions": {
+          "work": {
+            "suffix_rows": 7140,
+            "prefixes": 6903,
+            "unowned_tail_visits_skipped": 284912,
+            "bucket_prices_reused": 3456,
+            "indexed_tails": 52859,
+            "joint_queries": 58
+          },
+          "index_work": {
+            "catalogue_rows": 7140,
+            "primary_rows": 7140,
+            "secondary_rows": 6650,
+            "secondary_union_builds": 6426
+          },
+          "phase_arrivals": []
+        },
+        "shared-unions": {
+          "work": {
+            "suffix_rows": 7140,
+            "prefixes": 6903,
+            "unowned_tail_visits_skipped": 284912,
+            "bucket_prices_reused": 3456,
+            "indexed_tails": 52859,
+            "joint_queries": 58
+          },
+          "index_work": {
+            "catalogue_rows": 7140,
+            "primary_rows": 7140,
+            "secondary_rows": 6650,
+            "secondary_union_builds": 1728,
+            "secondary_union_reuses": 4698
+          },
+          "phase_arrivals": []
+        }
+      }
+    },
+    {
+      "cap": 16,
+      "errors": 6,
+      "start": 7044800,
+      "stop": 7052992,
+      "arms": {
+        "cold-unions": {
+          "work": {
+            "suffix_rows": 7140,
+            "prefixes": 8192,
+            "unowned_tail_visits_skipped": 203209,
+            "bucket_prices_reused": 1596,
+            "indexed_tails": 7124,
+            "joint_queries": 5
+          },
+          "index_work": {
+            "catalogue_rows": 7140,
+            "primary_rows": 7140,
+            "secondary_rows": 6650,
+            "secondary_union_builds": 7130
+          },
+          "phase_arrivals": []
+        },
+        "shared-unions": {
+          "work": {
+            "suffix_rows": 7140,
+            "prefixes": 8192,
+            "unowned_tail_visits_skipped": 203209,
+            "bucket_prices_reused": 1596,
+            "indexed_tails": 7124,
+            "joint_queries": 5
+          },
+          "index_work": {
+            "catalogue_rows": 7140,
+            "primary_rows": 7140,
+            "secondary_rows": 6650,
+            "secondary_union_builds": 2658,
+            "secondary_union_reuses": 4472
+          },
+          "phase_arrivals": []
+        }
+      }
+    },
+    {
+      "cap": 17,
+      "errors": 4,
+      "start": 0,
+      "stop": 6903,
+      "arms": {
+        "cold-unions": {
+          "work": {
+            "suffix_rows": 7140,
+            "prefixes": 6903,
+            "unowned_tail_visits_skipped": 5769437,
+            "bucket_prices_reused": 138364,
+            "indexed_tails": 1090000,
+            "joint_queries": 4550,
+            "integer_core_joint_queries_avoided": 76
+          },
+          "index_work": {
+            "catalogue_rows": 7140,
+            "primary_rows": 7140
+          },
+          "phase_arrivals": []
+        },
+        "shared-unions": {
+          "work": {
+            "suffix_rows": 7140,
+            "prefixes": 6903,
+            "unowned_tail_visits_skipped": 5769437,
+            "bucket_prices_reused": 138364,
+            "indexed_tails": 1090000,
+            "joint_queries": 4550,
+            "integer_core_joint_queries_avoided": 76
+          },
+          "index_work": {
+            "catalogue_rows": 7140,
+            "primary_rows": 7140
+          },
+          "phase_arrivals": []
+        },
+        "early-cores": {
+          "work": {
+            "suffix_rows": 7140,
+            "prefixes": 6903,
+            "unowned_tail_visits_skipped": 5769437,
+            "bucket_prices_reused": 138339,
+            "indexed_tails": 1088938,
+            "joint_queries": 4550,
+            "integer_core_suffixes_avoided": 1062
+          },
+          "index_work": {
+            "catalogue_rows": 7140,
+            "primary_rows": 7140,
+            "core_incidence_rows": 5801,
+            "core_forbidden_unions": 1626
+          },
+          "phase_arrivals": []
+        }
+      }
+    },
+    {
+      "cap": 17,
+      "errors": 5,
+      "start": 0,
+      "stop": 65536,
+      "arms": {
+        "cold-unions": {
+          "work": {
+            "suffix_rows": 7140,
+            "prefixes": 65536,
+            "bucket_prices_reused": 296793,
+            "indexed_tails": 3400598,
+            "unowned_tail_visits_skipped": 21006928,
+            "joint_queries": 10873,
+            "integer_core_joint_queries_avoided": 208
+          },
+          "index_work": {
+            "catalogue_rows": 7140,
+            "primary_rows": 7140,
+            "secondary_rows": 6098,
+            "secondary_union_builds": 735641
+          },
+          "phase_arrivals": []
+        },
+        "shared-unions": {
+          "work": {
+            "suffix_rows": 7140,
+            "prefixes": 65536,
+            "bucket_prices_reused": 296793,
+            "indexed_tails": 3400598,
+            "unowned_tail_visits_skipped": 21006928,
+            "joint_queries": 10873,
+            "integer_core_joint_queries_avoided": 208
+          },
+          "index_work": {
+            "catalogue_rows": 7140,
+            "primary_rows": 7140,
+            "secondary_rows": 6098,
+            "secondary_union_builds": 213936,
+            "secondary_union_reuses": 521705
+          },
+          "phase_arrivals": []
+        },
+        "early-cores": {
+          "work": {
+            "suffix_rows": 7140,
+            "prefixes": 65536,
+            "bucket_prices_reused": 296643,
+            "indexed_tails": 3388797,
+            "unowned_tail_visits_skipped": 21006928,
+            "integer_core_suffixes_avoided": 11801,
+            "joint_queries": 10873
+          },
+          "index_work": {
+            "catalogue_rows": 7140,
+            "primary_rows": 7140,
+            "secondary_rows": 6098,
+            "core_incidence_rows": 6589,
+            "core_forbidden_unions": 1045,
+            "secondary_union_builds": 213936,
+            "secondary_union_reuses": 521705
+          },
+          "phase_arrivals": []
+        }
+      }
+    }
+  ]
+}

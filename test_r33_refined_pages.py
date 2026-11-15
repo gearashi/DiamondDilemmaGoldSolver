@@ -20,14 +20,14 @@ class RefinedPageTests(unittest.TestCase):
             def reject_first(indices, deadline):
                 calls.append(tuple(sorted(indices)))
                 return len(calls)>1
-            with patch('r33_gold_refine.IntegerPatternFilter', return_value=reject_first):
+            with patch('r33_gold_refine.make_integer_filter', return_value=reject_first):
                 second = search(True)
             self.assertEqual((first['status'],second['status']),('PHASE_RELAXATION_FEASIBLE','INTEGER_RELAXATION_FEASIBLE'))
             self.assertEqual(first['next_rank'],second['next_rank'])
             self.assertNotEqual(first['outside_errors'],second['outside_errors'])
             self.assertEqual(second['work']['integer_checks'],2)
             self.assertEqual(second['work']['integer_rejections'],1)
-            with patch('r33_gold_refine.IntegerPatternFilter', side_effect=AssertionError):
+            with patch('r33_gold_refine.make_integer_filter', side_effect=AssertionError):
                 for flag, hit in ((False,first),(True,second)):
                     saved = search(flag)
                     self.assertEqual(list(map(tuple,saved['outside_errors'])),list(map(tuple,hit['outside_errors'])))
@@ -39,13 +39,13 @@ class RefinedPageTests(unittest.TestCase):
         with TemporaryDirectory() as tmp:
             db = Path(tmp)/'loss.sqlite'
             run_syndrome(p,ref,groups,9,[3],db,0,page=1)
-            with patch('r33_gold_refine.IntegerPatternFilter',side_effect=AssertionError):
+            with patch('r33_gold_refine.make_integer_filter',side_effect=AssertionError):
                 warm = run_syndrome(p,ref,groups,9,[3],db,0,page=17,refine_integer=True)
             self.assertEqual((warm['work'],warm['new_pages']),({},0))
-            with patch('r33_gold_refine.IntegerPatternFilter', return_value=self.raise_timeout):
+            with patch('r33_gold_refine.make_integer_filter', return_value=self.raise_timeout):
                 interrupted = run_syndrome(p,ref,groups,9,[4],db,0,page=2,refine_integer=True)
             self.assertEqual((interrupted['status'],interrupted['next_rank']),('UNKNOWN',0))
-            with patch('r33_gold_refine.IntegerPatternFilter', return_value=lambda *_:False):
+            with patch('r33_gold_refine.make_integer_filter', return_value=lambda *_:False):
                 rejected = run_syndrome(p,ref,groups,9,[4],db,0,page=3,refine_integer=True)
             self.assertEqual(rejected['status'],'INFEASIBLE')
             self.assertEqual(rejected['work']['integer_rejections'],15)

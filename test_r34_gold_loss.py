@@ -110,7 +110,7 @@ class CrossBudgetPageTests(TestCase):
         p,ref,g,q = fixture()
         with TemporaryDirectory() as folder:
             path = Path(folder)/"loss.sqlite"
-            with patch("r33_gold_refine.IntegerPatternFilter",return_value=lambda *_:False):
+            with patch("r33_gold_refine.make_integer_filter",return_value=lambda *_:False):
                 refined = run_syndrome(p,ref,g,100,[4],path,0,1,refine_integer=True)
                 self.assertEqual(refined["status"],"INFEASIBLE")
             with patch.object(OutsideSyndromes,"__init__",side_effect=AssertionError):

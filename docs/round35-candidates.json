@@ -551,8 +551,11 @@
       "source_id": 2,
       "title": "Exact suffix block filtering with verified integer cores",
       "proposal_and_validation": "The retained R34 core filter sees a full error mask just before a joint call. At a fixed prefix and bucket, compile each already-verified coreâ€™s required-one and required-zero masks into eligible suffix ordinals, subtract its mask before iterating tails, and OR together overlapping exclusions. A core can rule out an entire prefix only if *every* still-owned suffix is covered. Use the prefixâ€™s actual allowed indices, exact suffix cardinality and the first-anchor order to avoid counting already-filtered tails twice. Measure eliminated iterations in the original 17/four and 17/five traces, including the seven observed arrivals and the 73-literal checked core. A dormant or UNKNOWN hint cannot remove ordinals. Sparse-core and no-core controls bound the overhead.",
-      "state": "in progress",
-      "decision_changing_followups": "Compare actual retained integer core rejection before ordinal iteration against the checked per-tail filter."
+      "state": "keep with exact scope",
+      "decision_changing_followups": "Compare actual retained integer core rejection before ordinal iteration against the checked per-tail filter.",
+      "evidence": [
+        "docs/R35_SUFFIX_CORES.json"
+      ]
     },
     {
       "id": 50,
@@ -560,7 +563,12 @@
       "source_id": 3,
       "title": "Reuse residual bucket unions and exact paired-group bounds",
       "proposal_and_validation": "`_secondary_tails` rebuilds the OR of allowed ordinal masks on every call. Measure repeats by (first bucket, exact secondary residual, available slack) before proposing a bounded memo. Apply the lexicographic-owner/resume cut only after that reuse. Separately, `compile(groups)` supports multiple disjoint groups but production builds single-group tables. Compile low-rank *pairs* which share remaining phase variables and use their joint minimum in place of the two single charges. At a prefix select a disjoint family of pairs or take the maximum over alternative admissible bounds. Never add overlapping bounds twice. Try a triple only where the pair has demonstrable additional exclusions and an acceptable table rank. Report surviving joint calls, stopped-prefix/tail work and table bytes with all current R34 filters enabled.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "evidence": [
+        "docs/R35_PAIR_ANCHORS.json",
+        "docs/R35_GROUP_WIDTHS.json",
+        "docs/R35_SUFFIX_CORES.json"
+      ]
     },
     {
       "id": 51,
@@ -568,7 +576,11 @@
       "source_id": 4,
       "title": "Prune a whole ranked prefix subtree by exact suffix reachability",
       "proposal_and_validation": "Build a backward table on (remaining position, exact number left, projected outside XOR) for a small set of dependent checks; only expand a prefix when at least one admissible suffix can hit the required syndrome. Choose informative projections from held-out column ranks. Compare a full bitset for modest rank against sparse reachable states, partitioned into blocks with conservative bounds otherwise. Add a group-price bound to reachable states only when an independent finite scan agrees. An unreachable subtree can map to a contiguous lexicographic interval, so it can advance the existing lease without flattening all prefixes. Test gaps beginning in the middle of the subtree, cursor reopens, high-rank/no-prune controls, and an exhaustive count of every outside-error set on tiny boards.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "evidence": [
+        "docs/R35_LOSS_REACH.json",
+        "docs/R35_WEIGHTED_PREFIXES.json"
+      ]
     },
     {
       "id": 52,
@@ -576,7 +588,10 @@
       "source_id": 5,
       "title": "Amortize the integer relaxation across new full patterns",
       "proposal_and_validation": "The current filter preserves the CP-SAT model structure, but each undecided outside pattern invokes another native solve. Measure identical active assumptions, propagated equalities and integer solves in the 17-loss streams before coding. Compare a persistent incremental SAT or pseudo-Boolean encoding of this *specific* signed-inventory and reference-budget model under fully matched assumptions, with independently checked CP-SAT witnesses/negatives on finite scopes. Cache checked feasible assignments for cross-pattern reuse only when all physical bond assumptions and budget still validate. Repeated UNKNOWN on the same real pattern can justify splitting on remaining independent phase coordinates and committing disjoint completed children. Pricing/status from a partial child cannot exclude its parent.",
-      "state": "open"
+      "state": "in progress",
+      "evidence": [
+        "docs/R35_INTEGER_LOSS.json"
+      ]
     },
     {
       "id": 53,
@@ -584,7 +599,10 @@
       "source_id": 6,
       "title": "Transport unconditional integer-core evidence between references",
       "proposal_and_validation": "Native cores currently belong to a budget/model-dependent scope. Besides the one published core, test whether learned contradictions still hold in the relaxed model containing only the puzzleâ€™s unconditional integer inventory plus a small set of physical bond equalities/inequalities. Encode by ordered physical side pairs and required polarity, replay the relaxed oracle first, and reuse across another outside layout only when the relevant physical pairs are present with the same semantics. Keep cap-specific proofs scoped. Measure genuinely different reference/layout hits, independent native replays and amortized calls. If the available references share no applicable verified proof, close this transfer path for current inputs.",
-      "state": "open"
+      "state": "in progress",
+      "evidence": [
+        "docs/R35_LOSS_TRANSFERS.json"
+      ]
     },
     {
       "id": 54,
@@ -718,7 +736,7 @@
       "source_id": 12,
       "title": "Reuse checked positive witnesses across compatible caps",
       "proposal_and_validation": "Existing cross-cap replay inherited completed *negative* intervals. A joint or integer witness with a reconstructed concrete assignment and verified attained loss can also answer a looser cap on the same reference, outside error count, required pairs and model. Phase/integer status alone in a legacy hit is insufficient: reconstruct and recheck the assignment once or treat it as a hint. Derive a physical drop set consistent with every compulsory group and pin, and verify requested rank ownership. A positive outside a requested page cannot mark the page searched. Screen actual replay requests before persisting a bound table; test smaller caps, directions of phase/integer implication and multiple hits sharing one prefix.",
-      "state": "open"
+      "state": "in progress"
     },
     {
       "id": 60,
@@ -726,7 +744,7 @@
       "source_id": 13,
       "title": "Alternate disjoint contradiction packings as parallel bounds on the same assignment",
       "proposal_and_validation": "A reference may have more checked proper-loop/inventory conflicts than fit the one maximized disjoint packing. For an outside pattern in the *primary* rank space, project a secondary disjoint packing onto the *same* physical bond variables or obtain an independent compatible lower bound over its unpinned bonds. Take the maximum of valid lower bounds, never add overlapping groups or equate the two layoutsâ€™ outside counts. Screen alternative packings for structural/effective diversity first. Close this candidate when current certificates force one useful packing or none of the new projections tightens an original joint call. This complements the physical workstream transporting certified cardinalities into geographic domains.",
-      "state": "open"
+      "state": "in progress"
     },
     {
       "id": 61,

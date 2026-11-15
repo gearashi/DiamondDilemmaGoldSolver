@@ -1,0 +1,397 @@
+[
+  {
+    "cap": 14,
+    "errors": 4,
+    "start": 0,
+    "stop": 6903,
+    "paired": false,
+    "hits": [],
+    "work": {
+      "suffix_rows": 7140,
+      "prefixes": 5139,
+      "unowned_tail_visits_skipped": 268688,
+      "bucket_prices_reused": 3456,
+      "indexed_tails": 52859,
+      "joint_queries": 58,
+      "unreachable_prefixes": 1764
+    },
+    "index_work": {
+      "catalogue_rows": 7140,
+      "primary_rows": 7140,
+      "secondary_rows": 6650,
+      "secondary_union_builds": 1323,
+      "secondary_union_reuses": 3712
+    }
+  },
+  {
+    "cap": 14,
+    "errors": 4,
+    "start": 0,
+    "stop": 6903,
+    "paired": true,
+    "hits": [],
+    "work": {
+      "suffix_rows": 7140,
+      "prefixes": 5139,
+      "bucket_prices_reused": 8006,
+      "indexed_tails": 12092,
+      "unowned_tail_visits_skipped": 70676,
+      "joint_queries": 14,
+      "unreachable_prefixes": 1764
+    },
+    "index_work": {
+      "paired_group_prices": 18688,
+      "catalogue_rows": 7140,
+      "primary_rows": 7140,
+      "secondary_rows": 3576,
+      "secondary_union_builds": 2195,
+      "secondary_union_reuses": 3329
+    }
+  },
+  {
+    "cap": 15,
+    "errors": 5,
+    "start": 60000,
+    "stop": 68192,
+    "paired": false,
+    "hits": [],
+    "work": {
+      "suffix_rows": 7140,
+      "prefixes": 5860,
+      "unowned_tail_visits_skipped": 496924,
+      "bucket_prices_reused": 12695,
+      "indexed_tails": 53553,
+      "unreachable_prefixes": 2332,
+      "joint_queries": 48
+    },
+    "index_work": {
+      "catalogue_rows": 7140,
+      "primary_rows": 7140,
+      "secondary_rows": 5164,
+      "secondary_union_builds": 2972,
+      "secondary_union_reuses": 18210
+    }
+  },
+  {
+    "cap": 15,
+    "errors": 5,
+    "start": 60000,
+    "stop": 68192,
+    "paired": true,
+    "hits": [],
+    "work": {
+      "suffix_rows": 7140,
+      "prefixes": 5860,
+      "unowned_tail_visits_skipped": 137817,
+      "bucket_prices_reused": 12742,
+      "indexed_tails": 19037,
+      "unreachable_prefixes": 2332,
+      "joint_queries": 6
+    },
+    "index_work": {
+      "paired_group_prices": 18688,
+      "catalogue_rows": 7140,
+      "primary_rows": 7140,
+      "secondary_rows": 3576,
+      "secondary_union_builds": 4268,
+      "secondary_union_reuses": 7559
+    }
+  },
+  {
+    "cap": 16,
+    "errors": 6,
+    "start": 7044800,
+    "stop": 7052992,
+    "paired": false,
+    "hits": [],
+    "work": {
+      "suffix_rows": 7140,
+      "unreachable_prefixes": 3499,
+      "prefixes": 4693,
+      "unowned_tail_visits_skipped": 181297,
+      "bucket_prices_reused": 1596,
+      "indexed_tails": 7124,
+      "joint_queries": 5
+    },
+    "index_work": {
+      "catalogue_rows": 7140,
+      "primary_rows": 7140,
+      "secondary_rows": 6650,
+      "secondary_union_builds": 1589,
+      "secondary_union_reuses": 2983
+    }
+  },
+  {
+    "cap": 16,
+    "errors": 6,
+    "start": 7044800,
+    "stop": 7052992,
+    "paired": true,
+    "hits": [],
+    "work": {
+      "suffix_rows": 7140,
+      "unreachable_prefixes": 3499,
+      "prefixes": 4693,
+      "unowned_tail_visits_skipped": 85373,
+      "bucket_prices_reused": 2561,
+      "indexed_tails": 4005,
+      "joint_queries": 3
+    },
+    "index_work": {
+      "paired_group_prices": 18688,
+      "catalogue_rows": 7140,
+      "primary_rows": 7140,
+      "secondary_rows": 4637,
+      "secondary_union_builds": 8382,
+      "secondary_union_reuses": 7285
+    }
+  },
+  {
+    "cap": 17,
+    "errors": 4,
+    "start": 0,
+    "stop": 6903,
+    "paired": false,
+    "hits": [
+      [
+        7,
+        84,
+        109,
+        117
+      ],
+      [
+        11,
+        81,
+        92,
+        105
+      ],
+      [
+        79,
+        84,
+        109,
+        117
+      ]
+    ],
+    "work": {
+      "suffix_rows": 7140,
+      "prefixes": 5139,
+      "unowned_tail_visits_skipped": 5460905,
+      "bucket_prices_reused": 138364,
+      "indexed_tails": 1090000,
+      "joint_queries": 4626,
+      "unreachable_prefixes": 1764,
+      "integer_checks": 3,
+      "integer_rejections": 3
+    },
+    "index_work": {
+      "catalogue_rows": 7140,
+      "primary_rows": 7140
+    }
+  },
+  {
+    "cap": 17,
+    "errors": 4,
+    "start": 0,
+    "stop": 6903,
+    "paired": true,
+    "hits": [
+      [
+        7,
+        84,
+        109,
+        117
+      ],
+      [
+        11,
+        81,
+        92,
+        105
+      ],
+      [
+        79,
+        84,
+        109,
+        117
+      ]
+    ],
+    "work": {
+      "suffix_rows": 7140,
+      "prefixes": 5139,
+      "bucket_prices_reused": 128689,
+      "indexed_tails": 209143,
+      "unowned_tail_visits_skipped": 1116008,
+      "joint_queries": 1103,
+      "unreachable_prefixes": 1764,
+      "integer_checks": 3,
+      "integer_rejections": 3
+    },
+    "index_work": {
+      "paired_group_prices": 18688,
+      "catalogue_rows": 7140,
+      "primary_rows": 7140,
+      "secondary_rows": 3576,
+      "secondary_union_builds": 36729,
+      "secondary_union_reuses": 52449
+    }
+  },
+  {
+    "cap": 17,
+    "errors": 5,
+    "start": 0,
+    "stop": 65536,
+    "paired": false,
+    "hits": [
+      [
+        1,
+        11,
+        55,
+        65,
+        102
+      ],
+      [
+        2,
+        11,
+        60,
+        69,
+        110
+      ],
+      [
+        7,
+        40,
+        47,
+        57,
+        86
+      ],
+      [
+        7,
+        105,
+        109,
+        110,
+        117
+      ]
+    ],
+    "work": {
+      "suffix_rows": 7140,
+      "prefixes": 47614,
+      "bucket_prices_reused": 296793,
+      "indexed_tails": 3400598,
+      "unowned_tail_visits_skipped": 19593066,
+      "joint_queries": 11081,
+      "unreachable_prefixes": 17922,
+      "integer_checks": 4,
+      "integer_rejections": 4
+    },
+    "index_work": {
+      "catalogue_rows": 7140,
+      "primary_rows": 7140,
+      "secondary_rows": 6098,
+      "secondary_union_builds": 178476,
+      "secondary_union_reuses": 497048
+    }
+  },
+  {
+    "cap": 17,
+    "errors": 5,
+    "start": 0,
+    "stop": 65536,
+    "paired": true,
+    "hits": [
+      [
+        1,
+        11,
+        55,
+        65,
+        102
+      ],
+      [
+        2,
+        11,
+        60,
+        69,
+        110
+      ],
+      [
+        7,
+        40,
+        47,
+        57,
+        86
+      ],
+      [
+        7,
+        105,
+        109,
+        110,
+        117
+      ]
+    ],
+    "work": {
+      "suffix_rows": 7140,
+      "prefixes": 47614,
+      "bucket_prices_reused": 716068,
+      "indexed_tails": 1884626,
+      "unowned_tail_visits_skipped": 10877751,
+      "joint_queries": 1860,
+      "unreachable_prefixes": 17922,
+      "integer_checks": 4,
+      "integer_rejections": 4
+    },
+    "index_work": {
+      "paired_group_prices": 18688,
+      "catalogue_rows": 7140,
+      "primary_rows": 7140,
+      "secondary_rows": 4637,
+      "secondary_union_builds": 540368,
+      "secondary_union_reuses": 511731
+    }
+  },
+  {
+    "cap": 18,
+    "errors": 5,
+    "start": 33361,
+    "stop": 33617,
+    "paired": false,
+    "hits": [],
+    "work": {
+      "suffix_rows": 7140,
+      "prefixes": 232,
+      "unowned_tail_visits_skipped": 129874,
+      "bucket_prices_reused": 2182,
+      "indexed_tails": 35530,
+      "joint_queries": 701,
+      "unreachable_prefixes": 24
+    },
+    "index_work": {
+      "catalogue_rows": 7140,
+      "primary_rows": 7140,
+      "secondary_rows": 6098,
+      "secondary_union_builds": 1533,
+      "secondary_union_reuses": 2211
+    }
+  },
+  {
+    "cap": 18,
+    "errors": 5,
+    "start": 33361,
+    "stop": 33617,
+    "paired": true,
+    "hits": [],
+    "work": {
+      "suffix_rows": 7140,
+      "prefixes": 232,
+      "unowned_tail_visits_skipped": 68333,
+      "bucket_prices_reused": 9813,
+      "indexed_tails": 16484,
+      "joint_queries": 173,
+      "unreachable_prefixes": 24
+    },
+    "index_work": {
+      "paired_group_prices": 18688,
+      "catalogue_rows": 7140,
+      "primary_rows": 7140,
+      "secondary_rows": 3576,
+      "secondary_union_builds": 2869,
+      "secondary_union_reuses": 3019
+    }
+  }
+]

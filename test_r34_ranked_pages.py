@@ -73,7 +73,7 @@ def abrupt(indices,deadline):
     hits.append(1)
     if len(hits)==2: os._exit(93)
     return False
-with patch('r33_gold_refine.IntegerPatternFilter',return_value=abrupt):
+with patch('r33_gold_refine.make_integer_filter',return_value=abrupt):
     run_syndrome(p,r,g,9,[4],sys.argv[1],0,100,refine_integer=True)
 """
         with TemporaryDirectory() as folder:
@@ -90,7 +90,7 @@ with patch('r33_gold_refine.IntegerPatternFilter',return_value=abrupt):
             def wait(holder,rank,*args,**kwargs):
                 waits.append(rank)
                 return raw_wait(holder,rank,*args,**kwargs)
-            with (patch("r33_gold_refine.IntegerPatternFilter",return_value=lambda *_:True),
+            with (patch("r33_gold_refine.make_integer_filter",return_value=lambda *_:True),
                   patch.object(RankedLeases,"wait",wait)):
                 warm=run_syndrome(p,ref,g,9,[4],path,0,3,refine_integer=True)
             self.assertEqual(waits,[0])
