@@ -128,6 +128,19 @@ _R35_HEURISTIC = {
                            'a7804dfb62f7585ebe0ef578a86968646c0bc0ebdca093d811452832d7a8f48c',
                            'd04c92c4d207ad17f095554f3e163f105c4a31ceea716491194fe61bfbb638c5'),
 }
+# Exact repair projections only strengthen the next hitting-set master.
+# An existing pending native query and all earned native outcomes keep their authority.
+_R35_REPAIR = {
+    'constraint_repair_round24.py': ('2752b4f473a01e6744bea8c4040def55b0f4eb552a130ac8784c65e60aac1a9d',
+        'c80331d5f3ebf81536a16d574db95eebe39bdc84d3a9889915ae54d0ee9087c7',
+        '4dec58bffba2f0c82527fad2d9473a2348d6660af0bd3700d85cb02c15503a72'),
+    'constraint_repair_resume_round25.py': ('032e75d948d847836155a8c949bb025dc39937e42084155f6e30c66b8b91b397',
+        '6fbd361b87b861de2ccd31036637d5e66c5780e011cc3b5e61fcb8c75fb25b99',
+        '93460ba4048df7cbd3fc38a9c7f379c11d0a3d2a1df84682405e06f46a0af4d3'),
+    'constraint_repair_gold_round26.py': ('b067a5e07c23a26d79b600381ea1e9ca9c53a83f880ac669e096aadeb7f88dbd',
+        '7d99679e8aa9c860a02afc4e1c37b90774c622882d01ca3cf7358da83490da02',
+        'b5529fd866b554c9f987d1e2b93ee490d58acd20251ae29afa4e48564b9e3bf0'),
+}
 _R34_OPTIONAL = {
     'r34_coverage_index.py': 'a75b25eb32f5213a709da2b4a3b909a520f405c4d2751ea1fc5e906b9df51efa',
 }
@@ -147,7 +160,7 @@ def _variants(name,current):
     variants={sha256(data).hexdigest() for data in (raw,lf,crlf)}
     if current not in variants:
         return ()
-    for reviewed in (_R35_HEURISTIC, _R34_HEURISTIC, _R32_HEURISTIC):
+    for reviewed in (_R35_REPAIR, _R35_HEURISTIC, _R34_HEURISTIC, _R32_HEURISTIC):
         heuristic = reviewed.get(name)
         if heuristic and heuristic[0] in variants:
             variants.update(heuristic[1:])
@@ -206,6 +219,7 @@ def legacy_sources(current,profile):
             # The v1.14 Git source/archive has LF Python and a CRLF native C file.
             crlf = profile.endswith('-crlf') or profile=='v114-git' and name=='constraint_native.c'
             row = (_R35_HEURISTIC if profile.startswith('v115-') else _R34_HEURISTIC).get(name)
+            if row is None:row=_R35_REPAIR.get(name)
             if row is None and profile.startswith('v112-'):
                 row = _R32_HEURISTIC.get(name)
             if row:

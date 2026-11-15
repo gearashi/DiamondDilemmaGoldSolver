@@ -1,0 +1,63 @@
+{
+  "source": "c970275",
+  "seed": [
+    0,
+    4,
+    6,
+    9
+  ],
+  "saved": {
+    "binding": "64455228047c209e6b5e67d22a1107133b19b7921b822b5962a25d441635c2d7",
+    "digest": "2ec26bb8e0115410020bda5969f04eab49c024cbb4984f2e12db3dbfeda1abcb",
+    "kind": "core",
+    "state": {
+      "best_board": [
+        0,
+        4,
+        6,
+        9
+      ],
+      "complete_local_query": false,
+      "conflicts": [],
+      "cores": [],
+      "failures": [],
+      "master_retry": false,
+      "minimum_changes": null,
+      "pending": [],
+      "phase": "query",
+      "reason": null,
+      "retry": false,
+      "sources": [],
+      "stats": {
+        "hitting_set_branches": 0,
+        "hitting_set_solves": 1,
+        "oracle_branches": 0,
+        "oracle_conflicts": 0,
+        "oracle_core_cells": 0,
+        "oracle_queries": 0,
+        "oracle_unknown": 0,
+        "queries": 0,
+        "repair_completed_masters": 1,
+        "repair_completed_queries": 0,
+        "repair_completed_work_reused": 0,
+        "repair_master_attempts": 1,
+        "repair_master_model_rebuilds": 1,
+        "repair_master_retries": 0,
+        "repair_model_build_attempts": 1,
+        "repair_model_rebuilds": 1,
+        "repair_native_attempts": 0,
+        "repair_native_interrupted": 0,
+        "repair_native_retries": 0,
+        "repair_native_unknown": 0,
+        "repair_resume_loads": 0
+      },
+      "status": "stopped",
+      "walk": null
+    },
+    "version": 1
+  },
+  "crlf": {
+    "binding": "7d872e6fb20b9d0d81e3924f6b56b5614fdf711bfabcaeca192cc5ae85b83ffd",
+    "digest": "f051c2bb272961ac63f740103bdcb1a9c39ad489995e1321bf35ee0aa762858c"
+  }
+}

@@ -90,14 +90,16 @@ class RepairContinuationTests(unittest.TestCase):
             self.assertTrue(again['continuation_complete']); self.assertEqual(len(h['queries']), count)
 
     def test_completed_core_query_survives_stop_and_caps_are_cumulative(self):
+        # Exercise the historical empty master: every seed on this four-cell
+        # fixture now has a feasible first choice after pose propagation.
         problem, h = self.fixture(); seed = [0, 4, 6, 9]
         def stop(): return len(h['queries']) >= 1
         with self.oracle(h), patch('constraint_repair_round24._minimum_hitting_set', side_effect=finite_hitting):
-            first = core_guided_repair(problem, seed, durable=True, seconds=2, stop=stop, max_queries=1)
+            first = core_guided_repair(problem, seed, seeded=False, durable=True, seconds=2, stop=stop, max_queries=1)
             self.assertEqual(first['stats']['repair_completed_queries'], 1)
             self.assertTrue(first['cores']); self.assertEqual(len(first['exclusions']['cores']), 1)
             models = h['models']
-            last = core_guided_repair(problem, seed, resume=first['checkpoint'], seconds=2, max_queries=1)
+            last = core_guided_repair(problem, seed, seeded=False, resume=first['checkpoint'], seconds=2, max_queries=1)
             self.assertEqual(h['models'], models)
             self.assertTrue(last['continuation_complete']); self.assertEqual(last['reason'], 'query_limit')
             self.assertEqual(len(h['queries']), 1)

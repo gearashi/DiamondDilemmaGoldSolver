@@ -200,21 +200,21 @@ class GoldRepairPool:
             rows.append({'source':fragment['source'],'placements':[list(pair) for pair in places]})
         return {'fragments':rows}
 
-    def _constraints(self,rows,allowed):
-        if type(rows) not in (list,tuple) or len(rows)>1024: raise ValueError('Invalid retained master rows.')
-        result=[]
+    def _constraints(self,rows,allowed,limit=1024):
+        if type(rows) not in (list,tuple) or len(rows)>limit: raise ValueError('Invalid retained master rows.')
+        result=set()
         for row in rows:
             if type(row) not in (list,tuple,set,frozenset) or any(type(item)is not int or item not in allowed for item in row):
                 raise ValueError('Invalid retained master constraint.')
             converted=tuple(sorted(set(row)))
-            if converted not in result: result.append(converted)
+            result.add(converted)
         return sorted(result)
 
     def _valid_choice(self,kind,context,constraints,chosen):
         if chosen is None: return False
         selected=set(chosen)
         self._inc('master_validation_terms',sum(map(len,constraints)))
-        if kind=='hit': return all(selected.intersection(row) for row in constraints)
+        if kind=='hit': return len(selected)>=context.get('minimum_size',0) and all(selected.intersection(row) for row in constraints)
         if any(set(row)<=selected for row in constraints): return False
         placements=[pair for i in chosen for pair in context['fragments'][i]['placements']]
         self._inc('master_validation_terms',len(placements))
@@ -223,13 +223,19 @@ class GoldRepairPool:
     def _objective(self,kind,context,chosen):
         return len(chosen) if kind=='hit' else sum(len(context['fragments'][i]['placements']) for i in chosen)
 
-    def minimum_hitting_set(self,cores,cells,control,cp_model,*,seed):
+    def minimum_hitting_set(self,cores,cells,control,cp_model,*,seed,minimum_size=0):
         from constraint_lns import score
         score(self.problem,seed)
         if type(cells) not in (list,tuple) or cells!=sorted(set(cells)) or any(not _integer(c,0,self.problem.n-1) or c in self.problem.fixed for c in cells):
             raise ValueError('Invalid retained hitting-set cells.')
         context={'cells':list(cells),'seed':list(seed)}
-        constraints=self._constraints(cores,set(cells))
+        if type(minimum_size) is not int or minimum_size<0:raise ValueError('Invalid minimum change count.')
+        if minimum_size:
+            from r35_repair_seeds import certified_distance
+            if minimum_size>certified_distance(self.problem,seed)[0]:
+                raise ValueError('Unverified retained Gold change bound.')
+            context['minimum_size']=minimum_size
+        constraints=self._constraints(cores,set(cells),8192)
         chosen,work=self._master('hit',context,constraints,control,cp_model)
         return (set(chosen),work) if chosen is not None else (None,work)
 
@@ -278,7 +284,9 @@ class GoldRepairPool:
                             by_cell.setdefault(cell,[]).append(variables[i]); by_tile.setdefault(code//3,[]).append(variables[i])
                     for row in [*by_cell.values(),*by_tile.values()]: model.add_at_most_one(row)
                 objective=sum(variables.values()) if kind=='hit' else sum(len(f['placements'])*variables[i] for i,f in enumerate(context['fragments']))
-                if kind=='hit': model.minimize(objective)
+                if kind=='hit':
+                    if context.get('minimum_size'):model.add(objective>=context['minimum_size'])
+                    model.minimize(objective)
                 else: model.maximize(objective)
                 native={'model':model,'variables':variables,'objective':objective,'constraints':set(),'bound':None}
                 self._native_masters[key]=native; self._inc('master_builds')
@@ -304,6 +312,7 @@ class GoldRepairPool:
         if len(str(model.proto).encode('utf-8'))>self.policy['model_text_limit']:
             self._native_masters.pop(key,None); self._inc('master_evictions'); return None,'unknown'
         control.check(); solver=cp.CpSolver(); solver.parameters.num_search_workers=1
+        if kind=='hit' and len(constraints)>=64:solver.parameters.linearization_level=2
         solver.parameters.max_time_in_seconds=max(.000001,control.deadline-time.monotonic())
         if record['retry']: self._inc('master_retries')
         record['retry']=True; self._inc('master_calls'); status=None
@@ -358,13 +367,17 @@ class GoldRepairPool:
             kind=row['kind']; context=row['context']
             if type(context)is not dict: raise ValueError('Invalid saved master context.')
             if kind=='hit':
-                if set(context)!={'cells','seed'} or type(context['cells'])is not list or context['cells']!=sorted(set(context['cells'])) or any(not _integer(c,0,self.problem.n-1) or c in self.problem.fixed for c in context['cells']): raise ValueError('Invalid saved release cells.')
+                if set(context) not in ({'cells','seed'},{'cells','seed','minimum_size'}) or type(context['cells'])is not list or context['cells']!=sorted(set(context['cells'])) or any(not _integer(c,0,self.problem.n-1) or c in self.problem.fixed for c in context['cells']): raise ValueError('Invalid saved release cells.')
                 from constraint_lns import score
                 score(self.problem,context['seed']); allowed=set(context['cells'])
             else:
                 if set(context)!={'fragments'} or self._fragment_context(context['fragments'])!=context: raise ValueError('Invalid saved fragment scope.')
                 allowed=set(range(len(context['fragments'])))
-            constraints=self._constraints(row['constraints'],allowed)
+            if kind=='hit' and 'minimum_size' in context:
+                from r35_repair_seeds import certified_distance
+                if not _integer(context['minimum_size'],1,certified_distance(self.problem,context['seed'])[0]):
+                    raise ValueError('Invalid saved Gold change bound.')
+            constraints=self._constraints(row['constraints'],allowed,8192 if kind=='hit' else 1024)
             if row['constraints']!=[list(r) for r in constraints] or row['key']!=_digest({'kind':kind,'context':context}) or row['key'] in seen: raise ValueError('Invalid saved master identity.')
             seen.add(row['key'])
             if any(type(row[k])is not bool for k in ('optimal','infeasible','retry')): raise ValueError('Invalid saved master flags.')

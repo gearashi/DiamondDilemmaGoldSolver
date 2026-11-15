@@ -82,6 +82,9 @@ def _binding(problem, kind, inputs, policy, profile=None):
                     'validator.py', 'geometry.py')
     sources = {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
                for name in source_names}
+    if kind in ('core','gold_pool') and policy.get('seeded',True) and profile is None:
+        from r35_repair_seeds import proof_sources
+        sources.update(proof_sources())
     if profile is not None:
         from r27_incumbent_compat import legacy_sources
         sources=legacy_sources(sources,profile)
@@ -166,7 +169,10 @@ def _validate_state(problem, kind, state, fresh, inputs, policy, trade=None, fra
         if len({tuple(core) for core in cores}) != len(cores): raise bad()
         if cores != [[cell for cell, code in core] for core in failures if core]: raise bad()
         if any(code != inputs['codes'][cell] or cell not in movable for core in failures for cell, code in core): raise bad()
-        if state['status'] == 'infeasible' and [] not in failures: raise bad()
+        if state['status']=='infeasible' and [] not in failures:
+            from r35_repair_seeds import repair_rows
+            if (state['reason']!='proved_changed_cell_conflict' or not policy.get('seeded',True)
+                    or frozenset() not in repair_rows(problem,inputs['codes'])):raise bad()
         if state['status'] != 'solved' and state['best_board'] != inputs['codes']: raise bad()
         if pending is not None and (not _ints(pending, 0, problem.n-1, ordered=True)
                 or not set(pending)<=movable or any(not set(pending).intersection(core) for core in cores)): raise bad()
@@ -354,42 +360,62 @@ def _caught(exc, state, control):
     raise exc
 
 
-def core_guided_repair(problem, codes, *, seconds=10, stop=None, max_queries=128, resume=None, retained_service=None):
+def core_guided_repair(problem, codes, *, seconds=10, stop=None, max_queries=128, resume=None, retained_service=None, seeded=True):
     from constraint_repair_round24 import _minimum_hitting_set
+    from r35_repair_seeds import certified_choice,certified_distance,repair_rows,master_rows
+    if type(seeded) is not bool:raise ValueError('seeded must be boolean.')
     _seconds(seconds); score(problem, codes)
     if not _integer(max_queries, 1, MAX_QUERIES): raise ValueError('Invalid repair query limit.')
     inputs, policy = {'codes': list(codes)}, {'max_queries': max_queries}
+    if not seeded:policy['seeded']=False
     state, binding = _load(problem, 'core', inputs, policy, resume)
     control = _RepairControl(seconds, stop); stats = state['stats']
     if state['phase'] != 'done' and stats['repair_completed_queries'] >= max_queries:
         _done(state, reason='query_limit')
+    seeded_rows=None
+    lower=hits=0
+    hint=None
+    oracle=None
     try:
         if state['phase'] != 'done':
-            oracle = _oracle(problem, control, state, retained_service)
             cells = [cell for cell in range(problem.n) if cell not in problem.fixed]
             while state['phase'] != 'done':
                 control.check()
                 if stats['repair_completed_queries'] >= max_queries:
                     _done(state, reason='query_limit'); break
                 if state['phase'] == 'master':
-                    if state['master_retry']: stats['repair_master_retries'] += 1
+                    if seeded_rows is None:
+                        seeded_rows=repair_rows(problem,codes,control.check) if seeded else ()
+                        lower,hint=certified_distance(problem,codes) if seeded else (0,None)
+                    if frozenset() in seeded_rows:
+                        _done(state,'infeasible','proved_changed_cell_conflict')
+                        break
+                    if oracle is None:oracle=_oracle(problem,control,state,retained_service)
+                    constraints=master_rows(seeded_rows,state['cores'])
                     stats['repair_master_attempts'] += 1
-                    if retained_service is None: stats['repair_master_model_rebuilds'] += 1
-                    stats['hitting_set_solves'] += 1; state['master_retry'] = True
-                    if retained_service is None:
-                        released, work = _minimum_hitting_set([frozenset(row) for row in state['cores']], cells, control, oracle.cp_model)
-                    else:
-                        before_builds = retained_service.stats['gold_pool_master_builds']
-                        try:
-                            released, work = retained_service.minimum_hitting_set(state['cores'], cells, control, oracle.cp_model, seed=codes)
-                        finally:
-                            stats['repair_master_model_rebuilds'] += retained_service.stats['gold_pool_master_builds']-before_builds
+                    released=certified_choice(lower,hint,constraints,cells)
+                    work=0
+                    if released is None:
+                        options={'minimum_size':lower} if lower else {}
+                        if state['master_retry']: stats['repair_master_retries'] += 1
+                        if retained_service is None: stats['repair_master_model_rebuilds'] += 1
+                        stats['hitting_set_solves'] += 1; state['master_retry'] = True
+                        if retained_service is None:
+                            released, work = _minimum_hitting_set([frozenset(row) for row in constraints], cells, control, oracle.cp_model,**options)
+                        else:
+                            before_builds = retained_service.stats['gold_pool_master_builds']
+                            try:
+                                released, work = retained_service.minimum_hitting_set(constraints, cells, control, oracle.cp_model, seed=codes,**options)
+                            finally:
+                                stats['repair_master_model_rebuilds'] += retained_service.stats['gold_pool_master_builds']-before_builds
+                    else:hits+=1
                     if released is None:
                         if work == 'infeasible': _done(state, 'infeasible')
                         break
                     stats['hitting_set_branches'] += work; stats['repair_completed_masters'] += 1
                     state.update(pending=sorted(released), phase='query', master_retry=False)
                 assumptions = [(cell, codes[cell]) for cell in cells if cell not in state['pending']]
+                if oracle is None:oracle=_oracle(problem,control,state,retained_service)
                 answer = _query(oracle, assumptions, state); stats['queries'] += 1
                 if answer['status'] == 'solved':
                     actual = sum(a != b for a, b in zip(codes, answer['codes']))
@@ -402,7 +428,9 @@ def core_guided_repair(problem, codes, *, seconds=10, stop=None, max_queries=128
                 if core in state['cores']: raise RuntimeError('Resumable hitting set failed to advance.')
                 state['cores'].append(core); state.update(phase='master', pending=None)
     except Exception as exc: _caught(exc, state, control)
-    return _output(problem, 'core', state, binding, control.began, inputs, policy)
+    result=_output(problem,'core',state,binding,control.began,inputs,policy)
+    if seeded_rows is not None:result.update(derived_rows=len(seeded_rows),certified_seed_distance=lower,derived_master_hits=hits)
+    return result
 
 
 def _fragment_master(fragments, conflicts, control, cp):

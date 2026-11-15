@@ -79,36 +79,56 @@ class GoldRepairOracle:
                 'domains':[list(row) for row in self.problem.domains],
                 'cores':[[list(item) for item in core] for core in self.failures]}
 
-def _minimum_hitting_set(cores,cells,control,cp_model):
+def _minimum_hitting_set(cores,cells,control,cp_model,*,minimum_size=0):
     model=cp_model.CpModel();release={cell:model.new_bool_var(f'release_{cell}') for cell in cells}
     for core in cores:
         row=[release[cell] for cell in core if cell in release]
         if not row:return None,'infeasible'
         model.add_bool_or(row)
+    if minimum_size:model.add(sum(release.values())>=minimum_size)
     model.minimize(sum(release.values()))
     solver=cp_model.CpSolver();solver.parameters.num_search_workers=1
+    if len(cores)>=64:solver.parameters.linearization_level=2
     solver.parameters.max_time_in_seconds=max(.000001,control.deadline-time.monotonic())
     with _watch(control,control.deadline,solver):status=solver.solve(model)
     if status==cp_model.OPTIMAL:return {cell for cell,var in release.items() if solver.value(var)},int(solver.num_branches)
     return None,'unknown'
 
-def core_guided_repair(problem,codes,*,seconds=10,stop=None,max_queries=128,durable=False,resume=None,retained_service=None):
+def core_guided_repair(problem,codes,*,seconds=10,stop=None,max_queries=128,durable=False,resume=None,retained_service=None,seeded=True):
     """Find a minimum-Hamming-distance Gold board through assumption cores."""
+    if type(seeded) is not bool:raise ValueError('seeded must be boolean.')
     if type(durable) is not bool:raise ValueError('durable must be boolean.')
     if durable or resume is not None or retained_service is not None:
         from constraint_repair_resume_round25 import core_guided_repair as continued
-        return continued(problem,codes,seconds=seconds,stop=stop,max_queries=max_queries,resume=resume,retained_service=retained_service)
+        return continued(problem,codes,seconds=seconds,stop=stop,max_queries=max_queries,resume=resume,retained_service=retained_service,seeded=seeded)
     if type(max_queries)is not int or max_queries<1:raise ValueError('Positive repair query limit required.')
     score(problem,codes);control=_Control(seconds,stop);seed=list(codes)
     result={'status':'unknown','scope':'minimum_change_repair','best_board':seed,'cores':[],
             'stats':{'hitting_set_solves':0,'hitting_set_branches':0,'queries':0},'minimum_changes':None}
     try:
+        from r35_repair_seeds import certified_choice,certified_distance,repair_rows,master_rows
+        seeded_rows=repair_rows(problem,seed,control.check) if seeded else ()
+        lower,hint=certified_distance(problem,seed) if seeded else (0,None)
+        result.update(derived_rows=len(seeded_rows),certified_seed_distance=lower,derived_master_hits=0)
+        if frozenset() in seeded_rows:
+            result.update(status='infeasible',reason='proved_changed_cell_conflict',
+                          exclusions={'kind':'gold_repair_assumption_cores','fingerprint':problem.fingerprint,
+                                      'domains':[list(row) for row in problem.domains],'cores':[]},
+                          elapsed_seconds=time.monotonic()-control.began)
+            return result
         oracle=GoldRepairOracle(problem,control)
         cells=[cell for cell in range(problem.n) if cell not in problem.fixed]
         cores=[]
         for _ in range(max_queries):
-            control.check();released,work=_minimum_hitting_set(cores,cells,control,oracle.cp_model)
-            result['stats']['hitting_set_solves']+=1
+            control.check()
+            rows=master_rows(seeded_rows,cores)
+            released=certified_choice(lower,hint,rows,cells)
+            work=0
+            if released is None:
+                options={'minimum_size':lower} if lower else {}
+                released,work=_minimum_hitting_set(rows,cells,control,oracle.cp_model,**options)
+                result['stats']['hitting_set_solves']+=1
+            else:result['derived_master_hits']+=1
             if released is None:result['status']=work;break
             result['stats']['hitting_set_branches']+=work
             answer=oracle.query((cell,seed[cell]) for cell in cells if cell not in released)
