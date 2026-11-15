@@ -1,6 +1,7 @@
 """Compare conditional mate support to each vertex-labelled perfect matching."""
 from itertools import combinations
 from random import Random
+from importlib.util import find_spec
 import unittest
 
 from r35_mate_correlations import conditional_matches
@@ -37,6 +38,7 @@ class ConditionalMatchesTests(unittest.TestCase):
         self.assertFalse(limited['complete'])
         self.assertNotIn('bundles',limited)
 
+    @unittest.skipUnless(find_spec('ortools'),'geographic CP search requires the Python 3.12 profile')
     def test_public_option_under_sparse_and_projected_matching(self):
         from r27_structure_fixtures import planted
         from r30_gold import search

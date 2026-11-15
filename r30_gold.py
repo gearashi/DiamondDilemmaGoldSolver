@@ -408,7 +408,6 @@ class GoldMatching:
 def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=(), matching=True,
            geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=(),
            learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None, joint_poses=False, reference_bound=False, mate_correlations=False):
-    from ortools.sat.python import cp_model
     if seconds<=0 or max_rounds<1 or (geography and not matching):
         raise ValueError("Invalid Gold solve budget or mode.")
     pins=None if pins is None else checked_pins(problem.n,pins)
@@ -472,6 +471,7 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
         raise ValueError('Mate correlations require physical matching.')
     if project_blanks and not matching:
         raise ValueError("Blank-side projection requires a physical matching search.")
+    from ortools.sat.python import cp_model
     if matching:
         # These optional full-side formulas refer directly to individual blank literals.
         # Preserve their constraints whenever one of them is requested.

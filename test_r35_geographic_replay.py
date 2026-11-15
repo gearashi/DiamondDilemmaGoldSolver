@@ -64,7 +64,8 @@ class GeographicReplayTests(unittest.TestCase):
             self.assertEqual(emitted['geographic_core_units'],case['removals'])
             self.assertEqual(independent(p,ds),independent(p,live))
 
-    def test_complete_gold_and_edge_objectives_on_all_cpu_engines(self):
+    def test_complete_gold_and_edge_objectives_on_available_cpu_engines(self):
+        from importlib.util import find_spec
         from constraint_models import solve
         from constraint_dfs import solve as dfs
         for split in (False,True):
@@ -72,7 +73,10 @@ class GeographicReplayTests(unittest.TestCase):
             p.domains=[[v for v in range(3*p.n) if d>>v&1] for d in ds]
             p.physical_gold_support=True;p.geographic_conflicts=[hint]
             expected=independent(p,ds)
-            for engine in ('sat','cp-sat','cp-sat-circuit','cp','dfs'):
+            engines=['dfs']
+            if find_spec('pysat'):engines.append('sat')
+            if find_spec('ortools'):engines.extend(('cp-sat','cp-sat-circuit','cp'))
+            for engine in engines:
                 for target in ('gold','edges'):
                     out=dfs(p,target=target,seconds=5) if engine=='dfs' else solve(p,engine=engine,target=target,seconds=5)
                     if target=='gold':

@@ -54,6 +54,9 @@ class TurnTests(unittest.TestCase):
         other=TurnWords(p,max_steps=0)
         self.assertEqual(other.conflicts(true_map),[])
         self.assertTrue(other.stats['traversal_limit'])
+
+    def test_native_search_option_validation(self):
+        p,_=planted(1,3,33)
         with self.assertRaises(ValueError):
             search(p,domains=domain_bits(p),turn_length=5)
         with self.assertRaises(ValueError):

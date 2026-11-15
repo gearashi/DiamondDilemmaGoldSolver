@@ -1,4 +1,5 @@
 """Exercise exact physical cardinalities, multi-pose owner semantics and bound identity."""
+from importlib.util import find_spec
 from itertools import permutations,product
 from random import Random
 import unittest
@@ -37,8 +38,19 @@ class GeographicLossTests(unittest.TestCase):
                         self.assertTrue(all(mask>>code&1 for mask,code in zip(live,codes)))
                         self.assertFalse(set(res['forbidden'])&pairs)
         self.assertIsNone(certified_reference(p))
-        self.assertTrue(search(p,geography=True,reference_bound=True,channel=True,domains=ds)['status']=='GOLD')
+
+    @unittest.skipUnless(find_spec('ortools'),'geographic CP search requires the Python 3.12 profile')
+    def test_public_geographic_bound_and_channel(self):
+        p,ds=planted(1,3,70,uniform_ports=True)
+        self.assertEqual(search(p,geography=True,reference_bound=True,channel=True,domains=ds)['status'],'GOLD')
         with self.assertRaises(ValueError):search(p,reference_bound=True)
+
+    def test_saturated_certificate_finishes_before_loading_cp(self):
+        p,ds=planted(1,3,70,uniform_ports=True)
+        pair=next(iter(physical_bonds(p,[3*t for t in range(p.n)])))
+        with patch('r35_geographic_loss.certified_reference',return_value=({pair},0)):
+            out=search(p,domains=ds,bonds=[pair],geography=True,reference_bound=True)
+        self.assertEqual((out['status'],out['cp_calls']),('INFEASIBLE',0))
 
     def test_original_identity_and_changed_conditions(self):
         path=next((p for p in map(Path,('data/tiles.json','../data/tiles.json')) if p.is_file()),None)
