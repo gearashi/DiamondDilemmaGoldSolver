@@ -21,7 +21,7 @@ def export(tiles,groups_count,destination):
         extra=sorted((row for row in g[:13] if row not in packed),key=len)
         g=[*packed,*extra[:groups_count-10]]
     elif groups_count==10:g=list(packed)
-    elif groups_count!=len(g):raise ValueError('Expected the checked 10â€“13 or 344 groups.')
+    elif groups_count!=len(g):raise ValueError('Expected the checked 10–13 or 344 groups.')
     sat=InventorySAT(p,packed,req,outside,20,native=None,excess=True,projected=True,additional_groups=g)
     ext,stats=tight_clauses(p,packed,req,outside,sat.physical_losses,max(abs(v) for c in sat.clauses for v in c))
     clauses=sat.clauses+ext;highest=max(abs(v) for c in clauses for v in c)

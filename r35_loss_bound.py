@@ -42,7 +42,7 @@ def published_hit(problem, reference, groups, required, outside, identity, cap, 
                 relaxation="disjoint_group_signed_inventory" if integer else "disjoint_group_parity")
 
 
-def global_integer(problem, reference, groups, required, outside, cap, seconds, *, additional_groups=(), excess=False, independent_native=False):
+def global_integer(problem, reference, groups, required, outside, cap, seconds, *, additional_groups=(), excess=False, independent_native=False, conditions=None):
     from r32_gold_loss import digest
     from r35_integer_sat import InventorySAT
     if type(cap) is not int or cap<0 or isnan(seconds) or seconds<0:
@@ -60,6 +60,8 @@ def global_integer(problem, reference, groups, required, outside, cap, seconds, 
                             certified_loss_lower_bound=bound,
                             work={'decisions':0,'conflicts':0,'reference_loss_certificate_reused':1})
             for phase in REFERENCE_PHASES:
+                if conditions is not None and not conditions.accepts(phase):
+                    continue
                 hit=published_hit(problem,reference,[*groups,*additional_groups],required,outside,identity,cap,True,phase)
                 if hit is not None:
                     hit.update(relaxation=kind,work={'decisions':0,'conflicts':0,'reference_phase_reused':1})
@@ -67,7 +69,13 @@ def global_integer(problem, reference, groups, required, outside, cap, seconds, 
 
     check = InventorySAT(problem, groups, required, outside, cap, excess=excess, additional_groups=additional_groups)
     try:
-        outcome = check.decide(seconds)
+        if conditions is None:
+            outcome=check.decide(seconds)
+        else:
+            from time import monotonic
+            from math import inf
+            conditions.install(check)
+            outcome=conditions.decide(check,monotonic()+seconds if seconds else inf)
         work = check.solver.accum_stats()
         if outcome is None:
             return dict(status='UNKNOWN', cap=cap, work=work)

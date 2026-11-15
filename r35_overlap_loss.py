@@ -46,9 +46,10 @@ class OverlapPrices:
 
 
 class OverlapPattern:
-    def __init__(self,problem,packed,groups,required,outside,cap,integer,work):
+    def __init__(self,problem,packed,groups,required,outside,cap,integer,work,conditions=None):
         self.image=IntegerPhaseImages.compile(problem,packed,required,outside)
         self.prices=OverlapPrices(problem,packed,groups,required,outside)
+        self.conditions=conditions
         self.integer=integer
         self.cap=cap
         self.work=work
@@ -59,12 +60,18 @@ class OverlapPattern:
             additional=[g for g in groups if g not in packed]
             self.native=InventorySAT(problem,packed,required,outside,cap,additional_groups=additional,
                                      parity_only=not integer)
+            if conditions is not None:
+                conditions.install(self.native)
 
     def __call__(self,flipped,deadline):
         self.last_witness=None
         if self.image is not None:
+            price=self.prices.price
+            if self.conditions is not None:
+                def price(phase,indices):
+                    return self.prices.price(phase,indices) if self.conditions.accepts(phase) else inf
             cost,phase,_=self.image.minimum(flipped,deadline,self.work,
-                                           require_integer=self.integer,price=self.prices.price)
+                                           require_integer=self.integer,price=price)
             if cost<=self.cap:
                 self.last_witness=cost,phase
                 return True
@@ -73,7 +80,8 @@ class OverlapPattern:
         if remaining<=0:
             raise TimeoutError
         pins=[v if i in flipped else -v for i,v in enumerate(self.native.errors)]
-        answer=self.native.decide(remaining if remaining!=inf else 0,pins)
+        answer=(self.native.decide(remaining if remaining!=inf else 0,pins) if self.conditions is None
+                else self.conditions.decide(self.native,deadline,pins))
         if answer is None:
             raise TimeoutError
         if answer:

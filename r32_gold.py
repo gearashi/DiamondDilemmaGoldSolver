@@ -93,6 +93,7 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     charged_groups=groups if aggregate else packed
     if aggregate:
         identity=[*identity,'all-verified-groups-v1',sorted(sorted(g) for g in groups)]
+    weaker_scope=digest([*identity,upper])
     conditions=None
     if sphere_euler or mate_support:
         if not refine_integer:raise ValueError('Extra signed physical conditions require integer refinement.')
@@ -106,6 +107,8 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     if refine_integer:
         scope = digest([plain_scope, 'integer-pattern-v1'])
     read_scopes = (plain_scope, scope) if refine_integer else (scope,)
+    if conditions is not None:
+        read_scopes += (weaker_scope,digest([weaker_scope,'integer-pattern-v1']))
     if aggregate:
         read_scopes += (packed_scope,)
         if refine_integer:

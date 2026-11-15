@@ -72,7 +72,7 @@ def save_witness(db, identity, phase):
     db.execute('INSERT OR IGNORE INTO r35_loss_witnesses VALUES(?,?)', (identity,format(phase,'x')))
 
 
-def checked_hits(db, identity, problem, reference, groups, required, outside, cap, integer):
+def checked_hits(db, identity, problem, reference, groups, required, outside, cap, integer, conditions=None):
     exists = db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='r35_loss_witnesses'").fetchone()
     if not exists:
         return {}
@@ -85,7 +85,7 @@ def checked_hits(db, identity, problem, reference, groups, required, outside, ca
         except ValueError:
             continue
         result = physical_price(problem.tiles,reference,groups,required,phase,integer=integer)
-        if result is None or result[0] > cap:
+        if result is None or result[0] > cap or (conditions is not None and not conditions.accepts(phase)):
             continue
         cost, failed = result
         errors = [pair for pair in outside if pair in failed]
