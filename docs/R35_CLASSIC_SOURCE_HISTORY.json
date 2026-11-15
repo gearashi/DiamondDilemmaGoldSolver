@@ -1,0 +1,337 @@
+{
+  "cuda": {
+    "engines": [
+      "cuda"
+    ],
+    "scope": {},
+    "full_sources": 194,
+    "active": 36,
+    "individually_rejected_active_files": 36,
+    "active_digest": "76fcae6286598558d042bbb1c4ea1e692da7df245f14dd6fd295086a1ce6d94c",
+    "jobs": 480,
+    "counters": [
+      230400,
+      0,
+      480
+    ],
+    "native_probe": {},
+    "trials": [
+      {
+        "changed": "dfs_kernels.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_frames.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_kernels.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_counter_reduce.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_column_copies.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "constraint_work.py",
+        "state": "reopened"
+      },
+      {
+        "changed": "gpu_cpu_assist.py",
+        "state": "rejected"
+      }
+    ],
+    "origin": "20261115T045639607261Z"
+  },
+  "webgpu": {
+    "engines": [
+      "webgpu"
+    ],
+    "scope": {},
+    "full_sources": 194,
+    "active": 37,
+    "individually_rejected_active_files": 37,
+    "active_digest": "447b23fdb60459bc776c7a5e7b5070ff0a20b5eafed49dba74608484d4f014e7",
+    "jobs": 480,
+    "counters": [
+      230400,
+      0,
+      480
+    ],
+    "native_probe": {},
+    "trials": [
+      {
+        "changed": "dfs_kernels.cu",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_frames.cu",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_kernels.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_counter_reduce.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_column_copies.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "constraint_work.py",
+        "state": "reopened"
+      },
+      {
+        "changed": "gpu_cpu_assist.py",
+        "state": "rejected"
+      }
+    ],
+    "origin": "20261115T045730183004Z"
+  },
+  "mixed": {
+    "engines": [
+      "cuda",
+      "webgpu"
+    ],
+    "scope": {},
+    "full_sources": 194,
+    "active": 39,
+    "individually_rejected_active_files": 39,
+    "active_digest": "2e4da22c5f4b32326a45ab2bd075f7e4b62d2131a7c80181aeafc1c920e84c47",
+    "jobs": 480,
+    "counters": [
+      230400,
+      0,
+      480
+    ],
+    "native_probe": {},
+    "trials": [
+      {
+        "changed": "dfs_kernels.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_frames.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_kernels.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_counter_reduce.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_column_copies.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "constraint_work.py",
+        "state": "reopened"
+      },
+      {
+        "changed": "gpu_cpu_assist.py",
+        "state": "rejected"
+      }
+    ],
+    "origin": "20261115T045819987671Z"
+  },
+  "probe": {
+    "engines": [
+      "cuda"
+    ],
+    "scope": {
+      "cpu_probe": true
+    },
+    "full_sources": 194,
+    "active": 36,
+    "individually_rejected_active_files": 36,
+    "active_digest": "76fcae6286598558d042bbb1c4ea1e692da7df245f14dd6fd295086a1ce6d94c",
+    "jobs": 480,
+    "counters": [
+      230400,
+      0,
+      480
+    ],
+    "native_probe": {
+      "cpu_prefix_probes": 0,
+      "cpu_prefix_failures": 0,
+      "cpu_prefix_unknown": 0,
+      "cpu_prefix_values_removed": 0,
+      "cpu_endgame_calls": 0,
+      "cpu_endgame_nodes": 0,
+      "cpu_endgame_infeasible": 0,
+      "cpu_endgame_solutions": 0,
+      "cpu_endgame_unknown": 0,
+      "cpu_endgame_held_lanes": 0,
+      "cpu_probe_selection_contexts": 0,
+      "cpu_probe_hall_targets": 0
+    },
+    "trials": [
+      {
+        "changed": "dfs_kernels.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_frames.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_kernels.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_counter_reduce.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_column_copies.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "constraint_work.py",
+        "state": "reopened"
+      },
+      {
+        "changed": "gpu_cpu_assist.py",
+        "state": "rejected"
+      }
+    ],
+    "origin": "20261115T045900891773Z"
+  },
+  "proof-probe": {
+    "engines": [
+      "cuda"
+    ],
+    "scope": {
+      "proof_probes": true
+    },
+    "full_sources": 194,
+    "active": 36,
+    "individually_rejected_active_files": 36,
+    "active_digest": "76fcae6286598558d042bbb1c4ea1e692da7df245f14dd6fd295086a1ce6d94c",
+    "jobs": 480,
+    "counters": [
+      230400,
+      0,
+      480
+    ],
+    "native_probe": {
+      "cpu_prefix_probes": 0,
+      "cpu_prefix_failures": 0,
+      "cpu_prefix_unknown": 0,
+      "cpu_prefix_values_removed": 0,
+      "cpu_endgame_calls": 0,
+      "cpu_endgame_nodes": 0,
+      "cpu_endgame_infeasible": 0,
+      "cpu_endgame_solutions": 0,
+      "cpu_endgame_unknown": 0,
+      "cpu_endgame_held_lanes": 0,
+      "cpu_probe_selection_contexts": 0,
+      "cpu_probe_hall_targets": 0
+    },
+    "trials": [
+      {
+        "changed": "dfs_kernels.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_frames.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_kernels.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_counter_reduce.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_column_copies.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "constraint_work.py",
+        "state": "reopened"
+      },
+      {
+        "changed": "gpu_cpu_assist.py",
+        "state": "rejected"
+      }
+    ],
+    "origin": "20261115T045931829956Z"
+  },
+  "deep-probe": {
+    "state": "stopped",
+    "active": 480,
+    "completed": 0,
+    "max_depth": 79,
+    "counters": [
+      196392209,
+      34882649,
+      34867471
+    ],
+    "native_probe": {
+      "cpu_prefix_probes": 58,
+      "cpu_prefix_failures": 0,
+      "cpu_prefix_unknown": 58,
+      "cpu_prefix_values_removed": 0,
+      "cpu_endgame_calls": 0,
+      "cpu_endgame_nodes": 0,
+      "cpu_endgame_infeasible": 0,
+      "cpu_endgame_solutions": 0,
+      "cpu_endgame_unknown": 0,
+      "cpu_endgame_held_lanes": 0,
+      "cpu_probe_selection_contexts": 0,
+      "cpu_probe_hall_targets": 0
+    },
+    "generation": 3764,
+    "source_run": "20261115T050000037548Z",
+    "signed_engines": [
+      "cuda"
+    ],
+    "partial_source_reopened_on_dormant_change": true,
+    "verified_probe_implementation_required": true
+  },
+  "deep-targeted": {
+    "state": "stopped",
+    "active": 480,
+    "completed": 0,
+    "max_depth": 79,
+    "counters": [
+      212272213,
+      37679669,
+      37664424
+    ],
+    "native_probe": {
+      "cpu_prefix_probes": 63,
+      "cpu_prefix_failures": 14,
+      "cpu_prefix_unknown": 49,
+      "cpu_prefix_values_removed": 101306,
+      "cpu_endgame_calls": 0,
+      "cpu_endgame_nodes": 0,
+      "cpu_endgame_infeasible": 0,
+      "cpu_endgame_solutions": 0,
+      "cpu_endgame_unknown": 0,
+      "cpu_endgame_held_lanes": 0,
+      "cpu_probe_selection_contexts": 504,
+      "cpu_probe_hall_targets": 1
+    },
+    "generation": 4068,
+    "source_run": "20261115T050027357785Z",
+    "signed_engines": [
+      "cuda"
+    ],
+    "partial_source_reopened_on_dormant_change": true,
+    "verified_probe_implementation_required": true
+  }
+}

@@ -182,7 +182,7 @@ class HybridHostTests(unittest.TestCase):
         engine.neighbor_sides=engine.neighbor_sides[inverse]
         with self.assertRaisesRegex(ValueError,'geometry differs'):
             prepare_policy(engine,{'cpu_probe':True},data)
-        service=CPUAssist(data,'scope')
+        service=CPUAssist(data,'scope',endgame=True)
         partial=list(range(0,480,3));partial[-1]=-1
         for amount in (float('inf'),float('nan'),-1,0,1000,True):
             state={'version':1,'fingerprint':'scope','entries':[{'assignment':partial,'owner_prefix':[], 'slice_seconds':amount}]}

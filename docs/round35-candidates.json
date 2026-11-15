@@ -711,7 +711,8 @@
       "source_id": 30,
       "title": "Event-driven rotation threshold propagation",
       "proposal_and_validation": "r28_exchange_rotations.RotationOracle.threshold_reduce scans cells in full passes and rebuilds immutable binary edge-support lookup templates for each candidate target. Update local test margins after neighboring domains change; schedule remote checks at proven global slack decreases so a globally reduced star sum does not leave distant rotations untested. Reuse immutable lookups across thresholds; removed masks at a stricter target cannot simply carry over to a looser target. Measure star/support calls, intermediate domains, exact optima and all tied witnesses. Compare tiny brute force, past oracle tests and a distant rotation eliminated only by a global slack change.",
-      "state": "open"
+      "state": "testing",
+      "next_step": "Compare threshold events and structural plans against cold full sweeps on the incumbent, adjacent exchanges, fresh placements and exhaustive finite controls."
     },
     {
       "id": 46,
@@ -719,7 +720,8 @@
       "source_id": 31,
       "title": "Reuse structural rotation-elimination plans",
       "proposal_and_validation": "RotationOracle._eliminate rebuilds adjacency for all active scopes to choose the next variable at every step even on a numeric factor-cache hit. Screen whether adjacent physical boards have equal scopes and widths after additive decomposition. Cache a deterministic elimination plan/trace skeleton or maintain a local priority update, evaluating only changed scopes while preserving all operand bytes for numeric cache entries and directional witness maps. Include disconnected residual components, changed widths, cap crossings and tied optima. Compare scope/neighbor rebuilds, numeric messages, resident bytes and resulting witnesses against exact cold plans. R31 common rotation frames and R34 exterior messages capture other repeat units.",
-      "state": "open"
+      "state": "testing",
+      "next_step": "Compare threshold events and structural plans against cold full sweeps on the incumbent, adjacent exchanges, fresh placements and exhaustive finite controls."
     },
     {
       "id": 47,
@@ -1224,15 +1226,17 @@
       "source_id": 7,
       "title": "Bind exact completion reuse to active proof dependencies",
       "proposal_and_validation": "Scope-bound source archive compatibility: the current classic closure reaches 166 Python/shader/native sources for both backends, without benchmark/test leaves. Measure actual historical cases where a change solely to a dormant policy/backend/transitive helper prevents otherwise identical completion reuse. Only introduce narrower reviewed proof-dependency identities if outcomes are matched independently and every active prover/kernel/validator mutation still rejects; preserve all diagnostic source snapshots. Contrast with the existing reviewed heuristic-only historical aliases.",
-      "state": "testing backend and CPU scope extensions",
+      "state": "keep reviewed terminal and partial source reuse with guarded probe/backend scopes",
       "mechanism": "Source-bound classic terminal reuse after dormant-only changes; independent heuristic historical resume audit.",
-      "measurement": "Real released 480-job run and independent completion agree on 230400 orientation tries; host reopens with zero launches. All 32 active-file mutations rejected.",
+      "measurement": "Five native 480-job histories agreed on 230400 orientation tries each. Of 194 diagnostic files, 36 CUDA, 37 WebGPU and 39 mixed active files were tested individually (184/184 active mutations rejected over all five histories); dormant-only terminal reopens used zero GPU launches. Original 22-second partials reached depth 79: ordinary probes 58/58 UNKNOWN; targeted probes 14 exact prefix failures and 49 UNKNOWN across 63 probes, 504 selection contexts and 101306 removed values. Both partial receipts reopened under the dormant change and rejected a changed live pruner.",
       "evidence": [
         "docs/ROUND35_CLASSIC_SOURCES.md",
         "docs/R35_CLASSIC_DEPENDENCIES.json",
-        "docs/R35_V115_CROSSOVER.json"
+        "docs/R35_V115_CROSSOVER.json",
+        "docs/R35_CLASSIC_SOURCE_HISTORY.json"
       ],
-      "next_step": "Test actual backend-contribution tracking, CPU probe scope and repin only final reviewed active image."
+      "decision": "Retain both backend families for untracked or mixed histories, authenticate the incoming family on partial transfer, and retain full comparison for CPU endgame and unknown sources.",
+      "reopen_if": "A new proof dependency, ownership transfer, native backend, resource family, or changed source image requires another independently matched and pinned producer scope."
     },
     {
       "id": 72,

@@ -130,12 +130,31 @@ def origin_binding(hashes, scope):
     return checksum({'schema': SCHEMA, 'source_sha256': hashes, **scope})
 
 
-def verify_origin(run, origin, binding, current, scope):
+def checkpoint_scope(archive,scope):
+    """Read the backend claim covered by this checkpoint's origin binding."""
+    if 'exact_proof_backends' not in archive:
+        return scope
+    from r35_classic_sources import history
+    used=history(json.loads(str(archive['exact_proof_backends'])))
+    return {**scope,'proof_backends':list(used)}
+
+
+def check_cpu_scope(archive,policy):
+    assisted=any(policy.get(k,False) for k in ('cpu_probe','proof_probes','cpu_endgame'))
+    if ('cpu_assist_state' in archive)!=assisted:
+        raise ValueError('CPU assistance checkpoint ownership does not match its policy.')
+    if assisted and not policy.get('cpu_endgame'):
+        from gpu_cpu_assist import CPUAssist
+        CPUAssist.check_probe_ownership(json.loads(str(archive['cpu_assist_state'])))
+
+
+def verify_origin(run, origin, binding, current, scope, *, required_backend=None):
     """Check native binding and original bytes; allow equivalent LF/CRLF checkouts."""
     directory = run_dir(run, origin)
     config = read(directory/'run-config.json')
     source = config['source_sha256']
     if (config.get('run_id') != origin or config.get('verified_coverage_origin') is not True
+            or ('proof_backends' in scope and config.get('proof_backends')!=scope['proof_backends'])
             or origin_binding(source, scope) != binding
             or source.get('tiles.json') != current.get('tiles.json') or 'tiles.json' not in source):
         raise ValueError('Systematic checkpoint source or objective binding differs.')
@@ -144,9 +163,21 @@ def verify_origin(run, origin, binding, current, scope):
         current_root = Path(__file__).resolve().parent
         live = archived_sources(current_root,{k:v for k,v in current.items() if k != 'tiles.json'})
         if live != normalized:
-            from r35_classic_sources import compatible
-            if not compatible(directory,normalized,current_root,live,scope.get('gpu_policy')):
-                raise ValueError('Systematic source has changed outside a reviewed dormant CPU endgame.')
+            from r35_classic_sources import BACKENDS, compatible, history
+            final = directory/'final-status.json'
+            if not final.is_file() or read(final).get('state') not in ('stopped','exhausted','solved','edge_perfect'):
+                raise ValueError('An errored or unknown classic run cannot use a narrower source alias.')
+            used = scope.get('proof_backends')
+            if required_backend is not None:
+                if required_backend not in BACKENDS:
+                    raise ValueError('Unknown incoming classic backend.')
+                # A partial CUDA-only stack may resume on WebGPU, making that
+                # shader active in the resumed proof. Pre-tracking history
+                # already requires both engines.
+                if used is not None:
+                    used = sorted(set(history(used)) | {required_backend})
+            if not compatible(directory,normalized,current_root,live,scope.get('gpu_policy'),backends=used):
+                raise ValueError('Systematic source has changed outside its reviewed dormant dependencies.')
     return source
 
 
@@ -179,6 +210,8 @@ def reopen_terminal(run, checkpoint, marker, archive, hashes, scope, jobs):
     binding = str(archive['exact_source_binding'])
     try:
         check_receipt(run,origin,int(archive['exact_generation']),checkpoint,binding)
+        scope=checkpoint_scope(archive,scope)
+        check_cpu_scope(archive,scope['gpu_policy'])
         source = verify_origin(run,origin,binding,hashes,scope)
     except (OSError, KeyError, TypeError, ValueError) as exc:
         raise ValueError('Systematic exhaustion source evidence failed: '+str(exc)) from exc

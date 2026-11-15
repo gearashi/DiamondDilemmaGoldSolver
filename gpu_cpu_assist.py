@@ -227,9 +227,20 @@ class CPUAssist:
                 'entries':[{key:copy.deepcopy(value) for key,value in entry.items() if not key.startswith('_')}
                            for entry in self.entries.values()], 'stats':dict(self.stats)}
 
+    @staticmethod
+    def check_probe_ownership(saved):
+        if not isinstance(saved,dict) or saved.get('version')!=1 or saved.get('entries')!=[]:
+            raise ValueError('A CPU-owned endgame requires the CPU endgame policy on resume.')
+        stats=saved.get('stats')
+        if (not isinstance(stats,dict) or any(type(v) is not int or v!=0 for k,v in stats.items()
+                                                if k.startswith('cpu_endgame_'))):
+            raise ValueError('A disabled CPU endgame cannot have contributed search work.')
+
     def restore(self, saved):
         if not isinstance(saved,dict) or saved.get('version')!=1 or saved.get('fingerprint')!=self.fingerprint:
             raise ValueError('CPU/GPU assistance checkpoint binding differs.')
+        if not self.endgame_enabled:
+            self.check_probe_ownership(saved)
         rows=saved.get('entries')
         if not isinstance(rows,list) or len(rows)>1:raise ValueError('Malformed CPU/GPU endgame checkpoint.')
         incoming=OrderedDict()
@@ -248,8 +259,6 @@ class CPUAssist:
             if type(row.get('nodes',0)) is not int or row.get('nodes',0)<0:
                 raise ValueError('Malformed CPU endgame node counter.')
             incoming[key]=row
-        if incoming and not self.endgame_enabled:
-            raise ValueError('A CPU-owned endgame requires the CPU endgame policy on resume.')
         self.entries=incoming
         if isinstance(saved.get('stats'),dict):
             for key in self.stats:
