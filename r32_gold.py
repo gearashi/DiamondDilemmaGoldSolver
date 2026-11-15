@@ -407,6 +407,7 @@ def main():
     parser.add_argument('--page',type=int,default=8192)
     parser.add_argument('--refine-integer',action='store_true',help='In loss mode, check signed integer inventories before accepting a phase pattern (wide phase images use OR-Tools).')
     parser.add_argument('--integer-backend',choices=('sat','scip'),default='sat',help='The signed-inventory engine for integer-bound. SCIP branches on the physical variables.')
+    parser.add_argument('--physical-pairing',nargs='?',const='blank',choices=('blank','flow','both'),help='In integer-bound use SCIP to choose all physical mates with variable tile signs. The default projects blank sides. flow uses bipartite flows, and both combines the projections.')
     parser.add_argument('--independent-native',action='store_true',help='Rerun integer-bound without published decisions, or phase-sewing without bundled or saved witness hints.')
     parser.add_argument('--sphere-euler',action='store_true',help='Require the spherical one-loop Euler equation in signed integer search.')
     parser.add_argument('--mate-cost',action='store_true',help='Price lost reference pairs in small reciprocal classes, extending to twelve sides for broad overlapping departures.')
@@ -426,6 +427,7 @@ def main():
     if args.sewing_hint and args.mode!='phase-sewing':parser.error('--sewing-hint requires phase-sewing')
     if (args.sphere_euler or args.mate_support or args.mate_cost) and not (args.mode=='integer-bound' or args.mode=='loss' and args.refine_integer):
         parser.error('Signed physical conditions require integer-bound or loss --refine-integer')
+    if args.physical_pairing and args.mode!='integer-bound':parser.error('--physical-pairing requires integer-bound')
     if args.independent_native and args.mode not in ('integer-bound','phase-sewing'):parser.error('--independent-native requires integer-bound or phase-sewing')
     if args.integer_backend!='sat' and args.mode!='integer-bound':parser.error('--integer-backend requires integer-bound')
     if args.excess_charges and args.mode!='integer-bound':parser.error('--excess-charges requires integer-bound')
@@ -518,6 +520,10 @@ def main():
             elif any(not group for group in conditional_groups):
                 out = dict(status='INFEASIBLE', cap=args.upper, all_outside_layers=True,
                            work={'decisions': 0, 'required_geographic_conflict': 1})
+            elif args.physical_pairing:
+                from r35_mip_pairing import decide as physical_decision
+                out=physical_decision(p,ref,[*packed,*extra_groups,*conditional_groups],mandatory,args.upper,args.seconds,
+                                      sphere=args.sphere_euler,mode=args.physical_pairing,published=not args.independent_native)
             else:
                 conditions=None
                 if args.sphere_euler or args.mate_support or args.mate_cost:
@@ -538,6 +544,8 @@ def main():
                            verified_edge_perfect_departures=len(contact_groups))
             if circuits:
                 out.update(verified_gold_path_circuits=len(circuits),relaxation="gold_geographic_departures")
+            if args.physical_pairing:
+                out['relaxation']='complete_physical_mates'
         elif args.mode=='master':
             out=master(p,ref,cert,args.upper,args.seconds,req,forbid,ds)
         elif args.mode=='geographic':
@@ -586,8 +594,9 @@ def main():
             cert.add(out_rows)
             out=dict(clauses=cert.clauses(),candidate_queries=visits)
     out['fingerprint']=p.fingerprint
-    if args.sphere_euler or args.mate_support or args.mate_cost:
-        out['signed_conditions']=dict(sphere_euler=args.sphere_euler,mate_support=args.mate_support or args.mate_cost)
+    if args.sphere_euler or args.mate_support or args.mate_cost or args.physical_pairing:
+        out['signed_conditions']=dict(sphere_euler=args.sphere_euler,mate_support=bool(args.mate_support or args.mate_cost or args.physical_pairing))
+        if args.physical_pairing:out['signed_conditions']['complete_pairing']=True
         if args.mate_cost:out['signed_conditions']['mate_cost']=True
     message=json.dumps(out,indent=2)
     if args.output:

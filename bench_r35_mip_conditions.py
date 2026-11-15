@@ -135,7 +135,8 @@ if __name__=='__main__':
     cli=argparse.ArgumentParser(description=__doc__)
     cli.add_argument('--tiles',type=Path,required=True)
     cli.add_argument('--output',type=Path,required=True)
-    cli.add_argument('--modes',nargs='+',default=['whole','rules','small','families','price'])
+    cli.add_argument('--modes',nargs='+',choices=('whole','lazy','short','warm','rules','small','families','price','paired8','paired12','paired16'),
+                     default=['whole','warm','rules','small','families','price'])
     cli.add_argument('--cases',nargs='+',default=['31/em/31','37/em/37'])
     cli.add_argument('--scope',choices=('physical','wide','complete','circuits'),default='wide')
     cli.add_argument('--seconds',type=float,default=100)
