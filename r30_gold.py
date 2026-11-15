@@ -434,16 +434,27 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
     started=time.monotonic()
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
     phase_rules=()
-    if phase_anchors is not None:
-        if not geography or phase_anchors not in ('rules','roots','shared'):
-            raise ValueError('Geographic phase anchors require embed and a supported anchor mode.')
+    if phase_anchors is not None and (not geography or phase_anchors not in ('off','rules','roots','shared')):
+        raise ValueError('Geographic phase anchors require embed and a supported anchor mode.')
+    # Preserve validation of caller-supplied cuts and certificates in the native path.
+    automatic_rules=(phase_anchors is None and geography and problem.n==160 and (pins or bonds)
+                     and not (cutsets or type_cuts or bridges or geographic_cores or edge_perfect_cores
+                              or departure_rules or physical_loss or reference_bound))
+    if automatic_rules or phase_anchors in ('rules','roots','shared'):
         from r28_geo_color import _sphere
         _sphere(problem)
-        if phase_anchors=='rules':
-            from r35_anchor_rules import check_rules
-            phase_rules,stats['phase_rules']=check_rules(problem,pins or {},started+seconds)
-            if stats['phase_rules']['terminal']:
-                return dict(status='INFEASIBLE',**stats)
+    if automatic_rules or phase_anchors=='rules':
+        from r35_anchor_rules import check_rules
+        required=list(bonds)
+        if physical_support and (bonds or (pins and len(pins)<problem.n)):
+            from r32_gold_bonds import inventory
+            required.extend(inventory(problem).required)
+        phase_rules,stats['phase_rules']=check_rules(problem,pins or {},started+seconds,
+                                                    required=required,project=True)
+        if stats['phase_rules']['terminal']:
+            return dict(status='INFEASIBLE',**stats)
+        if automatic_rules:
+            phase_rules=()
     if phase_anchors in ('roots','shared'):
         from r35_phase_anchors import narrow
         required=list(bonds)
@@ -697,7 +708,7 @@ def main():
     cli.add_argument("--seconds",type=float,default=5)
     cli.add_argument("--rounds",type=int,default=32)
     cli.add_argument("--mate-correlations",nargs="?",const="full",choices=("full","signed"),help="Post verified conditional mate implications in represented reciprocal classes.")
-    cli.add_argument("--phase-anchors",choices=("rules","roots","shared"),help="Replay geographic phase exclusions or probe scarce tile placements before searching for Gold.")
+    cli.add_argument("--phase-anchors",choices=("off","rules","roots","shared"),help="Use stored geographic exclusions, probe scarce tile placements, or disable the automatic conditioned lookup.")
     cli.add_argument("--reference-bound",action="store_true",help="Apply the published certified incumbent-loss bound in geographic Gold.")
     cli.add_argument("--joint-poses",action="store_true",help="Prune unsupported simultaneous mandatory component poses before geographic search.")
     cli.add_argument("--tour-mode",choices=("raw","contract","sparse"),help="Post a circuit on mandatory physical strand paths.")

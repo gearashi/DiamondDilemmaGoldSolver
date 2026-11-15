@@ -70,10 +70,10 @@ def source_reuse(problem, rule, required, *, public):
     if public:
         full_pins = {t:source>>t&1 for t in range(problem.n)}
         outcomes = {}
-        for mode in (None,'roots','rules'):
+        for mode in ('off','roots','rules'):
             result = search(problem,geography=True,matching=True,learned_geometry=True,pins=full_pins,
                             seconds=8,phase_anchors=mode)
-            outcomes[mode or 'baseline'] = {k:result[k] for k in ('status','cp_calls','branches','phase_anchors',
+            outcomes['baseline' if mode=='off' else mode] = {k:result[k] for k in ('status','cp_calls','branches','phase_anchors',
                                                                   'phase_rules') if k in result}
         report['public']=outcomes
     return report

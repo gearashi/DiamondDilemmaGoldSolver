@@ -1,0 +1,472 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+  "full_phase_and_complement": [
+    {
+      "replayed": 0,
+      "reused": 0,
+      "clauses": 2,
+      "terminal": true,
+      "certified_fixed_phase": true
+    },
+    {
+      "replayed": 0,
+      "reused": 0,
+      "clauses": 2,
+      "terminal": true,
+      "certified_fixed_phase": true
+    }
+  ],
+  "changed_mesh_rejected": true,
+  "step": 8,
+  "seeds": [
+    29,
+    71,
+    223,
+    2026
+  ],
+  "donors": [
+    {
+      "donor": "raw",
+      "physical_bonds": 240,
+      "first_proved_prefix": [
+        136,
+        136,
+        136,
+        136
+      ],
+      "public": {
+        "off": {
+          "status": "UNKNOWN",
+          "branches": 71259,
+          "cp_calls": 32
+        },
+        "roots": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_anchors": {
+            "status": "INFEASIBLE",
+            "removed": 0,
+            "stats": {
+              "root_probes": 48,
+              "cell_revisions": 313
+            },
+            "symmetries": 10
+          }
+        },
+        "rules": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "stored_geographic_rules": 1,
+            "redundant_relative_signs": 20
+          }
+        },
+        "default": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "stored_geographic_rules": 1,
+            "redundant_relative_signs": 20
+          }
+        }
+      }
+    },
+    {
+      "donor": "contract",
+      "physical_bonds": 240,
+      "first_proved_prefix": [
+        128,
+        128,
+        128,
+        128
+      ],
+      "public": {
+        "off": {
+          "status": "UNKNOWN",
+          "branches": 78825,
+          "cp_calls": 32
+        },
+        "roots": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_anchors": {
+            "status": "INFEASIBLE",
+            "removed": 0,
+            "stats": {
+              "root_probes": 48,
+              "cell_revisions": 333
+            },
+            "symmetries": 10
+          }
+        },
+        "rules": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "stored_geographic_rules": 2,
+            "redundant_relative_signs": 17
+          }
+        },
+        "default": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "stored_geographic_rules": 2,
+            "redundant_relative_signs": 17
+          }
+        }
+      }
+    },
+    {
+      "donor": "near0",
+      "physical_bonds": 240,
+      "first_proved_prefix": [
+        128,
+        136,
+        128,
+        128
+      ],
+      "public": {
+        "off": {
+          "status": "UNKNOWN",
+          "branches": 94226,
+          "cp_calls": 32
+        },
+        "roots": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_anchors": {
+            "status": "INFEASIBLE",
+            "removed": 0,
+            "stats": {
+              "root_probes": 48,
+              "cell_revisions": 312
+            },
+            "symmetries": 10
+          }
+        },
+        "rules": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "redundant_relative_signs": 159
+          }
+        },
+        "default": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "redundant_relative_signs": 159
+          }
+        }
+      }
+    },
+    {
+      "donor": "near1",
+      "physical_bonds": 240,
+      "first_proved_prefix": [
+        136,
+        128,
+        128,
+        128
+      ],
+      "public": {
+        "off": {
+          "status": "UNKNOWN",
+          "branches": 124882,
+          "cp_calls": 32
+        },
+        "roots": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_anchors": {
+            "status": "INFEASIBLE",
+            "removed": 0,
+            "stats": {
+              "root_probes": 48,
+              "cell_revisions": 312
+            },
+            "symmetries": 10
+          }
+        },
+        "rules": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "redundant_relative_signs": 159
+          }
+        },
+        "default": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "redundant_relative_signs": 159
+          }
+        }
+      }
+    },
+    {
+      "donor": "trade",
+      "physical_bonds": 240,
+      "first_proved_prefix": [
+        136,
+        128,
+        128,
+        128
+      ],
+      "public": {
+        "off": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 1
+        },
+        "roots": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_anchors": {
+            "status": "INFEASIBLE",
+            "removed": 0,
+            "stats": {
+              "root_probes": 48,
+              "cell_revisions": 48
+            },
+            "symmetries": 10
+          }
+        },
+        "rules": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "stored_geographic_rules": 2,
+            "redundant_relative_signs": 17
+          }
+        },
+        "default": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "stored_geographic_rules": 2,
+            "redundant_relative_signs": 17
+          }
+        }
+      }
+    },
+    {
+      "donor": "cp",
+      "physical_bonds": 240,
+      "first_proved_prefix": [
+        128,
+        136,
+        128,
+        128
+      ],
+      "public": {
+        "off": {
+          "status": "UNKNOWN",
+          "branches": 67435,
+          "cp_calls": 32
+        },
+        "roots": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_anchors": {
+            "status": "INFEASIBLE",
+            "removed": 0,
+            "stats": {
+              "root_probes": 48,
+              "cell_revisions": 312
+            },
+            "symmetries": 10
+          }
+        },
+        "rules": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "stored_geographic_rules": 2,
+            "redundant_relative_signs": 17
+          }
+        },
+        "default": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "stored_geographic_rules": 2,
+            "redundant_relative_signs": 17
+          }
+        }
+      }
+    },
+    {
+      "donor": "contact",
+      "physical_bonds": 240,
+      "first_proved_prefix": [
+        128,
+        128,
+        128,
+        136
+      ],
+      "public": {
+        "off": {
+          "status": "UNKNOWN",
+          "branches": 69458,
+          "cp_calls": 32
+        },
+        "roots": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_anchors": {
+            "status": "INFEASIBLE",
+            "removed": 0,
+            "stats": {
+              "root_probes": 48,
+              "cell_revisions": 312
+            },
+            "symmetries": 10
+          }
+        },
+        "rules": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "redundant_relative_signs": 159
+          }
+        },
+        "default": {
+          "status": "INFEASIBLE",
+          "branches": 0,
+          "cp_calls": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 0,
+            "clauses": 2,
+            "terminal": true,
+            "certified_fixed_phase": true,
+            "redundant_relative_signs": 159
+          }
+        }
+      }
+    }
+  ],
+  "other_artwork": {
+    "planted": true,
+    "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+    "different_signed_mesh": true,
+    "checked_edges": 240,
+    "public": {
+      "off": {
+        "status": "GOLD",
+        "branches": 0,
+        "cp_calls": 1
+      },
+      "default": {
+        "status": "GOLD",
+        "branches": 0,
+        "cp_calls": 1,
+        "phase_rules": {
+          "replayed": 0,
+          "reused": 0,
+          "clauses": 0,
+          "terminal": false
+        }
+      },
+      "rules": {
+        "status": "GOLD",
+        "branches": 0,
+        "cp_calls": 1,
+        "phase_rules": {
+          "replayed": 0,
+          "reused": 0,
+          "clauses": 0,
+          "terminal": false
+        }
+      }
+    }
+  }
+}

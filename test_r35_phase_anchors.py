@@ -94,6 +94,32 @@ class PhaseAnchorTests(unittest.TestCase):
         self.assertEqual(kept,[])
         self.assertEqual(stats['replayed'],1)
 
+    def test_relative_phase_projection_matches_every_linear_completion(self):
+        from random import Random
+        from r29_gold_phase import PhaseBasis
+        from r35_anchor_rules import project_rule
+        rng=Random(350831)
+        for count in range(2,9):
+            for trial in range(30):
+                witness=rng.randrange(1<<count)
+                rows=[rng.randrange(1,1<<count) for _ in range(rng.randrange(count+1))]
+                base=PhaseBasis()
+                for mask in rows:base.add(mask,(mask&witness).bit_count()%2,())
+                state=list(base.trail),dict(base.pivots)
+                rule=tuple((i,rng.randrange(2)) for i in sorted(rng.sample(range(count),rng.randrange(2,count+1))))
+                smaller=project_rule(base,rule)
+                self.assertEqual((base.trail,base.pivots),state)
+                def excludes(condition,assignment):
+                    return condition is not None and len({((assignment>>t)&1)^v for t,v in condition})<=1
+                for phase in range(1<<count):
+                    if any((mask&(phase^witness)).bit_count()%2 for mask in rows):continue
+                    self.assertEqual(excludes(rule,phase),excludes(smaller,phase))
+
+    def test_proved_mesh_rejects_a_different_signed_board(self):
+        from r35_anchor_rules import has_proved_mesh
+        p,_,_=ring_donors(103)
+        self.assertFalse(has_proved_mesh(p))
+
     @unittest.skipUnless(find_spec('ortools'),'requires CP-SAT')
     def test_posted_phase_rule_excludes_only_both_proved_assignments(self):
         from ortools.sat.python import cp_model

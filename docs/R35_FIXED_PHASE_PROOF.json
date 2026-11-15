@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "signed_mesh_sha256": "3a3e25fc843e5eb6501abb2028150fe4e088befbf50999a0ec62a7ece7c44e03",
+  "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+  "complement": "0x2dc8545816eefe177fbebec173a766fdfde1aed9",
+  "physical_tiles": 160,
+  "seams": 240,
+  "anchor_tile": 25,
+  "macroface": 0,
+  "proper_rotations": 10,
+  "root_domains_sha256": "519a3583a2edcf101443ec31952b98ec9f6cd810660af838952dae9988afb797",
+  "dimacs_header": "p cnf 260320 749424",
+  "external_result": "VERIFIED",
+  "resolution_steps": 526397865,
+  "regeneration_source": "aea6c8a",
+  "files": {
+    "board.cnf": {
+      "sha256": "3eae6be90d9360819e4ab4db07d2eb20bdd90d37b257c8f4515e1597345d68ef",
+      "bytes": 14216482
+    },
+    "board.drat": {
+      "sha256": "3a4b05a09093862954c26211d2390d16d81096f280ad7525cfc29807a744fc6c",
+      "bytes": 331237362
+    },
+    "solve.log": {
+      "sha256": "1700e6f2691fa5791df98d3431feceb2329df5bbd0edbde9ac6a77550f8da1cc",
+      "bytes": 12090
+    },
+    "check.log": {
+      "sha256": "5d01e2b91d0e4c734caccab6344af668e8ddb2d1491fc3f477b0afe73f5ce1d9",
+      "bytes": 475
+    },
+    "README.txt": {
+      "sha256": "3d2a6423a070eab89e562e8f7d6478ddc3a1089165ef9ead9300a998e7c8510e",
+      "bytes": 713
+    }
+  },
+  "asset": {
+    "name": "DiamondDilemmaGoldSolver-R35-fixed-phase-proof.zip",
+    "bytes": 90746395,
+    "sha256": "7a49d2cc83349f3c4996c4e89b8ce91f6f98b1c34c35cd7dfffe73caf476d6cf"
+  }
+}
