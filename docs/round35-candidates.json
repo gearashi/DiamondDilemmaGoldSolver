@@ -887,7 +887,13 @@
       "source_id": 4,
       "title": "Checkpoint only changed classic GPU fields and frame chunks",
       "proposal_and_validation": "The classic (non-domain) GPU checkpoint is still an uncompressed whole NPZ. The installed native sample has 43 members and 260,190,250 bytes, including six arrays of 41,943,168 bytes each. Screen constant prefix data, idle lanes, and dirty frame/column chunks across real consecutive saves. Compare reusing the existing incremental checkpoint store with chunked certified native payloads, preserve old NPZ imports, cheap host-only exhaustion checks, crash-safe publication, checksums, independent witnesses and exact restart ownership. Count device readbacks, writes and unchanged payloads; cover Windows and Vulkan and disk-full fallback.",
-      "state": "open"
+      "state": "testing classic checkpoint storage after native field/chunk screen",
+      "evidence": [
+        "bench_r35_native_chunks.py",
+        "docs/R35_NATIVE_CHUNKS.json"
+      ],
+      "measurement": "2048 occupied lanes: isolated native fields 4049732 bytes; 256-step transition changed 156527 bytes, 3383296 bytes in changed fields, or 1105920 in 4 KiB chunks. Unchanged saves had zero differing chunks. Independent cold restores had matching next native state.",
+      "next_step": "Compare actual sparse/chunk storage and optional device readbacks with full NPZ, including receipts, stopped and mixed ownership, cold revalidation, crash/corruption, disk-full and migration; ensure durable captures and terminal verification before adoption."
     },
     {
       "id": 69,

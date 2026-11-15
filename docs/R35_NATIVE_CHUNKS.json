@@ -1,0 +1,812 @@
+[
+  {
+    "api": "CUDA",
+    "lanes": 128,
+    "assigned": 128,
+    "transitions": [
+      {
+        "nodes": 0,
+        "raw_bytes": 253892,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 1,
+        "raw_bytes": 253892,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 8,
+        "raw_bytes": 253892,
+        "changed_fields": 10,
+        "field_bytes": 211456,
+        "changed_bytes": 9391,
+        "changed_chunk_bytes": {
+          "4096": 27136,
+          "16384": 88576,
+          "65536": 211456,
+          "262144": 211456,
+          "1048576": 211456
+        }
+      },
+      {
+        "nodes": 64,
+        "raw_bytes": 253892,
+        "changed_fields": 10,
+        "field_bytes": 211456,
+        "changed_bytes": 12283,
+        "changed_chunk_bytes": {
+          "4096": 80384,
+          "16384": 113152,
+          "65536": 211456,
+          "262144": 211456,
+          "1048576": 211456
+        }
+      },
+      {
+        "nodes": 256,
+        "raw_bytes": 253892,
+        "changed_fields": 10,
+        "field_bytes": 211456,
+        "changed_bytes": 10885,
+        "changed_chunk_bytes": {
+          "4096": 104960,
+          "16384": 113152,
+          "65536": 211456,
+          "262144": 211456,
+          "1048576": 211456
+        }
+      }
+    ],
+    "identical_cold_restores": true,
+    "uninterrupted_difference": [
+      "boards",
+      "used",
+      "depths",
+      "maxdepths",
+      "firsts",
+      "lengths",
+      "cursors",
+      "shifts",
+      "rng",
+      "counters"
+    ]
+  },
+  {
+    "api": "CUDA",
+    "lanes": 2048,
+    "assigned": 128,
+    "transitions": [
+      {
+        "nodes": 0,
+        "raw_bytes": 4049732,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 1,
+        "raw_bytes": 4049732,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 8,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 9391,
+        "changed_chunk_bytes": {
+          "4096": 204800,
+          "16384": 335872,
+          "65536": 434176,
+          "262144": 1417216,
+          "1048576": 3383296
+        }
+      },
+      {
+        "nodes": 64,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 12283,
+        "changed_chunk_bytes": {
+          "4096": 663552,
+          "16384": 843776,
+          "65536": 1286144,
+          "262144": 1810432,
+          "1048576": 3383296
+        }
+      },
+      {
+        "nodes": 256,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 10885,
+        "changed_chunk_bytes": {
+          "4096": 978944,
+          "16384": 1220608,
+          "65536": 1679360,
+          "262144": 1810432,
+          "1048576": 3383296
+        }
+      }
+    ],
+    "identical_cold_restores": true,
+    "uninterrupted_difference": [
+      "boards",
+      "used",
+      "depths",
+      "maxdepths",
+      "firsts",
+      "lengths",
+      "cursors",
+      "shifts",
+      "rng",
+      "counters"
+    ]
+  },
+  {
+    "api": "CUDA",
+    "lanes": 2048,
+    "assigned": 2048,
+    "transitions": [
+      {
+        "nodes": 0,
+        "raw_bytes": 4049732,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 1,
+        "raw_bytes": 4049732,
+        "changed_fields": 5,
+        "field_bytes": 751616,
+        "changed_bytes": 108,
+        "changed_chunk_bytes": {
+          "4096": 55296,
+          "16384": 79872,
+          "65536": 161792,
+          "262144": 358400,
+          "1048576": 751616
+        }
+      },
+      {
+        "nodes": 8,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 134018,
+        "changed_chunk_bytes": {
+          "4096": 253952,
+          "16384": 335872,
+          "65536": 434176,
+          "262144": 1417216,
+          "1048576": 3383296
+        }
+      },
+      {
+        "nodes": 64,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 195302,
+        "changed_chunk_bytes": {
+          "4096": 708608,
+          "16384": 843776,
+          "65536": 1286144,
+          "262144": 1810432,
+          "1048576": 3383296
+        }
+      },
+      {
+        "nodes": 256,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 156527,
+        "changed_chunk_bytes": {
+          "4096": 1105920,
+          "16384": 1253376,
+          "65536": 1679360,
+          "262144": 1810432,
+          "1048576": 3383296
+        }
+      }
+    ],
+    "identical_cold_restores": true,
+    "uninterrupted_difference": [
+      "boards",
+      "used",
+      "depths",
+      "maxdepths",
+      "firsts",
+      "lengths",
+      "cursors",
+      "shifts",
+      "rng",
+      "counters"
+    ]
+  },
+  {
+    "api": "Vulkan",
+    "lanes": 128,
+    "assigned": 128,
+    "transitions": [
+      {
+        "nodes": 0,
+        "raw_bytes": 253892,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 1,
+        "raw_bytes": 253892,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 8,
+        "raw_bytes": 253892,
+        "changed_fields": 10,
+        "field_bytes": 211456,
+        "changed_bytes": 9391,
+        "changed_chunk_bytes": {
+          "4096": 27136,
+          "16384": 88576,
+          "65536": 211456,
+          "262144": 211456,
+          "1048576": 211456
+        }
+      },
+      {
+        "nodes": 64,
+        "raw_bytes": 253892,
+        "changed_fields": 10,
+        "field_bytes": 211456,
+        "changed_bytes": 12283,
+        "changed_chunk_bytes": {
+          "4096": 80384,
+          "16384": 113152,
+          "65536": 211456,
+          "262144": 211456,
+          "1048576": 211456
+        }
+      },
+      {
+        "nodes": 256,
+        "raw_bytes": 253892,
+        "changed_fields": 10,
+        "field_bytes": 211456,
+        "changed_bytes": 10885,
+        "changed_chunk_bytes": {
+          "4096": 104960,
+          "16384": 113152,
+          "65536": 211456,
+          "262144": 211456,
+          "1048576": 211456
+        }
+      }
+    ],
+    "identical_cold_restores": true,
+    "uninterrupted_difference": [
+      "boards",
+      "used",
+      "depths",
+      "maxdepths",
+      "firsts",
+      "lengths",
+      "cursors",
+      "shifts",
+      "rng",
+      "counters"
+    ]
+  },
+  {
+    "api": "Vulkan",
+    "lanes": 2048,
+    "assigned": 128,
+    "transitions": [
+      {
+        "nodes": 0,
+        "raw_bytes": 4049732,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 1,
+        "raw_bytes": 4049732,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 8,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 9391,
+        "changed_chunk_bytes": {
+          "4096": 204800,
+          "16384": 335872,
+          "65536": 434176,
+          "262144": 1417216,
+          "1048576": 3383296
+        }
+      },
+      {
+        "nodes": 64,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 12283,
+        "changed_chunk_bytes": {
+          "4096": 663552,
+          "16384": 843776,
+          "65536": 1286144,
+          "262144": 1810432,
+          "1048576": 3383296
+        }
+      },
+      {
+        "nodes": 256,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 10885,
+        "changed_chunk_bytes": {
+          "4096": 978944,
+          "16384": 1220608,
+          "65536": 1679360,
+          "262144": 1810432,
+          "1048576": 3383296
+        }
+      }
+    ],
+    "identical_cold_restores": true,
+    "uninterrupted_difference": [
+      "boards",
+      "used",
+      "depths",
+      "maxdepths",
+      "firsts",
+      "lengths",
+      "cursors",
+      "shifts",
+      "rng",
+      "counters"
+    ]
+  },
+  {
+    "api": "Vulkan",
+    "lanes": 2048,
+    "assigned": 2048,
+    "transitions": [
+      {
+        "nodes": 0,
+        "raw_bytes": 4049732,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 1,
+        "raw_bytes": 4049732,
+        "changed_fields": 5,
+        "field_bytes": 751616,
+        "changed_bytes": 108,
+        "changed_chunk_bytes": {
+          "4096": 55296,
+          "16384": 79872,
+          "65536": 161792,
+          "262144": 358400,
+          "1048576": 751616
+        }
+      },
+      {
+        "nodes": 8,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 134018,
+        "changed_chunk_bytes": {
+          "4096": 253952,
+          "16384": 335872,
+          "65536": 434176,
+          "262144": 1417216,
+          "1048576": 3383296
+        }
+      },
+      {
+        "nodes": 64,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 195302,
+        "changed_chunk_bytes": {
+          "4096": 708608,
+          "16384": 843776,
+          "65536": 1286144,
+          "262144": 1810432,
+          "1048576": 3383296
+        }
+      },
+      {
+        "nodes": 256,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 156527,
+        "changed_chunk_bytes": {
+          "4096": 1105920,
+          "16384": 1253376,
+          "65536": 1679360,
+          "262144": 1810432,
+          "1048576": 3383296
+        }
+      }
+    ],
+    "identical_cold_restores": true,
+    "uninterrupted_difference": [
+      "boards",
+      "used",
+      "depths",
+      "maxdepths",
+      "firsts",
+      "lengths",
+      "cursors",
+      "shifts",
+      "rng",
+      "counters"
+    ]
+  },
+  {
+    "api": "D3D12",
+    "lanes": 128,
+    "assigned": 128,
+    "transitions": [
+      {
+        "nodes": 0,
+        "raw_bytes": 253892,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 1,
+        "raw_bytes": 253892,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 8,
+        "raw_bytes": 253892,
+        "changed_fields": 10,
+        "field_bytes": 211456,
+        "changed_bytes": 9391,
+        "changed_chunk_bytes": {
+          "4096": 27136,
+          "16384": 88576,
+          "65536": 211456,
+          "262144": 211456,
+          "1048576": 211456
+        }
+      },
+      {
+        "nodes": 64,
+        "raw_bytes": 253892,
+        "changed_fields": 10,
+        "field_bytes": 211456,
+        "changed_bytes": 12283,
+        "changed_chunk_bytes": {
+          "4096": 80384,
+          "16384": 113152,
+          "65536": 211456,
+          "262144": 211456,
+          "1048576": 211456
+        }
+      },
+      {
+        "nodes": 256,
+        "raw_bytes": 253892,
+        "changed_fields": 10,
+        "field_bytes": 211456,
+        "changed_bytes": 10885,
+        "changed_chunk_bytes": {
+          "4096": 104960,
+          "16384": 113152,
+          "65536": 211456,
+          "262144": 211456,
+          "1048576": 211456
+        }
+      }
+    ],
+    "identical_cold_restores": true,
+    "uninterrupted_difference": [
+      "boards",
+      "used",
+      "depths",
+      "maxdepths",
+      "firsts",
+      "lengths",
+      "cursors",
+      "shifts",
+      "rng",
+      "counters"
+    ]
+  },
+  {
+    "api": "D3D12",
+    "lanes": 2048,
+    "assigned": 128,
+    "transitions": [
+      {
+        "nodes": 0,
+        "raw_bytes": 4049732,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 1,
+        "raw_bytes": 4049732,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 8,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 9391,
+        "changed_chunk_bytes": {
+          "4096": 204800,
+          "16384": 335872,
+          "65536": 434176,
+          "262144": 1417216,
+          "1048576": 3383296
+        }
+      },
+      {
+        "nodes": 64,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 12283,
+        "changed_chunk_bytes": {
+          "4096": 663552,
+          "16384": 843776,
+          "65536": 1286144,
+          "262144": 1810432,
+          "1048576": 3383296
+        }
+      },
+      {
+        "nodes": 256,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 10885,
+        "changed_chunk_bytes": {
+          "4096": 978944,
+          "16384": 1220608,
+          "65536": 1679360,
+          "262144": 1810432,
+          "1048576": 3383296
+        }
+      }
+    ],
+    "identical_cold_restores": true,
+    "uninterrupted_difference": [
+      "boards",
+      "used",
+      "depths",
+      "maxdepths",
+      "firsts",
+      "lengths",
+      "cursors",
+      "shifts",
+      "rng",
+      "counters"
+    ]
+  },
+  {
+    "api": "D3D12",
+    "lanes": 2048,
+    "assigned": 2048,
+    "transitions": [
+      {
+        "nodes": 0,
+        "raw_bytes": 4049732,
+        "changed_fields": 0,
+        "field_bytes": 0,
+        "changed_bytes": 0,
+        "changed_chunk_bytes": {
+          "4096": 0,
+          "16384": 0,
+          "65536": 0,
+          "262144": 0,
+          "1048576": 0
+        }
+      },
+      {
+        "nodes": 1,
+        "raw_bytes": 4049732,
+        "changed_fields": 5,
+        "field_bytes": 751616,
+        "changed_bytes": 108,
+        "changed_chunk_bytes": {
+          "4096": 55296,
+          "16384": 79872,
+          "65536": 161792,
+          "262144": 358400,
+          "1048576": 751616
+        }
+      },
+      {
+        "nodes": 8,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 134018,
+        "changed_chunk_bytes": {
+          "4096": 253952,
+          "16384": 335872,
+          "65536": 434176,
+          "262144": 1417216,
+          "1048576": 3383296
+        }
+      },
+      {
+        "nodes": 64,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 195302,
+        "changed_chunk_bytes": {
+          "4096": 708608,
+          "16384": 843776,
+          "65536": 1286144,
+          "262144": 1810432,
+          "1048576": 3383296
+        }
+      },
+      {
+        "nodes": 256,
+        "raw_bytes": 4049732,
+        "changed_fields": 10,
+        "field_bytes": 3383296,
+        "changed_bytes": 156527,
+        "changed_chunk_bytes": {
+          "4096": 1105920,
+          "16384": 1253376,
+          "65536": 1679360,
+          "262144": 1810432,
+          "1048576": 3383296
+        }
+      }
+    ],
+    "identical_cold_restores": true,
+    "uninterrupted_difference": [
+      "boards",
+      "used",
+      "depths",
+      "maxdepths",
+      "firsts",
+      "lengths",
+      "cursors",
+      "shifts",
+      "rng",
+      "counters"
+    ]
+  }
+]
