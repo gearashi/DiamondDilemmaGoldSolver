@@ -385,7 +385,7 @@ def simultaneous_swaps(model, board, allowed, prices, *, exact=False, touch=None
     return candidate,count
 
 
-def pack_cycles(model, board, cells, prices, *, relaxations=3):
+def pack_cycles(model, board, cells, prices, *, relaxations=3, partition=None, audit=None, identity_check=False):
     """Bound the whole nonadjacent repair, splitting an edge whose two endpoints changed.
 
     A permutation relaxation can link disconnected geographic cells in long donor cycles.
@@ -407,12 +407,29 @@ def pack_cycles(model, board, cells, prices, *, relaxations=3):
         if gain[i,i]==0:
             rotation[i,i]=board[cells[i]]%3
     legal=grid.max(axis=2)>=0
-    queue=[(-3*len(cells),())]
-    visited={()}
+    identity_work={}
+    if identity_check:
+        from r35_restricted_assignment import identity_dual
+        closed,sweeps=identity_dual(gain,legal,len(cells))
+        identity_work=dict(identity_proofs=int(closed),identity_updates=sweeps)
+        if closed:
+            if audit is not None:
+                audit['open_upper']=0
+            return board,dict(relaxations=0,complete=True,cycles=0,**identity_work)
+    branches=None
+    if partition:
+        from r35_cycle_branching import CycleBranches
+        branches=CycleBranches(model,cells,board,grid,old,partition)
+    queue=[(-3*len(cells),(),())]
+    visited={((),())}
+    certificates={}
+    if audit is not None:
+        seen_assignments=set()
     best=board.copy()
     best_gain=solves=cycles_seen=0
     while queue and solves<relaxations:
-        parent,pinned=heapq.heappop(queue)
+        parent,pinned,forced=heapq.heappop(queue)
+        previous=certificates.pop((pinned,forced),None)
         if -parent<=best_gain:
             continue
         allowed=legal.copy()
@@ -421,8 +438,39 @@ def pack_cycles(model, board, cells, prices, *, relaxations=3):
             allowed[i]=False
             allowed[i,i]=True
             weights[i,i]=0
-        donors=assignment(weights,allowed)
+        local_rotation=branches.require_changes(forced,allowed,weights,rotation) if branches else rotation
         solves+=1
+        certificate=None
+        if partition=='warm':
+            from r35_restricted_assignment import matching
+            certificate,cost=matching(weights,allowed,previous)
+            if audit is not None:
+                audit.update(cost)
+                audit['cold_assignments' if previous is None else 'warm_assignments']+=1
+            if certificate is None:
+                if audit is not None:
+                    audit['infeasible_children']+=1
+                continue
+            donors=certificate[0]
+        else:
+            if audit is not None:
+                audit['cold_assignments']+=1
+            try:
+                donors=assignment(weights,allowed)
+            except ValueError as error:
+                if not forced or str(error)!='Assignment has no legal completion.':
+                    raise
+                if audit is not None:
+                    audit['infeasible_children']+=1
+                continue
+        if audit is not None:
+            trial=3*(board[cells[donors]]//3)+local_rotation[np.arange(len(cells)),donors]
+            if pinned:
+                stay=np.asarray(pinned,dtype=int)
+                trial[stay]=board[cells[stay]]
+            signature=trial.astype('<i4').tobytes()
+            audit['duplicate_relaxed_boards']+=int(signature in seen_assignments)
+            seen_assignments.add(signature)
         upper=int(weights[np.arange(len(cells)),donors].sum())
         if upper<=best_gain:
             continue
@@ -450,17 +498,17 @@ def pack_cycles(model, board, cells, prices, *, relaxations=3):
             if footprint&neighbors:
                 continue
             for i in cycle:
-                code=3*(board[cells[donors[i]]]//3)+rotation[i,donors[i]]
+                code=3*(board[cells[donors[i]]]//3)+local_rotation[i,donors[i]]
                 primal[cells[i]]=code
             primal_gain+=weight
             blocked.update(footprint|neighbors)
             cycles_seen+=1
         if primal_gain>best_gain:
             best,best_gain=primal,primal_gain
-        if best_gain==upper:
+        if best_gain>=upper:
             continue
         changed={int(cells[i]):i for i,j in enumerate(donors)
-                 if i!=j or (i not in pinned and rotation[i,j]!=board[cells[i]]%3)}
+                 if i!=j or (i not in pinned and local_rotation[i,j]!=board[cells[i]]%3)}
         conflict=next(((i,changed[b]) for c,i in changed.items() for b in model.problem.neighbors[c]
                        if b in changed),None)
         if conflict is None:
@@ -468,14 +516,24 @@ def pack_cycles(model, board, cells, prices, *, relaxations=3):
             if best_gain!=upper:
                 raise ArithmeticError('Unpriced independent donor cycle.')
             continue
-        for i in conflict:
-            child=tuple(sorted((*pinned,i)))
-            if child not in visited:
-                visited.add(child)
-                heapq.heappush(queue,(-upper,child))
+        if branches is None:
+            children=((tuple(sorted((*pinned,i))),()) for i in conflict)
+        else:
+            children=branches.children(conflict,pinned,forced)
+        for stay,change in children:
+            key=(stay,change)
+            if key not in visited:
+                visited.add(key)
+                heapq.heappush(queue,(-upper,stay,change))
+                if certificate is not None:
+                    certificates[key]=certificate
     if int(model.matches(best).sum()-model.matches(board).sum())!=best_gain:
         raise ArithmeticError('Full-board cycle price differs from the reconstructed score.')
-    return best,dict(relaxations=solves,complete=not any(-upper>best_gain for upper,_ in queue),cycles=cycles_seen)
+    if audit is not None:
+        audit['distinct_relaxed_boards']+=len(seen_assignments)
+        audit['subproblems_created']+=len(visited)
+        audit['open_upper']=max([best_gain]+[-top for top,_,_ in queue])
+    return best,dict(relaxations=solves,complete=not any(-upper>best_gain for upper,_,_ in queue),cycles=cycles_seen,**identity_work)
 
 def diverse(model, rows, limit):
     entries=[]
@@ -524,7 +582,7 @@ def forest_pool(model,board,available,size,rng):
 class Engine:
     def __init__(self,problem,*,bonds=False,joint=False,adjacent=False,ties=0,fork=False,
                  relink=False,slate=1,pool=10,tie_slack=0,cycle_budget=0,contacts=None,disjoint=False,exact_packing=False,pair_cycles=0,forest=False,contact_group=0,
-                 touch_packing=None,separator_packing=False):
+                 touch_packing=None,separator_packing=False,cycle_partition=None,regional_cycle_budget=0,regional_only=False):
         if min(slate,pool)<1 or min(ties,cycle_budget)<0 or tie_slack not in (0,1,2):
             raise ValueError("Invalid candidate or repair limits.")
         self.model=BoardModel(problem)
@@ -548,7 +606,19 @@ class Engine:
         self.contacts=contacts
         self.disjoint=disjoint
         self.joint=joint or adjacent or cycle_budget>0 or contacts is not None or disjoint or self.exact_packing or pair_cycles>0 or forest
-        self.cycle_budget=cycle_budget
+        if cycle_partition not in (None,'disjoint','neighbors','warm'):
+            raise ValueError("Unknown circulation branching policy.")
+        self.cycle_partition=cycle_partition
+        self.cycle_budget=cycle_budget or (3 if cycle_partition else 0)
+        if type(regional_cycle_budget) is not int or regional_cycle_budget<0:
+            raise ValueError("Invalid regional circulation budget.")
+        self.regional_cycle_budget=regional_cycle_budget
+        self.regional_only=regional_only
+        contact_limit=(-1 if disjoint else int(adjacent)) if contacts is None else contacts
+        if regional_only and (not regional_cycle_budget or contact_limit!=0):
+            raise ValueError("Regional-only repair needs a positive budget and a no-contact local query.")
+        if cycle_partition or regional_cycle_budget:
+            self.joint=True
         self.adjacent=adjacent
         self.ties=ties
         self.fork=fork
@@ -573,7 +643,8 @@ class Engine:
             stats['positive_swap_pairs']+=n
             stats['potential_pairs_priced']+=len(available)*(len(available)-1)//2
             if self.cycle_budget:
-                board,cycle_work=pack_cycles(model,board,available,prices,relaxations=self.cycle_budget)
+                board,cycle_work=pack_cycles(model,board,available,prices,relaxations=self.cycle_budget,
+                                             partition=self.cycle_partition)
                 for key,value in cycle_work.items():
                     stats['full_cycle_'+key]+=value
             # A capped model also explores longer donor cycles inside this variable pool.
@@ -585,8 +656,23 @@ class Engine:
                 from r34_pair_cycles import pair_repair
                 board,pair_work=pair_repair(model,board,chosen,self.pair_cycles,contact_group=self.contact_group)
                 stats.update(pair_work)
-            board,info=joint_repair(model,board,chosen,adjacent=self.adjacent,
-                                   contacts=self.contacts,disjoint=self.disjoint)
+            contact_limit=(-1 if self.disjoint else int(self.adjacent)) if self.contacts is None else self.contacts
+            regional=None
+            if self.regional_cycle_budget and contact_limit==0 and len(chosen):
+                regional,decision=pack_cycles(model,board,chosen,prices,relaxations=self.regional_cycle_budget,
+                                              partition='neighbors',identity_check=True)
+                stats['regional_identity_proofs']+=decision.get('identity_proofs',0)
+                stats['regional_identity_updates']+=decision.get('identity_updates',0)
+                stats['regional_assignment_solves']+=decision['relaxations']
+            if regional is not None and (decision['complete'] or self.regional_only):
+                status='CIRCULATION_OPTIMAL' if decision['complete'] else 'CIRCULATION_FEASIBLE'
+                board,info=regional,dict(status=status,branches=0)
+            else:
+                board,info=joint_repair(model,board,chosen,adjacent=self.adjacent,
+                                       contacts=self.contacts,disjoint=self.disjoint)
+                if regional is not None and model.matches(regional).sum()>model.matches(board).sum():
+                    board=regional
+                    stats['regional_partial_witnesses_used']+=1
             stats['joint_'+info['status']]+=1
             stats['joint_branches']+=info['branches']
         cells=np.setdiff1d(model.independent_set(board,rng),protected)
@@ -654,6 +740,14 @@ class Engine:
         if reusable:
             config=dict(bonds=self.assemblies is not None,joint=self.joint,adjacent=self.adjacent,
                         cycle_budget=self.cycle_budget,pool=self.pool,ties=self.ties,tie_slack=self.tie_slack)
+            if self.cycle_partition:
+                config['cycle_partition']=self.cycle_partition
+            if self.regional_cycle_budget:
+                config['regional_cycle_budget']=self.regional_cycle_budget
+            if self.regional_only:
+                from importlib.util import find_spec
+                config['regional_only']=True
+                config['regional_native_assignment']=find_spec('ortools') is not None
             if self.forest:
                 config['forest']=True
             if self.pair_cycles:
@@ -806,6 +900,16 @@ def main():
     parser.add_argument('--slate',type=int,default=1)
     parser.add_argument('--pool',type=int,default=10)
     parser.add_argument('--cycle-budget',type=int,default=0,help='Full-board assignment relaxations per repair.')
+    parser.add_argument('--regional-only',action='store_true',
+                        help='Keep the physically checked regional witness if the no-contact budget ends. '
+                             'Skips local CP and supports the NumPy-only profile.')
+    parser.add_argument('--regional-cycle-budget',type=int,default=0,
+                        help='Try this many disjoint assignment bounds before constructing local no-contact CP. '
+                             'A proved optimum skips that local CP model.')
+    parser.add_argument('--cycle-partition',choices=('disjoint','neighbors','warm'),
+                        help='Partition nonadjacent donor assignments using changed/stayed codes. '
+                             'Neighbors also pins every neighbor of a required change. Warm reuses parent matchings. '
+                             'Implies a cycle budget of three unless a positive budget was selected.')
     parser.add_argument('--contacts',type=int,help='Maximum contacting changed pairs in joint repair (-1 for unlimited).')
     parser.add_argument('--forest',action='store_true',help='Choose a low-width repair pool along defective seams.')
     parser.add_argument('--pair-cycles',type=int,choices=(0,2,3),default=0,help='Price interacting donor cycles in the joint pool up to this length.')
@@ -829,6 +933,13 @@ def main():
     from r31_sampling import run_seeds
     p=SearchProblem(read_json(args.tiles))
     config={k:getattr(args,k) for k in ('bonds','joint','adjacent','ties','tie_slack','fork','relink','slate','pool','cycle_budget')}
+    if args.cycle_partition:
+        config['cycle_partition']=args.cycle_partition
+        config['cycle_budget']=args.cycle_budget or 3
+    if args.regional_cycle_budget:
+        config['regional_cycle_budget']=args.regional_cycle_budget
+    if args.regional_only:
+        config['regional_only']=True
     if args.forest:
         config['forest']=True
     if args.pair_cycles:
@@ -844,6 +955,9 @@ def main():
     if args.contacts is not None or args.disjoint_contacts:
         config.update(contacts=args.contacts,disjoint=args.disjoint_contacts)
     engine=Engine(p,**config)
+    if args.regional_only:
+        from importlib.util import find_spec
+        config['regional_native_assignment']=find_spec('ortools') is not None
     experiment={k:getattr(args,k) for k in ('backend','dispatches','replicas','rounds','ranked')}
     hints=[engine.model.legal_board(read_json(path)['codes']).tolist() for path in args.hint]
     scope=hashlib.sha256(json.dumps([2 if args.bonds else 1,domain_binding(engine.model),config,experiment,hints],sort_keys=True).encode()).hexdigest()

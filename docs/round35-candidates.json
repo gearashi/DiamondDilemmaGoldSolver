@@ -433,7 +433,16 @@
       "source_id": 21,
       "title": "Disjoint branching in the nonadjacent donor assignment",
       "proposal_and_validation": "r31_fresh.pack_cycles splits a conflicting pair of changed cells into i stays / j stays, repeating their intersection. Encode i stays or (i changes and j stays), using the actual unchanged code so same-tile reorientation is legal as a change. Recompute correct maxima when the unchanged orientation is forbidden on the diagonal; optionally repair the parent's matching/dual after each small constraint change. R34 already tested dual reuse for a different numeric family bound. Measure duplicate relaxed assignments, full solves, exact bound and valid selected cycles, including ties, forced rotations and infeasible children. Test unrestricted small complete nonadjacent neighborhoods before using the disjoint split for pruning.",
-      "state": "open"
+      "state": "retain disjoint regional proofs, identity dual and explicit portable mode",
+      "mechanism": "REPAIR-DISJOINT-CIRCULATION",
+      "measurement": "All 36 original regional optima matched. The released path used 6,194 assignment solves and repeated 74 relaxed boards. Disjoint/neighbor-propagating used 4,977/4,438 with zero repeated relaxations. Matched warm assignments needed 2,428 augmentations versus 34,464 cold. On four 320-round fresh starts, a two-bound regional gate certified all 1,280 local queries with five assignment solves after identity duals and zero local CP branches, versus 57,280 on the original trajectories. Scores 180/176/184/175; portable Python 3.15 resumed 16 to 32 rounds.",
+      "closure_reason": "Use --regional-cycle-budget 2 for work-efficient fresh discovery. Keep whole-board disjoint, forced-neighbor and warm assignments optional: early primal results differed, and whole-board work in the 3/24-node controls remained open. A positive-contact query never receives a noncontacting completion. --regional-only labels a budget-ended witness feasible and separates its execution backend.",
+      "reopen_trigger": "A materially different local contact objective, a recurring hard region distribution that changes the budget tradeoff, or a genuinely new bound that closes the four remaining regional assignment cases.",
+      "evidence": [
+        "docs/ROUND35_REPAIR.md",
+        "docs/R35_CIRCULATION.json",
+        "test_r35_cycle_branches.py"
+      ]
     },
     {
       "id": 37,

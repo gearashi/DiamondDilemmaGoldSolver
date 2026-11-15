@@ -102,6 +102,8 @@ Windows equivalents are `.\Setup.cmd -Backend webgpu` and `.\Setup.cmd -Backend 
 
 ### Selecting Python 3.15
 
+The NumPy-only installation also supports independent CPU fresh-board repair with a bounded noncontacting regional assignment search. Use `r31_fresh.py --regional-only --regional-cycle-budget 2` with the CPU settings in the [Round 35 fresh-repair comparison](docs/ROUND35_REPAIR.md). A bounded region returns its verified legal witness when it has work left.
+
 In a fresh checkout without `venv`, select the interpreter explicitly:
 
 ```powershell

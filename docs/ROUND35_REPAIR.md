@@ -110,3 +110,37 @@ Under standard exact packing, a one-entry history recovered 269 nontrivial graph
 **Decision.** Retain selective candidate and noncontacting-graph reuse transparently. A full price pass is appropriate for a fresh state or when every available pair has a dirty endpoint. All twelve sustained production runs reproduced the frozen pre-catalog best codes and logical search counters. Cold or resumed workers reconstruct the volatile catalog from their legal board on first use; existing saved trajectory formats and work receipts are compatible. No new search setting is required. Reopen only with evidence of useful nontrivial cross-process reuse or a distinct dependency omitted by the present masks.
 
 [Direct comparisons, physical controls and per-seed outputs](R35_SWAP_CATALOG.json). Reproduce with `bench_r35_swap_catalog.py`. The finite regression checks every legal pair of rotations against an independent full score, including an unchanged swap invalidated by rotating its excluded neighbor.
+
+## 36. Disjoint donor assignments and regional optimality certificates
+
+For a conflict between changed positions (i) and (j), the two children now describe “(i) stays” and “(i) changes, (j) stays”. A required change may rotate the original tile in place. If its alternate rotations are illegal, that row must take a different donor. `--cycle-partition neighbors` also pins every local neighbor of a required change. `warm` keeps tight, surviving arcs and the feasible parent row and column duals, then augments the unmatched rows. It checks the completed assignment's legality, distinct donors, dual feasibility and primal/dual equality.
+
+On 36 original-board regions of 8, 12 or 22 cells, all four policies proved the same physical optimum for every region. The released overlapping search needed 6,194 assignment solves and produced 74 repeated relaxed physical boards. Disjoint branching used 4,977, neighbor propagation used 4,438, and warm matching used 4,459. The three new branches produced zero repeats. With the smaller initial budgets the old search completed 30 regions, compared with 32 for each of the new variants. These certificates cover only the indicated regional cells and fixed exterior.
+
+Independent cold and warm Hungarian solvers were evaluated on each identical matrix along the bounded warm search. Across 1,677 regional calls, reused assignments needed 2,428 augmentations versus 34,464 cold and traversed 25,276 alternating columns versus 176,176. Eight full-board budget controls needed 1,411 versus 17,280 augmentations, and 60,386 versus 667,186 alternating columns. Full-board controls with just 3 or 24 relaxation calls per region remained incomplete. Neighbor propagation sometimes found a weaker early primal under those small budgets. On complete small controls, independently enumerated actual rotations and donor permutations agreed with the certified results.
+
+A second use applies to the ordinary local CP-SAT stage when it allows zero contacts. Its geographic slots, donor inventory, changed-code definition, legal rotations and boundary objective are then the same as the regional nonadjacent circulation. `--regional-cycle-budget N` uses a proved regional witness immediately. If the budget ends, it runs the ordinary model on the original base and retains the better verified board. Other contact settings keep the ordinary CP model. `--regional-only` makes the bounded partial witness the explicit fallback for a no-contact run. It is labeled feasible and gets a separate checkpoint identity, including the installed assignment backend. This supports the Python 3.15 NumPy profile without local CP.
+
+The unchanged assignment has score delta zero. When potentials `p` satisfy `p[i] - p[j] >= gain[i,j]` on every legal arc, row potentials `p` and column potentials `-p` prove an assignment upper bound of zero. The current legal board attains that bound. In 1,280 actual local calls, the zero potentials already certified 1,241. One update certified 27 more and two updates certified eight. Four calls required the ordinary assignment solver. The dual was also checked against all permutations on independent small matrices with unavailable arcs and positive cycles. Among the 36 harder regional pools, it replaced 11 matching calls and preserved all 36 complete optima.
+
+| Policy, four independent 320-round starts | Best matched seams per start | Local CP branches | Regional assignment solves after identity proof |
+|---|---|---:|---:|
+| Released full-board exact packing and ordinary local CP | 171, 182, 181, 180 | 57,280 | – |
+| Disjoint whole-board branches and ordinary local CP | 171, 182, 181, 180 | 57,280 | – |
+| Whole-board forced-neighbor branches and ordinary local CP | 178, 173, 179, 183 | 54,738 | – |
+| Whole-board warm branches and ordinary local CP | 178, 177, 173, 178 | 52,614 | – |
+| One local assignment bound before CP | 180, 176, 181, 175 | 1,007 | 5 |
+| Two local assignment bounds before CP | 180, 176, 184, 175 | 0 | 5 |
+| Two local bounds plus individual cycles | 183, 176, 181, 175 | 0 | 0 |
+
+The two-bound profile reached 180 on seeds 3500 and 3502 at rounds 180 and 202. Budgets 8, 32 and 128 returned the same codes and search work before the identity shortcut. Independent 16-to-64 and 64-to-320 extensions and a cold 64-round replay returned the checked codes and counters for each policy. At budgets 8, 32 and 128 on the separate harder regional distribution, 23, 27 and 30 of 36 pools, respectively, were proved before direct CP. All 12 CP-proved optima agreed with completed regional scopes; CP returned UNKNOWN on the other 24 at its usual effort.
+
+**Decision.** For fresh discovery with the priority on avoiding repeated optimization, use the existing full-board `--exact-packing` and add `--regional-cycle-budget 2`. The earlier 180-attainment comparison still favors the ordinary local CP profile on three out of four starts. The new profile skipped all 1,280 local CP models and attained 184 on one fresh board. Adding `--contact-group 1` eliminated all local assignment solves as well, with different final scores. Keep unrestricted CP for requested contacting neighborhoods and tune the regional budget upward only for demonstrably harder regional pools. Keep neighbor propagation and warm matching for regional closure or repeated assignment work; their ordinary full-board trajectories did not improve the default recommendation.
+
+```powershell
+.\venv\Scripts\python.exe r31_fresh.py --backend cpu --bonds --cycle-budget 3 --exact-packing --regional-cycle-budget 2 --rounds 320 --starts 0 --database runtime/fresh-regional.sqlite --output runtime/fresh-regional.json
+```
+
+For the NumPy-only Python 3.15 installation, add `--regional-only` and use a separate database. The actual 3.15.0 installation with NumPy 2.5.3, eight mandatory bonds and no OR-Tools reached 155 after 16 rounds, then 161 after 32 with 16 reused and 16 new rounds. The retained regular Python 3.12 and portable Python 3.15 options return physical heuristic boards; 208 and one-loop Gold remain open.
+
+[Regional optima, matched assignments, trajectory receipts and native/portable controls](R35_CIRCULATION.json). Reproduce with `bench_r35_cycle_branches.py`, `bench_r35_identity_duals.py` and `bench_r35_trajectories.py`.
