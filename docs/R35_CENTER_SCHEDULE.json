@@ -1,0 +1,73 @@
+{
+  "serial_turn_to_planted_gold": 5,
+  "target": 42,
+  "max_edges": 60,
+  "initial_scores": [
+    30,
+    25
+  ],
+  "fair": {
+    "group_turns": [
+      4,
+      4
+    ],
+    "first_turns": [
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1
+    ],
+    "improvements": [
+      {
+        "group": 1,
+        "turn": 2,
+        "ranked_pages": 2,
+        "score": 60
+      }
+    ],
+    "warm": [
+      0,
+      0
+    ],
+    "covered": [
+      4,
+      4
+    ]
+  },
+  "yield": {
+    "group_turns": [
+      4,
+      4
+    ],
+    "first_turns": [
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1
+    ],
+    "improvements": [
+      {
+        "group": 1,
+        "turn": 2,
+        "ranked_pages": 2,
+        "score": 60
+      }
+    ],
+    "warm": [
+      0,
+      0
+    ],
+    "covered": [
+      4,
+      4
+    ]
+  }
+}

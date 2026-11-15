@@ -442,7 +442,13 @@
       "source_id": 14,
       "title": "Fair scheduling across unrelated center groups",
       "proposal_and_validation": "r34_centers.search runs selected disjoint groups by a sequential list of full run() calls. At an unlimited timer the first enormous group can effectively monopolize the search. Interleave bounded persistent rank quotas between eligible groups, preserve each singleton's scope, then compare fair quotas with a fair minimum plus headroom/observed-unique-yield priority. This moves the order of exploration only. Check no group starvation, correct resume after adding a center, planted easy positive in group two and identical closed union after full finite runs. Near-center candidates were all certified below 208 in R34's measured independent archive; use eligible controls and avoid claiming original 208 benefit in that sample.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "Fair turns reached the independently replayed 60-edge planted Gold on ranked page two instead of page five. The same eight ranked pages and witnesses completed; warm starts added no pages. Observed-yield scheduling tied fairness on the measured control; fair remains default.",
+      "evidence": [
+        "docs/ROUND35_CENTER_SCHEDULE.md",
+        "docs/R35_CENTER_SCHEDULE.json",
+        "test_r35_center_schedule.py"
+      ]
     },
     {
       "id": 30,

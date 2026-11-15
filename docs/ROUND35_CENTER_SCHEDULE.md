@@ -1,0 +1,9 @@
+# Fair turns for disjoint ranked center groups
+
+Round 35 workstream 29 keeps the existing union and ownership scopes. For multiple eligible, disjoint groups the center runner defaults to two ranked pages per turn. Its SQLite schedule records who last ran and previously observed unique and total endpoint counts. Actual ranked receipts determine coverage; a scheduling turn cannot establish any negative. Adding an independent center gives its new group a turn without resetting the earlier groups. A single group follows its existing direct search path. Wall time and maximum pages retain their per-group meanings.
+
+A 40-piece planted comparison used explicit pose pins, two disjoint center shells and threshold 42 of 60. Four one-rank pages for each group produced the same complete eight pages, same verified maximum and same board under serial and interleaved execution. Serial reached the planted 60-edge single loop on the fifth turn; round-robin and the optional yield policy both found it on turn two. Warm starts added zero pages in either case. A three-group uneven-yield fixture exercises adding a center, page caps and starvation. One discretionary turn per rotation can select the highest measured fraction of non-owned endpoints, while least-recently-served turns bound waiting. It gave no advantage in the planted comparison, so round-robin is the default.
+
+The installed original-puzzle fresh archives had no 208-eligible independent center in the Round 34 comparison. This experiment measures the order of exploration when several groups actually qualify. It adds no source of 208 coverage to those archived exclusions.
+
+Run `python bench_r35_center_schedule.py --output docs/R35_CENTER_SCHEDULE.json` and `python -m unittest test_r35_center_schedule test_r34_repair.AdaptiveCenterTests`. The public CLI exposes `--group-pages` and `--schedule fair|yield`.

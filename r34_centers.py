@@ -109,12 +109,17 @@ def select(problem,boards,database,family,target,limit,policy='novel',seed=34,sa
                                   candidates=len(candidates),groups=groups)
 
 
-def search(problem,boards,database,*,family,target=208,limit=3,policy='novel',seed=34,samples=64,**settings):
+def search(problem,boards,database,*,family,target=208,limit=3,policy='novel',seed=34,samples=64,schedule='fair',group_pages=2,**settings):
     candidates,groups,report=select(problem,boards,database,family,target,limit,policy,seed,samples)
     # Separate disjoint shells retain their original singleton page scopes as
     # more centers are added. Possibly overlapping shells use exact joint ownership.
-    reports=[run(problem,[candidates[k]['board'] for k in group],database,families=(family,),target=target,**settings)
-             for group in groups]
+    if len(groups)<=1:
+        reports=[run(problem,[candidates[k]['board'] for k in group],database,families=(family,),target=target,**settings)
+                 for group in groups]
+    else:
+        from r35_center_schedule import interleave
+        reports,report['schedule']=interleave(problem,candidates,groups,database,family,target,settings,run,
+                                              quota=group_pages,policy=schedule)
     report['searches']=reports
     report['best']=max((r['best'] for r in reports if r['best'] is not None),
                        key=lambda row:row['score'],default=None)
@@ -133,13 +138,15 @@ def main():
     p.add_argument('--seed',type=int,default=34)
     p.add_argument('--page',type=int,default=64)
     p.add_argument('--start',type=int,default=0)
+    p.add_argument('--group-pages',type=int,default=2,help='Ranked page quota for one disjoint center-group turn.')
+    p.add_argument('--schedule',choices=('fair','yield'),default='fair')
     p.add_argument('--stop',type=int)
     p.add_argument('--seconds',type=float,default=0,help='Time limit per disjoint group (zero is unlimited).')
     args=p.parse_args()
     family=tuple(map(int,args.family.split(',')))
     report=search(SearchProblem(read_json(args.tiles)),archive_boards(args.archive),args.database,family=family,
                   target=args.target,limit=args.limit,policy=args.policy,seed=args.seed,page=args.page,
-                  start=args.start,stop=args.stop,seconds=args.seconds)
+                  start=args.start,stop=args.stop,seconds=args.seconds,schedule=args.schedule,group_pages=args.group_pages)
     print(json.dumps(report))
 
 
