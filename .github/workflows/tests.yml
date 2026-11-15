@@ -71,6 +71,8 @@ jobs:
         run: python -B -m unittest discover -v -p "test_r33*.py"
 
       - name: Check round 34 pruning, checkpoint and replay controls
+        env:
+          DIAMOND_REQUIRE_SOURCE_CLONE: ${{ runner.os == 'macOS' && '1' || '0' }}
         run: python -B -m unittest discover -v -p "test_r34*.py"
 
       - name: Run CPU-only tests

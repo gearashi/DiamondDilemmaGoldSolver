@@ -6,20 +6,18 @@ cuts/hints, but restart their internal search after a process restart.
 from __future__ import annotations
 
 import argparse
-import ast
 import datetime
-from functools import lru_cache
 import hashlib
 import json
 import math
 import os
 from pathlib import Path
 import queue
-import re
 import signal
 import threading
 import time
 
+from exact_source_evidence import snapshot_search_sources
 from io_utils import atomic_json, read_json_shared
 from search_algorithms import ALGORITHMS, RECOMMENDED, LABELS
 from search_problem import SearchProblem
@@ -34,46 +32,6 @@ EVENT_CAPACITY = 128
 def terminal_digest(record):
     payload = {key: value for key, value in record.items() if key != 'sha256'}
     return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
-
-
-@lru_cache(maxsize=512)
-def _source_references(name, data):
-    """Parse optional function-local imports too. Exact bytes key the cache."""
-    modules, resources = set(), set()
-    for node in ast.walk(ast.parse(data, filename=name)):
-        if isinstance(node, ast.Import):
-            modules.update(alias.name.split('.', 1)[0] for alias in node.names)
-        elif isinstance(node, ast.ImportFrom) and node.module:
-            modules.add(node.module.split('.', 1)[0])
-        elif isinstance(node, ast.Constant) and isinstance(node.value, str):
-            if re.fullmatch(r'[A-Za-z][A-Za-z0-9_]*\.(?:c|cu|wgsl)', node.value):
-                resources.add(node.value)
-    return modules, resources
-
-
-def snapshot_search_sources(root, evidence, explicit):
-    """Copy the transitive local source inputs supporting an exact search result."""
-    files = {path.name for path in root.iterdir() if path.is_file()}
-    prefixes = ('constraint_', 'gpu_', 'domain_', 'sampling_', 'dfs_', 'r27_')
-    pending = set(explicit)
-    pending.update(name for name in files if name.startswith(prefixes)
-                   and Path(name).suffix in ('.py', '.c', '.cu', '.wgsl'))
-    hashes = {}
-    while pending:
-        name = pending.pop()
-        if name in hashes:
-            continue
-        data = (root/name).read_bytes()
-        if name.endswith('.py'):
-            modules, resources = _source_references(name, data)
-            pending.update(resources)
-            for module in modules:
-                # Fail closed for a missing project engine imported on an optional path.
-                if module + '.py' in files or module.startswith(prefixes) or re.match(r'^r[0-9]+_', module):
-                    pending.add(module + '.py')
-        hashes[name] = hashlib.sha256(data).hexdigest()
-        (evidence/name).write_bytes(data)
-    return hashes
 
 
 def run_solver(problem, algorithm, **kwargs):
