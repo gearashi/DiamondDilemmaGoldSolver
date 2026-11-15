@@ -12,6 +12,42 @@ from r35_repair_seeds import active_catalog
 from search_problem import SearchProblem
 
 
+class SyntheticFrontiers(unittest.TestCase):
+    def test_held_literal_implications_remain_correct_on_widened_siblings(self):
+        from types import SimpleNamespace
+        from itertools import product
+        from r35_pose_departures import indexed_rows
+        n=160
+        image=[(c,1<<(3*c)) for c in range(n)]
+        other=image.copy()
+        other[0]=(2,1<<6)
+        other[1]=(1,1<<4)
+        other[2]=(0,1<<1)
+        images=(tuple(image),tuple(other))
+        receiver=FrontierPoses(SimpleNamespace(n=n))
+        receiver.checked=True
+        receiver.catalogue=(set().union(*images),images,indexed_rows(((0,1),)),n)
+        full=(1<<(3*n))-1
+        for a,b,c in product((1,2,3),(8,16,24),(64,128,192)):
+            before=[a,b,c]+[full]*(n-3)
+            after,facts=receiver.prune(before)
+            boards=[v for v in product((0,1),(3,4),(6,7))
+                    if all(m & (1<<k) for m,k in zip(before,v))
+                    and v[:2]!=(0,3) and v[1:]!=(4,6)]
+            if facts and facts['over']:
+                self.assertFalse(boards)
+            else:
+                self.assertTrue(all(all(m & (1<<k) for m,k in zip(after,v)) for v in boards))
+            self.assertEqual(before[:3],[a,b,c])
+
+    def test_api_rejects_unsupported_receivers_before_loading_any_engine(self):
+        for alg,opts,target,resume in [('sat',{},'gold',None),('dfs',{},'edges',None),
+                ('dfs',{'shared_coverage':True},'gold',None),('dfs',{'lcg':True},'gold',None),
+                ('dfs',{'reason_tracking':True},'gold',None),('dfs',{'symbolic_frontier':True},'gold',None),
+                ('dfs',{},'gold',{'parallel_version':1}),('gpu-domains',{},'gold',{'schema':'diamond-symbolic-coordinator-v1'})]:
+            with self.assertRaises(ValueError):validate_receiver(alg,opts,target,resume)
+
+
 class FrontierCases(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -93,13 +129,6 @@ class FrontierCases(unittest.TestCase):
         self.assertEqual((ans['status'],ans['nodes'],ans['stats']['reference_pose_closed']),('infeasible',0,1))
         self.assertEqual(ans['checkpoint']['frontier']['boxes'],[])
         self.assertEqual(prepare_frontier(self.p,portable,lambda:True)[0],portable)
-
-    def test_api_rejects_unsupported_receivers_before_loading_any_engine(self):
-        for alg,opts,target,resume in [('sat',{},'gold',None),('dfs',{},'edges',None),
-                ('dfs',{'shared_coverage':True},'gold',None),('dfs',{'lcg':True},'gold',None),
-                ('dfs',{'reason_tracking':True},'gold',None),('dfs',{'symbolic_frontier':True},'gold',None),
-                ('dfs',{},'gold',{'parallel_version':1}),('gpu-domains',{},'gold',{'schema':'diamond-symbolic-coordinator-v1'})]:
-            with self.assertRaises(ValueError):validate_receiver(alg,opts,target,resume)
 
     @unittest.skipUnless(os.environ.get('DIAMOND_TEST_CUDA')=='1','Requires native CUDA')
     def test_existing_live_cuda_resume_keeps_its_unfinished_native_owner(self):
