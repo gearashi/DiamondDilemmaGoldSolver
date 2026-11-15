@@ -159,18 +159,68 @@ class PriceControls(unittest.TestCase):
             path.write_text(json.dumps(manifest))
             self.assertIsNone(verified_restore(temp))
 
-    def test_large_varying_warm_rows_select_implementation_by_backend_and_decoder(self):
+    def test_warm_price_hint_reads_native_arrays_and_never_reuses_host_frame_bytes(self):
+        from unittest.mock import Mock
+        from classic_checkpoint_ranges import CheckpointRanges
+        from systematic_jobs import JobLedger
+        from test_replica_resize import host_dfs
+        n=128
+        gpu=host_dfs(n)
+        gpu.cp.RawKernel=Mock(side_effect=AssertionError('Warm price must avoid default-value device summary'))
+        gpu.maxdepths[:]=101
+        gpu.floors[:]=40
+        for field in FIELDS:getattr(gpu,field)[159,7]=0xf123
+        expected=gpu.snapshot_checkpoint()
+        reader=CheckpointRanges(gpu,JobLedger.empty(0,n))
+        got=reader.capture()
+        self.assertEqual(reader.frame_defaults.distribution,{'warm_direct':True})
+        self.assertEqual((reader.frame_defaults.maps,reader.frame_defaults.read_bytes),(0,0))
+        self.assertEqual(reader.maps,len(gpu.DEVICE_FIELDS))
+        for k in expected:np.testing.assert_array_equal(got[k],expected[k])
+        for field in FIELDS:self.assertEqual(int(got[field][159,7]),0xf123)
+        device=FrameDefaults(gpu)
+        depths=np.full(n,101,np.int16)
+        floors=np.full(n,54,np.int16)
+        self.assertFalse(device.prefer_direct(depths,floors))
+        floors-=1
+        self.assertTrue(device.prefer_direct(depths,floors))
+        self.assertFalse(FrameDefaults(gpu,force=True).prefer_direct(depths,floors))
+        self.assertFalse(device.prefer_direct(depths,depths))
+        self.assertFalse(device.prefer_direct(depths[:5],floors))
+        self.assertFalse(device.prefer_direct(None,None))
+
+    def test_webgpu_high_water_price_falls_back_to_exact_physical_buffers(self):
+        from classic_checkpoint_ranges import CheckpointRanges
+        from systematic_jobs import JobLedger
+        from test_webgpu_checkpoint import memory_engine,oracle
+        n=128
+        gpu=memory_engine(n)
+        gpu.buffers[5][1]=116
+        gpu.buffers[5][2]=20
+        reader=CheckpointRanges(gpu,JobLedger.empty(0,n),board_mode='ranges')
+        expected=oracle(gpu)
+        got=reader.capture()
+        self.assertEqual(reader.frame_defaults.distribution,{'warm_direct':True})
+        self.assertEqual((reader.frame_defaults.maps,reader.frame_defaults.read_bytes),(0,0))
+        self.assertEqual(reader.maps,6)
+        for name in expected:np.testing.assert_array_equal(got[name],expected[name])
+        gpu.buffers[1][159,91]=0xffd3b435
+        reader.installed[:]=True
+        again=reader.capture()
+        self.assertEqual(int(again['firsts'][159,91]),0xb435)
+        self.assertEqual(reader.maps,6)
+        for field in FIELDS:np.testing.assert_array_equal(got[field],expected[field])
+
+    def test_large_varying_warm_rows_avoid_large_cpu_unpack(self):
         from classic_frame_defaults import _worth_unpacking
         plans=np.zeros((160,10),np.uint32)
         plans[:90,0]=1
         plans[:90,2]=plans[:90,5]=131072
-        self.assertTrue(_worth_unpacking(131072,plans,web=False,native=False))
+        self.assertTrue(_worth_unpacking(131072,plans))
         plans[:90,9]=36
-        for web in (True,False):
-            for native in (True,False):
-                self.assertEqual(_worth_unpacking(131072,plans,web=web,native=native),web and native)
+        self.assertFalse(_worth_unpacking(131072,plans))
         plans[1:,9]=0
-        self.assertTrue(_worth_unpacking(131072,plans,web=False,native=False))
+        self.assertTrue(_worth_unpacking(131072,plans))
 
 
     def test_all_physical_directory_forms_and_batch_boundaries(self):

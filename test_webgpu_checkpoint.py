@@ -90,13 +90,14 @@ class RepresentationTests(unittest.TestCase):
         for n in (1,3,128):
             gpu = memory_engine(n)
             expected = oracle(gpu)
-            baseline = DFS.snapshot_checkpoint(gpu)
+            # Invoke the scalar reader directly so WebGPU virtual dispatch cannot replace this oracle.
+            baseline = DFS._snapshot_fields(gpu)
             self.assertEqual(len(gpu.queue.calls), 13)
             gpu.queue.calls.clear()
             before = gpu.readback_bytes
             actual = WebGPUDFS.snapshot_checkpoint(gpu)
             self.assertEqual(list(actual), list(baseline))
-            self.assertEqual(gpu.queue.calls, [(0, rows*n*4) for rows in (165,160,160,160,160,11)])
+            self.assertEqual(gpu.queue.calls, [(0, rows*n*4) for rows in (11,165,160,160,160,160)])
             self.assertEqual(gpu.readback_bytes-before, 816*n*4)
             for name, value in actual.items():
                 np.testing.assert_array_equal(value, baseline[name], err_msg=name)

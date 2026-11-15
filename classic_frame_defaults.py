@@ -122,12 +122,12 @@ def _restore(arrays,start,descriptor,raw):
 
 
 
-def _worth_unpacking(n,plans, *, web, native):
+def _worth_unpacking(n,plans):
     # On a warm pool the CPU can become more expensive than the avoided transfer.
     # Constant or untouched rows need only their already measured default/range.
     varying=plans[:,9]!=0
     records=np.where(plans[:,0]==1,plans[:,2].astype(np.int64)-plans[:,1],plans[:,5])
-    return int(records[varying].sum())<=2*n or (web and native)
+    return int(records[varying].sum())<=2*n
 
 
 def verified_restore(directory=None):
@@ -165,6 +165,20 @@ class FrameDefaults:
         self.kernels=None
         self.maps=self.read_bytes=0
         self.distribution={}
+
+    def prefer_direct(self,maxdepths,floors):
+        """Price a warm full read using two host arrays already required by the checkpoint."""
+        n=self.gpu.n
+        if (self.force or not isinstance(maxdepths,np.ndarray) or not isinstance(floors,np.ndarray)
+                or maxdepths.shape!=(n,) or floors.shape!=(n,) or n<=0
+                or maxdepths.dtype!=np.int16 or floors.dtype!=np.int16):
+            return False
+        # This selects a read path only. Both paths still read the actual GPU storage.
+        if int(maxdepths.sum(dtype=np.int64))-int(floors.sum(dtype=np.int64))<48*n:
+            return False
+        self.maps=self.read_bytes=0
+        self.distribution={'warm_direct':True}
+        return True
 
     def capture(self):
         gpu=self.gpu
@@ -249,7 +263,7 @@ class FrameDefaults:
             if not np.array_equal(meta[:,0]!=0,advertised):raise ValueError('Conflicting physical frame activity.')
             plans,sizes=_prices(n,meta)
             self.distribution={mode:int((plans[:,0]==i).sum()) for i,mode in enumerate(('empty','span','bits','indices'))}
-            if not self.force and not _worth_unpacking(n,plans,web=self.web,native=self.decoder is not None):return None
+            if not self.force and not _worth_unpacking(n,plans):return None
             pages=list(_pages(n,plans,sizes,limit-1))
             if self.read_bytes+4*sum(size+bool(size) for _,_,size in pages)>=8*160*n:return None
             arrays=empty_frames()

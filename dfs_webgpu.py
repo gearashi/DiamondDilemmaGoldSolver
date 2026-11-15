@@ -584,7 +584,7 @@ class WebGPUDFS(DFS):
             del raw
         else:
             fields['boards'],fields['used'] = projected
-        packed = reader._full_frames() if reader is not None else None
+        packed = reader._full_frames(fields['maxdepths'],fields['floors']) if reader is not None else None
         for i,name in enumerate(('firsts','lengths','cursors','shifts')):
             if packed is None:
                 raw = read(1+i,160)

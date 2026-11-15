@@ -1,0 +1,1295 @@
+{
+  "source": {
+    "plain_rows": "e9c2f1516c12b3cb41665a7ea6cd4bac2e646c90",
+    "bounded_numpy": "e84fee93119ee2c937b05b4c8fcb3388a3aae2bc",
+    "FXC": "3d19bc74b98b96737495dfe348e1d936822c49b2",
+    "bounded_native": "6129beae24651564380ac83a81ce54c866682735"
+  },
+  "original_and_held_out": [
+    {
+      "sha256": "621d6e7f495977d9b352695c6f6207721619cdbe20f6c1e68b1b291b151a57a1",
+      "width": 131072,
+      "dirty": 9223002,
+      "raw_bytes": 167772160,
+      "price_bytes": 75041584,
+      "all_popular_tuple_savings": 0
+    },
+    {
+      "sha256": "0769e2291ba4bb6462ec42466aba2aa61ed95c4492369f5d6a411547d0763986",
+      "width": 128,
+      "dirty": 6478,
+      "raw_bytes": 163840,
+      "price_bytes": 54816
+    },
+    {
+      "sha256": "5516b16c1f4d9b9deb90f8285bb8e668e713f8540ff132f23e32fb393a21c81e",
+      "width": 480,
+      "dirty": 480,
+      "raw_bytes": 614400,
+      "price_bytes": 5760
+    }
+  ],
+  "cpu_native": {
+    "n": 131072,
+    "bytes": 39448536,
+    "native_decode_seconds": [
+      0.11257580001256429,
+      0.13290279998909682,
+      0.1701201999967452,
+      0.11773879997781478,
+      0.13307319997693412
+    ]
+  },
+  "cpu_numpy": {
+    "n": 131072,
+    "bytes": 39448536,
+    "decode_seconds": [
+      1.8059487000282388,
+      1.341326099995058,
+      1.4273311999859288
+    ]
+  },
+  "cpu_volume": {
+    "npz_seconds": 0.46286409997264855,
+    "rows": [
+      {
+        "rank_rows": 4,
+        "nondefault": 63577,
+        "bytes": 206628,
+        "numpy": [
+          0.0446683999907691,
+          0.016590000013820827,
+          0.01996169998892583
+        ],
+        "native": [
+          0.002599200000986457,
+          0.0018185000226367265,
+          0.001951600017491728
+        ]
+      },
+      {
+        "rank_rows": 5,
+        "nondefault": 192437,
+        "bytes": 641532,
+        "numpy": [
+          0.06805279999389313,
+          0.07194819999858737,
+          0.06707399999140762
+        ],
+        "native": [
+          0.003732399985892698,
+          0.004225799988489598,
+          0.005734699981985614
+        ]
+      },
+      {
+        "rank_rows": 6,
+        "nondefault": 321297,
+        "bytes": 1076436,
+        "numpy": [
+          0.10972420001053251,
+          0.10739030002150685,
+          0.08216339998762123
+        ],
+        "native": [
+          0.005257899989373982,
+          0.00881689999368973,
+          0.005456099985167384
+        ]
+      },
+      {
+        "rank_rows": 10,
+        "nondefault": 836737,
+        "bytes": 2880484,
+        "numpy": [
+          0.259729299985338,
+          0.22246769999037497,
+          0.25014369998825714
+        ],
+        "native": [
+          0.021607400005450472,
+          0.01569329999620095,
+          0.02341379999415949
+        ]
+      },
+      {
+        "rank_rows": 24,
+        "nondefault": 2586107,
+        "bytes": 10460308,
+        "numpy": [
+          1.0142099999939092,
+          1.0011667000071611,
+          1.0185338000010233
+        ],
+        "native": [
+          0.08952259999932721,
+          0.056219999998575076,
+          0.04197799999383278
+        ]
+      },
+      {
+        "rank_rows": 80,
+        "nondefault": 8620175,
+        "bytes": 37087460,
+        "numpy": [
+          2.4122677999839652,
+          2.24407539999811,
+          2.0032229999778792
+        ],
+        "native": [
+          0.1544405999884475,
+          0.14692270001978613,
+          0.1545678999973461
+        ]
+      },
+      {
+        "rank_rows": 160,
+        "nondefault": 9223002,
+        "bytes": 39448536,
+        "numpy": [
+          1.842727199982619,
+          2.206698399997549,
+          2.1979355000075884
+        ],
+        "native": [
+          0.1848108999838587,
+          0.21516809999593534,
+          0.18234170001232997
+        ]
+      }
+    ]
+  },
+  "constant_fills": {
+    "numpy": [
+      0.012267300015082583,
+      0.012290799990296364,
+      0.011905600025784224,
+      0.017830400000093505,
+      0.011943699995754287
+    ],
+    "native": [
+      0.021118000004207715,
+      0.0211632999998983,
+      0.02040160002070479,
+      0.02606709999963641,
+      0.022310800006380305
+    ]
+  },
+  "numpy_trials": {
+    "CUDA": {
+      "width": 131072,
+      "checkpoint_sha256": "621d6e7f495977d9b352695c6f6207721619cdbe20f6c1e68b1b291b151a57a1",
+      "restore_seconds": 6.31261490000179,
+      "stages": {
+        "fresh": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.23915840001427568,
+              0.1379266000003554,
+              0.19754389999434352
+            ],
+            "bounded": [
+              0.3803894000011496,
+              0.13121640001190826,
+              0.10520729998825118
+            ],
+            "rows": [
+              0.40822290000505745,
+              0.12723100002040155,
+              0.09760099998675287
+            ]
+          },
+          "median": {
+            "packed": 0.19754389999434352,
+            "bounded": 0.13121640001190826,
+            "rows": 0.12723100002040155
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 12,
+              "bytes": 216924160
+            },
+            "bounded": {
+              "maps": 9,
+              "bytes": 49152020,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              }
+            },
+            "rows": {
+              "maps": 9,
+              "bytes": 49153920,
+              "frame_bytes": 1920,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160,
+                "span": 0,
+                "bits": 0,
+                "indices": 0
+              }
+            }
+          }
+        },
+        "installed_prefixes": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.15549480001209304,
+              0.14182720001554117,
+              0.13749900000402704
+            ],
+            "bounded": [
+              0.1302731999894604,
+              0.10697779999463819,
+              0.1347617999999784
+            ],
+            "rows": [
+              0.1212773000006564,
+              0.11021559999790043,
+              0.1160675999999512
+            ]
+          },
+          "median": {
+            "packed": 0.14182720001554117,
+            "bounded": 0.1302731999894604,
+            "rows": 0.1160675999999512
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 12,
+              "bytes": 216924160
+            },
+            "bounded": {
+              "maps": 9,
+              "bytes": 49152020,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              }
+            },
+            "rows": {
+              "maps": 9,
+              "bytes": 49153920,
+              "frame_bytes": 1920,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160,
+                "span": 0,
+                "bits": 0,
+                "indices": 0
+              }
+            }
+          }
+        },
+        "reinstalled_after_first_capture": {
+          "seconds": 1.651011500012828,
+          "maps": 11,
+          "bytes": 88605040,
+          "frame_bytes": 39453040,
+          "frame_maps": 3,
+          "modes": {
+            "empty": 55,
+            "span": 15,
+            "bits": 78,
+            "indices": 12
+          }
+        },
+        "restored": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.22738789999857545,
+              0.13957999998820014,
+              0.1557578999781981
+            ],
+            "bounded": [
+              2.03947259997949,
+              1.8050865000113845,
+              1.8075346999976318
+            ],
+            "rows": [
+              0.44772419999935664,
+              0.44312350000836886,
+              0.6352410000108648
+            ]
+          },
+          "median": {
+            "packed": 0.1557578999781981,
+            "bounded": 1.8075346999976318,
+            "rows": 0.44772419999935664
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 12,
+              "bytes": 216924160
+            },
+            "bounded": {
+              "maps": 11,
+              "bytes": 88605040,
+              "frame_bytes": 39453040,
+              "frame_maps": 3,
+              "modes": {
+                "empty": 55,
+                "span": 15,
+                "bits": 78,
+                "indices": 12
+              }
+            },
+            "rows": {
+              "maps": 10,
+              "bytes": 124193584,
+              "frame_bytes": 75041584,
+              "frame_maps": 2,
+              "modes": {
+                "empty": 55,
+                "span": 17,
+                "bits": 76,
+                "indices": 12
+              }
+            }
+          }
+        }
+      }
+    },
+    "Vulkan": {
+      "width": 131072,
+      "checkpoint_sha256": "621d6e7f495977d9b352695c6f6207721619cdbe20f6c1e68b1b291b151a57a1",
+      "restore_seconds": 6.053108099993551,
+      "stages": {
+        "fresh": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.617763999995077,
+              0.559099400008563,
+              0.4902775999798905
+            ],
+            "bounded": [
+              0.3156948999967426,
+              0.33294520000345074,
+              0.32112989999586716
+            ],
+            "rows": [
+              0.4503530999936629,
+              0.31733510000049137,
+              0.3260119000042323
+            ]
+          },
+          "median": {
+            "packed": 0.559099400008563,
+            "bounded": 0.32112989999586716,
+            "rows": 0.3260119000042323
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 4,
+              "bytes": 178782212
+            },
+            "bounded": {
+              "maps": 3,
+              "bytes": 11010072,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              }
+            },
+            "rows": {
+              "maps": 3,
+              "bytes": 11011972,
+              "frame_bytes": 1920,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160,
+                "span": 0,
+                "bits": 0,
+                "indices": 0
+              }
+            }
+          }
+        },
+        "installed_prefixes": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.4935029000043869,
+              0.5447862000146415,
+              0.5073053000087384
+            ],
+            "bounded": [
+              0.3152296999760438,
+              0.3578677000186872,
+              0.31528959999559447
+            ],
+            "rows": [
+              0.28913119999924675,
+              0.34771790000377223,
+              0.3485840999928769
+            ]
+          },
+          "median": {
+            "packed": 0.5073053000087384,
+            "bounded": 0.31528959999559447,
+            "rows": 0.34771790000377223
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 4,
+              "bytes": 178784132
+            },
+            "bounded": {
+              "maps": 3,
+              "bytes": 11011992,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              }
+            },
+            "rows": {
+              "maps": 3,
+              "bytes": 11013892,
+              "frame_bytes": 1920,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160,
+                "span": 0,
+                "bits": 0,
+                "indices": 0
+              }
+            }
+          }
+        },
+        "reinstalled_after_first_capture": {
+          "seconds": 4.183374600019306,
+          "maps": 5,
+          "bytes": 61805356,
+          "frame_bytes": 39453040,
+          "frame_maps": 3,
+          "modes": {
+            "empty": 55,
+            "span": 15,
+            "bits": 78,
+            "indices": 12
+          }
+        },
+        "restored": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              1.033462800027337,
+              0.748895899974741,
+              0.7716214999963995
+            ],
+            "bounded": [
+              3.0880128999997396,
+              2.359614799992414,
+              2.3882075999863446
+            ],
+            "rows": [
+              0.8539177999773528,
+              0.9497343000257388,
+              0.9571030999941286
+            ]
+          },
+          "median": {
+            "packed": 0.7716214999963995,
+            "bounded": 2.3882075999863446,
+            "rows": 0.9497343000257388
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 4,
+              "bytes": 190124476
+            },
+            "bounded": {
+              "maps": 5,
+              "bytes": 61805356,
+              "frame_bytes": 39453040,
+              "frame_maps": 3,
+              "modes": {
+                "empty": 55,
+                "span": 15,
+                "bits": 78,
+                "indices": 12
+              }
+            },
+            "rows": {
+              "maps": 4,
+              "bytes": 97393900,
+              "frame_bytes": 75041584,
+              "frame_maps": 2,
+              "modes": {
+                "empty": 55,
+                "span": 17,
+                "bits": 76,
+                "indices": 12
+              }
+            }
+          }
+        }
+      }
+    },
+    "D3D12": {
+      "width": 131072,
+      "checkpoint_sha256": "621d6e7f495977d9b352695c6f6207721619cdbe20f6c1e68b1b291b151a57a1",
+      "restore_seconds": 5.068808999989415,
+      "stages": {
+        "fresh": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.5815947000228334,
+              0.4255282999947667,
+              0.38971180000226013
+            ],
+            "bounded": [
+              0.49318610000773333,
+              0.25174669999978505,
+              0.25464209998608567
+            ],
+            "rows": [
+              0.4009514000208583,
+              0.25685869998415,
+              0.22642040002392605
+            ]
+          },
+          "median": {
+            "packed": 0.4255282999947667,
+            "bounded": 0.25464209998608567,
+            "rows": 0.25685869998415
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 4,
+              "bytes": 178782212
+            },
+            "bounded": {
+              "maps": 3,
+              "bytes": 11010072,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              }
+            },
+            "rows": {
+              "maps": 3,
+              "bytes": 11011972,
+              "frame_bytes": 1920,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160,
+                "span": 0,
+                "bits": 0,
+                "indices": 0
+              }
+            }
+          }
+        },
+        "installed_prefixes": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.37243769998895004,
+              0.4136966999794822,
+              0.4175794000038877
+            ],
+            "bounded": [
+              0.22937630000524223,
+              0.23045529998489656,
+              0.23495030001504347
+            ],
+            "rows": [
+              0.22523520002141595,
+              0.251008199993521,
+              0.24236949998885393
+            ]
+          },
+          "median": {
+            "packed": 0.4136966999794822,
+            "bounded": 0.23045529998489656,
+            "rows": 0.24236949998885393
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 4,
+              "bytes": 178784132
+            },
+            "bounded": {
+              "maps": 3,
+              "bytes": 11011992,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              }
+            },
+            "rows": {
+              "maps": 3,
+              "bytes": 11013892,
+              "frame_bytes": 1920,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160,
+                "span": 0,
+                "bits": 0,
+                "indices": 0
+              }
+            }
+          }
+        },
+        "reinstalled_after_first_capture": {
+          "seconds": 2.370478800003184,
+          "maps": 5,
+          "bytes": 61805356,
+          "frame_bytes": 39453040,
+          "frame_maps": 3,
+          "modes": {
+            "empty": 55,
+            "span": 15,
+            "bits": 78,
+            "indices": 12
+          }
+        },
+        "restored": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.777383499982534,
+              0.7580804000026546,
+              0.774534299998777
+            ],
+            "bounded": [
+              2.184948100009933,
+              2.1341286999813747,
+              2.0120472999988124
+            ],
+            "rows": [
+              0.9473840999999084,
+              0.9964753999956883,
+              0.9525775999936741
+            ]
+          },
+          "median": {
+            "packed": 0.774534299998777,
+            "bounded": 2.1341286999813747,
+            "rows": 0.9525775999936741
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 4,
+              "bytes": 190124476
+            },
+            "bounded": {
+              "maps": 5,
+              "bytes": 61805356,
+              "frame_bytes": 39453040,
+              "frame_maps": 3,
+              "modes": {
+                "empty": 55,
+                "span": 15,
+                "bits": 78,
+                "indices": 12
+              }
+            },
+            "rows": {
+              "maps": 4,
+              "bytes": 97393900,
+              "frame_bytes": 75041584,
+              "frame_maps": 2,
+              "modes": {
+                "empty": 55,
+                "span": 17,
+                "bits": 76,
+                "indices": 12
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "native_trials": {
+    "CUDA": {
+      "width": 131072,
+      "checkpoint_sha256": "621d6e7f495977d9b352695c6f6207721619cdbe20f6c1e68b1b291b151a57a1",
+      "restore_seconds": 4.365508399991086,
+      "npz_load_seconds": 0.47629990000859834,
+      "original_npz_frame_sha256": {
+        "firsts": "39d84e365c7a7bed3cb4019e4a7e5fdc067b57e47001a26832b0871773fa129a",
+        "lengths": "49fa2cb0bc3fb91acfe662cd8fa005a0544f5b3551b75536efe21b13a5a451e6",
+        "cursors": "8dbe88af6c21e4b7b79fba4be9680208d4e2ecf78c2ff695d01494919f80bd87",
+        "shifts": "11a59221fb84ba54197de116c02d48e63e279c1cb033648e591b8b7310f83796"
+      },
+      "native_frames_match_original_npz": true,
+      "stages": {
+        "fresh": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.15569779998622835,
+              0.0843297999817878,
+              0.0930985999875702
+            ],
+            "bounded": [
+              0.06903179999790154,
+              0.06558009999571368,
+              0.0667173000110779
+            ],
+            "auto": [
+              0.07006670002010651,
+              0.06909099998301826,
+              0.07134100000257604
+            ]
+          },
+          "median": {
+            "packed": 0.0930985999875702,
+            "bounded": 0.0667173000110779,
+            "auto": 0.07006670002010651
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 12,
+              "bytes": 216924160
+            },
+            "bounded": {
+              "maps": 9,
+              "bytes": 49152020,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              },
+              "native_decode": true
+            },
+            "auto": {
+              "maps": 9,
+              "bytes": 49152020,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              },
+              "native_decode": true
+            }
+          }
+        },
+        "installed_prefixes": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.09316180000314489,
+              0.0947681000106968,
+              0.0986611999978777
+            ],
+            "bounded": [
+              0.06727470000623725,
+              0.06200470001203939,
+              0.06994940000004135
+            ],
+            "auto": [
+              0.06979050001245923,
+              0.05910990000120364,
+              0.06301029998576269
+            ]
+          },
+          "median": {
+            "packed": 0.0947681000106968,
+            "bounded": 0.06727470000623725,
+            "auto": 0.06301029998576269
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 12,
+              "bytes": 216924160
+            },
+            "bounded": {
+              "maps": 9,
+              "bytes": 49152020,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              },
+              "native_decode": true
+            },
+            "auto": {
+              "maps": 9,
+              "bytes": 49152020,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              },
+              "native_decode": true
+            }
+          }
+        },
+        "reinstalled_after_first_capture": {
+          "seconds": 0.25524669999140315,
+          "maps": 11,
+          "bytes": 88605040,
+          "frame_bytes": 39453040,
+          "frame_maps": 3,
+          "modes": {
+            "empty": 55,
+            "span": 15,
+            "bits": 78,
+            "indices": 12
+          },
+          "native_decode": true
+        },
+        "restored": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.1006352000113111,
+              0.10796419999678619,
+              0.1041003999998793
+            ],
+            "bounded": [
+              0.19358280001324601,
+              0.23727259997394867,
+              0.19091110001318157
+            ],
+            "auto": [
+              0.10477440000977367,
+              0.10300619999179617,
+              0.10896660000435077
+            ]
+          },
+          "median": {
+            "packed": 0.1041003999998793,
+            "bounded": 0.19358280001324601,
+            "auto": 0.10477440000977367
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 12,
+              "bytes": 216924160
+            },
+            "bounded": {
+              "maps": 11,
+              "bytes": 88605040,
+              "frame_bytes": 39453040,
+              "frame_maps": 3,
+              "modes": {
+                "empty": 55,
+                "span": 15,
+                "bits": 78,
+                "indices": 12
+              },
+              "native_decode": true
+            },
+            "auto": {
+              "maps": 14,
+              "bytes": 216928660,
+              "frame_bytes": 4500,
+              "frame_maps": 2,
+              "modes": {
+                "empty": 55,
+                "span": 15,
+                "bits": 78,
+                "indices": 12
+              },
+              "native_decode": true
+            }
+          }
+        }
+      }
+    },
+    "Vulkan": {
+      "width": 131072,
+      "checkpoint_sha256": "621d6e7f495977d9b352695c6f6207721619cdbe20f6c1e68b1b291b151a57a1",
+      "restore_seconds": 4.424744999996619,
+      "npz_load_seconds": 0.4442076999985147,
+      "original_npz_frame_sha256": {
+        "firsts": "39d84e365c7a7bed3cb4019e4a7e5fdc067b57e47001a26832b0871773fa129a",
+        "lengths": "49fa2cb0bc3fb91acfe662cd8fa005a0544f5b3551b75536efe21b13a5a451e6",
+        "cursors": "8dbe88af6c21e4b7b79fba4be9680208d4e2ecf78c2ff695d01494919f80bd87",
+        "shifts": "11a59221fb84ba54197de116c02d48e63e279c1cb033648e591b8b7310f83796"
+      },
+      "native_frames_match_original_npz": true,
+      "stages": {
+        "fresh": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.37726819998351857,
+              0.21888110000872985,
+              0.20607640000525862
+            ],
+            "bounded": [
+              0.10046489999513142,
+              0.0837038999889046,
+              0.08435430002282374
+            ],
+            "auto": [
+              0.10180219999165274,
+              0.09889309998834506,
+              0.08675049999146722
+            ]
+          },
+          "median": {
+            "packed": 0.21888110000872985,
+            "bounded": 0.08435430002282374,
+            "auto": 0.09889309998834506
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 4,
+              "bytes": 178782212
+            },
+            "bounded": {
+              "maps": 3,
+              "bytes": 11010072,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              },
+              "native_decode": true
+            },
+            "auto": {
+              "maps": 3,
+              "bytes": 11010072,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              },
+              "native_decode": true
+            }
+          }
+        },
+        "installed_prefixes": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.21844830000190996,
+              0.19800830000895076,
+              0.19908369999029674
+            ],
+            "bounded": [
+              0.10156179999466985,
+              0.07747560000279918,
+              0.10279779997654259
+            ],
+            "auto": [
+              0.08600350000779144,
+              0.08950099998037331,
+              0.08232810001936741
+            ]
+          },
+          "median": {
+            "packed": 0.19908369999029674,
+            "bounded": 0.10156179999466985,
+            "auto": 0.08600350000779144
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 4,
+              "bytes": 178784132
+            },
+            "bounded": {
+              "maps": 3,
+              "bytes": 11011992,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              },
+              "native_decode": true
+            },
+            "auto": {
+              "maps": 3,
+              "bytes": 11011992,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              },
+              "native_decode": true
+            }
+          }
+        },
+        "reinstalled_after_first_capture": {
+          "seconds": 0.3141239999968093,
+          "maps": 5,
+          "bytes": 61805356,
+          "frame_bytes": 39453040,
+          "frame_maps": 3,
+          "modes": {
+            "empty": 55,
+            "span": 15,
+            "bits": 78,
+            "indices": 12
+          },
+          "native_decode": true
+        },
+        "restored": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.28677600002265535,
+              0.25982869998551905,
+              0.25079610000830144
+            ],
+            "bounded": [
+              0.29368720002821647,
+              0.2856169000151567,
+              0.2623058999888599
+            ],
+            "auto": [
+              0.2756977000099141,
+              0.3129872999852523,
+              0.29571010000654496
+            ]
+          },
+          "median": {
+            "packed": 0.25982869998551905,
+            "bounded": 0.2856169000151567,
+            "auto": 0.29571010000654496
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 4,
+              "bytes": 190124476
+            },
+            "bounded": {
+              "maps": 5,
+              "bytes": 61805356,
+              "frame_bytes": 39453040,
+              "frame_maps": 3,
+              "modes": {
+                "empty": 55,
+                "span": 15,
+                "bits": 78,
+                "indices": 12
+              },
+              "native_decode": true
+            },
+            "auto": {
+              "maps": 5,
+              "bytes": 61805356,
+              "frame_bytes": 39453040,
+              "frame_maps": 3,
+              "modes": {
+                "empty": 55,
+                "span": 15,
+                "bits": 78,
+                "indices": 12
+              },
+              "native_decode": true
+            }
+          }
+        }
+      }
+    },
+    "D3D12": {
+      "width": 131072,
+      "checkpoint_sha256": "621d6e7f495977d9b352695c6f6207721619cdbe20f6c1e68b1b291b151a57a1",
+      "restore_seconds": 6.5897070999781135,
+      "npz_load_seconds": 0.6842859000025783,
+      "original_npz_frame_sha256": {
+        "firsts": "39d84e365c7a7bed3cb4019e4a7e5fdc067b57e47001a26832b0871773fa129a",
+        "lengths": "49fa2cb0bc3fb91acfe662cd8fa005a0544f5b3551b75536efe21b13a5a451e6",
+        "cursors": "8dbe88af6c21e4b7b79fba4be9680208d4e2ecf78c2ff695d01494919f80bd87",
+        "shifts": "11a59221fb84ba54197de116c02d48e63e279c1cb033648e591b8b7310f83796"
+      },
+      "native_frames_match_original_npz": true,
+      "stages": {
+        "fresh": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              2.1682787999743596,
+              0.29464890001690947,
+              0.3472604999842588
+            ],
+            "bounded": [
+              0.6595875000057276,
+              0.12097049999283627,
+              0.14474599997629412
+            ],
+            "auto": [
+              0.13135609999881126,
+              0.1081150000100024,
+              0.1665365000080783
+            ]
+          },
+          "median": {
+            "packed": 0.3472604999842588,
+            "bounded": 0.14474599997629412,
+            "auto": 0.13135609999881126
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 4,
+              "bytes": 178782212
+            },
+            "bounded": {
+              "maps": 3,
+              "bytes": 11010072,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              },
+              "native_decode": true
+            },
+            "auto": {
+              "maps": 3,
+              "bytes": 11010072,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              },
+              "native_decode": true
+            }
+          }
+        },
+        "installed_prefixes": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.5373390000022482,
+              0.3718517000088468,
+              0.292256599990651
+            ],
+            "bounded": [
+              0.18082730000605807,
+              0.14241729999775998,
+              0.13075030001346022
+            ],
+            "auto": [
+              0.15906679999898188,
+              0.13798509998014197,
+              0.1321853999979794
+            ]
+          },
+          "median": {
+            "packed": 0.3718517000088468,
+            "bounded": 0.14241729999775998,
+            "auto": 0.13798509998014197
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 4,
+              "bytes": 178784132
+            },
+            "bounded": {
+              "maps": 3,
+              "bytes": 11011992,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              },
+              "native_decode": true
+            },
+            "auto": {
+              "maps": 3,
+              "bytes": 11011992,
+              "frame_bytes": 20,
+              "frame_maps": 1,
+              "modes": {
+                "empty": 160
+              },
+              "native_decode": true
+            }
+          }
+        },
+        "reinstalled_after_first_capture": {
+          "seconds": 0.38344219999271445,
+          "maps": 5,
+          "bytes": 61805356,
+          "frame_bytes": 39453040,
+          "frame_maps": 3,
+          "modes": {
+            "empty": 55,
+            "span": 15,
+            "bits": 78,
+            "indices": 12
+          },
+          "native_decode": true
+        },
+        "restored": {
+          "fields": 18,
+          "seconds": {
+            "packed": [
+              0.4841854000114836,
+              0.35833079999429174,
+              0.4336159999947995
+            ],
+            "bounded": [
+              0.5806280999968294,
+              0.38102919998345897,
+              0.608108499989612
+            ],
+            "auto": [
+              0.41943090001586825,
+              0.42743319997680373,
+              0.5061756999930367
+            ]
+          },
+          "median": {
+            "packed": 0.4336159999947995,
+            "bounded": 0.5806280999968294,
+            "auto": 0.42743319997680373
+          },
+          "telemetry": {
+            "packed": {
+              "maps": 4,
+              "bytes": 190124476
+            },
+            "bounded": {
+              "maps": 5,
+              "bytes": 61805356,
+              "frame_bytes": 39453040,
+              "frame_maps": 3,
+              "modes": {
+                "empty": 55,
+                "span": 15,
+                "bits": 78,
+                "indices": 12
+              },
+              "native_decode": true
+            },
+            "auto": {
+              "maps": 5,
+              "bytes": 61805356,
+              "frame_bytes": 39453040,
+              "frame_maps": 3,
+              "modes": {
+                "empty": 55,
+                "span": 15,
+                "bits": 78,
+                "indices": 12
+              },
+              "native_decode": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "selected_policy": {
+    "mean_high_water_gap_direct": 48,
+    "variable_records_per_lane_limit": 2,
+    "authority": "Independent physical storage for both paths. No NPZ frame is substituted.",
+    "original_high_water_gap": 69.38279724121094,
+    "held_out_gaps": [
+      49.609375,
+      0.0
+    ],
+    "maximum_width_summary_field_loads_avoided": 83886080,
+    "summary_maps_avoided": 2
+  }
+}

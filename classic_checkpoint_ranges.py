@@ -219,7 +219,7 @@ class CheckpointRanges:
         self.read_bytes += self.frame_kernel.read_bytes
         return result
 
-    def _full_frames(self):
+    def _full_frames(self,maxdepths=None,floors=None):
         gpu = self.gpu
         if not (self.web or hasattr(gpu.cp,'RawKernel')):
             return None
@@ -227,7 +227,8 @@ class CheckpointRanges:
             try:
                 if self.frame_defaults is None:
                     self.frame_defaults = FrameDefaults(gpu)
-                result = self.frame_defaults.capture()
+                prefer_direct = getattr(self.frame_defaults,'prefer_direct',None)
+                result = None if prefer_direct and prefer_direct(maxdepths,floors) else self.frame_defaults.capture()
             except Exception:
                 self.defaults_disabled = True
                 result = None

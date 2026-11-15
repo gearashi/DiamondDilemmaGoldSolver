@@ -750,18 +750,22 @@ class DFS:
 
     def _snapshot_fields(self,reader=None):
         self.cp.cuda.get_current_stream().synchronize()
-        packed = reader._full_frames() if reader is not None else None
-        frame_names = ('firsts','lengths','cursors','shifts')
         fields = {}
-        if packed is not None:
-            fields.update((name,field.reshape(160,self.n)) for name,field in zip(frame_names,packed))
-        for name in self.DEVICE_FIELDS:
-            if name in fields:
-                continue
+        def read(name):
             fields[name] = getattr(self,name).get()
             if reader is not None:
                 reader.maps += 1
                 reader.read_bytes += fields[name].nbytes
+        if reader is not None:
+            read('maxdepths')
+            read('floors')
+            packed = reader._full_frames(fields['maxdepths'],fields['floors'])
+            if packed is not None:
+                for name,field in zip(('firsts','lengths','cursors','shifts'),packed):
+                    fields[name] = field.reshape(160,self.n)
+        for name in self.DEVICE_FIELDS:
+            if name not in fields:
+                read(name)
         return self._checkpoint_payload(fields)
 
     def _checkpoint_payload(self, fields, *, fixed=None):
