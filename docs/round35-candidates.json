@@ -88,10 +88,18 @@
       "source_id": 6,
       "title": "Put a single circuit directly on mandatory physical strand IDs",
       "proposal_and_validation": "r30_gold.GoldMatching.process solves phase-compatible side matchings, then checks connected components and adds strand cuts. constraint_circuit builds a geographic circuit on optional port nodes or fixed geographic contractions. In the mate model, create directed supported successor arcs on the 365 mandatory segment IDs and add a single circuit there. Use the signed endpoint direction illustrated by r31_gold_switch.sewn_switches, guard both endpoints consistently and bundle every occupied slot of one selected mate. OR together duplicate directed arc supports. Contract forced open paths, handle parallel joins on tiny controls, and try switching from lazy cut separation only below a measured arc count/density. Follow up with SAT encoding using the same projected physical arcs only if native CP shows an opportunity. R27 successor-rank and sparse-elimination SAT were geographic placement experiments. Verify the complete physical matching set on small scopes against enumeration and both existing circuit methods. Count disconnected completions, duplicate strand cuts, branches, propagated arcs and real geographic lifts.",
-      "state": "in progress",
+      "state": "keep with exact scope",
       "decision_changing_followups": [
         "Compare the R27/R28/R29/R31 apex, pocket, flow and contracted-circuit connectivity encodings on the same completed Gold residuals as the physical circuit. Include adverse five-loop, empty-edge and nonplanar controls."
-      ]
+      ],
+      "evidence": [
+        "docs/ROUND35_PHYSICAL_TOUR.md",
+        "docs/R35_PHYSICAL_TOUR.json",
+        "docs/R35_CONNECTED_TOURS.json",
+        "test_r35_physical_tour.py"
+      ],
+      "decision": "Retain raw/contracted physical circuit and explicit size-limited mode. On the unrestricted published physical model, contracted achieved a connected sewing in one call and 78,428 branches; lazy remained open after 123,369 branches/four calls and 27 strand cuts. Both new saved tours fail geographic embedding. Across 64 enumerated small matchings CP, SAT and direct tracing agree on all 56 connected solutions. Coupled complementary models and full geographic channel have no additive win in the tested C1 geography cases.",
+      "reopen_if": "A representative geographic residual exhibits additive pruning over the geographic channel or complement controls, or a distinct large SAT arc encoding is justified by observed circuit reuse."
     },
     {
       "id": 7,
@@ -99,7 +107,7 @@
       "source_id": 7,
       "title": "Find stronger comb cuts with general handles and odd sets of teeth",
       "proposal_and_validation": "r31_gold_pricing.fractional_cuts selects the first twelve fractional edges, enumerates triples of disjoint two-strand teeth and eight three-strand handles per triple. For additional handles from actual min cuts or fractional clusters, price disjoint crossing two-strand teeth as a cardinality-constrained bipartite matching. With strand degree two, x(delta({u,v})) = 4 - 2*x_uv. For each odd t >= 3, choose t disjoint crossing pairs, maximizing the sum of 2*x_uv - 1. Directly reconstruct and evaluate x(delta(H)) + sum x(delta(T)) >= 3*t + 1 on the unrounded LP values, preserving every transition multiplicity supplied by one mate. Candidate discovery may be incomplete; mathematical verification of each installed row is sufficient. Consider larger multi-vertex teeth only if real fractional handles survive and two-strand rows leave measurable slack. Enumerate all handles/teeth on small graphs, check every cycle satisfies each reconstructed row, compare with published triples and odd *side* matching cuts on the original and pinned residuals. Count uniquely violated rows, integral matchings excluded early and ensuing CP calls/branches.",
-      "state": "open"
+      "state": "in progress"
     },
     {
       "id": 8,

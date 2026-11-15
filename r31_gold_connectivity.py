@@ -23,6 +23,21 @@ def connected_colors(problem, domains, method='parents', seconds=5, max_rows=100
     if sum(d.bit_count()*36 for d in domains)>max_rows:
         return dict(status='SIZE_LIMIT',boards=0)
     m=cp_model.CpModel()
+    choices,nodes,activations=_post_regions(problem,domains,method,corner,m)
+    solver=cp_model.CpSolver()
+    solver.parameters.num_search_workers=1
+    solver.parameters.max_time_in_seconds=seconds
+    status=solver.solve(m)
+    result=dict(status=solver.status_name(status),branches=solver.num_branches,nodes=len(nodes),
+                possible_links=len(activations),boards=0)
+    if status in (cp_model.FEASIBLE,cp_model.OPTIMAL):
+        codes=[next(v for v,x in row.items() if solver.value(x)) for row in choices]
+        if not problem.validate(codes)['valid']:raise ArithmeticError("Invalid geographic color witness.")
+        result.update(witness=codes,boards=1)
+    return result
+
+
+def _post_regions(problem,domains,method,corner,m):
     choices=[{v:m.new_bool_var('placement') for v in bits(ds)} for ds in domains]
     for row in choices:m.add_exactly_one(row.values())
     for t in range(problem.n):
@@ -91,17 +106,7 @@ def connected_colors(problem, domains, method='parents', seconds=5, max_rows=100
             supply=m.new_int_var(0,size,'root_supply')
             m.add(supply<=size*roots[u])
             m.add(sum(input_arcs[u])+supply-sum(output[u])==1)
-    solver=cp_model.CpSolver()
-    solver.parameters.num_search_workers=1
-    solver.parameters.max_time_in_seconds=seconds
-    status=solver.solve(m)
-    result=dict(status=solver.status_name(status),branches=solver.num_branches,nodes=size,
-                possible_links=len(activations),boards=0)
-    if status in (cp_model.FEASIBLE,cp_model.OPTIMAL):
-        codes=[next(v for v,x in row.items() if solver.value(x)) for row in choices]
-        if not problem.validate(codes)['valid']:raise ArithmeticError("Invalid geographic color witness.")
-        result.update(witness=codes,boards=1)
-    return result
+    return choices,nodes,activations
 
 
 class PhaseInterface:

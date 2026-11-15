@@ -172,7 +172,7 @@ def embedding(problem, domains, mates):
 
 
 class GoldMatching:
-    def __init__(self,problem,domains,pins,bonds,cutsets=(),forbidden=(),*,physical_support=True,project_blanks=False,corner_mode=None,neighbor_mode=None,turn_length=None):
+    def __init__(self,problem,domains,pins,bonds,cutsets=(),forbidden=(),*,physical_support=True,project_blanks=False,corner_mode=None,neighbor_mode=None,turn_length=None,tour_mode=None):
         self.problem=problem
         self.domains=domains
         self.inputs=EndpointCuts(problem)
@@ -267,6 +267,10 @@ class GoldMatching:
         if neighbor_mode:
             from r35_physical_adjacency import post_tile_limits
             self.neighbor_stats['pair_bounds']=post_tile_limits(self)
+        self.tour_stats=None
+        if tour_mode:
+            from r35_physical_tour import post_circuit
+            self.tour_stats=post_circuit(self,wanted,tour_mode)
         if corner_mode=='positions':
             from r35_corner_chains import post_positions
             self.corner_stats['positions'] = post_positions(self)
@@ -421,7 +425,7 @@ class GoldMatching:
 
 def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=(), matching=True,
            geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=(),
-           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None):
+           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None):
     from ortools.sat.python import cp_model
     if seconds<=0 or max_rounds<1 or (geography and not matching):
         raise ValueError("Invalid Gold solve budget or mode.")
@@ -432,6 +436,8 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             raise ValueError("Invalid physical side index.")
     started=time.monotonic()
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
+    if tour_mode not in (None,'raw','contract','sparse') or (tour_mode and not matching):
+        raise ValueError('Physical strand circuit requires a supported matching mode.')
     if turn_length is not None and (not geography or type(turn_length) is not int or not 3<=turn_length<=16):
         raise ValueError('Mixed-turn cycle lengths from 3 to 16 require geographic matching.')
     if neighbor_mode not in (None,'local','connectivity') or (neighbor_mode and not geography):
@@ -449,7 +455,9 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             stats['blank_projection_fallback'] = 'full-side channel, pricing, bridge, reference-loss, or vertex position model'
             project_blanks = False
         check=GoldMatching(problem,domains,pins,bonds,cutsets,forbidden,physical_support=physical_support,
-                           project_blanks=project_blanks,corner_mode=corner_mode,neighbor_mode=neighbor_mode,turn_length=turn_length)
+                           project_blanks=project_blanks,corner_mode=corner_mode,neighbor_mode=neighbor_mode,turn_length=turn_length,tour_mode=tour_mode)
+        if check.tour_stats is not None:
+            stats['physical_circuit']=check.tour_stats
         if check.turns is not None:
             stats['turn_word_work']=check.turns.stats
         if neighbor_mode:
@@ -618,6 +626,7 @@ def main():
     cli.add_argument("--input",type=Path)
     cli.add_argument("--seconds",type=float,default=5)
     cli.add_argument("--rounds",type=int,default=32)
+    cli.add_argument("--tour-mode",choices=("raw","contract","sparse"),help="Post a circuit on mandatory physical strand paths.")
     cli.add_argument("--turn-length",type=int,help="Check mixed-turn physical polygons up to this length (3 to 16).")
     cli.add_argument("--neighbor-mode",choices=("local","connectivity"),
                      help="Check tile-neighbor multiplicity/Hall support and optionally target-mesh connectivity.")
@@ -633,6 +642,9 @@ def main():
     project_blanks=args.project_blanks or data.get('project_blanks',False)
     corner_mode=args.corner_mode or data.get('corner_mode')
     neighbor_mode=args.neighbor_mode or data.get('neighbor_mode')
+    tour_mode=args.tour_mode or data.get('tour_mode')
+    if tour_mode and args.method not in ('matching','embed'):
+        cli.error('--tour-mode requires matching or embed.')
     turn_length=args.turn_length if args.turn_length is not None else data.get('turn_length')
     if turn_length is not None and args.method!='embed':
         cli.error('--turn-length requires embed.')
@@ -679,8 +691,8 @@ def main():
         out=search(problem,matching=args.method!='types',geography=args.method=='embed',
                    cutsets=data.get('strand_cuts',()),type_cuts=reusable,max_rounds=args.rounds,
                    learned_geometry=args.method=="embed" and data.get("learn_geography",True),
-                   channel=data.get("channel",args.method=="embed" and not project_blanks and not corner_mode and not neighbor_mode and not turn_length),
-                   corner_mode=corner_mode,neighbor_mode=neighbor_mode,turn_length=turn_length,
+                   channel=data.get("channel",args.method=="embed" and not project_blanks and not corner_mode and not neighbor_mode and not turn_length and not tour_mode),
+                   corner_mode=corner_mode,neighbor_mode=neighbor_mode,turn_length=turn_length,tour_mode=tour_mode,
                    project_blanks=project_blanks,fraction=data.get("fractional",False),
                    bridges=[*data.get("bridges",()),*prior.get("bridge_hints",())],
                    geographic_cores=prior.get("geographic_cores",()) if args.method=="embed" else (),

@@ -1,0 +1,775 @@
+{
+  "enumeration": [
+    {
+      "seed": 35,
+      "all_sewings": 16,
+      "independent_connected": 16,
+      "cp": {
+        "raw": 16,
+        "contract": 16,
+        "sparse": 16
+      },
+      "sat": {
+        "status": "CONNECTED_SEWING",
+        "complete": true,
+        "clauses": 2063,
+        "variables": 791,
+        "decisions": 85
+      }
+    },
+    {
+      "seed": 71,
+      "all_sewings": 16,
+      "independent_connected": 8,
+      "cp": {
+        "raw": 8,
+        "contract": 8,
+        "sparse": 8
+      },
+      "sat": {
+        "status": "CONNECTED_SEWING",
+        "complete": true,
+        "clauses": 2063,
+        "variables": 791,
+        "decisions": 54
+      }
+    },
+    {
+      "seed": 103,
+      "all_sewings": 16,
+      "independent_connected": 16,
+      "cp": {
+        "raw": 16,
+        "contract": 16,
+        "sparse": 16
+      },
+      "sat": {
+        "status": "CONNECTED_SEWING",
+        "complete": true,
+        "clauses": 2063,
+        "variables": 791,
+        "decisions": 85
+      }
+    },
+    {
+      "seed": 157,
+      "all_sewings": 16,
+      "independent_connected": 16,
+      "cp": {
+        "raw": 16,
+        "contract": 16,
+        "sparse": 16
+      },
+      "sat": {
+        "status": "CONNECTED_SEWING",
+        "complete": true,
+        "clauses": 2063,
+        "variables": 791,
+        "decisions": 85
+      }
+    }
+  ],
+  "geographic_controls": {
+    "planted": {
+      "lazy": {
+        "status": "GOLD",
+        "cp_calls": 13,
+        "branches": 1198,
+        "strand_cuts": 0
+      },
+      "direct": {
+        "status": "GOLD",
+        "cp_calls": 18,
+        "branches": 2426,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 18,
+          "arcs": 44,
+          "support_terms": 44,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 0
+        }
+      },
+      "contract": {
+        "status": "GOLD",
+        "cp_calls": 12,
+        "branches": 1419,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 4,
+          "arcs": 8,
+          "support_terms": 16,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 8
+        }
+      },
+      "channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0
+      },
+      "combined_channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 5,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 4,
+          "arcs": 8,
+          "support_terms": 16,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 8
+        }
+      },
+      "parents": {
+        "status": "OPTIMAL",
+        "branches": 160,
+        "boards": 1
+      },
+      "parents_with_tour": {
+        "status": "OPTIMAL",
+        "branches": 166,
+        "boards": 1
+      },
+      "flow": {
+        "status": "OPTIMAL",
+        "branches": 138,
+        "boards": 1
+      },
+      "flow_with_tour": {
+        "status": "OPTIMAL",
+        "branches": 153,
+        "boards": 1
+      },
+      "geographic_circuit": {
+        "status": "OPTIMAL",
+        "branches": 0
+      }
+    },
+    "split": {
+      "lazy": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0
+      },
+      "direct": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 18,
+          "arcs": 0,
+          "support_terms": 0,
+          "rejected_internal_or_owned": 0,
+          "active": true
+        }
+      },
+      "contract": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 18,
+          "arcs": 0,
+          "support_terms": 0,
+          "rejected_internal_or_owned": 0,
+          "active": true
+        }
+      },
+      "channel": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0
+      },
+      "combined_channel": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 18,
+          "arcs": 0,
+          "support_terms": 0,
+          "rejected_internal_or_owned": 0,
+          "active": true
+        }
+      },
+      "parents": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "boards": 0
+      },
+      "parents_with_tour": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "boards": 0
+      },
+      "flow": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "boards": 0
+      },
+      "flow_with_tour": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "boards": 0
+      },
+      "geographic_circuit": {
+        "status": "INFEASIBLE",
+        "branches": 0
+      }
+    },
+    "five_loops": {
+      "lazy": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0
+      },
+      "direct": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 25,
+          "arcs": 0,
+          "support_terms": 0,
+          "rejected_internal_or_owned": 0,
+          "active": true
+        }
+      },
+      "contract": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 25,
+          "arcs": 0,
+          "support_terms": 0,
+          "rejected_internal_or_owned": 0,
+          "active": true
+        }
+      },
+      "channel": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0
+      },
+      "combined_channel": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 25,
+          "arcs": 0,
+          "support_terms": 0,
+          "rejected_internal_or_owned": 0,
+          "active": true
+        }
+      },
+      "parents": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "boards": 0
+      },
+      "parents_with_tour": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "boards": 0
+      },
+      "flow": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "boards": 0
+      },
+      "flow_with_tour": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "boards": 0
+      },
+      "geographic_circuit": {
+        "status": "INFEASIBLE",
+        "branches": 0
+      }
+    },
+    "original_all_tiles_rotate": {
+      "lazy": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0
+      },
+      "direct": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 365,
+          "arcs": 0,
+          "support_terms": 0,
+          "rejected_internal_or_owned": 0,
+          "active": true
+        }
+      },
+      "contract": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 365,
+          "arcs": 0,
+          "support_terms": 0,
+          "rejected_internal_or_owned": 0,
+          "active": true
+        }
+      },
+      "channel": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0
+      },
+      "combined_channel": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 365,
+          "arcs": 0,
+          "support_terms": 0,
+          "rejected_internal_or_owned": 0,
+          "active": true
+        }
+      },
+      "parents": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "boards": 0
+      },
+      "parents_with_tour": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "boards": 0
+      },
+      "flow": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "boards": 0
+      },
+      "flow_with_tour": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "boards": 0
+      },
+      "geographic_circuit": {
+        "status": "INFEASIBLE",
+        "branches": 0
+      }
+    }
+  },
+  "physical_controls": [
+    {
+      "seed": 35,
+      "lazy": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 3,
+        "branches": 4817,
+        "strand_cuts": 8
+      },
+      "raw": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 1,
+        "branches": 4272,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 18,
+          "arcs": 252,
+          "support_terms": 504,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 252
+        }
+      },
+      "contract": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 1,
+        "branches": 4272,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 18,
+          "arcs": 252,
+          "support_terms": 504,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 252
+        }
+      },
+      "sparse": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 1,
+        "branches": 4272,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 18,
+          "arcs": 252,
+          "support_terms": 504,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 252
+        }
+      }
+    },
+    {
+      "seed": 71,
+      "lazy": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 3,
+        "branches": 2935,
+        "strand_cuts": 8
+      },
+      "raw": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 1,
+        "branches": 2171,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 18,
+          "arcs": 202,
+          "support_terms": 308,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 106
+        }
+      },
+      "contract": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 1,
+        "branches": 2331,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 14,
+          "arcs": 150,
+          "support_terms": 300,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 150
+        }
+      },
+      "sparse": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 1,
+        "branches": 2331,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 14,
+          "arcs": 150,
+          "support_terms": 300,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 150
+        }
+      }
+    },
+    {
+      "seed": 103,
+      "lazy": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 2,
+        "branches": 2245,
+        "strand_cuts": 3
+      },
+      "raw": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 1,
+        "branches": 2942,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 18,
+          "arcs": 208,
+          "support_terms": 380,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 172
+        }
+      },
+      "contract": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 1,
+        "branches": 2987,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 16,
+          "arcs": 188,
+          "support_terms": 376,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 188
+        }
+      },
+      "sparse": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 1,
+        "branches": 2987,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 16,
+          "arcs": 188,
+          "support_terms": 376,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 188
+        }
+      }
+    },
+    {
+      "seed": 157,
+      "lazy": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 1,
+        "branches": 63,
+        "strand_cuts": 0
+      },
+      "raw": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 1,
+        "branches": 386,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 18,
+          "arcs": 158,
+          "support_terms": 192,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 34
+        }
+      },
+      "contract": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 1,
+        "branches": 290,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 12,
+          "arcs": 90,
+          "support_terms": 180,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 90
+        }
+      },
+      "sparse": {
+        "status": "CONNECTED_SEWING",
+        "cp_calls": 1,
+        "branches": 290,
+        "strand_cuts": 0,
+        "physical_circuit": {
+          "vertices": 12,
+          "arcs": 90,
+          "support_terms": 180,
+          "rejected_internal_or_owned": 0,
+          "active": true,
+          "or_groups": 90
+        }
+      }
+    }
+  ],
+  "original_nonblank": {
+    "False_None": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 0,
+      "strand_cuts": 0,
+      "blank_root_trials": 0
+    },
+    "False_raw": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 0,
+      "strand_cuts": 0,
+      "physical_circuit": {
+        "vertices": 365,
+        "arcs": 730,
+        "support_terms": 730,
+        "rejected_internal_or_owned": 0,
+        "active": true,
+        "or_groups": 0
+      },
+      "blank_root_trials": 0
+    },
+    "False_contract": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 0,
+      "strand_cuts": 0,
+      "physical_circuit": {
+        "vertices": 1,
+        "arcs": 0,
+        "support_terms": 0,
+        "rejected_internal_or_owned": 0,
+        "active": true
+      },
+      "blank_root_trials": 0
+    },
+    "False_sparse": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 0,
+      "strand_cuts": 0,
+      "physical_circuit": {
+        "vertices": 1,
+        "arcs": 0,
+        "support_terms": 0,
+        "rejected_internal_or_owned": 0,
+        "active": true
+      },
+      "blank_root_trials": 0
+    },
+    "True_None": {
+      "status": "INFEASIBLE",
+      "cp_calls": 1,
+      "branches": 0,
+      "strand_cuts": 0,
+      "blank_root_trials": 480
+    },
+    "True_raw": {
+      "status": "INFEASIBLE",
+      "cp_calls": 1,
+      "branches": 0,
+      "strand_cuts": 0,
+      "physical_circuit": {
+        "vertices": 365,
+        "arcs": 730,
+        "support_terms": 730,
+        "rejected_internal_or_owned": 0,
+        "active": true,
+        "or_groups": 0
+      },
+      "blank_root_trials": 480
+    },
+    "True_contract": {
+      "status": "INFEASIBLE",
+      "cp_calls": 1,
+      "branches": 0,
+      "strand_cuts": 0,
+      "physical_circuit": {
+        "vertices": 1,
+        "arcs": 0,
+        "support_terms": 0,
+        "rejected_internal_or_owned": 0,
+        "active": true
+      },
+      "blank_root_trials": 480
+    },
+    "True_sparse": {
+      "status": "INFEASIBLE",
+      "cp_calls": 1,
+      "branches": 0,
+      "strand_cuts": 0,
+      "physical_circuit": {
+        "vertices": 1,
+        "arcs": 0,
+        "support_terms": 0,
+        "rejected_internal_or_owned": 0,
+        "active": true
+      },
+      "blank_root_trials": 480
+    }
+  },
+  "original_root": {
+    "raw": {
+      "vertices": 365,
+      "arcs": 5272,
+      "support_terms": 5294,
+      "rejected_internal_or_owned": 0,
+      "active": true,
+      "or_groups": 22
+    },
+    "contract": {
+      "vertices": 345,
+      "arcs": 5190,
+      "support_terms": 5254,
+      "rejected_internal_or_owned": 0,
+      "active": true,
+      "or_groups": 64
+    },
+    "sparse": {
+      "vertices": 345,
+      "arcs": 5190,
+      "support_terms": 5254,
+      "rejected_internal_or_owned": 0,
+      "active": false
+    }
+  },
+  "original_projected_trace": {
+    "lazy": {
+      "status": "UNKNOWN",
+      "cp_calls": 4,
+      "branches": 123369,
+      "strand_cuts": 27,
+      "blank_phase_failures": 0
+    },
+    "raw": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 78903,
+      "strand_cuts": 0,
+      "physical_circuit": {
+        "vertices": 365,
+        "arcs": 5272,
+        "support_terms": 5294,
+        "rejected_internal_or_owned": 0,
+        "active": true,
+        "or_groups": 22
+      },
+      "blank_phase_failures": 0,
+      "genus": 35,
+      "geographic": false
+    },
+    "contract": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 78428,
+      "strand_cuts": 0,
+      "physical_circuit": {
+        "vertices": 345,
+        "arcs": 5190,
+        "support_terms": 5254,
+        "rejected_internal_or_owned": 0,
+        "active": true,
+        "or_groups": 64
+      },
+      "blank_phase_failures": 0,
+      "genus": 37,
+      "geographic": false
+    },
+    "sparse": {
+      "status": "UNKNOWN",
+      "cp_calls": 4,
+      "branches": 123369,
+      "strand_cuts": 27,
+      "physical_circuit": {
+        "vertices": 345,
+        "arcs": 5190,
+        "support_terms": 5254,
+        "rejected_internal_or_owned": 0,
+        "active": false
+      },
+      "blank_phase_failures": 0
+    }
+  }
+}
