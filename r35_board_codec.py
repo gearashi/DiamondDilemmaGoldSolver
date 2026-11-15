@@ -91,7 +91,7 @@ def native_unpack(library):
     return decode
 
 
-def verified_decoder(directory=None):
+def verified_library(directory=None):
     root=Path(__file__).resolve().parent
     fn=Path(directory) if directory is not None else root/'.native'
     name=('r35_board_codec_decode.dll' if sys.platform=='win32' else
@@ -103,8 +103,18 @@ def verified_decoder(directory=None):
                 or manifest.get('source_sha256')!=hashlib.sha256((root/'r35_board_codec_decode.c').read_bytes()).hexdigest()
                 or manifest.get('library_sha256')!=hashlib.sha256((fn/name).read_bytes()).hexdigest()):
             return None
-        return native_unpack(ctypes.CDLL(str((fn/name).resolve())))
+        return ctypes.CDLL(str((fn/name).resolve()))
     except (OSError,ValueError,TypeError,KeyError,AttributeError):
+        return None
+
+
+def verified_decoder(directory=None):
+    library = verified_library(directory)
+    if library is None:
+        return None
+    try:
+        return native_unpack(library)
+    except (AttributeError, TypeError):
         return None
 
 

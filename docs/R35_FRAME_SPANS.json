@@ -1,0 +1,3767 @@
+{
+  "input_sha256": "81e5e40ab23afb135cafe913af3e9d6579d68eea4c096c60d2ddd57a1c8cfe79",
+  "samples_per_timing": 3,
+  "seed": 35068,
+  "units": "bytes uploaded/read and warm host-wall milliseconds",
+  "budgets": "successive frozen snapshots after listed additional steps; 512 maximum steps per requested dispatch",
+  "methods": {
+    "rectangle": "current four-field reader",
+    "span": "exact per-lane intervals with NumPy merge",
+    "native": "exact per-lane intervals with bounded C merge",
+    "bands": "independent initializer/cursor strips, penalty 256",
+    "fringe": "combined initializer strips plus cursor-only exterior strips, penalty 256",
+    "suffix": "0 or 4096 sets strip penalty"
+  },
+  "results": {
+    "CUDA": {
+      "128/128": [
+        {
+          "steps": 1,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 0,
+          "cursor": 0,
+          "marks": 512,
+          "rectangle": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1102
+          },
+          "span": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1408
+          },
+          "native": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1445
+          },
+          "bands": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1395
+          },
+          "bands0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1237
+          },
+          "bands4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.115
+          },
+          "fringe": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.132
+          },
+          "fringe0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1315
+          },
+          "fringe4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1308
+          }
+        },
+        {
+          "steps": 8,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 988,
+          "cursor": 1039,
+          "marks": 512,
+          "rectangle": {
+            "upload": 1928,
+            "read": 9216,
+            "maps": 1,
+            "median_ms": 1.4174
+          },
+          "span": {
+            "upload": 140,
+            "read": 8108,
+            "maps": 1,
+            "median_ms": 3.8319
+          },
+          "native": {
+            "upload": 140,
+            "read": 8108,
+            "maps": 1,
+            "median_ms": 1.6393
+          },
+          "bands": {
+            "upload": 540,
+            "read": 8448,
+            "maps": 1,
+            "median_ms": 1.9068
+          },
+          "bands0": {
+            "upload": 3532,
+            "read": 8036,
+            "maps": 1,
+            "median_ms": 2.287
+          },
+          "bands4096": {
+            "upload": 540,
+            "read": 8448,
+            "maps": 1,
+            "median_ms": 1.8219
+          },
+          "fringe": {
+            "upload": 808,
+            "read": 8712,
+            "maps": 1,
+            "median_ms": 2.7871
+          },
+          "fringe0": {
+            "upload": 2180,
+            "read": 8044,
+            "maps": 1,
+            "median_ms": 2.0817
+          },
+          "fringe4096": {
+            "upload": 808,
+            "read": 8712,
+            "maps": 1,
+            "median_ms": 2.0679
+          }
+        },
+        {
+          "steps": 64,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1379,
+          "cursor": 1485,
+          "marks": 512,
+          "rectangle": {
+            "upload": 1928,
+            "read": 31744,
+            "maps": 1,
+            "median_ms": 1.888
+          },
+          "span": {
+            "upload": 420,
+            "read": 11420,
+            "maps": 1,
+            "median_ms": 6.2071
+          },
+          "native": {
+            "upload": 420,
+            "read": 11420,
+            "maps": 1,
+            "median_ms": 2.5113
+          },
+          "bands": {
+            "upload": 2936,
+            "read": 16696,
+            "maps": 1,
+            "median_ms": 4.2276
+          },
+          "bands0": {
+            "upload": 11872,
+            "read": 11364,
+            "maps": 1,
+            "median_ms": 4.6245
+          },
+          "bands4096": {
+            "upload": 1996,
+            "read": 31744,
+            "maps": 1,
+            "median_ms": 3.0808
+          },
+          "fringe": {
+            "upload": 3336,
+            "read": 17068,
+            "maps": 1,
+            "median_ms": 5.1311
+          },
+          "fringe0": {
+            "upload": 7336,
+            "read": 11376,
+            "maps": 1,
+            "median_ms": 5.8129
+          },
+          "fringe4096": {
+            "upload": 2804,
+            "read": 32812,
+            "maps": 1,
+            "median_ms": 3.6014
+          }
+        },
+        {
+          "steps": 512,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1577,
+          "cursor": 1703,
+          "marks": 512,
+          "rectangle": {
+            "upload": 1928,
+            "read": 50176,
+            "maps": 1,
+            "median_ms": 3.809
+          },
+          "span": {
+            "upload": 500,
+            "read": 13120,
+            "maps": 1,
+            "median_ms": 6.0163
+          },
+          "native": {
+            "upload": 500,
+            "read": 13120,
+            "maps": 1,
+            "median_ms": 4.1962
+          },
+          "bands": {
+            "upload": 4940,
+            "read": 20680,
+            "maps": 1,
+            "median_ms": 4.7211
+          },
+          "bands0": {
+            "upload": 14440,
+            "read": 13060,
+            "maps": 1,
+            "median_ms": 5.9761
+          },
+          "bands4096": {
+            "upload": 3100,
+            "read": 49408,
+            "maps": 1,
+            "median_ms": 3.5239
+          },
+          "fringe": {
+            "upload": 4968,
+            "read": 21988,
+            "maps": 1,
+            "median_ms": 5.1818
+          },
+          "fringe0": {
+            "upload": 8944,
+            "read": 13076,
+            "maps": 1,
+            "median_ms": 5.5313
+          },
+          "fringe4096": {
+            "upload": 4068,
+            "read": 56712,
+            "maps": 1,
+            "median_ms": 3.9056
+          }
+        },
+        {
+          "steps": 4096,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 2071,
+          "cursor": 2199,
+          "marks": 512,
+          "rectangle": {
+            "upload": 1928,
+            "read": 56320,
+            "maps": 1,
+            "median_ms": 2.3716
+          },
+          "span": {
+            "upload": 508,
+            "read": 17080,
+            "maps": 1,
+            "median_ms": 6.1173
+          },
+          "native": {
+            "upload": 508,
+            "read": 17080,
+            "maps": 1,
+            "median_ms": 1.9679
+          },
+          "bands": {
+            "upload": 5344,
+            "read": 25448,
+            "maps": 1,
+            "median_ms": 4.7388
+          },
+          "bands0": {
+            "upload": 18424,
+            "read": 17072,
+            "maps": 1,
+            "median_ms": 6.6061
+          },
+          "bands4096": {
+            "upload": 3484,
+            "read": 55552,
+            "maps": 1,
+            "median_ms": 4.3557
+          },
+          "fringe": {
+            "upload": 5452,
+            "read": 26940,
+            "maps": 1,
+            "median_ms": 4.4115
+          },
+          "fringe0": {
+            "upload": 11396,
+            "read": 17104,
+            "maps": 1,
+            "median_ms": 6.4676
+          },
+          "fringe4096": {
+            "upload": 4076,
+            "read": 65024,
+            "maps": 1,
+            "median_ms": 4.7046
+          }
+        }
+      ],
+      "2048/128": [
+        {
+          "steps": 1,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 0,
+          "cursor": 0,
+          "marks": 512,
+          "rectangle": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1486
+          },
+          "span": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1728
+          },
+          "native": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.168
+          },
+          "bands": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1492
+          },
+          "bands0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1382
+          },
+          "bands4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1331
+          },
+          "fringe": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.148
+          },
+          "fringe0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1473
+          },
+          "fringe4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.145
+          }
+        },
+        {
+          "steps": 8,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 993,
+          "cursor": 1031,
+          "marks": 512,
+          "rectangle": {
+            "upload": 2440,
+            "read": 9216,
+            "maps": 1,
+            "median_ms": 4.1933
+          },
+          "span": {
+            "upload": 1560,
+            "read": 8096,
+            "maps": 1,
+            "median_ms": 4.3482
+          },
+          "native": {
+            "upload": 1560,
+            "read": 8096,
+            "maps": 1,
+            "median_ms": 3.6995
+          },
+          "bands": {
+            "upload": 1564,
+            "read": 8448,
+            "maps": 1,
+            "median_ms": 3.7088
+          },
+          "bands0": {
+            "upload": 4028,
+            "read": 8028,
+            "maps": 1,
+            "median_ms": 4.1856
+          },
+          "bands4096": {
+            "upload": 1564,
+            "read": 8448,
+            "maps": 1,
+            "median_ms": 3.3412
+          },
+          "fringe": {
+            "upload": 1252,
+            "read": 8496,
+            "maps": 1,
+            "median_ms": 3.6785
+          },
+          "fringe0": {
+            "upload": 2660,
+            "read": 8032,
+            "maps": 1,
+            "median_ms": 7.6712
+          },
+          "fringe4096": {
+            "upload": 1252,
+            "read": 8496,
+            "maps": 1,
+            "median_ms": 3.7173
+          }
+        },
+        {
+          "steps": 64,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1273,
+          "cursor": 1380,
+          "marks": 512,
+          "rectangle": {
+            "upload": 2440,
+            "read": 24576,
+            "maps": 1,
+            "median_ms": 3.8695
+          },
+          "span": {
+            "upload": 1560,
+            "read": 10588,
+            "maps": 1,
+            "median_ms": 5.506
+          },
+          "native": {
+            "upload": 1560,
+            "read": 10588,
+            "maps": 1,
+            "median_ms": 4.498
+          },
+          "bands": {
+            "upload": 3432,
+            "read": 15536,
+            "maps": 1,
+            "median_ms": 4.2508
+          },
+          "bands0": {
+            "upload": 11020,
+            "read": 10512,
+            "maps": 1,
+            "median_ms": 5.7977
+          },
+          "bands4096": {
+            "upload": 2524,
+            "read": 23808,
+            "maps": 1,
+            "median_ms": 4.8518
+          },
+          "fringe": {
+            "upload": 3164,
+            "read": 16344,
+            "maps": 1,
+            "median_ms": 4.5619
+          },
+          "fringe0": {
+            "upload": 6424,
+            "read": 10532,
+            "maps": 1,
+            "median_ms": 5.7389
+          },
+          "fringe4096": {
+            "upload": 2712,
+            "read": 24616,
+            "maps": 1,
+            "median_ms": 4.3461
+          }
+        },
+        {
+          "steps": 512,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1465,
+          "cursor": 1588,
+          "marks": 512,
+          "rectangle": {
+            "upload": 2440,
+            "read": 52224,
+            "maps": 1,
+            "median_ms": 4.2656
+          },
+          "span": {
+            "upload": 1560,
+            "read": 12208,
+            "maps": 1,
+            "median_ms": 6.571
+          },
+          "native": {
+            "upload": 1560,
+            "read": 12208,
+            "maps": 1,
+            "median_ms": 3.1695
+          },
+          "bands": {
+            "upload": 5064,
+            "read": 20076,
+            "maps": 1,
+            "median_ms": 5.6338
+          },
+          "bands0": {
+            "upload": 13640,
+            "read": 12168,
+            "maps": 1,
+            "median_ms": 7.7223
+          },
+          "bands4096": {
+            "upload": 4252,
+            "read": 51456,
+            "maps": 1,
+            "median_ms": 6.7231
+          },
+          "fringe": {
+            "upload": 4956,
+            "read": 21460,
+            "maps": 1,
+            "median_ms": 5.1586
+          },
+          "fringe0": {
+            "upload": 8984,
+            "read": 12180,
+            "maps": 1,
+            "median_ms": 7.0544
+          },
+          "fringe4096": {
+            "upload": 4564,
+            "read": 56568,
+            "maps": 1,
+            "median_ms": 5.4885
+          }
+        },
+        {
+          "steps": 4096,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1869,
+          "cursor": 1998,
+          "marks": 512,
+          "rectangle": {
+            "upload": 2440,
+            "read": 54272,
+            "maps": 1,
+            "median_ms": 4.2037
+          },
+          "span": {
+            "upload": 1560,
+            "read": 15464,
+            "maps": 1,
+            "median_ms": 9.6327
+          },
+          "native": {
+            "upload": 1560,
+            "read": 15464,
+            "maps": 1,
+            "median_ms": 2.4611
+          },
+          "bands": {
+            "upload": 5192,
+            "read": 23576,
+            "maps": 1,
+            "median_ms": 8.5699
+          },
+          "bands0": {
+            "upload": 17268,
+            "read": 15428,
+            "maps": 1,
+            "median_ms": 15.5443
+          },
+          "bands4096": {
+            "upload": 4380,
+            "read": 53504,
+            "maps": 1,
+            "median_ms": 6.3297
+          },
+          "fringe": {
+            "upload": 5392,
+            "read": 25000,
+            "maps": 1,
+            "median_ms": 6.0193
+          },
+          "fringe0": {
+            "upload": 10760,
+            "read": 15460,
+            "maps": 1,
+            "median_ms": 7.8057
+          },
+          "fringe4096": {
+            "upload": 5004,
+            "read": 63236,
+            "maps": 1,
+            "median_ms": 5.5945
+          }
+        }
+      ],
+      "2048/2048": [
+        {
+          "steps": 1,
+          "lanes": 2048,
+          "installed": 0,
+          "initialized": 0,
+          "cursor": 0,
+          "marks": 8192,
+          "rectangle": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2015
+          },
+          "span": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.329
+          },
+          "native": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2425
+          },
+          "bands": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1989
+          },
+          "bands0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.233
+          },
+          "bands4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2217
+          },
+          "fringe": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2269
+          },
+          "fringe0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2454
+          },
+          "fringe4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2402
+          }
+        },
+        {
+          "steps": 8,
+          "lanes": 2036,
+          "installed": 0,
+          "initialized": 13908,
+          "cursor": 14769,
+          "marks": 8144,
+          "rectangle": {
+            "upload": 10072,
+            "read": 146592,
+            "maps": 1,
+            "median_ms": 4.7905
+          },
+          "span": {
+            "upload": 1372,
+            "read": 114708,
+            "maps": 1,
+            "median_ms": 6.4326
+          },
+          "native": {
+            "upload": 1372,
+            "read": 114708,
+            "maps": 1,
+            "median_ms": 5.2495
+          },
+          "bands": {
+            "upload": 23836,
+            "read": 113788,
+            "maps": 1,
+            "median_ms": 4.6868
+          },
+          "bands0": {
+            "upload": 55520,
+            "read": 113000,
+            "maps": 1,
+            "median_ms": 5.9244
+          },
+          "bands4096": {
+            "upload": 16828,
+            "read": 134376,
+            "maps": 1,
+            "median_ms": 5.0067
+          },
+          "fringe": {
+            "upload": 17932,
+            "read": 113840,
+            "maps": 1,
+            "median_ms": 5.1233
+          },
+          "fringe0": {
+            "upload": 33872,
+            "read": 113008,
+            "maps": 1,
+            "median_ms": 4.9543
+          },
+          "fringe4096": {
+            "upload": 12176,
+            "read": 137200,
+            "maps": 1,
+            "median_ms": 6.1017
+          }
+        },
+        {
+          "steps": 64,
+          "lanes": 2036,
+          "installed": 0,
+          "initialized": 22033,
+          "cursor": 23720,
+          "marks": 8144,
+          "rectangle": {
+            "upload": 17240,
+            "read": 295248,
+            "maps": 1,
+            "median_ms": 7.8989
+          },
+          "span": {
+            "upload": 3080,
+            "read": 182420,
+            "maps": 1,
+            "median_ms": 10.1376
+          },
+          "native": {
+            "upload": 3080,
+            "read": 182420,
+            "maps": 1,
+            "median_ms": 5.5373
+          },
+          "bands": {
+            "upload": 84724,
+            "read": 186264,
+            "maps": 1,
+            "median_ms": 7.2753
+          },
+          "bands0": {
+            "upload": 184944,
+            "read": 179740,
+            "maps": 1,
+            "median_ms": 8.3214
+          },
+          "bands4096": {
+            "upload": 32500,
+            "read": 282008,
+            "maps": 1,
+            "median_ms": 6.3906
+          },
+          "fringe": {
+            "upload": 47348,
+            "read": 188396,
+            "maps": 1,
+            "median_ms": 7.5471
+          },
+          "fringe0": {
+            "upload": 97256,
+            "read": 179756,
+            "maps": 1,
+            "median_ms": 11.6569
+          },
+          "fringe4096": {
+            "upload": 24368,
+            "read": 298820,
+            "maps": 1,
+            "median_ms": 11.1658
+          }
+        },
+        {
+          "steps": 512,
+          "lanes": 2036,
+          "installed": 0,
+          "initialized": 24101,
+          "cursor": 26072,
+          "marks": 8144,
+          "rectangle": {
+            "upload": 15900,
+            "read": 354200,
+            "maps": 1,
+            "median_ms": 6.8143
+          },
+          "span": {
+            "upload": 6092,
+            "read": 200632,
+            "maps": 1,
+            "median_ms": 11.6735
+          },
+          "native": {
+            "upload": 6092,
+            "read": 200632,
+            "maps": 1,
+            "median_ms": 4.7969
+          },
+          "bands": {
+            "upload": 101632,
+            "read": 209832,
+            "maps": 1,
+            "median_ms": 9.9037
+          },
+          "bands0": {
+            "upload": 203072,
+            "read": 197008,
+            "maps": 1,
+            "median_ms": 12.7551
+          },
+          "bands4096": {
+            "upload": 35548,
+            "read": 318392,
+            "maps": 1,
+            "median_ms": 8.7375
+          },
+          "fringe": {
+            "upload": 60552,
+            "read": 210708,
+            "maps": 1,
+            "median_ms": 10.0611
+          },
+          "fringe0": {
+            "upload": 107732,
+            "read": 197036,
+            "maps": 1,
+            "median_ms": 14.8898
+          },
+          "fringe4096": {
+            "upload": 30040,
+            "read": 338016,
+            "maps": 1,
+            "median_ms": 10.3025
+          }
+        },
+        {
+          "steps": 4096,
+          "lanes": 2036,
+          "installed": 0,
+          "initialized": 29638,
+          "cursor": 31680,
+          "marks": 8144,
+          "rectangle": {
+            "upload": 16964,
+            "read": 397376,
+            "maps": 1,
+            "median_ms": 6.3186
+          },
+          "span": {
+            "upload": 6000,
+            "read": 245252,
+            "maps": 1,
+            "median_ms": 20.0858
+          },
+          "native": {
+            "upload": 6000,
+            "read": 245252,
+            "maps": 1,
+            "median_ms": 5.953
+          },
+          "bands": {
+            "upload": 117344,
+            "read": 257664,
+            "maps": 1,
+            "median_ms": 10.9143
+          },
+          "bands0": {
+            "upload": 249052,
+            "read": 241544,
+            "maps": 1,
+            "median_ms": 15.5242
+          },
+          "bands4096": {
+            "upload": 33684,
+            "read": 383860,
+            "maps": 1,
+            "median_ms": 8.622
+          },
+          "fringe": {
+            "upload": 69136,
+            "read": 260472,
+            "maps": 1,
+            "median_ms": 10.7092
+          },
+          "fringe0": {
+            "upload": 131264,
+            "read": 241596,
+            "maps": 1,
+            "median_ms": 12.4788
+          },
+          "fringe4096": {
+            "upload": 27688,
+            "read": 407640,
+            "maps": 1,
+            "median_ms": 8.7586
+          }
+        }
+      ],
+      "32768/32768": [
+        {
+          "steps": 1,
+          "lanes": 32768,
+          "installed": 0,
+          "initialized": 0,
+          "cursor": 0,
+          "marks": 131072,
+          "rectangle": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.1896
+          },
+          "span": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.3972
+          },
+          "native": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.4434
+          },
+          "bands": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.0114
+          },
+          "bands0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.1077
+          },
+          "bands4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.1599
+          },
+          "fringe": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.627
+          },
+          "fringe0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.4281
+          },
+          "fringe4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.2322
+          }
+        },
+        {
+          "steps": 8,
+          "lanes": 32515,
+          "installed": 0,
+          "initialized": 186394,
+          "cursor": 199300,
+          "marks": 130060,
+          "rectangle": {
+            "upload": 164092,
+            "read": 1612448,
+            "maps": 1,
+            "median_ms": 38.6648
+          },
+          "span": {
+            "upload": 36976,
+            "read": 1542776,
+            "maps": 1,
+            "median_ms": 58.2182
+          },
+          "native": {
+            "upload": 36976,
+            "read": 1542776,
+            "maps": 1,
+            "median_ms": 36.5421
+          },
+          "bands": {
+            "upload": 771348,
+            "read": 1518376,
+            "maps": 1,
+            "median_ms": 39.4324
+          },
+          "bands0": {
+            "upload": 1414440,
+            "read": 1517000,
+            "maps": 1,
+            "median_ms": 43.0264
+          },
+          "bands4096": {
+            "upload": 398696,
+            "read": 1530120,
+            "maps": 1,
+            "median_ms": 44.9819
+          },
+          "fringe": {
+            "upload": 412204,
+            "read": 1518796,
+            "maps": 1,
+            "median_ms": 34.8719
+          },
+          "fringe0": {
+            "upload": 797756,
+            "read": 1517004,
+            "maps": 1,
+            "median_ms": 43.552
+          },
+          "fringe4096": {
+            "upload": 288236,
+            "read": 1535024,
+            "maps": 1,
+            "median_ms": 36.4991
+          }
+        },
+        {
+          "steps": 64,
+          "lanes": 32203,
+          "installed": 0,
+          "initialized": 345877,
+          "cursor": 372734,
+          "marks": 128812,
+          "rectangle": {
+            "upload": 702044,
+            "read": 3114336,
+            "maps": 1,
+            "median_ms": 46.0007
+          },
+          "span": {
+            "upload": 71060,
+            "read": 2866164,
+            "maps": 1,
+            "median_ms": 100.4709
+          },
+          "native": {
+            "upload": 71060,
+            "read": 2866164,
+            "maps": 1,
+            "median_ms": 41.6039
+          },
+          "bands": {
+            "upload": 2464440,
+            "read": 2828288,
+            "maps": 1,
+            "median_ms": 75.6916
+          },
+          "bands0": {
+            "upload": 2876760,
+            "read": 2820856,
+            "maps": 1,
+            "median_ms": 73.2853
+          },
+          "bands4096": {
+            "upload": 1302880,
+            "read": 2931664,
+            "maps": 1,
+            "median_ms": 50.4215
+          },
+          "fringe": {
+            "upload": 1288164,
+            "read": 2830788,
+            "maps": 1,
+            "median_ms": 57.5786
+          },
+          "fringe0": {
+            "upload": 1493820,
+            "read": 2820896,
+            "maps": 1,
+            "median_ms": 65.2548
+          },
+          "fringe4096": {
+            "upload": 710724,
+            "read": 2963104,
+            "maps": 1,
+            "median_ms": 53.4929
+          }
+        },
+        {
+          "steps": 512,
+          "lanes": 32203,
+          "installed": 0,
+          "initialized": 379292,
+          "cursor": 410521,
+          "marks": 128812,
+          "rectangle": {
+            "upload": 791792,
+            "read": 3544264,
+            "maps": 1,
+            "median_ms": 54.1228
+          },
+          "span": {
+            "upload": 74728,
+            "read": 3158496,
+            "maps": 1,
+            "median_ms": 108.8837
+          },
+          "native": {
+            "upload": 74728,
+            "read": 3158496,
+            "maps": 1,
+            "median_ms": 42.694
+          },
+          "bands": {
+            "upload": 2921604,
+            "read": 3106860,
+            "maps": 1,
+            "median_ms": 75.2475
+          },
+          "bands0": {
+            "upload": 3163016,
+            "read": 3097048,
+            "maps": 1,
+            "median_ms": 82.1781
+          },
+          "bands4096": {
+            "upload": 1558928,
+            "read": 3319992,
+            "maps": 1,
+            "median_ms": 62.7386
+          },
+          "fringe": {
+            "upload": 1526552,
+            "read": 3109468,
+            "maps": 1,
+            "median_ms": 63.6379
+          },
+          "fringe0": {
+            "upload": 1647068,
+            "read": 3097132,
+            "maps": 1,
+            "median_ms": 68.6404
+          },
+          "fringe4096": {
+            "upload": 894884,
+            "read": 3358368,
+            "maps": 1,
+            "median_ms": 59.7653
+          }
+        },
+        {
+          "steps": 4096,
+          "lanes": 32203,
+          "installed": 0,
+          "initialized": 464716,
+          "cursor": 496971,
+          "marks": 128812,
+          "rectangle": {
+            "upload": 903084,
+            "read": 4250488,
+            "maps": 1,
+            "median_ms": 49.8011
+          },
+          "span": {
+            "upload": 73904,
+            "read": 3846528,
+            "maps": 1,
+            "median_ms": 136.5092
+          },
+          "native": {
+            "upload": 73904,
+            "read": 3846528,
+            "maps": 1,
+            "median_ms": 48.5291
+          },
+          "bands": {
+            "upload": 3516592,
+            "read": 3794448,
+            "maps": 1,
+            "median_ms": 103.4416
+          },
+          "bands0": {
+            "upload": 3850888,
+            "read": 3782504,
+            "maps": 1,
+            "median_ms": 88.9986
+          },
+          "bands4096": {
+            "upload": 1784896,
+            "read": 4033512,
+            "maps": 1,
+            "median_ms": 76.9791
+          },
+          "fringe": {
+            "upload": 1771308,
+            "read": 3798484,
+            "maps": 1,
+            "median_ms": 90.7544
+          },
+          "fringe0": {
+            "upload": 1993204,
+            "read": 3782568,
+            "maps": 1,
+            "median_ms": 93.4815
+          },
+          "fringe4096": {
+            "upload": 1013916,
+            "read": 4081536,
+            "maps": 1,
+            "median_ms": 77.0237
+          }
+        }
+      ]
+    },
+    "Vulkan": {
+      "128/128": [
+        {
+          "steps": 1,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 0,
+          "cursor": 0,
+          "marks": 512,
+          "rectangle": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1285
+          },
+          "span": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1501
+          },
+          "native": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1465
+          },
+          "bands": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1204
+          },
+          "bands0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1074
+          },
+          "bands4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1013
+          },
+          "fringe": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1165
+          },
+          "fringe0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1135
+          },
+          "fringe4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1152
+          }
+        },
+        {
+          "steps": 8,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 988,
+          "cursor": 1039,
+          "marks": 512,
+          "rectangle": {
+            "upload": 2568,
+            "read": 9216,
+            "maps": 1,
+            "median_ms": 2.5464
+          },
+          "span": {
+            "upload": 140,
+            "read": 8108,
+            "maps": 1,
+            "median_ms": 3.8814
+          },
+          "native": {
+            "upload": 140,
+            "read": 8108,
+            "maps": 1,
+            "median_ms": 3.0368
+          },
+          "bands": {
+            "upload": 540,
+            "read": 8448,
+            "maps": 1,
+            "median_ms": 3.5643
+          },
+          "bands0": {
+            "upload": 3532,
+            "read": 8036,
+            "maps": 1,
+            "median_ms": 2.8888
+          },
+          "bands4096": {
+            "upload": 540,
+            "read": 8448,
+            "maps": 1,
+            "median_ms": 2.6444
+          },
+          "fringe": {
+            "upload": 808,
+            "read": 8712,
+            "maps": 1,
+            "median_ms": 2.7946
+          },
+          "fringe0": {
+            "upload": 2180,
+            "read": 8044,
+            "maps": 1,
+            "median_ms": 2.8465
+          },
+          "fringe4096": {
+            "upload": 808,
+            "read": 8712,
+            "maps": 1,
+            "median_ms": 3.2914
+          }
+        },
+        {
+          "steps": 64,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1379,
+          "cursor": 1485,
+          "marks": 512,
+          "rectangle": {
+            "upload": 2568,
+            "read": 31744,
+            "maps": 1,
+            "median_ms": 2.3
+          },
+          "span": {
+            "upload": 420,
+            "read": 11420,
+            "maps": 1,
+            "median_ms": 5.1868
+          },
+          "native": {
+            "upload": 420,
+            "read": 11420,
+            "maps": 1,
+            "median_ms": 2.5724
+          },
+          "bands": {
+            "upload": 2936,
+            "read": 16696,
+            "maps": 1,
+            "median_ms": 4.2045
+          },
+          "bands0": {
+            "upload": 11872,
+            "read": 11364,
+            "maps": 1,
+            "median_ms": 5.1749
+          },
+          "bands4096": {
+            "upload": 1996,
+            "read": 31744,
+            "maps": 1,
+            "median_ms": 4.1913
+          },
+          "fringe": {
+            "upload": 3336,
+            "read": 17068,
+            "maps": 1,
+            "median_ms": 4.3147
+          },
+          "fringe0": {
+            "upload": 7336,
+            "read": 11376,
+            "maps": 1,
+            "median_ms": 5.6825
+          },
+          "fringe4096": {
+            "upload": 2804,
+            "read": 32812,
+            "maps": 1,
+            "median_ms": 4.4815
+          }
+        },
+        {
+          "steps": 512,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1577,
+          "cursor": 1703,
+          "marks": 512,
+          "rectangle": {
+            "upload": 2568,
+            "read": 50176,
+            "maps": 1,
+            "median_ms": 4.011
+          },
+          "span": {
+            "upload": 500,
+            "read": 13120,
+            "maps": 1,
+            "median_ms": 6.8462
+          },
+          "native": {
+            "upload": 500,
+            "read": 13120,
+            "maps": 1,
+            "median_ms": 3.2635
+          },
+          "bands": {
+            "upload": 4940,
+            "read": 20680,
+            "maps": 1,
+            "median_ms": 4.9362
+          },
+          "bands0": {
+            "upload": 14440,
+            "read": 13060,
+            "maps": 1,
+            "median_ms": 7.0802
+          },
+          "bands4096": {
+            "upload": 3100,
+            "read": 49408,
+            "maps": 1,
+            "median_ms": 5.1417
+          },
+          "fringe": {
+            "upload": 4968,
+            "read": 21988,
+            "maps": 1,
+            "median_ms": 5.119
+          },
+          "fringe0": {
+            "upload": 8944,
+            "read": 13076,
+            "maps": 1,
+            "median_ms": 7.066
+          },
+          "fringe4096": {
+            "upload": 4068,
+            "read": 56712,
+            "maps": 1,
+            "median_ms": 4.6361
+          }
+        },
+        {
+          "steps": 4096,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 2071,
+          "cursor": 2199,
+          "marks": 512,
+          "rectangle": {
+            "upload": 2568,
+            "read": 56320,
+            "maps": 1,
+            "median_ms": 3.8419
+          },
+          "span": {
+            "upload": 508,
+            "read": 17080,
+            "maps": 1,
+            "median_ms": 7.2285
+          },
+          "native": {
+            "upload": 508,
+            "read": 17080,
+            "maps": 1,
+            "median_ms": 2.9382
+          },
+          "bands": {
+            "upload": 5344,
+            "read": 25448,
+            "maps": 1,
+            "median_ms": 5.0502
+          },
+          "bands0": {
+            "upload": 18424,
+            "read": 17072,
+            "maps": 1,
+            "median_ms": 8.0543
+          },
+          "bands4096": {
+            "upload": 3484,
+            "read": 55552,
+            "maps": 1,
+            "median_ms": 5.8274
+          },
+          "fringe": {
+            "upload": 5452,
+            "read": 26940,
+            "maps": 1,
+            "median_ms": 5.9198
+          },
+          "fringe0": {
+            "upload": 11396,
+            "read": 17104,
+            "maps": 1,
+            "median_ms": 7.4063
+          },
+          "fringe4096": {
+            "upload": 4076,
+            "read": 65024,
+            "maps": 1,
+            "median_ms": 4.909
+          }
+        }
+      ],
+      "2048/128": [
+        {
+          "steps": 1,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 0,
+          "cursor": 0,
+          "marks": 512,
+          "rectangle": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1647
+          },
+          "span": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1786
+          },
+          "native": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1811
+          },
+          "bands": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1944
+          },
+          "bands0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1705
+          },
+          "bands4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1652
+          },
+          "fringe": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1669
+          },
+          "fringe0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1908
+          },
+          "fringe4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1761
+          }
+        },
+        {
+          "steps": 8,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 993,
+          "cursor": 1031,
+          "marks": 512,
+          "rectangle": {
+            "upload": 3080,
+            "read": 9216,
+            "maps": 1,
+            "median_ms": 5.1825
+          },
+          "span": {
+            "upload": 1560,
+            "read": 8096,
+            "maps": 1,
+            "median_ms": 5.6077
+          },
+          "native": {
+            "upload": 1560,
+            "read": 8096,
+            "maps": 1,
+            "median_ms": 5.209
+          },
+          "bands": {
+            "upload": 1564,
+            "read": 8448,
+            "maps": 1,
+            "median_ms": 5.4386
+          },
+          "bands0": {
+            "upload": 4028,
+            "read": 8028,
+            "maps": 1,
+            "median_ms": 5.7112
+          },
+          "bands4096": {
+            "upload": 1564,
+            "read": 8448,
+            "maps": 1,
+            "median_ms": 5.8435
+          },
+          "fringe": {
+            "upload": 1252,
+            "read": 8496,
+            "maps": 1,
+            "median_ms": 5.8858
+          },
+          "fringe0": {
+            "upload": 2660,
+            "read": 8032,
+            "maps": 1,
+            "median_ms": 5.8734
+          },
+          "fringe4096": {
+            "upload": 1252,
+            "read": 8496,
+            "maps": 1,
+            "median_ms": 5.611
+          }
+        },
+        {
+          "steps": 64,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1273,
+          "cursor": 1380,
+          "marks": 512,
+          "rectangle": {
+            "upload": 3080,
+            "read": 24576,
+            "maps": 1,
+            "median_ms": 5.6179
+          },
+          "span": {
+            "upload": 1560,
+            "read": 10588,
+            "maps": 1,
+            "median_ms": 6.997
+          },
+          "native": {
+            "upload": 1560,
+            "read": 10588,
+            "maps": 1,
+            "median_ms": 5.5119
+          },
+          "bands": {
+            "upload": 3432,
+            "read": 15536,
+            "maps": 1,
+            "median_ms": 6.6081
+          },
+          "bands0": {
+            "upload": 11020,
+            "read": 10512,
+            "maps": 1,
+            "median_ms": 7.6131
+          },
+          "bands4096": {
+            "upload": 2524,
+            "read": 23808,
+            "maps": 1,
+            "median_ms": 6.9551
+          },
+          "fringe": {
+            "upload": 3164,
+            "read": 16344,
+            "maps": 1,
+            "median_ms": 5.7484
+          },
+          "fringe0": {
+            "upload": 6424,
+            "read": 10532,
+            "maps": 1,
+            "median_ms": 8.0075
+          },
+          "fringe4096": {
+            "upload": 2712,
+            "read": 24616,
+            "maps": 1,
+            "median_ms": 7.4894
+          }
+        },
+        {
+          "steps": 512,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1465,
+          "cursor": 1588,
+          "marks": 512,
+          "rectangle": {
+            "upload": 3080,
+            "read": 52224,
+            "maps": 1,
+            "median_ms": 6.8624
+          },
+          "span": {
+            "upload": 1560,
+            "read": 12208,
+            "maps": 1,
+            "median_ms": 8.5723
+          },
+          "native": {
+            "upload": 1560,
+            "read": 12208,
+            "maps": 1,
+            "median_ms": 5.0938
+          },
+          "bands": {
+            "upload": 5064,
+            "read": 20076,
+            "maps": 1,
+            "median_ms": 7.3731
+          },
+          "bands0": {
+            "upload": 13640,
+            "read": 12168,
+            "maps": 1,
+            "median_ms": 9.8324
+          },
+          "bands4096": {
+            "upload": 4252,
+            "read": 51456,
+            "maps": 1,
+            "median_ms": 7.1906
+          },
+          "fringe": {
+            "upload": 4956,
+            "read": 21460,
+            "maps": 1,
+            "median_ms": 7.152
+          },
+          "fringe0": {
+            "upload": 8984,
+            "read": 12180,
+            "maps": 1,
+            "median_ms": 8.6751
+          },
+          "fringe4096": {
+            "upload": 4564,
+            "read": 56568,
+            "maps": 1,
+            "median_ms": 6.6394
+          }
+        },
+        {
+          "steps": 4096,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1869,
+          "cursor": 1998,
+          "marks": 512,
+          "rectangle": {
+            "upload": 3080,
+            "read": 54272,
+            "maps": 1,
+            "median_ms": 6.5368
+          },
+          "span": {
+            "upload": 1560,
+            "read": 15464,
+            "maps": 1,
+            "median_ms": 8.5945
+          },
+          "native": {
+            "upload": 1560,
+            "read": 15464,
+            "maps": 1,
+            "median_ms": 5.3959
+          },
+          "bands": {
+            "upload": 5192,
+            "read": 23576,
+            "maps": 1,
+            "median_ms": 8.0382
+          },
+          "bands0": {
+            "upload": 17268,
+            "read": 15428,
+            "maps": 1,
+            "median_ms": 8.9923
+          },
+          "bands4096": {
+            "upload": 4380,
+            "read": 53504,
+            "maps": 1,
+            "median_ms": 8.2968
+          },
+          "fringe": {
+            "upload": 5392,
+            "read": 25000,
+            "maps": 1,
+            "median_ms": 7.9774
+          },
+          "fringe0": {
+            "upload": 10760,
+            "read": 15460,
+            "maps": 1,
+            "median_ms": 10.4771
+          },
+          "fringe4096": {
+            "upload": 5004,
+            "read": 63236,
+            "maps": 1,
+            "median_ms": 8.3599
+          }
+        }
+      ],
+      "2048/2048": [
+        {
+          "steps": 1,
+          "lanes": 2048,
+          "installed": 0,
+          "initialized": 0,
+          "cursor": 0,
+          "marks": 8192,
+          "rectangle": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2102
+          },
+          "span": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2716
+          },
+          "native": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2904
+          },
+          "bands": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2279
+          },
+          "bands0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2441
+          },
+          "bands4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2444
+          },
+          "fringe": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2849
+          },
+          "fringe0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2589
+          },
+          "fringe4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.261
+          }
+        },
+        {
+          "steps": 8,
+          "lanes": 2036,
+          "installed": 0,
+          "initialized": 13908,
+          "cursor": 14769,
+          "marks": 8192,
+          "rectangle": {
+            "upload": 10712,
+            "read": 146592,
+            "maps": 1,
+            "median_ms": 6.8753
+          },
+          "span": {
+            "upload": 1372,
+            "read": 114708,
+            "maps": 1,
+            "median_ms": 8.1469
+          },
+          "native": {
+            "upload": 1372,
+            "read": 114708,
+            "maps": 1,
+            "median_ms": 5.9161
+          },
+          "bands": {
+            "upload": 23836,
+            "read": 113788,
+            "maps": 1,
+            "median_ms": 6.1635
+          },
+          "bands0": {
+            "upload": 55520,
+            "read": 113000,
+            "maps": 1,
+            "median_ms": 6.2875
+          },
+          "bands4096": {
+            "upload": 16828,
+            "read": 134376,
+            "maps": 1,
+            "median_ms": 6.1446
+          },
+          "fringe": {
+            "upload": 17932,
+            "read": 113840,
+            "maps": 1,
+            "median_ms": 6.3717
+          },
+          "fringe0": {
+            "upload": 33872,
+            "read": 113008,
+            "maps": 1,
+            "median_ms": 6.7492
+          },
+          "fringe4096": {
+            "upload": 12176,
+            "read": 137200,
+            "maps": 1,
+            "median_ms": 6.1923
+          }
+        },
+        {
+          "steps": 64,
+          "lanes": 2036,
+          "installed": 0,
+          "initialized": 22033,
+          "cursor": 23720,
+          "marks": 8192,
+          "rectangle": {
+            "upload": 17880,
+            "read": 295248,
+            "maps": 1,
+            "median_ms": 6.4042
+          },
+          "span": {
+            "upload": 3080,
+            "read": 182420,
+            "maps": 1,
+            "median_ms": 11.9686
+          },
+          "native": {
+            "upload": 3080,
+            "read": 182420,
+            "maps": 1,
+            "median_ms": 5.7856
+          },
+          "bands": {
+            "upload": 84724,
+            "read": 186264,
+            "maps": 1,
+            "median_ms": 8.4089
+          },
+          "bands0": {
+            "upload": 184944,
+            "read": 179740,
+            "maps": 1,
+            "median_ms": 11.0411
+          },
+          "bands4096": {
+            "upload": 32500,
+            "read": 282008,
+            "maps": 1,
+            "median_ms": 8.3307
+          },
+          "fringe": {
+            "upload": 47348,
+            "read": 188396,
+            "maps": 1,
+            "median_ms": 8.9361
+          },
+          "fringe0": {
+            "upload": 97256,
+            "read": 179756,
+            "maps": 1,
+            "median_ms": 11.6863
+          },
+          "fringe4096": {
+            "upload": 24368,
+            "read": 298820,
+            "maps": 1,
+            "median_ms": 7.8551
+          }
+        },
+        {
+          "steps": 512,
+          "lanes": 2036,
+          "installed": 0,
+          "initialized": 24101,
+          "cursor": 26072,
+          "marks": 8192,
+          "rectangle": {
+            "upload": 16540,
+            "read": 354200,
+            "maps": 1,
+            "median_ms": 8.1308
+          },
+          "span": {
+            "upload": 6092,
+            "read": 200632,
+            "maps": 1,
+            "median_ms": 17.5227
+          },
+          "native": {
+            "upload": 6092,
+            "read": 200632,
+            "maps": 1,
+            "median_ms": 5.6469
+          },
+          "bands": {
+            "upload": 101632,
+            "read": 209832,
+            "maps": 1,
+            "median_ms": 11.4496
+          },
+          "bands0": {
+            "upload": 203072,
+            "read": 197008,
+            "maps": 1,
+            "median_ms": 13.601
+          },
+          "bands4096": {
+            "upload": 35548,
+            "read": 318392,
+            "maps": 1,
+            "median_ms": 11.434
+          },
+          "fringe": {
+            "upload": 60552,
+            "read": 210708,
+            "maps": 1,
+            "median_ms": 11.155
+          },
+          "fringe0": {
+            "upload": 107732,
+            "read": 197036,
+            "maps": 1,
+            "median_ms": 12.8381
+          },
+          "fringe4096": {
+            "upload": 30040,
+            "read": 338016,
+            "maps": 1,
+            "median_ms": 9.0311
+          }
+        },
+        {
+          "steps": 4096,
+          "lanes": 2036,
+          "installed": 0,
+          "initialized": 29638,
+          "cursor": 31680,
+          "marks": 8192,
+          "rectangle": {
+            "upload": 17604,
+            "read": 397376,
+            "maps": 1,
+            "median_ms": 8.7178
+          },
+          "span": {
+            "upload": 6000,
+            "read": 245252,
+            "maps": 1,
+            "median_ms": 17.384
+          },
+          "native": {
+            "upload": 6000,
+            "read": 245252,
+            "maps": 1,
+            "median_ms": 6.4888
+          },
+          "bands": {
+            "upload": 117344,
+            "read": 257664,
+            "maps": 1,
+            "median_ms": 13.1937
+          },
+          "bands0": {
+            "upload": 249052,
+            "read": 241544,
+            "maps": 1,
+            "median_ms": 15.7258
+          },
+          "bands4096": {
+            "upload": 33684,
+            "read": 383860,
+            "maps": 1,
+            "median_ms": 11.5665
+          },
+          "fringe": {
+            "upload": 69136,
+            "read": 260472,
+            "maps": 1,
+            "median_ms": 12.1174
+          },
+          "fringe0": {
+            "upload": 131264,
+            "read": 241596,
+            "maps": 1,
+            "median_ms": 14.1736
+          },
+          "fringe4096": {
+            "upload": 27688,
+            "read": 407640,
+            "maps": 1,
+            "median_ms": 12.2756
+          }
+        }
+      ],
+      "32768/32768": [
+        {
+          "steps": 1,
+          "lanes": 32768,
+          "installed": 0,
+          "initialized": 0,
+          "cursor": 0,
+          "marks": 131072,
+          "rectangle": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.5224
+          },
+          "span": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.4649
+          },
+          "native": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.2306
+          },
+          "bands": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.9714
+          },
+          "bands0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.0042
+          },
+          "bands4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.0532
+          },
+          "fringe": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.263
+          },
+          "fringe0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.3105
+          },
+          "fringe4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.1382
+          }
+        },
+        {
+          "steps": 8,
+          "lanes": 32515,
+          "installed": 0,
+          "initialized": 186394,
+          "cursor": 199300,
+          "marks": 131072,
+          "rectangle": {
+            "upload": 164732,
+            "read": 1612448,
+            "maps": 1,
+            "median_ms": 61.3881
+          },
+          "span": {
+            "upload": 36976,
+            "read": 1542776,
+            "maps": 1,
+            "median_ms": 55.1303
+          },
+          "native": {
+            "upload": 36976,
+            "read": 1542776,
+            "maps": 1,
+            "median_ms": 47.7371
+          },
+          "bands": {
+            "upload": 771348,
+            "read": 1518376,
+            "maps": 1,
+            "median_ms": 43.6317
+          },
+          "bands0": {
+            "upload": 1414440,
+            "read": 1517000,
+            "maps": 1,
+            "median_ms": 41.8341
+          },
+          "bands4096": {
+            "upload": 398696,
+            "read": 1530120,
+            "maps": 1,
+            "median_ms": 42.3425
+          },
+          "fringe": {
+            "upload": 412204,
+            "read": 1518796,
+            "maps": 1,
+            "median_ms": 38.0221
+          },
+          "fringe0": {
+            "upload": 797756,
+            "read": 1517004,
+            "maps": 1,
+            "median_ms": 42.2627
+          },
+          "fringe4096": {
+            "upload": 288236,
+            "read": 1535024,
+            "maps": 1,
+            "median_ms": 35.877
+          }
+        },
+        {
+          "steps": 64,
+          "lanes": 32203,
+          "installed": 0,
+          "initialized": 345877,
+          "cursor": 372734,
+          "marks": 131072,
+          "rectangle": {
+            "upload": 702684,
+            "read": 3114336,
+            "maps": 1,
+            "median_ms": 50.8501
+          },
+          "span": {
+            "upload": 71060,
+            "read": 2866164,
+            "maps": 1,
+            "median_ms": 108.1377
+          },
+          "native": {
+            "upload": 71060,
+            "read": 2866164,
+            "maps": 1,
+            "median_ms": 48.4413
+          },
+          "bands": {
+            "upload": 2464440,
+            "read": 2828288,
+            "maps": 1,
+            "median_ms": 62.529
+          },
+          "bands0": {
+            "upload": 2876760,
+            "read": 2820856,
+            "maps": 1,
+            "median_ms": 67.61
+          },
+          "bands4096": {
+            "upload": 1302880,
+            "read": 2931664,
+            "maps": 1,
+            "median_ms": 57.966
+          },
+          "fringe": {
+            "upload": 1288164,
+            "read": 2830788,
+            "maps": 1,
+            "median_ms": 72.9188
+          },
+          "fringe0": {
+            "upload": 1493820,
+            "read": 2820896,
+            "maps": 1,
+            "median_ms": 63.2305
+          },
+          "fringe4096": {
+            "upload": 710724,
+            "read": 2963104,
+            "maps": 1,
+            "median_ms": 69.473
+          }
+        },
+        {
+          "steps": 512,
+          "lanes": 32203,
+          "installed": 0,
+          "initialized": 379292,
+          "cursor": 410521,
+          "marks": 131072,
+          "rectangle": {
+            "upload": 792432,
+            "read": 3544264,
+            "maps": 1,
+            "median_ms": 52.9957
+          },
+          "span": {
+            "upload": 74728,
+            "read": 3158496,
+            "maps": 1,
+            "median_ms": 127.512
+          },
+          "native": {
+            "upload": 74728,
+            "read": 3158496,
+            "maps": 1,
+            "median_ms": 43.923
+          },
+          "bands": {
+            "upload": 2921604,
+            "read": 3106860,
+            "maps": 1,
+            "median_ms": 69.5347
+          },
+          "bands0": {
+            "upload": 3163016,
+            "read": 3097048,
+            "maps": 1,
+            "median_ms": 74.2443
+          },
+          "bands4096": {
+            "upload": 1558928,
+            "read": 3319992,
+            "maps": 1,
+            "median_ms": 58.7788
+          },
+          "fringe": {
+            "upload": 1526552,
+            "read": 3109468,
+            "maps": 1,
+            "median_ms": 61.3978
+          },
+          "fringe0": {
+            "upload": 1647068,
+            "read": 3097132,
+            "maps": 1,
+            "median_ms": 62.6327
+          },
+          "fringe4096": {
+            "upload": 894884,
+            "read": 3358368,
+            "maps": 1,
+            "median_ms": 53.8706
+          }
+        },
+        {
+          "steps": 4096,
+          "lanes": 32203,
+          "installed": 0,
+          "initialized": 464716,
+          "cursor": 496971,
+          "marks": 131072,
+          "rectangle": {
+            "upload": 903724,
+            "read": 4250488,
+            "maps": 1,
+            "median_ms": 51.2987
+          },
+          "span": {
+            "upload": 73904,
+            "read": 3846528,
+            "maps": 1,
+            "median_ms": 166.3083
+          },
+          "native": {
+            "upload": 73904,
+            "read": 3846528,
+            "maps": 1,
+            "median_ms": 52.2403
+          },
+          "bands": {
+            "upload": 3516592,
+            "read": 3794448,
+            "maps": 1,
+            "median_ms": 78.7775
+          },
+          "bands0": {
+            "upload": 3850888,
+            "read": 3782504,
+            "maps": 1,
+            "median_ms": 84.0404
+          },
+          "bands4096": {
+            "upload": 1784896,
+            "read": 4033512,
+            "maps": 1,
+            "median_ms": 60.4175
+          },
+          "fringe": {
+            "upload": 1771308,
+            "read": 3798484,
+            "maps": 1,
+            "median_ms": 66.6449
+          },
+          "fringe0": {
+            "upload": 1993204,
+            "read": 3782568,
+            "maps": 1,
+            "median_ms": 76.8587
+          },
+          "fringe4096": {
+            "upload": 1013916,
+            "read": 4081536,
+            "maps": 1,
+            "median_ms": 57.9246
+          }
+        }
+      ]
+    },
+    "D3D12": {
+      "128/128": [
+        {
+          "steps": 1,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 0,
+          "cursor": 0,
+          "marks": 512,
+          "rectangle": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1134
+          },
+          "span": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1621
+          },
+          "native": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1992
+          },
+          "bands": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1148
+          },
+          "bands0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.105
+          },
+          "bands4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1049
+          },
+          "fringe": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1228
+          },
+          "fringe0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1489
+          },
+          "fringe4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.13
+          }
+        },
+        {
+          "steps": 8,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 988,
+          "cursor": 1039,
+          "marks": 512,
+          "rectangle": {
+            "upload": 2568,
+            "read": 9216,
+            "maps": 1,
+            "median_ms": 3.6167
+          },
+          "span": {
+            "upload": 140,
+            "read": 8108,
+            "maps": 1,
+            "median_ms": 4.4654
+          },
+          "native": {
+            "upload": 140,
+            "read": 8108,
+            "maps": 1,
+            "median_ms": 3.5988
+          },
+          "bands": {
+            "upload": 540,
+            "read": 8448,
+            "maps": 1,
+            "median_ms": 3.6593
+          },
+          "bands0": {
+            "upload": 3532,
+            "read": 8036,
+            "maps": 1,
+            "median_ms": 3.9588
+          },
+          "bands4096": {
+            "upload": 540,
+            "read": 8448,
+            "maps": 1,
+            "median_ms": 3.5076
+          },
+          "fringe": {
+            "upload": 808,
+            "read": 8712,
+            "maps": 1,
+            "median_ms": 3.8852
+          },
+          "fringe0": {
+            "upload": 2180,
+            "read": 8044,
+            "maps": 1,
+            "median_ms": 3.8467
+          },
+          "fringe4096": {
+            "upload": 808,
+            "read": 8712,
+            "maps": 1,
+            "median_ms": 3.7357
+          }
+        },
+        {
+          "steps": 64,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1379,
+          "cursor": 1485,
+          "marks": 512,
+          "rectangle": {
+            "upload": 2568,
+            "read": 31744,
+            "maps": 1,
+            "median_ms": 2.9061
+          },
+          "span": {
+            "upload": 420,
+            "read": 11420,
+            "maps": 1,
+            "median_ms": 5.3451
+          },
+          "native": {
+            "upload": 420,
+            "read": 11420,
+            "maps": 1,
+            "median_ms": 3.0747
+          },
+          "bands": {
+            "upload": 2936,
+            "read": 16696,
+            "maps": 1,
+            "median_ms": 4.4673
+          },
+          "bands0": {
+            "upload": 11872,
+            "read": 11364,
+            "maps": 1,
+            "median_ms": 8.7311
+          },
+          "bands4096": {
+            "upload": 1996,
+            "read": 31744,
+            "maps": 1,
+            "median_ms": 4.8958
+          },
+          "fringe": {
+            "upload": 3336,
+            "read": 17068,
+            "maps": 1,
+            "median_ms": 5.468
+          },
+          "fringe0": {
+            "upload": 7336,
+            "read": 11376,
+            "maps": 1,
+            "median_ms": 6.4085
+          },
+          "fringe4096": {
+            "upload": 2804,
+            "read": 32812,
+            "maps": 1,
+            "median_ms": 5.2885
+          }
+        },
+        {
+          "steps": 512,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1577,
+          "cursor": 1703,
+          "marks": 512,
+          "rectangle": {
+            "upload": 2568,
+            "read": 50176,
+            "maps": 1,
+            "median_ms": 4.5327
+          },
+          "span": {
+            "upload": 500,
+            "read": 13120,
+            "maps": 1,
+            "median_ms": 7.8767
+          },
+          "native": {
+            "upload": 500,
+            "read": 13120,
+            "maps": 1,
+            "median_ms": 3.8096
+          },
+          "bands": {
+            "upload": 4940,
+            "read": 20680,
+            "maps": 1,
+            "median_ms": 5.7638
+          },
+          "bands0": {
+            "upload": 14440,
+            "read": 13060,
+            "maps": 1,
+            "median_ms": 7.3927
+          },
+          "bands4096": {
+            "upload": 3100,
+            "read": 49408,
+            "maps": 1,
+            "median_ms": 4.6597
+          },
+          "fringe": {
+            "upload": 4968,
+            "read": 21988,
+            "maps": 1,
+            "median_ms": 5.9935
+          },
+          "fringe0": {
+            "upload": 8944,
+            "read": 13076,
+            "maps": 1,
+            "median_ms": 7.5108
+          },
+          "fringe4096": {
+            "upload": 4068,
+            "read": 56712,
+            "maps": 1,
+            "median_ms": 5.1499
+          }
+        },
+        {
+          "steps": 4096,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 2071,
+          "cursor": 2199,
+          "marks": 512,
+          "rectangle": {
+            "upload": 2568,
+            "read": 56320,
+            "maps": 1,
+            "median_ms": 4.43
+          },
+          "span": {
+            "upload": 508,
+            "read": 17080,
+            "maps": 1,
+            "median_ms": 7.913
+          },
+          "native": {
+            "upload": 508,
+            "read": 17080,
+            "maps": 1,
+            "median_ms": 3.6112
+          },
+          "bands": {
+            "upload": 5344,
+            "read": 25448,
+            "maps": 1,
+            "median_ms": 6.0738
+          },
+          "bands0": {
+            "upload": 18424,
+            "read": 17072,
+            "maps": 1,
+            "median_ms": 7.9694
+          },
+          "bands4096": {
+            "upload": 3484,
+            "read": 55552,
+            "maps": 1,
+            "median_ms": 5.743
+          },
+          "fringe": {
+            "upload": 5452,
+            "read": 26940,
+            "maps": 1,
+            "median_ms": 6.1231
+          },
+          "fringe0": {
+            "upload": 11396,
+            "read": 17104,
+            "maps": 1,
+            "median_ms": 7.8039
+          },
+          "fringe4096": {
+            "upload": 4076,
+            "read": 65024,
+            "maps": 1,
+            "median_ms": 5.7731
+          }
+        }
+      ],
+      "2048/128": [
+        {
+          "steps": 1,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 0,
+          "cursor": 0,
+          "marks": 512,
+          "rectangle": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1587
+          },
+          "span": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1881
+          },
+          "native": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1838
+          },
+          "bands": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1466
+          },
+          "bands0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1422
+          },
+          "bands4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1406
+          },
+          "fringe": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1405
+          },
+          "fringe0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1467
+          },
+          "fringe4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1398
+          }
+        },
+        {
+          "steps": 8,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 993,
+          "cursor": 1031,
+          "marks": 512,
+          "rectangle": {
+            "upload": 3080,
+            "read": 9216,
+            "maps": 1,
+            "median_ms": 5.1788
+          },
+          "span": {
+            "upload": 1560,
+            "read": 8096,
+            "maps": 1,
+            "median_ms": 5.9547
+          },
+          "native": {
+            "upload": 1560,
+            "read": 8096,
+            "maps": 1,
+            "median_ms": 4.0537
+          },
+          "bands": {
+            "upload": 1564,
+            "read": 8448,
+            "maps": 1,
+            "median_ms": 6.1027
+          },
+          "bands0": {
+            "upload": 4028,
+            "read": 8028,
+            "maps": 1,
+            "median_ms": 4.8997
+          },
+          "bands4096": {
+            "upload": 1564,
+            "read": 8448,
+            "maps": 1,
+            "median_ms": 4.7341
+          },
+          "fringe": {
+            "upload": 1252,
+            "read": 8496,
+            "maps": 1,
+            "median_ms": 4.2091
+          },
+          "fringe0": {
+            "upload": 2660,
+            "read": 8032,
+            "maps": 1,
+            "median_ms": 5.2861
+          },
+          "fringe4096": {
+            "upload": 1252,
+            "read": 8496,
+            "maps": 1,
+            "median_ms": 4.616
+          }
+        },
+        {
+          "steps": 64,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1273,
+          "cursor": 1380,
+          "marks": 512,
+          "rectangle": {
+            "upload": 3080,
+            "read": 24576,
+            "maps": 1,
+            "median_ms": 4.8632
+          },
+          "span": {
+            "upload": 1560,
+            "read": 10588,
+            "maps": 1,
+            "median_ms": 6.9067
+          },
+          "native": {
+            "upload": 1560,
+            "read": 10588,
+            "maps": 1,
+            "median_ms": 3.886
+          },
+          "bands": {
+            "upload": 3432,
+            "read": 15536,
+            "maps": 1,
+            "median_ms": 5.629
+          },
+          "bands0": {
+            "upload": 11020,
+            "read": 10512,
+            "maps": 1,
+            "median_ms": 7.0353
+          },
+          "bands4096": {
+            "upload": 2524,
+            "read": 23808,
+            "maps": 1,
+            "median_ms": 5.7351
+          },
+          "fringe": {
+            "upload": 3164,
+            "read": 16344,
+            "maps": 1,
+            "median_ms": 6.2115
+          },
+          "fringe0": {
+            "upload": 6424,
+            "read": 10532,
+            "maps": 1,
+            "median_ms": 6.2257
+          },
+          "fringe4096": {
+            "upload": 2712,
+            "read": 24616,
+            "maps": 1,
+            "median_ms": 5.6644
+          }
+        },
+        {
+          "steps": 512,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1465,
+          "cursor": 1588,
+          "marks": 512,
+          "rectangle": {
+            "upload": 3080,
+            "read": 52224,
+            "maps": 1,
+            "median_ms": 5.9651
+          },
+          "span": {
+            "upload": 1560,
+            "read": 12208,
+            "maps": 1,
+            "median_ms": 8.6485
+          },
+          "native": {
+            "upload": 1560,
+            "read": 12208,
+            "maps": 1,
+            "median_ms": 4.4032
+          },
+          "bands": {
+            "upload": 5064,
+            "read": 20076,
+            "maps": 1,
+            "median_ms": 7.1098
+          },
+          "bands0": {
+            "upload": 13640,
+            "read": 12168,
+            "maps": 1,
+            "median_ms": 8.6073
+          },
+          "bands4096": {
+            "upload": 4252,
+            "read": 51456,
+            "maps": 1,
+            "median_ms": 6.4841
+          },
+          "fringe": {
+            "upload": 4956,
+            "read": 21460,
+            "maps": 1,
+            "median_ms": 6.7417
+          },
+          "fringe0": {
+            "upload": 8984,
+            "read": 12180,
+            "maps": 1,
+            "median_ms": 7.4615
+          },
+          "fringe4096": {
+            "upload": 4564,
+            "read": 56568,
+            "maps": 1,
+            "median_ms": 6.3547
+          }
+        },
+        {
+          "steps": 4096,
+          "lanes": 128,
+          "installed": 0,
+          "initialized": 1869,
+          "cursor": 1998,
+          "marks": 512,
+          "rectangle": {
+            "upload": 3080,
+            "read": 54272,
+            "maps": 1,
+            "median_ms": 5.5256
+          },
+          "span": {
+            "upload": 1560,
+            "read": 15464,
+            "maps": 1,
+            "median_ms": 8.3764
+          },
+          "native": {
+            "upload": 1560,
+            "read": 15464,
+            "maps": 1,
+            "median_ms": 4.2769
+          },
+          "bands": {
+            "upload": 5192,
+            "read": 23576,
+            "maps": 1,
+            "median_ms": 6.729
+          },
+          "bands0": {
+            "upload": 17268,
+            "read": 15428,
+            "maps": 1,
+            "median_ms": 8.6178
+          },
+          "bands4096": {
+            "upload": 4380,
+            "read": 53504,
+            "maps": 1,
+            "median_ms": 7.3566
+          },
+          "fringe": {
+            "upload": 5392,
+            "read": 25000,
+            "maps": 1,
+            "median_ms": 7.0591
+          },
+          "fringe0": {
+            "upload": 10760,
+            "read": 15460,
+            "maps": 1,
+            "median_ms": 8.5259
+          },
+          "fringe4096": {
+            "upload": 5004,
+            "read": 63236,
+            "maps": 1,
+            "median_ms": 7.7644
+          }
+        }
+      ],
+      "2048/2048": [
+        {
+          "steps": 1,
+          "lanes": 2048,
+          "installed": 0,
+          "initialized": 0,
+          "cursor": 0,
+          "marks": 8192,
+          "rectangle": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2431
+          },
+          "span": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2769
+          },
+          "native": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2961
+          },
+          "bands": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2402
+          },
+          "bands0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1957
+          },
+          "bands4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.1839
+          },
+          "fringe": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2211
+          },
+          "fringe0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2255
+          },
+          "fringe4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 0.2201
+          }
+        },
+        {
+          "steps": 8,
+          "lanes": 2036,
+          "installed": 0,
+          "initialized": 13908,
+          "cursor": 14769,
+          "marks": 8192,
+          "rectangle": {
+            "upload": 10712,
+            "read": 146592,
+            "maps": 1,
+            "median_ms": 7.5621
+          },
+          "span": {
+            "upload": 1372,
+            "read": 114708,
+            "maps": 1,
+            "median_ms": 8.7983
+          },
+          "native": {
+            "upload": 1372,
+            "read": 114708,
+            "maps": 1,
+            "median_ms": 6.1608
+          },
+          "bands": {
+            "upload": 23836,
+            "read": 113788,
+            "maps": 1,
+            "median_ms": 5.5891
+          },
+          "bands0": {
+            "upload": 55520,
+            "read": 113000,
+            "maps": 1,
+            "median_ms": 5.757
+          },
+          "bands4096": {
+            "upload": 16828,
+            "read": 134376,
+            "maps": 1,
+            "median_ms": 5.3636
+          },
+          "fringe": {
+            "upload": 17932,
+            "read": 113840,
+            "maps": 1,
+            "median_ms": 5.9819
+          },
+          "fringe0": {
+            "upload": 33872,
+            "read": 113008,
+            "maps": 1,
+            "median_ms": 5.3761
+          },
+          "fringe4096": {
+            "upload": 12176,
+            "read": 137200,
+            "maps": 1,
+            "median_ms": 4.8554
+          }
+        },
+        {
+          "steps": 64,
+          "lanes": 2036,
+          "installed": 0,
+          "initialized": 22033,
+          "cursor": 23720,
+          "marks": 8192,
+          "rectangle": {
+            "upload": 17880,
+            "read": 295248,
+            "maps": 1,
+            "median_ms": 8.144
+          },
+          "span": {
+            "upload": 3080,
+            "read": 182420,
+            "maps": 1,
+            "median_ms": 12.0908
+          },
+          "native": {
+            "upload": 3080,
+            "read": 182420,
+            "maps": 1,
+            "median_ms": 4.8968
+          },
+          "bands": {
+            "upload": 84724,
+            "read": 186264,
+            "maps": 1,
+            "median_ms": 9.6239
+          },
+          "bands0": {
+            "upload": 184944,
+            "read": 179740,
+            "maps": 1,
+            "median_ms": 11.2133
+          },
+          "bands4096": {
+            "upload": 32500,
+            "read": 282008,
+            "maps": 1,
+            "median_ms": 10.2187
+          },
+          "fringe": {
+            "upload": 47348,
+            "read": 188396,
+            "maps": 1,
+            "median_ms": 10.284
+          },
+          "fringe0": {
+            "upload": 97256,
+            "read": 179756,
+            "maps": 1,
+            "median_ms": 13.2733
+          },
+          "fringe4096": {
+            "upload": 24368,
+            "read": 298820,
+            "maps": 1,
+            "median_ms": 9.3629
+          }
+        },
+        {
+          "steps": 512,
+          "lanes": 2036,
+          "installed": 0,
+          "initialized": 24101,
+          "cursor": 26072,
+          "marks": 8192,
+          "rectangle": {
+            "upload": 16540,
+            "read": 354200,
+            "maps": 1,
+            "median_ms": 8.6666
+          },
+          "span": {
+            "upload": 6092,
+            "read": 200632,
+            "maps": 1,
+            "median_ms": 15.3766
+          },
+          "native": {
+            "upload": 6092,
+            "read": 200632,
+            "maps": 1,
+            "median_ms": 5.4504
+          },
+          "bands": {
+            "upload": 101632,
+            "read": 209832,
+            "maps": 1,
+            "median_ms": 12.7268
+          },
+          "bands0": {
+            "upload": 203072,
+            "read": 197008,
+            "maps": 1,
+            "median_ms": 14.7735
+          },
+          "bands4096": {
+            "upload": 35548,
+            "read": 318392,
+            "maps": 1,
+            "median_ms": 9.8102
+          },
+          "fringe": {
+            "upload": 60552,
+            "read": 210708,
+            "maps": 1,
+            "median_ms": 12.7092
+          },
+          "fringe0": {
+            "upload": 107732,
+            "read": 197036,
+            "maps": 1,
+            "median_ms": 14.4727
+          },
+          "fringe4096": {
+            "upload": 30040,
+            "read": 338016,
+            "maps": 1,
+            "median_ms": 10.9964
+          }
+        },
+        {
+          "steps": 4096,
+          "lanes": 2036,
+          "installed": 0,
+          "initialized": 29638,
+          "cursor": 31680,
+          "marks": 8192,
+          "rectangle": {
+            "upload": 17604,
+            "read": 397376,
+            "maps": 1,
+            "median_ms": 9.5578
+          },
+          "span": {
+            "upload": 6000,
+            "read": 245252,
+            "maps": 1,
+            "median_ms": 17.0929
+          },
+          "native": {
+            "upload": 6000,
+            "read": 245252,
+            "maps": 1,
+            "median_ms": 4.8799
+          },
+          "bands": {
+            "upload": 117344,
+            "read": 257664,
+            "maps": 1,
+            "median_ms": 13.2142
+          },
+          "bands0": {
+            "upload": 249052,
+            "read": 241544,
+            "maps": 1,
+            "median_ms": 17.1377
+          },
+          "bands4096": {
+            "upload": 33684,
+            "read": 383860,
+            "maps": 1,
+            "median_ms": 12.585
+          },
+          "fringe": {
+            "upload": 69136,
+            "read": 260472,
+            "maps": 1,
+            "median_ms": 13.6117
+          },
+          "fringe0": {
+            "upload": 131264,
+            "read": 241596,
+            "maps": 1,
+            "median_ms": 16.328
+          },
+          "fringe4096": {
+            "upload": 27688,
+            "read": 407640,
+            "maps": 1,
+            "median_ms": 11.9054
+          }
+        }
+      ],
+      "32768/32768": [
+        {
+          "steps": 1,
+          "lanes": 32768,
+          "installed": 0,
+          "initialized": 0,
+          "cursor": 0,
+          "marks": 131072,
+          "rectangle": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.2525
+          },
+          "span": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.4599
+          },
+          "native": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.3587
+          },
+          "bands": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.0234
+          },
+          "bands0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.0333
+          },
+          "bands4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.2655
+          },
+          "fringe": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.2738
+          },
+          "fringe0": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.2772
+          },
+          "fringe4096": {
+            "upload": 0,
+            "read": 0,
+            "maps": 0,
+            "median_ms": 1.4346
+          }
+        },
+        {
+          "steps": 8,
+          "lanes": 32515,
+          "installed": 0,
+          "initialized": 186394,
+          "cursor": 199300,
+          "marks": 131072,
+          "rectangle": {
+            "upload": 164732,
+            "read": 1612448,
+            "maps": 1,
+            "median_ms": 39.3533
+          },
+          "span": {
+            "upload": 36976,
+            "read": 1542776,
+            "maps": 1,
+            "median_ms": 61.7956
+          },
+          "native": {
+            "upload": 36976,
+            "read": 1542776,
+            "maps": 1,
+            "median_ms": 38.9277
+          },
+          "bands": {
+            "upload": 771348,
+            "read": 1518376,
+            "maps": 1,
+            "median_ms": 46.6295
+          },
+          "bands0": {
+            "upload": 1414440,
+            "read": 1517000,
+            "maps": 1,
+            "median_ms": 51.8088
+          },
+          "bands4096": {
+            "upload": 398696,
+            "read": 1530120,
+            "maps": 1,
+            "median_ms": 42.5126
+          },
+          "fringe": {
+            "upload": 412204,
+            "read": 1518796,
+            "maps": 1,
+            "median_ms": 43.5314
+          },
+          "fringe0": {
+            "upload": 797756,
+            "read": 1517004,
+            "maps": 1,
+            "median_ms": 56.4955
+          },
+          "fringe4096": {
+            "upload": 288236,
+            "read": 1535024,
+            "maps": 1,
+            "median_ms": 44.0888
+          }
+        },
+        {
+          "steps": 64,
+          "lanes": 32203,
+          "installed": 0,
+          "initialized": 345877,
+          "cursor": 372734,
+          "marks": 131072,
+          "rectangle": {
+            "upload": 702684,
+            "read": 3114336,
+            "maps": 1,
+            "median_ms": 48.162
+          },
+          "span": {
+            "upload": 71060,
+            "read": 2866164,
+            "maps": 1,
+            "median_ms": 116.8483
+          },
+          "native": {
+            "upload": 71060,
+            "read": 2866164,
+            "maps": 1,
+            "median_ms": 48.9827
+          },
+          "bands": {
+            "upload": 2464440,
+            "read": 2828288,
+            "maps": 1,
+            "median_ms": 91.5214
+          },
+          "bands0": {
+            "upload": 2876760,
+            "read": 2820856,
+            "maps": 1,
+            "median_ms": 74.6579
+          },
+          "bands4096": {
+            "upload": 1302880,
+            "read": 2931664,
+            "maps": 1,
+            "median_ms": 54.7042
+          },
+          "fringe": {
+            "upload": 1288164,
+            "read": 2830788,
+            "maps": 1,
+            "median_ms": 73.7137
+          },
+          "fringe0": {
+            "upload": 1493820,
+            "read": 2820896,
+            "maps": 1,
+            "median_ms": 69.3931
+          },
+          "fringe4096": {
+            "upload": 710724,
+            "read": 2963104,
+            "maps": 1,
+            "median_ms": 55.9049
+          }
+        },
+        {
+          "steps": 512,
+          "lanes": 32203,
+          "installed": 0,
+          "initialized": 379292,
+          "cursor": 410521,
+          "marks": 131072,
+          "rectangle": {
+            "upload": 792432,
+            "read": 3544264,
+            "maps": 1,
+            "median_ms": 107.6553
+          },
+          "span": {
+            "upload": 74728,
+            "read": 3158496,
+            "maps": 1,
+            "median_ms": 242.7207
+          },
+          "native": {
+            "upload": 74728,
+            "read": 3158496,
+            "maps": 1,
+            "median_ms": 97.3023
+          },
+          "bands": {
+            "upload": 2921604,
+            "read": 3106860,
+            "maps": 1,
+            "median_ms": 156.1495
+          },
+          "bands0": {
+            "upload": 3163016,
+            "read": 3097048,
+            "maps": 1,
+            "median_ms": 139.022
+          },
+          "bands4096": {
+            "upload": 1558928,
+            "read": 3319992,
+            "maps": 1,
+            "median_ms": 132.5818
+          },
+          "fringe": {
+            "upload": 1526552,
+            "read": 3109468,
+            "maps": 1,
+            "median_ms": 129.966
+          },
+          "fringe0": {
+            "upload": 1647068,
+            "read": 3097132,
+            "maps": 1,
+            "median_ms": 146.4931
+          },
+          "fringe4096": {
+            "upload": 894884,
+            "read": 3358368,
+            "maps": 1,
+            "median_ms": 131.2849
+          }
+        },
+        {
+          "steps": 4096,
+          "lanes": 32203,
+          "installed": 0,
+          "initialized": 464716,
+          "cursor": 496971,
+          "marks": 131072,
+          "rectangle": {
+            "upload": 903724,
+            "read": 4250488,
+            "maps": 1,
+            "median_ms": 67.049
+          },
+          "span": {
+            "upload": 73904,
+            "read": 3846528,
+            "maps": 1,
+            "median_ms": 161.6995
+          },
+          "native": {
+            "upload": 73904,
+            "read": 3846528,
+            "maps": 1,
+            "median_ms": 62.202
+          },
+          "bands": {
+            "upload": 3516592,
+            "read": 3794448,
+            "maps": 1,
+            "median_ms": 101.3873
+          },
+          "bands0": {
+            "upload": 3850888,
+            "read": 3782504,
+            "maps": 1,
+            "median_ms": 103.5339
+          },
+          "bands4096": {
+            "upload": 1784896,
+            "read": 4033512,
+            "maps": 1,
+            "median_ms": 74.7348
+          },
+          "fringe": {
+            "upload": 1771308,
+            "read": 3798484,
+            "maps": 1,
+            "median_ms": 69.8693
+          },
+          "fringe0": {
+            "upload": 1993204,
+            "read": 3782568,
+            "maps": 1,
+            "median_ms": 78.1225
+          },
+          "fringe4096": {
+            "upload": 1013916,
+            "read": 4081536,
+            "maps": 1,
+            "median_ms": 59.3289
+          }
+        }
+      ]
+    }
+  }
+}

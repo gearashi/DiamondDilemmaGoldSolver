@@ -48,3 +48,37 @@ EXPORT int dd_physical_board_unpack(int k,int packet_size,const uint32_t *starts
     }
     return 1;
 }
+
+/* A lane owns a word-aligned series of four unsigned 16-bit field slices. */
+static uint16_t load_half(const uint32_t *words, unsigned half) {
+    return (uint16_t)(words[half / 2] >> (16 * (half & 1)));
+}
+
+EXPORT int dd_merge_frame_spans(unsigned n, unsigned k, unsigned size,
+    const uint32_t *lanes, const uint32_t *marks, const uint32_t *words,
+    uint16_t *firsts, uint16_t *lengths, uint16_t *cursors, uint16_t *shifts) {
+    unsigned at = 0;
+    if (!n || n > 131072 || k > n) return 0;
+    for (unsigned j = 0; j < k; ++j) {
+        unsigned lane = lanes[j], m = marks[j], a = m & 255, b = (m >> 8) & 255;
+        unsigned c = (m >> 16) & 255, d = m >> 24;
+        if (lane >= n || (j && lane <= lanes[j-1]) || !c || d < c || d > 160 ||
+            (!a != !b) || (a && (a < c || b < a || b > d))) return 0;
+        unsigned init = a ? b-a+1 : 0, cursor = d-c+1;
+        unsigned count = (3*init + cursor + 1)/2;
+        if (count > size-at) return 0;
+        const uint32_t *data = words+at;
+        for (unsigned r = 0; r < init; ++r) {
+            size_t cell = (size_t)(a-1+r)*n+lane;
+            firsts[cell] = load_half(data,r);
+            lengths[cell] = load_half(data,r+init);
+            shifts[cell] = load_half(data,r+2*init);
+        }
+        for (unsigned r = 0; r < cursor; ++r) {
+            size_t cell = (size_t)(c-1+r)*n+lane;
+            cursors[cell] = load_half(data,r+3*init);
+        }
+        at += count;
+    }
+    return at == size;
+}
