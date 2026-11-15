@@ -84,8 +84,15 @@ class PlacementSearchTests(unittest.TestCase):
                 result = solve(self.problem, path, domains=ROWS, split=False, target=11, max_calls=1)
                 self.assertEqual((result['calls'], result['placement_splits'], result['pending']),
                                  (1, 0, 1))
-            sliced = solve(self.problem, path, domains=ROWS, split=False, target=11, seconds=.000001)
-            self.assertEqual((sliced['calls'], sliced['pending']), (0, 1))
+            # Cross the deadline after initialization, independently of the
+            # host monotonic clock's resolution or native solver startup time.
+            from time import monotonic
+            start = monotonic()
+            ticks = iter((start,))
+            with patch('r31_defect_bands.time') as clock:
+                clock.monotonic.side_effect = lambda: next(ticks, start + 2)
+                sliced = solve(self.problem, path, domains=ROWS, split=False, target=11, seconds=1)
+            self.assertEqual((sliced['calls'], sliced['placement_splits'], sliced['pending']), (0, 0, 1))
 
     def test_unlimited_native_search_keeps_learnt_clauses_after_a_conflict_slice(self):
         from pysat.solvers import Glucose4
