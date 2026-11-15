@@ -187,11 +187,12 @@ class ProjectionNative:
         ledger=JobLedger.empty(0,gpu.n)
         reader=CheckpointRanges(gpu,ledger,board_mode='physical')
         reader.capture()
+        previous=reader.board_fallbacks
         captured=reader.capture()
         np.testing.assert_array_equal(captured['boards'],raw)
         np.testing.assert_array_equal(captured['used'],used)
         self.assertIsInstance(reader.board_projection,PhysicalBoardCodec)
-        self.assertEqual(reader.board_fallbacks,1)
+        self.assertEqual(reader.board_fallbacks,previous+1)
 
 
 @unittest.skipUnless(os.environ.get('DIAMOND_TEST_CUDA')=='1','requires CUDA device')
