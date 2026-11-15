@@ -1,0 +1,178 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "comparisons": [
+    {
+      "mode": "vertices",
+      "anchor": 25,
+      "solver": "cadical195",
+      "variables": 248514,
+      "clauses": 1183536,
+      "queries": [
+        {
+          "label": "full",
+          "pins": 160,
+          "status": "UNKNOWN",
+          "seconds": 186.53099999998813,
+          "budget": 35000,
+          "work": {
+            "restarts": 915,
+            "conflicts": 35002,
+            "decisions": 393519,
+            "propagations": 194494342
+          }
+        },
+        {
+          "label": "free-9,36,80,141",
+          "pins": 156,
+          "status": "UNKNOWN",
+          "seconds": 156.625,
+          "budget": 35000,
+          "work": {
+            "restarts": 799,
+            "conflicts": 35003,
+            "decisions": 384409,
+            "propagations": 185126338
+          }
+        }
+      ],
+      "inventory": null
+    },
+    {
+      "mode": "labels",
+      "anchor": 25,
+      "solver": "cadical195",
+      "variables": 272720,
+      "clauses": 793256,
+      "queries": [
+        {
+          "label": "free-5,9,15,36,38,80,89,141",
+          "pins": 152,
+          "status": "UNKNOWN",
+          "seconds": 370.875,
+          "budget": 75000,
+          "work": {
+            "restarts": 728,
+            "conflicts": 75000,
+            "decisions": 731507,
+            "propagations": 510287348
+          }
+        }
+      ],
+      "inventory": null,
+      "free_tiles": [
+        5,
+        9,
+        15,
+        36,
+        38,
+        80,
+        89,
+        141
+      ]
+    },
+    {
+      "mode": "labels",
+      "anchor": 25,
+      "solver": "cadical195",
+      "variables": 272720,
+      "clauses": 793278,
+      "queries": [
+        {
+          "label": "free-5,9,15,36,38,80,89,141",
+          "pins": 152,
+          "status": "UNSAT",
+          "seconds": 221.4529999999795,
+          "budget": 75000,
+          "work": {
+            "restarts": 732,
+            "conflicts": 52150,
+            "decisions": 577958,
+            "propagations": 364763491
+          },
+          "explicit_pins": {},
+          "total_core_literals": 152
+        }
+      ],
+      "inventory": {
+        "eligible": 6,
+        "clauses": 22,
+        "assignments": [
+          {
+            "5": 0,
+            "9": 1,
+            "15": 1,
+            "36": 0,
+            "38": 1,
+            "80": 0,
+            "89": 0,
+            "141": 0
+          },
+          {
+            "5": 0,
+            "9": 1,
+            "15": 1,
+            "36": 0,
+            "38": 1,
+            "80": 1,
+            "89": 0,
+            "141": 1
+          },
+          {
+            "5": 1,
+            "9": 0,
+            "15": 0,
+            "36": 0,
+            "38": 0,
+            "80": 0,
+            "89": 0,
+            "141": 0
+          },
+          {
+            "5": 1,
+            "9": 0,
+            "15": 0,
+            "36": 0,
+            "38": 0,
+            "80": 1,
+            "89": 0,
+            "141": 1
+          },
+          {
+            "5": 1,
+            "9": 1,
+            "15": 0,
+            "36": 1,
+            "38": 0,
+            "80": 0,
+            "89": 0,
+            "141": 0
+          },
+          {
+            "5": 1,
+            "9": 1,
+            "15": 0,
+            "36": 1,
+            "38": 0,
+            "80": 1,
+            "89": 0,
+            "141": 1
+          }
+        ]
+      },
+      "free_tiles": [
+        5,
+        9,
+        15,
+        36,
+        38,
+        80,
+        89,
+        141
+      ]
+    }
+  ],
+  "planted": {
+    "cases": 16,
+    "checked_phase_boards": 88
+  }
+}
