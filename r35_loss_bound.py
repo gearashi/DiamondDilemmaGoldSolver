@@ -67,7 +67,9 @@ def global_integer(problem, reference, groups, required, outside, cap, seconds, 
                     hit.update(relaxation=kind,work={'decisions':0,'conflicts':0,'reference_phase_reused':1})
                     return hit
 
-    check = InventorySAT(problem, groups, required, outside, cap, excess=excess, additional_groups=additional_groups)
+    cost_pairs = conditions.native_cost_pairs() if conditions is not None else None
+    check = InventorySAT(problem, groups, required, outside, cap, excess=excess, additional_groups=additional_groups,
+                         mate_cost_pairs=cost_pairs)
     try:
         if conditions is None:
             outcome=check.decide(seconds)

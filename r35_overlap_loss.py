@@ -58,7 +58,8 @@ class OverlapPattern:
         if self.image is None:
             from r35_integer_sat import InventorySAT
             additional=[g for g in groups if g not in packed]
-            self.native=InventorySAT(problem,packed,required,outside,cap,additional_groups=additional,
+            cost_pairs=conditions.native_cost_pairs() if conditions is not None else None
+            self.native=InventorySAT(problem,packed,required,outside,cap,additional_groups=additional,mate_cost_pairs=cost_pairs,
                                      parity_only=not integer)
             if conditions is not None:
                 conditions.install(self.native)

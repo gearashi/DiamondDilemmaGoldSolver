@@ -1,0 +1,2925 @@
+{
+  "checked": [
+    {
+      "groups": 13,
+      "cap": 23,
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "ordinary": 23,
+      "priced": 24,
+      "base": true,
+      "native": false,
+      "decisions": [
+        16,
+        58
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 24,
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "ordinary": 23,
+      "priced": 24,
+      "base": true,
+      "native": true,
+      "decisions": [
+        22,
+        43
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 25,
+      "phase": "0xce55aaa6e89109fca071557e8c580aa32f0e5fa2",
+      "ordinary": 25,
+      "priced": 26,
+      "base": true,
+      "native": false,
+      "decisions": [
+        11,
+        21
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 25,
+      "phase": "0xd237aba7e91101e88041413e8c589912021e5326",
+      "ordinary": 25,
+      "priced": 26,
+      "base": true,
+      "native": false,
+      "decisions": [
+        15,
+        17
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 25,
+      "phase": "0xd237aba7e91101f880c1413e8c58990202165106",
+      "ordinary": 25,
+      "priced": 26,
+      "base": true,
+      "native": false,
+      "decisions": [
+        14,
+        12
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 25,
+      "phase": "0xd237aba7e99101e88049413e8c589802021e5326",
+      "ordinary": 25,
+      "priced": 26,
+      "base": true,
+      "native": false,
+      "decisions": [
+        6,
+        4
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 26,
+      "phase": "0xce55aaa6e89109fca071557e8c580aa32f0e5fa2",
+      "ordinary": 25,
+      "priced": 26,
+      "base": true,
+      "native": true,
+      "decisions": [
+        16,
+        32
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 26,
+      "phase": "0xd237aba3e99101e88043402e8c589902021e5326",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": false,
+      "decisions": [
+        12,
+        22
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 26,
+      "phase": "0xd237aba7e91101e88041413e8c589912021e5326",
+      "ordinary": 25,
+      "priced": 26,
+      "base": true,
+      "native": true,
+      "decisions": [
+        35,
+        27
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 26,
+      "phase": "0xd237aba7e91101f880c1413e8c58990202165106",
+      "ordinary": 25,
+      "priced": 26,
+      "base": true,
+      "native": true,
+      "decisions": [
+        30,
+        10
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 26,
+      "phase": "0xd237aba7e99101e88049413e8c589802021e5326",
+      "ordinary": 25,
+      "priced": 26,
+      "base": true,
+      "native": true,
+      "decisions": [
+        30,
+        11
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 26,
+      "phase": "0xd237aba7e99101e98043403e8c589982021e5326",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": false,
+      "decisions": [
+        13,
+        5
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 27,
+      "phase": "0xce55aaa6e0910bf8a073547eac580ba32e0e5fa2",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": false,
+      "decisions": [
+        11,
+        19
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 27,
+      "phase": "0xd2378ba7e91101e88040413e8c589912021e5326",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": false,
+      "decisions": [
+        13,
+        17
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 27,
+      "phase": "0xd237aba3e99101e88043402e8c589902021e5326",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": true,
+      "decisions": [
+        16,
+        13
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 27,
+      "phase": "0xd237aba7e91100e88041412e8c5899030a1e5126",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": false,
+      "decisions": [
+        14,
+        11
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 27,
+      "phase": "0xd237aba7e91101f89041413e8c58991202165126",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": false,
+      "decisions": [
+        74,
+        3
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 27,
+      "phase": "0xd237aba7e99101e98043403e8c589982021e5326",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": true,
+      "decisions": [
+        17,
+        17
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 27,
+      "phase": "0xde55eaa6e89109fca073547e8c580ba72f0e5fa2",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": false,
+      "decisions": [
+        4,
+        1
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 28,
+      "phase": "0xc237aba7e89181e88041413e8c589902021e5126",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": false,
+      "decisions": [
+        16,
+        58
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 28,
+      "phase": "0xce55aaa6e0910bf8a073547eac580ba32e0e5fa2",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": true,
+      "decisions": [
+        14,
+        18
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 28,
+      "phase": "0xd2262ba7e91101e88041413e8c589902021a5126",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": false,
+      "decisions": [
+        5,
+        1
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 28,
+      "phase": "0xd2378ba7e91101e88040413e8c589912021e5326",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": true,
+      "decisions": [
+        12,
+        12
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 28,
+      "phase": "0xd237ab87e91101e88061412e8c589903021e5126",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": false,
+      "decisions": [
+        16,
+        4
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 28,
+      "phase": "0xd237aba7c91101f98041413e8c58990202165126",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": false,
+      "decisions": [
+        14,
+        3
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 28,
+      "phase": "0xd237aba7e91100e88041412e8c5899030a1e5126",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": true,
+      "decisions": [
+        11,
+        16
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 28,
+      "phase": "0xd237aba7e91101e88041413e8c589942021ed306",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": false,
+      "decisions": [
+        9,
+        0
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 28,
+      "phase": "0xd237aba7e91101f89041413e8c58991202165126",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": true,
+      "decisions": [
+        13,
+        12
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 28,
+      "phase": "0xde55eaa6e89109fca073547e8c580ba72f0e5fa2",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": true,
+      "decisions": [
+        16,
+        14
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 29,
+      "phase": "0xc237aba7e89181e88041413e8c589902021e5126",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": true,
+      "decisions": [
+        22,
+        43
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 29,
+      "phase": "0xc237aba7f91101e88041413e8c589900021e5166",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": false,
+      "decisions": [
+        11,
+        8
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 29,
+      "phase": "0xce55aaa2e89109fca071546e8c580ba32e4e5fa2",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": false,
+      "decisions": [
+        17,
+        12
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 29,
+      "phase": "0xd2262ba7e91101e88041413e8c589902021a5126",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": true,
+      "decisions": [
+        11,
+        17
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 29,
+      "phase": "0xd233aba7e91181e88141413e8c589902021e5326",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": false,
+      "decisions": [
+        9,
+        10
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 29,
+      "phase": "0xd237ab87e91101e88061412e8c589903021e5126",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": true,
+      "decisions": [
+        12,
+        14
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 29,
+      "phase": "0xd237aba7c91101f98041413e8c58990202165126",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": true,
+      "decisions": [
+        7,
+        13
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 29,
+      "phase": "0xd237aba7e91101e88041413e8c589942021ed306",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": true,
+      "decisions": [
+        7,
+        9
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 30,
+      "phase": "0xc237aba7f91101e88041413e8c589900021e5166",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": true,
+      "decisions": [
+        25,
+        44
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 30,
+      "phase": "0xce55aaa2e89109fca071546e8c580ba32e4e5fa2",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": true,
+      "decisions": [
+        23,
+        31
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 30,
+      "phase": "0xce55aaa2e89509fca071547e8c580ba32e0f5fa2",
+      "ordinary": 30,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        11,
+        2
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 30,
+      "phase": "0xd21f8ba7e91101e88040413e8c589902021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": false,
+      "decisions": [
+        14,
+        36
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 30,
+      "phase": "0xd21faba7e91101e88041413e8c589912021e5326",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": false,
+      "decisions": [
+        12,
+        15
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 30,
+      "phase": "0xd233aba7e91181e88141413e8c589902021e5326",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": true,
+      "decisions": [
+        12,
+        13
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 30,
+      "phase": "0xd235aba7e91101e8a061413e8c589902021e5166",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": false,
+      "decisions": [
+        15,
+        5
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 30,
+      "phase": "0xd237aba7c81101e88041413e8c189912021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": false,
+      "decisions": [
+        7,
+        4
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 30,
+      "phase": "0xd237aba7c91101e88049413c8c589802021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": false,
+      "decisions": [
+        6,
+        1
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 30,
+      "phase": "0xd237aba7c91101e88141413e8c509102021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": false,
+      "decisions": [
+        5,
+        1
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 30,
+      "phase": "0xd237aba7e91100e89049413e8c589802021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": false,
+      "decisions": [
+        9,
+        7
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 30,
+      "phase": "0xd23fbba7e91101e88041433e8c589b02021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": false,
+      "decisions": [
+        9,
+        15
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xc227bba7e91181e88041413e8c589902021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        16,
+        56
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xca55aaa6e8914bfca073547eac580ba32e0e5fa2",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        19,
+        7
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd217aba7c91301e08041413e8c589902021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        5,
+        12
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd217aba7e19101e88041413e8c5899020a1e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        5,
+        11
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd21f8ba7e91101e88040413e8c589902021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": true,
+      "decisions": [
+        27,
+        11
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd21faba7e91101e88041413e8c589912021e5326",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": true,
+      "decisions": [
+        40,
+        16
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd235aba7e91101e8a061413e8c589902021e5166",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": true,
+      "decisions": [
+        21,
+        20
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd237aba3e91101e98041412e8c589982021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        5,
+        9
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd237aba5e91101e8a061413e8c589902021e5166",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        6,
+        2
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd237aba7c81101e88041413e8c189912021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": true,
+      "decisions": [
+        44,
+        8
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd237aba7c91101e88049413c8c589802021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": true,
+      "decisions": [
+        17,
+        8
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd237aba7c91101e88141413e8c509102021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": true,
+      "decisions": [
+        44,
+        13
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd237aba7e91100e89049413e8c589802021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": true,
+      "decisions": [
+        16,
+        9
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd237aba7f91101e88041413e8c589b02021e516e",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        9,
+        1
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd237abaff91101ec8041413e8c589902021e5166",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        9,
+        1
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 31,
+      "phase": "0xd23fbba7e91101e88041433e8c589b02021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": true,
+      "decisions": [
+        38,
+        12
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xc227bba7e91181e88041413e8c589902021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        23,
+        43
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xca55aaa6e8914bfca073547eac580ba32e0e5fa2",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        18,
+        16
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xce55aaa2e89509fca071547e8c580ba32e0f5fa2",
+      "ordinary": 30,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        19,
+        6
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xd217aba7c91101ec8041413e8c589902021e512e",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        14,
+        5
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xd217aba7c91301e08041413e8c589902021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        7,
+        21
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xd217aba7e11181e88041413e8c589912021e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        13,
+        16
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xd217aba7e19101e88041413e8c5899020a1e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        19,
+        10
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xd237aba3e91101e98041412e8c589982021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        21,
+        13
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xd237aba5e91101e8a061413e8c589902021e5166",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        15,
+        13
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xd237aba7c91100e8a041413e8c589902021e5166",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        8,
+        4
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xd237aba7c91103e88041413eac589982021e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        8,
+        4
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xd237aba7e89101e88041413e8c58991a021e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        13,
+        4
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xd237aba7f91101e88041413e8c589b02021e516e",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        18,
+        9
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xd237abaff91101ec8041413e8c589902021e5166",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        22,
+        8
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 32,
+      "phase": "0xd2b7aba7e91101e88041413e8c5899222a1e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        19,
+        3
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 33,
+      "phase": "0xd217aba7c91101ec8041413e8c589902021e512e",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        25,
+        44
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 33,
+      "phase": "0xd217aba7e11181e88041413e8c589912021e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        31,
+        12
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 33,
+      "phase": "0xd227bba7e91101e88041413e8c58991a021e5126",
+      "ordinary": 33,
+      "priced": 34,
+      "base": true,
+      "native": false,
+      "decisions": [
+        12,
+        25
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 33,
+      "phase": "0xd2372ba7e91101e88041c1368d589902021e5126",
+      "ordinary": 33,
+      "priced": 34,
+      "base": true,
+      "native": false,
+      "decisions": [
+        24,
+        14
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 33,
+      "phase": "0xd237aba7c91100e8a041413e8c589902021e5166",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        19,
+        11
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 33,
+      "phase": "0xd237aba7c91103e88041413eac589982021e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        14,
+        5
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 33,
+      "phase": "0xd237aba7e89101e88041413e8c58991a021e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        32,
+        8
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 33,
+      "phase": "0xd2b7aba7e91101e88041413e8c5899222a1e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        30,
+        14
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 34,
+      "phase": "0xd227bba7e91101e88041413e8c58991a021e5126",
+      "ordinary": 33,
+      "priced": 34,
+      "base": true,
+      "native": true,
+      "decisions": [
+        22,
+        43
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 34,
+      "phase": "0xd233aba7ed1141e89041413e8c589902021e5126",
+      "ordinary": 34,
+      "priced": 35,
+      "base": true,
+      "native": false,
+      "decisions": [
+        17,
+        18
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 34,
+      "phase": "0xd2372ba7e91101e88041c1368d589902021e5126",
+      "ordinary": 33,
+      "priced": 34,
+      "base": true,
+      "native": true,
+      "decisions": [
+        10,
+        27
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 34,
+      "phase": "0xd237aba7c91101a88041493e8c589912021e5126",
+      "ordinary": 34,
+      "priced": 36,
+      "base": true,
+      "native": false,
+      "decisions": [
+        11,
+        1
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 34,
+      "phase": "0xd23fabafe91101e80041413e8c599902021e5126",
+      "ordinary": 34,
+      "priced": 35,
+      "base": true,
+      "native": false,
+      "decisions": [
+        4,
+        0
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 35,
+      "phase": "0xd233aba7ed1141e89041413e8c589902021e5126",
+      "ordinary": 34,
+      "priced": 35,
+      "base": true,
+      "native": true,
+      "decisions": [
+        22,
+        43
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 35,
+      "phase": "0xd23fabafe91101e80041413e8c599902021e5126",
+      "ordinary": 34,
+      "priced": 35,
+      "base": true,
+      "native": true,
+      "decisions": [
+        26,
+        26
+      ]
+    },
+    {
+      "groups": 13,
+      "cap": 36,
+      "phase": "0xd237aba7c91101a88041493e8c589912021e5126",
+      "ordinary": 34,
+      "priced": 36,
+      "base": true,
+      "native": true,
+      "decisions": [
+        29,
+        42
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 24,
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "ordinary": 24,
+      "priced": 25,
+      "base": true,
+      "native": false,
+      "decisions": [
+        45,
+        124
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 25,
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "ordinary": 24,
+      "priced": 25,
+      "base": true,
+      "native": true,
+      "decisions": [
+        56,
+        64
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 26,
+      "phase": "0xce55aaa6e89109fca071557e8c580aa32f0e5fa2",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": false,
+      "decisions": [
+        17,
+        50
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 26,
+      "phase": "0xd237aba3e99101e88043402e8c589902021e5326",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": false,
+      "decisions": [
+        15,
+        26
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 26,
+      "phase": "0xd237aba7e91101e88041413e8c589912021e5326",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": false,
+      "decisions": [
+        17,
+        18
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 26,
+      "phase": "0xd237aba7e91101f880c1413e8c58990202165106",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": false,
+      "decisions": [
+        25,
+        42
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 26,
+      "phase": "0xd237aba7e99101e88049413e8c589802021e5326",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": false,
+      "decisions": [
+        57,
+        13
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 27,
+      "phase": "0xce55aaa6e89109fca071557e8c580aa32f0e5fa2",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": true,
+      "decisions": [
+        26,
+        38
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 27,
+      "phase": "0xd237aba3e99101e88043402e8c589902021e5326",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": true,
+      "decisions": [
+        16,
+        28
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 27,
+      "phase": "0xd237aba7e91100e88041412e8c5899030a1e5126",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": false,
+      "decisions": [
+        9,
+        21
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 27,
+      "phase": "0xd237aba7e91101e88041413e8c589912021e5326",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": true,
+      "decisions": [
+        8,
+        33
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 27,
+      "phase": "0xd237aba7e91101f880c1413e8c58990202165106",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": true,
+      "decisions": [
+        9,
+        24
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 27,
+      "phase": "0xd237aba7e99101e88049413e8c589802021e5326",
+      "ordinary": 26,
+      "priced": 27,
+      "base": true,
+      "native": true,
+      "decisions": [
+        12,
+        22
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 27,
+      "phase": "0xd237aba7e99101e98043403e8c589982021e5326",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": false,
+      "decisions": [
+        7,
+        9
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 28,
+      "phase": "0xce55aaa6e0910bf8a073547eac580ba32e0e5fa2",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": false,
+      "decisions": [
+        17,
+        48
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 28,
+      "phase": "0xd2378ba7e91101e88040413e8c589912021e5326",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": false,
+      "decisions": [
+        24,
+        76
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 28,
+      "phase": "0xd237ab87e91101e88061412e8c589903021e5126",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": false,
+      "decisions": [
+        16,
+        8
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 28,
+      "phase": "0xd237aba7e91100e88041412e8c5899030a1e5126",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": true,
+      "decisions": [
+        23,
+        23
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 28,
+      "phase": "0xd237aba7e91101f89041413e8c58991202165126",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": false,
+      "decisions": [
+        23,
+        11
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 28,
+      "phase": "0xd237aba7e99101e98043403e8c589982021e5326",
+      "ordinary": 27,
+      "priced": 28,
+      "base": true,
+      "native": true,
+      "decisions": [
+        36,
+        25
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 28,
+      "phase": "0xde55eaa6e89109fca073547e8c580ba72f0e5fa2",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": false,
+      "decisions": [
+        16,
+        6
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 29,
+      "phase": "0xc237aba7e89181e88041413e8c589902021e5126",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": false,
+      "decisions": [
+        45,
+        102
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 29,
+      "phase": "0xce55aaa6e0910bf8a073547eac580ba32e0e5fa2",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": true,
+      "decisions": [
+        21,
+        38
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 29,
+      "phase": "0xd2262ba7e91101e88041413e8c589902021a5126",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": false,
+      "decisions": [
+        14,
+        6
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 29,
+      "phase": "0xd2378ba7e91101e88040413e8c589912021e5326",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": true,
+      "decisions": [
+        47,
+        28
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 29,
+      "phase": "0xd237ab87e91101e88061412e8c589903021e5126",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": true,
+      "decisions": [
+        21,
+        19
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 29,
+      "phase": "0xd237aba7c91101f98041413e8c58990202165126",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": false,
+      "decisions": [
+        25,
+        18
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 29,
+      "phase": "0xd237aba7e91101e88041413e8c589942021ed306",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": false,
+      "decisions": [
+        23,
+        7
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 29,
+      "phase": "0xd237aba7e91101f89041413e8c58991202165126",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": true,
+      "decisions": [
+        32,
+        58
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 29,
+      "phase": "0xde55eaa6e89109fca073547e8c580ba72f0e5fa2",
+      "ordinary": 28,
+      "priced": 29,
+      "base": true,
+      "native": true,
+      "decisions": [
+        40,
+        11
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 30,
+      "phase": "0xc237aba7e89181e88041413e8c589902021e5126",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": true,
+      "decisions": [
+        55,
+        72
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 30,
+      "phase": "0xc237aba7f91101e88041413e8c589900021e5166",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": false,
+      "decisions": [
+        19,
+        40
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 30,
+      "phase": "0xce55aaa2e89109fca071546e8c580ba32e4e5fa2",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": false,
+      "decisions": [
+        30,
+        26
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 30,
+      "phase": "0xd2262ba7e91101e88041413e8c589902021a5126",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": true,
+      "decisions": [
+        16,
+        17
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 30,
+      "phase": "0xd233aba7e91181e88141413e8c589902021e5326",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": false,
+      "decisions": [
+        9,
+        28
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 30,
+      "phase": "0xd237aba7c91101f98041413e8c58990202165126",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": true,
+      "decisions": [
+        23,
+        47
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 30,
+      "phase": "0xd237aba7e91101e88041413e8c589942021ed306",
+      "ordinary": 29,
+      "priced": 30,
+      "base": true,
+      "native": true,
+      "decisions": [
+        19,
+        11
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 30,
+      "phase": "0xd23fbba7e91101e88041433e8c589b02021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": false,
+      "decisions": [
+        13,
+        35
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xc227bba7e91181e88041413e8c589902021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        16,
+        53
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xc237aba7f91101e88041413e8c589900021e5166",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": true,
+      "decisions": [
+        27,
+        54
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xce55aaa2e89109fca071546e8c580ba32e4e5fa2",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": true,
+      "decisions": [
+        47,
+        35
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xce55aaa2e89509fca071547e8c580ba32e0f5fa2",
+      "ordinary": 31,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        26,
+        7
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xd217aba7e19101e88041413e8c5899020a1e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        35,
+        20
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xd21f8ba7e91101e88040413e8c589902021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        56,
+        17
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xd21faba7e91101e88041413e8c589912021e5326",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        24,
+        49
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xd233aba7e91181e88141413e8c589902021e5326",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": true,
+      "decisions": [
+        18,
+        26
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xd235aba7e91101e8a061413e8c589902021e5166",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        32,
+        11
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xd237aba3e91101e98041412e8c589982021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        6,
+        4
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xd237aba7c81101e88041413e8c189912021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        26,
+        13
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xd237aba7c91101e88049413c8c589802021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        21,
+        8
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xd237aba7c91101e88141413e8c509102021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        20,
+        7
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xd237aba7e91100e89049413e8c589802021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        7,
+        10
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xd237abaff91101ec8041413e8c589902021e5166",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": false,
+      "decisions": [
+        4,
+        4
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 31,
+      "phase": "0xd23fbba7e91101e88041433e8c589b02021e5126",
+      "ordinary": 30,
+      "priced": 31,
+      "base": true,
+      "native": true,
+      "decisions": [
+        26,
+        9
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xc227bba7e91181e88041413e8c589902021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        22,
+        106
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xca55aaa6e8914bfca073547eac580ba32e0e5fa2",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        34,
+        12
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd217aba7c91101ec8041413e8c589902021e512e",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        9,
+        14
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd217aba7c91301e08041413e8c589902021e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        21,
+        13
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd217aba7e19101e88041413e8c5899020a1e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        9,
+        11
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd21f8ba7e91101e88040413e8c589902021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        26,
+        15
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd21faba7e91101e88041413e8c589912021e5326",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        32,
+        14
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd235aba7e91101e8a061413e8c589902021e5166",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        24,
+        15
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd237aba3e91101e98041412e8c589982021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        9,
+        9
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd237aba5e91101e8a061413e8c589902021e5166",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        21,
+        13
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd237aba7c81101e88041413e8c189912021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        18,
+        16
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd237aba7c91101e88049413c8c589802021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        31,
+        39
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd237aba7c91101e88141413e8c509102021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        38,
+        19
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd237aba7c91103e88041413eac589982021e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        5,
+        6
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd237aba7e89101e88041413e8c58991a021e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        6,
+        4
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd237aba7e91100e89049413e8c589802021e5126",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        27,
+        12
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd237aba7f91101e88041413e8c589b02021e516e",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        22,
+        7
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd237abaff91101ec8041413e8c589902021e5166",
+      "ordinary": 31,
+      "priced": 32,
+      "base": true,
+      "native": true,
+      "decisions": [
+        7,
+        6
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 32,
+      "phase": "0xd2b7aba7e91101e88041413e8c5899222a1e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": false,
+      "decisions": [
+        12,
+        3
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 33,
+      "phase": "0xca55aaa6e8914bfca073547eac580ba32e0e5fa2",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        26,
+        35
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 33,
+      "phase": "0xce55aaa2e89509fca071547e8c580ba32e0f5fa2",
+      "ordinary": 31,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        65,
+        27
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 33,
+      "phase": "0xd217aba7c91101ec8041413e8c589902021e512e",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        15,
+        20
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 33,
+      "phase": "0xd217aba7c91301e08041413e8c589902021e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        24,
+        30
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 33,
+      "phase": "0xd217aba7e11181e88041413e8c589912021e5126",
+      "ordinary": 33,
+      "priced": 34,
+      "base": true,
+      "native": false,
+      "decisions": [
+        14,
+        25
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 33,
+      "phase": "0xd227bba7e91101e88041413e8c58991a021e5126",
+      "ordinary": 33,
+      "priced": 34,
+      "base": true,
+      "native": false,
+      "decisions": [
+        35,
+        24
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 33,
+      "phase": "0xd237aba5e91101e8a061413e8c589902021e5166",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        12,
+        35
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 33,
+      "phase": "0xd237aba7c91100e8a041413e8c589902021e5166",
+      "ordinary": 33,
+      "priced": 34,
+      "base": true,
+      "native": false,
+      "decisions": [
+        18,
+        28
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 33,
+      "phase": "0xd237aba7c91103e88041413eac589982021e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        9,
+        21
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 33,
+      "phase": "0xd237aba7e89101e88041413e8c58991a021e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        14,
+        11
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 33,
+      "phase": "0xd237aba7f91101e88041413e8c589b02021e516e",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        12,
+        6
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 33,
+      "phase": "0xd2b7aba7e91101e88041413e8c5899222a1e5126",
+      "ordinary": 32,
+      "priced": 33,
+      "base": true,
+      "native": true,
+      "decisions": [
+        14,
+        11
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 34,
+      "phase": "0xd217aba7e11181e88041413e8c589912021e5126",
+      "ordinary": 33,
+      "priced": 34,
+      "base": true,
+      "native": true,
+      "decisions": [
+        57,
+        72
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 34,
+      "phase": "0xd227bba7e91101e88041413e8c58991a021e5126",
+      "ordinary": 33,
+      "priced": 34,
+      "base": true,
+      "native": true,
+      "decisions": [
+        22,
+        104
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 34,
+      "phase": "0xd2372ba7e91101e88041c1368d589902021e5126",
+      "ordinary": 34,
+      "priced": 35,
+      "base": true,
+      "native": false,
+      "decisions": [
+        21,
+        32
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 34,
+      "phase": "0xd237aba7c91100e8a041413e8c589902021e5166",
+      "ordinary": 33,
+      "priced": 34,
+      "base": true,
+      "native": true,
+      "decisions": [
+        7,
+        24
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 34,
+      "phase": "0xd23fabafe91101e80041413e8c599902021e5126",
+      "ordinary": 34,
+      "priced": 35,
+      "base": true,
+      "native": false,
+      "decisions": [
+        4,
+        1
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 35,
+      "phase": "0xd233aba7ed1141e89041413e8c589902021e5126",
+      "ordinary": 35,
+      "priced": 36,
+      "base": true,
+      "native": false,
+      "decisions": [
+        45,
+        108
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 35,
+      "phase": "0xd2372ba7e91101e88041c1368d589902021e5126",
+      "ordinary": 34,
+      "priced": 35,
+      "base": true,
+      "native": true,
+      "decisions": [
+        32,
+        25
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 35,
+      "phase": "0xd237aba7c91101a88041493e8c589912021e5126",
+      "ordinary": 35,
+      "priced": 37,
+      "base": true,
+      "native": false,
+      "decisions": [
+        10,
+        10
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 35,
+      "phase": "0xd23fabafe91101e80041413e8c599902021e5126",
+      "ordinary": 34,
+      "priced": 35,
+      "base": true,
+      "native": true,
+      "decisions": [
+        16,
+        17
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 36,
+      "phase": "0xd233aba7ed1141e89041413e8c589902021e5126",
+      "ordinary": 35,
+      "priced": 36,
+      "base": true,
+      "native": true,
+      "decisions": [
+        57,
+        96
+      ]
+    },
+    {
+      "groups": 15,
+      "cap": 37,
+      "phase": "0xd237aba7c91101a88041493e8c589912021e5126",
+      "ordinary": 35,
+      "priced": 37,
+      "base": true,
+      "native": true,
+      "decisions": [
+        30,
+        143
+      ]
+    }
+  ],
+  "scope": "Pinned original signed-inventory phases that pass mate support. The native stage moves failed price checks before host candidate return. All-pattern unrestricted decisions are separate.",
+  "optional_charges": 48,
+  "required_mates_in_small_families": 7,
+  "small_families": 27,
+  "extra_matching_variables": 148,
+  "extra_matching_clauses": 984,
+  "groups": [
+    {
+      "groups": 13,
+      "cases": 96,
+      "before_candidates": 96,
+      "after_candidates": 48,
+      "decisions": [
+        1625,
+        1485
+      ]
+    },
+    {
+      "groups": 15,
+      "cases": 96,
+      "before_candidates": 96,
+      "after_candidates": 48,
+      "decisions": [
+        2249,
+        2838
+      ]
+    }
+  ],
+  "original_phase_reuse_screen": {
+    "candidates": 146,
+    "supported": 48,
+    "comparisons": [
+      {
+        "seed": "0xd237aba7e91101e88041413e8c589902021e5126",
+        "cap": 23,
+        "price": 24,
+        "pins": "0x144008010000001a002005160812320000010306",
+        "literals": 25,
+        "additional": []
+      },
+      {
+        "seed": "0xce55aaa6e89109fca071557e8c580aa32f0e5fa2",
+        "cap": 25,
+        "price": 26,
+        "pins": "0x82a400000000004800871100810012035822980",
+        "literals": 27,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7e91101e88041413e8c589912021e5326",
+        "cap": 25,
+        "price": 26,
+        "pins": "0x1440080100800018002005160853321000090306",
+        "literals": 29,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7e91101f880c1413e8c58990202165106",
+        "cap": 25,
+        "price": 26,
+        "pins": "0x144000010000000a012105160812321000090326",
+        "literals": 28,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7e99101e88049413e8c589802021e5326",
+        "cap": 25,
+        "price": 26,
+        "pins": "0x1440090100000118002845160812330020010146",
+        "literals": 30,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba3e99101e88043402e8c589902021e5326",
+        "cap": 26,
+        "price": 27,
+        "pins": "0x144008850000009800a005360012320200400182",
+        "literals": 28,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7e99101e98043403e8c589982021e5326",
+        "cap": 26,
+        "price": 27,
+        "pins": "0x1440080100000019202005060c12328000510186",
+        "literals": 29,
+        "additional": []
+      },
+      {
+        "seed": "0xce55aaa6e0910bf8a073547eac580ba32e0e5fa2",
+        "cap": 27,
+        "price": 28,
+        "pins": "0x82a00000800020480003008281001285d82098c",
+        "literals": 29,
+        "additional": []
+      },
+      {
+        "seed": "0xd2378ba7e91101e88040413e8c589912021e5326",
+        "cap": 27,
+        "price": 28,
+        "pins": "0x1440080100800018002105160853321000090326",
+        "literals": 31,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7e91100e88041412e8c5899030a1e5126",
+        "cap": 27,
+        "price": 28,
+        "pins": "0x144008810000011e002004360832320008010b06",
+        "literals": 31,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7e91101f89041413e8c58991202165126",
+        "cap": 27,
+        "price": 28,
+        "pins": "0x144000030000800a112005160853321000090306",
+        "literals": 31,
+        "additional": []
+      },
+      {
+        "seed": "0xde55eaa6e89109fca073547e8c580ba72f0e5fa2",
+        "cap": 27,
+        "price": 28,
+        "pins": "0x1a6a400000000000800030040811012415a2a984",
+        "literals": 30,
+        "additional": []
+      },
+      {
+        "seed": "0xc237aba7e89181e88041413e8c589902021e5126",
+        "cap": 28,
+        "price": 29,
+        "pins": "0x144008010180801a102005160812322000010306",
+        "literals": 30,
+        "additional": []
+      },
+      {
+        "seed": "0xd2262ba7e91101e88041413e8c589902021a5126",
+        "cap": 28,
+        "price": 29,
+        "pins": "0x145488010000005a00200516081a120000030316",
+        "literals": 31,
+        "additional": []
+      },
+      {
+        "seed": "0xd237ab87e91101e88061412e8c589903021e5126",
+        "cap": 28,
+        "price": 29,
+        "pins": "0x144008a10000101a002004360802320108010306",
+        "literals": 29,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7c91101f98041413e8c58990202165126",
+        "cap": 28,
+        "price": 29,
+        "pins": "0x144000012010000b012005160e123a1000090306",
+        "literals": 32,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7e91101e88041413e8c589942021ed306",
+        "cap": 28,
+        "price": 29,
+        "pins": "0x144008010480401800a105160012320600018326",
+        "literals": 32,
+        "additional": []
+      },
+      {
+        "seed": "0xc237aba7f91101e88041413e8c589900021e5166",
+        "cap": 29,
+        "price": 30,
+        "pins": "0x14c009491000011a002805170a12320a00010346",
+        "literals": 37,
+        "additional": []
+      },
+      {
+        "seed": "0xce55aaa2e89109fca071546e8c580ba32e4e5fa2",
+        "cap": 29,
+        "price": 30,
+        "pins": "0x82a408400000084809a31300010410235c00884",
+        "literals": 32,
+        "additional": []
+      },
+      {
+        "seed": "0xd233aba7e91181e88141413e8c589902021e5326",
+        "cap": 29,
+        "price": 30,
+        "pins": "0x1444880100908018112005170812320000094306",
+        "literals": 34,
+        "additional": []
+      },
+      {
+        "seed": "0xce55aaa2e89509fca071547e8c580ba32e0f5fa2",
+        "cap": 30,
+        "price": 32,
+        "pins": "0x2a400400040085809ab1000010012235c30894",
+        "literals": 34,
+        "additional": []
+      },
+      {
+        "seed": "0xd21f8ba7e91101e88040413e8c589902021e5126",
+        "cap": 30,
+        "price": 31,
+        "pins": "0x1c6808010080001a0021051e08163200009103a6",
+        "literals": 36,
+        "additional": []
+      },
+      {
+        "seed": "0xd21faba7e91101e88041413e8c589912021e5326",
+        "cap": 30,
+        "price": 31,
+        "pins": "0x1c680801008000180020051e0857321000990386",
+        "literals": 37,
+        "additional": []
+      },
+      {
+        "seed": "0xd235aba7e91101e8a061413e8c589902021e5166",
+        "cap": 30,
+        "price": 31,
+        "pins": "0x144209410000011a203805160812328800810346",
+        "literals": 36,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7c81101e88041413e8c189912021e5126",
+        "cap": 30,
+        "price": 31,
+        "pins": "0x14400a012110001a002005160a533a3000090306",
+        "literals": 36,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7c91101e88049413c8c589802021e5126",
+        "cap": 30,
+        "price": 31,
+        "pins": "0x140429012010011a002845160a123b0020010346",
+        "literals": 37,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7c91101e88141413e8c509102021e5126",
+        "cap": 30,
+        "price": 31,
+        "pins": "0x144088012010001a012005178a1a320002090306",
+        "literals": 35,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7e91100e89049413e8c589802021e5126",
+        "cap": 30,
+        "price": 31,
+        "pins": "0x1440080b0000811a102845160832330020010346",
+        "literals": 36,
+        "additional": []
+      },
+      {
+        "seed": "0xd23fbba7e91101e88041433e8c589b02021e5126",
+        "cap": 30,
+        "price": 31,
+        "pins": "0x1c0818010280001a0020071e0896b20840010386",
+        "literals": 37,
+        "additional": []
+      },
+      {
+        "seed": "0xc227bba7e91181e88041413e8c589902021e5126",
+        "cap": 31,
+        "price": 32,
+        "pins": "0x145018010000801a102005160812320840070316",
+        "literals": 34,
+        "additional": []
+      },
+      {
+        "seed": "0xca55aaa6e8914bfca073547eac580ba32e0e5fa2",
+        "cap": 31,
+        "price": 32,
+        "pins": "0xc2a400000004204808030002810018a55801dae",
+        "literals": 34,
+        "additional": []
+      },
+      {
+        "seed": "0xd217aba7c91301e08041413e8c589902021e5126",
+        "cap": 31,
+        "price": 32,
+        "pins": "0x146009082012011a082005960a127a0000910306",
+        "literals": 38,
+        "additional": []
+      },
+      {
+        "seed": "0xd217aba7e19101e88041413e8c5899020a1e5126",
+        "cap": 31,
+        "price": 32,
+        "pins": "0x1c6008010880001e8020051e0812320108910b06",
+        "literals": 37,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba3e91101e98041412e8c589982021e5126",
+        "cap": 31,
+        "price": 32,
+        "pins": "0x144008850000009b20a004360412328200110306",
+        "literals": 34,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba5e91101e8a061413e8c589902021e5166",
+        "cap": 31,
+        "price": 32,
+        "pins": "0x144209430000013a303805160802328800010346",
+        "literals": 37,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7f91101e88041413e8c589b02021e516e",
+        "cap": 31,
+        "price": 32,
+        "pins": "0x140009491000231a002805170a12b2080001035e",
+        "literals": 39,
+        "additional": []
+      },
+      {
+        "seed": "0xd237abaff91101ec8041413e8c589902021e5166",
+        "cap": 31,
+        "price": 32,
+        "pins": "0x144049491002011e002805170a12320808010346",
+        "literals": 39,
+        "additional": []
+      },
+      {
+        "seed": "0xd217aba7c91101ec8041413e8c589902021e512e",
+        "cap": 32,
+        "price": 33,
+        "pins": "0x146048012010221e002005160a123a000891031e",
+        "literals": 39,
+        "additional": []
+      },
+      {
+        "seed": "0xd217aba7e11181e88041413e8c589912021e5126",
+        "cap": 32,
+        "price": 33,
+        "pins": "0x146008010880801a9020051e0853321000990306",
+        "literals": 38,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7c91100e8a041413e8c589902021e5166",
+        "cap": 32,
+        "price": 33,
+        "pins": "0x144208492010011a203805160a323a8800010346",
+        "literals": 40,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7c91103e88041413eac589982021e5126",
+        "cap": 32,
+        "price": 33,
+        "pins": "0x144008012010021a202005162a123a884011030e",
+        "literals": 37,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7e89101e88041413e8c58991a021e5126",
+        "cap": 32,
+        "price": 33,
+        "pins": "0x144018010180001a002005162853323800090346",
+        "literals": 36,
+        "additional": []
+      },
+      {
+        "seed": "0xd2b7aba7e91101e88041413e8c5899222a1e5126",
+        "cap": 32,
+        "price": 33,
+        "pins": "0x14c009010100015e002805160812322328030b06",
+        "literals": 39,
+        "additional": []
+      },
+      {
+        "seed": "0xd227bba7e91101e88041413e8c58991a021e5126",
+        "cap": 33,
+        "price": 34,
+        "pins": "0x145018010000001a0020051628533218400f0356",
+        "literals": 38,
+        "additional": []
+      },
+      {
+        "seed": "0xd2372ba7e91101e88041c1368d589902021e5126",
+        "cap": 33,
+        "price": 34,
+        "pins": "0x14448c010004005a00208516191a360000010307",
+        "literals": 36,
+        "additional": []
+      },
+      {
+        "seed": "0xd233aba7ed1141e89041413e8c589902021e5126",
+        "cap": 34,
+        "price": 35,
+        "pins": "0x144488130420c01a10a00516081232020000d322",
+        "literals": 38,
+        "additional": []
+      },
+      {
+        "seed": "0xd237aba7c91101a88041493e8c589912021e5126",
+        "cap": 34,
+        "price": 36,
+        "pins": "0x5c080012010005a00600d160a533a10c0090306",
+        "literals": 39,
+        "additional": []
+      },
+      {
+        "seed": "0xd23fabafe91101e80041413e8c599902021e5126",
+        "cap": 34,
+        "price": 35,
+        "pins": "0x1c4849091882011a8020053e0817321004010386",
+        "literals": 43,
+        "additional": []
+      }
+    ]
+  },
+  "finite_validation": {
+    "whole_pairing_costs": 768,
+    "native_fixed_phase_caps": 768,
+    "partial_pin_lower_bounds": 3888,
+    "broad_cases": 50,
+    "additional_node_cutoffs_per_case": 3
+  }
+}

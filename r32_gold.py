@@ -117,8 +117,8 @@ def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refi
         conditions=SignedConditions(problem,euler=sphere_euler,mates=mate_support,mate_cost=mate_cost)
         identity=[*identity,'signed-physical-conditions-v1',sphere_euler,mate_support or mate_cost]
         if mate_cost:
-            cheaper_price_scopes.append(identity)
-            identity=[*identity,'eight-side-loss-prices-v1']
+            cheaper_price_scopes.extend((identity,[*identity,'eight-side-loss-prices-v1']))
+            identity=[*identity,'small-family-loss-prices-v2']
     scope = digest([*identity,upper])
     # A plain negative page excludes every integer-feasible pattern inside it.
     # A plain hit can coexist with further candidates in the same prefix.
@@ -145,7 +145,8 @@ def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refi
         read_scopes=tuple(dict.fromkeys((scope,geo_plain,*read_scopes)))
     if cheaper_price_scopes:
         if geo:
-            cheaper_price_scopes.append([*cheaper_price_scopes[0],'verified-geographic-departures-v1',sorted(sorted(g) for g in geo)])
+            geographic_tag=['verified-geographic-departures-v1',sorted(sorted(g) for g in geo)]
+            cheaper_price_scopes.extend([*prior,*geographic_tag] for prior in tuple(cheaper_price_scopes))
         for cheaper in cheaper_price_scopes:
             weak=digest([*cheaper,upper])
             read_scopes+=tuple(v for v in (weak,digest([weak,'integer-pattern-v1'])) if v not in read_scopes)
@@ -387,7 +388,7 @@ def main():
     parser.add_argument('--refine-integer',action='store_true',help='In loss mode, check signed integer inventories before accepting a phase pattern (wide phase images use OR-Tools).')
     parser.add_argument('--independent-native',action='store_true',help='In integer-bound, rerun the native all-pattern solver even for an independently checked published result.')
     parser.add_argument('--sphere-euler',action='store_true',help='Require the spherical one-loop Euler equation in signed integer search.')
-    parser.add_argument('--mate-cost',action='store_true',help='Also price lost reference pairs inside reciprocal classes of at most eight sides and combine overlapping departures.')
+    parser.add_argument('--mate-cost',action='store_true',help='Price lost reference pairs in small reciprocal classes, extending to twelve sides for broad overlapping departures.')
     parser.add_argument('--mate-support',action='store_true',help='Require signed physical mates and perfect matchings in reciprocal classes of up to sixteen sides.')
     parser.add_argument('--excess-charges',action='store_true',help='In integer-bound, subtract disjoint compulsory departures before charging the remaining losses.')
     parser.add_argument('--all-groups',action='store_true',help='In loss or integer-bound, enforce every verified physical departure group, including overlaps.')

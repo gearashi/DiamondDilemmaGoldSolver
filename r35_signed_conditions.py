@@ -47,7 +47,9 @@ class SignedConditions:
         self.mates=mates or mate_cost
         self.mate_cost=mate_cost
         self._scope=None
+        self._narrow_cost_scope=None
         self._prices=None
+        self._price_rules={}
         self.euler=None
         self.rejecting=set()
         self.initial=set()
@@ -60,14 +62,36 @@ class SignedConditions:
         scoped._scope=(frozenset(reference),tuple(frozenset(g) for g in groups),frozenset(required),cap)
         return scoped
 
-    def price(self,phase,ordinary):
-        if not self.mate_cost:return ordinary
-        if self._scope is None:raise ValueError('Mate cost requires a bound reference-loss scope.')
+    def _class_prices(self):
+        if self._scope is None:
+            raise ValueError("Mate cost requires a bound reference-loss scope.")
         if self._prices is None:
             from r35_mate_price import ClassPrices
-            reference,groups,required,_=self._scope
-            self._prices=ClassPrices(self.problem,reference,groups,required,limit=8)
-        strengthened=self._prices.memo(phase)
+            reference, groups, required, _ = self._scope
+            # The width belongs to the whole physical scope. A partial proof
+            # and all its full completions must price the same set of families.
+            width = 8 if self._narrow_prices() else 12
+            self._prices = ClassPrices(self.problem, reference, groups, required, limit=width)
+        return self._prices
+
+    def _narrow_prices(self):
+        if self._narrow_cost_scope is None:
+            from r35_mate_native import always_exact
+            _, groups, required, _ = self._scope
+            self._narrow_cost_scope = always_exact(self.problem, groups, required)
+        return self._narrow_cost_scope
+
+    def native_cost_pairs(self):
+        if not self.mate_cost:
+            return None
+        from r35_mate_native import named_pairs
+        if self._narrow_prices():
+            return named_pairs(self._class_prices())
+        return None
+
+    def price(self,phase,ordinary):
+        if not self.mate_cost:return ordinary
+        strengthened=self._class_prices().memo(phase)
         return ordinary if strengthened is None else max(ordinary,strengthened)
 
     def _prepare(self):
@@ -106,6 +130,7 @@ class SignedConditions:
 
     def accepts(self,phase):
         self._prepare()
+        if any(phase & mask in blocked for mask,blocked in self._price_rules.items()):return False
         if self.euler:
             weight=sum(row[(phase>>i)&1][-1] for i,row in enumerate(self.euler.rows))
             if weight not in self.euler.euler:return False
@@ -118,7 +143,33 @@ class SignedConditions:
         if self.euler:
             rows,_=euler_clauses(self.euler,model.solver.nof_vars())
             model.solver.append_formula(rows)
-        for row in sorted(self.initial|self.rejecting):model.solver.add_clause(list(row))
+        self._post(model, self.initial | self.rejecting)
+        if self.mate_cost and getattr(model, "mate_cost_pairs", None) is not None:
+            from r35_mate_native import clauses, named_pairs
+            prices = self._class_prices()
+            if model.mate_cost_pairs != named_pairs(prices):
+                raise ValueError("Native mate costs require the matching physical bond scope.")
+            model.solver.append_formula(clauses(prices, model.physical_losses, model.solver.nof_vars()))
+
+    @staticmethod
+    def _post(model, rows):
+        gauge_fixed = getattr(model, "clauses", ())[:1] == [[-1]]
+        for row in sorted(rows):
+            if gauge_fixed and -1 in row:
+                continue
+            model.solver.add_clause([v for v in row if not (gauge_fixed and v == 1)])
+
+    def _price_conflict(self, phase, deadline):
+        mask = self._prices.conflict(phase, self._scope[3], deadline)
+        blocked = phase & mask
+        # Reversing every tile phase preserves all required and optional mate
+        # compatibilities and loss prices. Both cylinders have the same bound.
+        patterns = {blocked, blocked ^ mask}
+        self._price_rules.setdefault(mask, set()).update(patterns)
+        rows = {self._clause((t, (pattern >> t) & 1) for t in range(mask.bit_length())
+                             if mask & (1 << t)) for pattern in patterns}
+        self.rejecting.update(rows)
+        return rows
 
     def decide(self,model,deadline,assumptions=()):
         from math import inf
@@ -136,8 +187,7 @@ class SignedConditions:
                 ((phase>>(abs(v)-1))&1)!=(v>0) for v in row)]
             if not learned:
                 if self.mate_cost and self.price(phase,0)>self._scope[3]:
-                    # The rejected cost is specific to this bound and these physical
-                    # obligations. Keep this nogood inside the current native formula.
-                    learned=[tuple(-i-1 if phase>>i&1 else i+1 for i in range(model.n))]
+                    # for_loss gives each cap and physical scope its own rule store.
+                    learned=self._price_conflict(phase,deadline)
                 else:raise ArithmeticError('Native signed phase violates an installed constraint.')
-            for row in sorted(learned):model.solver.add_clause(list(row))
+            self._post(model,learned)

@@ -10,7 +10,7 @@ from validator import reverse_mask
 class InventorySAT:
     """The first n variables are physical tile colors; its global complement is equivalent."""
 
-    def __init__(self, problem, groups, required, outside, cap, *, native='g4', excess=False, additional_groups=(), projected=False, parity_only=False):
+    def __init__(self, problem, groups, required, outside, cap, *, native='g4', excess=False, additional_groups=(), projected=False, parity_only=False, mate_cost_pairs=None):
         from pysat.card import CardEnc, ITotalizer
         from pysat.formula import IDPool
         from pysat.solvers import Solver
@@ -18,6 +18,8 @@ class InventorySAT:
         groups = [frozenset(g) for g in groups]
         additional_groups = [frozenset(g) for g in additional_groups]
         required = set(required)
+        self.mate_cost_pairs = None if mate_cost_pairs is None else frozenset(mate_cost_pairs)
+        priced_pairs = self.mate_cost_pairs or frozenset()
         covered = set()
         for group in groups:
             if covered.intersection(group):
@@ -120,7 +122,7 @@ class InventorySAT:
         for pair in outside:
             error = error_id(pair)
             errors.append(error)
-            if pair in extra_bonds:
+            if pair in extra_bonds or pair in priced_pairs:
                 # A compatible outside reference seam may still be dropped to
                 # satisfy an overlapping certified group. Count it just once.
                 charge = ids.id()
@@ -137,7 +139,7 @@ class InventorySAT:
             for pair in sorted(group-required):
                 if projected:
                     error = error_id(pair)
-                    if pair in voluntary:
+                    if pair in voluntary or pair in priced_pairs:
                         loss = ids.id()
                         clauses.append([-error,loss])
                     else:
