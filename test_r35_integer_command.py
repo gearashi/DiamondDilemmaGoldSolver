@@ -40,7 +40,14 @@ class BoundReuseTests(unittest.TestCase):
                 with self.assertRaisesRegex(AssertionError,'native reached'):run(21,**args)
             self.assertEqual(run(20,additional_groups=list(reversed(self.extra)))['certified_loss_lower_bound'],21)
             self.assertEqual(run(20,additional_groups=[self.extra[-1]])['loss_cost'],20)
-            with self.assertRaisesRegex(AssertionError,'native reached'):run(20,additional_groups=self.extra[:1])
+            from itertools import combinations
+            for size in range(4):
+                for rows in combinations(self.extra,size):
+                    result=run(20,additional_groups=rows)
+                    if self.extra[0] in rows:self.assertEqual(result['certified_loss_lower_bound'],21)
+                    else:self.assertEqual(result['loss_cost'],20)
+            weakened=[set(self.extra[0])|{self.out[0]}]
+            with self.assertRaisesRegex(AssertionError,'native reached'):run(20,additional_groups=weakened)
             with self.assertRaisesRegex(AssertionError,'native reached'):global_integer(p,ref,g,req,out[:-1],19,.01)
             with self.assertRaisesRegex(AssertionError,'native reached'):global_integer(p,ref,list(reversed(g)),req,out,19,.01)
             with self.assertRaisesRegex(AssertionError,'native reached'):global_integer(p,ref,g,req,out+out[:1],19,.01)

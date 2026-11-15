@@ -11,19 +11,15 @@ REFERENCE_PHASE = 0xd237aba7e99101e88041403e8c589902025e5326
 REFERENCE_PHASES = (REFERENCE_PHASE,0xce55aaa6e89109fca073547e8c580ba32e0e5fa2)
 
 
-# Cap 20 of the thirteen-group model is independently refuted. These three
-# obligations supplement the source-bound ten in REFERENCE_SCOPE.
-OVERLAPPING_OBLIGATIONS = frozenset({
-    frozenset({(115,176), (174,382), (285,383)}),
-    frozenset({(14,473), (54,433), (55,356), (133,354), (355,471)}),
-    frozenset({(26,178), (37,338), (38,331), (177,401), (179,332), (324,399), (325,337)}),
-})
+# Cap 20 is refuted by these three physical pairs as one additional
+# proper-loop obligation, alongside the original ten disjoint groups.
+BOUND_21_LOOP = frozenset({(115,176), (174,382), (285,383)})
 
 
 def checked_lower_bound(packed_identity, groups):
     if packed_identity != REFERENCE_SCOPE:
         return None
-    if OVERLAPPING_OBLIGATIONS.issubset(frozenset(group) for group in groups):
+    if any(frozenset(group)==BOUND_21_LOOP for group in groups):
         return 21
     return CHECKED_LOWER_BOUND
 

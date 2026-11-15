@@ -1382,16 +1382,18 @@
       "mechanism": "TIGHT-DISJOINT-LOSS-AT-OPTIMUM",
       "state": "keep verified all-group lower bound and exact-threshold restriction",
       "proposal_and_validation": "The ten disjoint departure groups have certified minimum cost 20. Any feasible 344-group solution at this cap must attain its own phase minimum on and outside the disjoint groups. Test the implied restrictions with complete finite controls and compare original warm/cold CP and SAT at fixed work; independently replay any witness/negative. Preserve unknown scopes.",
-      "decision": "Ten disjoint obligations have attainable minimum 20. With thirteen original obligations independent CaDiCaL plus DRAT refutes cap 20; direct physical repricing attains 21 and hits all 344 obligations. Apply 21 only when the required puzzle, reference, packed partition and additional groups match. Geographic retention becomes 186.",
+      "decision": "Ten disjoint obligations have attainable minimum 20. With thirteen original obligations independent CaDiCaL plus DRAT refutes cap 20; direct physical repricing attains 21 and hits all 344 obligations. Apply 21 only when the required puzzle, reference, packed partition and additional groups match. Geographic retention becomes 186. The later verified eleven-group proof isolates the three-bond proper loop as sufficient. All eight subsets of the three original extra obligations have exact lower and upper decisions, recorded separately.",
       "measurement": "All 431 local clauses matched independent truth-table and GF(2) reconstruction. CaDiCaL 1,007,545 decisions, drat-trim 31,101,252 resolution steps. Three hash seeds reproduce the exact 9,191-variable/19,872-clause input. Across 48 real near-reference residuals 28 to 40 immediate exclusions, and all eight remaining saturations remove 21 optional mates. Ordinary Glucose screened 1,760,202 decisions in 480s without a decision, versus 1,079,124 decisions and a negative at the strengthened all-344 boundary.",
       "evidence": [
         "docs/R35_ALL_GROUP_PROOF.json",
         "docs/R35_ATTAINMENT_CLAUSES.json",
         "docs/R35_GEOGRAPHIC_21.json",
         "docs/ROUND35_LOSS.md",
-        "test_r35_integer_command.py"
+        "test_r35_integer_command.py",
+        "docs/R35_MINIMAL_LOOP_PROOF.json"
       ],
-      "proof_archive_sha256": "e60b84ab532ab90f25cc47d2b1ec0b738bd06316a4ebf39749886135d7582b63"
+      "proof_archive_sha256": "e60b84ab532ab90f25cc47d2b1ec0b738bd06316a4ebf39749886135d7582b63",
+      "subset_proof_archive_sha256": "daf4eb92b2e1138d29c0be57d8c24ab4d99766cbce26fdd5ce5df0b957d0a62b"
     },
     {
       "id": 77,

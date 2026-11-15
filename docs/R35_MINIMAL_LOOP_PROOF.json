@@ -1,0 +1,143 @@
+{
+  "schema": 1,
+  "antecedent_archive": {
+    "name": "DiamondDilemmaGoldSolver-R35-all-group-loss-proof.zip",
+    "sha256": "e60b84ab532ab90f25cc47d2b1ec0b738bd06316a4ebf39749886135d7582b63",
+    "bytes": 76942221
+  },
+  "proof_source_commit": "0c2f70682103598864f563efe8ca8105b9919dd4",
+  "original_tile_sha256": "81e5e40ab23afb135cafe913af3e9d6579d68eea4c096c60d2ddd57a1c8cfe79",
+  "reference_sha256": "ca0a089fa219f93713bf3a26ce3191d8090e2410b0072ee9146c90297049f492",
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "reference_bonds": 207,
+  "required_physical_bonds": 8,
+  "disjoint_groups": 10,
+  "additional_obligation": [
+    [
+      115,
+      176
+    ],
+    [
+      174,
+      382
+    ],
+    [
+      285,
+      383
+    ]
+  ],
+  "proper_loop_replayed": true,
+  "cap": 20,
+  "scope": "ten original disjoint groups plus the three-bond physical loop",
+  "minimum": 21,
+  "witness": "0xce55aaa6e89109fca073547e8c580ba32e0e5fa2",
+  "refutation": {
+    "verified": true,
+    "variables": 9180,
+    "clauses": 19859,
+    "solver": "CaDiCaL 2.1.3",
+    "decisions": 3046062,
+    "conflicts": 1909430,
+    "resolution_steps": 71845277
+  },
+  "subsets": [
+    {
+      "additional_group_sizes": [],
+      "minimum": 20,
+      "phase": "0xce55aaa6e89109fca073547e8c580ba32e0e5fa2",
+      "certified_lower": 20
+    },
+    {
+      "additional_group_sizes": [
+        3
+      ],
+      "minimum": 21,
+      "phase": "0xce55aaa6e89109fca073547e8c580ba32e0e5fa2",
+      "certified_lower": 21
+    },
+    {
+      "additional_group_sizes": [
+        5
+      ],
+      "minimum": 20,
+      "phase": "0xce55aaa6e89109fca073547e8c580ba32e0e5fa2",
+      "certified_lower": 20
+    },
+    {
+      "additional_group_sizes": [
+        7
+      ],
+      "minimum": 20,
+      "phase": "0xce55aaa6e89109fca073547e8c580ba32e0e5fa2",
+      "certified_lower": 20
+    },
+    {
+      "additional_group_sizes": [
+        3,
+        5
+      ],
+      "minimum": 21,
+      "phase": "0xce55aaa6e89109fca073547e8c580ba32e0e5fa2",
+      "certified_lower": 21
+    },
+    {
+      "additional_group_sizes": [
+        3,
+        7
+      ],
+      "minimum": 21,
+      "phase": "0xce55aaa6e89109fca073547e8c580ba32e0e5fa2",
+      "certified_lower": 21
+    },
+    {
+      "additional_group_sizes": [
+        5,
+        7
+      ],
+      "minimum": 20,
+      "phase": "0xce55aaa6e89109fca073547e8c580ba32e0e5fa2",
+      "certified_lower": 20
+    },
+    {
+      "additional_group_sizes": [
+        3,
+        5,
+        7
+      ],
+      "minimum": 21,
+      "phase": "0xce55aaa6e89109fca073547e8c580ba32e0e5fa2",
+      "certified_lower": 21
+    }
+  ],
+  "files": {
+    "all11/cap20.cnf": {
+      "bytes": 295079,
+      "sha256": "1e30bb501e2e73ddc05a5ab1f915f0b4bcf2620217b088f9bf36759494a22726"
+    },
+    "all11/cap20.drat": {
+      "bytes": 132548952,
+      "sha256": "2e33def999bd218444a21d2fe51ffe8b59c7839eca80e75227395a07d47693b0"
+    },
+    "all11/check.log": {
+      "bytes": 626,
+      "sha256": "3b2aba39818f2dcd31abe4a3fa2249bfba2364d93c185631522a41a2ac58826f"
+    },
+    "all11/solve.log": {
+      "bytes": 31282,
+      "sha256": "56c4cbda23cfddb731e76017bbd2df8503893a3f60a9f7bcb111caa1d9972a75"
+    },
+    "regeneration.json": {
+      "bytes": 682,
+      "sha256": "7dcf7f01ca656d09ed937f1eadeb7f3fd19bcbd71754e98d51a493d86f5e62fb"
+    },
+    "subsets.json": {
+      "bytes": 1384,
+      "sha256": "7f567ffdb822a4c0ae20c2a30833556434cfe2dad95c898a55b95dd7695737df"
+    }
+  },
+  "asset": {
+    "name": "DiamondDilemmaGoldSolver-R35-minimal-loop-proof.zip",
+    "bytes": 65296663,
+    "sha256": "daf4eb92b2e1138d29c0be57d8c24ab4d99766cbce26fdd5ce5df0b957d0a62b"
+  }
+}
