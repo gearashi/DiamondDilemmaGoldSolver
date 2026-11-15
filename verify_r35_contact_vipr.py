@@ -76,8 +76,9 @@ def signed_axioms(problem, reference, required, groups, cycles, cap):
     return set(domains), {lost(b):1 for b in losses}, expected
 
 
-def replay_header(path, problem, reference, required, groups, cycles, cap):
+def replay_header(path, problem, reference, required, groups, cycles, cap, *, additional_axioms=()):
     domains, cost, expected = signed_axioms(problem, reference, required, groups, cycles, cap)
+    expected.update(additional_axioms)
     with path.open(encoding='ascii') as source:
         def fields():
             return source.readline().split()

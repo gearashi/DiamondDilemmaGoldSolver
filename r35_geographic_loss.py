@@ -28,18 +28,19 @@ def certified_reference(problem, codes=None):
     # Rebuild the physical identity on every request. The expensive geometry
     # replay is reusable only with the same overlap groups and evidence bytes.
     source=sha256()
-    for name in (CERTIFICATE.name,'R35_CONTACT_WIDE_PROOF.json','R35_GEOGRAPHIC_RESIDUALS.json','R35_EDGE_CONTACTS.json'):
+    for name in (CERTIFICATE.name,'R35_CONTACT_WIDE_PROOF.json','R35_SPHERE_CONTACT_PROOF.json','R35_GEOGRAPHIC_RESIDUALS.json','R35_EDGE_CONTACTS.json'):
         try:
             evidence=(CERTIFICATE.parent/name).read_bytes()
         except OSError:
             evidence=b''
         source.update(sha256(evidence).digest())
-    key=(identity,frozenset(frozenset(group) for group in groups),source.digest())
+    sphere_input=digest([problem.edges,[tile['segments'] for tile in problem.tiles]])
+    key=(identity,frozenset(frozenset(group) for group in groups),source.digest(),sphere_input)
     cached=getattr(problem,'_geographic_loss_reference',None)
     if cached is not None and cached[0]==key:
         return cached[1]
     from r35_contact_certificate import checked_contact_bound
-    loss=max(checked_lower_bound(identity,groups),checked_contact_bound(problem,reference,required,groups,signed_parity=True,integer=True))
+    loss=max(checked_lower_bound(identity,groups),checked_contact_bound(problem,reference,required,groups,signed_parity=True,integer=True,sphere=True))
     result=(frozenset(reference),len(reference)-loss)
     problem._geographic_loss_reference=(key,result)
     return result

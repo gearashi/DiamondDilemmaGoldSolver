@@ -155,7 +155,7 @@ def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refi
         read_scopes=tuple(dict.fromkeys((scope,geo_plain,*read_scopes)))
     if contacts_present:
         from r35_contact_certificate import checked_contact_bound
-        contact_bound=checked_contact_bound(problem,ref,required,groups,charged=charged_groups,signed_parity=True,integer=refine_integer)
+        contact_bound=checked_contact_bound(problem,ref,required,groups,charged=charged_groups,signed_parity=True,integer=refine_integer,sphere=sphere_euler)
         if upper<contact_bound:
             return dict(status='INFEASIBLE',loss_budget=upper,checked_layers=indices,
                         all_outside_layers=all_layers_requested,certified_loss_lower_bound=contact_bound,
@@ -510,7 +510,7 @@ def main():
             if contact_groups:
                 from r35_contact_certificate import checked_contact_bound
                 contact_bound=checked_contact_bound(p,ref,mandatory,groups,
-                    charged=[*packed,*extra_groups,*conditional_groups],signed_parity=True,integer=True)
+                    charged=[*packed,*extra_groups,*conditional_groups],signed_parity=True,integer=True,sphere=args.sphere_euler)
             if contact_bound and args.upper<contact_bound and not args.independent_native:
                 out=dict(status='INFEASIBLE',cap=args.upper,all_outside_layers=True,
                          certified_loss_lower_bound=contact_bound,

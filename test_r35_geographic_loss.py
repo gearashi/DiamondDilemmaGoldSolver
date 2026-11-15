@@ -56,16 +56,20 @@ class GeographicLossTests(unittest.TestCase):
         path=next((p for p in map(Path,('data/tiles.json','../data/tiles.json')) if p.is_file()),None)
         if not path:self.skipTest('Original pieces unavailable.')
         p=SearchProblem(read_json(path));ref,limit=certified_reference(p)
-        self.assertEqual((len(ref),limit),(207,176))
+        self.assertEqual((len(ref),limit),(207,175))
         from unittest.mock import patch
         with patch('r35_contact_certificate.checked_contact_bound',side_effect=AssertionError('unnecessary repeat')):
             self.assertEqual(certified_reference(p),(ref,limit))
         original_read=Path.read_bytes
-        def missing_wide_proof(path):
-            return b'{}' if path.name=='R35_CONTACT_WIDE_PROOF.json' else original_read(path)
-        with patch.object(Path,'read_bytes',missing_wide_proof):
+        def hide(*names):
+            return lambda path: b'{}' if path.name in names else original_read(path)
+        with patch.object(Path,'read_bytes',hide('R35_CONTACT_WIDE_PROOF.json')):
+            self.assertEqual(certified_reference(p),(ref,limit))
+        with patch.object(Path,'read_bytes',hide('R35_SPHERE_CONTACT_PROOF.json')):
+            self.assertEqual(certified_reference(p),(ref,176))
+        with patch.object(Path,'read_bytes',hide('R35_CONTACT_WIDE_PROOF.json','R35_SPHERE_CONTACT_PROOF.json')):
             self.assertEqual(certified_reference(p),(ref,180))
-        self.assertEqual(certified_reference(p),(ref,176))
+        self.assertEqual(certified_reference(p),(ref,limit))
         codes=read_json('docs/R29_INCUMBENT.json')['codes'];wrong=codes.copy()
         wrong[0],wrong[1]=wrong[1],wrong[0]
         self.assertIsNone(certified_reference(p,wrong))

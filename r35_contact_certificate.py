@@ -91,7 +91,12 @@ def wide_integer_scope(required,physical_groups,charged):
     return all(g in given or any(consequence<=g for consequence in given) for g in source)
 
 
-def checked_contact_bound(problem,reference,required,groups,*,charged=None,signed_parity=False,integer=False):
+def checked_contact_bound(problem,reference,required,groups,*,charged=None,signed_parity=False,integer=False,sphere=False):
+    if sphere and signed_parity and integer:
+        from r35_sphere_contact_bound import checked_sphere_bound
+        bound = checked_sphere_bound(problem,reference,frozenset(required),groups,charged)
+        if bound:
+            return bound
     try:data=json.loads(CERTIFICATE.read_bytes())
     except (OSError,ValueError):return 0
     bound=verify(problem,frozenset(reference),frozenset(required),{frozenset(g) for g in groups},data,
