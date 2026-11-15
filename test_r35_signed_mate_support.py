@@ -40,6 +40,34 @@ class SignedMateSearchTests(unittest.TestCase):
         self.assertFalse(SignedConditions(self.p,euler=True).accepts(self.first))
         self.assertTrue(SignedConditions(self.p,euler=True).accepts(self.second))
 
+    def test_hall_core_has_no_independent_partner_permutation(self):
+        from r32_gold_bonds import inventory
+        from r35_loss_witness import raw_sides,reciprocal
+        c=SignedConditions(self.p,mates=True)
+        self.assertFalse(c.accepts(self.first))
+        raw=raw_sides(self.p.tiles);source=inventory(self.p).possible
+        # Independently enumerate all physical pairings of the fourteen-side
+        # family and test the two complete critical partial assignments.
+        labels={raw[9][0],reciprocal(raw[9])[0]}
+        family={i for i,label in enumerate(raw) if label[0] in labels}
+        self.assertEqual(len(family),14)
+        def has_pairs(rest,pins):
+            if not rest:return True
+            u=min(rest)
+            for v in rest-{u}:
+                if (u,v) not in source:continue
+                if u//3 in pins and v//3 in pins:
+                    a=(raw[u][0],raw[u][1]^pins[u//3])
+                    b=(raw[v][0],raw[v][1]^pins[v//3])
+                    if reciprocal(a)!=b:continue
+                if has_pairs(rest-{u,v},pins):return True
+            return False
+        for clause in c.rejecting:
+            pins={abs(v)-1:int(v<0) for v in clause}
+            self.assertFalse(has_pairs(family,pins))
+            for tile in pins:
+                self.assertTrue(has_pairs(family,{t:v for t,v in pins.items() if t!=tile}))
+
     @unittest.skipUnless(find_spec('pysat'),'independent native SAT is optional')
     def test_incremental_native_rechecks_and_learns_exact_hall_core(self):
         from pysat.solvers import Solver
@@ -49,9 +77,20 @@ class SignedMateSearchTests(unittest.TestCase):
         try:
             model.solver=Solver(name='g4');c=SignedConditions(p,mates=True);c.install(model)
             self.assertTrue(model.decide(0,pins))
+            # Simulate another persistent instance learning this phase after
+            # this native formula was created.
+            self.assertFalse(c.accepts(self.first))
             self.assertFalse(c.decide(model,inf,pins));self.assertEqual(len(c.rejecting),2)
             self.assertFalse(model.decide(0,pins))
         finally:model.close()
+
+    def test_published_negative_skips_sphere_and_partner_compilation(self):
+        from unittest.mock import patch
+        from r32_gold import run_syndrome
+        with patch.object(SignedConditions,'_prepare',side_effect=AssertionError('unneeded compilation')):
+            out=run_syndrome(self.p,self.ref,self.groups[:13],20,None,':memory:',.01,
+                             refine_integer=True,all_groups=True,sphere_euler=True,mate_support=True)
+        self.assertEqual(out['certified_loss_lower_bound'],21)
 
     def test_material_weak_and_combined_public_cli(self):
         cmd=[sys.executable,'-B','r32_gold.py','integer-bound','--tiles',str(self.path),'--upper','20','--all-groups','--seconds','.005',

@@ -69,7 +69,7 @@ class OverlapPattern:
             price=self.prices.price
             if self.conditions is not None:
                 def price(phase,indices):
-                    return self.prices.price(phase,indices) if self.conditions.accepts(phase) else inf
+                    return self.conditions.price(phase,self.prices.price(phase,indices)) if self.conditions.accepts(phase) else inf
             cost,phase,_=self.image.minimum(flipped,deadline,self.work,
                                            require_integer=self.integer,price=price)
             if cost<=self.cap:
@@ -87,6 +87,7 @@ class OverlapPattern:
         if answer:
             phase=self.native.phase()
             cost=self.prices.price(phase,flipped)
+            if self.conditions is not None:cost=self.conditions.price(phase,cost)
             if cost>self.cap:
                 raise ArithmeticError('Native overlapping-group witness exceeded its cap.')
             self.last_witness=cost,phase

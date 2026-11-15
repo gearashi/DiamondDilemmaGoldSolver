@@ -76,13 +76,13 @@ def _negative_page(db, scope, errors, start, stop):
     return inserted
 
 
-def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False, all_groups=False, sphere_euler=False, mate_support=False, geographic_hints=()):
+def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False, all_groups=False, sphere_euler=False, mate_support=False, mate_cost=False, geographic_hints=()):
     """Replay optional geometric evidence before handing it to the ranked loss search."""
     from r35_geographic_replay import geographic_departures
     ref=frozenset(ref)
     geo=geographic_departures(problem,ref,inventory(problem).required,geographic_hints) if geographic_hints else ()
     result=_ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refine_integer,
-                        all_groups,sphere_euler,mate_support,geo)
+                        all_groups,sphere_euler,mate_support,mate_cost,geo)
     if geo:
         result.update(verified_geographic_departures=len(geo),
                       relaxation=('signed_inventory_with_geographic_departures' if refine_integer
@@ -91,7 +91,7 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
 
 
 def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refine_integer,
-                 all_groups,sphere_euler,mate_support,geo):
+                 all_groups,sphere_euler,mate_support,mate_cost,geo):
     """Save completed disjoint prefix ranges together with their negative result."""
     if page<1 or seconds<0:raise ValueError('Expected positive page size and nonnegative duration')
     ref = frozenset(ref)
@@ -109,12 +109,16 @@ def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refi
     if aggregate:
         identity=[*identity,'all-verified-groups-v1',sorted(sorted(g) for g in groups)]
     weaker_scope=digest([*identity,upper])
+    cheaper_price_scopes=[]
     conditions=None
-    if sphere_euler or mate_support:
+    if sphere_euler or mate_support or mate_cost:
         if not refine_integer:raise ValueError('Extra signed physical conditions require integer refinement.')
         from r35_signed_conditions import SignedConditions
-        conditions=SignedConditions(problem,euler=sphere_euler,mates=mate_support)
-        identity=[*identity,'signed-physical-conditions-v1',sphere_euler,mate_support]
+        conditions=SignedConditions(problem,euler=sphere_euler,mates=mate_support,mate_cost=mate_cost)
+        identity=[*identity,'signed-physical-conditions-v1',sphere_euler,mate_support or mate_cost]
+        if mate_cost:
+            cheaper_price_scopes.append(identity)
+            identity=[*identity,'eight-side-loss-prices-v1']
     scope = digest([*identity,upper])
     # A plain negative page excludes every integer-feasible pattern inside it.
     # A plain hit can coexist with further candidates in the same prefix.
@@ -139,6 +143,12 @@ def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refi
         geo_plain=digest([*identity,upper])
         scope=digest([geo_plain,'integer-pattern-v1']) if refine_integer else geo_plain
         read_scopes=tuple(dict.fromkeys((scope,geo_plain,*read_scopes)))
+    if cheaper_price_scopes:
+        if geo:
+            cheaper_price_scopes.append([*cheaper_price_scopes[0],'verified-geographic-departures-v1',sorted(sorted(g) for g in geo)])
+        for cheaper in cheaper_price_scopes:
+            weak=digest([*cheaper,upper])
+            read_scopes+=tuple(v for v in (weak,digest([weak,'integer-pattern-v1'])) if v not in read_scopes)
     searched_caps = registered_cap = False
     budget = monotonic()+seconds if seconds else float('inf')
     pattern_filter = None
@@ -193,11 +203,14 @@ def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refi
                     total_prefixes=covered,new_pages=0,work={'reference_loss_certificate_reused':1},
                     certified_loss_lower_bound=bound,
                     relaxation="all_group_signed_inventory" if aggregate else "disjoint_group_signed_inventory")
+    if conditions is not None:
+        conditions=conditions.for_loss(ref,charged_groups,required,upper)
     public_hits={}
     for phase in REFERENCE_PHASES:
         if conditions is not None and not conditions.accepts(phase):continue
         positive=published_hit(problem,ref,charged_groups,required,outside,packed_identity,upper,refine_integer,phase)
         if positive is not None:
+            if conditions is not None:positive['loss_cost']=conditions.price(phase,positive['loss_cost'])
             if aggregate:
                 positive['relaxation']='all_group_signed_inventory' if refine_integer else 'all_group_parity'
             old=public_hits.get(positive['errors'])
@@ -224,8 +237,8 @@ def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refi
             if witness_hits is None:
                 from r35_loss_witness import checked_hits
                 witness_hits = checked_hits(db,identity_key,problem,ref,charged_groups,required,outside,upper,refine_integer,conditions)
-                if weaker_identity is not None:
-                    weak_hits=checked_hits(db,digest(weaker_identity),problem,ref,charged_groups,
+                for cheaper in ([weaker_identity] if weaker_identity is not None else [])+cheaper_price_scopes:
+                    weak_hits=checked_hits(db,digest(cheaper),problem,ref,charged_groups,
                                            required,outside,upper,refine_integer,conditions)
                     for layer,positive in weak_hits.items():
                         witness_hits.setdefault(layer,positive)
@@ -236,8 +249,8 @@ def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refi
             current = _advance_saved(db, read_scopes, errors, 0)
             if current < count and not searched_caps:
                 higher = _higher_loss_scopes(db, identity, upper, len(ref), refine_integer)
-                if weaker_identity is not None:
-                    higher += _higher_loss_scopes(db,weaker_identity,upper,len(ref),refine_integer)
+                for cheaper in ([weaker_identity] if weaker_identity is not None else [])+cheaper_price_scopes:
+                    higher += _higher_loss_scopes(db,cheaper,upper,len(ref),refine_integer)
                 searched_caps = True
                 if higher:
                     read_scopes += higher
@@ -374,6 +387,7 @@ def main():
     parser.add_argument('--refine-integer',action='store_true',help='In loss mode, check signed integer inventories before accepting a phase pattern (wide phase images use OR-Tools).')
     parser.add_argument('--independent-native',action='store_true',help='In integer-bound, rerun the native all-pattern solver even for an independently checked published result.')
     parser.add_argument('--sphere-euler',action='store_true',help='Require the spherical one-loop Euler equation in signed integer search.')
+    parser.add_argument('--mate-cost',action='store_true',help='Also price lost reference pairs inside reciprocal classes of at most eight sides and combine overlapping departures.')
     parser.add_argument('--mate-support',action='store_true',help='Require signed physical mates and perfect matchings in reciprocal classes of up to sixteen sides.')
     parser.add_argument('--excess-charges',action='store_true',help='In integer-bound, subtract disjoint compulsory departures before charging the remaining losses.')
     parser.add_argument('--all-groups',action='store_true',help='In loss or integer-bound, enforce every verified physical departure group, including overlaps.')
@@ -384,7 +398,7 @@ def main():
     args=parser.parse_args()
     if args.seconds<0 or args.limit<0 or args.page<1 or args.upper<0 or (args.mode not in ('loss','integer-bound') and args.seconds==0):
         parser.error('Invalid budget')
-    if (args.sphere_euler or args.mate_support) and not (args.mode=='integer-bound' or args.mode=='loss' and args.refine_integer):
+    if (args.sphere_euler or args.mate_support or args.mate_cost) and not (args.mode=='integer-bound' or args.mode=='loss' and args.refine_integer):
         parser.error('Signed physical conditions require integer-bound or loss --refine-integer')
     if args.independent_native and args.mode!='integer-bound':parser.error('--independent-native requires integer-bound')
     if args.excess_charges and args.mode!='integer-bound':parser.error('--excess-charges requires integer-bound')
@@ -426,7 +440,7 @@ def main():
             indices=None if args.outside is None else [args.outside]
             out=run_syndrome(p,ref,groups,args.upper,indices,args.database,args.seconds,args.page,
                              refine_integer=args.refine_integer,all_groups=args.all_groups,sphere_euler=args.sphere_euler,
-                             mate_support=args.mate_support,geographic_hints=geographic_hints)
+                             mate_support=args.mate_support,mate_cost=args.mate_cost,geographic_hints=geographic_hints)
         elif args.mode=='integer-bound':
             if case.keys()-{'codes'} or args.outside is not None:
                 parser.error('integer-bound solves every outside pattern of one unrestricted reference')
@@ -440,9 +454,9 @@ def main():
                            work={'decisions': 0, 'required_geographic_conflict': 1})
             else:
                 conditions=None
-                if args.sphere_euler or args.mate_support:
+                if args.sphere_euler or args.mate_support or args.mate_cost:
                     from r35_signed_conditions import SignedConditions
-                    conditions=SignedConditions(p,euler=args.sphere_euler,mates=args.mate_support)
+                    conditions=SignedConditions(p,euler=args.sphere_euler,mates=args.mate_support,mate_cost=args.mate_cost)
                 out = global_integer(p,ref,packed,mandatory,outside,args.upper,args.seconds,
                                          additional_groups=[*extra_groups, *geographic_groups],
                                          excess=args.excess_charges,independent_native=args.independent_native,conditions=conditions)
@@ -497,8 +511,9 @@ def main():
             cert.add(out_rows)
             out=dict(clauses=cert.clauses(),candidate_queries=visits)
     out['fingerprint']=p.fingerprint
-    if args.sphere_euler or args.mate_support:
-        out['signed_conditions']=dict(sphere_euler=args.sphere_euler,mate_support=args.mate_support)
+    if args.sphere_euler or args.mate_support or args.mate_cost:
+        out['signed_conditions']=dict(sphere_euler=args.sphere_euler,mate_support=args.mate_support or args.mate_cost)
+        if args.mate_cost:out['signed_conditions']['mate_cost']=True
     message=json.dumps(out,indent=2)
     if args.output:Path(args.output).write_text(message+'\n',encoding='utf-8')
     print(message)

@@ -88,6 +88,7 @@ def checked_hits(db, identity, problem, reference, groups, required, outside, ca
         if result is None or result[0] > cap or (conditions is not None and not conditions.accepts(phase)):
             continue
         cost, failed = result
+        if conditions is not None:cost=conditions.price(phase,cost)
         errors = [pair for pair in outside if pair in failed]
         found.setdefault(len(errors), dict(status='INTEGER_RELAXATION_FEASIBLE' if integer else 'PHASE_RELAXATION_FEASIBLE',
                                            outside_errors=errors, errors=len(errors), cap=cap, loss_cost=cost,

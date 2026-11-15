@@ -40,14 +40,41 @@ def euler_clauses(data,top):
 
 
 class SignedConditions:
-    def __init__(self,problem,*,euler=False,mates=False):
-        self.euler=PhaseInterface(problem) if euler else None
-        self.mates=mates
+    def __init__(self,problem,*,euler=False,mates=False,mate_cost=False):
+        self.problem=problem
+        self._unprepared=problem
+        self.use_euler=euler
+        self.mates=mates or mate_cost
+        self.mate_cost=mate_cost
+        self._scope=None
+        self._prices=None
+        self.euler=None
         self.rejecting=set()
         self.initial=set()
         self.families=[]
         self.cached_match=lru_cache(maxsize=8192)(self._match)
-        if mates:
+
+    def for_loss(self,reference,groups,required,cap):
+        if not self.mate_cost:return self
+        scoped=type(self)(self.problem,euler=self.use_euler,mates=True,mate_cost=True)
+        scoped._scope=(frozenset(reference),tuple(frozenset(g) for g in groups),frozenset(required),cap)
+        return scoped
+
+    def price(self,phase,ordinary):
+        if not self.mate_cost:return ordinary
+        if self._scope is None:raise ValueError('Mate cost requires a bound reference-loss scope.')
+        if self._prices is None:
+            from r35_mate_price import ClassPrices
+            reference,groups,required,_=self._scope
+            self._prices=ClassPrices(self.problem,reference,groups,required,limit=8)
+        strengthened=self._prices.memo(phase)
+        return ordinary if strengthened is None else max(ordinary,strengthened)
+
+    def _prepare(self):
+        problem=self._unprepared
+        if problem is None:return
+        self.euler=PhaseInterface(problem) if self.use_euler else None
+        if self.mates:
             labels,classes=reciprocal_classes(problem.tiles)
             allowed=inventory(problem).possible
             for group in classes:
@@ -58,6 +85,7 @@ class SignedConditions:
                     tiles=tuple(sorted({side//3 for side in group}))
                     self.families.append((group,edges,tiles,sum(1<<i for i in tiles)))
         self._initial_masks=[(sum(1<<(abs(v)-1) for v in row),sum(1<<(-v-1) for v in row if v<0)) for row in self.initial]
+        self._unprepared=None
 
     @staticmethod
     def _clause(pins):
@@ -77,13 +105,16 @@ class SignedConditions:
         return False
 
     def accepts(self,phase):
+        self._prepare()
         if self.euler:
             weight=sum(row[(phase>>i)&1][-1] for i,row in enumerate(self.euler.rows))
             if weight not in self.euler.euler:return False
         if any(phase&mask==bits for mask,bits in self._initial_masks):return False
-        return all(self.cached_match(j,phase&family[3]) for j,family in enumerate(self.families))
+        if not all(self.cached_match(j,phase&family[3]) for j,family in enumerate(self.families)):return False
+        return not self.mate_cost or self.price(phase,0)<=self._scope[3]
 
     def install(self,model):
+        self._prepare()
         if self.euler:
             rows,_=euler_clauses(self.euler,model.solver.nof_vars())
             model.solver.append_formula(rows)
@@ -98,8 +129,15 @@ class SignedConditions:
             verdict=model.decide(0 if seconds==inf else seconds,assumptions)
             if verdict is not True:return verdict
             phase=model.phase()
-            before=self.rejecting.copy()
             if self.accepts(phase):return True
-            learned=self.rejecting-before
-            if not learned:raise ArithmeticError('Native signed phase violates an installed constraint.')
+            # Another retained solver can discover a clause after this formula
+            # was built. Install the actual violated clauses in this solver.
+            learned=[row for row in self.rejecting if all(
+                ((phase>>(abs(v)-1))&1)!=(v>0) for v in row)]
+            if not learned:
+                if self.mate_cost and self.price(phase,0)>self._scope[3]:
+                    # The rejected cost is specific to this bound and these physical
+                    # obligations. Keep this nogood inside the current native formula.
+                    learned=[tuple(-i-1 if phase>>i&1 else i+1 for i in range(model.n))]
+                else:raise ArithmeticError('Native signed phase violates an installed constraint.')
             for row in sorted(learned):model.solver.add_clause(list(row))
