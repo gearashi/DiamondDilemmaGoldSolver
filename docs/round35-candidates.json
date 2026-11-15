@@ -131,10 +131,17 @@
       "source_id": 9,
       "title": "Propagate support across several rigid component poses",
       "proposal_and_validation": "constraint_pruning.Pruner.prune_clusters projects placements supported by each mandatory component on its own. r28_geo_sewing.PosePacking.check tests whether *some* simultaneous disjoint footprint packing exists, and collapses same-footprint labelled poses. r32_fresh_geometry._skeleton_pose_masks also starts from supports per component. Compute which poses participate in at least one simultaneous packing under current domains; project labelled per-cell placements back, preserving different orientations with identical footprints. Start with pairs having overlapping footprints, then independent connected groups; include residual matching of free tiles and only supported cells/tiles under a budget. Keep all unresolved alternatives. A later exact branching comparison can choose a low-count surviving component pose, creating a disjoint and complete decision over its members. Validate every retained/removed pose against direct small-board enumeration, including overlap, singleton, multi-orientation identical footprints, a positive and a case that has some packing but a uniquely unsupported pose. Compare redundant labelled enumerations to current independent pruning and yes/no packing, then count removed poses and DFS nodes on actual Gold/skeleton residuals.",
-      "state": "in progress",
+      "state": "keep with exact scope",
       "decision_changing_followups": [
         "Among already archived distinct lifted-contour histories, audit refusals, survivors and true finite lifts versus short UNKNOWNs. Count actual geographical lifts per unique contour under the same budget; do not regenerate identical contours."
-      ]
+      ],
+      "evidence": [
+        "docs/ROUND35_JOINT_POSES.md",
+        "docs/R35_JOINT_POSES.json",
+        "test_r35_joint_poses.py"
+      ],
+      "decision": "Retain explicit labelled joint geographic pose support. Four independently seeded restrictions on the real required dominoes each lost 37 unsupported footprints and 1,010 remaining codes beyond prior independent pruning. Exact unrestricted root retains all 3,840 labelled poses. C2: 31 unique original contours passed compulsory support yet every tested four-cell donor region had a fixed incompatible seam. The full contour searches remain open. Controlled disjoint child partitions matched all enumerated solutions.",
+      "reopen_if": "A material population of live contour domains loses additional placements or native nodes by joint support, or a genuinely different donor region yields a new verified lift."
     },
     {
       "id": 10,
@@ -142,7 +149,7 @@
       "source_id": 10,
       "title": "Reserve the future poses of compulsory partners in classic CUDA and WebGPU DFS",
       "proposal_and_validation": "dfs_gpu._physical_gold_table exposes blocked physical pairs. dfs_kernels.cu forbidden_neighbor and its WGSL counterpart inspect already occupied adjacent faces. For a candidate belonging to a compulsory component, compile Pruner's labelled templates keyed by root tile/rotation. Check the dictated future cells, occupied tile owners, and known external seams upon the first placement. Optionally reserve future poses or narrow owned disjoint prefixes in a host-side pass; retain replayable evidence and correct stop/checkpoint behavior. Begin with checks that have no persistent per-lane reservation state. Use rollback bookkeeping and GPU domain/CPU completed-fragment deductions only after an observed benefit. R31 uses rigid components in fresh heuristic construction, R34 adds existential physical requirements on partial parity skeletons and binary CP implications, while classic 34 checks occupied forbidden pairs. Compare the exact final solution or frontier union, cuts by depth and candidate steps at matched prefix budgets with disabled/fixed/current checks on CUDA and WGSL. Include FXC, restart at a partially occupied fragment, sibling unwind, a fixed prefix spanning both directions, open controls and edges-only isolation.",
-      "state": "open"
+      "state": "in progress"
     },
     {
       "id": 11,

@@ -1,0 +1,1212 @@
+{
+  "root": {
+    "complete": true,
+    "initial_labelled": 3840,
+    "initial_footprints": 1920,
+    "disjoint_pool_witnesses": 1900,
+    "support_witnesses": 1900,
+    "pose_pack_nodes": 15209,
+    "pose_overlap_tests": 122051,
+    "removed_codes": 0,
+    "remaining_labelled": 3840
+  },
+  "restricted_real": [
+    {
+      "seed": 35,
+      "failure_pose": [
+        [
+          34,
+          56
+        ],
+        [
+          55,
+          434
+        ]
+      ],
+      "supported_alternative": [
+        [
+          127,
+          434
+        ],
+        [
+          134,
+          56
+        ]
+      ],
+      "conflicting_choices": [
+        [
+          [
+            33,
+            75
+          ],
+          [
+            34,
+            69
+          ]
+        ],
+        [
+          [
+            49,
+            77
+          ],
+          [
+            55,
+            71
+          ]
+        ]
+      ],
+      "prior_removed": 0,
+      "joint": {
+        "initial_labelled": 2884,
+        "initial_footprints": 1444,
+        "disjoint_pool_witnesses": 1390,
+        "support_witnesses": 1390,
+        "unsupported_footprints": 37,
+        "pose_pack_nodes": 11170,
+        "pose_overlap_tests": 42772,
+        "removed_codes": 1010,
+        "remaining_labelled": 2811
+      },
+      "complete_projection": true,
+      "distinct_children": 2
+    },
+    {
+      "seed": 71,
+      "failure_pose": [
+        [
+          111,
+          54
+        ],
+        [
+          118,
+          433
+        ]
+      ],
+      "supported_alternative": [
+        [
+          148,
+          432
+        ],
+        [
+          149,
+          56
+        ]
+      ],
+      "conflicting_choices": [
+        [
+          [
+            22,
+            75
+          ],
+          [
+            111,
+            70
+          ]
+        ],
+        [
+          [
+            117,
+            75
+          ],
+          [
+            118,
+            69
+          ]
+        ]
+      ],
+      "prior_removed": 0,
+      "joint": {
+        "initial_labelled": 2884,
+        "initial_footprints": 1444,
+        "disjoint_pool_witnesses": 1390,
+        "support_witnesses": 1390,
+        "unsupported_footprints": 37,
+        "pose_pack_nodes": 11170,
+        "pose_overlap_tests": 42772,
+        "removed_codes": 1010,
+        "remaining_labelled": 2811
+      },
+      "complete_projection": true,
+      "distinct_children": 2
+    },
+    {
+      "seed": 103,
+      "failure_pose": [
+        [
+          157,
+          434
+        ],
+        [
+          159,
+          56
+        ]
+      ],
+      "supported_alternative": [
+        [
+          108,
+          432
+        ],
+        [
+          109,
+          56
+        ]
+      ],
+      "conflicting_choices": [
+        [
+          [
+            157,
+            70
+          ],
+          [
+            158,
+            77
+          ]
+        ],
+        [
+          [
+            86,
+            76
+          ],
+          [
+            159,
+            69
+          ]
+        ]
+      ],
+      "prior_removed": 0,
+      "joint": {
+        "initial_labelled": 2884,
+        "initial_footprints": 1444,
+        "disjoint_pool_witnesses": 1390,
+        "support_witnesses": 1390,
+        "unsupported_footprints": 37,
+        "pose_pack_nodes": 11169,
+        "pose_overlap_tests": 42769,
+        "removed_codes": 1010,
+        "remaining_labelled": 2811
+      },
+      "complete_projection": true,
+      "distinct_children": 2
+    },
+    {
+      "seed": 157,
+      "failure_pose": [
+        [
+          75,
+          432
+        ],
+        [
+          158,
+          55
+        ]
+      ],
+      "supported_alternative": [
+        [
+          147,
+          54
+        ],
+        [
+          153,
+          433
+        ]
+      ],
+      "conflicting_choices": [
+        [
+          [
+            74,
+            75
+          ],
+          [
+            75,
+            69
+          ]
+        ],
+        [
+          [
+            154,
+            77
+          ],
+          [
+            158,
+            71
+          ]
+        ]
+      ],
+      "prior_removed": 0,
+      "joint": {
+        "initial_labelled": 2884,
+        "initial_footprints": 1444,
+        "disjoint_pool_witnesses": 1390,
+        "support_witnesses": 1390,
+        "unsupported_footprints": 37,
+        "pose_pack_nodes": 11169,
+        "pose_overlap_tests": 42769,
+        "removed_codes": 1010,
+        "remaining_labelled": 2811
+      },
+      "complete_projection": true,
+      "distinct_children": 2
+    }
+  ],
+  "original_contours": {
+    "runs": {
+      "independent": [
+        "70e98f248f9aec71bae015968d8c2eba61e141e682449e2dc73952ec99e5e6df",
+        "998f0ee76148f369992e2fdb48c5c1a174e083ebdbb34c00608cc5edd715f4bd",
+        "4e9f6bc6b99c4886d55ffbde1f47cfb1faca307b6c1f336856d720640e66b0c9",
+        "b693bf67efe079244c57a5cee7397a3b207dfca82b1816a9af5402a5abcba4eb",
+        "7b6a160ff57bc036b9321ebf129b787339edbc12e30a6654888ea4ea4f92a213",
+        "25787bc8e3c7d522df782a2a26efed4ed8911601bdc4b83109c7a4a9b162a35b",
+        "9363e559f2606594c6ea115f5ff5033511746dd5d2eb8399c2d69e6c3567902c",
+        "6b0087160f129b59ca82d3d6844e23cddc6c097b193ce47bbcb07e0afb762d74",
+        "db415fb2162ed931acd0ad7b0240d26d95e31a5b9870049a7241de80fd960402",
+        "6006114a72d937563f7635a0d98590c6b79a07f5c7f99bf13d808ebf60116198",
+        "648732d25e7b20bd24520ff1964bfc5c0bbbc9ebeede1cb69d221144cc8f6050",
+        "9f2f380b5199c99dc603f8537ad7baba98bcdb5f376d5a39ba7401d3f9a2eec7",
+        "4ed163d6af59cafa1949256da66b38406f018750c7952750b1cc8cfd41e5232d",
+        "a070f149db86492863695537f645a269320190db77aa1d4d8ad7279af0cf8b72",
+        "ea3bfdaa0d76e3e6b1da8bdb58cacfcb842cc55c60cb1aa3bd755ed2ea72309b",
+        "30ed96e138d834e2b5902e84cb8a3f25b35a20b78df6e2d90318c0ac24f3b4aa"
+      ],
+      "two_flip_walk": [
+        "70e98f248f9aec71bae015968d8c2eba61e141e682449e2dc73952ec99e5e6df",
+        "dd25e885c83df5cba7d1069b152b4f1abfc1234ea267622c629a374ae6386e7b",
+        "3fe819aec6872946de1733c374f08d4aab2d439ad91452eee9f3b65805c940bd",
+        "f8ca6cb518c33d66dacdde23bea9edd3d340a74771b30b2f1b268cc0a5cb13dc",
+        "15fb3acff730f0314824a9ff958656480d7ed8d017fa530542d9e0144ee35efa",
+        "f9312d93ccd21b3e17eb1cc9afdfa9af9a7f1ce5706808639fc1109a21b98772",
+        "34285863e1094bb5dad761bba0a5d75b7201afb287434325e3f7f4eaffb290d0",
+        "147b1094d8f6685dbc41de971c26a54956beea411e02deb61d958f8e9d84586b",
+        "c83f54a81963d62405c4b1952a22ec1b81a060b3882a79224fcb9dd353c34119",
+        "419f5cfa70235155ce843b6e10c4d51b0a20d8f54dae8bfa3401e9072c72ff8c",
+        "93f49bb1a71673e084f1ef41fa5a2524c799e7c9f44b0e7c6fc59a259d99e510",
+        "3da28f9f2702e02c1b419b204fe2221e2dc77441abeb3628b6f13edf0e4d5809",
+        "2358872de1642f658a74c5ea57aaad81c4bae89c88b9e997fe13a43b02188faa",
+        "5371a4d1b64609683bc9971cbeabe450f23092a1fdd718cfe079782b254bd219",
+        "d37a209f1b6b613291c5f868ecb3bc7c8567b9c863817d4aed4318c64809059a",
+        "973dfad3fb8b6eb9575359380bb93d7296191504b40bb154fe22c3fa2b4a9c7a"
+      ],
+      "repeated_first": [
+        "70e98f248f9aec71bae015968d8c2eba61e141e682449e2dc73952ec99e5e6df",
+        "70e98f248f9aec71bae015968d8c2eba61e141e682449e2dc73952ec99e5e6df",
+        "70e98f248f9aec71bae015968d8c2eba61e141e682449e2dc73952ec99e5e6df"
+      ]
+    },
+    "unique": [
+      {
+        "hash": "70e98f248f9aec71bae015968d8c2eba61e141e682449e2dc73952ec99e5e6df",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            144,
+            55
+          ]
+        }
+      },
+      {
+        "hash": "998f0ee76148f369992e2fdb48c5c1a174e083ebdbb34c00608cc5edd715f4bd",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            54,
+            0
+          ]
+        }
+      },
+      {
+        "hash": "4e9f6bc6b99c4886d55ffbde1f47cfb1faca307b6c1f336856d720640e66b0c9",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            165,
+            168
+          ]
+        }
+      },
+      {
+        "hash": "b693bf67efe079244c57a5cee7397a3b207dfca82b1816a9af5402a5abcba4eb",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            142,
+            389
+          ]
+        }
+      },
+      {
+        "hash": "7b6a160ff57bc036b9321ebf129b787339edbc12e30a6654888ea4ea4f92a213",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            55,
+            413
+          ]
+        }
+      },
+      {
+        "hash": "25787bc8e3c7d522df782a2a26efed4ed8911601bdc4b83109c7a4a9b162a35b",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            30,
+            36
+          ]
+        }
+      },
+      {
+        "hash": "9363e559f2606594c6ea115f5ff5033511746dd5d2eb8399c2d69e6c3567902c",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            56,
+            142
+          ]
+        }
+      },
+      {
+        "hash": "6b0087160f129b59ca82d3d6844e23cddc6c097b193ce47bbcb07e0afb762d74",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            192,
+            198
+          ]
+        }
+      },
+      {
+        "hash": "db415fb2162ed931acd0ad7b0240d26d95e31a5b9870049a7241de80fd960402",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            54,
+            192
+          ]
+        }
+      },
+      {
+        "hash": "6006114a72d937563f7635a0d98590c6b79a07f5c7f99bf13d808ebf60116198",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            166,
+            228
+          ]
+        }
+      },
+      {
+        "hash": "648732d25e7b20bd24520ff1964bfc5c0bbbc9ebeede1cb69d221144cc8f6050",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            56,
+            142
+          ]
+        }
+      },
+      {
+        "hash": "9f2f380b5199c99dc603f8537ad7baba98bcdb5f376d5a39ba7401d3f9a2eec7",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            103,
+            105
+          ]
+        }
+      },
+      {
+        "hash": "4ed163d6af59cafa1949256da66b38406f018750c7952750b1cc8cfd41e5232d",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            7,
+            165
+          ]
+        }
+      },
+      {
+        "hash": "a070f149db86492863695537f645a269320190db77aa1d4d8ad7279af0cf8b72",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            7,
+            264
+          ]
+        }
+      },
+      {
+        "hash": "ea3bfdaa0d76e3e6b1da8bdb58cacfcb842cc55c60cb1aa3bd755ed2ea72309b",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            8,
+            10
+          ]
+        }
+      },
+      {
+        "hash": "30ed96e138d834e2b5902e84cb8a3f25b35a20b78df6e2d90318c0ac24f3b4aa",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            138,
+            144
+          ]
+        }
+      },
+      {
+        "hash": "dd25e885c83df5cba7d1069b152b4f1abfc1234ea267622c629a374ae6386e7b",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            55,
+            134
+          ]
+        }
+      },
+      {
+        "hash": "3fe819aec6872946de1733c374f08d4aab2d439ad91452eee9f3b65805c940bd",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            55,
+            134
+          ]
+        }
+      },
+      {
+        "hash": "f8ca6cb518c33d66dacdde23bea9edd3d340a74771b30b2f1b268cc0a5cb13dc",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            55,
+            134
+          ]
+        }
+      },
+      {
+        "hash": "15fb3acff730f0314824a9ff958656480d7ed8d017fa530542d9e0144ee35efa",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            55,
+            134
+          ]
+        }
+      },
+      {
+        "hash": "f9312d93ccd21b3e17eb1cc9afdfa9af9a7f1ce5706808639fc1109a21b98772",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            9,
+            13
+          ]
+        }
+      },
+      {
+        "hash": "34285863e1094bb5dad761bba0a5d75b7201afb287434325e3f7f4eaffb290d0",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            107,
+            133
+          ]
+        }
+      },
+      {
+        "hash": "147b1094d8f6685dbc41de971c26a54956beea411e02deb61d958f8e9d84586b",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            118,
+            133
+          ]
+        }
+      },
+      {
+        "hash": "c83f54a81963d62405c4b1952a22ec1b81a060b3882a79224fcb9dd353c34119",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            118,
+            133
+          ]
+        }
+      },
+      {
+        "hash": "419f5cfa70235155ce843b6e10c4d51b0a20d8f54dae8bfa3401e9072c72ff8c",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            114,
+            133
+          ]
+        }
+      },
+      {
+        "hash": "93f49bb1a71673e084f1ef41fa5a2524c799e7c9f44b0e7c6fc59a259d99e510",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            103,
+            133
+          ]
+        }
+      },
+      {
+        "hash": "3da28f9f2702e02c1b419b204fe2221e2dc77441abeb3628b6f13edf0e4d5809",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            105,
+            132
+          ]
+        }
+      },
+      {
+        "hash": "2358872de1642f658a74c5ea57aaad81c4bae89c88b9e997fe13a43b02188faa",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            105,
+            132
+          ]
+        }
+      },
+      {
+        "hash": "5371a4d1b64609683bc9971cbeabe450f23092a1fdd718cfe079782b254bd219",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            110,
+            132
+          ]
+        }
+      },
+      {
+        "hash": "d37a209f1b6b613291c5f868ecb3bc7c8567b9c863817d4aed4318c64809059a",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            105,
+            132
+          ]
+        }
+      },
+      {
+        "hash": "973dfad3fb8b6eb9575359380bb93d7296191504b40bb154fe22c3fa2b4a9c7a",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 0,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            5,
+            2
+          ],
+          "codes": [
+            104,
+            132
+          ]
+        }
+      }
+    ]
+  },
+  "held_ring_contours": {
+    "runs": {
+      "independent": [
+        "30222344d364a8dfae7e8dfe76a7a2eca1956b0f2aec8fdca3f103ab9258197f",
+        "f373e53ddf316777980ed09aaa1f4d9e9d35592b65e5854c692323cc69f79e07",
+        "d15d460d8e93820de3bcfdb95b7a931357823eb74bbd4319280579d1a76ce78d",
+        "b3933d63b0ccbbca2cb1db7876be0a51d89076313f8346216d2a352a8cf20aae",
+        "907d5690c4f3adce6524bde66f9d683450a3d914cfd19e002423708760bdc0d7",
+        "907d5690c4f3adce6524bde66f9d683450a3d914cfd19e002423708760bdc0d7"
+      ],
+      "two_flip_walk": [
+        "30222344d364a8dfae7e8dfe76a7a2eca1956b0f2aec8fdca3f103ab9258197f",
+        "0efb0999f38c888a0fa0c4897e9556cb04c92be3203eadc2c648d29b07f53f0c",
+        "1b8565b893572113b96596a08cc6709801985a88eee4362f272027efdab5a023",
+        "3e29b813f33c031b9cc7d2b7375226f5dfe2b31c6139ae906f96bcb3a95dbea7",
+        "b3933d63b0ccbbca2cb1db7876be0a51d89076313f8346216d2a352a8cf20aae",
+        "eef3c135fe625ac78d419a4d03bdf3754f26dce1d77605907ac7ef54f8bc072a"
+      ],
+      "repeated_first": [
+        "30222344d364a8dfae7e8dfe76a7a2eca1956b0f2aec8fdca3f103ab9258197f",
+        "30222344d364a8dfae7e8dfe76a7a2eca1956b0f2aec8fdca3f103ab9258197f",
+        "30222344d364a8dfae7e8dfe76a7a2eca1956b0f2aec8fdca3f103ab9258197f"
+      ]
+    },
+    "unique": [
+      {
+        "hash": "30222344d364a8dfae7e8dfe76a7a2eca1956b0f2aec8fdca3f103ab9258197f",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 24,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            5,
+            2,
+            9,
+            0
+          ],
+          "codes": [
+            15,
+            21
+          ]
+        }
+      },
+      {
+        "hash": "f373e53ddf316777980ed09aaa1f4d9e9d35592b65e5854c692323cc69f79e07",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 24,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            9,
+            1
+          ],
+          "codes": [
+            13,
+            29
+          ]
+        }
+      },
+      {
+        "hash": "d15d460d8e93820de3bcfdb95b7a931357823eb74bbd4319280579d1a76ce78d",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 24,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            9,
+            1
+          ],
+          "codes": [
+            11,
+            28
+          ]
+        }
+      },
+      {
+        "hash": "b3933d63b0ccbbca2cb1db7876be0a51d89076313f8346216d2a352a8cf20aae",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 24,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            5,
+            0,
+            6,
+            2
+          ],
+          "codes": [
+            16,
+            26
+          ]
+        }
+      },
+      {
+        "hash": "907d5690c4f3adce6524bde66f9d683450a3d914cfd19e002423708760bdc0d7",
+        "status": "NO_INDEPENDENT_MANDATORY_POSE"
+      },
+      {
+        "hash": "0efb0999f38c888a0fa0c4897e9556cb04c92be3203eadc2c648d29b07f53f0c",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 24,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            5,
+            0,
+            6,
+            2
+          ],
+          "codes": [
+            16,
+            24
+          ]
+        }
+      },
+      {
+        "hash": "1b8565b893572113b96596a08cc6709801985a88eee4362f272027efdab5a023",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 24,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            9,
+            1
+          ],
+          "codes": [
+            10,
+            29
+          ]
+        }
+      },
+      {
+        "hash": "3e29b813f33c031b9cc7d2b7375226f5dfe2b31c6139ae906f96bcb3a95dbea7",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 24,
+        "region": {
+          "status": "INFEASIBLE",
+          "reason": "fixed incompatible seam",
+          "seam": [
+            4,
+            1,
+            9,
+            1
+          ],
+          "codes": [
+            13,
+            29
+          ]
+        }
+      },
+      {
+        "hash": "eef3c135fe625ac78d419a4d03bdf3754f26dce1d77605907ac7ef54f8bc072a",
+        "status": "JOINT_SURVIVOR",
+        "scope_complete": true,
+        "removed": 24,
+        "region": {
+          "status": "GOLD",
+          "exact_solutions": 1,
+          "witness": [
+            0,
+            3,
+            6,
+            9,
+            12,
+            15,
+            18,
+            21,
+            24,
+            27
+          ]
+        }
+      }
+    ]
+  },
+  "planted": [
+    {
+      "seed": 35,
+      "baseline": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      },
+      "joint": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      },
+      "valid": 2,
+      "work": {
+        "initial_labelled": 2,
+        "initial_footprints": 2,
+        "disjoint_pool_witnesses": 1,
+        "support_witnesses": 1,
+        "pose_pack_nodes": 3,
+        "pose_overlap_tests": 2,
+        "removed_codes": 0,
+        "remaining_labelled": 2
+      },
+      "branches": 0
+    },
+    {
+      "seed": 71,
+      "baseline": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      },
+      "joint": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      },
+      "valid": 1,
+      "work": {
+        "initial_labelled": 4,
+        "initial_footprints": 3,
+        "disjoint_pool_witnesses": 1,
+        "support_witnesses": 1,
+        "pose_pack_nodes": 4,
+        "pose_overlap_tests": 3,
+        "removed_codes": 0,
+        "remaining_labelled": 4
+      },
+      "branches": 2
+    },
+    {
+      "seed": 103,
+      "baseline": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      },
+      "joint": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      },
+      "valid": 1,
+      "work": {
+        "initial_labelled": 0,
+        "initial_footprints": 0,
+        "disjoint_pool_witnesses": 1,
+        "support_witnesses": 1,
+        "pose_pack_nodes": 1,
+        "removed_codes": 0,
+        "remaining_labelled": 0
+      },
+      "branches": 0
+    },
+    {
+      "seed": 157,
+      "baseline": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      },
+      "joint": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      },
+      "valid": 1,
+      "work": {
+        "initial_labelled": 1,
+        "initial_footprints": 1,
+        "disjoint_pool_witnesses": 1,
+        "support_witnesses": 1,
+        "pose_pack_nodes": 2,
+        "pose_overlap_tests": 1,
+        "removed_codes": 0,
+        "remaining_labelled": 1
+      },
+      "branches": 0
+    }
+  ]
+}
