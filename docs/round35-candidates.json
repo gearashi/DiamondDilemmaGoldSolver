@@ -157,7 +157,8 @@
       "proposal_and_validation": "ComponentBudget._responses currently aggregates crossing count, not open chain endpoints or cycle lengths. Carry endpoint connectivity at small boundaries, stitch donor chains to charge actual cycle budget/family, then condition an articulation/small separator of a connected interaction component that currently returns only the coarse bound. Record incremental closures at each stage and cap/saturation counts. Have an admissible relaxation or return the previous cap above width budget. Compare exhaustive crossing cycles, legal donor restrictions, hidden shared rotations and planted positive pools. R34 summed bounds over disjoint stars, it did not condition connected separators.",
       "state": "open",
       "decision_changing_followups": [
-        "Use the R30 donor-path decision diagram as an oracle for endpoints and cycle lengths; benchmark transfer to geographic joins only on scopes not already cheaply closed."
+        "Use the R30 donor-path decision diagram as an oracle for endpoints and cycle lengths; benchmark transfer to geographic joins only on scopes not already cheaply closed.",
+        "R30 had fully certified 682/685/684 of the 710 near-pair anchors across three centers. Use the actual unclosed anchors as held-outs for new separator tests; keep closed anchors as existing proof."
       ]
     },
     {
@@ -182,7 +183,10 @@
       "source_id": 6,
       "title": "Derived contact-graph alternatives for higher shells",
       "proposal_and_validation": "r30_cycles.certified_contacts, r31_route_geometry.proved_connected and PrefixRanges today have proved connectivity for the relevant four-swap families only. For each five-swap family and then larger ones, bound gains for partitions of its contact graph using checked predecessors and numeric component bounds. Permit unions of feasible shapes, including disconnected pairs of profitable components; prune only when all compatible shapes are excluded by verified inequalities. Propagate allowed graph shapes down to attachment/rank intervals if opportunity exists. Compare pruned interval lengths/endpoint prices beyond existing affordable tests. Check every shape and witness on small domains, then report real verified assumptions per center/family.",
-      "state": "open"
+      "state": "open",
+      "decision_changing_followups": [
+        "Evaluate family-contact deductions on the authentic remaining hard near-pair anchors in R30_BOUNDS_ALL_SIZES.json. Distinguish bounded donor tests from arbitrary numbers of isolated movers."
+      ]
     },
     {
       "id": 22,
@@ -332,7 +336,10 @@
       "source_id": 24,
       "title": "Forward checks in the fresh constructor",
       "proposal_and_validation": "r31_fresh.Assemblies.seed visits groups in static order, tests footprint collisions and waits until the leaf for residual tile matching. Use occupancy-indexed viable pose lists, dynamic most-constrained assembly order, cheap residual slot/Hall checks and selective full matching. Compare with the existing geographic pose-packing and host Hall implementations, preserving this constructor's ranked/random/seed behavior under a separate policy. Count pose nodes, full assignments, found starts and failures by reason. On exhaustive pinned examples retain every feasible embedding; a bounded stochastic construction failure is not Gold infeasibility.",
-      "state": "open"
+      "state": "open",
+      "decision_changing_followups": [
+        "Share the independently deduplicated contour-lift audit under #9 when assembly seeding uses these contours; preserve different physical restrictions with the same coarse projection."
+      ]
     },
     {
       "id": 40,
@@ -554,7 +561,26 @@
       "source_id": 2,
       "title": "Invalidate symbolic proof replays only in the affected scope",
       "proposal_and_validation": "The symbolic ledger uses one invalidation epoch over all puzzle scopes. Quantify duplicate reconstruction when a different scope is updated or deleted; try a per-scope epoch/target-root reuse only if this occurs. Include replacements changing both scopes, concurrent transactions and exact replay.",
-      "state": "open"
+      "state": "rejected for current solver workload",
+      "mechanism": "Symbolic coverage invalidation by scope on destructive writes",
+      "evidence": "docs/ROUND35_COVERAGE.md",
+      "measurement": {
+        "cells": 10,
+        "assignments": 1024,
+        "assumed_closed_in_target": 8,
+        "remaining": 1016,
+        "foreign_appends": 128,
+        "duplicate_appends": 128,
+        "normal_target_reopens": 8,
+        "initial_epoch": 0,
+        "normal_epoch": 0,
+        "normal_builds": 1,
+        "normal_reuses": 8,
+        "after_foreign_delete_epoch": 1,
+        "after_foreign_delete_builds": 2
+      },
+      "closure_reason": "Normal writes are append or ignore; all eight cross-scope opens already reused the diagram. Only out-of-band deletion caused a rebuild.",
+      "reopen_trigger": "A supported compactor/editor begins destructive changes to unrelated scopes during live searches, or an ordinary counterexample is observed."
     },
     {
       "id": 67,
@@ -602,7 +628,10 @@
       "source_id": "R32 #26 closure",
       "title": "Resolve the six reciprocal seam-slot projections on the 24-free incumbent residual",
       "proposal_and_validation": "The 207 and 208 controls timed out under tiny budgets while even the simpler 240 control closed. Compare no, one and six layers with geographic equations off/on against exact band/direct controls, including smaller held-outs and up to an hour on decision-relevant cases. Count independently verified additional negatives or saved ground search, all projection costs and materialized witnesses. If only inconclusive projected hits or dominated work persist, close the solver adoption question as rejected for this scope.",
-      "state": "open"
+      "state": "open",
+      "decision_changing_followups": [
+        "Use predeclared, unselected cases reaching the bound stage. Check whether landmark/seam XORs are already implied by the edge model. Report certified additional closures and proof cost separately for ordinary 208 and single-loop Gold, including #6/#12 if signed circuits apply."
+      ]
     }
   ],
   "priorities": [
