@@ -247,23 +247,47 @@ def active_catalog(problem):
                 lower_bound=regional['proved_lower'],hit=regional['hit'],post_master=known_hint_conflicts())
 
 
+def catalog_images(problem,record):
+    """Each image lists (query cell, reference pose) in the original row order."""
+    seed=tuple(record['codes'])
+    if problem is None or record.get('puzzle')!='e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853':
+        return (tuple(enumerate(seed)),)
+    from r35_claim_catalogue import published_scope
+    if not published_scope(problem):
+        return ()
+    from r35_pose_departures import reference_images
+    return tuple(tuple((c,mask.bit_length()-1) for c,mask in image) for image in reference_images(seed))
+
+
 def certified_distance(problem,codes):
-    """Transfer the exact reference lower bound using the best legal distance change per cell."""
+    """Transfer the strongest certified image bound through the actual query domains."""
     record=active_catalog(problem)
     if record is None:return 0,None
-    reference=record['codes']
-    hint=set(record['hit'])
-    lower=record.get('lower_bound',len(hint))
-    for c,(actual,other) in enumerate(zip(codes,reference)):
-        if actual==other:continue
-        domain=problem.domains[c]
-        if actual in domain:
-            lower-=1
-            hint.discard(c)
-        elif domain and all(v==other for v in domain):
-            lower+=1
-            hint.add(c)
-    return max(0,lower),hint
+    original=record.get('lower_bound',len(record['hit']))
+    allowed=[actual in domain for actual,domain in zip(codes,problem.domains)]
+    forced=[]
+    for row in problem.domains:
+        first=next(iter(row),None)
+        forced.append(first if all(code==first for code in row) else None)
+    best=None
+    hint=None
+    for image in catalog_images(problem,record):
+        lower=original
+        changed=[]
+        forced_changes=[]
+        for c,other in image:
+            if codes[c]==other:continue
+            if allowed[c]:
+                lower-=1
+                changed.append(c)
+            elif forced[c]==other:
+                lower+=1
+                forced_changes.append(c)
+        if best is not None and lower<best:continue
+        proposed={image[i][0] for i in record['hit']}.difference(changed).union(forced_changes)
+        if best is None or lower>best or (len(proposed)==best and len(hint)!=best):
+            best,hint=lower,proposed
+    return (max(0,best),hint) if best is not None else (0,None)
 
 
 def certified_choice(lower,hint,rows,cells):
@@ -276,10 +300,33 @@ def archive_rows(state):
     """A verified impossible conjunction remains impossible on every seed preserving its named poses."""
     record=active_catalog(state.p)
     if record is None:return
-    agreement={c for c,(v,w) in enumerate(zip(state.codes,record['codes'])) if v==w}
-    for i,row in enumerate([*record['rows'],*record.get('post_master',())]):
+    images=catalog_images(state.p,record)
+    if len(images)==1:
+        image=images[0]
+        match={i for i,(cell,other) in enumerate(image) if state.codes[cell]==other}
+        for i,row in enumerate((*record['rows'],*record.get('post_master',()))):
+            if i%128==0:state.check()
+            if match.issuperset(row):
+                state.add(tuple(image[c][0] for c in row),'saved_pose_conflict')
+        return
+    aligned=[]
+    for image in images:
+        match={i for i,(cell,other) in enumerate(image) if state.codes[cell]==other}
+        if match:aligned.append((image,match))
+    if not aligned:return
+    # Assign each original row to one cell. A physical tile occurs once in a
+    # valid seed and the ten proper rotations send it to ten different cells,
+    # so its bucket is visited at most once across all images.
+    by_cell=defaultdict(list)
+    for i,row in enumerate((*record['rows'],*record.get('post_master',()))):
         if i%128==0:state.check()
-        if agreement.issuperset(row):state.add(row,'saved_pose_conflict')
+        by_cell[row[0]].append(row)
+    for image,match in aligned:
+        for c in sorted(match):
+            state.check()
+            for row in by_cell[c]:
+                if match.issuperset(row):
+                    state.add(tuple(image[i][0] for i in row),'saved_pose_conflict')
 
 
 def seed_rows(problem,codes,*,check=lambda:None,mode='all',loops=True,mandatory=True,exact=True,owners=True,hall=True,joined_stars=True,anchor_radius=None,unique=True,max_domain=40,hints=None,archive=False):
@@ -287,6 +334,9 @@ def seed_rows(problem,codes,*,check=lambda:None,mode='all',loops=True,mandatory=
     check()
     metric=score(problem,codes)
     state=Repairs(problem,codes,check)
+    over=archive and certified_distance(problem,codes)[0]>len(state.movable)
+    if over and (hints is None or mode=='none'):
+        return [frozenset()],{'distance_exceeds_movable':1}
     mismatch=set(map(tuple,metric['unmatched_edges']))
     for a,s,b,t in problem.edges:
         edge=tuple(sorted((state.physical(a,s),state.physical(b,t))))
@@ -301,7 +351,7 @@ def seed_rows(problem,codes,*,check=lambda:None,mode='all',loops=True,mandatory=
     if mandatory:state.mandatory()
     state.neighbors(exact=exact,owners=owners,hall=hall,joined_stars=joined_stars)
     if archive:
-        if certified_distance(problem,codes)[0]>len(state.movable):
+        if over:
             state.add((),'distance_exceeds_movable')
         else:archive_rows(state)
     if anchor_radius is not None and frozenset() not in state.rows:
@@ -335,6 +385,7 @@ def proof_sources():
     root=Path(__file__).resolve().parent
     names=('r35_repair_seeds.py','r35_repair_propagation.py','r32_gold_bonds.py','r27_structure_filters.py',
            'r35_contact_certificate.py','r35_loss_witness.py','r35_geographic_replay.py',
+           'constraint_symmetry.py','geometry.py','r35_claim_catalogue.py','r35_anchor_rules.py','r35_pose_departures.py',
            'r35_induced_contacts.py','r32_gold_loss.py','r31_geographic.py','r28_geo_sewing.py',
            'r28_geo_color.py','r29_gold_phase.py','docs/R35_CONTACT_LOSS_CERTIFICATE.json',
            'docs/R35_REPAIR_PLACEMENTS.json','docs/R35_REPAIR_REFINED.json','docs/R35_REPAIR_REGIONAL.json')
