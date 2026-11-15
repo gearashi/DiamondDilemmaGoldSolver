@@ -499,7 +499,16 @@
       "source_id": 23,
       "title": "Joint mandatory-assembly relocation and priced displaced pieces",
       "proposal_and_validation": "r31_fresh.Assemblies.relocate chooses one mandatory assembly and up to eight sampled poses; displaced pieces currently receive random legal matching weights. Compare physical marginal score and small exact repair for displaced pieces/rotations, then a pair of bonded assemblies that mutually block each other's target cells. Preserve each mandatory physical mate, all forbidden mates and all individual domains. Prior optional merge/undo deals with hypothesized bonds, a different operation. Count unique legal coordinated relocations and steps to maintained gains; planted two-assembly relocation and rescore every placement.",
-      "state": "open"
+      "state": "retain coordinated assembly repair as optional",
+      "mechanism": "REPAIR-COORDINATED-ASSEMBLIES",
+      "measurement": "48 original one-move comparisons gained 7/20/3 cumulative seams from priced, reciprocal and partial extensions. Four 320-round guarded reciprocal starts finished 177/180/184/184 vs 181/179/181/175 released relocation. Unguarded reciprocal skipped 129,644 oriented proposals using verified family hits. Three unguarded profiles matched previous individual-cache results on all 36 prefixes.",
+      "closure_reason": "Keep local physical moves and validated bounded caches. Whole-run score gains depend on seed; partial-overlap trajectories tied the cheaper reciprocal profile on the guarded four.",
+      "reopen_trigger": "A materially different rigid-component size, blocked footprint pattern, or new held-out population demonstrates repeated legal motion beyond these tested single and paired moves.",
+      "evidence": [
+        "docs/ROUND35_BONDED_REPAIR.md",
+        "docs/R35_ASSEMBLY_RELOCATION.json",
+        "test_r35_assembly_relocation.py"
+      ]
     },
     {
       "id": 39,

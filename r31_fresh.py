@@ -597,13 +597,20 @@ def forest_pool(model,board,available,size,rng):
 class Engine:
     def __init__(self,problem,*,bonds=False,joint=False,adjacent=False,ties=0,fork=False,
                  relink=False,slate=1,pool=10,tie_slack=0,cycle_budget=0,contacts=None,disjoint=False,exact_packing=False,pair_cycles=0,forest=False,contact_group=0,
-                 touch_packing=None,separator_packing=False,cycle_partition=None,regional_cycle_budget=0,regional_only=False,forbidden_repair=None):
+                 touch_packing=None,separator_packing=False,cycle_partition=None,regional_cycle_budget=0,regional_only=False,forbidden_repair=None,assembly_relocation=None):
         if min(slate,pool)<1 or min(ties,cycle_budget)<0 or tie_slack not in (0,1,2):
             raise ValueError("Invalid candidate or repair limits.")
         self.model=BoardModel(problem)
         if forbidden_repair not in (None,'project','prices','guarded'):
             raise ValueError("Unknown physical mate repair option.")
-        self.assemblies=Assemblies(self.model) if bonds or forbidden_repair else None
+        if assembly_relocation not in (None,'priced','reciprocal','mutual'):
+            raise ValueError("Unknown mandatory assembly relocation option.")
+        self.assemblies=Assemblies(self.model) if bonds or forbidden_repair or assembly_relocation else None
+        self.assembly_relocation=assembly_relocation
+        self.relocator=None
+        if assembly_relocation:
+            from r35_assembly_relocation import AssemblyRelocator
+            self.relocator=AssemblyRelocator(self.assemblies)
         self.forbidden_repair=forbidden_repair
         self.mate_rules=None
         if forbidden_repair:
@@ -668,7 +675,11 @@ class Engine:
         guarded=self.forbidden_repair=='guarded'
         legal_block=self.mate_rules.block if self.forbidden_repair in ('prices','guarded') else model.block
         if self.assemblies:
-            board=self.assemblies.relocate(board,rng)
+            if self.relocator:
+                board,work=self.relocator.relocate(board,rng,self.assembly_relocation)
+                stats.update({'assembly_'+k:v for k,v in work.items()})
+            else:
+                board=self.assemblies.relocate(board,rng)
             protected=self.assemblies.protected(board)
         else:
             protected=[]
@@ -800,6 +811,8 @@ class Engine:
         if reusable:
             config=dict(bonds=self.assemblies is not None,joint=self.joint,adjacent=self.adjacent,
                         cycle_budget=self.cycle_budget,pool=self.pool,ties=self.ties,tie_slack=self.tie_slack)
+            if self.assembly_relocation:
+                config['assembly_relocation']=self.assembly_relocation
             if self.forbidden_repair:
                 config['forbidden_repair']=self.forbidden_repair
             if self.cycle_partition:
@@ -962,6 +975,8 @@ def main():
     parser.add_argument('--slate',type=int,default=1)
     parser.add_argument('--pool',type=int,default=10)
     parser.add_argument('--cycle-budget',type=int,default=0,help='Full-board assignment relaxations per repair.')
+    parser.add_argument('--assembly-relocation',choices=('priced','reciprocal','mutual'),
+                        help='Price displaced pieces and optionally move mutually blocking mandatory assemblies.')
     parser.add_argument('--forbidden-repair',choices=('project','prices','guarded'),
                         help='Use the mandatory Gold mate inventory during fresh repair. Implies --bonds.')
     parser.add_argument('--regional-only',action='store_true',
@@ -1006,6 +1021,8 @@ def main():
         config['regional_only']=True
     if args.forbidden_repair:
         config.update(bonds=True,forbidden_repair=args.forbidden_repair)
+    if args.assembly_relocation:
+        config.update(bonds=True,assembly_relocation=args.assembly_relocation)
     if args.forest:
         config['forest']=True
     if args.pair_cycles:

@@ -1,0 +1,2153 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "local_controls": [
+    {
+      "trials": 1,
+      "starts": 24,
+      "source": "released",
+      "dest": "priced",
+      "wins": 3,
+      "ties": 21,
+      "losses": 0,
+      "summed_gain": 3
+    },
+    {
+      "trials": 1,
+      "starts": 24,
+      "source": "priced",
+      "dest": "reciprocal",
+      "wins": 11,
+      "ties": 13,
+      "losses": 0,
+      "summed_gain": 17
+    },
+    {
+      "trials": 1,
+      "starts": 24,
+      "source": "reciprocal",
+      "dest": "mutual",
+      "wins": 1,
+      "ties": 23,
+      "losses": 0,
+      "summed_gain": 1
+    },
+    {
+      "trials": 8,
+      "starts": 24,
+      "source": "released",
+      "dest": "priced",
+      "wins": 4,
+      "ties": 20,
+      "losses": 0,
+      "summed_gain": 4
+    },
+    {
+      "trials": 8,
+      "starts": 24,
+      "source": "priced",
+      "dest": "reciprocal",
+      "wins": 3,
+      "ties": 21,
+      "losses": 0,
+      "summed_gain": 3
+    },
+    {
+      "trials": 8,
+      "starts": 24,
+      "source": "reciprocal",
+      "dest": "mutual",
+      "wins": 2,
+      "ties": 22,
+      "losses": 0,
+      "summed_gain": 2
+    }
+  ],
+  "trajectories": {
+    "assembly-mutual": [
+      {
+        "seed": 3500,
+        "cold64": {
+          "score": 177,
+          "work_equal": true,
+          "codes_equal": true
+        },
+        "prefixes": {
+          "16": {
+            "score": 164,
+            "components": 109,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "141008672cfa59474f6d2b0b10075aa9292952adb3ada8287970d5c1e660a16b",
+            "cache_operations": {
+              "layouts_built": 213,
+              "price_misses": 263,
+              "reciprocal_families_priced": 273,
+              "layouts_reused": 498,
+              "reciprocal_families_reused": 175,
+              "reciprocal_poses_bypassed": 700,
+              "oriented_rows_reused": 700
+            },
+            "milestones": {
+              "round_to_150": 7,
+              "round_to_160": 11
+            }
+          },
+          "64": {
+            "score": 177,
+            "components": 88,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "d863bc39188b5bb110ac8337d6b04a085662b29f63efd882f95bc567bca44904",
+            "cache_operations": {
+              "layouts_built": 533,
+              "price_misses": 828,
+              "reciprocal_families_priced": 234,
+              "layouts_reused": 1658,
+              "reciprocal_families_reused": 1110,
+              "reciprocal_poses_bypassed": 4440,
+              "oriented_rows_reused": 4632,
+              "price_hits": 19
+            },
+            "milestones": {
+              "round_to_150": 7,
+              "round_to_160": 11,
+              "round_to_170": 27,
+              "round_to_175": 54
+            }
+          },
+          "320": {
+            "score": 180,
+            "components": 82,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "e12910bdc1802e7c3219c09ea1908bb27c32d4678e145dc3f93c432791e9a1fe",
+            "cache_operations": {
+              "layouts_built": 1774,
+              "price_misses": 3965,
+              "reciprocal_families_priced": 223,
+              "layouts_reused": 10073,
+              "reciprocal_families_reused": 6945,
+              "reciprocal_poses_bypassed": 27780,
+              "oriented_rows_reused": 37733,
+              "price_hits": 714
+            },
+            "milestones": {
+              "round_to_150": 7,
+              "round_to_160": 11,
+              "round_to_170": 27,
+              "round_to_175": 54,
+              "round_to_180": 300
+            }
+          }
+        }
+      },
+      {
+        "seed": 3501,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 164,
+            "components": 116,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "03e7dca8a6308c8fe38cba7c0730b80636b05c868a0ac2c2e7968d27706076f9",
+            "cache_operations": {
+              "layouts_built": 219,
+              "price_misses": 286,
+              "reciprocal_families_priced": 228,
+              "layouts_reused": 517,
+              "reciprocal_families_reused": 220,
+              "reciprocal_poses_bypassed": 880,
+              "oriented_rows_reused": 901,
+              "price_hits": 2
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 8
+            }
+          },
+          "64": {
+            "score": 171,
+            "components": 103,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "d0ca17168b9de56fb3623c4a6f85c6c6065602844b36836a26c37993c05e57c4",
+            "cache_operations": {
+              "layouts_built": 490,
+              "price_misses": 720,
+              "reciprocal_families_priced": 142,
+              "layouts_reused": 1582,
+              "reciprocal_families_reused": 1202,
+              "reciprocal_poses_bypassed": 4808,
+              "oriented_rows_reused": 4922,
+              "price_hits": 8
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 8,
+              "round_to_170": 34
+            }
+          },
+          "320": {
+            "score": 175,
+            "components": 95,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "967dcbf40e94a9bd847bd7d3b610f6215e7cbc77bb7f0a5d8981efb2799c4f3b",
+            "cache_operations": {
+              "layouts_built": 1592,
+              "price_misses": 3724,
+              "reciprocal_families_priced": 512,
+              "layouts_reused": 9595,
+              "reciprocal_families_reused": 6656,
+              "reciprocal_poses_bypassed": 26624,
+              "oriented_rows_reused": 30794,
+              "price_hits": 295
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 8,
+              "round_to_170": 34,
+              "round_to_175": 300
+            }
+          }
+        }
+      },
+      {
+        "seed": 3502,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 161,
+            "components": 117,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "9e0ede9f5000e0bd9309a561c8ea46a6e68252888ea7fad83853307f18dc7003",
+            "cache_operations": {
+              "layouts_built": 228,
+              "price_misses": 300,
+              "reciprocal_families_priced": 274,
+              "layouts_reused": 520,
+              "reciprocal_families_reused": 174,
+              "reciprocal_poses_bypassed": 696,
+              "oriented_rows_reused": 696
+            },
+            "milestones": {
+              "round_to_150": 8,
+              "round_to_160": 12
+            }
+          },
+          "64": {
+            "score": 178,
+            "components": 91,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "f534ffdb75fc0f7d3c8d2f2660a962f68cee8d45e54da7909f2a02082982e1ec",
+            "cache_operations": {
+              "layouts_built": 536,
+              "price_misses": 803,
+              "reciprocal_families_priced": 330,
+              "layouts_reused": 1617,
+              "reciprocal_families_reused": 1014,
+              "reciprocal_poses_bypassed": 4056,
+              "oriented_rows_reused": 4164,
+              "price_hits": 6
+            },
+            "milestones": {
+              "round_to_150": 8,
+              "round_to_160": 12,
+              "round_to_170": 50,
+              "round_to_175": 59
+            }
+          },
+          "320": {
+            "score": 181,
+            "components": 89,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "6d8d73b0ad16929b7d92b4dc398ce4215f8c9e444b21ae4e36d2593699eb4fa2",
+            "cache_operations": {
+              "layouts_built": 1733,
+              "price_misses": 4054,
+              "reciprocal_families_priced": 236,
+              "layouts_reused": 9904,
+              "reciprocal_families_reused": 6932,
+              "reciprocal_poses_bypassed": 27728,
+              "oriented_rows_reused": 33692,
+              "price_hits": 415
+            },
+            "milestones": {
+              "round_to_150": 8,
+              "round_to_160": 12,
+              "round_to_170": 50,
+              "round_to_175": 59,
+              "round_to_180": 263
+            }
+          }
+        }
+      },
+      {
+        "seed": 3503,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 163,
+            "components": 109,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "7fb92c40a446a7fa7075dfd751eb250a310ae78c70962edca8186beb15624bd2",
+            "cache_operations": {
+              "layouts_built": 245,
+              "price_misses": 300,
+              "reciprocal_families_priced": 248,
+              "layouts_reused": 504,
+              "reciprocal_families_reused": 200,
+              "reciprocal_poses_bypassed": 800,
+              "oriented_rows_reused": 818,
+              "price_hits": 1
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12
+            }
+          },
+          "64": {
+            "score": 167,
+            "components": 100,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "5fafe55b4771a8434bd901982a6b71b2afb564b4935d8e0ee2ba58049e8e328f",
+            "cache_operations": {
+              "layouts_built": 527,
+              "price_misses": 862,
+              "layouts_reused": 1689,
+              "reciprocal_families_priced": 244,
+              "reciprocal_families_reused": 1100,
+              "reciprocal_poses_bypassed": 4400,
+              "oriented_rows_reused": 4565,
+              "price_hits": 10
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12
+            }
+          },
+          "320": {
+            "score": 175,
+            "components": 86,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "9bb89a31e23b68611d755447ab96ff753e274298f691483eedac27c4d8819d20",
+            "cache_operations": {
+              "layouts_built": 1765,
+              "price_misses": 4085,
+              "reciprocal_families_priced": 497,
+              "layouts_reused": 9720,
+              "reciprocal_families_reused": 6671,
+              "reciprocal_poses_bypassed": 26684,
+              "oriented_rows_reused": 30035,
+              "price_hits": 232
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12,
+              "round_to_170": 95,
+              "round_to_175": 307
+            }
+          }
+        }
+      }
+    ],
+    "assembly-mutual-guarded": [
+      {
+        "seed": 3500,
+        "cold64": {
+          "score": 174,
+          "work_equal": true,
+          "codes_equal": true
+        },
+        "prefixes": {
+          "16": {
+            "score": 168,
+            "components": 103,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "f98219c288d18ee072e654ef696036272c746028ffc79c6d70599fccc29ae300",
+            "cache_operations": {
+              "layouts_built": 197,
+              "price_misses": 244,
+              "reciprocal_families_priced": 255,
+              "layouts_reused": 495,
+              "reciprocal_families_reused": 193,
+              "reciprocal_poses_bypassed": 772,
+              "oriented_rows_reused": 772
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 10
+            }
+          },
+          "64": {
+            "score": 174,
+            "components": 98,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "7d2492dbbe18dc07b09e6449e3ee3f6ec2760af786eab03fcf61df7c8f1198e9",
+            "cache_operations": {
+              "layouts_built": 516,
+              "price_misses": 801,
+              "reciprocal_families_priced": 153,
+              "layouts_reused": 1652,
+              "reciprocal_families_reused": 1191,
+              "reciprocal_poses_bypassed": 4764,
+              "oriented_rows_reused": 5133,
+              "price_hits": 23
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 10,
+              "round_to_170": 23
+            }
+          },
+          "320": {
+            "score": 177,
+            "components": 87,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "06244df85036c2822722b06cf66c1f078e6b9289a2247dc594f9c99d7c803019",
+            "cache_operations": {
+              "layouts_built": 1617,
+              "price_misses": 3614,
+              "reciprocal_families_priced": 171,
+              "layouts_reused": 9672,
+              "reciprocal_families_reused": 6997,
+              "reciprocal_poses_bypassed": 27988,
+              "oriented_rows_reused": 34755,
+              "price_hits": 507
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 10,
+              "round_to_170": 23,
+              "round_to_175": 123
+            }
+          }
+        }
+      },
+      {
+        "seed": 3501,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 164,
+            "components": 107,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "b5089613289cf357f141a53d6dea6cb907d87a271f92c00cae7fbeaae9050e6c",
+            "cache_operations": {
+              "layouts_built": 197,
+              "price_misses": 208,
+              "reciprocal_families_priced": 292,
+              "layouts_reused": 459,
+              "reciprocal_families_reused": 156,
+              "reciprocal_poses_bypassed": 624,
+              "oriented_rows_reused": 624
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 9
+            }
+          },
+          "64": {
+            "score": 175,
+            "components": 92,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "00a4d4a553e45efeb13813b73f8235f1dd914121ef85db87fdb8a0d30b443124",
+            "cache_operations": {
+              "layouts_built": 488,
+              "price_misses": 715,
+              "reciprocal_families_priced": 260,
+              "layouts_reused": 1576,
+              "reciprocal_families_reused": 1084,
+              "reciprocal_poses_bypassed": 4336,
+              "oriented_rows_reused": 4411,
+              "price_hits": 5
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 9,
+              "round_to_170": 29,
+              "round_to_175": 42
+            }
+          },
+          "320": {
+            "score": 180,
+            "components": 88,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "5b744bd2bfdb17c2087035db599265471dd943876abb56bde42dd4eabcc19616",
+            "cache_operations": {
+              "layouts_built": 1550,
+              "price_misses": 3547,
+              "reciprocal_families_priced": 332,
+              "layouts_reused": 9502,
+              "reciprocal_families_reused": 6836,
+              "reciprocal_poses_bypassed": 27344,
+              "oriented_rows_reused": 32311,
+              "price_hits": 337
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 9,
+              "round_to_170": 29,
+              "round_to_175": 42,
+              "round_to_180": 290
+            }
+          }
+        }
+      },
+      {
+        "seed": 3502,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 165,
+            "components": 106,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "a5e124736c7d9d1b6ffacf3485bf96d5b32c36d0f5d9eaa852feda971b03626f",
+            "cache_operations": {
+              "layouts_built": 202,
+              "price_misses": 240,
+              "reciprocal_families_priced": 296,
+              "layouts_reused": 496,
+              "reciprocal_families_reused": 152,
+              "reciprocal_poses_bypassed": 608,
+              "oriented_rows_reused": 758,
+              "price_hits": 10
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 11
+            }
+          },
+          "64": {
+            "score": 174,
+            "components": 99,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "1e17b9ee469d4c5d7352e0ac80c6f388cd70f65733482fac8a6a9c478f714544",
+            "cache_operations": {
+              "layouts_built": 539,
+              "price_misses": 810,
+              "reciprocal_families_priced": 207,
+              "layouts_reused": 1653,
+              "reciprocal_families_reused": 1137,
+              "reciprocal_poses_bypassed": 4548,
+              "oriented_rows_reused": 5127,
+              "price_hits": 38
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 11,
+              "round_to_170": 45
+            }
+          },
+          "320": {
+            "score": 184,
+            "components": 81,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "e56fd333d36ece2a3889bc5915324ee35b87e1daf07c7dcb57a1c46955cf3608",
+            "cache_operations": {
+              "layouts_built": 1692,
+              "price_misses": 4312,
+              "reciprocal_families_priced": 408,
+              "layouts_reused": 10083,
+              "reciprocal_families_reused": 6760,
+              "reciprocal_poses_bypassed": 27040,
+              "oriented_rows_reused": 31253,
+              "price_hits": 295
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 11,
+              "round_to_170": 45,
+              "round_to_175": 70,
+              "round_to_180": 196
+            }
+          }
+        }
+      },
+      {
+        "seed": 3503,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 162,
+            "components": 110,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "010767912cc7e6185f7863bc40bdfb2e0ec90be50032826e3cf4bb306dea6c4a",
+            "cache_operations": {
+              "layouts_built": 216,
+              "price_misses": 275,
+              "reciprocal_families_priced": 238,
+              "layouts_reused": 507,
+              "reciprocal_families_reused": 210,
+              "reciprocal_poses_bypassed": 840,
+              "oriented_rows_reused": 840
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12
+            }
+          },
+          "64": {
+            "score": 177,
+            "components": 92,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "ceeef0a9bd9aa307a11a32ea62d4a1f7071e9e1fd65eaffeefed0de2902d5954",
+            "cache_operations": {
+              "layouts_built": 504,
+              "price_misses": 753,
+              "reciprocal_families_priced": 258,
+              "layouts_reused": 1616,
+              "reciprocal_families_reused": 1086,
+              "reciprocal_poses_bypassed": 4344,
+              "oriented_rows_reused": 4666,
+              "price_hits": 23
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12,
+              "round_to_170": 30,
+              "round_to_175": 57
+            }
+          },
+          "320": {
+            "score": 184,
+            "components": 86,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "77107b15f4d035820071460d31114ec3de25b994893fd1b6a0c41aa42c8bca23",
+            "cache_operations": {
+              "layouts_built": 1635,
+              "price_misses": 3982,
+              "reciprocal_families_priced": 452,
+              "layouts_reused": 9832,
+              "reciprocal_families_reused": 6716,
+              "reciprocal_poses_bypassed": 26864,
+              "oriented_rows_reused": 31325,
+              "price_hits": 317
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12,
+              "round_to_170": 30,
+              "round_to_175": 57,
+              "round_to_180": 214
+            }
+          }
+        }
+      }
+    ],
+    "assembly-mutual-guarded-singles": [
+      {
+        "seed": 3500,
+        "cold64": {
+          "score": 174,
+          "work_equal": true,
+          "codes_equal": true
+        },
+        "prefixes": {
+          "16": {
+            "score": 168,
+            "components": 103,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "f98219c288d18ee072e654ef696036272c746028ffc79c6d70599fccc29ae300",
+            "cache_operations": {
+              "layouts_built": 197,
+              "price_misses": 244,
+              "reciprocal_families_priced": 255,
+              "layouts_reused": 495,
+              "reciprocal_families_reused": 193,
+              "reciprocal_poses_bypassed": 772,
+              "oriented_rows_reused": 772
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 10
+            }
+          },
+          "64": {
+            "score": 174,
+            "components": 98,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "7d2492dbbe18dc07b09e6449e3ee3f6ec2760af786eab03fcf61df7c8f1198e9",
+            "cache_operations": {
+              "layouts_built": 516,
+              "price_misses": 801,
+              "reciprocal_families_priced": 153,
+              "layouts_reused": 1652,
+              "reciprocal_families_reused": 1191,
+              "reciprocal_poses_bypassed": 4764,
+              "oriented_rows_reused": 5133,
+              "price_hits": 23
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 10,
+              "round_to_170": 23
+            }
+          },
+          "320": {
+            "score": 177,
+            "components": 87,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "06244df85036c2822722b06cf66c1f078e6b9289a2247dc594f9c99d7c803019",
+            "cache_operations": {
+              "layouts_built": 1617,
+              "price_misses": 3614,
+              "reciprocal_families_priced": 171,
+              "layouts_reused": 9672,
+              "reciprocal_families_reused": 6997,
+              "reciprocal_poses_bypassed": 27988,
+              "oriented_rows_reused": 34755,
+              "price_hits": 507
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 10,
+              "round_to_170": 23,
+              "round_to_175": 123
+            }
+          }
+        }
+      },
+      {
+        "seed": 3501,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 164,
+            "components": 107,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "b5089613289cf357f141a53d6dea6cb907d87a271f92c00cae7fbeaae9050e6c",
+            "cache_operations": {
+              "layouts_built": 197,
+              "price_misses": 208,
+              "reciprocal_families_priced": 292,
+              "layouts_reused": 459,
+              "reciprocal_families_reused": 156,
+              "reciprocal_poses_bypassed": 624,
+              "oriented_rows_reused": 624
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 9
+            }
+          },
+          "64": {
+            "score": 175,
+            "components": 92,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "00a4d4a553e45efeb13813b73f8235f1dd914121ef85db87fdb8a0d30b443124",
+            "cache_operations": {
+              "layouts_built": 488,
+              "price_misses": 715,
+              "reciprocal_families_priced": 260,
+              "layouts_reused": 1576,
+              "reciprocal_families_reused": 1084,
+              "reciprocal_poses_bypassed": 4336,
+              "oriented_rows_reused": 4411,
+              "price_hits": 5
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 9,
+              "round_to_170": 29,
+              "round_to_175": 42
+            }
+          },
+          "320": {
+            "score": 180,
+            "components": 88,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "5b744bd2bfdb17c2087035db599265471dd943876abb56bde42dd4eabcc19616",
+            "cache_operations": {
+              "layouts_built": 1550,
+              "price_misses": 3547,
+              "reciprocal_families_priced": 332,
+              "layouts_reused": 9502,
+              "reciprocal_families_reused": 6836,
+              "reciprocal_poses_bypassed": 27344,
+              "oriented_rows_reused": 32311,
+              "price_hits": 337
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 9,
+              "round_to_170": 29,
+              "round_to_175": 42,
+              "round_to_180": 290
+            }
+          }
+        }
+      },
+      {
+        "seed": 3502,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 168,
+            "components": 116,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "a7a4828375ad4be25e68ac5b5313e8a92e0bb6ab79207629ec9c88151ca4c978",
+            "cache_operations": {
+              "layouts_built": 241,
+              "price_misses": 347,
+              "reciprocal_families_priced": 290,
+              "layouts_reused": 555,
+              "reciprocal_families_reused": 158,
+              "reciprocal_poses_bypassed": 632,
+              "oriented_rows_reused": 635,
+              "price_hits": 1
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 8
+            }
+          },
+          "64": {
+            "score": 172,
+            "components": 105,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "30f5d8321721b9b501254450b2e4046d671681f8626d67d347029f5fafefd9d5",
+            "cache_operations": {
+              "layouts_built": 480,
+              "price_misses": 670,
+              "reciprocal_families_priced": 224,
+              "layouts_reused": 1547,
+              "reciprocal_families_reused": 1120,
+              "reciprocal_poses_bypassed": 4480,
+              "oriented_rows_reused": 4669,
+              "price_hits": 13
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 8,
+              "round_to_170": 41
+            }
+          },
+          "320": {
+            "score": 177,
+            "components": 96,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "5a9f034fbf0edf86e8017371cf4f9c8313b244f2114b10e46ea736f12a872314",
+            "cache_operations": {
+              "layouts_built": 1700,
+              "price_misses": 4391,
+              "reciprocal_families_priced": 561,
+              "layouts_reused": 10116,
+              "reciprocal_families_reused": 6607,
+              "reciprocal_poses_bypassed": 26428,
+              "oriented_rows_reused": 30223,
+              "price_hits": 257
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 8,
+              "round_to_170": 41,
+              "round_to_175": 178
+            }
+          }
+        }
+      },
+      {
+        "seed": 3503,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 165,
+            "components": 106,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "3cee6a471960950015cc2821732b8af683d890ea747a14e953cb79d0973de618",
+            "cache_operations": {
+              "layouts_built": 239,
+              "price_misses": 341,
+              "reciprocal_families_priced": 290,
+              "layouts_reused": 550,
+              "reciprocal_families_reused": 158,
+              "reciprocal_poses_bypassed": 632,
+              "oriented_rows_reused": 632
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 9
+            }
+          },
+          "64": {
+            "score": 173,
+            "components": 94,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "7cc6e6f8570b7ae56dfbd0d0e194bc791cc3cd5b658441ae499bef1e38be8557",
+            "cache_operations": {
+              "layouts_built": 518,
+              "price_misses": 793,
+              "reciprocal_families_priced": 222,
+              "layouts_reused": 1642,
+              "price_hits": 23,
+              "oriented_rows_reused": 4827,
+              "reciprocal_families_reused": 1122,
+              "reciprocal_poses_bypassed": 4488
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 9,
+              "round_to_170": 20
+            }
+          },
+          "320": {
+            "score": 177,
+            "components": 89,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "808ab9cd91ac0e3a47e685e9ba3461a7e03965e3e024b791d8bc1361b713907e",
+            "cache_operations": {
+              "layouts_built": 1638,
+              "price_misses": 3835,
+              "reciprocal_families_priced": 426,
+              "layouts_reused": 9742,
+              "reciprocal_families_reused": 6742,
+              "reciprocal_poses_bypassed": 26968,
+              "oriented_rows_reused": 32359,
+              "price_hits": 377
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 9,
+              "round_to_170": 20,
+              "round_to_175": 146
+            }
+          }
+        }
+      }
+    ],
+    "assembly-priced": [
+      {
+        "seed": 3500,
+        "cold64": {
+          "score": 171,
+          "work_equal": true,
+          "codes_equal": true
+        },
+        "prefixes": {
+          "16": {
+            "score": 160,
+            "components": 114,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "ed79b77092825edbbff26d5db140965316f48250b0daa6d8866af29532225bcc",
+            "cache_operations": {
+              "layouts_built": 109,
+              "price_misses": 112,
+              "layouts_reused": 3
+            },
+            "milestones": {
+              "round_to_150": 7,
+              "round_to_160": 12
+            }
+          },
+          "64": {
+            "score": 171,
+            "components": 105,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "03b7c3f7f8684751d7a5a8984e81cc609f551012734eadaa07bd983f0bc52fc5",
+            "cache_operations": {
+              "layouts_built": 295,
+              "price_misses": 319,
+              "layouts_reused": 28,
+              "price_hits": 4,
+              "oriented_rows_reused": 72
+            },
+            "milestones": {
+              "round_to_150": 7,
+              "round_to_160": 12,
+              "round_to_170": 47
+            }
+          },
+          "320": {
+            "score": 179,
+            "components": 86,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "e1927007a71e05bd1c45cc33c909dcfdbad1b2e4f5dd38920953760715eae1cf",
+            "cache_operations": {
+              "layouts_built": 1063,
+              "price_misses": 1610,
+              "layouts_reused": 675,
+              "price_hits": 128,
+              "oriented_rows_reused": 2242
+            },
+            "milestones": {
+              "round_to_150": 7,
+              "round_to_160": 12,
+              "round_to_170": 47,
+              "round_to_175": 102
+            }
+          }
+        }
+      },
+      {
+        "seed": 3501,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 164,
+            "components": 109,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "c3492643e241d1b6c52d9c603110de4500f84e426c05eacf702794790aefa4bc",
+            "cache_operations": {
+              "layouts_built": 108,
+              "price_misses": 110,
+              "layouts_reused": 3,
+              "price_hits": 1,
+              "oriented_rows_reused": 18
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 13
+            }
+          },
+          "64": {
+            "score": 170,
+            "components": 101,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "9acc39f0037d337390be286d564f8265ec7476806ca4c1f1425abf9e7ee963a1",
+            "cache_operations": {
+              "layouts_built": 304,
+              "price_misses": 330,
+              "layouts_reused": 29,
+              "price_hits": 3,
+              "oriented_rows_reused": 54
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 13,
+              "round_to_170": 44
+            }
+          },
+          "320": {
+            "score": 180,
+            "components": 82,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "3530dc25502904563fc7d3ea425466ce398286d0026211fdb22ffb3f7b9e764c",
+            "cache_operations": {
+              "layouts_built": 1121,
+              "price_misses": 1696,
+              "layouts_reused": 651,
+              "price_hits": 76,
+              "oriented_rows_reused": 1338
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 13,
+              "round_to_170": 44,
+              "round_to_175": 114,
+              "round_to_180": 186
+            }
+          }
+        }
+      },
+      {
+        "seed": 3502,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 156,
+            "components": 125,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "62d212d8862fd2dd0874732124017b6da4c4868c79ffebb8a0b8a911f6316e02",
+            "cache_operations": {
+              "layouts_built": 108,
+              "price_misses": 115,
+              "layouts_reused": 7
+            },
+            "milestones": {
+              "round_to_150": 6
+            }
+          },
+          "64": {
+            "score": 172,
+            "components": 97,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "f74b3fc191b1e795168abed2cc25f9cb2abbf4889a25e9b4ada1ffd8a7d194d3",
+            "cache_operations": {
+              "layouts_built": 300,
+              "price_misses": 331,
+              "layouts_reused": 36,
+              "price_hits": 5,
+              "oriented_rows_reused": 90
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 19,
+              "round_to_170": 46
+            }
+          },
+          "320": {
+            "score": 175,
+            "components": 97,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "9797be497ba5d3880985d872d7db3467b1fb286f0cc3268b966a4e4b1dd2a684",
+            "cache_operations": {
+              "layouts_built": 1058,
+              "price_misses": 1568,
+              "layouts_reused": 668,
+              "price_hits": 158,
+              "oriented_rows_reused": 2797
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 19,
+              "round_to_170": 46,
+              "round_to_175": 318
+            }
+          }
+        }
+      },
+      {
+        "seed": 3503,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 163,
+            "components": 109,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "7fb92c40a446a7fa7075dfd751eb250a310ae78c70962edca8186beb15624bd2",
+            "cache_operations": {
+              "layouts_built": 102,
+              "price_misses": 106,
+              "layouts_reused": 5,
+              "price_hits": 1,
+              "oriented_rows_reused": 18
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12
+            }
+          },
+          "64": {
+            "score": 167,
+            "components": 100,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "5fafe55b4771a8434bd901982a6b71b2afb564b4935d8e0ee2ba58049e8e328f",
+            "cache_operations": {
+              "layouts_built": 294,
+              "price_misses": 315,
+              "layouts_reused": 28,
+              "price_hits": 7,
+              "oriented_rows_reused": 126
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12
+            }
+          },
+          "320": {
+            "score": 176,
+            "components": 90,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "f9e669823259423c39a89ceb85c42f4a9b95db35eeaed5446f78cb98ac93b071",
+            "cache_operations": {
+              "layouts_built": 1116,
+              "price_misses": 1668,
+              "layouts_reused": 649,
+              "price_hits": 97,
+              "oriented_rows_reused": 1716
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12,
+              "round_to_170": 95,
+              "round_to_175": 313
+            }
+          }
+        }
+      }
+    ],
+    "assembly-priced-guarded": [
+      {
+        "seed": 3500,
+        "cold64": {
+          "score": 172,
+          "work_equal": true,
+          "codes_equal": true
+        },
+        "prefixes": {
+          "16": {
+            "score": 163,
+            "components": 120,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "8ba55486c0692e02dacc9e7de88ff78af83a44e386d01dd68a98b1debf8e41fc",
+            "cache_operations": {
+              "layouts_built": 108,
+              "price_misses": 110,
+              "layouts_reused": 3,
+              "price_hits": 1,
+              "oriented_rows_reused": 18
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 13
+            }
+          },
+          "64": {
+            "score": 172,
+            "components": 104,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "ca9adf611baf40b1c336c41054d820d83c43975c60494e2828a42461bfc568ee",
+            "cache_operations": {
+              "layouts_built": 297,
+              "price_misses": 320,
+              "layouts_reused": 24,
+              "price_hits": 1,
+              "oriented_rows_reused": 18
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 13,
+              "round_to_170": 53
+            }
+          },
+          "320": {
+            "score": 179,
+            "components": 90,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "b7b8df80394e03c99b19569f133b18644ab6241126227d13361c7d9d2138c5f1",
+            "cache_operations": {
+              "layouts_built": 1132,
+              "price_misses": 1616,
+              "layouts_reused": 613,
+              "price_hits": 129,
+              "oriented_rows_reused": 2275
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 13,
+              "round_to_170": 53,
+              "round_to_175": 81
+            }
+          }
+        }
+      },
+      {
+        "seed": 3501,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 163,
+            "components": 111,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "8592d6f4bd16ace07b2dff0f3695584685af3e899fa665032314a526b7e7d79c",
+            "cache_operations": {
+              "layouts_built": 112,
+              "price_misses": 116,
+              "layouts_reused": 6,
+              "price_hits": 2,
+              "oriented_rows_reused": 36
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 9
+            }
+          },
+          "64": {
+            "score": 168,
+            "components": 106,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "8345ae5977aac1221a35434b4248c6331cfe3ce3679b388d336c0abe8610e7ae",
+            "cache_operations": {
+              "layouts_built": 295,
+              "price_misses": 323,
+              "layouts_reused": 32,
+              "price_hits": 4,
+              "oriented_rows_reused": 72
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 9
+            }
+          },
+          "320": {
+            "score": 173,
+            "components": 103,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "413c4a0cdff4e13ebcd6eeea1bfa399bd34f12c69ab62203489fd39bba7f4da6",
+            "cache_operations": {
+              "layouts_built": 1123,
+              "price_misses": 1622,
+              "layouts_reused": 637,
+              "price_hits": 138,
+              "oriented_rows_reused": 2454
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 9,
+              "round_to_170": 68
+            }
+          }
+        }
+      },
+      {
+        "seed": 3502,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 164,
+            "components": 113,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "b46a7fbe42a5e0bccf1dc21b1127add3f1771230be885008e1510409563826ae",
+            "cache_operations": {
+              "layouts_built": 107,
+              "price_misses": 110,
+              "layouts_reused": 3
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12
+            }
+          },
+          "64": {
+            "score": 177,
+            "components": 95,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "51a5aab32ef6b107c490f8f280e8da1de70e86b8778aec4b3edd32c6ed8469da",
+            "cache_operations": {
+              "layouts_built": 295,
+              "price_misses": 325,
+              "layouts_reused": 33,
+              "price_hits": 3,
+              "oriented_rows_reused": 54
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12,
+              "round_to_170": 28,
+              "round_to_175": 36
+            }
+          },
+          "320": {
+            "score": 182,
+            "components": 84,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "1a79c05103a1ecfa6726977f9b23ada5713a9bfcf305bbb1fa6e0d1c8f1a1651",
+            "cache_operations": {
+              "layouts_built": 1079,
+              "price_misses": 1621,
+              "layouts_reused": 681,
+              "price_hits": 139,
+              "oriented_rows_reused": 2470
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12,
+              "round_to_170": 28,
+              "round_to_175": 36,
+              "round_to_180": 144
+            }
+          }
+        }
+      },
+      {
+        "seed": 3503,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 160,
+            "components": 120,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "b808713e826d2b70019ef8e08be1ca4d7baf39c01ff179fc1c04e661d2fa961f",
+            "cache_operations": {
+              "layouts_built": 112,
+              "price_misses": 113,
+              "layouts_reused": 1
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 15
+            }
+          },
+          "64": {
+            "score": 168,
+            "components": 101,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "f1ebd5803d4c9e1a97264b565c28e7c1958099317b140224e619a7c023cc9894",
+            "cache_operations": {
+              "layouts_built": 286,
+              "price_misses": 319,
+              "layouts_reused": 35,
+              "price_hits": 2,
+              "oriented_rows_reused": 36
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 15
+            }
+          },
+          "320": {
+            "score": 175,
+            "components": 91,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "78d573b0aef2026c02b5d4cdaba0dff4612f8b82686aab63772c7573c705503c",
+            "cache_operations": {
+              "layouts_built": 1081,
+              "price_misses": 1582,
+              "layouts_reused": 657,
+              "price_hits": 156,
+              "oriented_rows_reused": 2778
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 15,
+              "round_to_170": 69,
+              "round_to_175": 121
+            }
+          }
+        }
+      }
+    ],
+    "assembly-reciprocal": [
+      {
+        "seed": 3500,
+        "cold64": {
+          "score": 177,
+          "work_equal": true,
+          "codes_equal": true
+        },
+        "prefixes": {
+          "16": {
+            "score": 164,
+            "components": 109,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "141008672cfa59474f6d2b0b10075aa9292952adb3ada8287970d5c1e660a16b",
+            "cache_operations": {
+              "layouts_built": 139,
+              "price_misses": 111,
+              "reciprocal_families_priced": 273,
+              "layouts_reused": 420,
+              "reciprocal_families_reused": 175,
+              "reciprocal_poses_bypassed": 700,
+              "oriented_rows_reused": 700
+            },
+            "milestones": {
+              "round_to_150": 7,
+              "round_to_160": 11
+            }
+          },
+          "64": {
+            "score": 177,
+            "components": 88,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "d863bc39188b5bb110ac8337d6b04a085662b29f63efd882f95bc567bca44904",
+            "cache_operations": {
+              "layouts_built": 319,
+              "price_misses": 319,
+              "reciprocal_families_priced": 234,
+              "layouts_reused": 1346,
+              "reciprocal_families_reused": 1110,
+              "reciprocal_poses_bypassed": 4440,
+              "oriented_rows_reused": 4476,
+              "price_hits": 2
+            },
+            "milestones": {
+              "round_to_150": 7,
+              "round_to_160": 11,
+              "round_to_170": 27,
+              "round_to_175": 54
+            }
+          },
+          "320": {
+            "score": 180,
+            "components": 82,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "e12910bdc1802e7c3219c09ea1908bb27c32d4678e145dc3f93c432791e9a1fe",
+            "cache_operations": {
+              "layouts_built": 1147,
+              "price_misses": 1526,
+              "reciprocal_families_priced": 223,
+              "layouts_reused": 7744,
+              "reciprocal_families_reused": 6945,
+              "reciprocal_poses_bypassed": 27780,
+              "oriented_rows_reused": 31232,
+              "price_hits": 197
+            },
+            "milestones": {
+              "round_to_150": 7,
+              "round_to_160": 11,
+              "round_to_170": 27,
+              "round_to_175": 54,
+              "round_to_180": 300
+            }
+          }
+        }
+      },
+      {
+        "seed": 3501,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 164,
+            "components": 116,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "03e7dca8a6308c8fe38cba7c0730b80636b05c868a0ac2c2e7968d27706076f9",
+            "cache_operations": {
+              "layouts_built": 138,
+              "price_misses": 106,
+              "reciprocal_families_priced": 228,
+              "layouts_reused": 416,
+              "reciprocal_families_reused": 220,
+              "reciprocal_poses_bypassed": 880,
+              "oriented_rows_reused": 880
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 8
+            }
+          },
+          "64": {
+            "score": 171,
+            "components": 103,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "d0ca17168b9de56fb3623c4a6f85c6c6065602844b36836a26c37993c05e57c4",
+            "cache_operations": {
+              "layouts_built": 329,
+              "price_misses": 328,
+              "reciprocal_families_priced": 142,
+              "layouts_reused": 1349,
+              "reciprocal_families_reused": 1202,
+              "reciprocal_poses_bypassed": 4808,
+              "oriented_rows_reused": 4901,
+              "price_hits": 6
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 8,
+              "round_to_170": 34
+            }
+          },
+          "320": {
+            "score": 175,
+            "components": 95,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "967dcbf40e94a9bd847bd7d3b610f6215e7cbc77bb7f0a5d8981efb2799c4f3b",
+            "cache_operations": {
+              "layouts_built": 1107,
+              "price_misses": 1670,
+              "reciprocal_families_priced": 512,
+              "layouts_reused": 7832,
+              "reciprocal_families_reused": 6656,
+              "reciprocal_poses_bypassed": 26624,
+              "oriented_rows_reused": 28367,
+              "price_hits": 101
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 8,
+              "round_to_170": 34,
+              "round_to_175": 300
+            }
+          }
+        }
+      },
+      {
+        "seed": 3502,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 161,
+            "components": 117,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "9e0ede9f5000e0bd9309a561c8ea46a6e68252888ea7fad83853307f18dc7003",
+            "cache_operations": {
+              "layouts_built": 137,
+              "price_misses": 108,
+              "reciprocal_families_priced": 274,
+              "layouts_reused": 419,
+              "reciprocal_families_reused": 174,
+              "reciprocal_poses_bypassed": 696,
+              "oriented_rows_reused": 696
+            },
+            "milestones": {
+              "round_to_150": 8,
+              "round_to_160": 12
+            }
+          },
+          "64": {
+            "score": 178,
+            "components": 91,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "f534ffdb75fc0f7d3c8d2f2660a962f68cee8d45e54da7909f2a02082982e1ec",
+            "cache_operations": {
+              "layouts_built": 331,
+              "price_misses": 330,
+              "reciprocal_families_priced": 330,
+              "layouts_reused": 1346,
+              "reciprocal_families_reused": 1014,
+              "reciprocal_poses_bypassed": 4056,
+              "oriented_rows_reused": 4110,
+              "price_hits": 3
+            },
+            "milestones": {
+              "round_to_150": 8,
+              "round_to_160": 12,
+              "round_to_170": 50,
+              "round_to_175": 59
+            }
+          },
+          "320": {
+            "score": 181,
+            "components": 89,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "6d8d73b0ad16929b7d92b4dc398ce4215f8c9e444b21ae4e36d2593699eb4fa2",
+            "cache_operations": {
+              "layouts_built": 1132,
+              "price_misses": 1600,
+              "reciprocal_families_priced": 236,
+              "layouts_reused": 7775,
+              "reciprocal_families_reused": 6932,
+              "reciprocal_poses_bypassed": 27728,
+              "oriented_rows_reused": 30119,
+              "price_hits": 139
+            },
+            "milestones": {
+              "round_to_150": 8,
+              "round_to_160": 12,
+              "round_to_170": 50,
+              "round_to_175": 59,
+              "round_to_180": 263
+            }
+          }
+        }
+      },
+      {
+        "seed": 3503,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 163,
+            "components": 109,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "7fb92c40a446a7fa7075dfd751eb250a310ae78c70962edca8186beb15624bd2",
+            "cache_operations": {
+              "layouts_built": 151,
+              "price_misses": 106,
+              "reciprocal_families_priced": 248,
+              "layouts_reused": 404,
+              "reciprocal_families_reused": 200,
+              "reciprocal_poses_bypassed": 800,
+              "oriented_rows_reused": 818,
+              "price_hits": 1
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12
+            }
+          },
+          "64": {
+            "score": 167,
+            "components": 100,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "5fafe55b4771a8434bd901982a6b71b2afb564b4935d8e0ee2ba58049e8e328f",
+            "cache_operations": {
+              "layouts_built": 322,
+              "price_misses": 315,
+              "layouts_reused": 1344,
+              "reciprocal_families_priced": 244,
+              "reciprocal_families_reused": 1100,
+              "reciprocal_poses_bypassed": 4400,
+              "oriented_rows_reused": 4526,
+              "price_hits": 7
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12
+            }
+          },
+          "320": {
+            "score": 176,
+            "components": 90,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "f9e669823259423c39a89ceb85c42f4a9b95db35eeaed5446f78cb98ac93b071",
+            "cache_operations": {
+              "layouts_built": 1146,
+              "price_misses": 1668,
+              "reciprocal_families_priced": 485,
+              "layouts_reused": 7787,
+              "reciprocal_families_reused": 6683,
+              "reciprocal_poses_bypassed": 26732,
+              "oriented_rows_reused": 28448,
+              "price_hits": 97
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12,
+              "round_to_170": 95,
+              "round_to_175": 313
+            }
+          }
+        }
+      }
+    ],
+    "assembly-reciprocal-guarded": [
+      {
+        "seed": 3500,
+        "cold64": {
+          "score": 174,
+          "work_equal": true,
+          "codes_equal": true
+        },
+        "prefixes": {
+          "16": {
+            "score": 168,
+            "components": 103,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "f98219c288d18ee072e654ef696036272c746028ffc79c6d70599fccc29ae300",
+            "cache_operations": {
+              "layouts_built": 133,
+              "price_misses": 112,
+              "reciprocal_families_priced": 255,
+              "layouts_reused": 427,
+              "reciprocal_families_reused": 193,
+              "reciprocal_poses_bypassed": 772,
+              "oriented_rows_reused": 772
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 10
+            }
+          },
+          "64": {
+            "score": 174,
+            "components": 98,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "7d2492dbbe18dc07b09e6449e3ee3f6ec2760af786eab03fcf61df7c8f1198e9",
+            "cache_operations": {
+              "layouts_built": 316,
+              "price_misses": 318,
+              "reciprocal_families_priced": 153,
+              "layouts_reused": 1352,
+              "reciprocal_families_reused": 1191,
+              "reciprocal_poses_bypassed": 4764,
+              "oriented_rows_reused": 4872,
+              "price_hits": 6
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 10,
+              "round_to_170": 23
+            }
+          },
+          "320": {
+            "score": 177,
+            "components": 87,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "06244df85036c2822722b06cf66c1f078e6b9289a2247dc594f9c99d7c803019",
+            "cache_operations": {
+              "layouts_built": 1105,
+              "price_misses": 1590,
+              "reciprocal_families_priced": 171,
+              "layouts_reused": 7828,
+              "reciprocal_families_reused": 6997,
+              "reciprocal_poses_bypassed": 27988,
+              "oriented_rows_reused": 31059,
+              "price_hits": 175
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 10,
+              "round_to_170": 23,
+              "round_to_175": 123
+            }
+          }
+        }
+      },
+      {
+        "seed": 3501,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 164,
+            "components": 107,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "b5089613289cf357f141a53d6dea6cb907d87a271f92c00cae7fbeaae9050e6c",
+            "cache_operations": {
+              "layouts_built": 154,
+              "price_misses": 116,
+              "reciprocal_families_priced": 292,
+              "layouts_reused": 410,
+              "reciprocal_families_reused": 156,
+              "reciprocal_poses_bypassed": 624,
+              "oriented_rows_reused": 624
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 9
+            }
+          },
+          "64": {
+            "score": 175,
+            "components": 92,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "00a4d4a553e45efeb13813b73f8235f1dd914121ef85db87fdb8a0d30b443124",
+            "cache_operations": {
+              "layouts_built": 317,
+              "price_misses": 328,
+              "reciprocal_families_priced": 260,
+              "layouts_reused": 1357,
+              "reciprocal_families_reused": 1084,
+              "reciprocal_poses_bypassed": 4336,
+              "oriented_rows_reused": 4372,
+              "price_hits": 2
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 9,
+              "round_to_170": 29,
+              "round_to_175": 42
+            }
+          },
+          "320": {
+            "score": 180,
+            "components": 88,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "5b744bd2bfdb17c2087035db599265471dd943876abb56bde42dd4eabcc19616",
+            "cache_operations": {
+              "layouts_built": 1127,
+              "price_misses": 1618,
+              "reciprocal_families_priced": 332,
+              "layouts_reused": 7797,
+              "reciprocal_families_reused": 6836,
+              "reciprocal_poses_bypassed": 27344,
+              "oriented_rows_reused": 29749,
+              "price_hits": 138
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 9,
+              "round_to_170": 29,
+              "round_to_175": 42,
+              "round_to_180": 290
+            }
+          }
+        }
+      },
+      {
+        "seed": 3502,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 165,
+            "components": 106,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "a5e124736c7d9d1b6ffacf3485bf96d5b32c36d0f5d9eaa852feda971b03626f",
+            "cache_operations": {
+              "layouts_built": 140,
+              "price_misses": 114,
+              "reciprocal_families_priced": 296,
+              "layouts_reused": 422,
+              "reciprocal_families_reused": 152,
+              "reciprocal_poses_bypassed": 608,
+              "oriented_rows_reused": 608
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 11
+            }
+          },
+          "64": {
+            "score": 174,
+            "components": 99,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "1e17b9ee469d4c5d7352e0ac80c6f388cd70f65733482fac8a6a9c478f714544",
+            "cache_operations": {
+              "layouts_built": 334,
+              "price_misses": 331,
+              "reciprocal_families_priced": 207,
+              "layouts_reused": 1342,
+              "reciprocal_families_reused": 1137,
+              "reciprocal_poses_bypassed": 4548,
+              "oriented_rows_reused": 4566,
+              "price_hits": 1
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 11,
+              "round_to_170": 45
+            }
+          },
+          "320": {
+            "score": 184,
+            "components": 81,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "e56fd333d36ece2a3889bc5915324ee35b87e1daf07c7dcb57a1c46955cf3608",
+            "cache_operations": {
+              "layouts_built": 1111,
+              "price_misses": 1656,
+              "reciprocal_families_priced": 408,
+              "layouts_reused": 7808,
+              "reciprocal_families_reused": 6760,
+              "reciprocal_poses_bypassed": 27040,
+              "oriented_rows_reused": 28688,
+              "price_hits": 95
+            },
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 11,
+              "round_to_170": 45,
+              "round_to_175": 70,
+              "round_to_180": 196
+            }
+          }
+        }
+      },
+      {
+        "seed": 3503,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 162,
+            "components": 110,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "010767912cc7e6185f7863bc40bdfb2e0ec90be50032826e3cf4bb306dea6c4a",
+            "cache_operations": {
+              "layouts_built": 140,
+              "price_misses": 109,
+              "reciprocal_families_priced": 238,
+              "layouts_reused": 417,
+              "reciprocal_families_reused": 210,
+              "reciprocal_poses_bypassed": 840,
+              "oriented_rows_reused": 840
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12
+            }
+          },
+          "64": {
+            "score": 177,
+            "components": 92,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "ceeef0a9bd9aa307a11a32ea62d4a1f7071e9e1fd65eaffeefed0de2902d5954",
+            "cache_operations": {
+              "layouts_built": 325,
+              "price_misses": 329,
+              "reciprocal_families_priced": 258,
+              "layouts_reused": 1353,
+              "reciprocal_families_reused": 1086,
+              "reciprocal_poses_bypassed": 4344,
+              "oriented_rows_reused": 4417,
+              "price_hits": 5
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12,
+              "round_to_170": 30,
+              "round_to_175": 57
+            }
+          },
+          "320": {
+            "score": 184,
+            "components": 86,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "77107b15f4d035820071460d31114ec3de25b994893fd1b6a0c41aa42c8bca23",
+            "cache_operations": {
+              "layouts_built": 1107,
+              "price_misses": 1653,
+              "reciprocal_families_priced": 452,
+              "layouts_reused": 7826,
+              "reciprocal_families_reused": 6716,
+              "reciprocal_poses_bypassed": 26864,
+              "oriented_rows_reused": 28880,
+              "price_hits": 112
+            },
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 12,
+              "round_to_170": 30,
+              "round_to_175": 57,
+              "round_to_180": 214
+            }
+          }
+        }
+      }
+    ],
+    "mate-guarded-singles": [
+      {
+        "seed": 3500,
+        "cold64": {
+          "score": 170,
+          "work_equal": true,
+          "codes_equal": true
+        },
+        "prefixes": {
+          "16": {
+            "score": 164,
+            "components": 109,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "5d83fcd5ff5bdcfcdedd548eaf375e12c484239aceda5c03b41351fc5a8abdfe",
+            "cache_operations": {},
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 8
+            }
+          },
+          "64": {
+            "score": 170,
+            "components": 105,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "98433cad67481d9f1259dadb9621d33f54daf32491f08dc20cab9ff66197e7bf",
+            "cache_operations": {},
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 8,
+              "round_to_170": 59
+            }
+          },
+          "320": {
+            "score": 178,
+            "components": 94,
+            "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+            "final_hash": "c445c807f115ceac3317172674cf08bafbbcca3dae8e96fede99fab8c5f46160",
+            "cache_operations": {},
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 8,
+              "round_to_170": 59,
+              "round_to_175": 90
+            }
+          }
+        }
+      },
+      {
+        "seed": 3501,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 168,
+            "components": 102,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "274fc95544654cfa01779cf86838c8f67ea8af438be419c3d09434627b4b7d41",
+            "cache_operations": {},
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 9
+            }
+          },
+          "64": {
+            "score": 172,
+            "components": 95,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "8516b7d1eff938793fbd835469111b7bb88d6730fab7f6dcab694343481fc22b",
+            "cache_operations": {},
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 9,
+              "round_to_170": 20
+            }
+          },
+          "320": {
+            "score": 179,
+            "components": 91,
+            "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+            "final_hash": "6f08afb74e6c7d7e0925f00b8f421438aa561befa66c585668317cb73cdf4066",
+            "cache_operations": {},
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 9,
+              "round_to_170": 20,
+              "round_to_175": 103
+            }
+          }
+        }
+      },
+      {
+        "seed": 3502,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 163,
+            "components": 115,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "c1c35fa38b9307861215eaa0de276c19550e0c6f47609d5f0a4b3262038c64d1",
+            "cache_operations": {},
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 10
+            }
+          },
+          "64": {
+            "score": 166,
+            "components": 111,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "6862dead8862442703ab87398bcdbf865c82ccab00f627774196cadd0b29fa56",
+            "cache_operations": {},
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 10
+            }
+          },
+          "320": {
+            "score": 174,
+            "components": 93,
+            "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+            "final_hash": "62a33815845d13e5bef20a8592ccf1feeaeb8f3194d9fba972d6b7b40ac3f834",
+            "cache_operations": {},
+            "milestones": {
+              "round_to_150": 6,
+              "round_to_160": 10,
+              "round_to_170": 119
+            }
+          }
+        }
+      },
+      {
+        "seed": 3503,
+        "cold64": null,
+        "prefixes": {
+          "16": {
+            "score": 160,
+            "components": 120,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "b808713e826d2b70019ef8e08be1ca4d7baf39c01ff179fc1c04e661d2fa961f",
+            "cache_operations": {},
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 15
+            }
+          },
+          "64": {
+            "score": 168,
+            "components": 101,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "f1ebd5803d4c9e1a97264b565c28e7c1958099317b140224e619a7c023cc9894",
+            "cache_operations": {},
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 15
+            }
+          },
+          "320": {
+            "score": 175,
+            "components": 91,
+            "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+            "final_hash": "78d573b0aef2026c02b5d4cdaba0dff4612f8b82686aab63772c7573c705503c",
+            "cache_operations": {},
+            "milestones": {
+              "round_to_150": 5,
+              "round_to_160": 15,
+              "round_to_170": 69,
+              "round_to_175": 121
+            }
+          }
+        }
+      }
+    ]
+  },
+  "family_cache_vs_individual_verified": {
+    "assembly-mutual": [
+      3500,
+      3501,
+      3502,
+      3503
+    ],
+    "assembly-priced": [
+      3500,
+      3501,
+      3502,
+      3503
+    ],
+    "assembly-reciprocal": [
+      3500,
+      3501,
+      3502,
+      3503
+    ]
+  }
+}
