@@ -115,7 +115,15 @@
       "source_id": 8,
       "title": "Recombine full alternating cycles between two physical sewings",
       "proposal_and_validation": "Two complete side matchings with the same signed phase differ on disjoint even alternating cycles. Taking either parent's whole matching on each such cycle preserves side ownership, signed compatibility and reciprocal masks. r31_gold_switch.sewn_switches accepts only nonoverlapping two-bond trades, and its successor permutation must be an involution. Compose the actual segment successors for changes of six/eight or more darts, count distinct cycle-choice masks, trace connected offspring, then verify geography and Gold. Start with exact direct rewiring and a rollback partial circuit check. Add memoization keyed by actual remaining cycles and endpoint state only with observed reuse. If parents differ in phase, require a compatible phase solve or retain separate families. Screen for suitable distinct parents first, including R31's positive finite matches; the old unrestricted runs did not supply a geographically recoverable original cover. Exhaust all 2^k offspring on controlled small parents and compare against direct per-side enumeration. Count newly connected sewings and validated geographic lifts per unique combination.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "evidence": [
+        "docs/ROUND35_ALTERNATING_SEWINGS.md",
+        "docs/R35_ALTERNATING_SEWINGS.json",
+        "docs/R35_EXCHANGE_PARENTS.json",
+        "test_r35_alternating_sewings.py"
+      ],
+      "decision": "Retain compatible alternating-cycle recombination with rollback, blank projection and bounded frontier memoization. In the original 17-nonblank/3-blank-cycle family it counts exactly 15,464 connected full sewings using 5,676 versus 11,586 rollback nodes. A common obstruction excludes all 1,048,576 possible geographic choices. A distinct CP-generated 47-cycle family is geographically excluded in full despite an incomplete abstract count. No verified geographic Gold on the original.",
+      "reopen_if": "A new phase-compatible pair survives the common geographic pose and genus checks, or a different remaining-frontier invariant materially extends the proven geographic scope."
     },
     {
       "id": 9,
@@ -123,7 +131,7 @@
       "source_id": 9,
       "title": "Propagate support across several rigid component poses",
       "proposal_and_validation": "constraint_pruning.Pruner.prune_clusters projects placements supported by each mandatory component on its own. r28_geo_sewing.PosePacking.check tests whether *some* simultaneous disjoint footprint packing exists, and collapses same-footprint labelled poses. r32_fresh_geometry._skeleton_pose_masks also starts from supports per component. Compute which poses participate in at least one simultaneous packing under current domains; project labelled per-cell placements back, preserving different orientations with identical footprints. Start with pairs having overlapping footprints, then independent connected groups; include residual matching of free tiles and only supported cells/tiles under a budget. Keep all unresolved alternatives. A later exact branching comparison can choose a low-count surviving component pose, creating a disjoint and complete decision over its members. Validate every retained/removed pose against direct small-board enumeration, including overlap, singleton, multi-orientation identical footprints, a positive and a case that has some packing but a uniquely unsupported pose. Compare redundant labelled enumerations to current independent pruning and yes/no packing, then count removed poses and DFS nodes on actual Gold/skeleton residuals.",
-      "state": "open",
+      "state": "in progress",
       "decision_changing_followups": [
         "Among already archived distinct lifted-contour histories, audit refusals, survivors and true finite lifts versus short UNKNOWNs. Count actual geographical lifts per unique contour under the same budget; do not regenerate identical contours."
       ]
