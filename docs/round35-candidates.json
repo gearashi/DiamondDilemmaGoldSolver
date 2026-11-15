@@ -1367,7 +1367,7 @@
       "state": "keep checked native-command shortcut",
       "mechanism": "LOSS-PUBLIC-ALL-PATTERN-REUSE",
       "decision": "Use the R35 checked public lower bound or a physically repriced feasible witness only for its authentic full scope. Retain the independent native mode, encoding diagnostics and previously undecided inputs.",
-      "measurement": "One-second native searches at disjoint 19/20 and all-group 21 used 20190, 22509 and 20871 decisions without a decision. Public reuse returned three checked results at zero native decisions. All-group 20 remained UNKNOWN with 20731 decisions in both arms. Python 3.15 also returned the known decisions without optional SAT.",
+      "measurement": "One-second native searches at disjoint 19/20 and all-group 21 used 20190, 22509 and 20871 decisions without a decision. Public reuse returned three checked results at zero native decisions. All-group 20 was UNKNOWN with 20731 decisions in both arms in the original comparison. The subsequent #76 certified it negative. Python 3.15 also returned the known decisions without optional SAT.",
       "evidence": [
         "docs/ROUND35_INTEGER_PUBLIC.md",
         "docs/R35_INTEGER_PUBLIC_REUSE.json",
@@ -1380,8 +1380,18 @@
       "source_id": "follow-up to #73 and #75",
       "title": "Restrict cap-20 losses to minimum loss sets for their exact phase",
       "mechanism": "TIGHT-DISJOINT-LOSS-AT-OPTIMUM",
-      "state": "testing",
-      "proposal_and_validation": "The ten disjoint departure groups have certified minimum cost 20. Any feasible 344-group solution at this cap must attain its own phase minimum on and outside the disjoint groups. Test the implied restrictions with complete finite controls and compare original warm/cold CP and SAT at fixed work; independently replay any witness/negative. Preserve unknown scopes."
+      "state": "keep verified all-group lower bound and exact-threshold restriction",
+      "proposal_and_validation": "The ten disjoint departure groups have certified minimum cost 20. Any feasible 344-group solution at this cap must attain its own phase minimum on and outside the disjoint groups. Test the implied restrictions with complete finite controls and compare original warm/cold CP and SAT at fixed work; independently replay any witness/negative. Preserve unknown scopes.",
+      "decision": "Ten disjoint obligations have attainable minimum 20. With thirteen original obligations independent CaDiCaL plus DRAT refutes cap 20; direct physical repricing attains 21 and hits all 344 obligations. Apply 21 only when the required puzzle, reference, packed partition and additional groups match. Geographic retention becomes 186.",
+      "measurement": "All 431 local clauses matched independent truth-table and GF(2) reconstruction. CaDiCaL 1,007,545 decisions, drat-trim 31,101,252 resolution steps. Three hash seeds reproduce the exact 9,191-variable/19,872-clause input. Across 48 real near-reference residuals 28 to 40 immediate exclusions, and all eight remaining saturations remove 21 optional mates. Ordinary Glucose screened 1,760,202 decisions in 480s without a decision, versus 1,079,124 decisions and a negative at the strengthened all-344 boundary.",
+      "evidence": [
+        "docs/R35_ALL_GROUP_PROOF.json",
+        "docs/R35_ATTAINMENT_CLAUSES.json",
+        "docs/R35_GEOGRAPHIC_21.json",
+        "docs/ROUND35_LOSS.md",
+        "test_r35_integer_command.py"
+      ],
+      "proof_archive_sha256": "e60b84ab532ab90f25cc47d2b1ec0b738bd06316a4ebf39749886135d7582b63"
     },
     {
       "id": 77,
