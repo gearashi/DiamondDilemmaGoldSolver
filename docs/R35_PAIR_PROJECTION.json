@@ -1086,5 +1086,36 @@
         "stronger_physical_pair_width": 12
       }
     }
-  ]
+  ],
+  "global_19_circuits_no_donor": {
+    "status": "UNKNOWN",
+    "cap": 33,
+    "work": {
+      "explicit_binary_mates": 1818,
+      "continuous_mates": 0,
+      "blank_projected_sides": 46,
+      "blank_omitted_edges": 1034,
+      "variables": 2284,
+      "rows": 6436,
+      "nodes": 26,
+      "lp_iterations": 73767,
+      "seconds": 49.812999999994645
+    }
+  },
+  "public_315": {
+    "status": "PHYSICAL_MATCHING_FEASIBLE",
+    "cap": 34,
+    "loss_cost": 34,
+    "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+    "strand_components": [
+      8,
+      68,
+      289
+    ],
+    "work": {
+      "nodes": 0,
+      "verified_physical_pairing_reused": 1
+    },
+    "relaxation": "complete_physical_mates"
+  }
 }

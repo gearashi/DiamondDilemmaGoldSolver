@@ -2954,5 +2954,203 @@
       "over": false,
       "removed_poses": 0
     }
-  ]
+  ],
+  "ranked_price34": {
+    "status": "INTEGER_RELAXATION_FEASIBLE",
+    "outside_errors": [
+      [
+        19,
+        106
+      ],
+      [
+        26,
+        178
+      ],
+      [
+        57,
+        264
+      ],
+      [
+        104,
+        460
+      ],
+      [
+        145,
+        208
+      ],
+      [
+        205,
+        216
+      ],
+      [
+        236,
+        459
+      ],
+      [
+        278,
+        335
+      ],
+      [
+        280,
+        437
+      ],
+      [
+        294,
+        427
+      ],
+      [
+        305,
+        389
+      ]
+    ],
+    "errors": 11,
+    "cap": 34,
+    "loss_cost": 34,
+    "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+    "witness_revalidated": true,
+    "reused": true,
+    "relaxation": "signed_inventory_with_edge_perfect_departures",
+    "pages": 0,
+    "work": {},
+    "verified_geographic_departures": 194,
+    "verified_edge_perfect_departures": 985,
+    "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "signed_conditions": {
+      "sphere_euler": true,
+      "mate_support": true,
+      "mate_cost": true
+    }
+  },
+  "ranked_below_portable_bound": {
+    "status": "INFEASIBLE",
+    "loss_budget": 31,
+    "checked_layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21
+    ],
+    "all_outside_layers": true,
+    "certified_loss_lower_bound": 32,
+    "work": {
+      "decisions": 0,
+      "contact_weight_certificate": 1
+    },
+    "verified_geographic_departures": 194,
+    "relaxation": "signed_inventory_with_edge_perfect_departures",
+    "verified_edge_perfect_departures": 985,
+    "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "signed_conditions": {
+      "sphere_euler": true,
+      "mate_support": false
+    }
+  },
+  "public_19_circuit_hit": {
+    "status": "INTEGER_RELAXATION_FEASIBLE",
+    "outside_errors": [
+      [
+        2,
+        168
+      ],
+      [
+        33,
+        83
+      ],
+      [
+        45,
+        367
+      ],
+      [
+        47,
+        103
+      ],
+      [
+        104,
+        460
+      ],
+      [
+        119,
+        279
+      ],
+      [
+        120,
+        234
+      ],
+      [
+        131,
+        375
+      ],
+      [
+        134,
+        147
+      ],
+      [
+        170,
+        182
+      ],
+      [
+        174,
+        382
+      ],
+      [
+        197,
+        423
+      ],
+      [
+        205,
+        216
+      ],
+      [
+        254,
+        281
+      ]
+    ],
+    "errors": 14,
+    "cap": 33,
+    "loss_cost": 33,
+    "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+    "witness_revalidated": true,
+    "reused": true,
+    "relaxation": "gold_geographic_departures",
+    "work": {
+      "decisions": 0,
+      "conflicts": 0,
+      "reference_phase_reused": 1
+    },
+    "verified_geographic_departures": 194,
+    "verified_edge_perfect_departures": 985,
+    "verified_gold_path_circuits": 19,
+    "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "signed_conditions": {
+      "sphere_euler": true,
+      "mate_support": true
+    }
+  },
+  "external_cap32": {
+    "status": "UNKNOWN",
+    "seconds": 3300.01,
+    "nodes": 79300,
+    "open_nodes": 6835,
+    "solver": "SCIP 10.0.0 exact",
+    "printed_lp_lower_bound": 30.4371326203305,
+    "use_as_exclusion": false
+  }
 }
