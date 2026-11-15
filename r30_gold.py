@@ -100,26 +100,8 @@ def insufficient_crossings(data, pins, groups=PUBLISHED_ENDPOINT_SETS):
 
 def endpoint_constraint(m, phases, data, group):
     """A closed tour meeting both sides crosses the type partition at least twice."""
-    inside,outside=[],[]
-    crossings=[]
-    for t,pair in enumerate(data.strands):
-        occupied = [[],[]]
-        counts=[]
-        for row in pair:
-            endpoints={v for ab in row for v in ab}
-            occupied[0].append(bool(endpoints & group))
-            occupied[1].append(bool(endpoints - group))
-            counts.append(sum((a in group)!=(b in group) for a,b in row))
-        for opts,sides in zip(occupied,(inside,outside)):
-            if all(opts):
-                sides.append(True)
-            elif any(opts):
-                sides.append(phases[t] if opts[1] else ~phases[t])
-        crossings.append(counts[0]+(counts[1]-counts[0])*phases[t])
-    used=[_occurs(m,inside),_occurs(m,outside)]
-    if any(type(x) is bool and not x for x in used):
-        return
-    m.add(sum(crossings)>=2).only_enforce_if([x for x in used if type(x) is not bool])
+    from r35_endpoint_partitions import add_compiled_cut, compile_endpoint_cut
+    add_compiled_cut(m,phases,compile_endpoint_cut(data,group))
 
 
 def _all_seam_edges(problem, data, domains):
