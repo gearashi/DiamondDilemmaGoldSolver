@@ -55,3 +55,21 @@ Each profile used 16/64/320-round prefixes and a cold 64-round repeat on seed 35
 **Decision.** Retain the displacement and coordinated search as optional moves. Guarded reciprocal is the smallest tested variant to attain 184 twice on this seed group. Partial overlap added verified local moves and had mixed trajectory effects. Use fresh independent starts for this comparison. The incumbent remains 207 and Gold requires 240 seams on one loop.
 
 [Assembly controls, physical hashes and trajectories](R35_ASSEMBLY_RELOCATION.json). Use `bench_r35_assembly_relocation.py` for independent one-move comparisons and `bench_r35_trajectories.py` for saved prefixes.
+
+## 40. Join optional rigid components on the assumed physical mate
+
+`r32_fresh.py fresh --merges 8 --incremental-merges` joins verified component pose tables on one physical dart pair. Each left pose dictates the only possible anchored cell and rotation on the right. An ungrouped piece uses a direct domain lookup. When both sides are assemblies, the join indexes complete right poses by the anchored piece and rejects overlapping footprints. Tables bind the component tiles and the assumed physical edges within the current construction. Their sorted rows match full root traversal. Rebuilding a surviving component can reuse its table after a different optional edge is removed.
+
+| Requested optional edges per start | Independent starts | Released physical neighbor probes | Joined neighbor probes | Right poses indexed | Legal rows produced by both |
+|---:|---:|---:|---:|---:|---:|
+| 3 | 16 | 49,920 | 23,040 | 0 | 23,040 |
+| 8 | 16 | 141,120 | 61,440 | 480 | 61,440 |
+| 16 | 16 | 321,580 | 122,880 | 3,840 | 122,860 |
+
+All 48 original phase-compatible runs retained every requested join, yielding 432 optional placements. The independently traversed and incrementally joined models returned identical complete physical boards on each run, with the same mandatory and forbidden mate validation. A second comparison bypassed 203,040 singleton index rows within the joined algorithm. At depth 16 the resulting initial boards had 27–35 seams before repair.
+
+When the bounded assembly constructor fails, a separate occupancy search can prove an incompatible subset of rigid groups. It tries removing groups while the remaining conflict can still be proved. Rollback then removes the latest optional edge in the conflict and rebuilds other surviving groups. The planted conflict preserves a later, unrelated merge that suffix rollback would discard. A budget-limited proof yields only the ordinary retry. A compatible later arrangement survives both a stopped attempt and a completed packing check. Original unrestricted starts showed no rollback incidence in this sample.
+
+**Decision.** Keep incremental joins for optional phase-compatible assembly experiments. Conflict-directed removal applies only to a proved occupancy conflict. It has a planted positive and produced no additional full original starts at the tested merge depths. Reopen expansion of conflict explanations only after recording a recurring original packing failure where this occupancy proof leaves a relevant earlier choice unidentified.
+
+[Joined and full traversal receipts](R35_SPECULATIVE_JOINS.json). `bench_r35_speculative_poses.py` reproduces both builders. `test_r35_speculative_poses.py` compares sorted poses on unrestricted and restricted physical domains with reversed join order.

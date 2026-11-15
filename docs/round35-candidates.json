@@ -539,7 +539,16 @@
       "source_id": 25,
       "title": "Conflict-directed optional merge rollback and incremental pose joins",
       "proposal_and_validation": "r32_fresh.speculate recomputes _poses for an enlarged component and removes the newest optional join if a bounded pack fails. Cache verified component pose tables and join them on the actual extra physical edge. Extract a proved packing conflict among optional merges where available, backjump or replace a culprit while preserving unrelated choices. Ordinary time/budget failures can guide a different attempt but cannot add persistent negatives. Measure rows constructed, productive merges retained, full legal lifts and scores on same seeds; planted irrelevant last merge and failed-then-successful time budget. Compare existing suffix-reversal fallback.",
-      "state": "open"
+      "state": "keep incremental pose joins and conditional proved-conflict rollback",
+      "mechanism": "REPAIR-SPECULATIVE-POSE-JOIN",
+      "measurement": "48 paired original runs at 3/8/16 optional joins returned identical legal boards and all 432 requested joins. Full traversal made 512,620 neighbor probes vs 207,360 for incremental joins; direct ungrouped anchors further cut right indexing from 207,360 to 4,320 rows. Restricted and reordered tables match the independent traversal.",
+      "closure_reason": "Keep joined legal poses, direct singleton anchors and checked replay. A planted incompatible packing removes its earlier implicated edge and preserves the independent later choice. No original rollback occurred in these 48 runs. Bounded attempts never prove a negative.",
+      "reopen_trigger": "A new observed original packing failure has useful optional edges outside the implicated set and the present occupancy proof cannot separate them.",
+      "evidence": [
+        "docs/ROUND35_BONDED_REPAIR.md",
+        "docs/R35_SPECULATIVE_JOINS.json",
+        "test_r35_speculative_poses.py"
+      ]
     },
     {
       "id": 41,
