@@ -6,9 +6,17 @@ import numpy as np
 
 
 class CoveredUndo:
-    def __init__(self, bound, covered):
+    def __init__(self, bound, covered, *, predecessor_upper=None, target=None):
         self.bound = bound
         self.covered = covered
+        self.predecessor_upper = predecessor_upper
+        self.target = target
+        if predecessor_upper is not None:
+            if type(target) is not int:
+                raise ValueError('Split bounds need a physical score target.')
+            from functools import partial
+            from r35_route_splits import score_change
+            self.split_gain = lru_cache(maxsize=8192)(partial(score_change,self))
         self.gain = lru_cache(maxsize=8192)(self._gain)
         self.region_gain = lru_cache(maxsize=4096)(self._region_gain)
         self.near = [set(map(int,row))-{bound.n} for row in bound.neighbors[:bound.n]]
@@ -40,7 +48,8 @@ class CoveredUndo:
         outside=sorted(set().union(*(self.near[c] for c in cells))-set(cells))
         # Bound the conditioning table. A skipped component must stay open.
         if len(outside)+len(cells)>12:
-            return None
+            from r35_route_difference import differential
+            return differential(b,dict(zip(cells,cells)),dict(zip(cells,donors)),dict(changed_ports))
         exterior=np.array(list(product(range(3),repeat=len(outside))),dtype=int)
         other=dict(changed_ports)
         ports={c:(3*b.tiles[other.get(c,c)]+exterior[:,i,None]) for i,c in enumerate(outside)}
@@ -101,4 +110,7 @@ class CoveredUndo:
                 gain=self._group_gain(removed,exterior)
                 if gain is not None and gain<=0:
                     return True
+        if self.predecessor_upper is not None:
+            from r35_route_splits import split_reject
+            return split_reject(self,cycles)
         return False

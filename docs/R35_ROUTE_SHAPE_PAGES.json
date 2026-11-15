@@ -1,0 +1,407 @@
+[
+  {
+    "family": [
+      2,
+      5
+    ],
+    "starts": [
+      27883074348,
+      27883075567,
+      71090090553,
+      71091678699
+    ],
+    "variants": {
+      "existing": {
+        "work": {
+          "interval_probes": 11,
+          "first_rank_interval": 0,
+          "support_assignments": 8,
+          "local_term_misses": 45,
+          "first_support": 4032,
+          "raw_center_endpoints": 4032
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "late": {
+        "work": {
+          "interval_probes": 11,
+          "first_rank_interval": 0,
+          "support_assignments": 8,
+          "local_term_misses": 45,
+          "first_support": 4032,
+          "raw_center_endpoints": 4032
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "early": {
+        "work": {
+          "interval_probes": 11,
+          "first_rank_interval": 0,
+          "first_shapes": 216,
+          "shape_regional_prices": 199,
+          "support_assignments": 8,
+          "local_term_misses": 45,
+          "first_support": 3816,
+          "raw_center_endpoints": 4032
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    }
+  },
+  {
+    "family": [
+      3,
+      4
+    ],
+    "starts": [
+      33735346473,
+      29796768921,
+      71093440740,
+      74160083092
+    ],
+    "variants": {
+      "existing": {
+        "work": {
+          "interval_probes": 12,
+          "first_rank_interval": 0,
+          "support_assignments": 8,
+          "local_term_misses": 42,
+          "first_support": 2520,
+          "raw_center_endpoints": 3360,
+          "local_term_hits": 11,
+          "typed_assignments": 2,
+          "first_predecessor": 676,
+          "first_endpoint": 164
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "late": {
+        "work": {
+          "interval_probes": 12,
+          "first_rank_interval": 0,
+          "support_assignments": 8,
+          "local_term_misses": 42,
+          "first_support": 2520,
+          "raw_center_endpoints": 3360,
+          "local_term_hits": 11,
+          "typed_assignments": 2,
+          "first_shapes": 12,
+          "shape_regional_prices": 8,
+          "first_predecessor": 672,
+          "first_endpoint": 156
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "early": {
+        "work": {
+          "interval_probes": 12,
+          "first_rank_interval": 0,
+          "first_shapes": 96,
+          "shape_regional_prices": 48,
+          "support_assignments": 8,
+          "local_term_misses": 42,
+          "first_support": 2436,
+          "raw_center_endpoints": 3360,
+          "local_term_hits": 11,
+          "typed_assignments": 2,
+          "first_predecessor": 672,
+          "first_endpoint": 156
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    }
+  },
+  {
+    "family": [
+      2,
+      2,
+      4
+    ],
+    "starts": [
+      352021625544,
+      437588814729,
+      1030384323420,
+      1030385491885
+    ],
+    "variants": {
+      "existing": {
+        "work": {
+          "interval_probes": 10,
+          "first_rank_interval": 0,
+          "support_assignments": 8,
+          "local_term_misses": 50,
+          "first_support": 10080,
+          "raw_center_endpoints": 10080
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "late": {
+        "work": {
+          "interval_probes": 10,
+          "first_rank_interval": 0,
+          "support_assignments": 8,
+          "local_term_misses": 50,
+          "first_support": 10080,
+          "raw_center_endpoints": 10080
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "early": {
+        "work": {
+          "interval_probes": 10,
+          "first_rank_interval": 0,
+          "first_shapes": 1428,
+          "shape_regional_prices": 1120,
+          "support_assignments": 8,
+          "local_term_misses": 50,
+          "first_support": 8652,
+          "raw_center_endpoints": 10080
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    }
+  },
+  {
+    "family": [
+      2,
+      3,
+      3
+    ],
+    "starts": [
+      352025153673,
+      379908844207,
+      1079532220238,
+      1056015329462
+    ],
+    "variants": {
+      "existing": {
+        "work": {
+          "interval_probes": 12,
+          "first_rank_interval": 0,
+          "support_assignments": 8,
+          "local_term_misses": 57,
+          "first_support": 8960,
+          "raw_center_endpoints": 8960
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "late": {
+        "work": {
+          "interval_probes": 12,
+          "first_rank_interval": 0,
+          "support_assignments": 8,
+          "local_term_misses": 57,
+          "first_support": 8960,
+          "raw_center_endpoints": 8960
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "early": {
+        "work": {
+          "interval_probes": 12,
+          "first_rank_interval": 0,
+          "first_shapes": 664,
+          "shape_regional_prices": 425,
+          "support_assignments": 8,
+          "local_term_misses": 57,
+          "first_support": 8296,
+          "raw_center_endpoints": 8960
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    }
+  },
+  {
+    "family": [
+      2,
+      2,
+      2,
+      3
+    ],
+    "starts": [
+      4263421373923,
+      41327666573432,
+      42006027231798,
+      13163349997588
+    ],
+    "variants": {
+      "existing": {
+        "work": {
+          "interval_probes": 11,
+          "first_rank_interval": 0,
+          "support_assignments": 8,
+          "local_term_misses": 67,
+          "first_support": 20160,
+          "raw_center_endpoints": 20160
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "late": {
+        "work": {
+          "interval_probes": 11,
+          "first_rank_interval": 0,
+          "support_assignments": 8,
+          "local_term_misses": 67,
+          "first_support": 20160,
+          "raw_center_endpoints": 20160
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "early": {
+        "work": {
+          "interval_probes": 11,
+          "first_rank_interval": 0,
+          "first_shapes": 2472,
+          "shape_regional_prices": 2019,
+          "support_assignments": 8,
+          "local_term_misses": 67,
+          "first_support": 17688,
+          "raw_center_endpoints": 20160
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    }
+  },
+  {
+    "family": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "starts": [
+      536594718645540,
+      38722738589329,
+      545846537330329,
+      158280966256370
+    ],
+    "variants": {
+      "existing": {
+        "work": {
+          "interval_probes": 10,
+          "first_rank_interval": 0,
+          "support_assignments": 8,
+          "local_term_misses": 79,
+          "first_support": 7560,
+          "raw_center_endpoints": 7560
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "late": {
+        "work": {
+          "interval_probes": 10,
+          "first_rank_interval": 0,
+          "support_assignments": 8,
+          "local_term_misses": 79,
+          "first_support": 7560,
+          "raw_center_endpoints": 7560
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "early": {
+        "work": {
+          "interval_probes": 10,
+          "first_rank_interval": 0,
+          "first_shapes": 1233,
+          "shape_regional_prices": 827,
+          "support_assignments": 8,
+          "local_term_misses": 79,
+          "first_support": 6327,
+          "raw_center_endpoints": 7560
+        },
+        "best": [
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    }
+  }
+]

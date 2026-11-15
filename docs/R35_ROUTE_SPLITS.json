@@ -1,0 +1,5225 @@
+{
+  "samples": {
+    "(6,)": {
+      "examined": 250,
+      "whole_cycle": 0,
+      "including_splits": 245
+    },
+    "(2, 5)": {
+      "examined": 250,
+      "whole_cycle": 131,
+      "including_splits": 226
+    },
+    "(3, 4)": {
+      "examined": 250,
+      "whole_cycle": 118,
+      "including_splits": 235
+    },
+    "(2, 2, 4)": {
+      "examined": 250,
+      "whole_cycle": 189,
+      "including_splits": 189
+    },
+    "(2, 3, 3)": {
+      "examined": 250,
+      "whole_cycle": 177,
+      "including_splits": 177
+    },
+    "(2, 2, 2, 3)": {
+      "examined": 250,
+      "whole_cycle": 166,
+      "including_splits": 166
+    },
+    "(2, 2, 2, 2, 2)": {
+      "examined": 250,
+      "whole_cycle": 194,
+      "including_splits": 194
+    }
+  },
+  "regions": [
+    {
+      "cells": [
+        38,
+        127,
+        37
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        69,
+        68,
+        12
+      ],
+      "boundary": 5,
+      "changed": {
+        "70": 31,
+        "31": 70
+      },
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        35,
+        36,
+        41
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2469
+      }
+    },
+    {
+      "cells": [
+        128,
+        112,
+        144
+      ],
+      "boundary": 5,
+      "changed": {
+        "80": 1,
+        "1": 80
+      },
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        5,
+        11,
+        94
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        51,
+        50,
+        49
+      ],
+      "boundary": 5,
+      "changed": {
+        "57": 86,
+        "86": 57
+      },
+      "gain": 1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        83,
+        82,
+        89
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        53,
+        59,
+        54
+      ],
+      "boundary": 5,
+      "changed": {
+        "79": 44,
+        "44": 79
+      },
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2469
+      }
+    },
+    {
+      "cells": [
+        36,
+        37,
+        60
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2469
+      }
+    },
+    {
+      "cells": [
+        89,
+        88,
+        92
+      ],
+      "boundary": 5,
+      "changed": {
+        "100": 43,
+        "43": 100
+      },
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2469
+      }
+    },
+    {
+      "cells": [
+        19,
+        25,
+        18
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        94,
+        93,
+        11
+      ],
+      "boundary": 5,
+      "changed": {
+        "90": 4,
+        "4": 90
+      },
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        51,
+        57,
+        58
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        129,
+        128,
+        144
+      ],
+      "boundary": 5,
+      "changed": {
+        "130": 10,
+        "10": 130
+      },
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2469
+      }
+    },
+    {
+      "cells": [
+        1,
+        2,
+        23
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        146,
+        135,
+        129
+      ],
+      "boundary": 5,
+      "changed": {
+        "128": 108,
+        "108": 128
+      },
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        9,
+        10,
+        11
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        52,
+        51,
+        76
+      ],
+      "boundary": 5,
+      "changed": {
+        "57": 30,
+        "30": 57
+      },
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        71,
+        72,
+        50
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        61,
+        63,
+        38
+      ],
+      "boundary": 5,
+      "changed": {
+        "134": 29,
+        "29": 134
+      },
+      "gain": 1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        98,
+        99,
+        97
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        107,
+        106,
+        30
+      ],
+      "boundary": 5,
+      "changed": {
+        "105": 80,
+        "80": 105
+      },
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        43,
+        42,
+        37
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        122,
+        126,
+        43
+      ],
+      "boundary": 5,
+      "changed": {
+        "37": 28,
+        "28": 37
+      },
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        115,
+        114,
+        113
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        116,
+        115,
+        117
+      ],
+      "boundary": 5,
+      "changed": {
+        "118": 112,
+        "112": 118
+      },
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        57,
+        56,
+        60
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2469
+      }
+    },
+    {
+      "cells": [
+        16,
+        0,
+        17
+      ],
+      "boundary": 5,
+      "changed": {
+        "23": 79,
+        "79": 23
+      },
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        58,
+        62,
+        59
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2469
+      }
+    },
+    {
+      "cells": [
+        153,
+        147,
+        152
+      ],
+      "boundary": 5,
+      "changed": {
+        "146": 73,
+        "73": 146
+      },
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        82,
+        81,
+        87
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2469
+      }
+    },
+    {
+      "cells": [
+        138,
+        142,
+        59
+      ],
+      "boundary": 5,
+      "changed": {
+        "137": 5,
+        "5": 137
+      },
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        102,
+        101,
+        31
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        26,
+        30,
+        29
+      ],
+      "boundary": 5,
+      "changed": {
+        "31": 44,
+        "44": 31
+      },
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        157,
+        158,
+        156
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        42,
+        43,
+        41
+      ],
+      "boundary": 5,
+      "changed": {
+        "37": 84,
+        "84": 37
+      },
+      "gain": 1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        90,
+        91,
+        14
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        130,
+        119,
+        113
+      ],
+      "boundary": 5,
+      "changed": {
+        "131": 2,
+        "2": 131
+      },
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        14,
+        13,
+        15
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2469
+      }
+    },
+    {
+      "cells": [
+        132,
+        131,
+        124
+      ],
+      "boundary": 5,
+      "changed": {
+        "133": 150,
+        "150": 133
+      },
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        52,
+        53,
+        51
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        57,
+        51,
+        56
+      ],
+      "boundary": 5,
+      "changed": {
+        "50": 89,
+        "89": 50
+      },
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        144,
+        80,
+        128
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        24,
+        23,
+        25
+      ],
+      "boundary": 5,
+      "changed": {
+        "17": 21,
+        "21": 17
+      },
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        84,
+        83,
+        82
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        107,
+        101,
+        100
+      ],
+      "boundary": 5,
+      "changed": {
+        "92": 159,
+        "159": 92
+      },
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        133,
+        134,
+        132
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        84,
+        85,
+        91
+      ],
+      "boundary": 5,
+      "changed": {
+        "14": 42,
+        "42": 14
+      },
+      "gain": 0,
+      "work": {
+        "largest": 729,
+        "table_entries": 2145
+      }
+    },
+    {
+      "cells": [
+        0,
+        1,
+        7,
+        16
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        92,
+        93,
+        94,
+        95
+      ],
+      "boundary": 6,
+      "changed": {
+        "90": 57,
+        "57": 90
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 5952
+      }
+    },
+    {
+      "cells": [
+        104,
+        103,
+        97,
+        98
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": 1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        59,
+        142,
+        53,
+        58
+      ],
+      "boundary": 6,
+      "changed": {
+        "52": 158,
+        "158": 52
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 5952
+      }
+    },
+    {
+      "cells": [
+        77,
+        76,
+        79,
+        78
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 5952
+      }
+    },
+    {
+      "cells": [
+        125,
+        126,
+        43,
+        42
+      ],
+      "boundary": 6,
+      "changed": {
+        "46": 145,
+        "145": 46
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        98,
+        87,
+        97,
+        96
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        120,
+        119,
+        121,
+        124
+      ],
+      "boundary": 6,
+      "changed": {
+        "122": 151,
+        "151": 122
+      },
+      "gain": 0,
+      "work": {
+        "largest": 2187,
+        "table_entries": 5952
+      }
+    },
+    {
+      "cells": [
+        104,
+        108,
+        109,
+        105
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": 1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        159,
+        70,
+        15,
+        157
+      ],
+      "boundary": 5,
+      "changed": {
+        "158": 97,
+        "97": 158
+      },
+      "gain": 1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2631
+      }
+    },
+    {
+      "cells": [
+        63,
+        38,
+        134,
+        133
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2631
+      }
+    },
+    {
+      "cells": [
+        77,
+        78,
+        76,
+        155
+      ],
+      "boundary": 6,
+      "changed": {
+        "52": 134,
+        "134": 52
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        130,
+        129,
+        135,
+        119
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        126,
+        43,
+        42,
+        41
+      ],
+      "boundary": 6,
+      "changed": {
+        "46": 149,
+        "149": 46
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        20,
+        44,
+        40,
+        45
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 5952
+      }
+    },
+    {
+      "cells": [
+        127,
+        38,
+        63,
+        37
+      ],
+      "boundary": 5,
+      "changed": {
+        "125": 27,
+        "27": 125
+      },
+      "gain": 1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2307
+      }
+    },
+    {
+      "cells": [
+        102,
+        95,
+        6,
+        101
+      ],
+      "boundary": 5,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 729,
+        "table_entries": 2631
+      }
+    },
+    {
+      "cells": [
+        47,
+        45,
+        44,
+        40
+      ],
+      "boundary": 6,
+      "changed": {
+        "39": 99,
+        "99": 39
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        35,
+        36,
+        60,
+        61
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        48,
+        64,
+        49,
+        65
+      ],
+      "boundary": 6,
+      "changed": {
+        "55": 17,
+        "17": 55
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        78,
+        74,
+        77,
+        79
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        110,
+        27,
+        21,
+        109
+      ],
+      "boundary": 6,
+      "changed": {
+        "111": 137,
+        "137": 111
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        80,
+        81,
+        96,
+        112
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        59,
+        53,
+        142,
+        58
+      ],
+      "boundary": 6,
+      "changed": {
+        "54": 132,
+        "132": 54
+      },
+      "gain": -2,
+      "work": {
+        "largest": 2187,
+        "table_entries": 5952
+      }
+    },
+    {
+      "cells": [
+        116,
+        115,
+        114,
+        117
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": 1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        0,
+        1,
+        64,
+        16
+      ],
+      "boundary": 6,
+      "changed": {
+        "65": 88,
+        "88": 65
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 7572
+      }
+    },
+    {
+      "cells": [
+        40,
+        41,
+        42,
+        46
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": 1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        146,
+        145,
+        135,
+        151
+      ],
+      "boundary": 6,
+      "changed": {
+        "129": 126,
+        "126": 129
+      },
+      "gain": 1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        143,
+        141,
+        54,
+        53
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        145,
+        151,
+        146,
+        135
+      ],
+      "boundary": 6,
+      "changed": {
+        "136": 90,
+        "90": 136
+      },
+      "gain": 0,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        113,
+        114,
+        119,
+        115
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        55,
+        34,
+        49,
+        50
+      ],
+      "boundary": 6,
+      "changed": {
+        "35": 25,
+        "25": 35
+      },
+      "gain": -2,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        58,
+        62,
+        57,
+        139
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        38,
+        63,
+        61,
+        60
+      ],
+      "boundary": 6,
+      "changed": {
+        "62": 17,
+        "17": 62
+      },
+      "gain": 0,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        108,
+        116,
+        104,
+        103
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        40,
+        44,
+        39,
+        20
+      ],
+      "boundary": 6,
+      "changed": {
+        "21": 93,
+        "93": 21
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        130,
+        119,
+        131,
+        132
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        73,
+        74,
+        67,
+        72
+      ],
+      "boundary": 6,
+      "changed": {
+        "78": 92,
+        "92": 78
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 5952
+      }
+    },
+    {
+      "cells": [
+        137,
+        131,
+        132,
+        136
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        85,
+        84,
+        83,
+        86
+      ],
+      "boundary": 6,
+      "changed": {
+        "91": 139,
+        "139": 91
+      },
+      "gain": 0,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        32,
+        33,
+        48,
+        64
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        4,
+        5,
+        28,
+        29
+      ],
+      "boundary": 6,
+      "changed": {
+        "6": 67,
+        "67": 6
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        157,
+        159,
+        158,
+        156
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 2187,
+        "table_entries": 5952
+      }
+    },
+    {
+      "cells": [
+        119,
+        130,
+        131,
+        129
+      ],
+      "boundary": 6,
+      "changed": {
+        "120": 156,
+        "156": 120
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 5952
+      }
+    },
+    {
+      "cells": [
+        130,
+        129,
+        128,
+        131
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        47,
+        45,
+        46,
+        44
+      ],
+      "boundary": 6,
+      "changed": {
+        "40": 39,
+        "39": 40
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 5952
+      }
+    },
+    {
+      "cells": [
+        99,
+        105,
+        106,
+        100
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        54,
+        53,
+        79,
+        59
+      ],
+      "boundary": 6,
+      "changed": {
+        "58": 56,
+        "56": 58
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6276
+      }
+    },
+    {
+      "cells": [
+        109,
+        108,
+        116,
+        104,
+        115
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        34,
+        55,
+        33,
+        39,
+        18
+      ],
+      "boundary": 7,
+      "changed": {
+        "17": 48,
+        "48": 17
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18345
+      }
+    },
+    {
+      "cells": [
+        39,
+        33,
+        18,
+        40,
+        19
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        135,
+        146,
+        145,
+        129,
+        151
+      ],
+      "boundary": 7,
+      "changed": {
+        "136": 21,
+        "21": 136
+      },
+      "gain": 2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17697
+      }
+    },
+    {
+      "cells": [
+        40,
+        44,
+        20,
+        45,
+        39
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        5,
+        4,
+        3,
+        11,
+        6
+      ],
+      "boundary": 7,
+      "changed": {
+        "28": 139,
+        "139": 28
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18669
+      }
+    },
+    {
+      "cells": [
+        137,
+        138,
+        142,
+        141,
+        143
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17697
+      }
+    },
+    {
+      "cells": [
+        115,
+        121,
+        120,
+        119,
+        124
+      ],
+      "boundary": 7,
+      "changed": {
+        "125": 63,
+        "63": 125
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        98,
+        97,
+        87,
+        99,
+        105
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        158,
+        157,
+        154,
+        156,
+        152
+      ],
+      "boundary": 6,
+      "changed": {
+        "84": 85,
+        "85": 84
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 7410
+      }
+    },
+    {
+      "cells": [
+        83,
+        84,
+        156,
+        85,
+        157
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        107,
+        30,
+        26,
+        25,
+        106
+      ],
+      "boundary": 7,
+      "changed": {
+        "101": 41,
+        "41": 101
+      },
+      "gain": 0,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18345
+      }
+    },
+    {
+      "cells": [
+        72,
+        71,
+        73,
+        76,
+        77
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        7,
+        8,
+        1,
+        9,
+        0
+      ],
+      "boundary": 7,
+      "changed": {
+        "3": 15,
+        "15": 3
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18345
+      }
+    },
+    {
+      "cells": [
+        74,
+        75,
+        158,
+        73,
+        154
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": 1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18345
+      }
+    },
+    {
+      "cells": [
+        139,
+        138,
+        62,
+        133,
+        61
+      ],
+      "boundary": 7,
+      "changed": {
+        "142": 119,
+        "119": 142
+      },
+      "gain": 0,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        37,
+        38,
+        43,
+        63,
+        134
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6762
+      }
+    },
+    {
+      "cells": [
+        80,
+        144,
+        96,
+        128,
+        145
+      ],
+      "boundary": 6,
+      "changed": {
+        "129": 33,
+        "33": 129
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6438
+      }
+    },
+    {
+      "cells": [
+        28,
+        29,
+        30,
+        4,
+        24
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        42,
+        46,
+        41,
+        35,
+        34
+      ],
+      "boundary": 7,
+      "changed": {
+        "36": 137,
+        "137": 36
+      },
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18345
+      }
+    },
+    {
+      "cells": [
+        39,
+        18,
+        40,
+        33,
+        34
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        145,
+        146,
+        135,
+        147,
+        148
+      ],
+      "boundary": 7,
+      "changed": {
+        "149": 44,
+        "44": 149
+      },
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        145,
+        151,
+        144,
+        82,
+        81
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": 1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 7410
+      }
+    },
+    {
+      "cells": [
+        37,
+        38,
+        63,
+        127,
+        43
+      ],
+      "boundary": 6,
+      "changed": {
+        "126": 104,
+        "104": 126
+      },
+      "gain": 1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6438
+      }
+    },
+    {
+      "cells": [
+        142,
+        141,
+        140,
+        138,
+        137
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 2187,
+        "table_entries": 7410
+      }
+    },
+    {
+      "cells": [
+        47,
+        22,
+        21,
+        118,
+        45
+      ],
+      "boundary": 6,
+      "changed": {
+        "27": 63,
+        "63": 27
+      },
+      "gain": 0,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6438
+      }
+    },
+    {
+      "cells": [
+        140,
+        141,
+        143,
+        148,
+        136
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        34,
+        55,
+        56,
+        60,
+        49
+      ],
+      "boundary": 7,
+      "changed": {
+        "36": 31,
+        "31": 36
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        73,
+        74,
+        67,
+        75,
+        72
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        11,
+        10,
+        14,
+        9,
+        91
+      ],
+      "boundary": 7,
+      "changed": {
+        "13": 121,
+        "121": 13
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        45,
+        47,
+        22,
+        21,
+        44
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": 1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 7410
+      }
+    },
+    {
+      "cells": [
+        41,
+        40,
+        42,
+        44,
+        45
+      ],
+      "boundary": 6,
+      "changed": {
+        "47": 84,
+        "84": 47
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 7410
+      }
+    },
+    {
+      "cells": [
+        78,
+        155,
+        77,
+        76,
+        52
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18345
+      }
+    },
+    {
+      "cells": [
+        125,
+        124,
+        126,
+        132,
+        122
+      ],
+      "boundary": 7,
+      "changed": {
+        "43": 18,
+        "18": 43
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18669
+      }
+    },
+    {
+      "cells": [
+        57,
+        58,
+        56,
+        60,
+        51
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        0,
+        64,
+        48,
+        1,
+        65
+      ],
+      "boundary": 7,
+      "changed": {
+        "16": 21,
+        "21": 16
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        33,
+        34,
+        55,
+        49,
+        56
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        134,
+        127,
+        125,
+        133,
+        126
+      ],
+      "boundary": 7,
+      "changed": {
+        "132": 111,
+        "111": 132
+      },
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17697
+      }
+    },
+    {
+      "cells": [
+        10,
+        11,
+        5,
+        94,
+        14
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        129,
+        135,
+        128,
+        136,
+        140
+      ],
+      "boundary": 7,
+      "changed": {
+        "146": 111,
+        "111": 146
+      },
+      "gain": -3,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18345
+      }
+    },
+    {
+      "cells": [
+        15,
+        13,
+        12,
+        8,
+        70
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18345
+      }
+    },
+    {
+      "cells": [
+        77,
+        79,
+        150,
+        76,
+        78
+      ],
+      "boundary": 7,
+      "changed": {
+        "72": 103,
+        "103": 72
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        46,
+        45,
+        42,
+        47,
+        44
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        154,
+        153,
+        155,
+        149,
+        147
+      ],
+      "boundary": 6,
+      "changed": {
+        "150": 103,
+        "103": 150
+      },
+      "gain": -2,
+      "work": {
+        "largest": 2187,
+        "table_entries": 7410
+      }
+    },
+    {
+      "cells": [
+        11,
+        5,
+        4,
+        6,
+        28
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17373
+      }
+    },
+    {
+      "cells": [
+        55,
+        56,
+        57,
+        49,
+        60
+      ],
+      "boundary": 7,
+      "changed": {
+        "48": 145,
+        "145": 48
+      },
+      "gain": 0,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18669
+      }
+    },
+    {
+      "cells": [
+        70,
+        69,
+        159,
+        68,
+        86
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 6438
+      }
+    },
+    {
+      "cells": [
+        20,
+        21,
+        19,
+        25,
+        22
+      ],
+      "boundary": 7,
+      "changed": {
+        "27": 106,
+        "106": 27
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17697
+      }
+    },
+    {
+      "cells": [
+        90,
+        94,
+        93,
+        95,
+        92,
+        11
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51312
+      }
+    },
+    {
+      "cells": [
+        2,
+        3,
+        23,
+        17,
+        1,
+        7
+      ],
+      "boundary": 8,
+      "changed": {
+        "66": 39,
+        "39": 66
+      },
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 50664
+      }
+    },
+    {
+      "cells": [
+        120,
+        124,
+        125,
+        127,
+        126,
+        134
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 54552
+      }
+    },
+    {
+      "cells": [
+        81,
+        80,
+        144,
+        128,
+        129,
+        130
+      ],
+      "boundary": 8,
+      "changed": {
+        "119": 2,
+        "2": 119
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51636
+      }
+    },
+    {
+      "cells": [
+        138,
+        142,
+        137,
+        131,
+        139,
+        141
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 54552
+      }
+    },
+    {
+      "cells": [
+        84,
+        85,
+        91,
+        86,
+        156,
+        90
+      ],
+      "boundary": 8,
+      "changed": {
+        "94": 111,
+        "111": 94
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 50664
+      }
+    },
+    {
+      "cells": [
+        51,
+        52,
+        53,
+        59,
+        58,
+        57
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 2187,
+        "table_entries": 11784
+      }
+    },
+    {
+      "cells": [
+        110,
+        27,
+        21,
+        22,
+        20,
+        44
+      ],
+      "boundary": 8,
+      "changed": {
+        "111": 88,
+        "88": 111
+      },
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 50664
+      }
+    },
+    {
+      "cells": [
+        30,
+        29,
+        26,
+        107,
+        106,
+        28
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 50664
+      }
+    },
+    {
+      "cells": [
+        16,
+        32,
+        48,
+        64,
+        17,
+        49
+      ],
+      "boundary": 7,
+      "changed": {
+        "50": 121,
+        "121": 50
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 19155
+      }
+    },
+    {
+      "cells": [
+        17,
+        16,
+        23,
+        2,
+        24,
+        28
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 50664
+      }
+    },
+    {
+      "cells": [
+        20,
+        44,
+        19,
+        21,
+        22,
+        45
+      ],
+      "boundary": 7,
+      "changed": {
+        "25": 158,
+        "158": 25
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17859
+      }
+    },
+    {
+      "cells": [
+        152,
+        151,
+        156,
+        145,
+        84,
+        157
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51312
+      }
+    },
+    {
+      "cells": [
+        26,
+        30,
+        29,
+        31,
+        27,
+        107
+      ],
+      "boundary": 8,
+      "changed": {
+        "102": 8,
+        "8": 102
+      },
+      "gain": 1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 50664
+      }
+    },
+    {
+      "cells": [
+        35,
+        41,
+        40,
+        42,
+        34,
+        46
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 19683,
+        "table_entries": 50664
+      }
+    },
+    {
+      "cells": [
+        30,
+        26,
+        29,
+        27,
+        31,
+        110
+      ],
+      "boundary": 8,
+      "changed": {
+        "102": 91,
+        "91": 102
+      },
+      "gain": 0,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51636
+      }
+    },
+    {
+      "cells": [
+        48,
+        49,
+        55,
+        32,
+        34,
+        35
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18831
+      }
+    },
+    {
+      "cells": [
+        84,
+        83,
+        82,
+        156,
+        85,
+        157
+      ],
+      "boundary": 8,
+      "changed": {
+        "151": 48,
+        "48": 151
+      },
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 54552
+      }
+    },
+    {
+      "cells": [
+        27,
+        21,
+        22,
+        47,
+        45,
+        46
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51960
+      }
+    },
+    {
+      "cells": [
+        41,
+        35,
+        42,
+        40,
+        34,
+        46
+      ],
+      "boundary": 8,
+      "changed": {
+        "123": 8,
+        "8": 123
+      },
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 50664
+      }
+    },
+    {
+      "cells": [
+        122,
+        121,
+        115,
+        116,
+        117,
+        108
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18507
+      }
+    },
+    {
+      "cells": [
+        85,
+        84,
+        156,
+        152,
+        91,
+        153
+      ],
+      "boundary": 8,
+      "changed": {
+        "151": 116,
+        "116": 151
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51636
+      }
+    },
+    {
+      "cells": [
+        128,
+        129,
+        144,
+        135,
+        145,
+        130
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18507
+      }
+    },
+    {
+      "cells": [
+        54,
+        143,
+        79,
+        53,
+        77,
+        78
+      ],
+      "boundary": 7,
+      "changed": {
+        "59": 41,
+        "41": 59
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18831
+      }
+    },
+    {
+      "cells": [
+        37,
+        38,
+        127,
+        36,
+        60,
+        125
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51636
+      }
+    },
+    {
+      "cells": [
+        73,
+        67,
+        74,
+        68,
+        75,
+        78
+      ],
+      "boundary": 7,
+      "changed": {
+        "12": 54,
+        "54": 12
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 19155
+      }
+    },
+    {
+      "cells": [
+        7,
+        8,
+        1,
+        66,
+        67,
+        12
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17859
+      }
+    },
+    {
+      "cells": [
+        94,
+        11,
+        90,
+        10,
+        91,
+        85
+      ],
+      "boundary": 7,
+      "changed": {
+        "5": 105,
+        "105": 5
+      },
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18831
+      }
+    },
+    {
+      "cells": [
+        15,
+        70,
+        159,
+        69,
+        13,
+        86
+      ],
+      "boundary": 6,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 2187,
+        "table_entries": 7896
+      }
+    },
+    {
+      "cells": [
+        4,
+        5,
+        3,
+        2,
+        28,
+        6
+      ],
+      "boundary": 8,
+      "changed": {
+        "29": 136,
+        "136": 29
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 54552
+      }
+    },
+    {
+      "cells": [
+        73,
+        72,
+        71,
+        65,
+        67,
+        74
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18507
+      }
+    },
+    {
+      "cells": [
+        53,
+        59,
+        54,
+        58,
+        142,
+        141
+      ],
+      "boundary": 7,
+      "changed": {
+        "143": 104,
+        "104": 143
+      },
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17859
+      }
+    },
+    {
+      "cells": [
+        52,
+        53,
+        76,
+        51,
+        50,
+        71
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 19155
+      }
+    },
+    {
+      "cells": [
+        90,
+        91,
+        85,
+        84,
+        86,
+        159
+      ],
+      "boundary": 8,
+      "changed": {
+        "157": 64,
+        "64": 157
+      },
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 50664
+      }
+    },
+    {
+      "cells": [
+        19,
+        20,
+        25,
+        24,
+        28,
+        29
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51636
+      }
+    },
+    {
+      "cells": [
+        81,
+        82,
+        80,
+        87,
+        151,
+        98
+      ],
+      "boundary": 8,
+      "changed": {
+        "97": 140,
+        "140": 97
+      },
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 50664
+      }
+    },
+    {
+      "cells": [
+        45,
+        46,
+        42,
+        44,
+        43,
+        126
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51636
+      }
+    },
+    {
+      "cells": [
+        35,
+        34,
+        36,
+        55,
+        49,
+        37
+      ],
+      "boundary": 8,
+      "changed": {
+        "50": 146,
+        "146": 50
+      },
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51636
+      }
+    },
+    {
+      "cells": [
+        125,
+        126,
+        124,
+        132,
+        133,
+        131
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -4,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51312
+      }
+    },
+    {
+      "cells": [
+        52,
+        53,
+        59,
+        54,
+        143,
+        141
+      ],
+      "boundary": 7,
+      "changed": {
+        "51": 75,
+        "75": 51
+      },
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18507
+      }
+    },
+    {
+      "cells": [
+        149,
+        150,
+        155,
+        79,
+        143,
+        141
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17859
+      }
+    },
+    {
+      "cells": [
+        26,
+        27,
+        30,
+        110,
+        25,
+        106
+      ],
+      "boundary": 7,
+      "changed": {
+        "21": 125,
+        "125": 21
+      },
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18507
+      }
+    },
+    {
+      "cells": [
+        35,
+        41,
+        34,
+        33,
+        36,
+        42
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 54552
+      }
+    },
+    {
+      "cells": [
+        21,
+        22,
+        47,
+        27,
+        26,
+        111
+      ],
+      "boundary": 7,
+      "changed": {
+        "20": 123,
+        "123": 20
+      },
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18507
+      }
+    },
+    {
+      "cells": [
+        25,
+        26,
+        19,
+        30,
+        24,
+        23
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 50664
+      }
+    },
+    {
+      "cells": [
+        69,
+        70,
+        15,
+        68,
+        159,
+        157
+      ],
+      "boundary": 7,
+      "changed": {
+        "75": 79,
+        "79": 75
+      },
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 17859
+      }
+    },
+    {
+      "cells": [
+        104,
+        108,
+        116,
+        103,
+        97,
+        115
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 6561,
+        "table_entries": 21747
+      }
+    },
+    {
+      "cells": [
+        1,
+        7,
+        66,
+        2,
+        3,
+        4
+      ],
+      "boundary": 8,
+      "changed": {
+        "23": 115,
+        "115": 23
+      },
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51636
+      }
+    },
+    {
+      "cells": [
+        156,
+        157,
+        84,
+        85,
+        158,
+        154,
+        153
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 55038
+      }
+    },
+    {
+      "cells": [
+        75,
+        158,
+        74,
+        154,
+        73,
+        67,
+        66
+      ],
+      "boundary": 9,
+      "changed": {
+        "155": 124,
+        "124": 155
+      },
+      "gain": -2,
+      "work": {
+        "largest": 59049,
+        "table_entries": 151185
+      }
+    },
+    {
+      "cells": [
+        12,
+        13,
+        15,
+        8,
+        7,
+        66,
+        65
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 59049,
+        "table_entries": 162849
+      }
+    },
+    {
+      "cells": [
+        11,
+        5,
+        94,
+        90,
+        89,
+        93,
+        91
+      ],
+      "boundary": 9,
+      "changed": {
+        "6": 49,
+        "49": 6
+      },
+      "gain": -2,
+      "work": {
+        "largest": 59049,
+        "table_entries": 150213
+      }
+    },
+    {
+      "cells": [
+        93,
+        92,
+        100,
+        99,
+        105,
+        106,
+        104
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153129
+      }
+    },
+    {
+      "cells": [
+        44,
+        40,
+        20,
+        45,
+        46,
+        42,
+        41
+      ],
+      "boundary": 7,
+      "changed": {
+        "35": 91,
+        "91": 35
+      },
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 22881
+      }
+    },
+    {
+      "cells": [
+        57,
+        56,
+        51,
+        58,
+        62,
+        59,
+        60
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -5,
+      "work": {
+        "largest": 19683,
+        "table_entries": 52122
+      }
+    },
+    {
+      "cells": [
+        0,
+        16,
+        64,
+        32,
+        65,
+        17,
+        33
+      ],
+      "boundary": 8,
+      "changed": {
+        "34": 94,
+        "94": 34
+      },
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51798
+      }
+    },
+    {
+      "cells": [
+        153,
+        154,
+        147,
+        148,
+        140,
+        141,
+        155
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -4,
+      "work": {
+        "largest": 19683,
+        "table_entries": 55038
+      }
+    },
+    {
+      "cells": [
+        103,
+        97,
+        114,
+        96,
+        98,
+        104,
+        80
+      ],
+      "boundary": 9,
+      "changed": {
+        "108": 9,
+        "9": 108
+      },
+      "gain": -2,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153129
+      }
+    },
+    {
+      "cells": [
+        121,
+        120,
+        119,
+        122,
+        123,
+        126,
+        130
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153129
+      }
+    },
+    {
+      "cells": [
+        44,
+        20,
+        21,
+        45,
+        47,
+        27,
+        46
+      ],
+      "boundary": 8,
+      "changed": {
+        "42": 25,
+        "25": 42
+      },
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 53094
+      }
+    },
+    {
+      "cells": [
+        139,
+        138,
+        142,
+        133,
+        62,
+        58,
+        137
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51798
+      }
+    },
+    {
+      "cells": [
+        42,
+        46,
+        123,
+        122,
+        121,
+        43,
+        126
+      ],
+      "boundary": 7,
+      "changed": {
+        "41": 62,
+        "62": 41
+      },
+      "gain": -1,
+      "work": {
+        "largest": 6561,
+        "table_entries": 22881
+      }
+    },
+    {
+      "cells": [
+        123,
+        117,
+        116,
+        118,
+        115,
+        114,
+        121
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -4,
+      "work": {
+        "largest": 19683,
+        "table_entries": 54390
+      }
+    },
+    {
+      "cells": [
+        143,
+        150,
+        79,
+        54,
+        77,
+        149,
+        53
+      ],
+      "boundary": 7,
+      "changed": {
+        "59": 145,
+        "145": 59
+      },
+      "gain": -4,
+      "work": {
+        "largest": 6561,
+        "table_entries": 21909
+      }
+    },
+    {
+      "cells": [
+        150,
+        143,
+        54,
+        79,
+        77,
+        78,
+        141
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 6561,
+        "table_entries": 18993
+      }
+    },
+    {
+      "cells": [
+        109,
+        108,
+        110,
+        111,
+        118,
+        27,
+        21
+      ],
+      "boundary": 8,
+      "changed": {
+        "20": 77,
+        "77": 20
+      },
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51798
+      }
+    },
+    {
+      "cells": [
+        37,
+        43,
+        38,
+        42,
+        36,
+        63,
+        60
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51150
+      }
+    },
+    {
+      "cells": [
+        9,
+        3,
+        8,
+        4,
+        28,
+        5,
+        11
+      ],
+      "boundary": 8,
+      "changed": {
+        "24": 142,
+        "142": 24
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51798
+      }
+    },
+    {
+      "cells": [
+        155,
+        154,
+        153,
+        158,
+        147,
+        75,
+        148
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 55038
+      }
+    },
+    {
+      "cells": [
+        24,
+        25,
+        28,
+        19,
+        23,
+        26,
+        2
+      ],
+      "boundary": 9,
+      "changed": {
+        "3": 111,
+        "111": 3
+      },
+      "gain": -3,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153129
+      }
+    },
+    {
+      "cells": [
+        149,
+        148,
+        140,
+        155,
+        78,
+        136,
+        154
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153129
+      }
+    },
+    {
+      "cells": [
+        25,
+        24,
+        28,
+        26,
+        30,
+        23,
+        4
+      ],
+      "boundary": 8,
+      "changed": {
+        "19": 20,
+        "20": 19
+      },
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51798
+      }
+    },
+    {
+      "cells": [
+        131,
+        137,
+        132,
+        124,
+        136,
+        120,
+        119
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 52770
+      }
+    },
+    {
+      "cells": [
+        126,
+        122,
+        123,
+        117,
+        116,
+        115,
+        108
+      ],
+      "boundary": 8,
+      "changed": {
+        "118": 7,
+        "7": 118
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 54714
+      }
+    },
+    {
+      "cells": [
+        19,
+        25,
+        26,
+        20,
+        18,
+        21,
+        44
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 19683,
+        "table_entries": 52122
+      }
+    },
+    {
+      "cells": [
+        62,
+        61,
+        139,
+        138,
+        63,
+        133,
+        132
+      ],
+      "boundary": 8,
+      "changed": {
+        "131": 49,
+        "49": 131
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 52122
+      }
+    },
+    {
+      "cells": [
+        134,
+        127,
+        125,
+        124,
+        120,
+        132,
+        133
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 22881
+      }
+    },
+    {
+      "cells": [
+        94,
+        93,
+        92,
+        95,
+        102,
+        100,
+        99
+      ],
+      "boundary": 8,
+      "changed": {
+        "90": 79,
+        "79": 90
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51798
+      }
+    },
+    {
+      "cells": [
+        94,
+        90,
+        11,
+        91,
+        89,
+        88,
+        85
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 59049,
+        "table_entries": 162849
+      }
+    },
+    {
+      "cells": [
+        115,
+        116,
+        117,
+        118,
+        123,
+        46,
+        47
+      ],
+      "boundary": 8,
+      "changed": {
+        "45": 72,
+        "72": 45
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 64434
+      }
+    },
+    {
+      "cells": [
+        151,
+        145,
+        152,
+        144,
+        82,
+        80,
+        128
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 54390
+      }
+    },
+    {
+      "cells": [
+        151,
+        145,
+        152,
+        146,
+        82,
+        81,
+        153
+      ],
+      "boundary": 8,
+      "changed": {
+        "156": 79,
+        "79": 156
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51150
+      }
+    },
+    {
+      "cells": [
+        0,
+        1,
+        16,
+        17,
+        18,
+        7,
+        8
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153453
+      }
+    },
+    {
+      "cells": [
+        119,
+        120,
+        124,
+        121,
+        125,
+        122,
+        130
+      ],
+      "boundary": 8,
+      "changed": {
+        "123": 27,
+        "27": 123
+      },
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51150
+      }
+    },
+    {
+      "cells": [
+        145,
+        151,
+        144,
+        128,
+        129,
+        112,
+        135
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51798
+      }
+    },
+    {
+      "cells": [
+        108,
+        109,
+        111,
+        22,
+        118,
+        21,
+        104
+      ],
+      "boundary": 8,
+      "changed": {
+        "103": 52,
+        "52": 103
+      },
+      "gain": 0,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51798
+      }
+    },
+    {
+      "cells": [
+        112,
+        113,
+        119,
+        130,
+        129,
+        131,
+        120
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 54714
+      }
+    },
+    {
+      "cells": [
+        96,
+        97,
+        80,
+        112,
+        113,
+        98,
+        103
+      ],
+      "boundary": 8,
+      "changed": {
+        "81": 30,
+        "30": 81
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 52122
+      }
+    },
+    {
+      "cells": [
+        90,
+        94,
+        91,
+        93,
+        85,
+        86,
+        89
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153453
+      }
+    },
+    {
+      "cells": [
+        54,
+        143,
+        141,
+        53,
+        52,
+        150,
+        140
+      ],
+      "boundary": 8,
+      "changed": {
+        "79": 108,
+        "108": 79
+      },
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51798
+      }
+    },
+    {
+      "cells": [
+        56,
+        60,
+        55,
+        57,
+        61,
+        36,
+        49
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153129
+      }
+    },
+    {
+      "cells": [
+        55,
+        34,
+        49,
+        50,
+        71,
+        56,
+        65
+      ],
+      "boundary": 9,
+      "changed": {
+        "57": 40,
+        "40": 57
+      },
+      "gain": -3,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153129
+      }
+    },
+    {
+      "cells": [
+        81,
+        80,
+        144,
+        82,
+        145,
+        128,
+        87
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 54390
+      }
+    },
+    {
+      "cells": [
+        19,
+        25,
+        26,
+        20,
+        21,
+        24,
+        27
+      ],
+      "boundary": 7,
+      "changed": {
+        "28": 63,
+        "63": 28
+      },
+      "gain": -4,
+      "work": {
+        "largest": 6561,
+        "table_entries": 22881
+      }
+    },
+    {
+      "cells": [
+        119,
+        113,
+        120,
+        130,
+        112,
+        128,
+        129
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 6561,
+        "table_entries": 31953
+      }
+    },
+    {
+      "cells": [
+        134,
+        63,
+        127,
+        61,
+        62,
+        38,
+        139
+      ],
+      "boundary": 6,
+      "changed": {
+        "58": 143,
+        "143": 58
+      },
+      "gain": -1,
+      "work": {
+        "largest": 2187,
+        "table_entries": 8058
+      }
+    },
+    {
+      "cells": [
+        31,
+        6,
+        95,
+        93,
+        5,
+        29,
+        102,
+        4
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -4,
+      "work": {
+        "largest": 6561,
+        "table_entries": 23043
+      }
+    },
+    {
+      "cells": [
+        39,
+        18,
+        33,
+        40,
+        19,
+        20,
+        21,
+        41
+      ],
+      "boundary": 9,
+      "changed": {
+        "17": 100,
+        "100": 17
+      },
+      "gain": -3,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153615
+      }
+    },
+    {
+      "cells": [
+        67,
+        66,
+        65,
+        64,
+        48,
+        7,
+        1,
+        73
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -4,
+      "work": {
+        "largest": 59049,
+        "table_entries": 150699
+      }
+    },
+    {
+      "cells": [
+        97,
+        96,
+        112,
+        98,
+        103,
+        128,
+        129,
+        130
+      ],
+      "boundary": 10,
+      "changed": {
+        "135": 126,
+        "126": 135
+      },
+      "gain": null,
+      "work": {
+        "largest": 6561,
+        "table_entries": 7695
+      }
+    },
+    {
+      "cells": [
+        132,
+        131,
+        137,
+        136,
+        130,
+        129,
+        128,
+        144
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -4,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153615
+      }
+    },
+    {
+      "cells": [
+        4,
+        28,
+        24,
+        29,
+        30,
+        26,
+        107,
+        106
+      ],
+      "boundary": 9,
+      "changed": {
+        "105": 71,
+        "71": 105
+      },
+      "gain": -3,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153291
+      }
+    },
+    {
+      "cells": [
+        143,
+        141,
+        142,
+        59,
+        58,
+        140,
+        148,
+        138
+      ],
+      "boundary": 10,
+      "changed": {},
+      "gain": null,
+      "work": {
+        "largest": 2187,
+        "table_entries": 2997
+      }
+    },
+    {
+      "cells": [
+        158,
+        154,
+        157,
+        75,
+        74,
+        153,
+        152,
+        155
+      ],
+      "boundary": 8,
+      "changed": {
+        "78": 16,
+        "16": 78
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 55200
+      }
+    },
+    {
+      "cells": [
+        82,
+        151,
+        83,
+        81,
+        87,
+        84,
+        85,
+        145
+      ],
+      "boundary": 10,
+      "changed": {},
+      "gain": null,
+      "work": {
+        "largest": 729,
+        "table_entries": 1539
+      }
+    },
+    {
+      "cells": [
+        134,
+        133,
+        127,
+        139,
+        132,
+        38,
+        37,
+        131
+      ],
+      "boundary": 9,
+      "changed": {
+        "137": 97,
+        "97": 137
+      },
+      "gain": -3,
+      "work": {
+        "largest": 59049,
+        "table_entries": 154587
+      }
+    },
+    {
+      "cells": [
+        62,
+        139,
+        61,
+        60,
+        36,
+        56,
+        57,
+        51
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 59049,
+        "table_entries": 151347
+      }
+    },
+    {
+      "cells": [
+        4,
+        3,
+        5,
+        2,
+        23,
+        11,
+        9,
+        94
+      ],
+      "boundary": 9,
+      "changed": {
+        "8": 74,
+        "74": 8
+      },
+      "gain": -2,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153615
+      }
+    },
+    {
+      "cells": [
+        18,
+        19,
+        39,
+        17,
+        33,
+        34,
+        16,
+        25
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -5,
+      "work": {
+        "largest": 59049,
+        "table_entries": 163335
+      }
+    },
+    {
+      "cells": [
+        1,
+        2,
+        0,
+        3,
+        4,
+        5,
+        6,
+        64
+      ],
+      "boundary": 10,
+      "changed": {
+        "31": 60,
+        "60": 31
+      },
+      "gain": null,
+      "work": {
+        "largest": 6561,
+        "table_entries": 7857
+      }
+    },
+    {
+      "cells": [
+        113,
+        114,
+        112,
+        115,
+        116,
+        121,
+        96,
+        103
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -4,
+      "work": {
+        "largest": 59049,
+        "table_entries": 151671
+      }
+    },
+    {
+      "cells": [
+        134,
+        63,
+        61,
+        62,
+        38,
+        133,
+        60,
+        139
+      ],
+      "boundary": 7,
+      "changed": {
+        "37": 26,
+        "26": 37
+      },
+      "gain": -3,
+      "work": {
+        "largest": 6561,
+        "table_entries": 23367
+      }
+    },
+    {
+      "cells": [
+        59,
+        58,
+        62,
+        57,
+        139,
+        56,
+        142,
+        51
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 59049,
+        "table_entries": 154263
+      }
+    },
+    {
+      "cells": [
+        157,
+        159,
+        158,
+        86,
+        156,
+        154,
+        70,
+        69
+      ],
+      "boundary": 8,
+      "changed": {
+        "15": 132,
+        "132": 15
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 55200
+      }
+    },
+    {
+      "cells": [
+        130,
+        131,
+        132,
+        119,
+        133,
+        137,
+        134,
+        129
+      ],
+      "boundary": 10,
+      "changed": {},
+      "gain": null,
+      "work": {
+        "largest": 6561,
+        "table_entries": 7371
+      }
+    },
+    {
+      "cells": [
+        48,
+        49,
+        32,
+        33,
+        55,
+        64,
+        0,
+        65
+      ],
+      "boundary": 8,
+      "changed": {
+        "39": 13,
+        "13": 39
+      },
+      "gain": -5,
+      "work": {
+        "largest": 19683,
+        "table_entries": 52284
+      }
+    },
+    {
+      "cells": [
+        5,
+        11,
+        10,
+        94,
+        14,
+        13,
+        9,
+        4
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153615
+      }
+    },
+    {
+      "cells": [
+        72,
+        76,
+        52,
+        77,
+        53,
+        73,
+        54,
+        143
+      ],
+      "boundary": 9,
+      "changed": {
+        "74": 106,
+        "106": 74
+      },
+      "gain": -3,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153615
+      }
+    },
+    {
+      "cells": [
+        22,
+        111,
+        118,
+        21,
+        117,
+        47,
+        123,
+        46
+      ],
+      "boundary": 7,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 6561,
+        "table_entries": 20127
+      }
+    },
+    {
+      "cells": [
+        38,
+        63,
+        134,
+        37,
+        36,
+        127,
+        133,
+        60
+      ],
+      "boundary": 7,
+      "changed": {
+        "139": 67,
+        "67": 139
+      },
+      "gain": -3,
+      "work": {
+        "largest": 6561,
+        "table_entries": 19803
+      }
+    },
+    {
+      "cells": [
+        10,
+        9,
+        8,
+        7,
+        14,
+        1,
+        0,
+        91
+      ],
+      "boundary": 10,
+      "changed": {},
+      "gain": null,
+      "work": {
+        "largest": 2187,
+        "table_entries": 3483
+      }
+    },
+    {
+      "cells": [
+        73,
+        72,
+        76,
+        52,
+        71,
+        65,
+        50,
+        67
+      ],
+      "boundary": 8,
+      "changed": {
+        "74": 126,
+        "126": 74
+      },
+      "gain": -5,
+      "work": {
+        "largest": 19683,
+        "table_entries": 64596
+      }
+    },
+    {
+      "cells": [
+        33,
+        34,
+        32,
+        16,
+        35,
+        36,
+        0,
+        60
+      ],
+      "boundary": 10,
+      "changed": {},
+      "gain": null,
+      "work": {
+        "largest": 2187,
+        "table_entries": 3483
+      }
+    },
+    {
+      "cells": [
+        143,
+        150,
+        149,
+        155,
+        154,
+        158,
+        79,
+        78
+      ],
+      "boundary": 8,
+      "changed": {
+        "54": 123,
+        "123": 54
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 51960
+      }
+    },
+    {
+      "cells": [
+        133,
+        132,
+        134,
+        63,
+        124,
+        139,
+        38,
+        131
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -4,
+      "work": {
+        "largest": 59049,
+        "table_entries": 153615
+      }
+    },
+    {
+      "cells": [
+        110,
+        109,
+        106,
+        108,
+        107,
+        116,
+        117,
+        27
+      ],
+      "boundary": 10,
+      "changed": {
+        "101": 151,
+        "151": 101
+      },
+      "gain": null,
+      "work": {
+        "largest": 2187,
+        "table_entries": 2997
+      }
+    },
+    {
+      "cells": [
+        67,
+        66,
+        73,
+        74,
+        7,
+        78,
+        68,
+        155
+      ],
+      "boundary": 10,
+      "changed": {},
+      "gain": null,
+      "work": {
+        "largest": 2187,
+        "table_entries": 3483
+      }
+    },
+    {
+      "cells": [
+        15,
+        86,
+        13,
+        70,
+        159,
+        14,
+        157,
+        10
+      ],
+      "boundary": 8,
+      "changed": {
+        "69": 152,
+        "152": 69
+      },
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 52932
+      }
+    },
+    {
+      "cells": [
+        37,
+        36,
+        43,
+        35,
+        38,
+        63,
+        42,
+        61
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -4,
+      "work": {
+        "largest": 19683,
+        "table_entries": 67836
+      }
+    },
+    {
+      "cells": [
+        54,
+        143,
+        141,
+        150,
+        79,
+        77,
+        76,
+        140
+      ],
+      "boundary": 8,
+      "changed": {
+        "148": 132,
+        "132": 148
+      },
+      "gain": -5,
+      "work": {
+        "largest": 19683,
+        "table_entries": 55200
+      }
+    },
+    {
+      "cells": [
+        132,
+        124,
+        125,
+        133,
+        126,
+        122,
+        127,
+        123
+      ],
+      "boundary": 9,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 59049,
+        "table_entries": 154587
+      }
+    },
+    {
+      "cells": [
+        124,
+        125,
+        132,
+        131,
+        127,
+        133,
+        130,
+        129
+      ],
+      "boundary": 9,
+      "changed": {
+        "135": 93,
+        "93": 135
+      },
+      "gain": -4,
+      "work": {
+        "largest": 59049,
+        "table_entries": 151347
+      }
+    },
+    {
+      "cells": [
+        28,
+        4,
+        29,
+        30,
+        26,
+        24,
+        25,
+        3
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -1,
+      "work": {
+        "largest": 19683,
+        "table_entries": 56172
+      }
+    },
+    {
+      "cells": [
+        150,
+        143,
+        54,
+        79,
+        149,
+        155,
+        78,
+        53
+      ],
+      "boundary": 7,
+      "changed": {
+        "74": 58,
+        "58": 74
+      },
+      "gain": -4,
+      "work": {
+        "largest": 6561,
+        "table_entries": 20127
+      }
+    },
+    {
+      "cells": [
+        25,
+        19,
+        24,
+        28,
+        4,
+        18,
+        5,
+        3
+      ],
+      "boundary": 10,
+      "changed": {},
+      "gain": null,
+      "work": {
+        "largest": 6561,
+        "table_entries": 7371
+      }
+    },
+    {
+      "cells": [
+        96,
+        80,
+        81,
+        144,
+        82,
+        145,
+        83,
+        97
+      ],
+      "boundary": 9,
+      "changed": {
+        "89": 10,
+        "10": 89
+      },
+      "gain": -1,
+      "work": {
+        "largest": 59049,
+        "table_entries": 163335
+      }
+    },
+    {
+      "cells": [
+        134,
+        127,
+        63,
+        38,
+        125,
+        61,
+        37,
+        62
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -4,
+      "work": {
+        "largest": 19683,
+        "table_entries": 55200
+      }
+    },
+    {
+      "cells": [
+        34,
+        55,
+        49,
+        33,
+        32,
+        39,
+        56,
+        48
+      ],
+      "boundary": 8,
+      "changed": {
+        "40": 51,
+        "51": 40
+      },
+      "gain": -5,
+      "work": {
+        "largest": 19683,
+        "table_entries": 64596
+      }
+    },
+    {
+      "cells": [
+        32,
+        33,
+        48,
+        16,
+        39,
+        64,
+        40,
+        18
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -2,
+      "work": {
+        "largest": 19683,
+        "table_entries": 54876
+      }
+    },
+    {
+      "cells": [
+        143,
+        54,
+        150,
+        141,
+        53,
+        149,
+        59,
+        79
+      ],
+      "boundary": 7,
+      "changed": {
+        "140": 7,
+        "7": 140
+      },
+      "gain": -4,
+      "work": {
+        "largest": 6561,
+        "table_entries": 22395
+      }
+    },
+    {
+      "cells": [
+        152,
+        156,
+        151,
+        82,
+        83,
+        81,
+        89,
+        84
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": 0,
+      "work": {
+        "largest": 19683,
+        "table_entries": 64920
+      }
+    },
+    {
+      "cells": [
+        37,
+        43,
+        36,
+        126,
+        60,
+        61,
+        56,
+        35
+      ],
+      "boundary": 10,
+      "changed": {
+        "34": 19,
+        "19": 34
+      },
+      "gain": null,
+      "work": {
+        "largest": 6561,
+        "table_entries": 7695
+      }
+    },
+    {
+      "cells": [
+        39,
+        40,
+        18,
+        19,
+        20,
+        25,
+        44,
+        41
+      ],
+      "boundary": 8,
+      "changed": {},
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 94080
+      }
+    },
+    {
+      "cells": [
+        56,
+        55,
+        49,
+        57,
+        51,
+        58,
+        59,
+        50
+      ],
+      "boundary": 8,
+      "changed": {
+        "52": 14,
+        "14": 52
+      },
+      "gain": -3,
+      "work": {
+        "largest": 19683,
+        "table_entries": 56172
+      }
+    }
+  ]
+}
