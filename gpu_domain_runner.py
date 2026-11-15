@@ -460,10 +460,24 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
                 last_sharing=time.monotonic()
                 if contradiction:return finish_verified_root()
             if engine is None and parked:
-                task=parked.pop(0)
-                roots=[tuple(int(x,16) for x in row) for row in task['native']['cubes']]
-                engine=DomainCUDA(problem,roots,target=target,max_memory_bytes=MAX_BYTES,**engine_options)
-                engine.restore(unpack_native(task['native'],engine))
+                # A saved queue may contain different widths from successive
+                # resizes. Assemble the requested GPU batch only at dispatch.
+                archives = []
+                roots = []
+                for task in parked:
+                    archive = task['native']
+                    archives.append(archive)
+                    roots.extend(tuple(int(x,16) for x in row) for row in archive['cubes'])
+                    if len(roots) >= replicas:
+                        break
+                engine=DomainCUDA(problem,roots[:replicas],target=target,max_memory_bytes=MAX_BYTES,**engine_options)
+                if len(archives) == 1 and len(roots) <= replicas:
+                    engine.restore(unpack_native(archives[0],engine))
+                    del parked[0]
+                else:
+                    from gpu_lane_resize_round34 import restore_slices
+                    tail, _ = restore_slices(engine,archives,replicas,None,COUNTERS,pack_native,unpack_native)
+                    parked[:len(archives)] = tail
                 if pool is not None:
                     pool.lanes=pool.parked[:engine.lanes]
                     del pool.parked[:engine.lanes]

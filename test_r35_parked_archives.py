@@ -4,7 +4,7 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from constraint_work import digest
-from gpu_domain_runner import pack_native, unpack_native
+from gpu_domain_runner import pack_native, solve, unpack_native
 from test_r34_lane_resize import new_engine, pause_restore, setup_saved
 
 
@@ -53,3 +53,23 @@ class ParkedArchivesTests(TestCase):
         saved['digest'] = digest({k:v for k,v in saved.items() if k != 'digest'})
         result = pause_restore(problem,saved,2,{})['checkpoint']
         self.assertNotIn('ignored_metadata',result['native_queue'][0])
+
+    def test_mixed_widths_fill_every_device_batch_and_preserve_terminal_ownership(self):
+        for balanced in (False,True):
+            problem, initial = setup_saved(balanced,True)
+            opts = {'gpu_lane_balance':balanced,'gpu_propagated_forks':True}
+            narrow = pause_restore(problem,initial,1,opts)['checkpoint']
+            medium = pause_restore(problem,narrow,2,opts)['checkpoint']
+            self.assertEqual([len(archive['cubes']) for archive in medium['native_queue']], [1,1])
+            launched = []
+            def track(*args,**kwargs):
+                engine = new_engine(*args,**kwargs)
+                launched.append(engine.lanes)
+                return engine
+            with patch('gpu_domain_round24.DomainCUDA',side_effect=track):
+                completed = solve(problem,target='edges',replicas=2,resume=medium,options=opts)
+            self.assertEqual(launched,[2,2])
+            self.assertEqual((completed['status'],completed['nodes']),('infeasible',22))
+            self.assertEqual(completed['stats']['gpu_domain_completed'],4)
+            if balanced:
+                self.assertEqual(completed['stats']['gpu_lane_owners_completed'],1)

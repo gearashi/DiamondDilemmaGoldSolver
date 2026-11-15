@@ -1,5 +1,6 @@
 {
   "baseline": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
+  "aligned_commit": "d73e737b1629d83a2e68a2371b496b5716f6e6c1",
   "finite": {
     "device": "NVIDIA GeForce RTX 2060",
     "scope": "b0353aea8df0bda0c4f1877c3a7da8dfd9421b35fe0584d9ec83c4ddb208c3e7",
@@ -7,146 +8,320 @@
     "stages": [
       {
         "width": 2,
-        "parked": 3,
-        "before": {
+        "released": {
           "archive_decodes": 1,
           "parked_reencodes": 3,
           "parked_reencoded_raw_bytes": 17976,
-          "peak_traced_host_bytes": 412422
+          "peak_traced_host_bytes": 412478,
+          "parked_widths": [
+            2,
+            2,
+            2
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 1,
           "parked_reencodes": 3,
           "parked_reencoded_raw_bytes": 17976,
-          "peak_traced_host_bytes": 403321
+          "peak_traced_host_bytes": 403321,
+          "parked_widths": [
+            2,
+            2,
+            2
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 1,
+          "parked_reencodes": 3,
+          "parked_reencoded_raw_bytes": 17976,
+          "peak_traced_host_bytes": 403097,
+          "parked_widths": [
+            2,
+            2,
+            2
+          ]
         }
       },
       {
         "width": 2,
-        "parked": 3,
-        "before": {
+        "released": {
           "archive_decodes": 4,
           "parked_reencodes": 3,
           "parked_reencoded_raw_bytes": 17976,
-          "peak_traced_host_bytes": 386449
+          "peak_traced_host_bytes": 386438,
+          "parked_widths": [
+            2,
+            2,
+            2
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 4,
           "parked_reencodes": 0,
           "parked_reencoded_raw_bytes": 0,
-          "peak_traced_host_bytes": 379146
+          "peak_traced_host_bytes": 378178,
+          "parked_widths": [
+            2,
+            2,
+            2
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 4,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 379034,
+          "parked_widths": [
+            2,
+            2,
+            2
+          ]
         }
       },
       {
         "width": 3,
-        "parked": 2,
-        "before": {
+        "released": {
           "archive_decodes": 4,
           "parked_reencodes": 2,
           "parked_reencoded_raw_bytes": 14980,
-          "peak_traced_host_bytes": 394617
+          "peak_traced_host_bytes": 394321,
+          "parked_widths": [
+            3,
+            2
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 4,
           "parked_reencodes": 1,
           "parked_reencoded_raw_bytes": 8988,
-          "peak_traced_host_bytes": 393037
+          "peak_traced_host_bytes": 392925,
+          "parked_widths": [
+            3,
+            2
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 4,
+          "parked_reencodes": 1,
+          "parked_reencoded_raw_bytes": 2996,
+          "peak_traced_host_bytes": 385652,
+          "parked_widths": [
+            1,
+            2,
+            2
+          ]
         }
       },
       {
         "width": 3,
-        "parked": 2,
-        "before": {
+        "released": {
           "archive_decodes": 3,
           "parked_reencodes": 2,
           "parked_reencoded_raw_bytes": 14980,
-          "peak_traced_host_bytes": 387621
+          "peak_traced_host_bytes": 387549,
+          "parked_widths": [
+            3,
+            2
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 3,
           "parked_reencodes": 0,
           "parked_reencoded_raw_bytes": 0,
-          "peak_traced_host_bytes": 382726
+          "peak_traced_host_bytes": 382670,
+          "parked_widths": [
+            3,
+            2
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 4,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 385278,
+          "parked_widths": [
+            1,
+            2,
+            2
+          ]
         }
       },
       {
         "width": 1,
-        "parked": 7,
-        "before": {
+        "released": {
           "archive_decodes": 3,
           "parked_reencodes": 7,
           "parked_reencoded_raw_bytes": 20972,
-          "peak_traced_host_bytes": 390489
+          "peak_traced_host_bytes": 390489,
+          "parked_widths": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 3,
           "parked_reencodes": 7,
           "parked_reencoded_raw_bytes": 20972,
-          "peak_traced_host_bytes": 390393
+          "peak_traced_host_bytes": 390393,
+          "parked_widths": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 4,
+          "parked_reencodes": 2,
+          "parked_reencoded_raw_bytes": 5992,
+          "peak_traced_host_bytes": 378598,
+          "parked_widths": [
+            1,
+            1,
+            1,
+            2,
+            2
+          ]
         }
       },
       {
         "width": 1,
-        "parked": 7,
-        "before": {
+        "released": {
           "archive_decodes": 8,
           "parked_reencodes": 7,
           "parked_reencoded_raw_bytes": 20972,
-          "peak_traced_host_bytes": 388309
+          "peak_traced_host_bytes": 388445,
+          "parked_widths": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 8,
           "parked_reencodes": 0,
           "parked_reencoded_raw_bytes": 0,
-          "peak_traced_host_bytes": 382130
+          "peak_traced_host_bytes": 382082,
+          "parked_widths": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 6,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 377330,
+          "parked_widths": [
+            1,
+            1,
+            1,
+            2,
+            2
+          ]
         }
       },
       {
         "width": 4,
-        "parked": 1,
-        "before": {
+        "released": {
           "archive_decodes": 8,
           "parked_reencodes": 1,
           "parked_reencoded_raw_bytes": 11984,
-          "peak_traced_host_bytes": 401622
+          "peak_traced_host_bytes": 401825,
+          "parked_widths": [
+            4
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 8,
           "parked_reencodes": 1,
           "parked_reencoded_raw_bytes": 11984,
-          "peak_traced_host_bytes": 400505
+          "peak_traced_host_bytes": 400553,
+          "parked_widths": [
+            4
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 6,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 389250,
+          "parked_widths": [
+            2,
+            2
+          ]
         }
       },
       {
         "width": 4,
-        "parked": 1,
-        "before": {
+        "released": {
           "archive_decodes": 2,
           "parked_reencodes": 1,
           "parked_reencoded_raw_bytes": 11984,
-          "peak_traced_host_bytes": 397253
+          "peak_traced_host_bytes": 397301,
+          "parked_widths": [
+            4
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 2,
           "parked_reencodes": 0,
           "parked_reencoded_raw_bytes": 0,
-          "peak_traced_host_bytes": 386066
+          "peak_traced_host_bytes": 386162,
+          "parked_widths": [
+            4
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 3,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 388170,
+          "parked_widths": [
+            2,
+            2
+          ]
         }
       },
       {
         "width": 8,
-        "parked": 0,
-        "before": {
+        "released": {
           "archive_decodes": 2,
           "parked_reencodes": 0,
           "parked_reencoded_raw_bytes": 0,
-          "peak_traced_host_bytes": 407852
+          "peak_traced_host_bytes": 408476,
+          "parked_widths": []
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 2,
           "parked_reencodes": 0,
           "parked_reencoded_raw_bytes": 0,
-          "peak_traced_host_bytes": 408380
+          "peak_traced_host_bytes": 408660,
+          "parked_widths": []
+        },
+        "deferred": {
+          "archive_decodes": 3,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 408932,
+          "parked_widths": []
         }
       }
     ]
@@ -158,148 +333,490 @@
     "stages": [
       {
         "width": 2,
-        "parked": 3,
-        "before": {
+        "released": {
           "archive_decodes": 1,
           "parked_reencodes": 3,
           "parked_reencoded_raw_bytes": 5653944,
-          "peak_traced_host_bytes": 15659140
+          "peak_traced_host_bytes": 15659140,
+          "parked_widths": [
+            2,
+            2,
+            2
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 1,
           "parked_reencodes": 3,
           "parked_reencoded_raw_bytes": 5653944,
-          "peak_traced_host_bytes": 15658584
+          "peak_traced_host_bytes": 15658584,
+          "parked_widths": [
+            2,
+            2,
+            2
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 1,
+          "parked_reencodes": 3,
+          "parked_reencoded_raw_bytes": 5653944,
+          "peak_traced_host_bytes": 15658608,
+          "parked_widths": [
+            2,
+            2,
+            2
+          ]
         }
       },
       {
         "width": 2,
-        "parked": 3,
-        "before": {
+        "released": {
           "archive_decodes": 4,
           "parked_reencodes": 3,
           "parked_reencoded_raw_bytes": 5653944,
-          "peak_traced_host_bytes": 6732491
+          "peak_traced_host_bytes": 6732195,
+          "parked_widths": [
+            2,
+            2,
+            2
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 4,
           "parked_reencodes": 0,
           "parked_reencoded_raw_bytes": 0,
-          "peak_traced_host_bytes": 6287707
+          "peak_traced_host_bytes": 6287539,
+          "parked_widths": [
+            2,
+            2,
+            2
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 4,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 6287611,
+          "parked_widths": [
+            2,
+            2,
+            2
+          ]
         }
       },
       {
         "width": 3,
-        "parked": 2,
-        "before": {
+        "released": {
           "archive_decodes": 4,
           "parked_reencodes": 2,
           "parked_reencoded_raw_bytes": 4711620,
-          "peak_traced_host_bytes": 11223107
+          "peak_traced_host_bytes": 11222987,
+          "parked_widths": [
+            3,
+            2
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 4,
           "parked_reencodes": 1,
           "parked_reencoded_raw_bytes": 2826972,
-          "peak_traced_host_bytes": 11221667
+          "peak_traced_host_bytes": 11221667,
+          "parked_widths": [
+            3,
+            2
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 4,
+          "parked_reencodes": 1,
+          "parked_reencoded_raw_bytes": 942324,
+          "peak_traced_host_bytes": 8378469,
+          "parked_widths": [
+            1,
+            2,
+            2
+          ]
         }
       },
       {
         "width": 3,
-        "parked": 2,
-        "before": {
+        "released": {
           "archive_decodes": 3,
           "parked_reencodes": 2,
           "parked_reencoded_raw_bytes": 4711620,
-          "peak_traced_host_bytes": 9337863
+          "peak_traced_host_bytes": 9337863,
+          "parked_widths": [
+            3,
+            2
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 3,
           "parked_reencodes": 0,
           "parked_reencoded_raw_bytes": 0,
-          "peak_traced_host_bytes": 9011332
+          "peak_traced_host_bytes": 9011332,
+          "parked_widths": [
+            3,
+            2
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 4,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 6911048,
+          "parked_widths": [
+            1,
+            2,
+            2
+          ]
         }
       },
       {
         "width": 1,
-        "parked": 7,
-        "before": {
+        "released": {
           "archive_decodes": 3,
           "parked_reencodes": 7,
           "parked_reencoded_raw_bytes": 6596268,
-          "peak_traced_host_bytes": 9125992
+          "peak_traced_host_bytes": 9125992,
+          "parked_widths": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 3,
           "parked_reencodes": 7,
           "parked_reencoded_raw_bytes": 6596268,
-          "peak_traced_host_bytes": 9126700
+          "peak_traced_host_bytes": 9126700,
+          "parked_widths": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 4,
+          "parked_reencodes": 2,
+          "parked_reencoded_raw_bytes": 1884648,
+          "peak_traced_host_bytes": 6385259,
+          "parked_widths": [
+            1,
+            1,
+            1,
+            2,
+            2
+          ]
         }
       },
       {
         "width": 1,
-        "parked": 7,
-        "before": {
+        "released": {
           "archive_decodes": 8,
           "parked_reencodes": 7,
           "parked_reencoded_raw_bytes": 6596268,
-          "peak_traced_host_bytes": 4005435
+          "peak_traced_host_bytes": 4005339,
+          "parked_widths": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 8,
           "parked_reencodes": 0,
           "parked_reencoded_raw_bytes": 0,
-          "peak_traced_host_bytes": 3505269
+          "peak_traced_host_bytes": 3505269,
+          "parked_widths": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 6,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 6312923,
+          "parked_widths": [
+            1,
+            1,
+            1,
+            2,
+            2
+          ]
         }
       },
       {
         "width": 4,
-        "parked": 1,
-        "before": {
+        "released": {
           "archive_decodes": 8,
           "parked_reencodes": 1,
           "parked_reencoded_raw_bytes": 3769296,
-          "peak_traced_host_bytes": 13166571
+          "peak_traced_host_bytes": 13166499,
+          "parked_widths": [
+            4
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 8,
           "parked_reencodes": 1,
           "parked_reencoded_raw_bytes": 3769296,
-          "peak_traced_host_bytes": 13165479
+          "peak_traced_host_bytes": 13165479,
+          "parked_widths": [
+            4
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 6,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 9348733,
+          "parked_widths": [
+            2,
+            2
+          ]
         }
       },
       {
         "width": 4,
-        "parked": 1,
-        "before": {
+        "released": {
           "archive_decodes": 2,
           "parked_reencodes": 1,
           "parked_reencoded_raw_bytes": 3769296,
-          "peak_traced_host_bytes": 12223023
+          "peak_traced_host_bytes": 12222927,
+          "parked_widths": [
+            4
+          ]
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 2,
           "parked_reencodes": 0,
           "parked_reencoded_raw_bytes": 0,
-          "peak_traced_host_bytes": 11873215
+          "peak_traced_host_bytes": 11873215,
+          "parked_widths": [
+            4
+          ]
+        },
+        "deferred": {
+          "archive_decodes": 3,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 8801768,
+          "parked_widths": [
+            2,
+            2
+          ]
         }
       },
       {
         "width": 8,
-        "parked": 0,
-        "before": {
+        "released": {
           "archive_decodes": 2,
           "parked_reencodes": 0,
           "parked_reencoded_raw_bytes": 0,
-          "peak_traced_host_bytes": 19884433
+          "peak_traced_host_bytes": 19884433,
+          "parked_widths": []
         },
-        "after": {
+        "aligned": {
           "archive_decodes": 2,
           "parked_reencodes": 0,
           "parked_reencoded_raw_bytes": 0,
-          "peak_traced_host_bytes": 19885433
+          "peak_traced_host_bytes": 19885433,
+          "parked_widths": []
+        },
+        "deferred": {
+          "archive_decodes": 3,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 18000985,
+          "parked_widths": []
         }
       }
     ]
-  }
+  },
+  "dispatch": [
+    {
+      "target": "edges",
+      "width": 1,
+      "oracle_solutions": 6,
+      "released": {
+        "codec_work": {
+          "decoded_frames": 10,
+          "decoded_raw_bytes": 29960,
+          "encoded_frames": 8,
+          "encoded_raw_bytes": 23968
+        },
+        "widths_launched": [
+          1,
+          1,
+          1
+        ],
+        "status": "edge_perfect",
+        "nodes": 3,
+        "support_checks": 36,
+        "completed": 2
+      },
+      "deferred": {
+        "codec_work": {
+          "decoded_frames": 7,
+          "decoded_raw_bytes": 32956,
+          "encoded_frames": 2,
+          "encoded_raw_bytes": 5992
+        },
+        "widths_launched": [
+          1,
+          1,
+          1
+        ],
+        "status": "edge_perfect",
+        "nodes": 3,
+        "support_checks": 36,
+        "completed": 2
+      }
+    },
+    {
+      "target": "edges",
+      "width": 2,
+      "oracle_solutions": 6,
+      "released": {
+        "codec_work": {
+          "decoded_frames": 5,
+          "decoded_raw_bytes": 29960,
+          "encoded_frames": 4,
+          "encoded_raw_bytes": 23968
+        },
+        "widths_launched": [
+          2,
+          2
+        ],
+        "status": "edge_perfect",
+        "nodes": 6,
+        "support_checks": 64,
+        "completed": 2
+      },
+      "deferred": {
+        "codec_work": {
+          "decoded_frames": 9,
+          "decoded_raw_bytes": 29960,
+          "encoded_frames": 1,
+          "encoded_raw_bytes": 5992
+        },
+        "widths_launched": [
+          2,
+          2
+        ],
+        "status": "edge_perfect",
+        "nodes": 6,
+        "support_checks": 64,
+        "completed": 2
+      }
+    },
+    {
+      "target": "gold",
+      "width": 1,
+      "oracle_solutions": 0,
+      "released": {
+        "codec_work": {
+          "decoded_frames": 15,
+          "decoded_raw_bytes": 44940,
+          "encoded_frames": 7,
+          "encoded_raw_bytes": 20972
+        },
+        "widths_launched": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "status": "infeasible",
+        "nodes": 0,
+        "support_checks": 16,
+        "completed": 8
+      },
+      "deferred": {
+        "codec_work": {
+          "decoded_frames": 12,
+          "decoded_raw_bytes": 53928,
+          "encoded_frames": 3,
+          "encoded_raw_bytes": 8988
+        },
+        "widths_launched": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "status": "infeasible",
+        "nodes": 0,
+        "support_checks": 16,
+        "completed": 8
+      }
+    },
+    {
+      "target": "gold",
+      "width": 2,
+      "oracle_solutions": 0,
+      "released": {
+        "codec_work": {
+          "decoded_frames": 7,
+          "decoded_raw_bytes": 41944,
+          "encoded_frames": 3,
+          "encoded_raw_bytes": 17976
+        },
+        "widths_launched": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "status": "infeasible",
+        "nodes": 0,
+        "support_checks": 16,
+        "completed": 8
+      },
+      "deferred": {
+        "codec_work": {
+          "decoded_frames": 13,
+          "decoded_raw_bytes": 41944,
+          "encoded_frames": 0,
+          "encoded_raw_bytes": 0
+        },
+        "widths_launched": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "status": "infeasible",
+        "nodes": 0,
+        "support_checks": 16,
+        "completed": 8
+      }
+    }
+  ]
 }

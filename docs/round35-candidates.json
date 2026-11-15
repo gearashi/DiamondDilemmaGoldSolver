@@ -645,7 +645,27 @@
       "source_id": 5,
       "title": "Carry verified parked lane slices through repeated resizes",
       "proposal_and_validation": "Native lane resize validates and re-encodes every parked batch in gpu_lane_resize_round34.restore_slices. For a multi-stage resize and partially retired backlog, measure exact verified slices that could be carried through without recompression or remain lazily decoded until activated. Compare equivalent lane ownership, sums of counters, identical continuation, early-stop, tamper/deferred-error handling and CPU memory peak; never certify a negative before every contributing native state was validated.",
-      "state": "open"
+      "state": "in progress",
+      "mechanism": "Carry verified parked native GPU archive slices through repeated resizes",
+      "evidence": "docs/ROUND35_COVERAGE.md",
+      "interim_measured": {
+        "original_parked_raw_bytes_reencoded": [
+          41462256,
+          18846480,
+          8480916
+        ],
+        "arms": [
+          "v1.15.0",
+          "aligned carry",
+          "deferred assembly"
+        ],
+        "stages": 9,
+        "validated_archive_decodes_per_arm": 35,
+        "real_dispatch_comparisons": 4
+      },
+      "decision_changing_followups": [
+        "Measure bounded verified decoded-state reuse through completed dispatch and early pause on the original and finite boards. Include RAM cap, partially retired queues, corrupt archives, independently verified answers, and the measured extra decode work at width one. Close or reject for supported scopes in this workstream."
+      ]
     },
     {
       "id": 70,

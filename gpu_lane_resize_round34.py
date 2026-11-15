@@ -28,7 +28,7 @@ def lane_cubes(archives, max_bytes):
 
 
 def restore_slices(engine, archives, replicas, owner_ids, counter_names, pack, unpack):
-    """Restore the first bounded group now and archive the rest in the same lane order."""
+    """Fill the active group and retain validated sleeping archives in lane order."""
     pending=[]
     group=[]
     group_roots=[]
@@ -56,7 +56,7 @@ def restore_slices(engine, archives, replicas, owner_ids, counter_names, pack, u
             park(view, state, pack(view,snapshot))
         group.clear()
         group_roots.clear()
-    for index, native in enumerate(archives):
+    for native in archives:
         view=copy(engine)
         view.cubes=tuple(view._validate_cube(tuple(int(x,16) for x in row)) for row in native["cubes"])
         view.lanes=len(view.cubes)
@@ -72,8 +72,7 @@ def restore_slices(engine, archives, replicas, owner_ids, counter_names, pack, u
             records.append((cube,idle))
         # Only self-contained legacy archives can be carried byte-for-byte into
         # the native queue. External chunk references belong to their generation.
-        aligned = view.lanes == replicas or (index == len(archives)-1 and view.lanes < replicas)
-        if not first and not group and aligned and native.keys() == packed_fields:
+        if not first and not group and native.keys() == packed_fields:
             # Counters, frontier and ownership still come from the verified state.
             park(view, state, deepcopy(native))
             continue
@@ -85,6 +84,10 @@ def restore_slices(engine, archives, replicas, owner_ids, counter_names, pack, u
             if len(group_roots)==replicas:
                 emit()
             begin=end
+        if not first and group_roots:
+            # Keep this leftover in source order. Subsequent intact archives can
+            # wait in their existing encoding until a device batch needs them.
+            emit()
     if group_roots:
         emit()
     return pending,records
