@@ -73,7 +73,14 @@
       "source_id": 5,
       "title": "Test factor-criticality of the odd optimistic strand graph",
       "proposal_and_validation": "A Hamiltonian cycle of odd length loses one vertex to become an even path with a perfect matching. Hence each vertex of an odd optimistic segment graph must be exposable by a maximum matching. An even Hamiltonian graph has a perfect matching. The same necessity applies after contracting already selected disjoint open strand paths, using actual remaining free endpoints for adjacencies. Handle trivial one/two-component cases and completed circuits separately; a simple collapsed two-vertex graph does not encode two distinct required joins. Start with r27_structure_filters.strand_graph, r32_gold_bonds._open_paths and r30_gold.GoldMatching.transitions. Extend to exposing all vertices in one matching decomposition and independently check any negative witness using an unmatched residual or an odd-component obstruction. Sparse conditional mate tests can use the same graph after selecting that whole seam bundle. R27 tested removing every single and pair of strand vertices for excessive component count. R34 tested matching on physical *side* classes. Neither supplies this strand matching condition. Enumerate small Hamiltonian positives and synthetic factor-critical obstructions that pass the existing checks; compare real post-matching residuals by independent cuts and added mate deletions.",
-      "state": "in progress"
+      "state": "closed: no additive gain",
+      "evidence": [
+        "docs/ROUND35_STRAND_MATCHING.md",
+        "docs/R35_STRAND_MATCHING.json",
+        "test_r35_strand_matching.py"
+      ],
+      "decision": "Do not add strand matching to the production loop. Original root and all 1,994 optional nonblank mates passed. All 4,474 sparse conditional probes on 41 surviving fixed-bond scopes and 122 on the surviving geographic scope passed. Independently verified synthetic obstructions exist beyond two-vertex separators. No cap interrupted the 6,590 original conditional probes.",
+      "reopen_if": "A representative geographically or physically narrowed optimistic strand graph supplies an independently replayable odd-component barrier after the preceding matching and separator checks."
     },
     {
       "id": 6,
@@ -81,7 +88,7 @@
       "source_id": 6,
       "title": "Put a single circuit directly on mandatory physical strand IDs",
       "proposal_and_validation": "r30_gold.GoldMatching.process solves phase-compatible side matchings, then checks connected components and adds strand cuts. constraint_circuit builds a geographic circuit on optional port nodes or fixed geographic contractions. In the mate model, create directed supported successor arcs on the 365 mandatory segment IDs and add a single circuit there. Use the signed endpoint direction illustrated by r31_gold_switch.sewn_switches, guard both endpoints consistently and bundle every occupied slot of one selected mate. OR together duplicate directed arc supports. Contract forced open paths, handle parallel joins on tiny controls, and try switching from lazy cut separation only below a measured arc count/density. Follow up with SAT encoding using the same projected physical arcs only if native CP shows an opportunity. R27 successor-rank and sparse-elimination SAT were geographic placement experiments. Verify the complete physical matching set on small scopes against enumeration and both existing circuit methods. Count disconnected completions, duplicate strand cuts, branches, propagated arcs and real geographic lifts.",
-      "state": "open",
+      "state": "in progress",
       "decision_changing_followups": [
         "Compare the R27/R28/R29/R31 apex, pocket, flow and contracted-circuit connectivity encodings on the same completed Gold residuals as the physical circuit. Include adverse five-loop, empty-edge and nonplanar controls."
       ]

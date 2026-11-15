@@ -1,0 +1,73 @@
+{
+  "root": {
+    "scope_passes": 1,
+    "single_passes": 1994
+  },
+  "pinned": [
+    {
+      "pins": 4,
+      "scope_passes": 10,
+      "single_passes": 1125
+    },
+    {
+      "pins": 12,
+      "scope_passes": 10,
+      "single_passes": 1101
+    },
+    {
+      "pins": 24,
+      "scope_passes": 9,
+      "single_passes": 985,
+      "matching_already_closed": 1
+    },
+    {
+      "pins": 48,
+      "scope_passes": 8,
+      "single_passes": 873,
+      "matching_already_closed": 2
+    },
+    {
+      "pins": 96,
+      "scope_passes": 4,
+      "single_passes": 390,
+      "matching_already_closed": 6
+    },
+    {
+      "pins": 144,
+      "matching_already_closed": 10
+    }
+  ],
+  "geographic": [
+    {
+      "free": 4,
+      "matching_already_closed": 3
+    },
+    {
+      "free": 8,
+      "matching_already_closed": 3
+    },
+    {
+      "free": 16,
+      "matching_already_closed": 3
+    },
+    {
+      "free": 32,
+      "matching_already_closed": 3
+    },
+    {
+      "free": 64,
+      "matching_already_closed": 3
+    },
+    {
+      "free": 96,
+      "matching_already_closed": 3
+    },
+    {
+      "free": 128,
+      "scope_passes": 1,
+      "single_passes": 122,
+      "matching_already_closed": 2
+    }
+  ],
+  "obstructions": []
+}
