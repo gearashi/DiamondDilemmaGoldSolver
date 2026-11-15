@@ -42,7 +42,11 @@ def compare(tmp):
     result={'serial_turn_to_planted_gold':first_gold,'target':target,'max_edges':len(p.edges),'initial_scores':[r['score'] for r in info['selected']]}
     for policy in ('fair','yield'):
         target_db=Path(tmp)/(policy+'.db')
-        trial=search(p,boards,target_db,schedule=policy,group_pages=1,**args,**kwargs)
+        from unittest.mock import patch
+        from r30_multicenter import SharedSupports
+        with patch('r30_multicenter.SharedSupports',wraps=SharedSupports) as built:
+            trial=search(p,boards,target_db,schedule=policy,group_pages=1,**args,**kwargs)
+        assert built.call_count==2
         final=[(r['scope'],r['best'],r['covered_supports']) for r in trial['searches']]
         assert final==baseline,(final,baseline)
         assert p.validate(trial['best']['codes'])['valid']
@@ -50,7 +54,7 @@ def compare(tmp):
         assert event['turn']<first_gold,(event,first_gold,traces,trial['schedule'])
         warm=search(p,boards,target_db,schedule=policy,group_pages=1,**args,**kwargs)
         assert all(r['new_pages']==0 for r in warm['searches'])
-        result[policy]=dict(**trial['schedule'],warm=[r['new_pages'] for r in warm['searches']],covered=[r['covered_supports'] for r in trial['searches']])
+        result[policy]=dict(**trial['schedule'],group_graph_builds=built.call_count,warm=[r['new_pages'] for r in warm['searches']],covered=[r['covered_supports'] for r in trial['searches']])
     return result
 
 

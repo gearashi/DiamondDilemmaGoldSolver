@@ -28,7 +28,7 @@ def archive_boards(paths):
                         yield json.loads(data)['codes']
 
 
-def select(problem,boards,database,family,target,limit,policy='novel',seed=34,samples=64):
+def select(problem,boards,database,family,target,limit,policy='novel',seed=34,samples=64,*,distinct_orbits=True):
     if limit<1 or samples<1 or policy not in ('score','defects','novel'):
         raise ValueError("Invalid center policy.")
     family=tuple(sorted(family))
@@ -39,30 +39,57 @@ def select(problem,boards,database,family,target,limit,policy='novel',seed=34,sa
     if not 0<=target<=len(problem.edges) or size>len(model.free):
         raise ValueError("Invalid target or support size.")
     domain=domain_binding(model)
+    from r35_center_orbits import CenterOrbits
+    orbits=CenterOrbits(model)
     candidates={}
-    for values in boards:
-        board=model.legal_board(values)
-        key=physical_hash(board//3)
-        mask=sum(1<<i for i,m in enumerate(model.matches(board)) if not m)
-        score=len(problem.edges)-mask.bit_count()
-        if key not in candidates or score>candidates[key]['score']:
-            candidates[key]=dict(board=board,score=score,mask=mask)
+    mask_builds=mask_hits=0
+    with closing(sqlite3.connect(database,timeout=90)) as feature_db,feature_db:
+        feature_db.execute("""CREATE TABLE IF NOT EXISTS r35_center_masks(
+            domain TEXT,posed BLOB,failed TEXT,PRIMARY KEY(domain,posed))""")
+        for values in boards:
+            board=model.legal_board(values)
+            key=physical_hash(board//3)
+            posed=board.astype('<i8',copy=False).tobytes()
+            cached=feature_db.execute('SELECT failed FROM r35_center_masks WHERE domain=? AND posed=?',
+                                      (domain,posed)).fetchone()
+            if cached:
+                mask=int(cached[0],16);mask_hits+=1
+            else:
+                mask=sum(1<<i for i,m in enumerate(model.matches(board)) if not m)
+                feature_db.execute('INSERT OR IGNORE INTO r35_center_masks VALUES(?,?,?)',(domain,posed,hex(mask)))
+                mask_builds+=1
+            score=len(problem.edges)-mask.bit_count()
+            if key not in candidates or score>candidates[key]['score']:
+                candidates[key]=dict(board=board,score=score,mask=mask)
+    submitted=len(candidates)
+    if distinct_orbits:
+        representatives={}
+        for key,row in candidates.items():
+            orbit,_=orbits.key(row['board']//3)
+            previous=representatives.get(orbit)
+            if previous is None or (row['score'],key)>(candidates[previous]['score'],previous):
+                representatives[orbit]=key
+        candidates={key:candidates[key] for key in representatives.values()}
     caps={}
     with closing(sqlite3.connect(database,timeout=90)) as db,db:
         db.execute("CREATE TABLE IF NOT EXISTS r30_budget(cap_key TEXT PRIMARY KEY,cap INTEGER NOT NULL)")
         for key,row in candidates.items():
-            cache_key=f'{domain}:{size-len(family)}:{key}'
-            saved=db.execute("SELECT cap FROM r30_budget WHERE cap_key=?",(cache_key,)).fetchone()
-            if saved:
-                cap=saved[0]
-            else:
+            raw=f'{domain}:{size-len(family)}:{key}'
+            orbit_key,_=orbits.key(row['board']//3)
+            canonical=f'{domain}:{size-len(family)}:{orbit_key}'
+            cap=db.execute('SELECT min(cap) FROM r30_budget WHERE cap_key IN (?,?)',(raw,canonical)).fetchone()[0]
+            if cap is None:
                 bound=ExchangeBound(model,row['board'])
-                cap=budget_upper(bound,defect_packings(bound),size-len(family))
-                db.execute("INSERT OR IGNORE INTO r30_budget VALUES(?,?)",(cache_key,cap))
+                cap=orbits.cap(db,bound,domain,size-len(family),budget_upper)
             caps[key]=cap
     live={k for k in candidates if caps[k]>=target}
     transforms=None
     overlaps={}
+    pair_counts={}
+    from r35_shell_overlap import cycle_type,intersection,union_count
+    from r34_cycle_orders import family_count
+    from math import comb
+    shell_size=comb(len(model.free),size)*family_count(family)
     def relatives(a,b):
         nonlocal transforms
         if transforms is None:
@@ -70,8 +97,13 @@ def select(problem,boards,database,family,target,limit,policy='novel',seed=34,sa
         if (a,b) not in overlaps:
             current=candidates[a]['board']//3
             other=candidates[b]['board']//3
-            overlaps[a,b]=[{c:d for c,d in enumerate(mapping) if c!=d}
-                           for mapping,_ in owner_copies(model,[(other,size)],current,size,transforms=transforms)]
+            overlaps[a,b]=[]
+            pair_counts[a,b]=[]
+            for mapping,_ in owner_copies(model,[(other,size)],current,size,transforms=transforms):
+                count=intersection(cycle_type(mapping),family,family,len(model.free))
+                if count:
+                    overlaps[a,b].append({c:d for c,d in enumerate(mapping) if c!=d})
+                    pair_counts[a,b].append(count)
         return overlaps[a,b]
     test=[]
     def sampled_moves():
@@ -84,6 +116,8 @@ def select(problem,boards,database,family,target,limit,policy='novel',seed=34,sa
                 order=options[rng.randrange(len(options))]
                 test.append({c:cells[order[i]] for i,c in enumerate(cells)})
         return test
+    novelty={}
+    exact_novelty=sampled_novelty=0
     selected=[]
     groups=[]
     detail=[]
@@ -95,8 +129,22 @@ def select(problem,boards,database,family,target,limit,policy='novel',seed=34,sa
             diversity=min((row['mask']^candidates[k]['mask']).bit_count() for k in selected)
             if policy=='defects':
                 return diversity,row['score'],caps[key]
-            near=[rel for k in selected for rel in relatives(key,k)]
-            novel=sum(all(sparse_cycle_type(move,rel)!=family for rel in near) for move in sampled_moves()) if near else samples
+            nonlocal exact_novelty,sampled_novelty
+            lookup=key,tuple(selected)
+            if lookup not in novelty:
+                near=[rel for k in selected for rel in relatives(key,k)]
+                if len(near)<=1:
+                    covered=sum(sum(pair_counts[key,k]) for k in selected)
+                else:
+                    covered=union_count(family,near,len(model.free))
+                if covered is None:
+                    hits=sum(all(sparse_cycle_type(move,rel)!=family for rel in near) for move in sampled_moves())
+                    novelty[lookup]=shell_size*hits//samples
+                    sampled_novelty+=1
+                else:
+                    novelty[lookup]=shell_size-covered
+                    exact_novelty+=1
+            novel=novelty[lookup]
             return novel,caps[key],diversity,row['score']
         key=max(sorted(live),key=priority)
         detail.append(dict(center=key,score=candidates[key]['score'],upper=caps[key],priority=priority(key)))
@@ -106,11 +154,12 @@ def select(problem,boards,database,family,target,limit,policy='novel',seed=34,sa
         groups=[group for group in groups if group not in connected]
         groups.append([k for group in connected for k in group]+[key])
     return candidates,groups,dict(selected=detail,cap_excluded={k:caps[k] for k in sorted(caps) if caps[k]<target},
-                                  candidates=len(candidates),groups=groups)
+                                  candidates=len(candidates),equivalent_centers=submitted-len(candidates),exact_novelty_counts=exact_novelty,sampled_novelty_counts=sampled_novelty,fresh_mask_prices=mask_builds,reused_mask_prices=mask_hits,groups=groups)
 
 
 def search(problem,boards,database,*,family,target=208,limit=3,policy='novel',seed=34,samples=64,schedule='fair',group_pages=2,**settings):
-    candidates,groups,report=select(problem,boards,database,family,target,limit,policy,seed,samples)
+    candidates,groups,report=select(problem,boards,database,family,target,limit,policy,seed,samples,
+                                           distinct_orbits=settings.get('start',0)==0 and settings.get('stop') is None)
     # Separate disjoint shells retain their original singleton page scopes as
     # more centers are added. Possibly overlapping shells use exact joint ownership.
     if len(groups)<=1:

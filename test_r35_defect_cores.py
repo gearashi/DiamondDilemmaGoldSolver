@@ -1,5 +1,5 @@
 """Exact local row equivalence, closed-only persistence, and both directions of budget dominance."""
-from itertools import combinations,product
+from importlib.util import find_spec
 from random import Random
 import sqlite3
 import unittest
@@ -38,6 +38,7 @@ class DefectReuseTests(unittest.TestCase):
         self.assertEqual(len(cache.cores),1)
         self.assertEqual(canonical([((1,2),3),((1,2),1),((1,2),4)]),(((1,2),1),((1,2),4)))
 
+    @unittest.skipUnless(find_spec('ortools'),'native CP verification requires the Python 3.12 profile')
     def test_durable_native_replay_rejects_consistent_digest_forgery_and_capped_result(self):
         with sqlite3.connect(':memory:') as db:
             cache=CoverCores(db,'original')

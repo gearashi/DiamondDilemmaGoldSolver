@@ -87,8 +87,8 @@ class SharedSupports:
                 size = max(map(sum,self.families))
                 for mapping, _, transform in owner_copies(model, [(donor.tiles,size)], b.tiles, size,
                                                          transforms=self.transforms, with_transform=True):
-                    if sum(length - 1 for length in cycles(mapping)) % 2 and len(self.parity)==1:
-                        continue
+                    from r35_shell_overlap import any_family
+                    if not any_family(cycles(mapping),self.families,len(self.free)):continue
                     sparse = {i:j for i,j in enumerate(mapping) if i!=j}
                     copies.append((sparse, earlier, np.argsort(transform)))
             self.copies.append(copies)
@@ -199,7 +199,7 @@ def _covered_prefix(db, key, start, stop):
 
 
 def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop=None,
-        page=64,seconds=0,max_pages=None,filters=('contact','core','connected','star','family','ranges'),share=True,triage=False,backend='cpu',reuse_release=True,progress=None,order_quantum=128):
+        page=64,seconds=0,max_pages=None,filters=('contact','core','connected','star','family','ranges'),share=True,triage=False,backend='cpu',reuse_release=True,progress=None,order_quantum=128,orbit_scores=False,_prepared=None):
     """Negative coverage applies to the union of listed families and centers.
 
     Pages are colex support ranks. Concurrent workers may submit overlapping ranges:
@@ -217,7 +217,10 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
         raise ValueError("Invalid multi-center search scope or page settings.")
     k, = sizes
     swap_budget = max(k-len(f) for f in families)
-    model = BoardModel(problem)
+    if _prepared is None:model=BoardModel(problem)
+    else:
+        model=_prepared['model']
+        if model.problem is not problem:raise ValueError('Prepared group belongs to another puzzle.')
     physical = {}
     for board in boards:
         b = model.legal_board(board)
@@ -242,7 +245,11 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                     return _page_result(previous, key, limit, True, 0, {})
     center_boards = [physical[t] for t in sorted(physical)]
     from r30_bounds import budget_upper, defect_packings
-    bounds = [ExchangeBound(model,board) for board in center_boards]
+    setup_key=key,bool(share)
+    graph=None if _prepared is None else _prepared['graphs'].get(setup_key)
+    bounds=graph.bounds if graph is not None else [ExchangeBound(model,board) for board in center_boards]
+    from r35_center_orbits import CenterOrbits
+    orbits=None
     # Cache center-level bounds separately from the union and target; later jobs can
     # change the center list or cycle family and still use the same valid ceiling.
     with closing(sqlite3.connect(database,timeout=90)) as budgets:
@@ -254,14 +261,20 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
             if saved:
                 cap = saved[0]
             else:
-                cap = budget_upper(bound,defect_packings(bound),swap_budget)
+                if orbits is None:orbits=CenterOrbits(model)
                 with budgets:
+                    cap=orbits.cap(budgets,bound,binding,swap_budget,budget_upper)
                     budgets.execute('INSERT OR IGNORE INTO r30_budget VALUES(?,?)',(ckey,cap))
             caps.append(cap)
     if max(caps)<target:
         return dict(scope=key,covered_supports=limit,total_supports=limit,complete=True,range_finished=True,
                     remaining_supports=0,upper_bounds=caps,evidence=f'{swap_budget}-swap defect budget',best=None,new_pages=0,work={})
-    graph = SharedSupports(model,center_boards,families,share,bounds=bounds)
+    if graph is None:
+        graph=SharedSupports(model,center_boards,families,share,bounds=bounds)
+        if _prepared is not None:
+            graphs=_prepared['graphs'];graphs[setup_key]=graph
+            if len(graphs)>4:graphs.popitem(last=False)
+    elif _prepared is not None:_prepared['graphs'].move_to_end(setup_key)
     db = sqlite3.connect(database,timeout=90,isolation_level=None)
     t0 = time.monotonic()
     renewal=ExitStack()
@@ -366,6 +379,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
         leases = RankedLeases(db,'support',key,private=database==':memory:',lifetime=renewal)
         from r35_order_frontier import OrderFrontier,OrderSliceExpired
         frontier=OrderFrontier(db,key,order_quantum)
+        if orbit_scores and orbits is None:orbits=CenterOrbits(model)
         busy=False
         while (current<stop or busy) and (max_pages is None or new_pages<max_pages) and (not seconds or time.monotonic()-t0<seconds):
             if current>=stop:
@@ -491,9 +505,14 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                                 item = json.loads(prior[0])
                                 counters['exact_reused'] += 1
                             else:
-                                item = rotation_optimum(b,oracle,seed)
+                                item=orbits.lookup(db,binding,seed) if orbit_scores else None
+                                if item is None:
+                                    item=rotation_optimum(b,oracle,seed)
+                                    counters['exact_solved']+=1
+                                else:
+                                    counters['exact_reused']+=1
+                                    counters['rotated_witnesses']+=1
                                 db.execute('INSERT OR IGNORE INTO optima VALUES(?,?)',(perm,json.dumps(item)))
-                                counters['exact_solved'] += 1
                             if item['score']>=target:
                                 counters['hits'] += 1
                                 yield ix,cycles(order),item
@@ -675,6 +694,7 @@ def main():
     p.add_argument('--recheck',action='store_true',help='Ignore the shipped six-cell proof; use a fresh database to reproduce it.')
     p.add_argument('--backend',choices=('cpu','cuda'),default='cpu',help='Support-core filter backend; checkpoints are shared.')
     p.add_argument('--triage',action='store_true')
+    p.add_argument('--orbit-scores',action='store_true',help='Check for exact matched-seam witnesses saved in a rotated coordinate frame.')
     args = p.parse_args()
     problem = SearchProblem(read_json(args.tiles))
     if args.incumbent:
@@ -686,7 +706,7 @@ def main():
         boards = [[3*t for t in r['pieces']] for r in record['centers']]
     families = [tuple(map(int,f.split(','))) for f in (args.family or ('2,4','3,3'))]
     print(json.dumps(run(problem,boards,args.database,families=families,target=args.target,
-                         start=args.start,stop=args.stop,page=args.page,seconds=args.seconds,order_quantum=args.order_quantum,
+                         start=args.start,stop=args.stop,page=args.page,seconds=args.seconds,order_quantum=args.order_quantum,orbit_scores=args.orbit_scores,
                          filters=tuple(filter(None,args.filters.split(','))),triage=args.triage,backend=args.backend,reuse_release=not args.recheck,
                          progress=lambda row: print(json.dumps(row),flush=True))))
 

@@ -1,5 +1,5 @@
 """Interleave finite page quotas without treating scheduler state as search coverage."""
-from collections import Counter
+from collections import Counter,OrderedDict
 from contextlib import closing
 import hashlib
 import json
@@ -16,6 +16,7 @@ def interleave(problem,candidates,groups,database,family,target,settings,runner,
     from r34_rank_leases import covered_end
     model=BoardModel(problem)
     binding=domain_binding(model)
+    prepared=dict(model=model,graphs=OrderedDict())
     start=settings.get('start',0)
     limit=comb(len(model.free),sum(family))
     stop=settings.get('stop')
@@ -61,7 +62,7 @@ def interleave(problem,candidates,groups,database,family,target,settings,runner,
             end=min(stop,cursor+quota*page)
             kw=dict(settings,start=cursor,stop=end,max_pages=max(0,allocation),seconds=max(budget,1e-6) if seconds else 0)
             before=monotonic()
-            result=runner(problem,[candidates[k]['board'] for k in groups[ix]],database,families=(family,),target=target,**kw)
+            result=runner(problem,[candidates[k]['board'] for k in groups[ix]],database,families=(family,),target=target,_prepared=prepared,**kw)
             state['elapsed']+=monotonic()-before
             state['turns']+=1;state['pages']+=result['new_pages'];state['work'].update(result['work'])
             if len(trace)<128:trace.append(ix)

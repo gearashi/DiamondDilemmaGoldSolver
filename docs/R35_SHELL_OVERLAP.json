@@ -1,0 +1,80 @@
+{
+  "published_overlap": [
+    {
+      "support": 6,
+      "before_earlier_balls": 4279650440,
+      "earlier_excluded": 1431190020,
+      "eligible": 2848460420
+    },
+    {
+      "support": 7,
+      "before_earlier_balls": 115097857875,
+      "earlier_excluded": 38414671295,
+      "eligible": 76683186580
+    },
+    {
+      "support": 8,
+      "before_earlier_balls": 883293846435,
+      "earlier_excluded": 294431282145,
+      "eligible": 588862564290
+    }
+  ],
+  "installed_centers": {
+    "center_family_pairs": 684,
+    "hamming_eligible_copies": 12,
+    "parity_rejected": 8,
+    "intersecting_copies": 4
+  },
+  "constructed_original_separations": [
+    {
+      "family": [
+        2,
+        4
+      ],
+      "new_relative_tests": 0,
+      "old_relative_tests": 720,
+      "real_board_pairs": 8
+    },
+    {
+      "family": [
+        3,
+        3
+      ],
+      "new_relative_tests": 0,
+      "old_relative_tests": 520,
+      "real_board_pairs": 13
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "new_relative_tests": 0,
+      "old_relative_tests": 210,
+      "real_board_pairs": 1
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ]
+    }
+  ],
+  "materialized_novelty": {
+    "incremental": [
+      7560,
+      7560,
+      7236,
+      6995,
+      6180,
+      5644,
+      4441
+    ],
+    "union": 45616,
+    "exact_queries": 21,
+    "sampled_queries": 0
+  }
+}

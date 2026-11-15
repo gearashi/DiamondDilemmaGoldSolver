@@ -456,7 +456,13 @@
       "source_id": 15,
       "title": "Rotation-orbit identity for center caps, exact rotation optima and plateau vertices",
       "proposal_and_validation": "r34_centers.select uses physical_hash(board//3); SwapGraph.key and some route optimum keys also use raw identity. Use only verified domain-preserving proper rotations, with actual cell/side/orientation transports and independent physical witness reconstruction. Preserve distinct original coordinates in the returned path and all labels. If caps and exact query results share first, evaluate orbit keys for centers/walk vertices and incremental archive selection. Scope mixed objectives and coordinate-specific pins separately. R29-R34 already rotate shells for overlap, reuse relative pricing frames and select by novelty. Count equal-orbit cap/price rebuilds in real archives first. Check asymmetric, fixed orientation, rotated duplicate and inverse path controls; the ordinary sphere group is not a blanket divisor of support counts.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "10,568 historical distinct physical placements contain zero rotation duplicates. Selected full orbit caps and opt-in transported exact witnesses pass planted inverse checks (one native query to zero); coordinate-limited scopes retain their frames. Expanding the real archive 8→16→16 priced 8→8→0 new seam masks.",
+      "evidence": [
+        "docs/ROUND35_CENTER_ORBITS.md",
+        "docs/R35_ORBIT_ARCHIVE.json",
+        "test_r35_center_orbits.py"
+      ]
     },
     {
       "id": 31,
@@ -464,9 +470,15 @@
       "source_id": 16,
       "title": "Stronger proof of center-shell separation and novelty",
       "proposal_and_validation": "r29_exchange_route.owner_copies filters by moved support/Hamming difference; SharedSupports also screens parity. Under actual allowed rotations, test transposition triangle inequality then constrained product-of-cycle-class feasibility on the small differing label set, accounting for any eligible extra labels and family parity. For nearby sparse overlaps, count exactly by feasible strata when practical; otherwise use estimates only to order centers beyond r34_centers.select's 64 sampled moves. Compare permanently avoided ownership checks, eligible group counts and truly distinct endpoints. Exhaustively compare intersections on small boards with unequal families, extra-label bridges and restricted domains. No proof from sampled nonintersection.",
-      "state": "open",
+      "state": "keep with exact scope",
       "decision_changing_followups": [
         "Use the R30 exact 668,394,211,290-overlap result for the two published outer shells as the oracle. Measure transfer only on distinct center/family pairs."
+      ],
+      "decision": "Exactly reproduced the R30 668,394,211,290 eligible intersections. Across 684 installed comparisons no Hamming/parity survivor was newly disjoint. Constructed 22 legal original-board gaps eliminated all 1,450 old relative-order checks. Materialized all 45,616 members of a seven-center endpoint union and matched 21 exact novelty queries.",
+      "evidence": [
+        "docs/ROUND35_SHELL_OVERLAP.md",
+        "docs/R35_SHELL_OVERLAP.json",
+        "test_r35_shell_overlap.py"
       ]
     },
     {

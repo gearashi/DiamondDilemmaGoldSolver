@@ -1,0 +1,75 @@
+{
+  "proper_rotations": 10,
+  "sets": {
+    "fresh_cpu_cuda": {
+      "physical": 16,
+      "orbits": 16,
+      "rotated_duplicates": 0
+    },
+    "published_centers": {
+      "physical": 3,
+      "orbits": 3,
+      "rotated_duplicates": 0
+    },
+    "optima": {
+      "physical": 4573,
+      "orbits": 4573,
+      "rotated_duplicates": 0
+    },
+    "legacy_optimum": {
+      "physical": 6207,
+      "orbits": 6207,
+      "rotated_duplicates": 0
+    },
+    "plateau_bounds": {
+      "physical": 56,
+      "orbits": 56,
+      "rotated_duplicates": 0
+    },
+    "plateau_queue": {
+      "physical": 236,
+      "orbits": 236,
+      "rotated_duplicates": 0
+    },
+    "legacy_centers": {
+      "physical": 310,
+      "orbits": 310,
+      "rotated_duplicates": 0
+    },
+    "cross_archive_union": {
+      "physical": 10568,
+      "orbits": 10568,
+      "rotated_duplicates": 0
+    }
+  },
+  "incremental_selection": [
+    {
+      "input": 8,
+      "priced": 8,
+      "reused": 0,
+      "excluded": 8
+    },
+    {
+      "input": 16,
+      "priced": 8,
+      "reused": 8,
+      "excluded": 16
+    },
+    {
+      "input": 16,
+      "priced": 0,
+      "reused": 16,
+      "excluded": 16
+    }
+  ],
+  "heldout_transport": {
+    "input_orientations": 10,
+    "selected_centers": 1,
+    "source_rank": 0,
+    "requested_rank": 1,
+    "score": 15,
+    "direct_native": 1,
+    "transported_native": 0,
+    "transported_scores": 1
+  }
+}
