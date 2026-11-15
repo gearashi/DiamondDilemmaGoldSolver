@@ -76,7 +76,7 @@ class ExchangeBound:
                      for side in range(3))
         return values.max(axis=-1)
 
-    def bounds(self, cells, order):
+    def bounds(self, cells, order, *, doubled=False):
         cells = np.asarray(cells, dtype=int)
         touched = np.concatenate((cells, self.neighbors[cells].reshape(len(cells), -1)), axis=1)
         touched.sort(axis=1)
@@ -92,7 +92,8 @@ class ExchangeBound:
             tc = np.where(touched == t, sources[:, j, None], tc)
             tn = np.where(touched_neighbors == t[..., None], sources[:, j, None, None], tn)
         delta = self.stars(tc, tn) - self.base[touched]
-        return (self.total + (delta * unique).sum(axis=1)) // 2
+        upper=self.total+(delta*unique).sum(axis=1)
+        return upper if doubled else upper//2
 
     def witness_seed(self, cells, order):
         candidate = self.board.copy()

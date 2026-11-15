@@ -22,7 +22,8 @@ class SwapGraph:
         self.db = db
         self.model = model
         self.binding = domain_binding(model)
-        self.oracle = RotationOracle(model)
+        self.deadline=float('inf')
+        self.oracle = RotationOracle(model,observe=lambda *_:self.check_time())
         self.pairs = np.array(list(itertools.combinations(model.free, 2)), dtype=int).reshape(-1, 2)
         db.executescript("""
             CREATE TABLE IF NOT EXISTS optima(key TEXT PRIMARY KEY, result TEXT NOT NULL);
@@ -45,6 +46,11 @@ class SwapGraph:
             db.execute("CREATE INDEX IF NOT EXISTS optimum_physical ON optimum(perm,scope)")
         self.work = dict(centers=0, star=0, solved=0, reused=0, exact_fallback=0,
                          legacy_centers=0, star_evaluations=0, cached_stars=0, reused_arcs=0, tie_solves=0)
+
+    def check_time(self):
+        if time.monotonic()>=self.deadline:
+            from r35_plateau_pages import ExpansionStopped
+            raise ExpansionStopped()
 
     def key(self, board):
         return self.binding + ":" + identity(board)
@@ -78,11 +84,14 @@ class SwapGraph:
             return known
         if known and known.get('codes'):
             self.work['tie_solves'] += 1
+        self.check_time()
         result = self.oracle.optimum(seed, ties=tie_limit > 1, limit=tie_limit)
         tried = tie_limit
         if result is None:
             self.work['exact_fallback'] += 1
-            choices = rotation_alternatives(self.model, seed, k=1, seconds=120)
+            self.check_time()
+            choices = rotation_alternatives(self.model, seed, k=1, seconds=max(.001,min(120,self.deadline-time.monotonic())))
+            self.check_time()
             if not choices or not choices[0][1]['exact']:
                 raise RuntimeError("Unresolved rotation optimum; resume this batch.")
             score = choices[0][1]['matched_edges']
@@ -94,6 +103,7 @@ class SwapGraph:
             raise RuntimeError("Cached and recomputed rotation optima disagree.")
         best = known if known and known.get('codes') else None
         for codes in boards:
+            self.check_time()
             report = self.check(key, codes, score)
             if best is None or report['line_components'] < best['components']:
                 best = dict(score=score, components=report['line_components'], codes=codes, gold=report['valid'])
@@ -101,9 +111,18 @@ class SwapGraph:
             raise RuntimeError("Exact rotation solver returned no witness.")
         if 'gold' not in best:
             best['gold'] = self.check(key, best['codes'], score)['valid']
+        if not db.in_transaction:
+            db.execute("BEGIN IMMEDIATE")
+        current=db.execute("SELECT result FROM optima WHERE key=?",(key,)).fetchone()
+        if current:
+            current=json.loads(current[0])
+            if current['score']!=score:
+                raise RuntimeError("Concurrent physical rotation optima disagree.")
+            if current.get('codes') and current['components']<=best['components']:
+                best=current
         db.execute("INSERT OR REPLACE INTO optima VALUES (?,?)", (key, json.dumps(best)))
-        db.execute("INSERT OR REPLACE INTO walk_ties VALUES (?,?)",
-                   (key, max(tried, sampled[0] if sampled else 0)))
+        db.execute("""INSERT INTO walk_ties VALUES (?,?) ON CONFLICT(board) DO UPDATE
+                      SET requested=max(walk_ties.requested,excluded.requested)""",(key,tried))
         self.work['solved'] += 1
         return best
 
@@ -174,10 +193,15 @@ class SwapGraph:
                 db.execute("INSERT INTO walk_bounds VALUES (?,?,?)",(key,floor,zlib.compress(upper.tobytes())))
         else:
             self.work['reused_arcs'] += 1
+        yield from self.known_neighbors(key,floor)
+
+    def known_neighbors(self,key,floor):
+        db=self.db
         for child, raw, score, encoded_seed in db.execute(
                 "SELECT e.neighbor,o.result,l.score,l.seed FROM walk_edges e "
                 "LEFT JOIN optima o ON o.key=e.neighbor LEFT JOIN walk_legacy l ON l.board=e.neighbor "
                 "WHERE e.board=? ORDER BY e.neighbor", (key,)):
+            self.work['edge_rows']=self.work.get('edge_rows',0)+1
             if raw:
                 item = json.loads(raw)
             elif score is not None and score >= floor:
@@ -197,25 +221,46 @@ def _route(db, scope, key):
 
 
 def walk(problem, codes, database, floor, goal, *, max_centers=20, seconds=0, tie_limit=8, widest=False,
-         max_swaps=None, potentials=True):
+         max_swaps=None, potentials=True, max_candidates=None, transport=True, incremental=False):
     """A BFS at each floor gives a shortest path; descending closed floors certify the bottleneck."""
     if not 0 <= floor < goal <= len(problem.edges) or tie_limit < 1 or max_centers < 0 or seconds < 0:
         raise ValueError("Invalid plateau range or budget.")
     if max_swaps is not None and (type(max_swaps) is not int or max_swaps<0):
         raise ValueError("Nonnegative swap limit required.")
+    if max_candidates is not None and (type(max_candidates) is not int or max_candidates<0):
+        raise ValueError('Expected nonnegative swap candidate allowance.')
     started = time.monotonic()
+    deadline=started+seconds if seconds else float('inf')
     model = BoardModel(problem)
     start = model.legal_board(codes)
     db = sqlite3.connect(database, timeout=120)
     try:
+        from r35_plateau_pages import advance,schema,ExpansionStopped
         graph = SwapGraph(db,model)
+        graph.work['swap_candidates']=0
+        schema(db)
         db.execute("CREATE TABLE IF NOT EXISTS walk_legacy(board TEXT PRIMARY KEY,score INTEGER,seed TEXT)")
-        db.execute("BEGIN IMMEDIATE")
         root = graph.key(start)
-        initial = graph.optimum(root,start,0,tie_limit)
+        graph.deadline=deadline
+        try:
+            initial=graph.optimum(root,start,0,tie_limit)
+        except ExpansionStopped:
+            db.rollback()
+            # A cold root can time out before its optimum is certified. Return
+            # the user's independently checked starting witness without closing it.
+            report=problem.validate(start.tolist())
+            return dict(graph.work,objective='matched_edges',target=goal,score=report['matched_edges'],
+                        components=report['line_components'],codes=start.tolist(),gold=report['valid'],
+                        floor=floor,closed=0,open=1,swaps=[],reached=False,feasible=report['matched_edges']>=goal,
+                        shortest_at_floor=None,widest_floor=None,initialization_pending=True,rotation_work=graph.oracle.work)
         if initial['score'] < floor:
             raise ValueError("The best rotation of the starting board is below the floor.")
         db.commit()
+        if incremental:
+            if not widest:raise ValueError('Incremental activation requires a widest-floor search.')
+            from r35_plateau_floors import run
+            return run(graph,database,root,initial,floor,goal,max_centers,tie_limit,max_swaps,potentials,
+                       max_candidates,transport)
         levels = range(min(initial['score'],goal-1),floor-1,-1) if widest else [floor]
         for level in levels:
             binding = f'{root}/{level}/{goal}'
@@ -250,11 +295,34 @@ def walk(problem, codes, database, floor, goal, *, max_centers=20, seconds=0, ti
                     bound = ExchangeBound(model,board)
                     skip = budget_upper(bound,defect_packings(bound),max_swaps-depth)<goal
                     graph.work['potential_closed'] += int(skip)
-                for child,item in (() if skip else graph.neighbors(key,board,level)):
+                if not skip:
+                    # The queue's parent/depth commit stays in BFS order. Expensive
+                    # rotations and star pages can commit without locking that queue.
+                    parent=db.execute('SELECT parent FROM walk_queue WHERE scope=? AND board=?',(scope,key)).fetchone()[0] if transport else None
+                    db.commit()
+                    if not advance(graph,database,key,board,level,deadline=deadline,candidate_limit=max_candidates,parent=parent):
+                        break
+                    staged_best=best['score']
+                    try:
+                        for child,item in graph.known_neighbors(key,level):
+                            graph.check_time()
+                            if tie_limit>1 and item['score']>=staged_best:
+                                graph.optimum(child,item['codes'],level,tie_limit)
+                            staged_best=max(staged_best,item['score'])
+                            if db.in_transaction:db.commit()
+                    except ExpansionStopped:
+                        db.rollback()
+                        break
+                    db.execute("BEGIN IMMEDIATE")
+                    next_row=db.execute("SELECT board,depth FROM walk_queue WHERE scope=? AND closed=0 ORDER BY depth,rowid LIMIT 1",(scope,)).fetchone()
+                    if next_row!=row:
+                        db.commit()
+                        continue
+                    best_key,=db.execute("SELECT best FROM walk_roots WHERE scope=?",(scope,)).fetchone()
+                    best=get(best_key)
+                for child,item in (() if skip else graph.known_neighbors(key,level)):
                     db.execute("INSERT OR IGNORE INTO walk_queue(scope,board,parent,depth) VALUES (?,?,?,?)",
                                (scope,child,key,depth+1))
-                    if item['score'] >= best['score'] and tie_limit > 1:
-                        item = graph.optimum(child,item['codes'],level,tie_limit)
                     if (item['score'], -item['components']) > (best['score'], -best['components']):
                         best_key,best = child,item
                 db.execute("UPDATE walk_roots SET best=? WHERE scope=?", (best_key,scope))
@@ -264,7 +332,13 @@ def walk(problem, codes, database, floor, goal, *, max_centers=20, seconds=0, ti
             if row or best['score'] >= goal:
                 break
         db.execute("BEGIN IMMEDIATE")
-        best = graph.optimum(best_key, best['codes'], 0, tie_limit)
+        # A stopped call returns the best already verified witness.
+        if time.monotonic()<deadline:
+            try:
+                best=graph.optimum(best_key,best['codes'],0,tie_limit)
+            except ExpansionStopped:
+                db.rollback()
+                db.execute('BEGIN IMMEDIATE')
         counts = dict(db.execute("SELECT closed,count(*) FROM walk_queue WHERE scope=? GROUP BY closed",(scope,)))
         path = _route(db,scope,best_key)
         swaps = []

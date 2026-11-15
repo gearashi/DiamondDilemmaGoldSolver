@@ -696,7 +696,17 @@
       "source_id": 27,
       "title": "Checkpoint inside the one-swap plateau center",
       "proposal_and_validation": "r29_plateau.walk runs SwapGraph.neighbors under BEGIN IMMEDIATE; all qualifying child optimizations on an unfinished center can be rolled back together. Fence candidate-swap chunks and atomically bind discovered edges/physical optima, exact remaining floor band and parent generation. Prevent advancing walk_bounds.lowest before its entire relevant band finishes. Parallelize at a BFS frontier level only if shortest/widest parent and witness selection survive. Measure exact rotations and star calculations replayed after forced kills; bound stop latency, old graph import, different depths and one costly positive at a chunk boundary. R34 fenced rank pages, not this graph.",
-      "state": "open"
+      "state": "keep durable candidate pages and serial frontier ownership",
+      "mechanism": "PLATEAU-CANDIDATE-FENCE",
+      "measurement": "On a forced process exit during the eighth exact physical rotation, one unfinished rotation replayed instead of eight. New star calculations fell from 25,440 to 12,720. Both runs yielded identical independently measured results on all 87 considered neighbors. Two- and four-worker speculative prefetch increased exact rotations across four positive seeds.",
+      "closure_reason": "Retain atomic candidate and star pages, delayed floor closure, monotonic tied-witness publication and checked cold-root cancellation. Retain serial FIFO scheduling. A SQLite key lookup, one numeric factor or native solver call can run across a soft deadline.",
+      "reopen_trigger": "A new parallel frontier ownership rule that can eliminate speculative candidate work or a new interrupted operation outside these atomically checked units.",
+      "evidence": [
+        "docs/ROUND35_PLATEAU.md",
+        "docs/R35_PLATEAU.json",
+        "test_r35_plateau_pages.py",
+        "test_r35_plateau_floors.py"
+      ]
     },
     {
       "id": 43,
@@ -704,9 +714,19 @@
       "source_id": 28,
       "title": "Transport the star-bound vector across actual adjacent BFS centers",
       "proposal_and_validation": "At a newly opened parent/child one-swap center, SwapGraph.neighbors currently computes every candidate pair bound afresh. If the candidate's local star footprint is independent of the two changed locations, transport its *doubled* star delta and add the exact new baseline total. R29's existing per-center bound vector is already reused at lower floors; it stores floored integers which can lose parity. Compare a lossless compact representation and recompute only the marked parent fringe, with cold fallback. Validate every pair on adjacent real 206-floor vertices and random planted ones, including parity changes, ties and disallowed swaps. Count pair-star work, additional bytes and database locality.",
-      "state": "open",
+      "state": "keep lossless persisted star transport",
       "decision_changing_followups": [
         "Use R30 two-center star transport as the baseline. Test only new saved breadth-first vectors, exact parity under changed baselines and actual avoided pair rebuilds."
+      ],
+      "mechanism": "PLATEAU-PARENT-STARS",
+      "measurement": "All 152,640 bounds on twelve original floor-206 neighbors matched independent doubled-star evaluation. Persisted parent transport eliminated 118,328 pair recalculations and used 1,805 additional compressed bytes over the prior floor-only representation. Floor-only transport would misprice 16,047 pairs. Another 1,536 pairs matched the earlier two-center oracle.",
+      "closure_reason": "Store each new vector as one compressed signed-byte delta per physical pair plus its doubled baseline. Keep a cold path for expired, unrelated or old floor-only donors. The existing R30 in-memory same-support calculation remains the comparison.",
+      "reopen_trigger": "Material new evidence of repeated donorless centers, a changed star relation or a new representation that saves sufficient additional pair work.",
+      "evidence": [
+        "docs/ROUND35_PLATEAU.md",
+        "docs/R35_PLATEAU.json",
+        "test_r35_plateau_pages.py",
+        "test_r35_plateau_floors.py"
       ]
     },
     {
@@ -715,7 +735,17 @@
       "source_id": 29,
       "title": "Avoid re-expanding entire connected plateaus at lower floors",
       "proposal_and_validation": "The widest loop in r29_plateau.walk creates a new BFS queue at every floor. Its arcs, optima and star vectors are already threshold-independent, but traversing and querying all previous frontier vertices again can be redundant. Incrementally activate edges and vertices entering a score band, update connectivity/distances/parent records including shortcuts through newly enabled vertices. Extra care on bounded max_swaps searches where a new shortcut changes remaining budget. Compare full BFS/descending controls for reachable sets, highest reachable floor and minimum swap distance, including an instance whose old shortest path becomes shorter. Count edge/queue reads and closed vertices genuinely avoided.",
-      "state": "open"
+      "state": "keep explicit incremental widest-floor search",
+      "mechanism": "PLATEAU-FLOOR-ACTIVATION",
+      "measurement": "Actual 207/52 down to floor 205 with a one-swap limit retained 2,143 eligible swaps and 2,144 exact optima. Center closures fell 519 to 446 and edge reads 5,506 to 443. Four independently enumerated finite depth caps matched every shortest path, including a 4-to-2 shortcut.",
+      "closure_reason": "Retain indexed score bands, exact bounded-distance repair and path witnesses on --incremental-floors. The existing fixed-floor and released widest queue paths continue supporting active archives.",
+      "reopen_trigger": "New threshold constraints that change previously scored arcs, or new multi-root geography with material shared distance work.",
+      "evidence": [
+        "docs/ROUND35_PLATEAU.md",
+        "docs/R35_PLATEAU.json",
+        "test_r35_plateau_pages.py",
+        "test_r35_plateau_floors.py"
+      ]
     },
     {
       "id": 45,

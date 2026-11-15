@@ -1,0 +1,1755 @@
+{
+  "input": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "center": "docs/R29_INCUMBENT.json",
+  "crash": {
+    "released": {
+      "crash_star_pairs": 12720,
+      "star_pairs_total": 25440,
+      "committed_at_crash": 0,
+      "closed_floor_at_crash": [],
+      "cursor_at_crash": [],
+      "rotations_repeated": 8,
+      "total_exact_rotations": 95,
+      "final": {
+        "edges": 87,
+        "physical_sha256": "77707d9a6fc2e5b78d9be9c3d42bb06c014091e6a1172c547340ab54d64aec2f",
+        "qualifying": 2,
+        "work": {
+          "centers": 0,
+          "star": 12633,
+          "solved": 87,
+          "reused": 1,
+          "exact_fallback": 4,
+          "legacy_centers": 0,
+          "star_evaluations": 12720,
+          "cached_stars": 0,
+          "reused_arcs": 0,
+          "tie_solves": 0,
+          "edge_rows": 87
+        }
+      }
+    },
+    "fenced": {
+      "crash_star_pairs": 12720,
+      "star_pairs_total": 12720,
+      "committed_at_crash": 7,
+      "closed_floor_at_crash": [
+        [
+          241
+        ]
+      ],
+      "cursor_at_crash": [
+        [
+          7
+        ]
+      ],
+      "rotations_repeated": 1,
+      "total_exact_rotations": 88,
+      "final": {
+        "edges": 87,
+        "physical_sha256": "77707d9a6fc2e5b78d9be9c3d42bb06c014091e6a1172c547340ab54d64aec2f",
+        "qualifying": 2,
+        "work": {
+          "centers": 0,
+          "star": 0,
+          "solved": 80,
+          "reused": 1,
+          "exact_fallback": 4,
+          "legacy_centers": 0,
+          "star_evaluations": 0,
+          "cached_stars": 12720,
+          "reused_arcs": 0,
+          "tie_solves": 0,
+          "swap_candidates": 80
+        }
+      }
+    }
+  },
+  "vectors": {
+    "input": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "source_score": 207,
+    "source_base": 416,
+    "all_206_neighbors": 71,
+    "records": [
+      {
+        "swap": [
+          0,
+          31
+        ],
+        "score": 206,
+        "components": 53,
+        "base": 414,
+        "pairs": 12720,
+        "recomputed": 2850,
+        "reused": 9870,
+        "lossy_floor_errors": 0,
+        "floor_bytes": 5453,
+        "extra_parity_bytes": 1601,
+        "stored_delta_bytes": 5732,
+        "compressed_i2_bytes": 6682,
+        "compressed_delta_bytes": 5732
+      },
+      {
+        "swap": [
+          18,
+          146
+        ],
+        "score": 207,
+        "components": 54,
+        "base": 415,
+        "pairs": 12720,
+        "recomputed": 2990,
+        "reused": 9730,
+        "lossy_floor_errors": 3955,
+        "floor_bytes": 5783,
+        "extra_parity_bytes": 1601,
+        "stored_delta_bytes": 5705,
+        "compressed_i2_bytes": 6649,
+        "compressed_delta_bytes": 5705
+      },
+      {
+        "swap": [
+          30,
+          73
+        ],
+        "score": 206,
+        "components": 54,
+        "base": 414,
+        "pairs": 12720,
+        "recomputed": 2990,
+        "reused": 9730,
+        "lossy_floor_errors": 0,
+        "floor_bytes": 5514,
+        "extra_parity_bytes": 1601,
+        "stored_delta_bytes": 5744,
+        "compressed_i2_bytes": 6717,
+        "compressed_delta_bytes": 5744
+      },
+      {
+        "swap": [
+          46,
+          119
+        ],
+        "score": 206,
+        "components": 53,
+        "base": 414,
+        "pairs": 12720,
+        "recomputed": 2990,
+        "reused": 9730,
+        "lossy_floor_errors": 0,
+        "floor_bytes": 5521,
+        "extra_parity_bytes": 1601,
+        "stored_delta_bytes": 5747,
+        "compressed_i2_bytes": 6736,
+        "compressed_delta_bytes": 5747
+      },
+      {
+        "swap": [
+          122,
+          143
+        ],
+        "score": 206,
+        "components": 53,
+        "base": 414,
+        "pairs": 12720,
+        "recomputed": 2850,
+        "reused": 9870,
+        "lossy_floor_errors": 0,
+        "floor_bytes": 5497,
+        "extra_parity_bytes": 1601,
+        "stored_delta_bytes": 5773,
+        "compressed_i2_bytes": 6734,
+        "compressed_delta_bytes": 5773
+      },
+      {
+        "swap": [
+          108,
+          154
+        ],
+        "score": 206,
+        "components": 54,
+        "base": 414,
+        "pairs": 12720,
+        "recomputed": 2990,
+        "reused": 9730,
+        "lossy_floor_errors": 0,
+        "floor_bytes": 5480,
+        "extra_parity_bytes": 1601,
+        "stored_delta_bytes": 5764,
+        "compressed_i2_bytes": 6746,
+        "compressed_delta_bytes": 5764
+      },
+      {
+        "swap": [
+          66,
+          123
+        ],
+        "score": 206,
+        "components": 53,
+        "base": 415,
+        "pairs": 12720,
+        "recomputed": 2990,
+        "reused": 9730,
+        "lossy_floor_errors": 3877,
+        "floor_bytes": 5782,
+        "extra_parity_bytes": 1601,
+        "stored_delta_bytes": 5749,
+        "compressed_i2_bytes": 6727,
+        "compressed_delta_bytes": 5749
+      },
+      {
+        "swap": [
+          44,
+          65
+        ],
+        "score": 206,
+        "components": 54,
+        "base": 413,
+        "pairs": 12720,
+        "recomputed": 2990,
+        "reused": 9730,
+        "lossy_floor_errors": 3881,
+        "floor_bytes": 5832,
+        "extra_parity_bytes": 1601,
+        "stored_delta_bytes": 5769,
+        "compressed_i2_bytes": 6742,
+        "compressed_delta_bytes": 5769
+      },
+      {
+        "swap": [
+          36,
+          105
+        ],
+        "score": 206,
+        "components": 53,
+        "base": 414,
+        "pairs": 12720,
+        "recomputed": 2990,
+        "reused": 9730,
+        "lossy_floor_errors": 0,
+        "floor_bytes": 5481,
+        "extra_parity_bytes": 1601,
+        "stored_delta_bytes": 5736,
+        "compressed_i2_bytes": 6682,
+        "compressed_delta_bytes": 5736
+      },
+      {
+        "swap": [
+          30,
+          123
+        ],
+        "score": 206,
+        "components": 54,
+        "base": 414,
+        "pairs": 12720,
+        "recomputed": 2990,
+        "reused": 9730,
+        "lossy_floor_errors": 0,
+        "floor_bytes": 5547,
+        "extra_parity_bytes": 1601,
+        "stored_delta_bytes": 5749,
+        "compressed_i2_bytes": 6751,
+        "compressed_delta_bytes": 5749
+      },
+      {
+        "swap": [
+          22,
+          118
+        ],
+        "score": 206,
+        "components": 53,
+        "base": 415,
+        "pairs": 12720,
+        "recomputed": 1842,
+        "reused": 10878,
+        "lossy_floor_errors": 4334,
+        "floor_bytes": 5782,
+        "extra_parity_bytes": 1601,
+        "stored_delta_bytes": 5716,
+        "compressed_i2_bytes": 6701,
+        "compressed_delta_bytes": 5716
+      },
+      {
+        "swap": [
+          6,
+          137
+        ],
+        "score": 206,
+        "components": 52,
+        "base": 414,
+        "pairs": 12720,
+        "recomputed": 2850,
+        "reused": 9870,
+        "lossy_floor_errors": 0,
+        "floor_bytes": 5462,
+        "extra_parity_bytes": 1601,
+        "stored_delta_bytes": 5755,
+        "compressed_i2_bytes": 6720,
+        "compressed_delta_bytes": 5755
+      }
+    ]
+  },
+  "controls": {
+    "two_center_supports": {
+      "support_assignments": 1909,
+      "equality_checks": 1536,
+      "whole_support_reuses": 1163
+    },
+    "stops": [
+      {
+        "seconds": 1e-05,
+        "wall": 0.15600000001722947,
+        "score": 207,
+        "open": 1,
+        "closed": 0,
+        "candidates": 0,
+        "root_pending": true
+      },
+      {
+        "seconds": 0.05,
+        "wall": 0.0629999999946449,
+        "score": 207,
+        "open": 1,
+        "closed": 0,
+        "candidates": 0,
+        "root_pending": false
+      },
+      {
+        "seconds": 0.25,
+        "wall": 0.264999999984866,
+        "score": 207,
+        "open": 1,
+        "closed": 0,
+        "candidates": 0,
+        "root_pending": false
+      },
+      {
+        "seconds": 1,
+        "wall": 1.625,
+        "score": 207,
+        "open": 1,
+        "closed": 0,
+        "candidates": 10,
+        "root_pending": false
+      }
+    ]
+  },
+  "frontier": [
+    {
+      "seed": 19,
+      "workers": 1,
+      "work": {
+        "solved": 12,
+        "star_evaluations": 12,
+        "swap_candidates": 12
+      },
+      "shortest": 2,
+      "swaps": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "seed": 19,
+      "workers": 2,
+      "work": {
+        "solved": 15,
+        "star_evaluations": 18,
+        "swap_candidates": 18
+      },
+      "shortest": 2,
+      "swaps": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "seed": 19,
+      "workers": 4,
+      "work": {
+        "solved": 18,
+        "star_evaluations": 30,
+        "swap_candidates": 30
+      },
+      "shortest": 2,
+      "swaps": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "seed": 31,
+      "workers": 1,
+      "work": {
+        "solved": 12,
+        "star_evaluations": 12,
+        "swap_candidates": 12
+      },
+      "shortest": 2,
+      "swaps": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "seed": 31,
+      "workers": 2,
+      "work": {
+        "solved": 15,
+        "star_evaluations": 18,
+        "swap_candidates": 18
+      },
+      "shortest": 2,
+      "swaps": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "seed": 31,
+      "workers": 4,
+      "work": {
+        "solved": 18,
+        "star_evaluations": 30,
+        "swap_candidates": 30
+      },
+      "shortest": 2,
+      "swaps": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "seed": 83,
+      "workers": 1,
+      "work": {
+        "solved": 12,
+        "star_evaluations": 12,
+        "swap_candidates": 12
+      },
+      "shortest": 2,
+      "swaps": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "seed": 83,
+      "workers": 2,
+      "work": {
+        "solved": 15,
+        "star_evaluations": 18,
+        "swap_candidates": 18
+      },
+      "shortest": 2,
+      "swaps": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "seed": 83,
+      "workers": 4,
+      "work": {
+        "solved": 18,
+        "star_evaluations": 30,
+        "swap_candidates": 30
+      },
+      "shortest": 2,
+      "swaps": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "seed": 310,
+      "workers": 1,
+      "work": {
+        "solved": 15,
+        "star_evaluations": 18,
+        "swap_candidates": 18
+      },
+      "shortest": 2,
+      "swaps": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "seed": 310,
+      "workers": 2,
+      "work": {
+        "solved": 16,
+        "star_evaluations": 18,
+        "swap_candidates": 18
+      },
+      "shortest": 2,
+      "swaps": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    },
+    {
+      "seed": 310,
+      "workers": 4,
+      "work": {
+        "solved": 18,
+        "star_evaluations": 30,
+        "swap_candidates": 30
+      },
+      "shortest": 2,
+      "swaps": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ]
+    }
+  ],
+  "floors": {
+    "original": {
+      "rebuild": {
+        "proof": {
+          "score": 207,
+          "floor": 205,
+          "widest_floor": null,
+          "shortest_at_floor": null,
+          "reached": false,
+          "swaps": []
+        },
+        "stored_distance_rows": 519,
+        "work": {
+          "centers": 519,
+          "edge_rows": 5506,
+          "swap_candidates": 2143,
+          "solved": 2144,
+          "star_evaluations": 12720,
+          "reused_arcs": 0,
+          "path_propagations": 0,
+          "band_expansions": 0,
+          "activations": 0,
+          "depth_closed": 516,
+          "potential_closed": 0
+        },
+        "repeated": {
+          "centers": 0,
+          "edge_rows": 0,
+          "swap_candidates": 0,
+          "solved": 0,
+          "star_evaluations": 0,
+          "reused_arcs": 0,
+          "path_propagations": 0,
+          "band_expansions": 0,
+          "activations": 0,
+          "depth_closed": 0,
+          "potential_closed": 0
+        }
+      },
+      "activate": {
+        "proof": {
+          "score": 207,
+          "floor": 205,
+          "widest_floor": null,
+          "shortest_at_floor": null,
+          "reached": false,
+          "swaps": []
+        },
+        "stored_distance_rows": 444,
+        "work": {
+          "centers": 446,
+          "edge_rows": 443,
+          "swap_candidates": 2143,
+          "solved": 2144,
+          "star_evaluations": 12720,
+          "reused_arcs": 0,
+          "path_propagations": 1,
+          "band_expansions": 2,
+          "activations": 2,
+          "depth_closed": 443,
+          "potential_closed": 0
+        },
+        "repeated": {
+          "centers": 0,
+          "edge_rows": 0,
+          "swap_candidates": 0,
+          "solved": 0,
+          "star_evaluations": 0,
+          "reused_arcs": 0,
+          "path_propagations": 0,
+          "band_expansions": 0,
+          "activations": 0,
+          "depth_closed": 0,
+          "potential_closed": 0
+        }
+      }
+    },
+    "planted": {
+      "planted-19-1": {
+        "rebuild": {
+          "proof": {
+            "score": 12,
+            "floor": 0,
+            "widest_floor": null,
+            "shortest_at_floor": null,
+            "reached": false,
+            "swaps": [
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 63,
+          "work": {
+            "centers": 63,
+            "edge_rows": 108,
+            "swap_candidates": 6,
+            "solved": 7,
+            "star_evaluations": 6,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 54,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        },
+        "activate": {
+          "proof": {
+            "score": 12,
+            "floor": 0,
+            "widest_floor": null,
+            "shortest_at_floor": null,
+            "reached": false,
+            "swaps": [
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 7,
+          "work": {
+            "centers": 7,
+            "edge_rows": 6,
+            "swap_candidates": 6,
+            "solved": 7,
+            "star_evaluations": 6,
+            "reused_arcs": 0,
+            "path_propagations": 1,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 6,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        }
+      },
+      "planted-19-2": {
+        "rebuild": {
+          "proof": {
+            "score": 15,
+            "floor": 8,
+            "widest_floor": 8,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 12,
+          "work": {
+            "centers": 2,
+            "edge_rows": 24,
+            "swap_candidates": 12,
+            "solved": 12,
+            "star_evaluations": 12,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        },
+        "activate": {
+          "proof": {
+            "score": 15,
+            "floor": 8,
+            "widest_floor": 8,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 12,
+          "work": {
+            "centers": 2,
+            "edge_rows": 12,
+            "swap_candidates": 12,
+            "solved": 12,
+            "star_evaluations": 12,
+            "reused_arcs": 0,
+            "path_propagations": 2,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        }
+      },
+      "planted-19-None": {
+        "rebuild": {
+          "proof": {
+            "score": 15,
+            "floor": 8,
+            "widest_floor": 8,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 12,
+          "work": {
+            "centers": 2,
+            "edge_rows": 24,
+            "swap_candidates": 12,
+            "solved": 12,
+            "star_evaluations": 12,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        },
+        "activate": {
+          "proof": {
+            "score": 15,
+            "floor": 8,
+            "widest_floor": 8,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 12,
+          "work": {
+            "centers": 2,
+            "edge_rows": 12,
+            "swap_candidates": 12,
+            "solved": 12,
+            "star_evaluations": 12,
+            "reused_arcs": 0,
+            "path_propagations": 2,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        }
+      },
+      "planted-31-1": {
+        "rebuild": {
+          "proof": {
+            "score": 11,
+            "floor": 0,
+            "widest_floor": null,
+            "shortest_at_floor": null,
+            "reached": false,
+            "swaps": [
+              [
+                0,
+                1
+              ]
+            ]
+          },
+          "stored_distance_rows": 62,
+          "work": {
+            "centers": 62,
+            "edge_rows": 106,
+            "swap_candidates": 6,
+            "solved": 7,
+            "star_evaluations": 6,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 53,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        },
+        "activate": {
+          "proof": {
+            "score": 11,
+            "floor": 0,
+            "widest_floor": null,
+            "shortest_at_floor": null,
+            "reached": false,
+            "swaps": [
+              [
+                0,
+                1
+              ]
+            ]
+          },
+          "stored_distance_rows": 7,
+          "work": {
+            "centers": 8,
+            "edge_rows": 6,
+            "swap_candidates": 6,
+            "solved": 7,
+            "star_evaluations": 6,
+            "reused_arcs": 0,
+            "path_propagations": 1,
+            "band_expansions": 1,
+            "activations": 1,
+            "depth_closed": 6,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        }
+      },
+      "planted-31-2": {
+        "rebuild": {
+          "proof": {
+            "score": 15,
+            "floor": 8,
+            "widest_floor": 8,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 11,
+          "work": {
+            "centers": 2,
+            "edge_rows": 22,
+            "swap_candidates": 11,
+            "solved": 11,
+            "star_evaluations": 12,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        },
+        "activate": {
+          "proof": {
+            "score": 15,
+            "floor": 8,
+            "widest_floor": 8,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 11,
+          "work": {
+            "centers": 2,
+            "edge_rows": 11,
+            "swap_candidates": 11,
+            "solved": 11,
+            "star_evaluations": 12,
+            "reused_arcs": 0,
+            "path_propagations": 2,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        }
+      },
+      "planted-31-None": {
+        "rebuild": {
+          "proof": {
+            "score": 15,
+            "floor": 8,
+            "widest_floor": 8,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 11,
+          "work": {
+            "centers": 2,
+            "edge_rows": 22,
+            "swap_candidates": 11,
+            "solved": 11,
+            "star_evaluations": 12,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        },
+        "activate": {
+          "proof": {
+            "score": 15,
+            "floor": 8,
+            "widest_floor": 8,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 11,
+          "work": {
+            "centers": 2,
+            "edge_rows": 11,
+            "swap_candidates": 11,
+            "solved": 11,
+            "star_evaluations": 12,
+            "reused_arcs": 0,
+            "path_propagations": 2,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        }
+      },
+      "planted-83-1": {
+        "rebuild": {
+          "proof": {
+            "score": 11,
+            "floor": 0,
+            "widest_floor": null,
+            "shortest_at_floor": null,
+            "reached": false,
+            "swaps": [
+              [
+                0,
+                1
+              ]
+            ]
+          },
+          "stored_distance_rows": 63,
+          "work": {
+            "centers": 63,
+            "edge_rows": 108,
+            "swap_candidates": 6,
+            "solved": 7,
+            "star_evaluations": 6,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 54,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        },
+        "activate": {
+          "proof": {
+            "score": 11,
+            "floor": 0,
+            "widest_floor": null,
+            "shortest_at_floor": null,
+            "reached": false,
+            "swaps": [
+              [
+                0,
+                1
+              ]
+            ]
+          },
+          "stored_distance_rows": 7,
+          "work": {
+            "centers": 7,
+            "edge_rows": 6,
+            "swap_candidates": 6,
+            "solved": 7,
+            "star_evaluations": 6,
+            "reused_arcs": 0,
+            "path_propagations": 1,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 6,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        }
+      },
+      "planted-83-2": {
+        "rebuild": {
+          "proof": {
+            "score": 15,
+            "floor": 8,
+            "widest_floor": 8,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 12,
+          "work": {
+            "centers": 2,
+            "edge_rows": 24,
+            "swap_candidates": 12,
+            "solved": 12,
+            "star_evaluations": 12,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        },
+        "activate": {
+          "proof": {
+            "score": 15,
+            "floor": 8,
+            "widest_floor": 8,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 12,
+          "work": {
+            "centers": 2,
+            "edge_rows": 12,
+            "swap_candidates": 12,
+            "solved": 12,
+            "star_evaluations": 12,
+            "reused_arcs": 0,
+            "path_propagations": 2,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        }
+      },
+      "planted-83-None": {
+        "rebuild": {
+          "proof": {
+            "score": 15,
+            "floor": 8,
+            "widest_floor": 8,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 12,
+          "work": {
+            "centers": 2,
+            "edge_rows": 24,
+            "swap_candidates": 12,
+            "solved": 12,
+            "star_evaluations": 12,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        },
+        "activate": {
+          "proof": {
+            "score": 15,
+            "floor": 8,
+            "widest_floor": 8,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 12,
+          "work": {
+            "centers": 2,
+            "edge_rows": 12,
+            "swap_candidates": 12,
+            "solved": 12,
+            "star_evaluations": 12,
+            "reused_arcs": 0,
+            "path_propagations": 2,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        }
+      },
+      "planted-310-1": {
+        "rebuild": {
+          "proof": {
+            "score": 12,
+            "floor": 0,
+            "widest_floor": null,
+            "shortest_at_floor": null,
+            "reached": false,
+            "swaps": [
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 68,
+          "work": {
+            "centers": 68,
+            "edge_rows": 118,
+            "swap_candidates": 6,
+            "solved": 7,
+            "star_evaluations": 6,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 58,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        },
+        "activate": {
+          "proof": {
+            "score": 12,
+            "floor": 0,
+            "widest_floor": null,
+            "shortest_at_floor": null,
+            "reached": false,
+            "swaps": [
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 7,
+          "work": {
+            "centers": 9,
+            "edge_rows": 6,
+            "swap_candidates": 6,
+            "solved": 7,
+            "star_evaluations": 6,
+            "reused_arcs": 0,
+            "path_propagations": 1,
+            "band_expansions": 2,
+            "activations": 2,
+            "depth_closed": 6,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        }
+      },
+      "planted-310-2": {
+        "rebuild": {
+          "proof": {
+            "score": 15,
+            "floor": 9,
+            "widest_floor": 9,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 13,
+          "work": {
+            "centers": 3,
+            "edge_rows": 34,
+            "swap_candidates": 17,
+            "solved": 14,
+            "star_evaluations": 18,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        },
+        "activate": {
+          "proof": {
+            "score": 15,
+            "floor": 9,
+            "widest_floor": 9,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 13,
+          "work": {
+            "centers": 3,
+            "edge_rows": 16,
+            "swap_candidates": 17,
+            "solved": 14,
+            "star_evaluations": 18,
+            "reused_arcs": 0,
+            "path_propagations": 3,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        }
+      },
+      "planted-310-None": {
+        "rebuild": {
+          "proof": {
+            "score": 15,
+            "floor": 9,
+            "widest_floor": 9,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 13,
+          "work": {
+            "centers": 3,
+            "edge_rows": 34,
+            "swap_candidates": 17,
+            "solved": 14,
+            "star_evaluations": 18,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        },
+        "activate": {
+          "proof": {
+            "score": 15,
+            "floor": 9,
+            "widest_floor": 9,
+            "shortest_at_floor": 2,
+            "reached": true,
+            "swaps": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          "stored_distance_rows": 13,
+          "work": {
+            "centers": 3,
+            "edge_rows": 16,
+            "swap_candidates": 17,
+            "solved": 14,
+            "star_evaluations": 18,
+            "reused_arcs": 0,
+            "path_propagations": 3,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          },
+          "repeated": {
+            "centers": 0,
+            "edge_rows": 0,
+            "swap_candidates": 0,
+            "solved": 0,
+            "star_evaluations": 0,
+            "reused_arcs": 0,
+            "path_propagations": 0,
+            "band_expansions": 0,
+            "activations": 0,
+            "depth_closed": 0,
+            "potential_closed": 0
+          }
+        }
+      }
+    }
+  }
+}

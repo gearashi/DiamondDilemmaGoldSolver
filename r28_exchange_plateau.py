@@ -21,9 +21,12 @@ def main():
     p.add_argument("--widest",action="store_true",help="Exhaust higher score floors first, then find a shortest route.")
     p.add_argument("--ties",type=int,default=8,help="Number of tied best rotations to inspect for the displayed board.")
     p.add_argument("--max-swaps",type=int,help="Find a target within this many swaps. Score reports the best witness visited.")
+    p.add_argument("--candidate-limit",type=int,help="Stop after this many committed swap candidates, even inside a center.")
+    p.add_argument('--cold-stars',action='store_true',help='Recompute new centers without transporting a parent star vector.')
+    p.add_argument('--incremental-floors',action='store_true',help='Reuse shortest routes while progressively lowering the score floor.')
     args = p.parse_args()
     result = walk(SearchProblem(read_json(args.tiles)),read_json(args.incumbent)["codes"],
-                  args.database,args.floor,args.target,max_centers=args.centers,seconds=args.seconds,tie_limit=args.ties,widest=args.widest,max_swaps=args.max_swaps)
+                  args.database,args.floor,args.target,max_centers=args.centers,seconds=args.seconds,tie_limit=args.ties,widest=args.widest or args.incremental_floors,max_swaps=args.max_swaps,max_candidates=args.candidate_limit,transport=not args.cold_stars,incremental=args.incremental_floors)
     if args.output:
         from io_utils import atomic_json
         atomic_json(args.output,result)
