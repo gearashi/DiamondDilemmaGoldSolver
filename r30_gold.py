@@ -445,12 +445,8 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
         _sphere(problem)
     if automatic_rules or phase_anchors=='rules':
         from r35_anchor_rules import check_rules
-        required=list(bonds)
-        if physical_support and (bonds or (pins and len(pins)<problem.n)):
-            from r32_gold_bonds import inventory
-            required.extend(inventory(problem).required)
         phase_rules,stats['phase_rules']=check_rules(problem,pins or {},started+seconds,
-                                                    required=required,project=True)
+                                                    required=bonds,project=True,physical_support=physical_support)
         if stats['phase_rules']['terminal']:
             return dict(status='INFEASIBLE',**stats)
         if automatic_rules:

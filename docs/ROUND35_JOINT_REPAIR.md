@@ -18,7 +18,7 @@ All 256 installed 207/54 queries returned the unchanged board. They covered 128 
 
 The unpruned exact subset method charged 383,473 retained subset states on the 640-query comparison. Donor-adjusted suffix bounds reduced this to 95,929. Ordering entire supports by highest upper bound alone worsened it to 125,962. Smallest supports first used 93,343 states, and breaking equal-size ties by their upper bound used 93,284. Unconditional cross-support exact memoization used 98,948 newly solved states. The retained selective version combined 77,228 threshold-aware subproblem visits, 108,845 previously proved bounds or maxima reused, and 422 ordinary subset states on forests. These are internal regional work counters. The native weighted-tail alternatives traded states for older assignment machinery. The one-pair version required 11,820 extra weighted problems and examined 373,260 legal input arcs, so it stays a comparison option in the benchmark.
 
-| 320-round profile, seeds 3500–3503 | Ordinary CP best scores | Final exact-region best scores |
+| 320-round profile, seeds 3500â€“3503 | Ordinary CP best scores | Final exact-region best scores |
 |---|---|---|
 | Ten random cells, at most one contacting pair | 171, 182, 181, 175 | 176, 177, 181, 180 |
 | Eight cells in a forest, changed contacts disjoint | 185, 172, 180, 175 | 177, 179, 181, 181 |

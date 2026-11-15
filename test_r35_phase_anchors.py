@@ -115,6 +115,41 @@ class PhaseAnchorTests(unittest.TestCase):
                     if any((mask&(phase^witness)).bit_count()%2 for mask in rows):continue
                     self.assertEqual(excludes(rule,phase),excludes(smaller,phase))
 
+    def test_private_inventory_bases_preserve_labels_and_isolate_conflicts(self):
+        from r29_gold_phase import SignedParity
+        from r35_anchor_rules import _query_parity
+        p,_,_=ring_donors(103)
+        native=SignedParity(p)
+        first,built=_query_parity(p)
+        self.assertTrue(built)
+        self.assertEqual(list(first.sides),list(native.sides))
+        self.assertEqual(first.base.pivots,native.base.pivots)
+        self.assertTrue(first.pin(0,0))
+        self.assertFalse(first.pin(0,1))
+        second,built=_query_parity(p)
+        self.assertFalse(built)
+        self.assertIsNone(second.base.conflict)
+        self.assertEqual(second.base.pivots,native.base.pivots)
+        self.assertTrue(second.pin(0,1))
+        segments=[[list(endpoint) for endpoint in arc] for arc in p.tiles[0]['segments']]
+        orig=segments[0][0][1]
+        segments[0][0][1]=1 if orig!=1 else 2
+        p.tiles[0]['segments']=segments
+        changed,built=_query_parity(p)
+        self.assertTrue(built)
+        self.assertNotEqual(changed.sides,second.sides)
+
+    def test_damaged_optional_anchor_receipt_is_ignored(self):
+        from unittest.mock import patch
+        from r35_anchor_rules import _published
+        try:
+            for contents in (b'{',b'{}',b'null',b'{"fingerprint":"other","rules":[]}'):
+                _published.cache_clear()
+                with patch("pathlib.Path.read_bytes",return_value=contents):
+                    self.assertEqual(_published(),(None,()))
+        finally:
+            _published.cache_clear()
+
     def test_proved_mesh_rejects_a_different_signed_board(self):
         from r35_anchor_rules import has_proved_mesh
         p,_,_=ring_donors(103)

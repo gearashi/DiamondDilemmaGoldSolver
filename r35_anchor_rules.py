@@ -1,4 +1,5 @@
 """Replay geographic phase exclusions before sharing them between embedding queries."""
+from copy import copy
 from functools import lru_cache
 from hashlib import sha256
 import json
@@ -13,11 +14,22 @@ from r35_phase_anchors import narrow
 @lru_cache(maxsize=1)
 def _published():
     path = Path(__file__).parent / "docs" / "R35_PHASE_ANCHOR_CORES.json"
-    if not path.is_file():
+    try:
+        data = json.loads(path.read_bytes())
+        if data["fingerprint"] != "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853":
+            return None, ()
+        rows = []
+        for entry in data["rules"]:
+            anchor = entry["anchor"]
+            pins = tuple((t,v) for t,v in entry["pins"])
+            if (type(anchor) is not int or not 0 <= anchor < 160 or not pins
+                    or any(type(t) is not int or not 0<=t<160 or type(v) is not int or v not in (0,1)
+                           for t,v in pins) or len(dict(pins)) != len(pins)):
+                continue
+            rows.append((anchor,pins))
+        return data["fingerprint"], tuple(rows)
+    except (OSError, ValueError, TypeError, KeyError, RecursionError):
         return None, ()
-    data = json.loads(path.read_bytes())
-    rows = tuple((row["anchor"], tuple(map(tuple, row["pins"]))) for row in data["rules"])
-    return data["fingerprint"], rows
 
 
 # Generated DIMACS and independent refutation are bound in docs/R35_FIXED_PHASE_PROOF.json.
@@ -69,14 +81,30 @@ def project_rule(basis, row):
         basis.rollback(mark)
 
 
-def check_rules(problem, pins, deadline, *, candidates=None, project=False, required=()):
+def _query_parity(problem):
+    """Give each query a private elimination basis with the same tile-inventory rows."""
+    from r29_gold_phase import PhaseBasis, SignedParity
+    sides = tuple((sum(1<<(slot-1) for slot in slots),sign) for slots,sign in raw_sides(problem.tiles))
+    template = getattr(problem, "_anchor_parity_template", None)
+    build = template is None or template.sides != sides
+    if build:
+        template = SignedParity(problem,sides=sides)
+        problem._anchor_parity_template = template
+    query = copy(template)
+    query.base = PhaseBasis()
+    query.base.pivots = template.base.pivots.copy()
+    query.base.conflict = template.base.conflict
+    return query, build
+
+
+def check_rules(problem, pins, deadline, *, candidates=None, project=False, required=(), physical_support=False):
     """Each returned pin assignment and its global complement exclude every board."""
     proven = ()
     if candidates is None:
         if has_proved_mesh(problem):
             proven = tuple((t, (PROVED_PHASE >> t) & 1) for t in range(problem.n))
         fingerprint, candidates = _published()
-        if not proven and fingerprint != problem.fingerprint:
+        if not proven and (problem.n != 160 or fingerprint != problem.fingerprint):
             candidates = ()
     accepted = []
     stats = dict(replayed=0, reused=0, clauses=0, terminal=False)
@@ -84,8 +112,11 @@ def check_rules(problem, pins, deadline, *, candidates=None, project=False, requ
         return accepted, stats
     parity = None
     if project and (required or 0 < len(pins) < problem.n):
-        from r29_gold_phase import SignedParity
-        parity = SignedParity(problem)
+        parity, built = _query_parity(problem)
+        stats["inventory_builds"] = int(built)
+        if physical_support:
+            from r32_gold_bonds import inventory
+            required = (*required, *inventory(problem).required)
         for a, b in required:
             parity.bond(a, b)
         for tile, value in pins.items():

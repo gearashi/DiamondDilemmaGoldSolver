@@ -12,9 +12,9 @@ On 240 distinct saved transitions with a physically compatible earlier state and
 
 | Paired profile | Released cleanup count / summed seams lost | Guarded final cleanup count | Released 320-round scores | Guarded 320-round scores |
 |---|---|---:|---|---|
-| Exact packing and two-bound regional repair, seeds 3500–3503 | 536 / 1,432 | 0 | 180, 176, 184, 175 | 181, 179, 181, 175 |
-| Released full circulation, seeds 3504–3507 | 267 / 647 | 0 | 180, 182, 175, 181 | 183, 174, 176, 176 |
-| Individual profitable cycles, seeds 3508–3511 | 598 / 1,526 | 0 | 178, 183, 179, 175 | 184, 183, 185, 178 |
+| Exact packing and two-bound regional repair, seeds 3500â€“3503 | 536 / 1,432 | 0 | 180, 176, 184, 175 | 181, 179, 181, 175 |
+| Released full circulation, seeds 3504â€“3507 | 267 / 647 | 0 | 180, 182, 175, 181 | 183, 174, 176, 176 |
+| Individual profitable cycles, seeds 3508â€“3511 | 598 / 1,526 | 0 | 178, 183, 179, 175 | 184, 183, 185, 178 |
 
 On the first four starts, prices-only finished at 176/181/181/175 and final projection at 178/175/180/178. Each profile used identical starts, its own 16/64/320-round prefixes, and a separate cold 64-round replay on seed 3500. In a further sixteen one-round physical controls, five had no collision anywhere on the released path. Their guarded scores tied once and improved four times; different physically legal ties and candidate lists can alter the path even before the winning sequence has a collision.
 
@@ -28,7 +28,7 @@ On the first four starts, prices-only finished at 176/181/181/175 and final proj
 
 ## 38. Coordinate whole mandatory assemblies and price displaced pieces
 
-The original eight rigid dimers each have 480 legal poses. Single relocation samples up to eight poses of one dimer and uses a random legal assignment for the displaced pieces. The optional `--assembly-relocation priced` keeps that candidate and scores every legal displaced-piece permutation and rotation for each sampled pose, up to four displaced pieces. `reciprocal` adds all legal pose pairs that exchange two entire dimer footprints. That is 28 pairs and 112 possible oriented exchanges on the original board. `mutual` also repairs sampled poses that partially overlap another assembly. Each mode keeps the best fully legal witness and checks its physical edge score. The search keeps the released sampler�s random-number progression.
+The original eight rigid dimers each have 480 legal poses. Single relocation samples up to eight poses of one dimer and uses a random legal assignment for the displaced pieces. The optional `--assembly-relocation priced` keeps that candidate and scores every legal displaced-piece permutation and rotation for each sampled pose, up to four displaced pieces. `reciprocal` adds all legal pose pairs that exchange two entire dimer footprints. That is 28 pairs and 112 possible oriented exchanges on the original board. `mutual` also repairs sampled poses that partially overlap another assembly. Each mode keeps the best fully legal witness and checks its physical edge score. The search keeps the released sampler’s random-number progression.
 
 | Independent controls | Better displacement orientations | Plus reciprocal exchanges | Plus partial-overlap exchanges |
 |---|---:|---:|---:|
@@ -100,7 +100,7 @@ The Round 35 contour comparison emitted 35 source records representing 31 exact 
 | 8 | 16 | 141,120 | 61,440 | 480 | 61,440 |
 | 16 | 16 | 321,580 | 122,880 | 3,840 | 122,860 |
 
-All 48 original phase-compatible runs retained every requested join, yielding 432 optional placements. The independently traversed and incrementally joined models returned identical complete physical boards on each run, with the same mandatory and forbidden mate validation. A second comparison bypassed 203,040 singleton index rows within the joined algorithm. At depth 16 the resulting initial boards had 27�35 seams before repair.
+All 48 original phase-compatible runs retained every requested join, yielding 432 optional placements. The independently traversed and incrementally joined models returned identical complete physical boards on each run, with the same mandatory and forbidden mate validation. A second comparison bypassed 203,040 singleton index rows within the joined algorithm. At depth 16 the resulting initial boards had 27–35 seams before repair.
 
 When the bounded assembly constructor fails, a separate occupancy search can prove an incompatible subset of rigid groups. It tries removing groups while the remaining conflict can still be proved. Rollback then removes the latest optional edge in the conflict and rebuilds other surviving groups. The planted conflict preserves a later, unrelated merge that suffix rollback would discard. A budget-limited proof yields only the ordinary retry. A compatible later arrangement survives both a stopped attempt and a completed packing check. Original unrestricted starts showed no rollback incidence in this sample.
 

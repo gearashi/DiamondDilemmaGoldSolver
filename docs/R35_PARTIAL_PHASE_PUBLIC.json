@@ -17,6 +17,7 @@
           "reused": 0,
           "clauses": 2,
           "terminal": true,
+          "inventory_builds": 0,
           "certified_fixed_phase": true,
           "stored_partial_phases": 2,
           "redundant_relative_signs": 47
@@ -24,13 +25,14 @@
       },
       "previous": {
         "status": "UNKNOWN",
-        "branches": 161001,
-        "cp_calls": 8,
+        "branches": 194073,
+        "cp_calls": 9,
         "phase_rules": {
           "replayed": 0,
           "reused": 0,
           "clauses": 2,
           "terminal": false,
+          "inventory_builds": 0,
           "certified_fixed_phase": true,
           "stored_partial_phases": 0,
           "redundant_relative_signs": 92,
@@ -53,6 +55,7 @@
           "reused": 0,
           "clauses": 2,
           "terminal": true,
+          "inventory_builds": 0,
           "certified_fixed_phase": true,
           "stored_partial_phases": 2,
           "redundant_relative_signs": 47
@@ -60,13 +63,14 @@
       },
       "previous": {
         "status": "UNKNOWN",
-        "branches": 197141,
-        "cp_calls": 9,
+        "branches": 207088,
+        "cp_calls": 10,
         "phase_rules": {
           "replayed": 0,
           "reused": 0,
           "clauses": 2,
           "terminal": false,
+          "inventory_builds": 0,
           "certified_fixed_phase": true,
           "stored_partial_phases": 0,
           "redundant_relative_signs": 92,
@@ -89,6 +93,7 @@
           "reused": 0,
           "clauses": 4,
           "terminal": true,
+          "inventory_builds": 0,
           "certified_fixed_phase": true,
           "stored_partial_phases": 2,
           "redundant_relative_signs": 91
@@ -96,13 +101,14 @@
       },
       "previous": {
         "status": "UNKNOWN",
-        "branches": 163193,
-        "cp_calls": 11,
+        "branches": 197172,
+        "cp_calls": 13,
         "phase_rules": {
           "replayed": 0,
           "reused": 0,
           "clauses": 2,
           "terminal": false,
+          "inventory_builds": 0,
           "certified_fixed_phase": true,
           "stored_partial_phases": 0,
           "redundant_relative_signs": 93,
@@ -125,6 +131,7 @@
           "reused": 0,
           "clauses": 4,
           "terminal": true,
+          "inventory_builds": 0,
           "certified_fixed_phase": true,
           "stored_partial_phases": 2,
           "redundant_relative_signs": 91
@@ -139,6 +146,7 @@
           "reused": 0,
           "clauses": 2,
           "terminal": false,
+          "inventory_builds": 0,
           "certified_fixed_phase": true,
           "stored_partial_phases": 0,
           "redundant_relative_signs": 93,
@@ -146,5 +154,15 @@
         }
       }
     }
-  ]
+  ],
+  "inventory_reuse": {
+    "cases": 108,
+    "prior_builds": 108,
+    "cached_builds": 1,
+    "previous_seconds": 1.8599999999860302,
+    "current_seconds": 0.9839999999967404,
+    "rejected": 56,
+    "surviving": 52,
+    "all_projected_clauses_equal": true
+  }
 }

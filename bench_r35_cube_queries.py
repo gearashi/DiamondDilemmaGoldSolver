@@ -12,7 +12,46 @@ from r35_phase_cube_rules import certified_rules
 from search_problem import SearchProblem
 
 
+def compare_inventory(problem):
+    from random import Random
+    from time import monotonic
+    from bench_r35_mixed_sewings import original_sources
+    from r29_gold_phase import SignedParity
+
+    cases = []
+    for donor in original_sources().values():
+        pins = dict(enumerate(donor["phases"]))
+        for seed in (29,223):
+            pairs = list(map(tuple,donor["pairs"]))
+            Random(seed).shuffle(pairs)
+            for count in (8,64,112,128,144,192,240):
+                cases.append(({},pairs[:count]))
+            cases.append(({},[*pairs[:64],(0,0)]))
+            cases.append(({t:pins[t] for t in range(0,problem.n,5)},pairs[:12]))
+    Random(35083).shuffle(cases)
+    def run():
+        answers = []
+        builds = 0
+        start = monotonic()
+        for pins, bonds in cases:
+            rows,stats=check_rules(problem,pins,float("inf"),project=True,required=bonds,
+                                   physical_support=True)
+            builds += stats.pop("inventory_builds")
+            answers.append((rows,stats))
+        return answers,builds,monotonic()-start
+    with patch("r35_anchor_rules._query_parity",side_effect=lambda p:(SignedParity(p),True)):
+        previous,cold,previous_seconds=run()
+    current,warm,current_seconds=run()
+    if current!=previous or warm!=1 or cold!=len(cases):
+        raise AssertionError("Reusing signed inventory changed a result or failed to avoid reconstruction.")
+    return dict(cases=len(cases),prior_builds=cold,cached_builds=warm,
+                previous_seconds=previous_seconds,current_seconds=current_seconds,
+                rejected=sum(r[1]["terminal"] for r in current),
+                surviving=sum(not r[1]["terminal"] for r in current),all_projected_clauses_equal=True)
+
+
 def measure(problem, seconds, native):
+    reuse = compare_inventory(problem)
     rules = certified_rules(problem)
     required = inventory(problem).required
     rows = []
@@ -40,7 +79,7 @@ def measure(problem, seconds, native):
             if old:
                 entry["previous"]={k:old[k] for k in ("status","branches","cp_calls","phase_rules")}
             rows.append(entry)
-    return dict(fingerprint=problem.fingerprint,per_solve_seconds=seconds,queries=rows)
+    return dict(fingerprint=problem.fingerprint,per_solve_seconds=seconds,queries=rows,inventory_reuse=reuse)
 
 
 if __name__=="__main__":
