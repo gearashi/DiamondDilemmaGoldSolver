@@ -119,6 +119,16 @@ EXPORT int dd_restore_default_frames(uint32_t n, uint32_t rows, uint32_t size,
         const uint32_t *index = packet+base, *values = index+directory;
         if ((stream_bits & 31) && values[words-1] >> (stream_bits & 31)) return 0;
         size_t target = (size_t)(desc[2]+row)*n;
+        if (!total && mode == 1) {
+            if (count != take || !(bias[0] || bias[1] || bias[2] != 65535 || bias[3])) return 0;
+            uint16_t *fields[4] = {firsts, lengths, cursors, shifts};
+            for (unsigned f = 0; f < 4; ++f) {
+                uint16_t *span = fields[f] + target + lo;
+                for (uint32_t j = 0; j < take; ++j) span[j] = (uint16_t)bias[f];
+            }
+            /* These physically contiguous constant rows have no directory or payload words. */
+            continue;
+        }
         uint32_t prior = 0, present = 0, word = 0, bitmap = 0;
         for (uint32_t i = 0; i < take; ++i) {
             uint32_t lane = lo+i;

@@ -260,5 +260,6 @@ class FrameDefaults:
                     self.maps+=1;self.read_bytes+=4*len(packet)
                     if packet[0]:raise ValueError('Physical fields changed during frame packing.')
                     raw=packet[1:]
-                (self.decoder or _restore)(arrays,start,plan,raw)
+                decoder=self.decoder if size and self.decoder else _restore
+                decoder(arrays,start,plan,raw)
         return tuple(a.ravel() for a in arrays)
