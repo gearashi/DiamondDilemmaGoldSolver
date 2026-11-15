@@ -70,18 +70,40 @@ def verify(problem, reference, required, physical_groups, evidence, *, charged=N
     return (weight_sum+maximum-1)//maximum
 
 
-def checked_contact_bound(problem,reference,required,groups,*,charged=None,signed_parity=False):
+def wide_integer_scope(required,physical_groups,charged):
+    """Match exactly the source groups of the independently checked all-pattern CNF."""
+    from r32_gold_loss import digest
+    directory=CERTIFICATE.parent
+    try:
+        receipt=json.loads((directory/'R35_CONTACT_WIDE_PROOF.json').read_bytes())
+        base=[frozenset(map(tuple,g)) for g in receipt['physical_groups']]
+        geographic=json.loads((directory/'R35_GEOGRAPHIC_RESIDUALS.json').read_bytes())['geographic_cores']
+        contact=json.loads((directory/'R35_EDGE_CONTACTS.json').read_bytes())['edge_perfect_cores']
+        source={frozenset(map(tuple,g))-required for g in [*geographic,*[row for row in contact if len(row)<=13]]}
+        source.update(g-required for g in base)
+    except (OSError,ValueError,TypeError,KeyError):
+        return False
+    expected='5322fed7f3b5978995cdc5f220c8a4c408c9b37919c4316173589a8ded9b3002'
+    if digest(sorted(sorted(row) for row in source))!=expected or not set(base)<=set(map(frozenset,physical_groups)):
+        return False
+    if charged is None:return True
+    given={frozenset(g)-required for g in charged}
+    return all(g in given or any(consequence<=g for consequence in given) for g in source)
+
+
+def checked_contact_bound(problem,reference,required,groups,*,charged=None,signed_parity=False,integer=False):
     try:data=json.loads(CERTIFICATE.read_bytes())
     except (OSError,ValueError):return 0
     bound=verify(problem,frozenset(reference),frozenset(required),{frozenset(g) for g in groups},data,
                   charged=None if charged is None else tuple(frozenset(g)-required for g in charged))
     if bound==25 and signed_parity:
-        # The separately verified cap-25 DRAT proof needs the signed pair and
+        # The checked cap-26 weighted DRAT proof needs the signed pair and
         # reciprocal-inventory parity equations together with exactly these terms.
         from r32_gold_loss import digest
         identity=digest([data['fingerprint'],sorted(map(tuple,data['reference'])),
                          sorted(map(tuple,data['required'])),
                          sorted((r['kind'],r['weight'],sorted(map(tuple,r['bonds']))) for r in data['weighted_cores'])])
         if identity=='3c0a3e1592b5c7fdde4279da83b240c8a78d84a1210de02cb3f8f02d065ce200':
-            return 26
+            if integer and wide_integer_scope(frozenset(required),groups,charged):return 31
+            return 27
     return bound

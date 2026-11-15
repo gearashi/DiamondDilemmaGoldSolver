@@ -151,7 +151,7 @@ def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refi
         read_scopes=tuple(dict.fromkeys((scope,geo_plain,*read_scopes)))
     if contacts_present:
         from r35_contact_certificate import checked_contact_bound
-        contact_bound=checked_contact_bound(problem,ref,required,groups,charged=charged_groups,signed_parity=True)
+        contact_bound=checked_contact_bound(problem,ref,required,groups,charged=charged_groups,signed_parity=True,integer=refine_integer)
         if upper<contact_bound:
             return dict(status='INFEASIBLE',loss_budget=upper,checked_layers=indices,
                         all_outside_layers=all_layers_requested,certified_loss_lower_bound=contact_bound,
@@ -402,6 +402,7 @@ def main():
     parser.add_argument('--outside',type=int,help='In loss, outside phase errors. In geographic, exact physical bond losses outside the packed groups.')
     parser.add_argument('--page',type=int,default=8192)
     parser.add_argument('--refine-integer',action='store_true',help='In loss mode, check signed integer inventories before accepting a phase pattern (wide phase images use OR-Tools).')
+    parser.add_argument('--integer-backend',choices=('sat','scip'),default='sat',help='The signed-inventory engine for integer-bound. SCIP branches on the physical variables.')
     parser.add_argument('--independent-native',action='store_true',help='Rerun integer-bound without published decisions, or phase-sewing without bundled or saved witness hints.')
     parser.add_argument('--sphere-euler',action='store_true',help='Require the spherical one-loop Euler equation in signed integer search.')
     parser.add_argument('--mate-cost',action='store_true',help='Price lost reference pairs in small reciprocal classes, extending to twelve sides for broad overlapping departures.')
@@ -422,6 +423,7 @@ def main():
     if (args.sphere_euler or args.mate_support or args.mate_cost) and not (args.mode=='integer-bound' or args.mode=='loss' and args.refine_integer):
         parser.error('Signed physical conditions require integer-bound or loss --refine-integer')
     if args.independent_native and args.mode not in ('integer-bound','phase-sewing'):parser.error('--independent-native requires integer-bound or phase-sewing')
+    if args.integer_backend!='sat' and args.mode!='integer-bound':parser.error('--integer-backend requires integer-bound')
     if args.excess_charges and args.mode!='integer-bound':parser.error('--excess-charges requires integer-bound')
     if args.all_groups and args.mode not in ('loss','integer-bound'):parser.error('--all-groups requires loss or integer-bound')
     if args.backend!='cpu' and args.mode!='watch':parser.error('CUDA applies to watch mode')
@@ -495,11 +497,11 @@ def main():
             contact_groups=contact_departures(p,ref,mandatory,contact_hints)
             conditional_groups=tuple(dict.fromkeys((*geographic_groups,*contact_groups)))
             contact_bound=0
-            if contact_groups and not args.independent_native:
+            if contact_groups:
                 from r35_contact_certificate import checked_contact_bound
                 contact_bound=checked_contact_bound(p,ref,mandatory,groups,
-                    charged=[*packed,*extra_groups,*conditional_groups],signed_parity=True)
-            if contact_bound and args.upper<contact_bound:
+                    charged=[*packed,*extra_groups,*conditional_groups],signed_parity=True,integer=True)
+            if contact_bound and args.upper<contact_bound and not args.independent_native:
                 out=dict(status='INFEASIBLE',cap=args.upper,all_outside_layers=True,
                          certified_loss_lower_bound=contact_bound,
                          work={'decisions':0,'contact_weight_certificate':1})
@@ -511,9 +513,13 @@ def main():
                 if args.sphere_euler or args.mate_support or args.mate_cost:
                     from r35_signed_conditions import SignedConditions
                     conditions=SignedConditions(p,euler=args.sphere_euler,mates=args.mate_support,mate_cost=args.mate_cost)
+                budgets=[]
+                if contact_bound and args.integer_backend=='sat':
+                    from r35_contact_slack import applicable_budgets
+                    budgets=applicable_budgets(p,ref,mandatory,groups,[*packed,*extra_groups,*conditional_groups],args.upper)
                 out = global_integer(p,ref,packed,mandatory,outside,args.upper,args.seconds,
                                          additional_groups=[*extra_groups, *conditional_groups],
-                                         excess=args.excess_charges,independent_native=args.independent_native,conditions=conditions)
+                                         excess=args.excess_charges,independent_native=args.independent_native,conditions=conditions,contact_budgets=budgets,integer_backend=args.integer_backend)
             if geographic_groups:
                 out.update(relaxation='signed_inventory_with_geographic_departures',
                            verified_geographic_departures=len(geographic_groups))

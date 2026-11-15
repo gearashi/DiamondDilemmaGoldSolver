@@ -1513,8 +1513,22 @@
       "source_id": "genuine packing-positive follow-up to #80",
       "title": "Certify incompatible incidental contacts in every pose of a retained physical-bond path",
       "mechanism": "INDUCED-EDGE-CONTACT-CERTIFICATE",
-      "state": "testing",
-      "proposal_and_validation": "Compare all labelled root poses and actual raw line-endpoints; retain the physically embeddable but edge-perfect-impossible type separately. Discover alternate reference paths, phase and full matching costs, construct an integer-weight certificate, check objective scope, positive controls and global retention deployment."
+      "state": "keep scoped induced-contact rules, certified Gold bound and physical-variable integer search",
+      "proposal_and_validation": "Compare all labelled root poses and actual raw line-endpoints; retain the physically embeddable but edge-perfect-impossible type separately. Discover alternate reference paths, phase and full matching costs, construct an integer-weight certificate, check objective scope, positive controls and global retention deployment.",
+      "decision": "Expose separate embeddable-but-mismatching departure rules, exact scope-bound signed/geometry pruning, validated 31-loss phase reuse, and optional SCIP in integer-bound. Preserve ordinary geometric and pairing semantics.",
+      "measurement": "2,143 incumbent paths through length 17 produced 966 new groups and 985 total. All 106 tested signed prices strengthened (+1,009 over 194 geometric groups). The original broad signed optimum is exactly 31 named losses: 70,980 rational VIPR derivations exclude cap 30, a raw physical phase attains 31, and all 1,827 axioms independently match. Gold can retain at most 176 reference bonds. With 985 rules the public independent SCIP run used 981 nodes at 30 and 947 at 31. Ordinary signed queries spent zero decisions at each cutoff. Geographic guard directly closes 48/72 versus 16/72. Short-budget adverse case and narrower objective controls recorded.",
+      "evidence": [
+        "docs/ROUND35_INDUCED_CONTACTS.md",
+        "docs/R35_CONTACT_WIDE_PROOF.json",
+        "docs/R35_INDUCED_CONTACT_RESULTS.json",
+        "docs/R35_EDGE_CONTACTS.json",
+        "docs/R35_CONTACT_RESIDUALS.json",
+        "verify_r35_contact_wide.py",
+        "verify_r35_contact_vipr.py",
+        "test_r35_contact_mip.py",
+        "test_r35_induced_contacts.py"
+      ],
+      "reopen_if": "A different authentic reference, a new necessary physical-condition family capable of excluding the actual 31-loss witness, or a geographic realization changes the construction problem. Repeated reoptimization at cap 30 in this signed model is closed."
     },
     {
       "id": 82,

@@ -36,6 +36,7 @@ class InventorySAT:
             if not (0 <= a < b < len(sides) and a//3 != b//3 and reverse_mask(sides[a][0]) == sides[b][0]):
                 raise ValueError('Expected a reciprocal physical seam on two different tiles.')
 
+        self.native_backend = native
         self.n = problem.n
         ids = IDPool(start_from=problem.n+1)
         clauses = [[-1]]
@@ -204,6 +205,16 @@ class InventorySAT:
             raise ValueError('Expected nonnegative search duration.')
         if not seconds or seconds == inf:
             return self.solver.solve(assumptions=assumptions)
+        if self.native_backend in ('cadical153','cadical195'):
+            # These bindings honor conflict budgets and do not implement
+            # asynchronous interruption. Retain learned clauses between slices.
+            from time import monotonic
+            deadline=monotonic()+seconds
+            while monotonic()<deadline:
+                self.solver.conf_budget(128)
+                answer=self.solver.solve_limited(assumptions=assumptions)
+                if answer is not None:return answer
+            return None
         timer = Timer(seconds, self.solver.interrupt)
         timer.daemon = True
         timer.start()

@@ -9,9 +9,11 @@ from r35_loss_bound import REFERENCE_SCOPE, checked_lower_bound
 
 
 def certified_reference(problem, codes=None):
-    """Rebuild the exact mathematical scope that the shipped DRAT proof covers."""
+    """Rebuild the physical scope of the independently checked reference-loss bounds."""
     if problem.fingerprint != 'e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853':
         return None
+    from hashlib import sha256
+    from r35_contact_certificate import CERTIFICATE
     try:
         if codes is None:
             codes=read_json(Path(__file__).parent/'docs/R29_INCUMBENT.json')['codes']
@@ -23,9 +25,24 @@ def certified_reference(problem, codes=None):
     packed,required,_=OutsideSyndromes.layout(reference,groups,inventory(problem).required)
     identity=digest([3,problem.fingerprint,sorted(reference),sorted(required),[sorted(g) for g in packed]])
     if identity!=REFERENCE_SCOPE:return None
+    # Rebuild the physical identity on every request. The expensive geometry
+    # replay is reusable only with the same overlap groups and evidence bytes.
+    source=sha256()
+    for name in (CERTIFICATE.name,'R35_CONTACT_WIDE_PROOF.json','R35_GEOGRAPHIC_RESIDUALS.json','R35_EDGE_CONTACTS.json'):
+        try:
+            evidence=(CERTIFICATE.parent/name).read_bytes()
+        except OSError:
+            evidence=b''
+        source.update(sha256(evidence).digest())
+    key=(identity,frozenset(frozenset(group) for group in groups),source.digest())
+    cached=getattr(problem,'_geographic_loss_reference',None)
+    if cached is not None and cached[0]==key:
+        return cached[1]
     from r35_contact_certificate import checked_contact_bound
-    loss=max(checked_lower_bound(identity,groups),checked_contact_bound(problem,reference,required,groups,signed_parity=True))
-    return frozenset(reference),len(reference)-loss
+    loss=max(checked_lower_bound(identity,groups),checked_contact_bound(problem,reference,required,groups,signed_parity=True,integer=True))
+    result=(frozenset(reference),len(reference)-loss)
+    problem._geographic_loss_reference=(key,result)
+    return result
 
 
 def retained_bound(problem,domains,reference,limit,required=()):

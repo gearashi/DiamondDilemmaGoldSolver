@@ -58,6 +58,24 @@ class InferredContactTests(unittest.TestCase):
         bad=dict(d,weighted_cores=[dict(d['weighted_cores'][0],weight=True),*d['weighted_cores'][1:]])
         self.assertFalse(verify(self.p,self.ref,self.req,self.groups[:13],bad))
 
+    def test_stronger_global_proof_requires_its_actual_inventory_and_claim_scope(self):
+        from r35_contact_certificate import checked_contact_bound
+        def read(name,key):
+            return [frozenset(map(tuple,r)) for r in json.loads((CERTIFICATE.parent/name).read_bytes())[key]]
+        physical=self.groups[:13]
+        geo=read('R35_GEOGRAPHIC_RESIDUALS.json','geographic_cores')
+        contact=[g for g in read('R35_EDGE_CONTACTS.json','edge_perfect_cores') if len(g)<=13]
+        charged=[*physical,*geo,*contact]
+        def bound(rows,**flags):
+            return checked_contact_bound(self.p,self.ref,self.req,physical,charged=rows,**flags)
+        self.assertEqual(bound(charged),25)
+        self.assertEqual(bound(charged,signed_parity=True),27)
+        self.assertEqual(bound(charged,signed_parity=True,integer=True),31)
+        used={frozenset(map(tuple,r['bonds'])) for r in self.certificate['weighted_cores']}
+        compact=[*physical,*(g for g in [*geo,*contact] if g in used)]
+        self.assertEqual(bound(compact,signed_parity=True,integer=True),27)
+        self.assertEqual(bound(physical,signed_parity=True,integer=True),0)
+
     def test_only_full_embedded_objective_accepts_contact_cuts(self):
         from r30_gold import search
         core=min(self.contacts,key=len)

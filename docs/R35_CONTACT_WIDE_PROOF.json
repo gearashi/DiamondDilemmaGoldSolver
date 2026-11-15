@@ -1,0 +1,608 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "minimum_lost": 31,
+  "maximum_retained": 176,
+  "signed_integer": true,
+  "physical_groups": [
+    [
+      [
+        96,
+        392
+      ]
+    ],
+    [
+      [
+        245,
+        352
+      ]
+    ],
+    [
+      [
+        115,
+        176
+      ],
+      [
+        174,
+        382
+      ],
+      [
+        285,
+        383
+      ]
+    ],
+    [
+      [
+        14,
+        473
+      ],
+      [
+        54,
+        433
+      ],
+      [
+        55,
+        356
+      ],
+      [
+        133,
+        354
+      ],
+      [
+        355,
+        471
+      ]
+    ],
+    [
+      [
+        171,
+        376
+      ],
+      [
+        173,
+        374
+      ],
+      [
+        192,
+        373
+      ],
+      [
+        194,
+        266
+      ],
+      [
+        265,
+        350
+      ],
+      [
+        349,
+        377
+      ]
+    ],
+    [
+      [
+        26,
+        178
+      ],
+      [
+        37,
+        338
+      ],
+      [
+        38,
+        331
+      ],
+      [
+        177,
+        401
+      ],
+      [
+        179,
+        332
+      ],
+      [
+        324,
+        399
+      ],
+      [
+        325,
+        337
+      ]
+    ],
+    [
+      [
+        15,
+        330
+      ],
+      [
+        17,
+        262
+      ],
+      [
+        37,
+        338
+      ],
+      [
+        38,
+        331
+      ],
+      [
+        99,
+        263
+      ],
+      [
+        101,
+        391
+      ],
+      [
+        310,
+        336
+      ],
+      [
+        311,
+        390
+      ]
+    ],
+    [
+      [
+        21,
+        80
+      ],
+      [
+        22,
+        441
+      ],
+      [
+        78,
+        286
+      ],
+      [
+        201,
+        371
+      ],
+      [
+        202,
+        357
+      ],
+      [
+        287,
+        369
+      ],
+      [
+        358,
+        467
+      ],
+      [
+        443,
+        465
+      ]
+    ],
+    [
+      [
+        13,
+        446
+      ],
+      [
+        14,
+        473
+      ],
+      [
+        30,
+        385
+      ],
+      [
+        32,
+        212
+      ],
+      [
+        55,
+        356
+      ],
+      [
+        56,
+        445
+      ],
+      [
+        139,
+        298
+      ],
+      [
+        222,
+        396
+      ],
+      [
+        297,
+        384
+      ]
+    ],
+    [
+      [
+        133,
+        354
+      ],
+      [
+        135,
+        400
+      ],
+      [
+        136,
+        322
+      ],
+      [
+        225,
+        472
+      ],
+      [
+        226,
+        458
+      ],
+      [
+        324,
+        399
+      ],
+      [
+        326,
+        406
+      ],
+      [
+        355,
+        471
+      ],
+      [
+        405,
+        457
+      ]
+    ],
+    [
+      [
+        18,
+        403
+      ],
+      [
+        20,
+        249
+      ],
+      [
+        67,
+        140
+      ],
+      [
+        68,
+        404
+      ],
+      [
+        87,
+        251
+      ],
+      [
+        89,
+        409
+      ],
+      [
+        138,
+        340
+      ],
+      [
+        313,
+        393
+      ],
+      [
+        314,
+        410
+      ],
+      [
+        341,
+        395
+      ]
+    ],
+    [
+      [
+        4,
+        273
+      ],
+      [
+        6,
+        50
+      ],
+      [
+        7,
+        362
+      ],
+      [
+        39,
+        74
+      ],
+      [
+        41,
+        152
+      ],
+      [
+        48,
+        290
+      ],
+      [
+        52,
+        112
+      ],
+      [
+        73,
+        114
+      ],
+      [
+        111,
+        361
+      ],
+      [
+        115,
+        176
+      ],
+      [
+        175,
+        289
+      ]
+    ],
+    [
+      [
+        35,
+        85
+      ],
+      [
+        44,
+        198
+      ],
+      [
+        59,
+        110
+      ],
+      [
+        61,
+        230
+      ],
+      [
+        62,
+        447
+      ],
+      [
+        71,
+        449
+      ],
+      [
+        77,
+        154
+      ],
+      [
+        109,
+        162
+      ],
+      [
+        126,
+        188
+      ],
+      [
+        153,
+        429
+      ],
+      [
+        164,
+        411
+      ],
+      [
+        186,
+        233
+      ],
+      [
+        229,
+        232
+      ],
+      [
+        246,
+        414
+      ],
+      [
+        260,
+        308
+      ],
+      [
+        300,
+        419
+      ],
+      [
+        307,
+        430
+      ]
+    ]
+  ],
+  "geographic_file": "R35_GEOGRAPHIC_RESIDUALS.json",
+  "contact_file": "R35_EDGE_CONTACTS.json",
+  "maximum_contact_length": 13,
+  "geographic_groups": 194,
+  "contact_groups": 326,
+  "projected_group_count": 528,
+  "projected_group_sha256": "5322fed7f3b5978995cdc5f220c8a4c408c9b37919c4316173589a8ded9b3002",
+  "strongest_checked_cap": 30,
+  "proof_files": {
+    "model.lp": {
+      "bytes": 413479,
+      "sha256": "fe32591081ee8537638afd72c8712e3987a70c79545262127dded84fc267ed33"
+    },
+    "proof.vipr": {
+      "bytes": 375340715,
+      "sha256": "88cf23cb7b15bfe91c8ea6fe5f9bf35e9f19699fa5bba7a9ac90ef533fcc53ca"
+    },
+    "solver.log": {
+      "bytes": 17297,
+      "sha256": "41c10dee9bbe903469c99c7ddada1a02752ccf95a4f2e5aef10ae049d6e9a0aa"
+    },
+    "checker.log": {
+      "bytes": 485,
+      "sha256": "881a5517e9afd46a66b470fe13473e19f8b9083367549703c1d78feee6c8b696"
+    }
+  },
+  "mandatory_bonds": 8,
+  "reference_bonds": 207,
+  "witness": {
+    "cost": 31,
+    "phase": "0xce77aac6e89509e8867b457e8c580a233a5e5f22",
+    "lost": [
+      [
+        10,
+        328
+      ],
+      [
+        18,
+        403
+      ],
+      [
+        20,
+        249
+      ],
+      [
+        26,
+        178
+      ],
+      [
+        52,
+        112
+      ],
+      [
+        59,
+        110
+      ],
+      [
+        61,
+        230
+      ],
+      [
+        67,
+        140
+      ],
+      [
+        81,
+        296
+      ],
+      [
+        96,
+        392
+      ],
+      [
+        99,
+        263
+      ],
+      [
+        104,
+        460
+      ],
+      [
+        117,
+        463
+      ],
+      [
+        120,
+        234
+      ],
+      [
+        133,
+        354
+      ],
+      [
+        135,
+        400
+      ],
+      [
+        149,
+        379
+      ],
+      [
+        165,
+        220
+      ],
+      [
+        174,
+        382
+      ],
+      [
+        177,
+        401
+      ],
+      [
+        194,
+        266
+      ],
+      [
+        197,
+        423
+      ],
+      [
+        205,
+        216
+      ],
+      [
+        222,
+        396
+      ],
+      [
+        237,
+        342
+      ],
+      [
+        245,
+        352
+      ],
+      [
+        254,
+        281
+      ],
+      [
+        276,
+        387
+      ],
+      [
+        300,
+        419
+      ],
+      [
+        324,
+        399
+      ],
+      [
+        443,
+        465
+      ]
+    ]
+  },
+  "scope": "Exact signed endpoint class inventories, eight mandatory bonds, thirteen original physical departure groups and 194 geographic plus 326 induced-contact groups. A signed witness does not assign tile positions.",
+  "redundant_signed_cycles": {
+    "file": "R35_CONTACT_SIGNED_CYCLES.json",
+    "count": 43,
+    "method": "Raw signed-side and required-pair XOR inconsistency replay"
+  },
+  "format": "VIPR 1.0",
+  "native": {
+    "solver": "SCIP 10.0.0 exact",
+    "source_revision": "0c80fdd8e9",
+    "original_model_rows": 1083,
+    "nodes": 7225,
+    "original_integer_variables": 372,
+    "starting_axioms": 1827,
+    "variable_bounds": 744,
+    "derivations": 70980,
+    "explicitly_completed_weak_rows": 4732,
+    "presolve": false,
+    "cut_separation": false
+  },
+  "checker": {
+    "project": "scipopt/vipr",
+    "revision": "99eec197a49b2bd9ad33c1f4c7afabe93caa6511",
+    "command": "viprchk proof.vipr",
+    "result": "Successfully verified infeasibility.",
+    "cpu_seconds": 35.2805
+  },
+  "prior_independent_drat": {
+    "cap": 29,
+    "variables": 18048,
+    "clauses": 36887,
+    "core_lemmas": 691161,
+    "resolution_steps": 98403763,
+    "cnf_sha256": "6232bf545825ed9c247243bfd7ec1c4659a5d17c41e6f906485567e3102aa858"
+  },
+  "release_asset": "DiamondDilemmaGoldSolver-R35-contact-wide-proof.zip"
+}
