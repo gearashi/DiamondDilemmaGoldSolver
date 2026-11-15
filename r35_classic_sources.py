@@ -12,6 +12,7 @@ from exact_source_evidence import _source_references
 REVIEWED = frozenset({
     '9ef7d713a75de279771abb29ea7253fa659a5610b49dcc969b7e90cd86ef89c4',
     '8e687009420a495e9b9540522825e4df9a70933d380040ba8e31b7e1376f603a',
+    'b111d4f02168a9a78a57df276fb4148c5a0738ace25df75392209ad8d9ce1897',
 })
 SEEDS = {"systematic_search.py", "dfs_webgpu.py", "constraint_native.c", "constraint_native_search.c"}
 CPU_FLAGS = {"cpu_probe", "cpu_endgame", "proof_probes"}

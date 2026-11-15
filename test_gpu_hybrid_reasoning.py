@@ -190,6 +190,23 @@ class HybridHostTests(unittest.TestCase):
         state['entries'][0]={'assignment':partial,'owner_prefix':[],'solved':list(range(0,480,3))}
         with self.assertRaisesRegex(ValueError,'ordinary pending'):service.restore(state)
 
+    def test_probe_only_resume_rejects_endgame_ownership_without_mutating_live_state(self):
+        data,_=gold_fixture()
+        service=CPUAssist(data,'scope',probe=True,endgame=False)
+        before=service.snapshot()
+        incoming=service.snapshot()
+        partial=list(range(0,480,3))
+        partial[-1]=-1
+        incoming['entries']=[{'assignment':partial,'owner_prefix':[0],'nodes':0}]
+        with self.assertRaisesRegex(ValueError,'requires the CPU endgame policy'):
+            service.restore(incoming)
+        self.assertEqual(service.snapshot(),before)
+        enabled=CPUAssist(data,'scope',probe=True,endgame=True)
+        enabled.restore(incoming)
+        self.assertEqual(len(enabled.entries),1)
+        service.restore(before)
+        self.assertEqual(service.snapshot(),before)
+
     def test_cpu_rejection_keeps_ancestors_and_rejects_changed_scope(self):
         data,board=varied_gold_fixture();gpu=assisted_host(data)
         gpu.load_prefixes([list(3*gpu.order[:158])])

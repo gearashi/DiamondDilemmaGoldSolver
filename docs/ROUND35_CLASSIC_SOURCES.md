@@ -13,3 +13,5 @@ The same portable-export change also affected an existing heuristic source manif
 ## Remaining decisions
 
 Test whether recording the backends that actually contributed to future-format checkpoints can safely omit an unused shader, including a mixed-backend resume. Evaluate the independently exercised CPU probe without endgame before extending the reviewed policy. Reverify the approved source digest against the final release tree after all active solver changes land.
+
+A probe-only CPU checkpoint previously accepted a nonempty resumed endgame owner. Such a record could enter the full constraint DFS from the ownership dispatch path. The reader now rejects that policy/ownership mismatch before altering live state. Recheck probe-only scope with a real probe traversal and archived source controls before accepting any additional completion reuse. Existing historical proof scopes retain the stricter policy.

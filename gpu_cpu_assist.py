@@ -248,6 +248,8 @@ class CPUAssist:
             if type(row.get('nodes',0)) is not int or row.get('nodes',0)<0:
                 raise ValueError('Malformed CPU endgame node counter.')
             incoming[key]=row
+        if incoming and not self.endgame_enabled:
+            raise ValueError('A CPU-owned endgame requires the CPU endgame policy on resume.')
         self.entries=incoming
         if isinstance(saved.get('stats'),dict):
             for key in self.stats:
