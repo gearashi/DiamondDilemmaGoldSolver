@@ -1,0 +1,301 @@
+{
+  "root": {
+    "before": 3036,
+    "after": 3035,
+    "exclusions": [
+      {
+        "removed": [
+          319,
+          365
+        ],
+        "required_core": [
+          [
+            318,
+            364
+          ],
+          [
+            319,
+            365
+          ]
+        ],
+        "genus": 0
+      }
+    ],
+    "work": {
+      "trial_joins": 3028,
+      "repeated_tile": 1,
+      "fixed_pairs": 8
+    },
+    "degrees": {
+      "5": 2,
+      "6": 75,
+      "4": 5
+    },
+    "position_variables": 7534,
+    "position_constraints": 28708,
+    "positions": {
+      "applicable": true,
+      "corners": 480,
+      "degrees": {
+        "5": 2,
+        "6": 75,
+        "4": 5
+      },
+      "guarded_steps": 6070
+    }
+  },
+  "original_residuals": [
+    {
+      "pins": 4,
+      "chains_removed_on_survivors": 13,
+      "chains_repeated_tile": 12,
+      "chains_overlong_chain": 0,
+      "chains_unavailable_degree": 1,
+      "chains_length_packing": 0,
+      "packing_removed_on_survivors": 13,
+      "packing_repeated_tile": 12,
+      "packing_overlong_chain": 0,
+      "packing_unavailable_degree": 1,
+      "packing_length_packing": 0,
+      "packing_only_on_chain_survivors": 0,
+      "independently_replayed_premises": 13,
+      "exclusions_by_independent_geometry": 13
+    },
+    {
+      "pins": 12,
+      "chains_removed_on_survivors": 24,
+      "chains_repeated_tile": 17,
+      "chains_overlong_chain": 1,
+      "chains_unavailable_degree": 6,
+      "chains_length_packing": 0,
+      "packing_removed_on_survivors": 24,
+      "packing_repeated_tile": 17,
+      "packing_overlong_chain": 1,
+      "packing_unavailable_degree": 6,
+      "packing_length_packing": 0,
+      "packing_only_on_chain_survivors": 0,
+      "independently_replayed_premises": 24,
+      "exclusions_by_independent_geometry": 24
+    },
+    {
+      "pins": 24,
+      "chains_removed_on_survivors": 38,
+      "chains_repeated_tile": 22,
+      "chains_overlong_chain": 3,
+      "chains_unavailable_degree": 13,
+      "chains_length_packing": 0,
+      "packing_removed_on_survivors": 38,
+      "packing_repeated_tile": 22,
+      "packing_overlong_chain": 3,
+      "packing_unavailable_degree": 13,
+      "packing_length_packing": 0,
+      "packing_only_on_chain_survivors": 0,
+      "independently_replayed_premises": 38,
+      "exclusions_by_independent_geometry": 38,
+      "published_baseline_closed": 1
+    },
+    {
+      "pins": 48,
+      "chains_removed_on_survivors": 32,
+      "chains_repeated_tile": 24,
+      "chains_overlong_chain": 139,
+      "chains_unavailable_degree": 19,
+      "chains_length_packing": 0,
+      "packing_removed_on_survivors": 32,
+      "packing_repeated_tile": 24,
+      "packing_overlong_chain": 139,
+      "packing_unavailable_degree": 19,
+      "packing_length_packing": 0,
+      "packing_only_on_chain_survivors": 0,
+      "independently_replayed_premises": 188,
+      "exclusions_by_independent_geometry": 32,
+      "chains_closed": 6,
+      "packing_closed": 6,
+      "closed_by_independent_geometry": 0,
+      "published_baseline_closed": 2
+    },
+    {
+      "pins": 96,
+      "chains_closed": 4,
+      "chains_repeated_tile": 12,
+      "chains_overlong_chain": 404,
+      "chains_unavailable_degree": 7,
+      "chains_length_packing": 0,
+      "packing_closed": 4,
+      "packing_repeated_tile": 12,
+      "packing_overlong_chain": 404,
+      "packing_unavailable_degree": 7,
+      "packing_length_packing": 0,
+      "packing_only_on_chain_survivors": 0,
+      "independently_replayed_premises": 423,
+      "closed_by_independent_geometry": 2,
+      "published_baseline_closed": 6
+    },
+    {
+      "pins": 144,
+      "published_baseline_closed": 10
+    }
+  ],
+  "original_connected": {
+    "chains": {
+      "status": "INFEASIBLE",
+      "cp_calls": 1,
+      "branches": 0,
+      "corner_preprocessing": {
+        "overlong_chain": 1
+      }
+    },
+    "packing": {
+      "status": "INFEASIBLE",
+      "cp_calls": 1,
+      "branches": 0,
+      "corner_preprocessing": {
+        "overlong_chain": 1
+      }
+    },
+    "positions": {
+      "status": "INFEASIBLE",
+      "cp_calls": 1,
+      "branches": 0,
+      "corner_preprocessing": {
+        "overlong_chain": 1,
+        "positions": {
+          "applicable": true,
+          "corners": 480,
+          "degrees": {
+            "5": 2,
+            "6": 75,
+            "4": 5
+          },
+          "guarded_steps": 0
+        }
+      }
+    }
+  },
+  "planted": [
+    {
+      "seed": 35,
+      "prior": {
+        "status": "GOLD",
+        "cp_calls": 13,
+        "branches": 1198
+      },
+      "chains": {
+        "status": "GOLD",
+        "cp_calls": 10,
+        "branches": 85,
+        "corner_sewing_cuts": 9
+      },
+      "packing": {
+        "status": "GOLD",
+        "cp_calls": 10,
+        "branches": 85,
+        "corner_sewing_cuts": 9
+      },
+      "positions": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "corner_sewing_cuts": 0
+      },
+      "channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      }
+    },
+    {
+      "seed": 71,
+      "prior": {
+        "status": "GOLD",
+        "cp_calls": 34,
+        "branches": 8575
+      },
+      "chains": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "corner_sewing_cuts": 0
+      },
+      "packing": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "corner_sewing_cuts": 0
+      },
+      "positions": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "corner_sewing_cuts": 0
+      },
+      "channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      }
+    },
+    {
+      "seed": 103,
+      "prior": {
+        "status": "UNKNOWN",
+        "cp_calls": 40,
+        "branches": 10805
+      },
+      "chains": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "corner_sewing_cuts": 0
+      },
+      "packing": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "corner_sewing_cuts": 0
+      },
+      "positions": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "corner_sewing_cuts": 0
+      },
+      "channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      }
+    },
+    {
+      "seed": 157,
+      "prior": {
+        "status": "GOLD",
+        "cp_calls": 9,
+        "branches": 180
+      },
+      "chains": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "corner_sewing_cuts": 0
+      },
+      "packing": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "corner_sewing_cuts": 0
+      },
+      "positions": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "corner_sewing_cuts": 0
+      },
+      "channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      }
+    }
+  ]
+}

@@ -172,7 +172,7 @@ def embedding(problem, domains, mates):
 
 
 class GoldMatching:
-    def __init__(self,problem,domains,pins,bonds,cutsets=(),forbidden=(),*,physical_support=True,project_blanks=False):
+    def __init__(self,problem,domains,pins,bonds,cutsets=(),forbidden=(),*,physical_support=True,project_blanks=False,corner_mode=None):
         self.problem=problem
         self.domains=domains
         self.inputs=EndpointCuts(problem)
@@ -209,6 +209,13 @@ class GoldMatching:
                     supported = rows
                 options = [] if supported is None else [
                     (a,b) for a,b in options if b in supported[a]]
+        self.corner_state = None
+        self.corner_stats = None
+        if corner_mode:
+            from r35_corner_chains import filter_options
+            allowed,self.corner_state,self.corner_stats = filter_options(problem,set(options)-banned,wanted,
+                                                                        packing=corner_mode!='chains')
+            options=sorted(allowed)
         self.blank_projection = None
         if project_blanks and any(not mask for mask,_ in self.inputs.sides):
             from r35_blank_projection import BlankProjection
@@ -245,6 +252,9 @@ class GoldMatching:
                 self.m.add(self.mate[pair]==1)
             else:
                 self.m.add_bool_or([])
+        if corner_mode=='positions':
+            from r35_corner_chains import post_positions
+            self.corner_stats['positions'] = post_positions(self)
         if self.blank_projection is not None:
             self.required_nonblank = wanted.intersection(self.mate)
         for group in cutsets:
@@ -318,6 +328,12 @@ class GoldMatching:
                 self.strand_cut(g)
             stats['strand_cuts']=len(self.strand_seen)
             return None
+        if self.corner_state is not None:
+            conflict = self.corner_state.conflict(active)
+            if conflict is not None:
+                self.m.add_bool_or([~self.mate[p] for p in conflict])
+                stats['corner_sewing_cuts'] += 1
+                return None
         if self.blank_projection is not None:
             from r35_blank_projection import lift
             from r31_geographic import physical_bonds
@@ -384,7 +400,7 @@ class GoldMatching:
 
 def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=(), matching=True,
            geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=(),
-           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False):
+           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None):
     from ortools.sat.python import cp_model
     if seconds<=0 or max_rounds<1 or (geography and not matching):
         raise ValueError("Invalid Gold solve budget or mode.")
@@ -395,6 +411,8 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             raise ValueError("Invalid physical side index.")
     started=time.monotonic()
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
+    if corner_mode not in (None,'chains','packing','positions') or (corner_mode and not geography):
+        raise ValueError("Corner constraints require an embed search and a supported corner mode.")
     if type(project_blanks) is not bool:
         raise ValueError("Expected a boolean blank-side projection option.")
     if project_blanks and not matching:
@@ -402,11 +420,13 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
     if matching:
         # These optional full-side formulas refer directly to individual blank literals.
         # Preserve their constraints whenever one of them is requested.
-        if project_blanks and (channel or fraction or bridges or physical_loss is not None):
-            stats['blank_projection_fallback'] = 'full-side channel, pricing, bridge, or loss model'
+        if project_blanks and (channel or fraction or bridges or physical_loss is not None or corner_mode=='positions'):
+            stats['blank_projection_fallback'] = 'full-side channel, pricing, bridge, reference-loss, or vertex position model'
             project_blanks = False
         check=GoldMatching(problem,domains,pins,bonds,cutsets,forbidden,physical_support=physical_support,
-                           project_blanks=project_blanks)
+                           project_blanks=project_blanks,corner_mode=corner_mode)
+        if corner_mode:
+            stats.update(corner_preprocessing=check.corner_stats,corner_sewing_cuts=0)
         if check.blank_projection is not None:
             stats.update(blank_pairs_deferred=len(check.blank_projection.allowed), nonblank_witnesses_checked=0,
                          blank_phase_failures=0, blank_matching_states=0, blank_root_trials=0)
@@ -569,6 +589,8 @@ def main():
     cli.add_argument("--input",type=Path)
     cli.add_argument("--seconds",type=float,default=5)
     cli.add_argument("--rounds",type=int,default=32)
+    cli.add_argument("--corner-mode",choices=("chains","packing","positions"),
+                     help="Check partial physical vertex rings when embedding a sewing.")
     cli.add_argument("--project-blanks",action="store_true",
                      help="Defer blank-side choices in matching or embed; infer geographic blank joins from the mesh.")
     cli.add_argument("--output",type=Path,help="Save a result and its reusable cuts.")
@@ -577,6 +599,9 @@ def main():
     args=cli.parse_args()
     data=read_json(args.input) if args.input else {}
     project_blanks=args.project_blanks or data.get('project_blanks',False)
+    corner_mode=args.corner_mode or data.get('corner_mode')
+    if corner_mode and args.method!='embed':
+        cli.error('--corner-mode requires embed.')
     if project_blanks and args.method not in ('embed','matching'):
         cli.error('--project-blanks requires matching or embed.')
     problem=SearchProblem(read_json(args.tiles))
@@ -616,7 +641,8 @@ def main():
         out=search(problem,matching=args.method!='types',geography=args.method=='embed',
                    cutsets=data.get('strand_cuts',()),type_cuts=reusable,max_rounds=args.rounds,
                    learned_geometry=args.method=="embed" and data.get("learn_geography",True),
-                   channel=data.get("channel",args.method=="embed" and not project_blanks),
+                   channel=data.get("channel",args.method=="embed" and not project_blanks and not corner_mode),
+                   corner_mode=corner_mode,
                    project_blanks=project_blanks,fraction=data.get("fractional",False),
                    bridges=[*data.get("bridges",()),*prior.get("bridge_hints",())],
                    geographic_cores=prior.get("geographic_cores",()) if args.method=="embed" else (),
