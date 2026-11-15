@@ -11,7 +11,11 @@ def geographic_roots(problem,domains,edges,*,anchor=0):
         raise ValueError('Expected a physical tile ID for the anchor.')
     if len(domains)!=problem.n:
         raise ValueError('Expected one pose domain per board cell.')
-    mates=[set() for _ in range(3*problem.n)]
+    return anchor_roots(problem,domains,mate_supports(problem.n,edges),anchor)
+
+
+def mate_supports(tile_count,edges):
+    mates=[set() for _ in range(3*tile_count)]
     for a,b in edges:
         mates[a].add(b)
         mates[b].add(a)
@@ -19,11 +23,15 @@ def geographic_roots(problem,domains,edges,*,anchor=0):
     for s in range(3):
         for j in range(3):
             row=[]
-            for code in range(3*problem.n):
+            for code in range(3*tile_count):
                 tile,rot=divmod(code,3)
                 d=3*tile+(s-rot)%3
                 row.append(sum(1<<(3*(m//3)+(j-m%3)%3) for m in mates[d]))
             supports[s,j]=row
+    return supports
+
+
+def anchor_roots(problem,domains,supports,anchor):
     roots=visits=0
     survivors=[]
     for home,d in enumerate(domains):
