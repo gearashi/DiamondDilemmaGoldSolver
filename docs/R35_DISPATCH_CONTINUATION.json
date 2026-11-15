@@ -49,5 +49,85 @@
     "test_r35_dispatch_pages.PagePlanTests.test_interrupted_dispatch_rotates_sparse_pages_and_accepts_new_width",
     "test_r35_dispatch_pages.PagePlanTests.test_resume_width_and_adverse_order_hints_preserve_all_physical_stacks"
   ],
-  "scope": "The improvement changes which unfinished branches advance after an interrupted page. Individual DFS cursors still define attempted positions. In the prior control the second visits advanced a different state within the same job. The original-instance time to Gold is unknown."
+  "scope": "The improvement changes which unfinished branches advance after an interrupted page. Individual DFS cursors still define attempted positions. In the prior control the second visits advanced a different state within the same job. The original-instance time to Gold is unknown.",
+  "native_endpoint_checks": {
+    "RTX 2060 CUDA": 2,
+    "RTX 2060 Vulkan": 2,
+    "RTX 2060 Direct3D 12": 2
+  },
+  "public_maximum_cuda": {
+    "gpu": "NVIDIA GeForce RTX 2060",
+    "replicas": 131072,
+    "native_budget": 512,
+    "checkpoint_seconds": 2,
+    "samples": [
+      {
+        "generation": 3,
+        "next_page_lane": 640,
+        "elapsed": 22.31,
+        "live_elapsed": 22.312000000005355,
+        "nodes": 442521
+      },
+      {
+        "generation": 7,
+        "next_page_lane": 2048,
+        "elapsed": 26.88,
+        "live_elapsed": 26.85899999999674,
+        "nodes": 947098
+      }
+    ],
+    "stop_through_portable_save_seconds": 1.2820000000065193,
+    "lanes_with_trials": 2580,
+    "active_at_stop": 130825,
+    "archive_verified": true
+  },
+  "dispatch_source": "a47b55f",
+  "d3d_frozen_source": "6c9959c",
+  "d3d_dynamic_maximum": [
+    {
+      "replicas": 131072,
+      "budget": 1,
+      "completed_pages": 128,
+      "elapsed_ms": 420.64560001017526,
+      "page_max_ms": 112.17199999373406,
+      "page_median_ms": 2.412650006590411,
+      "active": 129860,
+      "native_endpoints_equal": true,
+      "compared_lanes": 41
+    },
+    {
+      "replicas": 131072,
+      "budget": 8,
+      "completed_pages": 128,
+      "elapsed_ms": 1729.53929999494,
+      "page_max_ms": 28.87370000826195,
+      "page_median_ms": 13.206800009356812,
+      "active": 126417,
+      "native_endpoints_equal": true,
+      "compared_lanes": 41
+    },
+    {
+      "replicas": 131072,
+      "budget": 64,
+      "completed_pages": 256,
+      "elapsed_ms": 36412.14129998116,
+      "page_max_ms": 191.20010000187904,
+      "page_median_ms": 142.27554998069536,
+      "active": 121004,
+      "native_endpoints_equal": true,
+      "compared_lanes": 41
+    },
+    {
+      "replicas": 131072,
+      "budget": 512,
+      "completed_pages": 1024,
+      "elapsed_ms": 1019291.968799982,
+      "page_max_ms": 1211.5717999986373,
+      "page_median_ms": 1003.8257999985944,
+      "active": 119682,
+      "native_endpoints_equal": true,
+      "compared_lanes": 41
+    }
+  ],
+  "finite_dashboard_control": "A 512-job frontier with a 0.5-second checkpoint interval and a 2.25-second synthetic run produced a durable running checkpoint and a current live board before the full native sweep finished. All 512 jobs advanced by exactly one unit."
 }
