@@ -8,6 +8,8 @@ The previous unpaged Direct3D 12 dynamic search at 131,072 lanes triggered a Win
 
 A second test used the public solver with the same maximum replica count, a fixed 512-step budget and a two-second minimum checkpoint interval on CUDA. It published generations 3 and 7 during its first sweep, with the next pages starting at lanes 640 and 2,048. The live board updated during the search. From the Stop request to a verified portable save took 1.282 seconds. At that point 2,580 lanes had tried candidates. These times apply to this machine and checkpoint. The checkpoint interval is measured from the completion of the preceding save. [Hardware measurements](R35_DISPATCH_CONTINUATION.json)
 
+The same public test completed on Direct3D 12 and Vulkan. Direct3D saved at next lanes 256 and 640, then took 2.516 seconds from Stop through its portable checkpoint. Vulkan saved at lanes 384 and 1,024 and took 2.047 seconds. At the maximum 512-step budget, independent all-field comparisons on CUDA and Vulkan also passed all 1,024 pages. Their longest pages took 412 ms and 464 ms respectively.
+
 ## Interrupted coverage
 
 In the controlled 256-job comparison, three one-page sessions on the predecessor each advanced the same first 128 jobs by one more DFS step. With continuation, two such sessions advanced all 256 distinct jobs once. A second control captured an interval checkpoint and refreshed the live board partway through a 512-job sweep. All 512 jobs advanced once. The initial branch order and full uninterrupted search have the same physical endpoints. Actual CUDA, Vulkan and Direct3D tests checked every physical field after consecutive partial stops and cold restoration.

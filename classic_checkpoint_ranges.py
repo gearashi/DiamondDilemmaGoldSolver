@@ -104,7 +104,7 @@ def _packed_frames(n, windows):
 
 class CheckpointRanges:
     """One search-thread reader for the lifetime of one native engine and ledger."""
-    def __init__(self, gpu, ledger, *, board_mode=None, trace=False):
+    def __init__(self, gpu, ledger, *, board_mode=None, trace=None):
         self.gpu = gpu
         self.ledger = ledger
         self.prior = None
@@ -112,7 +112,8 @@ class CheckpointRanges:
         self.frame_defaults = None
         self.defaults_disabled = False
         self.board_mode = board_mode
-        self.trace = trace
+        self.auto_trace = trace is None
+        self.trace = True if self.auto_trace else trace
         self.trace_owner = object()
         self.trace_rows = None
         self.trace_scope = None
@@ -339,7 +340,16 @@ class CheckpointRanges:
                 # again before this capture. Preserve arbitrary old bytes elsewhere.
                 frame_lanes,low,high = _attained_bounds(self.prior,fields,lanes,installed,
                                                         getattr(gpu,'cpu_assist',None) is None)
-                frame_lanes,low,high = self._trace_bounds(frame_lanes,low,high,installed)
+                # Large pools sometimes make only a handful of candidate tries
+                # per lane before Stop or a scheduled save. In these intervals
+                # fetching a separate word per lane can cost more than the
+                # frame rows it eliminates. Existing counters are already local.
+                use_marks = True
+                if self.auto_trace and len(frame_lanes) >= 32768:
+                    attempts = fields['counters'][0,frame_lanes] - self.prior['counters'][0,frame_lanes]
+                    use_marks = not (0 < attempts.sum(dtype=np.uint64) <= 8 * len(frame_lanes))
+                if use_marks:
+                    frame_lanes,low,high = self._trace_bounds(frame_lanes,low,high,installed)
                 windows = _frame_windows(frame_lanes,low,high,installed)
                 if self.trace_scope is not None and windows:
                     traced,marks = self.trace_scope

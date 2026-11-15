@@ -1,0 +1,127 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "held_out_count": 106,
+  "phases_sha256": "ac34085db864cac94ed6fbb42c448e27e5902ef347e986d5fb577e4391753bb6",
+  "scopes": {
+    "13": {
+      "uncached": {
+        "counts": {
+          "direct_relaxed_searches": 4504,
+          "requested_relaxed_families": 4504,
+          "neutral_families": 7508,
+          "exact_family_searches": 6849,
+          "visited_matching_subsets": 41746,
+          "requested_exact_families": 6849,
+          "evaluated_relaxed_tables": 4504
+        },
+        "cache_sizes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pin_mask": "0x144008010000001a002005160812320000010306",
+        "pin_count": 25
+      },
+      "cached": {
+        "counts": {
+          "requested_relaxed_families": 4504,
+          "neutral_families": 7508,
+          "exact_family_searches": 112,
+          "visited_matching_subsets": 853,
+          "requested_exact_families": 6849,
+          "evaluated_relaxed_tables": 6
+        },
+        "cache_sizes": [
+          147,
+          112,
+          32,
+          6
+        ],
+        "pin_mask": "0x144008010000001a002005160812320000010306",
+        "pin_count": 25
+      },
+      "all_phase_prices_sha256": "b7f38f50ad3eaf511e91fc49a55a46a6288e818bcff5c4c2b13e893e7eb8b92b"
+    },
+    "13+2": {
+      "uncached": {
+        "counts": {
+          "direct_relaxed_searches": 4504,
+          "requested_relaxed_families": 4504,
+          "neutral_families": 6054,
+          "exact_family_searches": 6849,
+          "visited_matching_subsets": 41746,
+          "requested_exact_families": 6849,
+          "evaluated_relaxed_tables": 4504
+        },
+        "cache_sizes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pin_mask": "0x144008010000001a00a005160812320200000302",
+        "pin_count": 25
+      },
+      "cached": {
+        "counts": {
+          "requested_relaxed_families": 4504,
+          "neutral_families": 6054,
+          "exact_family_searches": 112,
+          "visited_matching_subsets": 840,
+          "requested_exact_families": 6849,
+          "evaluated_relaxed_tables": 9
+        },
+        "cache_sizes": [
+          165,
+          112,
+          68,
+          9
+        ],
+        "pin_mask": "0x144008010000001a00a005160812320200000302",
+        "pin_count": 25
+      },
+      "all_phase_prices_sha256": "ba16b268a7ee510cf562a9c01003bce4702190e5b37e191dd24ebf469bcceb20"
+    },
+    "344+2": {
+      "uncached": {
+        "counts": {
+          "direct_relaxed_searches": 4018,
+          "requested_relaxed_families": 4018,
+          "neutral_families": 5023,
+          "exact_family_searches": 6120,
+          "visited_matching_subsets": 36507,
+          "requested_exact_families": 6120,
+          "evaluated_relaxed_tables": 4018
+        },
+        "cache_sizes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "pin_mask": "0x144009000080011200a0051e0812320200010306",
+        "pin_count": 29
+      },
+      "cached": {
+        "counts": {
+          "requested_relaxed_families": 4018,
+          "neutral_families": 5023,
+          "exact_family_searches": 106,
+          "visited_matching_subsets": 788,
+          "requested_exact_families": 6120,
+          "evaluated_relaxed_tables": 18
+        },
+        "cache_sizes": [
+          123,
+          106,
+          43,
+          18
+        ],
+        "pin_mask": "0x144009000080011200a0051e0812320200010306",
+        "pin_count": 29
+      },
+      "all_phase_prices_sha256": "ba16b268a7ee510cf562a9c01003bce4702190e5b37e191dd24ebf469bcceb20"
+    }
+  }
+}

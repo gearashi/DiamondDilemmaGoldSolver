@@ -49,7 +49,7 @@ def trial(api,profile,before,n,setup,budgets,reference,problem,output):
             jobs.validate(gpu.states.get())
         else:
             jobs.refill(gpu,prefixes,lengths)
-        observer=CheckpointRanges(gpu,jobs,trace=profile=='tracked',board_mode='ranges')
+        observer=CheckpointRanges(gpu,jobs,trace=None if profile=='automatic' else profile=='tracked',board_mode='ranges')
         observer.capture()
         rows=[]
         for steps in budgets:
@@ -93,6 +93,7 @@ if __name__=='__main__':
     parser.add_argument('--previous',type=Path,help='Archived kernel for the predecessor comparison')
     parser.add_argument('--portable',action='store_true',help='Measure the pure Python frame decoders without a compiled host library.')
     parser.add_argument('--current-only',action='store_true',help='Compare tracked and untracked bounded current kernels.')
+    parser.add_argument('--automatic',action='store_true',help='Include the production automatic trace policy.')
     parser.add_argument('--dynamic',action='store_true',help='Use forced moves and dynamic MRV on the bounded current kernels.')
     parser.add_argument('--active',type=int,help='Number of active prefixes; sparse cases spread them across the pool.')
     parser.add_argument('--tiles',type=Path,required=True)
@@ -106,6 +107,8 @@ if __name__=='__main__':
     if not 1<=owners<=args.lanes<=131072:
         parser.error('Expected 1 <= active <= lanes <= 131072.')
     profiles=('untracked','tracked') if args.current_only or args.dynamic else ('previous','untracked','tracked')
+    if args.automatic:
+        profiles=(*profiles,'automatic')
     if 'previous' in profiles and args.previous is None:
         parser.error('Supply --previous or use --current-only.')
     setup=inputs(p,owners,False)

@@ -129,5 +129,149 @@
       "compared_lanes": 41
     }
   ],
-  "finite_dashboard_control": "A 512-job frontier with a 0.5-second checkpoint interval and a 2.25-second synthetic run produced a durable running checkpoint and a current live board before the full native sweep finished. All 512 jobs advanced by exactly one unit."
+  "finite_dashboard_control": "A 512-job frontier with a 0.5-second checkpoint interval and a 2.25-second synthetic run produced a durable running checkpoint and a current live board before the full native sweep finished. All 512 jobs advanced by exactly one unit.",
+  "cuda_dynamic_maximum": [
+    {
+      "replicas": 131072,
+      "budget": 1,
+      "completed_pages": 128,
+      "elapsed_ms": 31.548864364624023,
+      "page_max_ms": 3.519099991535768,
+      "page_median_ms": 0.20984999719075859,
+      "active": 129860,
+      "native_endpoints_equal": true,
+      "compared_lanes": 41
+    },
+    {
+      "replicas": 131072,
+      "budget": 8,
+      "completed_pages": 128,
+      "elapsed_ms": 590.5617065429688,
+      "page_max_ms": 10.024799994425848,
+      "page_median_ms": 4.26260000676848,
+      "active": 126417,
+      "native_endpoints_equal": true,
+      "compared_lanes": 41
+    },
+    {
+      "replicas": 131072,
+      "budget": 64,
+      "completed_pages": 256,
+      "elapsed_ms": 11940.4169921875,
+      "page_max_ms": 55.66490002092905,
+      "page_median_ms": 46.99590000382159,
+      "active": 121004,
+      "native_endpoints_equal": true,
+      "compared_lanes": 41
+    },
+    {
+      "replicas": 131072,
+      "budget": 512,
+      "completed_pages": 1024,
+      "elapsed_ms": 348132.34375,
+      "page_max_ms": 411.68889999971725,
+      "page_median_ms": 343.14890000678133,
+      "active": 119682,
+      "native_endpoints_equal": true,
+      "compared_lanes": 41
+    }
+  ],
+  "vulkan_dynamic_maximum": [
+    {
+      "replicas": 131072,
+      "budget": 1,
+      "completed_pages": 128,
+      "elapsed_ms": 160.3017000015825,
+      "page_max_ms": 38.787500001490116,
+      "page_median_ms": 0.9281999955419451,
+      "active": 129860,
+      "native_endpoints_equal": true,
+      "compared_lanes": 41
+    },
+    {
+      "replicas": 131072,
+      "budget": 8,
+      "completed_pages": 128,
+      "elapsed_ms": 1133.8442999986,
+      "page_max_ms": 19.132700021145865,
+      "page_median_ms": 8.52229999145493,
+      "active": 126417,
+      "native_endpoints_equal": true,
+      "compared_lanes": 41
+    },
+    {
+      "replicas": 131072,
+      "budget": 64,
+      "completed_pages": 256,
+      "elapsed_ms": 24551.463799987687,
+      "page_max_ms": 121.23369998880662,
+      "page_median_ms": 97.05105000466574,
+      "active": 121004,
+      "native_endpoints_equal": true,
+      "compared_lanes": 41
+    },
+    {
+      "replicas": 131072,
+      "budget": 512,
+      "completed_pages": 1024,
+      "elapsed_ms": 349506.1720999947,
+      "page_max_ms": 464.46499999728985,
+      "page_median_ms": 342.66520000528544,
+      "active": 119682,
+      "native_endpoints_equal": true,
+      "compared_lanes": 41
+    }
+  ],
+  "public_maximum_d3d12": {
+    "gpu": "WebGPU: NVIDIA GeForce RTX 2060 [D3D12]",
+    "replicas": 131072,
+    "native_budget": 512,
+    "checkpoint_seconds": 2,
+    "samples": [
+      {
+        "generation": 2,
+        "next_page_lane": 256,
+        "elapsed": 71.19,
+        "live_elapsed": 71.18700000000536,
+        "nodes": 151449
+      },
+      {
+        "generation": 5,
+        "next_page_lane": 640,
+        "elapsed": 74.5,
+        "live_elapsed": 74.5,
+        "nodes": 294601
+      }
+    ],
+    "stop_through_portable_save_seconds": 2.5160000000032596,
+    "lanes_with_trials": 858,
+    "active_at_stop": 131023,
+    "archive_verified": true
+  },
+  "public_maximum_vulkan": {
+    "gpu": "WebGPU: NVIDIA GeForce RTX 2060 [Vulkan]",
+    "replicas": 131072,
+    "native_budget": 512,
+    "checkpoint_seconds": 2,
+    "samples": [
+      {
+        "generation": 2,
+        "next_page_lane": 384,
+        "elapsed": 19.19,
+        "live_elapsed": 19.171999999991385,
+        "nodes": 244557
+      },
+      {
+        "generation": 5,
+        "next_page_lane": 1024,
+        "elapsed": 23.88,
+        "live_elapsed": 23.85999999998603,
+        "nodes": 538518
+      }
+    ],
+    "stop_through_portable_save_seconds": 2.0469999999913853,
+    "lanes_with_trials": 1443,
+    "active_at_stop": 130933,
+    "archive_verified": true
+  }
 }
