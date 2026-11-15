@@ -7,7 +7,13 @@ import numpy as np
 from r34_swap_packing import pack_swaps
 
 
-def pair_repair(model, board, cells, max_length=2, *, interact=True):
+def _save(choices, footprint, codes, gain):
+    key = frozenset(footprint)
+    if gain>0 and (key not in choices or choices[key][0]<gain):
+        choices[key] = gain, dict(zip(footprint,map(int,codes)))
+
+
+def cycle_prices(model, board, cells, max_length):
     if max_length not in (2,3):
         raise ValueError("Expected a maximum cycle length of 2 or 3.")
     cells = tuple(sorted(set(map(int,cells))))
@@ -20,10 +26,6 @@ def pair_repair(model, board, cells, max_length=2, *, interact=True):
     choices = {}
     rows = []
     work = Counter()
-    def save(footprint,codes,gain):
-        key = frozenset(footprint)
-        if gain>0 and (key not in choices or choices[key][0]<gain):
-            choices[key] = gain, dict(zip(footprint,map(int,codes)))
 
     for length in range(2,max_length+1):
         rotations = np.array(list(product(range(3),repeat=length)))
@@ -48,9 +50,34 @@ def pair_repair(model, board, cells, max_length=2, *, interact=True):
                         boundary[e] = (left if a in local else right, match)
                 best = int(delta.argmax())
                 gain = int(delta[best])
-                save(cycle,codes[best],gain)
+                _save(choices,cycle,codes[best],gain)
                 rows.append((frozenset(cycle),cycle,codes,delta,boundary,gain))
                 work['cycles_priced'] += 1
+    return before, rows, choices, work
+
+
+def pair_repair(model, board, cells, max_length=2, *, interact=True, contact_group=0):
+    if contact_group not in (0,1,2,3):
+        raise ValueError("Invalid contact group size.")
+    if contact_group == 1 and interact:
+        if max_length not in (2,3):
+            raise ValueError("Expected a maximum cycle length of 2 or 3.")
+        from r35_independent_cycles import independent_cycles
+        return independent_cycles(model,board,cells,max_length)
+    before, rows, choices, work = cycle_prices(model, board, cells, max_length)
+
+    if contact_group >= 2 and interact:
+        from r35_cycle_contacts import corrected_moves
+        predicted,changes,counts = corrected_moves(model,rows,before,choices,contact_group)
+        work.update(counts)
+        result = board.copy()
+        for change in changes:
+            for cell,code in change.items():
+                result[cell] = code
+        if int(model.matches(result).sum()-before.sum()) != predicted:
+            raise ArithmeticError("Contact group differs from full board score.")
+        return result, dict(work)
+
     singles = choices.copy() if interact else choices
     if interact:
         for i,(sa,ca,ra,da,ba,ga) in enumerate(rows):
@@ -71,7 +98,7 @@ def pair_repair(model, board, cells, max_length=2, *, interact=True):
                 gain = int(joint[a,b])
                 if gain>max(0,ga,gb):
                     work['joint_improvements'] += 1
-                    save((*ca,*cb),(*ra[a],*rb[b]),gain)
+                    _save(choices,(*ca,*cb),(*ra[a],*rb[b]),gain)
     def pack(options):
         items = sorted(options.values(),key=lambda x:-x[0])
         selected = pack_swaps(model,[tuple(item) for _,item in items],[gain for gain,_ in items])

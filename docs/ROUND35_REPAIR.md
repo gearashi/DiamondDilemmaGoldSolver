@@ -1,0 +1,41 @@
+# Fresh repair and swap packing in Round 35
+
+## 32. Which three-cycle repairs improve fresh boards?
+
+The new `r31_fresh.py --contact-group 1` prices individual profitable two- and three-piece cycles and packs mutually independent moves. Set `--pair-cycles 2` as well to restrict the maximum cycle length to two. The familiar `--pair-cycles 3` alone retains the v1.15.0 mixed-pair policy. Contact-group values 2 and 3 additionally price two or three touching, disjoint cycles. These options have separate trajectory identities.
+
+Four held-out independent CPU starts used seeds 3500-3503, no candidate hints, the original domains and all eight mandatory physical Gold bonds. Every policy began from identical validated physical codes within that seed, and the four seeds produced four distinct starts. The initial scores were 11, 12, 12 and 16. Each standard repair used a ten-cell randomly chosen pool, whole-board cycle budget three, and the same independent full-board validation. Every best board retained the required mates and excluded the 24 forbidden pairs.
+
+| Policy | Best at 64 rounds per seed | Best at 320 rounds per seed | Rounds to 160 | Rounds to 180 |
+|---|---|---|---|---|
+| Released eight-bond baseline | 174, 170, 169, 173 | 179, 176, 177, 174 | 11, 23, 13, 13 | unreached on all four |
+| Released `--pair-cycles 3` | 175, 170, 169, 173 | 181, 181, 177, 174 | 11, 14, 13, 13 | 120, 236, unreached, unreached |
+| Individual cycles, raw or factored | 175, 170, 169, 173 | 181, 181, 177, 174 | 11, 14, 13, 13 | 120, 236, unreached, unreached |
+
+The individual-cycle arms reproduced the released pair policy's exact best codes, components, milestone rounds, unique-board counts, orientation entries and CP branches at both 64 and 320 rounds. Across 1,280 repair iterations with each policy, the released option priced 364,800 legal cycles, and 601 mixed cycle pairs. Seven pair candidates improved their local comparison but the trajectory gained nothing from evaluating those pairs on these starts. Individual cycles required 44,646 bounded CP branches downstream versus 42,162 for the original baseline, while full-board assignment relaxations fell from 2,304 to 2,024 and rotation entries from 9,333,108 to 7,480,170. Bounds/descent calls, repair iterations and rotation entries are different work units. Timings were collected under concurrent CPU work and were excluded from selection. Every 16-to-64 and 64-to-320 comparison continued its own prefix. Independent cold 64-round replays on seed 3500 matched their split-path boards and work.
+
+The factored individual-cycle kernel prices each allowed rotation of each candidate donor at each position against unchanged neighbors once. It shares those values through all permutations of local cycles. For moved cells sharing a seam it corrects the double-count using the exact oriented interaction and compares the witness with a full rescore. The 1,280 matched repairs would otherwise materialize 8,812,800 allowed orientation tuples in individual cycles. The new code evaluated 384,000 individual destination/donor/rotation slots, separated 346,353 whole cycles, bounded away 18,422 more and examined 243 entries in jointly coupled orientation grids. It retained the same four physical 320-round results. Positive controls, missing orientations and pinned pieces are included in the finite tests.
+
+**Decision.** Use `--contact-group 1` for sustained independent CPU starts when prioritizing the measured seam thresholds on this hardware. The inexpensive eight-bond baseline is still available. The released mixed-contact correction has a separate use on preselected interacting neighborhoods. A changed score threshold/deeper search without materially different physical opportunities is insufficient to reopen its general-setting comparison.
+
+```powershell
+.\venv\Scripts\python.exe r31_fresh.py --backend cpu --bonds --cycle-budget 3 --contact-group 1 --rounds 320 --starts 0 --database runtime/fresh-independent-cycles.sqlite --output runtime/fresh-independent-cycles.json
+```
+
+## Contacting pairs and triples
+
+When two cycles each improve the board independently, their best rotations can still conflict on their common seam. Earlier code omitted all these positive-positive pairs. The new pricing indexes disjoint cycles by actual shared seams and retains the best legal orientation for each exact interface response. When three cycles form a contacting path, their two leaf orientations are independent given the central cycle's orientation. The algorithm maximizes both leaves separately before selecting the best central orientation. Every triangle still sees every compatible combination of compressed interfaces. Tied maximizing responses retain the earliest original witness. The packer keeps the baseline packed score if adding alternatives makes its large-component greedy result worse.
+
+Each row below covers sixteen original-board pools, eight from arbitrary legal fresh placements and eight after eight independent-set repair steps. The numbers sum gains across different boards and do not denote one placement's score.
+
+| Pool | Released gain | With positive-positive pairs | With connected triples | Pools with a further strict gain from pairs / triples |
+|---|---:|---:|---:|---:|
+| Six geographically connected cells | 26 | 29 | 29 | 2 / 0 |
+| Eight geographically connected cells | 35 | 40 | 46 | 5 / 6 |
+| Ten scattered cells | 52 | 53 | 54 | 1 / 1 |
+
+Across those 48 pools the physical seam index considered 60,057 disjoint, actually touching cycle pairs, out of 826,960 raw pair combinations. Pair response compression reduced eligible orientation-product entries from 16,556,967 to 2,762,253. Triple compression narrowed 145,824,057 raw products to 69,039,900. Path factorization then used 3,188,073 pairwise leaf entries and 204,942 central rows for the path cases; 56,894,832 complete compressed triple entries remained on triangles. These counts describe local pricing work and exclude index construction. Independent finite controls enumerate legal physical rotations, verify every connected triple occurs once, and check exact witnesses including ties and restricted domains.
+
+A 64-round eight-cell-forest trajectory used the released, expanded pair and triple policy on the same four seeds. All three finished with identical best board hashes (178, 168, 172, 169). Applying each local stage before the full-board circulation instead produced 176/171/170/174, 177/171/169/173 and 177/170/171/173 respectively. This earlier order shortened the time to 160 on some seeds and lowered some final scores. Keep the new two/three-cycle rules as opt-in exact local repair capabilities; reject the early reordering and their promotion over individual cycles for ordinary sustained search. No method in this comparison reached 208 or Gold.
+
+[Per-seed scores, witness digests, work and 48 local comparisons](R35_CYCLE_REPAIR.json). Reproduce with `bench_r35_trajectories.py --help` and `bench_r35_cycle_contacts.py --help`; use an isolated output directory, the installed physical tile file, and seeds 3500 through 3503 for the trajectory arms.

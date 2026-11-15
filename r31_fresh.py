@@ -520,7 +520,7 @@ def forest_pool(model,board,available,size,rng):
 
 class Engine:
     def __init__(self,problem,*,bonds=False,joint=False,adjacent=False,ties=0,fork=False,
-                 relink=False,slate=1,pool=10,tie_slack=0,cycle_budget=0,contacts=None,disjoint=False,exact_packing=False,pair_cycles=0,forest=False):
+                 relink=False,slate=1,pool=10,tie_slack=0,cycle_budget=0,contacts=None,disjoint=False,exact_packing=False,pair_cycles=0,forest=False,contact_group=0):
         if min(slate,pool)<1 or min(ties,cycle_budget)<0 or tie_slack not in (0,1,2):
             raise ValueError("Invalid candidate or repair limits.")
         self.model=BoardModel(problem)
@@ -529,6 +529,11 @@ class Engine:
             raise ValueError("Invalid joint-repair contact limit.")
         if pair_cycles not in (0,2,3):
             raise ValueError("Expected zero, two or three for local cycle pairs.")
+        if contact_group not in (0,1,2,3):
+            raise ValueError("Contact groups must contain one, two or three cycles.")
+        if contact_group and not pair_cycles:
+            pair_cycles=3
+        self.contact_group=contact_group
         self.forest=forest
         self.pair_cycles=pair_cycles
         self.exact_packing=exact_packing
@@ -568,7 +573,7 @@ class Engine:
                 chosen=rng.choice(available,min(len(available),self.pool),replace=False)
             if self.pair_cycles:
                 from r34_pair_cycles import pair_repair
-                board,pair_work=pair_repair(model,board,chosen,self.pair_cycles)
+                board,pair_work=pair_repair(model,board,chosen,self.pair_cycles,contact_group=self.contact_group)
                 stats.update(pair_work)
             board,info=joint_repair(model,board,chosen,adjacent=self.adjacent,
                                    contacts=self.contacts,disjoint=self.disjoint)
@@ -643,6 +648,8 @@ class Engine:
                 config['forest']=True
             if self.pair_cycles:
                 config['pair_cycles']=self.pair_cycles
+            if self.contact_group:
+                config['contact_group']=self.contact_group
             if self.exact_packing:
                 config['exact_packing']=True
             if self.contacts is not None or self.disjoint:
@@ -788,6 +795,7 @@ def main():
     parser.add_argument('--contacts',type=int,help='Maximum contacting changed pairs in joint repair (-1 for unlimited).')
     parser.add_argument('--forest',action='store_true',help='Choose a low-width repair pool along defective seams.')
     parser.add_argument('--pair-cycles',type=int,choices=(0,2,3),default=0,help='Price interacting donor cycles in the joint pool up to this length.')
+    parser.add_argument('--contact-group',type=int,choices=(1,2,3),default=0,help='Pack positive cycles alone (1), or also price two or three touching cycles. With no --pair-cycles, consider cycles up to length three.')
     parser.add_argument('--exact-packing',action='store_true',help='Solve small and bipartite swap conflicts exactly.')
     parser.add_argument('--disjoint-contacts',action='store_true',help='Permit at most one changed neighbor per changed cell.')
     parser.add_argument('--ties',type=int,default=0)
@@ -806,6 +814,8 @@ def main():
         config['forest']=True
     if args.pair_cycles:
         config['pair_cycles']=args.pair_cycles
+    if args.contact_group:
+        config['contact_group']=args.contact_group
     if args.exact_packing:
         config['exact_packing']=True
     if args.contacts is not None or args.disjoint_contacts:

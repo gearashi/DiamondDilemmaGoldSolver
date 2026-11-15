@@ -286,10 +286,50 @@
       "source_id": 17,
       "title": "Corrected joint scores for two positive cycles and higher-order interactions",
       "proposal_and_validation": "r34_pair_cycles.pair_repair skips both positive cycles even if touching prevents the packer taking both. Price viable positive/positive contacts, index pairs sharing actual physical seams instead of all pairs, and compress rotation rows by their full interface masks/old match flags before max-sum. Compare three contacting disjoint cycles after two-cycle gains saturate, including nonpairwise effects. Compare a retained baseline even where an existing footprint's score improves without adding a key. Prior length-three control priced 33,737 interactions with one or more nonpositive cycles. Count scored pairs/rows, gains vs either move and first improvements; exhaustive all orientations plus actual board rescoring and held-out trajectories.",
-      "state": "in progress",
+      "state": "retained for independent fresh discovery and scoped local interaction pricing",
       "decision_changing_followups": [
         "Resolve the retained three-cycle short-horizon policy before promoting its extensions. Use matched incumbent-free starts and held-out seeds through 64 and 320 repair rounds, cold and resumed within the correct profile. Compare steps to score, final incumbent, unique endpoints, work, and seeds where it loses. Earlier R31 rankings reversed by 320. Carry the result through positive touching cycles and sparse packing variants only when evidence changes deployment."
-      ]
+      ],
+      "mechanism": "Exact independent donor-cycle scoring and conditional two- and three-cycle rotation prices",
+      "evidence": "docs/ROUND35_REPAIR.md",
+      "measurement": {
+        "held_out_seeds": [
+          3500,
+          3501,
+          3502,
+          3503
+        ],
+        "baseline_320": [
+          179,
+          176,
+          177,
+          174
+        ],
+        "independent_cycles_320": [
+          181,
+          181,
+          177,
+          174
+        ],
+        "first_180": [
+          120,
+          236,
+          null,
+          null
+        ],
+        "mixed_pair_prices_avoided": 601,
+        "old_single_rotation_tuples": 8812800,
+        "independent_donor_rotations": 384000,
+        "remaining_joint_rotation_entries": 243,
+        "local_matched_pools": 48,
+        "summed_gains_released_positive_pairs_triples": [
+          113,
+          122,
+          129
+        ]
+      },
+      "closure_reason": "All best boards and milestones from released length-three paired cycles matched the much cheaper individually priced cycles on four sustained independent trajectories. Actual local pools gained from two and three contacting cycles. Late forest trajectories tied across the three policies and moving the stage earlier had mixed outcomes.",
+      "reopen_trigger": "New physical workloads where signed contacting-cycle corrections repeatedly survive downstream repair or a counterexample to the labeled rotation/packing calculation."
     },
     {
       "id": 33,
