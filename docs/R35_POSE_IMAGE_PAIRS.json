@@ -1,0 +1,786 @@
+{
+  "workstream": 89,
+  "decision": "Keep the cheap two-image cardinality shortcut before geographic work. Retire weighted two-image tile pricing and alternating-cycle residue from production after full seam/all-different fixed-point propagation.",
+  "puzzle": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "model": "Every original rotated image allows at most 65 retained oriented poses. Its ten pose labels are distinct at each site. For each of the 45 image pairs, more than 130 forced placements prove exclusion; exactly 130 forbid both labels at the other sites. Larger color subsets have capacity at least 195, exceeding 160 sites. Together with the existing one-image rule this exhausts capacity-only Hall subsets on the original board.",
+  "owner_model": "The benchmark requires 30 distinct off-image cell/tile assignments and, at 30 or 31 surviving matching edges, checks complete weighted assignments. This reasoning provided earlier CP reductions and has independent enumeration controls. Every final discriminating original scope was already covered by full geographic seam and ordinary tile-matching closure.",
+  "conditions": {
+    "owner_probe": "At least 130 sites must have a named tile with a unique legal orientation; for each pair, at least 130 sites must specifically be chargeable by that pair. The published image table is authenticated in the receiver. Its distinct physical tiles per site follow from the free proper rotation action.",
+    "input": "The spatial controls keep two rotated poses and all three turns of each shared tile outside a BFS patch of broad sites. Tiles 27,65,111 have reciprocal mates amongst themselves; all forty members of a fixed spatial holdout survived full compiled geographic AC before applying pair rules.",
+    "updated_geographic_receiver": "The historical six triplets are from the intermediate width-ten crossover receiver. They are retained as a predecessor comparison. The final full-strength receiver runs ordinary geographic seam support and unweighted complete tile matching repeatedly to a fixed point. Its authority checks below supersede claims of additional geographic exclusions in the earlier receiver.",
+    "timing": "Four wall seconds per public CP arm. Branches from an unresolved run measure effort spent before timeout and are not estimates of exhaustive search."
+  },
+  "ordinary_compiled_ac_spatial_sweep": {
+    "scopes": 40,
+    "survivors": 40,
+    "remaining_poses_range": [
+      6661,
+      9718
+    ],
+    "complete_fixed_point_survivors": 0
+  },
+  "fixed_point_after_299_removals": {
+    "case": "spatial-30",
+    "before": {
+      "compiled_geographic_ac_poses": 8085,
+      "width10_geographic_poses": 9887
+    },
+    "after": {
+      "removed": 299,
+      "compiled_geographic_ac": "contradiction",
+      "width10_geographic": "contradiction"
+    },
+    "scope": "Earlier width-ten receiver. On the final full fixed point ordinary seam/owner support already closes before weighted pricing."
+  },
+  "cycle_residue": {
+    "method": "Two bijective parental placements decompose into alternating ownership cycles. Enumerate the attainable number of A labels in each small cycle, with optional off-image sites, then convolve across cycles. At saturation both A and B must total 65. A complete two-site cycle contributes an even number of A labels.",
+    "cases": 12,
+    "own_exclusions": 4,
+    "width10_geographic_exclusions": 12,
+    "compiled_ac_exclusions": 12,
+    "added_exclusions_after_geographic_stage": 0,
+    "individual_results": [
+      {
+        "images": [
+          0,
+          5
+        ],
+        "cycle_length": 2,
+        "held": 130,
+        "geographic_width10_over": true,
+        "compiled_ac_over": true,
+        "residue_over": true,
+        "residue_removals": 0
+      },
+      {
+        "images": [
+          0,
+          5
+        ],
+        "cycle_length": 2,
+        "held": 128,
+        "geographic_width10_over": true,
+        "compiled_ac_over": true,
+        "residue_over": false,
+        "residue_removals": 0
+      },
+      {
+        "images": [
+          2,
+          7
+        ],
+        "cycle_length": 2,
+        "held": 130,
+        "geographic_width10_over": true,
+        "compiled_ac_over": true,
+        "residue_over": true,
+        "residue_removals": 0
+      },
+      {
+        "images": [
+          2,
+          7
+        ],
+        "cycle_length": 2,
+        "held": 128,
+        "geographic_width10_over": true,
+        "compiled_ac_over": true,
+        "residue_over": false,
+        "residue_removals": 0
+      },
+      {
+        "images": [
+          3,
+          9
+        ],
+        "cycle_length": 2,
+        "held": 130,
+        "geographic_width10_over": true,
+        "compiled_ac_over": true,
+        "residue_over": true,
+        "residue_removals": 0
+      },
+      {
+        "images": [
+          3,
+          9
+        ],
+        "cycle_length": 2,
+        "held": 128,
+        "geographic_width10_over": true,
+        "compiled_ac_over": true,
+        "residue_over": false,
+        "residue_removals": 0
+      },
+      {
+        "images": [
+          1,
+          2
+        ],
+        "cycle_length": 5,
+        "held": 130,
+        "geographic_width10_over": true,
+        "compiled_ac_over": true,
+        "residue_over": false,
+        "residue_removals": 0
+      },
+      {
+        "images": [
+          1,
+          2
+        ],
+        "cycle_length": 5,
+        "held": 125,
+        "geographic_width10_over": true,
+        "compiled_ac_over": true,
+        "residue_over": false,
+        "residue_removals": 0
+      },
+      {
+        "images": [
+          0,
+          3
+        ],
+        "cycle_length": 5,
+        "held": 130,
+        "geographic_width10_over": true,
+        "compiled_ac_over": true,
+        "residue_over": false,
+        "residue_removals": 0
+      },
+      {
+        "images": [
+          0,
+          3
+        ],
+        "cycle_length": 5,
+        "held": 125,
+        "geographic_width10_over": true,
+        "compiled_ac_over": true,
+        "residue_over": false,
+        "residue_removals": 0
+      },
+      {
+        "images": [
+          4,
+          8
+        ],
+        "cycle_length": 2,
+        "held": 130,
+        "geographic_width10_over": true,
+        "compiled_ac_over": true,
+        "residue_over": true,
+        "residue_removals": 0
+      },
+      {
+        "images": [
+          4,
+          8
+        ],
+        "cycle_length": 2,
+        "held": 128,
+        "geographic_width10_over": true,
+        "compiled_ac_over": true,
+        "residue_over": false,
+        "residue_removals": 0
+      }
+    ]
+  },
+  "finite_controls": {
+    "pure_5_cell_complete_instances": 160,
+    "exact_weighted_4_cell_instances": 140,
+    "off_image_bipartite_graphs": 100,
+    "off_image_caps_per_graph": 3,
+    "native_tests": {
+      "3.12": "5 passed",
+      "3.15": "5 passed"
+    },
+    "other": "Thresholds 129, 130, 131; a fully open board; repeated mixed query recomputes zero matchings."
+  },
+  "reproduction": [
+    "python -m unittest -v test_r35_pose_image_pairs",
+    "python bench_r35_pose_image_pairs.py --tiles data/tiles.json --native .native --seconds 4 --output pose-image-pairs.json --cases held-out threshold spatial-29 spatial-29-held-out spatial-30 spatial-32 covered-0-1 covered-1-7"
+  ],
+  "audit_sha256": {
+    "pose-pair-public-final.json": "3cf75914c5aa9e740ac1ed2320d5594bf8fd7b5c290881276d8d4701edbab9e9",
+    "pose-pair-residues.json": "253a4f01685bfa4dbc85c50b2593565a1e9513ef0638c590952c55b7e8557593",
+    "pose-pair-ac-cluster.json": "fd8b86488c7add438188e54e19f98d982484c5eac647f252442599ad32665b67",
+    "pose-pair-self-support.json": "0a30bade2a47d3c8ca3b1d0cf203094ca7c01fc2977661bbd1341be8db2273c6",
+    "pose-pair-guided-closure.json": "9feff3c15d417b8ee0319e4bba9b3da39523b49d9d297d3cc86ad4f592d94a9e",
+    "pose-pair-final-receiver.json": "9ed61380b87c762b2c9d6345b5775a28979c4e6711f8a9db555cf03f17809374"
+  },
+  "intermediate_public_cases": [
+    {
+      "case": "threshold",
+      "domain_poses": 14660,
+      "compiled_ac_poses_before": null,
+      "compiled_ac_poses_after": null,
+      "pure_removed": 60,
+      "owners_removed": 9540,
+      "without-pairs": {
+        "status": "INFEASIBLE",
+        "cp_calls": 0,
+        "branches": 0,
+        "reason": "image_pool_seams"
+      },
+      "pure": {
+        "status": "INFEASIBLE",
+        "cp_calls": 0,
+        "branches": 0,
+        "reason": "image_pool_seams"
+      },
+      "integrated": {
+        "status": "INFEASIBLE",
+        "cp_calls": 0,
+        "branches": 0,
+        "reason": "image_pool_seams"
+      }
+    },
+    {
+      "case": "held-out",
+      "domain_poses": 14182,
+      "compiled_ac_poses_before": null,
+      "compiled_ac_poses_after": null,
+      "pure_removed": 0,
+      "owners_removed": 0,
+      "without-pairs": {
+        "status": "INFEASIBLE",
+        "cp_calls": 0,
+        "branches": 0,
+        "reason": "image_pool_seams"
+      },
+      "pure": {
+        "status": "INFEASIBLE",
+        "cp_calls": 0,
+        "branches": 0,
+        "reason": "pose_image_pair_quota"
+      },
+      "integrated": {
+        "status": "INFEASIBLE",
+        "cp_calls": 0,
+        "branches": 0,
+        "reason": "pose_image_pair_quota"
+      }
+    },
+    {
+      "case": "spatial-29",
+      "domain_poses": 13949,
+      "compiled_ac_poses_before": 7575,
+      "compiled_ac_poses_after": 7575,
+      "pure_removed": 0,
+      "owners_removed": 0,
+      "without-pairs": {
+        "status": "UNKNOWN",
+        "cp_calls": 4,
+        "branches": 176890,
+        "reason": null
+      },
+      "pure": {
+        "status": "UNKNOWN",
+        "cp_calls": 6,
+        "branches": 248342,
+        "reason": null
+      },
+      "integrated": {
+        "status": "INFEASIBLE",
+        "cp_calls": 0,
+        "branches": 0,
+        "reason": "pose_image_pair_owners"
+      }
+    },
+    {
+      "case": "spatial-29-held-out",
+      "domain_poses": 13822,
+      "compiled_ac_poses_before": 6723,
+      "compiled_ac_poses_after": 6723,
+      "pure_removed": 0,
+      "owners_removed": 0,
+      "without-pairs": {
+        "status": "UNKNOWN",
+        "cp_calls": 5,
+        "branches": 248342,
+        "reason": null
+      },
+      "pure": {
+        "status": "UNKNOWN",
+        "cp_calls": 6,
+        "branches": 248342,
+        "reason": null
+      },
+      "integrated": {
+        "status": "INFEASIBLE",
+        "cp_calls": 0,
+        "branches": 0,
+        "reason": "pose_image_pair_owners"
+      }
+    },
+    {
+      "case": "spatial-30",
+      "domain_poses": 14419,
+      "compiled_ac_poses_before": 8085,
+      "compiled_ac_poses_after": null,
+      "pure_removed": 0,
+      "owners_removed": 299,
+      "without-pairs": {
+        "status": "UNKNOWN",
+        "cp_calls": 5,
+        "branches": 200902,
+        "reason": null
+      },
+      "pure": {
+        "status": "UNKNOWN",
+        "cp_calls": 6,
+        "branches": 248342,
+        "reason": null
+      },
+      "integrated": {
+        "status": "UNKNOWN",
+        "cp_calls": 4,
+        "branches": 200902,
+        "reason": null
+      }
+    },
+    {
+      "case": "spatial-32",
+      "domain_poses": 15357,
+      "compiled_ac_poses_before": 9026,
+      "compiled_ac_poses_after": 9026,
+      "pure_removed": 0,
+      "owners_removed": 0,
+      "without-pairs": {
+        "status": "UNKNOWN",
+        "cp_calls": 5,
+        "branches": 200902,
+        "reason": null
+      },
+      "pure": {
+        "status": "UNKNOWN",
+        "cp_calls": 5,
+        "branches": 200902,
+        "reason": null
+      },
+      "integrated": {
+        "status": "UNKNOWN",
+        "cp_calls": 5,
+        "branches": 248342,
+        "reason": null
+      }
+    }
+  ],
+  "seam_covered_donors": [
+    {
+      "images": [
+        0,
+        5
+      ],
+      "shared_tiles": [
+        7,
+        11,
+        13,
+        43,
+        50,
+        53,
+        55,
+        57,
+        62,
+        72,
+        74,
+        85,
+        91,
+        94,
+        100,
+        103,
+        106,
+        108,
+        115,
+        116,
+        121,
+        126,
+        127,
+        128,
+        132,
+        142,
+        151,
+        152,
+        153
+      ],
+      "original_poses": 14182,
+      "after_compiled_seams_and_unweighted_matching": [
+        [
+          14182,
+          4612
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "intermediate_two_image_lower_bound": 131,
+      "full_fixed_point_survives": false
+    },
+    {
+      "images": [
+        0,
+        1
+      ],
+      "shared_tiles": [
+        7,
+        11,
+        13,
+        43,
+        50,
+        53,
+        55,
+        57,
+        62,
+        72,
+        74,
+        85,
+        91,
+        94,
+        100,
+        103,
+        106,
+        108,
+        115,
+        116,
+        121,
+        126,
+        127,
+        128,
+        132,
+        142,
+        151,
+        152,
+        153
+      ],
+      "original_poses": 14182,
+      "after_compiled_seams_and_unweighted_matching": [
+        [
+          14182,
+          7657
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "intermediate_two_image_lower_bound": 131,
+      "full_fixed_point_survives": false
+    },
+    {
+      "images": [
+        3,
+        8
+      ],
+      "shared_tiles": [
+        11,
+        13,
+        48,
+        50,
+        53,
+        55,
+        62,
+        74,
+        76,
+        78,
+        81,
+        84,
+        91,
+        94,
+        100,
+        103,
+        106,
+        115,
+        116,
+        121,
+        123,
+        126,
+        127,
+        132,
+        136,
+        142,
+        145,
+        146,
+        152
+      ],
+      "original_poses": 14182,
+      "after_compiled_seams_and_unweighted_matching": [
+        [
+          14182,
+          4786
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "intermediate_two_image_lower_bound": 131,
+      "full_fixed_point_survives": false
+    },
+    {
+      "images": [
+        1,
+        7
+      ],
+      "shared_tiles": [
+        7,
+        13,
+        19,
+        50,
+        53,
+        55,
+        62,
+        74,
+        76,
+        78,
+        84,
+        85,
+        88,
+        91,
+        94,
+        100,
+        103,
+        106,
+        115,
+        116,
+        121,
+        126,
+        127,
+        132,
+        142,
+        151,
+        152,
+        153
+      ],
+      "original_poses": 13704,
+      "after_compiled_seams_and_unweighted_matching": [
+        [
+          13704,
+          4632
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "intermediate_two_image_lower_bound": 132,
+      "full_fixed_point_survives": false
+    }
+  ],
+  "cycle_spread_trials": [
+    {
+      "images": [
+        0,
+        1
+      ],
+      "required_covered_cycles": 27,
+      "actual_original_trials": 45,
+      "survived_fixed_point": 0
+    },
+    {
+      "images": [
+        0,
+        2
+      ],
+      "required_covered_cycles": 27,
+      "actual_original_trials": 45,
+      "survived_fixed_point": 0
+    }
+  ],
+  "scope_summary": "Forty spatially clustered pools survived a first compiled AC pass. Four other held-out pools survived a full seam pass and a complete tile matching filter. None of the 44 survived the complete fixed point. A further 90 pools supplied physically distinct tile choices across the required relative cycles and also closed. This is a finite disposition. Every signed bound here assumes geographic Gold; it must not be applied to an ordinary scored-208 search.",
+  "final_public_cases": [
+    {
+      "case": "threshold",
+      "full_geographic_owner_trace": [
+        [
+          0,
+          0
+        ]
+      ],
+      "policies": {
+        "without-pairs": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "image_pool_seams"
+        },
+        "integrated": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "image_pool_seams"
+        }
+      }
+    },
+    {
+      "case": "held-out",
+      "full_geographic_owner_trace": [
+        [
+          0,
+          0
+        ]
+      ],
+      "policies": {
+        "without-pairs": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "image_pool_seams"
+        },
+        "integrated": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "pose_image_pair_quota"
+        }
+      }
+    },
+    {
+      "case": "spatial-29",
+      "full_geographic_owner_trace": [
+        [
+          7575,
+          0
+        ]
+      ],
+      "policies": {
+        "without-pairs": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "geographic_tile_matching"
+        },
+        "integrated": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "geographic_tile_matching"
+        }
+      }
+    },
+    {
+      "case": "spatial-29-held-out",
+      "full_geographic_owner_trace": [
+        [
+          6723,
+          0
+        ]
+      ],
+      "policies": {
+        "without-pairs": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "geographic_tile_matching"
+        },
+        "integrated": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "geographic_tile_matching"
+        }
+      }
+    },
+    {
+      "case": "spatial-30",
+      "full_geographic_owner_trace": [
+        [
+          8085,
+          0
+        ]
+      ],
+      "policies": {
+        "without-pairs": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "geographic_tile_matching"
+        },
+        "integrated": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "geographic_tile_matching"
+        }
+      }
+    },
+    {
+      "case": "spatial-32",
+      "full_geographic_owner_trace": [
+        [
+          9026,
+          0
+        ]
+      ],
+      "policies": {
+        "without-pairs": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "geographic_tile_matching"
+        },
+        "integrated": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "geographic_tile_matching"
+        }
+      }
+    },
+    {
+      "case": "covered-0-1",
+      "full_geographic_owner_trace": [
+        [
+          14182,
+          7657
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "policies": {
+        "without-pairs": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "image_pool_seams"
+        },
+        "integrated": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "image_pool_seams"
+        }
+      }
+    },
+    {
+      "case": "covered-1-7",
+      "full_geographic_owner_trace": [
+        [
+          13704,
+          4632
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "policies": {
+        "without-pairs": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "image_pool_seams"
+        },
+        "integrated": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "reason": "image_pool_seams"
+        }
+      }
+    }
+  ]
+}
