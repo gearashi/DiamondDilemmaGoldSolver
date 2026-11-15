@@ -1308,11 +1308,26 @@
         "docs/R35_CLASSIC_DEPENDENCIES.json",
         "docs/R35_V115_CROSSOVER.json",
         "docs/R35_CLASSIC_SOURCE_HISTORY.json",
-        "docs/R35_CLASSIC_SOURCE_HISTORY_RELEASE.json"
+        "docs/R35_CLASSIC_SOURCE_HISTORY_RELEASE.json",
+        "docs/R35_CLASSIC_SOURCE_HISTORY_DENSITY.json"
       ],
       "decision": "Retain both backend families for untracked or mixed histories, authenticate the incoming family on partial transfer, and retain full comparison for CPU endgame and unknown sources.",
       "reopen_if": "A new proof dependency, ownership transfer, native backend, resource family, or changed source image requires another independently matched and pinned producer scope.",
-      "release_verification": "Frozen f8ea1d5 image, 216 files. Pure CUDA, WebGPU, mixed, prefix-probe and proof-probe histories exhausted all 480 branches with identical 230400 decisions. Individually modified all 50/51/58 active files; tested 57 and 54 native CPU probes on two original depth79 partial histories."
+      "release_verification": "Frozen f8ea1d5 image, 216 files. Pure CUDA, WebGPU, mixed, prefix-probe and proof-probe histories exhausted all 480 branches with identical 230400 decisions. Individually modified all 50/51/58 active files; tested 57 and 54 native CPU probes on two original depth79 partial histories.",
+      "final_density_image": {
+        "producer": "024d076",
+        "files": 219,
+        "cuda_active": 50,
+        "webgpu_active": 51,
+        "mixed_active": 58,
+        "verified_histories": 7,
+        "terminal_jobs_each": 480,
+        "terminal_decisions_each": 230400,
+        "real_probe_counts": [
+          58,
+          57
+        ]
+      }
     },
     {
       "id": 72,

@@ -1,0 +1,763 @@
+{
+  "cuda": {
+    "engines": [
+      "cuda"
+    ],
+    "scope": {},
+    "full_sources": 219,
+    "active": 50,
+    "individually_rejected_active_files": 50,
+    "active_digest": "c1746a0532542cf4f400c191ee7371ee659dc242bf5713dc09056538f3a99574",
+    "jobs": 480,
+    "counters": [
+      230400,
+      0,
+      480
+    ],
+    "native_probe": {},
+    "trials": [
+      {
+        "changed": "constraint_work.py",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_decode.c",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_delta.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_delta.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_frame_defaults.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_frame_defaults.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_frames.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_packet.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_packet.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_column_copies.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_counter_reduce.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_kernels.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_kernels.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "gpu_cpu_assist.py",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_board_codec.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_board_codec.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "r35_board_codec_decode.c",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_frame_spans.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_frame_spans.wgsl",
+        "state": "reopened"
+      }
+    ],
+    "origin": "20261115T082822394340Z"
+  },
+  "webgpu": {
+    "engines": [
+      "webgpu"
+    ],
+    "scope": {},
+    "full_sources": 219,
+    "active": 51,
+    "individually_rejected_active_files": 51,
+    "active_digest": "911ecd7dc8a002ecc36352a871a5f86102cba454e616e8caf09f08e0233de460",
+    "jobs": 480,
+    "counters": [
+      230400,
+      0,
+      480
+    ],
+    "native_probe": {},
+    "trials": [
+      {
+        "changed": "constraint_work.py",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_decode.c",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_delta.cu",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_delta.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_frame_defaults.cu",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_frame_defaults.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_frames.cu",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_packet.cu",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_packet.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_column_copies.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_counter_reduce.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_kernels.cu",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_kernels.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "gpu_cpu_assist.py",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_board_codec.cu",
+        "state": "reopened"
+      },
+      {
+        "changed": "r35_board_codec.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_board_codec_decode.c",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_frame_spans.cu",
+        "state": "reopened"
+      },
+      {
+        "changed": "r35_frame_spans.wgsl",
+        "state": "rejected"
+      }
+    ],
+    "origin": "20261115T082943158365Z"
+  },
+  "mixed": {
+    "engines": [
+      "cuda",
+      "webgpu"
+    ],
+    "scope": {},
+    "full_sources": 219,
+    "active": 58,
+    "individually_rejected_active_files": 58,
+    "active_digest": "9e11dea2f65ca2e3f08350dd53a691a44fa439e6acf4ca960488e23012822c22",
+    "jobs": 480,
+    "counters": [
+      230400,
+      0,
+      480
+    ],
+    "native_probe": {},
+    "trials": [
+      {
+        "changed": "constraint_work.py",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_decode.c",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_delta.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_delta.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_frame_defaults.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_frame_defaults.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_frames.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_packet.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_packet.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_column_copies.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_counter_reduce.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_kernels.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_kernels.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "gpu_cpu_assist.py",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_board_codec.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_board_codec.wgsl",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_board_codec_decode.c",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_frame_spans.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_frame_spans.wgsl",
+        "state": "rejected"
+      }
+    ],
+    "origin": "20261115T083115732641Z"
+  },
+  "probe": {
+    "engines": [
+      "cuda"
+    ],
+    "scope": {
+      "cpu_probe": true
+    },
+    "full_sources": 219,
+    "active": 50,
+    "individually_rejected_active_files": 50,
+    "active_digest": "c1746a0532542cf4f400c191ee7371ee659dc242bf5713dc09056538f3a99574",
+    "jobs": 480,
+    "counters": [
+      230400,
+      0,
+      480
+    ],
+    "native_probe": {
+      "cpu_prefix_probes": 0,
+      "cpu_prefix_failures": 0,
+      "cpu_prefix_unknown": 0,
+      "cpu_prefix_values_removed": 0,
+      "cpu_endgame_calls": 0,
+      "cpu_endgame_nodes": 0,
+      "cpu_endgame_infeasible": 0,
+      "cpu_endgame_solutions": 0,
+      "cpu_endgame_unknown": 0,
+      "cpu_endgame_held_lanes": 0,
+      "cpu_probe_selection_contexts": 0,
+      "cpu_probe_hall_targets": 0
+    },
+    "trials": [
+      {
+        "changed": "constraint_work.py",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_decode.c",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_delta.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_delta.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_frame_defaults.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_frame_defaults.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_frames.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_packet.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_packet.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_column_copies.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_counter_reduce.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_kernels.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_kernels.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "gpu_cpu_assist.py",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_board_codec.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_board_codec.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "r35_board_codec_decode.c",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_frame_spans.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_frame_spans.wgsl",
+        "state": "reopened"
+      }
+    ],
+    "origin": "20261115T083230161817Z"
+  },
+  "proof-probe": {
+    "engines": [
+      "cuda"
+    ],
+    "scope": {
+      "proof_probes": true
+    },
+    "full_sources": 219,
+    "active": 50,
+    "individually_rejected_active_files": 50,
+    "active_digest": "c1746a0532542cf4f400c191ee7371ee659dc242bf5713dc09056538f3a99574",
+    "jobs": 480,
+    "counters": [
+      230400,
+      0,
+      480
+    ],
+    "native_probe": {
+      "cpu_prefix_probes": 0,
+      "cpu_prefix_failures": 0,
+      "cpu_prefix_unknown": 0,
+      "cpu_prefix_values_removed": 0,
+      "cpu_endgame_calls": 0,
+      "cpu_endgame_nodes": 0,
+      "cpu_endgame_infeasible": 0,
+      "cpu_endgame_solutions": 0,
+      "cpu_endgame_unknown": 0,
+      "cpu_endgame_held_lanes": 0,
+      "cpu_probe_selection_contexts": 0,
+      "cpu_probe_hall_targets": 0
+    },
+    "trials": [
+      {
+        "changed": "constraint_work.py",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_decode.c",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_delta.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_delta.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_frame_defaults.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_frame_defaults.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_checkpoint_frames.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_packet.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_checkpoint_packet.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_column_copies.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_counter_reduce.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "dfs_kernels.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "dfs_kernels.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "gpu_cpu_assist.py",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_board_codec.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_board_codec.wgsl",
+        "state": "reopened"
+      },
+      {
+        "changed": "r35_board_codec_decode.c",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_frame_spans.cu",
+        "state": "rejected"
+      },
+      {
+        "changed": "r35_frame_spans.wgsl",
+        "state": "reopened"
+      }
+    ],
+    "origin": "20261115T083342502040Z"
+  },
+  "deep-probe": {
+    "state": "stopped",
+    "active": 480,
+    "completed": 0,
+    "max_depth": 79,
+    "counters": [
+      196653988,
+      34927609,
+      34912434
+    ],
+    "native_probe": {
+      "cpu_prefix_probes": 58,
+      "cpu_prefix_failures": 7,
+      "cpu_prefix_unknown": 51,
+      "cpu_prefix_values_removed": 47722,
+      "cpu_endgame_calls": 0,
+      "cpu_endgame_nodes": 0,
+      "cpu_endgame_infeasible": 0,
+      "cpu_endgame_solutions": 0,
+      "cpu_endgame_unknown": 0,
+      "cpu_endgame_held_lanes": 0,
+      "cpu_probe_selection_contexts": 0,
+      "cpu_probe_hall_targets": 0
+    },
+    "generation": 3769,
+    "source_run": "20261115T083447967304Z",
+    "signed_engines": [
+      "cuda"
+    ],
+    "partial_source_reopened_on_dormant_change": true,
+    "verified_probe_implementation_required": true
+  },
+  "deep-targeted": {
+    "state": "stopped",
+    "active": 480,
+    "completed": 0,
+    "max_depth": 79,
+    "counters": [
+      191999701,
+      34113652,
+      34098422
+    ],
+    "native_probe": {
+      "cpu_prefix_probes": 57,
+      "cpu_prefix_failures": 10,
+      "cpu_prefix_unknown": 47,
+      "cpu_prefix_values_removed": 59510,
+      "cpu_endgame_calls": 0,
+      "cpu_endgame_nodes": 0,
+      "cpu_endgame_infeasible": 0,
+      "cpu_endgame_solutions": 0,
+      "cpu_endgame_unknown": 0,
+      "cpu_endgame_held_lanes": 0,
+      "cpu_probe_selection_contexts": 456,
+      "cpu_probe_hall_targets": 1
+    },
+    "generation": 3680,
+    "source_run": "20261115T083515492242Z",
+    "signed_engines": [
+      "cuda"
+    ],
+    "partial_source_reopened_on_dormant_change": true,
+    "verified_probe_implementation_required": true
+  },
+  "release_image": {
+    "producer": "024d076",
+    "base": "f8ea1d5",
+    "source_archive_sha256": "5b5d98d88d890e16eb80a571953a0fccb8c50b890c2d26f28874b86d82aac39e",
+    "active": {
+      "('cuda',)": {
+        "digest": "c1746a0532542cf4f400c191ee7371ee659dc242bf5713dc09056538f3a99574",
+        "active": [
+          "build_native.py",
+          "checkpoint_writer.py",
+          "classic_checkpoint_delta.py",
+          "classic_checkpoint_ranges.py",
+          "classic_frame_defaults.py",
+          "classic_frame_packet.py",
+          "classic_parked_storage.py",
+          "constraint_explanations.py",
+          "constraint_incremental_hall.py",
+          "constraint_native.c",
+          "constraint_native.py",
+          "constraint_native_search.c",
+          "constraint_parity.py",
+          "constraint_pruning.py",
+          "constraint_symmetry.py",
+          "dfs_checkpoint_decode.c",
+          "dfs_checkpoint_delta.cu",
+          "dfs_checkpoint_frame_defaults.cu",
+          "dfs_checkpoint_frames.cu",
+          "dfs_checkpoint_packet.cu",
+          "dfs_gpu.py",
+          "dfs_kernels.cu",
+          "dfs_webgpu.py",
+          "exact_frontier.py",
+          "exact_source_evidence.py",
+          "geometry.py",
+          "gpu_backends.py",
+          "gpu_cpu_assist.py",
+          "gpu_engine.py",
+          "gpu_reasoning.py",
+          "io_utils.py",
+          "kernels.cu",
+          "r27_structure_filters.py",
+          "r32_gold_bonds.py",
+          "r35_board_codec.cu",
+          "r35_board_codec.py",
+          "r35_board_codec_decode.c",
+          "r35_classic_sources.py",
+          "r35_frame_span_decode.py",
+          "r35_frame_spans.cu",
+          "r35_frame_spans.py",
+          "r35_gpu_mates.py",
+          "r35_physical_adjacency.py",
+          "render_board.py",
+          "search_problem.py",
+          "source_image_storage.py",
+          "systematic_evidence.py",
+          "systematic_jobs.py",
+          "systematic_search.py",
+          "validator.py"
+        ]
+      },
+      "('webgpu',)": {
+        "digest": "911ecd7dc8a002ecc36352a871a5f86102cba454e616e8caf09f08e0233de460",
+        "active": [
+          "build_native.py",
+          "checkpoint_writer.py",
+          "classic_checkpoint_delta.py",
+          "classic_checkpoint_ranges.py",
+          "classic_frame_defaults.py",
+          "classic_frame_packet.py",
+          "classic_parked_storage.py",
+          "constraint_explanations.py",
+          "constraint_incremental_hall.py",
+          "constraint_native.c",
+          "constraint_native.py",
+          "constraint_native_search.c",
+          "constraint_parity.py",
+          "constraint_pruning.py",
+          "constraint_symmetry.py",
+          "dfs_checkpoint_decode.c",
+          "dfs_checkpoint_delta.wgsl",
+          "dfs_checkpoint_frame_defaults.wgsl",
+          "dfs_checkpoint_packet.wgsl",
+          "dfs_column_copies.wgsl",
+          "dfs_counter_reduce.wgsl",
+          "dfs_gpu.py",
+          "dfs_kernels.wgsl",
+          "dfs_webgpu.py",
+          "exact_frontier.py",
+          "exact_source_evidence.py",
+          "geometry.py",
+          "gpu_backends.py",
+          "gpu_cpu_assist.py",
+          "gpu_engine.py",
+          "gpu_reasoning.py",
+          "io_utils.py",
+          "kernels.cu",
+          "r27_structure_filters.py",
+          "r32_gold_bonds.py",
+          "r35_board_codec.py",
+          "r35_board_codec.wgsl",
+          "r35_board_codec_decode.c",
+          "r35_classic_sources.py",
+          "r35_frame_span_decode.py",
+          "r35_frame_spans.py",
+          "r35_frame_spans.wgsl",
+          "r35_gpu_mates.py",
+          "r35_physical_adjacency.py",
+          "render_board.py",
+          "search_problem.py",
+          "source_image_storage.py",
+          "systematic_evidence.py",
+          "systematic_jobs.py",
+          "systematic_search.py",
+          "validator.py"
+        ]
+      },
+      "('cuda', 'webgpu')": {
+        "digest": "9e11dea2f65ca2e3f08350dd53a691a44fa439e6acf4ca960488e23012822c22",
+        "active": [
+          "build_native.py",
+          "checkpoint_writer.py",
+          "classic_checkpoint_delta.py",
+          "classic_checkpoint_ranges.py",
+          "classic_frame_defaults.py",
+          "classic_frame_packet.py",
+          "classic_parked_storage.py",
+          "constraint_explanations.py",
+          "constraint_incremental_hall.py",
+          "constraint_native.c",
+          "constraint_native.py",
+          "constraint_native_search.c",
+          "constraint_parity.py",
+          "constraint_pruning.py",
+          "constraint_symmetry.py",
+          "dfs_checkpoint_decode.c",
+          "dfs_checkpoint_delta.cu",
+          "dfs_checkpoint_delta.wgsl",
+          "dfs_checkpoint_frame_defaults.cu",
+          "dfs_checkpoint_frame_defaults.wgsl",
+          "dfs_checkpoint_frames.cu",
+          "dfs_checkpoint_packet.cu",
+          "dfs_checkpoint_packet.wgsl",
+          "dfs_column_copies.wgsl",
+          "dfs_counter_reduce.wgsl",
+          "dfs_gpu.py",
+          "dfs_kernels.cu",
+          "dfs_kernels.wgsl",
+          "dfs_webgpu.py",
+          "exact_frontier.py",
+          "exact_source_evidence.py",
+          "geometry.py",
+          "gpu_backends.py",
+          "gpu_cpu_assist.py",
+          "gpu_engine.py",
+          "gpu_reasoning.py",
+          "io_utils.py",
+          "kernels.cu",
+          "r27_structure_filters.py",
+          "r32_gold_bonds.py",
+          "r35_board_codec.cu",
+          "r35_board_codec.py",
+          "r35_board_codec.wgsl",
+          "r35_board_codec_decode.c",
+          "r35_classic_sources.py",
+          "r35_frame_span_decode.py",
+          "r35_frame_spans.cu",
+          "r35_frame_spans.py",
+          "r35_frame_spans.wgsl",
+          "r35_gpu_mates.py",
+          "r35_physical_adjacency.py",
+          "render_board.py",
+          "search_problem.py",
+          "source_image_storage.py",
+          "systematic_evidence.py",
+          "systematic_jobs.py",
+          "systematic_search.py",
+          "validator.py"
+        ]
+      }
+    },
+    "cpu_policy_tests": {
+      "3.12": 4,
+      "3.15": 4
+    },
+    "operation": "Wide automatic frame capture evaluates the inexpensive short-work controller when gpu.n >= 32768 and at least half the physical lanes currently have frames. All host/native restore paths and active identities remain authenticated."
+  }
+}

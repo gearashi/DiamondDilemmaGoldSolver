@@ -17,9 +17,9 @@ REVIEWED = frozenset({
 # New producer images record a source-bound union of every backend entrusted
 # with the native stack. A pre-tracking marker always requires both shaders.
 GUARDED = {
-    ('cuda',): ('76fcae6286598558d042bbb1c4ea1e692da7df245f14dd6fd295086a1ce6d94c', '29205e050b8e7c852aa95c968c5d691bdc48780d5cd059dc796245f0104dea67'),
-    ('webgpu',): ('447b23fdb60459bc776c7a5e7b5070ff0a20b5eafed49dba74608484d4f014e7', 'b57e4ca0ac4a17000ba114b9d51a733be8946ff6626618b5befb87cb6869eb74'),
-    ('cuda', 'webgpu'): ('2e4da22c5f4b32326a45ab2bd075f7e4b62d2131a7c80181aeafc1c920e84c47', '887997b0d022d130c97f31b24d578487f72c51bdbce999f8b0c28505aac1e32d'),
+    ('cuda',): ('76fcae6286598558d042bbb1c4ea1e692da7df245f14dd6fd295086a1ce6d94c', '29205e050b8e7c852aa95c968c5d691bdc48780d5cd059dc796245f0104dea67', 'c1746a0532542cf4f400c191ee7371ee659dc242bf5713dc09056538f3a99574'),
+    ('webgpu',): ('447b23fdb60459bc776c7a5e7b5070ff0a20b5eafed49dba74608484d4f014e7', 'b57e4ca0ac4a17000ba114b9d51a733be8946ff6626618b5befb87cb6869eb74', '911ecd7dc8a002ecc36352a871a5f86102cba454e616e8caf09f08e0233de460'),
+    ('cuda', 'webgpu'): ('2e4da22c5f4b32326a45ab2bd075f7e4b62d2131a7c80181aeafc1c920e84c47', '887997b0d022d130c97f31b24d578487f72c51bdbce999f8b0c28505aac1e32d', '9e11dea2f65ca2e3f08350dd53a691a44fa439e6acf4ca960488e23012822c22'),
 }
 BACKENDS = ('cuda','webgpu')
 CUDA_RESOURCES = frozenset({
