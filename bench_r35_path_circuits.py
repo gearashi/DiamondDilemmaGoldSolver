@@ -76,6 +76,38 @@ def native_poses(problem, hints):
     return dict(result)
 
 
+def replay_reuse(problem,reference,required,hints):
+    """Shuffle real claims and vary the reference; count calls to the full pose enumerator."""
+    from random import Random
+    from unittest.mock import patch
+    from r35_path_mates import PathMates
+    sample=list(hints)
+    cases=[]
+    for seed in (29,71,223,2026):
+        Random(seed).shuffle(sample)
+        cases.extend([(sample[:],reference|required),(sample[:9],reference|required),
+                      (sample[:],(reference-set(map(tuple,sample[0]["path"])))|required)])
+    def run(cold):
+        checks=0
+        previous=PathMates.patterns
+        def count(checker,*args,**kwargs):
+            nonlocal checks
+            checks+=1
+            return previous(checker,*args,**kwargs)
+        setattr(problem,"_path_circuit_replay",None)
+        rows=[]
+        with patch.object(PathMates,"patterns",count):
+            for candidates,allowed in cases:
+                if cold:problem._path_circuit_replay=None
+                rows.append(verified_circuits(problem,candidates,allowed))
+        return rows,checks
+    first,cold=run(True)
+    later,warm=run(False)
+    if first!=later:raise ArithmeticError("Warm replay changed the proved groups.")
+    return dict(queries=len(cases),cold_pose_enumerations=cold,warm_pose_enumerations=warm,
+                identical_projected_groups=True)
+
+
 def report(tiles, screen_file):
     problem, ref, physical, req = problem_scope(tiles)
     claims = compose(problem, ref, req, read_json(screen_file))
@@ -105,6 +137,7 @@ def report(tiles, screen_file):
     return dict(fingerprint=problem.fingerprint,compositions=len(claims),nondominated=len(useful),
                 widths=dict(Counter(map(len,useful))),fixed_phase_prices=prices,
                 placement_specialization=native_poses(problem,useful.values()),
+                repeated_claims=replay_reuse(problem,ref,req,useful.values()),
                 gold_path_circuits=[v for _,v in sorted(useful.items(), key=lambda x:(len(x[0]),sorted(x[0])))])
 
 

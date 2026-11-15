@@ -1,5 +1,5 @@
 """Infer extra physical seams shared by every edge-compatible embedding of a rigid component."""
-from collections import defaultdict
+from collections import OrderedDict, defaultdict
 from time import monotonic
 
 from r27_structure_filters import Union
@@ -149,18 +149,31 @@ def post_tables(check, tables):
     return dict(tables=posted, rows=rows, unsupported_patterns=unsupported)
 
 
+def _circuit_replay(problem):
+    # Match the exact inputs used by placement propagation and by physical loop tracing.
+    artwork = tuple(tuple(tuple((s,k) for s,k in segment) for segment in tile["segments"])
+                    for tile in problem.tiles)
+    key = (problem.n, problem.total_segments, tuple(map(tuple,problem.edges)),
+           problem.masks[::3].tobytes(), artwork)
+    old = getattr(problem, "_path_circuit_replay", None)
+    if old is None or old[0] != key:
+        from r32_gold_bonds import endpoints
+        from r35_loss_witness import raw_sides
+        old = (key, PathMates(problem), endpoints(problem),
+               [slots for slots,_ in raw_sides(problem.tiles)], OrderedDict())
+        problem._path_circuit_replay = old
+    return old[1:]
+
+
 def verified_circuits(problem, hints, allowed=None):
     """Substitute a geographically forced extra mate into a strict physical loop."""
-    from r32_gold_bonds import endpoints, loop_groups
+    from r32_gold_bonds import loop_groups
     from r35_geographic_replay import replay_for
-    from r35_loss_witness import raw_sides
 
     if not hints:
         return ()
     normalizer = replay_for(problem)
-    checker = PathMates(problem)
-    arcs = endpoints(problem)
-    sides = [slots for slots, _ in raw_sides(problem.tiles)]
+    checker, arcs, sides, cached = _circuit_replay(problem)
     common_by_path = {}
     proved_loops = {}
     groups = set()
@@ -175,6 +188,11 @@ def verified_circuits(problem, hints, allowed=None):
         group = path | (circuit - single)
         if allowed is not None and not group <= allowed:
             continue
+        record = path, circuit, single
+        if record in cached:
+            cached.move_to_end(record)
+            groups.add(group)
+            continue
         if circuit not in proved_loops:
             proved_loops[circuit] = circuit in loop_groups(arcs, sides, circuit, problem.total_segments)
         if not proved_loops[circuit]:
@@ -186,6 +204,9 @@ def verified_circuits(problem, hints, allowed=None):
                 patterns = set()
             common_by_path[path] = frozenset.intersection(*patterns) if patterns else frozenset()
         if single <= common_by_path[path]:
+            if len(cached) >= 128:
+                cached.popitem(last=False)
+            cached[record] = True
             groups.add(group)
     return tuple(sorted(groups, key=lambda g: (len(g), sorted(g))))
 

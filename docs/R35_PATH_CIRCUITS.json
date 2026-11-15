@@ -60,6 +60,12 @@
     "zero_geometric_roots": 600,
     "roots": 9120
   },
+  "repeated_claims": {
+    "queries": 12,
+    "cold_pose_enumerations": 164,
+    "warm_pose_enumerations": 19,
+    "identical_projected_groups": true
+  },
   "gold_path_circuits": [
     {
       "path": [

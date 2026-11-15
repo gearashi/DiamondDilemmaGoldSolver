@@ -1537,7 +1537,7 @@
       "source_id": "cross-consumer follow-up to #81 and Round 24/25 minimum-change master",
       "title": "Seed the minimum-changed-cell repair master with verified geographic and physical conflicts",
       "mechanism": "GOLD-REPAIR-SEEDED-CELL-CORES",
-      "state": "keep scoped geographic changed-cell master",
+      "state": "testing",
       "proposal_and_validation": "The released public hitting-set master starts empty. A changed endpoint must hit every initially bad seam. A lost reference bond requires at least one of its two original cells to change. Project only independently confirmed physically required departures. Compare visible seams, fixed and variable seed scopes, proper loops, authenticated geometric/edge-perfect groups, and their combinations. Exhaust tiny seeds, measure representative and held-out original cases, evaluate initial and repeated native master/oracle work, and test interrupted, resumed and legacy histories.",
       "decision": "Use the 93-change bound and all 120 independently replayed adaptive rows on the named geographic reference. Transfer necessary pose rows and the distance lower bound to compatible nearby seeds. Recheck current fixed and domain restrictions. Persist native failures separately and preserve actual v1.15 pending work before changing the next master.",
       "measurement": "The 3,804 original geographic constraints require 89 of 160 cells to change. After 88 further verified rows the exact hitting optimum is 93; external DRAT verified cap92 in 13,977,119 resolution steps. Another 32 valid rows reject that particular 93-hit; the cap93 result is unresolved. On held-out rotations, 45,126/45,522 charged decisions fell to 29,977/29,446. Original first scope now costs 37,944 master branches versus 2,032 on a known failed 93-hit. All 1,944 finite seeds and native minimums 1/3/4 agree.",
@@ -1550,7 +1550,8 @@
         "bench_r35_repair_refinement.py",
         "test_r35_repair_seeds.py"
       ],
-      "reopen_if": "New independent geographic constraints, a new incumbent, a verifiably reusable native master frontier or a genuinely different consumer changes the decision. Further cap93 sampling alone extends ongoing search coverage."
+      "reopen_if": "New independent geographic constraints, a new incumbent, a verifiably reusable native master frontier or a genuinely different consumer changes the decision. Further cap93 sampling alone extends ongoing search coverage.",
+      "reopened_evidence": "New geographically verified path-to-loop rule 17 from #86 produced 16 independently replayed, undominated three- and four-cell exclusions. Test the concrete 96\u201398-cell surviving selections, fixed/unfixed controls and legacy transfer before closing this measured extension."
     },
     {
       "id": 83,
@@ -1681,6 +1682,15 @@
         "test_r35_path_circuits.py"
       ],
       "reopen_if": "A different donor or reference yields a newly reachable nonreference seam, more than one necessary alternative, a surviving incompatible correlated pattern with measured pruning, or an obstruction beyond the ordinary placed-edge and loop checks."
+    },
+    {
+      "id": 87,
+      "area": "Proof reuse across public solver runs",
+      "source_id": "Cold positive and negative public CLI controls after #80, #81 and #86",
+      "title": "Reuse independently verified original geographic claim catalogues in a fresh process",
+      "mechanism": "COLD-GEOGRAPHIC-CLAIM-CATALOGUE",
+      "state": "testing",
+      "proposal_and_validation": "A positive public 33-loss query and a negative 31-loss ranked query both make zero new native search decisions but still replay the same external geographic claim files on each fresh launch. Compare full raw verification with lookup for the published 194 geometry and 985 contact claims and the relevant proper-loop groups, binding each proof kind to its actual source. Preserve live independent checking, mixed and unknown inputs, changed raw artwork, corrupt metadata, different domain scopes, valid placements and cold/warm ownership. Retain only reductions established by fresh public calls."
     }
   ],
   "priorities": [
@@ -1699,7 +1709,7 @@
   ],
   "baseline": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
   "worktree": "C:/DiamondDilemmaGoldSolver/round35",
-  "total_candidates": 86,
+  "total_candidates": 87,
   "first_parallel_groups": [
     [
       1

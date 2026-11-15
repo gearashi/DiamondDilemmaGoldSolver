@@ -28,6 +28,22 @@ class PathCircuitTests(unittest.TestCase):
         self.assertFalse(verified_circuits(self.p,bad))
         self.assertFalse(verified_circuits(self.p,[dict(hint,path=[hint["path"][0]])]))
 
+    def test_repeat_query_reuses_proofs_but_changed_geometry_reopens(self):
+        from r35_path_mates import PathMates
+        h=self.hints[0]
+        self.assertTrue(verified_circuits(self.p,[h]))
+        before=self.p._path_circuit_replay
+        with patch.object(PathMates,"patterns",side_effect=AssertionError("redundant replay")):
+            self.assertTrue(verified_circuits(self.p,[dict(h,path=h["path"][::-1])]))
+        saved=self.p.edges
+        try:
+            self.p.edges=[]
+            self.assertFalse(verified_circuits(self.p,[h]))
+            self.assertIsNot(before,self.p._path_circuit_replay)
+        finally:
+            self.p.edges=saved
+        self.assertTrue(verified_circuits(self.p,[h]))
+
     def test_geographic_gold_scope_and_public_zero_search(self):
         h=self.hints[0]
         g=verified_circuits(self.p,[h])[0]
