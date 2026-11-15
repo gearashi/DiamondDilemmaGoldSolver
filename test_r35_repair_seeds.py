@@ -219,5 +219,46 @@ class SeedProofTests(TestCase):
                         open_record(record)
         _variants.cache_clear()
 
+    def test_refined_scope_rechecks_the_suggested_hit_against_all_later_cuts(self):
+        import hashlib
+        import json
+        from pathlib import Path
+        from r35_repair_seeds import active_catalog,certified_choice
+        root=Path(__file__).resolve().parent/'docs'
+        original=json.loads((root/'R35_REPAIR_PLACEMENTS.json').read_bytes())
+        refined=json.loads((root/'R35_REPAIR_REFINED.json').read_bytes())
+        self.assertEqual(refined['base_sha256'],hashlib.sha256((root/'R35_REPAIR_PLACEMENTS.json').read_bytes().strip()).hexdigest())
+        hit=set(refined['hit'])
+        effective=original['rows']+refined['extra']
+        rows=list(map(frozenset,effective))
+        self.assertEqual(len(hit),93)
+        self.assertEqual(certified_choice(93,hit,rows,range(160)),hit)
+        self.assertIsNone(certified_choice(93,hit,rows+list(map(frozenset,refined['additional'])),range(160)))
+        with patch('r35_repair_seeds.checked_catalog',return_value=original):
+            actual=active_catalog(None)
+            self.assertEqual(actual['rows'],effective+refined['additional'])
+            with patch.object(Path,'read_bytes',return_value=b'{}'):
+                self.assertEqual(active_catalog(None),original)
+            with patch.object(Path,'read_bytes',side_effect=FileNotFoundError):
+                self.assertEqual(active_catalog(None),original)
+
+    def test_repair_cut_generation_accepts_only_independent_pose_conflicts(self):
+        from bench_r35_repair_refinement import local_cuts
+        class Checking:
+            def __init__(self,solutions):self.solutions=solutions;self.calls=0
+            def replay(self,seed,row):
+                self.calls+=1
+                return all(any(seed[c]!=g[c] for c in row) for g in self.solutions)
+        p=SearchProblem(*tetrahedron_tiles())
+        gold=brute(p,'gold');proof=Checking(gold)
+        self.assertFalse(local_cuts(p,gold[0],[],proof))
+        bad=[0,5,7,11]
+        cuts=local_cuts(p,bad,[],proof)
+        self.assertGreater(proof.calls,0)
+        self.assertTrue(all(all(any(bad[c]!=g[c] for c in row) for g in gold) for row in cuts))
+        with self.assertRaisesRegex(ValueError,'independent|Independent'):
+            local_cuts(p,bad,[],type('Reject',(),{'replay':lambda *_:False})())
+        with self.assertRaises(ValueError):local_cuts(p,bad,[3,3],proof)
+
 
 if __name__=='__main__':main()

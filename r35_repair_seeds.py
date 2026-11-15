@@ -216,18 +216,35 @@ def checked_catalog(problem):
     return json.loads(body)
 
 
+def active_catalog(problem):
+    record=checked_catalog(problem)
+    if record is None or record.get('puzzle')!='e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853':
+        return record
+    from hashlib import sha256
+    try:body=(Path(__file__).resolve().parent/'docs/R35_REPAIR_REFINED.json').read_bytes().strip()
+    except OSError:return record
+    if sha256(body).hexdigest()!='3369433c96e41f6af984ba4d8fed42998d26b62538f7920395b1df7a16719397':return record
+    refined=json.loads(body)
+    return dict(record,rows=record['rows']+refined['extra']+refined['additional'],hit=refined['hit'])
+
+
 def certified_distance(problem,codes):
     """Transfer the exact reference lower bound using the best legal distance change per cell."""
-    record=checked_catalog(problem)
+    record=active_catalog(problem)
     if record is None:return 0,None
     reference=record['codes']
-    lower=len(record['hit'])
+    hint=set(record['hit'])
+    lower=len(hint)
     for c,(actual,other) in enumerate(zip(codes,reference)):
         if actual==other:continue
         domain=problem.domains[c]
-        if actual in domain:lower-=1
-        elif domain and all(v==other for v in domain):lower+=1
-    return max(0,lower),set(record['hit'])
+        if actual in domain:
+            lower-=1
+            hint.discard(c)
+        elif domain and all(v==other for v in domain):
+            lower+=1
+            hint.add(c)
+    return max(0,lower),hint
 
 
 def certified_choice(lower,hint,rows,cells):
@@ -238,7 +255,7 @@ def certified_choice(lower,hint,rows,cells):
 
 def archive_rows(state):
     """A verified impossible conjunction remains impossible on every seed preserving its named poses."""
-    record=checked_catalog(state.p)
+    record=active_catalog(state.p)
     if record is None:return
     agreement={c for c,(v,w) in enumerate(zip(state.codes,record['codes'])) if v==w}
     for i,row in enumerate(record['rows']):
@@ -301,7 +318,7 @@ def proof_sources():
            'r35_contact_certificate.py','r35_loss_witness.py','r35_geographic_replay.py',
            'r35_induced_contacts.py','r32_gold_loss.py','r31_geographic.py','r28_geo_sewing.py',
            'r28_geo_color.py','r29_gold_phase.py','docs/R35_CONTACT_LOSS_CERTIFICATE.json',
-           'docs/R35_REPAIR_PLACEMENTS.json')
+           'docs/R35_REPAIR_PLACEMENTS.json','docs/R35_REPAIR_REFINED.json')
     return {name:(sha256((root/name).read_bytes()).hexdigest() if (root/name).is_file() else 'absent')
             for name in names}
 
