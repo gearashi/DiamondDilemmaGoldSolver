@@ -44,6 +44,9 @@ class PersistentSatSession:
         self.stats={'session_model_builds':0,'session_warm_slices':0,'session_native_calls':0,'session_cubes_closed':0,'session_gold_cuts':0,'session_decisions':0,'session_candidates':0,'session_imported_loops':0,'session_imported_masks':0}
         self.stats.update(session_core_candidates=0,session_core_verifications=0,session_core_model_builds=0,session_core_decisions=0,session_core_verified=0,session_core_unknown=0,session_core_boxes_removed=0,session_core_assignments_removed=0)
         self.stats.update(dict.fromkeys(('regional_dag_regions','regional_dag_arcs','regional_dag_constraints','regional_dag_compile_transitions','regional_dag_compile_states','regional_dag_cap_skips','regional_dag_expanded_histories','regional_dag_compile_reuses','regional_dag_compile_resumes','regional_dag_cursor_loads','regional_dag_cursor_saves','regional_dag_cursor_io_failures','regional_dag_compile_evictions','regional_dag_encoder_replays'),0))
+        # The physical Gold encoder emits only these counters when it builds.
+        # Declare them before loading either an old prepared or an unopened session.
+        self.stats.update(dict.fromkeys(('physical_forbidden_clauses','physical_required_clauses','physical_core_units'),0))
         self.stats.update(dict.fromkeys(PERSIST_KEYS,0))
         from constraint_sat_guards_round26 import STAT_KEYS as GUARD_KEYS
         self.stats.update(dict.fromkeys(GUARD_KEYS,0))
@@ -508,7 +511,7 @@ class PersistentSatSession:
             from constraint_knowledge import revalidate_witness
             from constraint_sat_persistence import STAT_KEYS as PERSIST_KEYS,MAX_SNAPSHOT_BYTES
             for record in payload['gold_cuts']:obj.gold_cuts.append(revalidate_witness(problem,record,target='gold'))
-            if any(k not in obj.stats or type(v)is not int or v<0 for k,v in payload['stats'].items()):raise ValueError('Malformed native-session counters.')
+            if not isinstance(payload.get('stats'),dict) or any(k not in obj.stats or type(v)is not int or v<0 for k,v in payload['stats'].items()):raise ValueError('Malformed native-session counters.')
             saved=payload.get('native_clauses')
             if saved is not None:
                 if not isinstance(saved,dict) or len(json.dumps(saved,separators=(',',':')).encode())>MAX_SNAPSHOT_BYTES:raise ValueError('Malformed or oversized saved native clauses.')

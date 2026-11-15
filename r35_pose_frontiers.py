@@ -85,8 +85,10 @@ def screen_cubes(cubes, receiver, stop=None):
     return retained,closed,removed
 
 def validate_receiver(algorithm, options, target, resume):
-    if algorithm not in ('dfs','gpu-domains') or target!='gold' or options.get('symbolic_frontier'):
-        raise ValueError('Reference pose cuts require DFS or GPU domain search for Gold.')
+    if algorithm not in ('dfs','gpu-domains','parallel-dfs','sat') or target!='gold' or options.get('symbolic_frontier'):
+        raise ValueError('Reference pose cuts require Gold DFS, GPU domains, or an imported parallel DFS or persistent SAT frontier.')
+    if algorithm=='sat' and not options.get('persistent_sat'):
+        raise ValueError('Reference pose cuts on an imported SAT frontier require persistent_sat.')
     if algorithm=='dfs' and (options.get('shared_coverage') or options.get('reason_tracking') or options.get('lcg') or
                              isinstance(resume,dict) and 'parallel_version' in resume):
         raise ValueError('Reference pose cuts require the single-process DFS without reason tracking or LCG.')

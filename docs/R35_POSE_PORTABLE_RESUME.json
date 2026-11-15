@@ -1,0 +1,104 @@
+{
+  "persistent_sat": {
+    "producer": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
+    "decisions": 20,
+    "old_reopen_error": "Malformed native-session counters.",
+    "closed_cubes": 1,
+    "native_calls": 1,
+    "frontier_digest": "636ff764d81765eae0eee318d9ff11bf8f2dbf5827c6a9870f95ce6801c2ebe5",
+    "old_physical_forbidden": 11520,
+    "old_physical_required": 7680,
+    "retained_cubes": 1,
+    "identical_with_and_without_option": true,
+    "finished_second_region": {
+      "producer": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
+      "previous_nodes": 20,
+      "final_nodes": [
+        20,
+        20
+      ],
+      "completed": 2,
+      "native_calls": 2,
+      "remaining": 0,
+      "scope": "two imported disjoint cubes"
+    }
+  },
+  "parallel_dfs": {
+    "status": "stopped",
+    "source_work_digest": "46760b6dca711b935eaeecb17f7ad7ffa602e5f5b3b54680799ee6b3a5551d4f",
+    "owned_jobs": 4,
+    "retired_nodes": 179,
+    "completed": 167,
+    "job_digest": "a8bff83f7983eda7631995c188765d6928bf8dcb65cfce363bdb0a4f72d0542f",
+    "identical_reopened_frontier": true
+  },
+  "parallel_cli": {
+    "baseline": {
+      "state": "time_limit",
+      "work_scope": {
+        "kind": "imported_frontier",
+        "frontier_digest": "46760b6dca711b935eaeecb17f7ad7ffa602e5f5b3b54680799ee6b3a5551d4f"
+      },
+      "reference_pose_cuts": false,
+      "nodes_checked": 179,
+      "counters": {
+        "parallel_workers_started": 2,
+        "reference_pose_closed": 0
+      }
+    },
+    "screened": {
+      "state": "exhausted",
+      "work_scope": {
+        "kind": "imported_frontier",
+        "frontier_digest": "46760b6dca711b935eaeecb17f7ad7ffa602e5f5b3b54680799ee6b3a5551d4f"
+      },
+      "reference_pose_cuts": true,
+      "nodes_checked": 0,
+      "counters": {
+        "parallel_workers_started": 0,
+        "reference_pose_closed": 1
+      },
+      "terminal_scope": {
+        "kind": "imported_frontier",
+        "frontier_digest": "46760b6dca711b935eaeecb17f7ad7ffa602e5f5b3b54680799ee6b3a5551d4f"
+      }
+    }
+  },
+  "sat_cli": {
+    "baseline": {
+      "state": "exhausted",
+      "work_scope": {
+        "kind": "imported_frontier",
+        "frontier_digest": "46760b6dca711b935eaeecb17f7ad7ffa602e5f5b3b54680799ee6b3a5551d4f"
+      },
+      "reference_pose_cuts": false,
+      "nodes_checked": 20,
+      "counters": {
+        "session_model_builds": 1,
+        "session_native_calls": 1
+      },
+      "terminal_scope": {
+        "kind": "imported_frontier",
+        "frontier_digest": "46760b6dca711b935eaeecb17f7ad7ffa602e5f5b3b54680799ee6b3a5551d4f"
+      }
+    },
+    "screened": {
+      "state": "exhausted",
+      "work_scope": {
+        "kind": "imported_frontier",
+        "frontier_digest": "46760b6dca711b935eaeecb17f7ad7ffa602e5f5b3b54680799ee6b3a5551d4f"
+      },
+      "reference_pose_cuts": true,
+      "nodes_checked": 0,
+      "counters": {
+        "session_model_builds": 0,
+        "session_native_calls": 0,
+        "reference_pose_closed": 1
+      },
+      "terminal_scope": {
+        "kind": "imported_frontier",
+        "frontier_digest": "46760b6dca711b935eaeecb17f7ad7ffa602e5f5b3b54680799ee6b3a5551d4f"
+      }
+    }
+  }
+}

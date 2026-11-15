@@ -36,11 +36,29 @@ def terminal_digest(record):
 
 def run_solver(problem, algorithm, **kwargs):
     pose_stats = {}
-    pose_option = getattr(problem,'reference_pose_cuts',False)
+    pose_option = kwargs.pop('reference_pose_cuts',getattr(problem,'reference_pose_cuts',False))
     if type(pose_option) is not bool:raise ValueError('reference_pose_cuts must be boolean.')
     if pose_option:
         from r35_pose_frontiers import validate_receiver
         validate_receiver(algorithm,kwargs.get('options') or {},kwargs.get('target','gold'),kwargs.get('resume'))
+        if algorithm in ('parallel-dfs','sat'):
+            portable=kwargs.pop('work_frontier',None)
+            if portable is not None:
+                if kwargs.get('resume') is not None:raise ValueError('Choose native resume or an imported frontier.')
+                kwargs['resume']=portable
+            if kwargs.get('resume') is None:
+                raise ValueError('Reference pose cuts on this engine require a scoped imported frontier or existing resume.')
+            if not isinstance(kwargs['resume'],dict):raise ValueError('Malformed imported or native frontier.')
+            if kwargs['resume'].get('work_version')==1:
+                from r35_pose_frontiers import prepare_frontier
+                kwargs['resume'],pose_stats=prepare_frontier(problem,kwargs['resume'],kwargs.get('stop'))
+    # A worker or native checkpoint must retain its original policy. Only
+    # single-process DFS applies the receiver inside branching and propagation.
+    cpu_option=pose_option and algorithm=='dfs'
+    if getattr(problem,'reference_pose_cuts',False) != cpu_option:
+        from copy import copy
+        problem=copy(problem)
+        problem.reference_pose_cuts=cpu_option
     if (kwargs.get('options', {}).get('symbolic_frontier')
             or isinstance(kwargs.get('resume'), dict) and kwargs['resume'].get('schema') == 'diamond-symbolic-coordinator-v1'):
         from constraint_coordinator_round26 import solve
@@ -126,7 +144,7 @@ def main(argv=None):
     parser.add_argument('--backend', choices=('auto', 'cuda', 'webgpu'), default='auto')
     parser.add_argument('--workers', type=int, default=4, help='Parallel DFS worker processes, 1..64.')
     parser.add_argument('--search-options', type=json.loads, default=None, help='JSON exact-search controls.')
-    parser.add_argument('--reference-pose-cuts', action='store_true', help='Use authenticated original oriented-pose conflicts in DFS or before fresh GPU domain allocation.')
+    parser.add_argument('--reference-pose-cuts', action='store_true', help='Use authenticated oriented-pose conflicts in DFS or before dispatching fresh GPU domains and imported parallel DFS or persistent SAT cubes.')
     parser.add_argument('--work-frontier',type=Path,help='Import a scoped remaining-work JSON into GPU domains, parallel DFS, or persistent SAT.')
     parser.add_argument('--resume', action='store_true')
     parser.add_argument('--stop-file-initialized', action='store_true')
@@ -143,6 +161,8 @@ def main(argv=None):
         if args.reference_pose_cuts:
             from r35_pose_frontiers import validate_receiver
             validate_receiver(args.algorithm,options,'gold',None)
+            if args.algorithm in ('parallel-dfs','sat') and not (args.work_frontier or args.resume):
+                parser.error('Reference pose cuts on this engine require --work-frontier or --resume.')
         validate_workers(args.workers)
         validate_runtime_selection(args.algorithm, args.backend, options)
     except ValueError as exc:

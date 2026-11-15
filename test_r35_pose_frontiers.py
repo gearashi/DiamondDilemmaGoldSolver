@@ -40,6 +40,45 @@ class SyntheticFrontiers(unittest.TestCase):
                 self.assertTrue(all(all(m & (1<<k) for m,k in zip(after,v)) for v in boards))
             self.assertEqual(before[:3],[a,b,c])
 
+    def test_explicit_override_can_turn_implicit_policy_off_or_on(self):
+        from types import SimpleNamespace
+        problem=SimpleNamespace(reference_pose_cuts=True)
+        with patch('constraint_dfs.solve',side_effect=lambda item,**kw:{'applied':item.reference_pose_cuts}):
+            self.assertFalse(run_solver(problem,'dfs',reference_pose_cuts=False)['applied'])
+            self.assertTrue(problem.reference_pose_cuts)
+            problem.reference_pose_cuts=False
+            self.assertTrue(run_solver(problem,'dfs',reference_pose_cuts=True)['applied'])
+            self.assertFalse(problem.reference_pose_cuts)
+
+    def test_legacy_physical_counter_restore_keeps_scope_and_rejects_unknowns(self):
+        from copy import deepcopy
+        from constraint_sat_session import PersistentSatSession
+        from constraint_work import digest
+        from test_gpu_domain_round25 import joint_hall_fixture
+        problem=joint_hall_fixture()
+        scope=WorkScope.for_problem(problem,'gold')
+        session=PersistentSatSession(problem,scope,[scope.root])
+        try:saved=session.snapshot()
+        finally:session.close()
+        # Old original-physical models emitted just the populated keys.
+        saved['stats'].pop('physical_core_units',None)
+        saved['stats'].update(physical_forbidden_clauses=11520,physical_required_clauses=7680)
+        def resign(data):data['digest']=digest({k:v for k,v in data.items() if k!='digest'})
+        resign(saved)
+        restored=PersistentSatSession.restore(problem,saved)
+        try:
+            after=restored.snapshot()
+            self.assertEqual(after['frontier'],saved['frontier'])
+            self.assertEqual(after['stats']['physical_required_clauses'],7680)
+            self.assertEqual(after['stats']['session_cubes_closed'],0)
+        finally:restored.close()
+        for edit in (None,dict(wrong_counter=5),dict(physical_required_clauses=-1),dict(physical_required_clauses=True)):
+            bad=deepcopy(saved)
+            if edit is None:bad['stats']=[]
+            else:bad['stats'].update(edit)
+            resign(bad)
+            with self.assertRaisesRegex(ValueError,'Malformed native-session counters'):PersistentSatSession.restore(problem,bad)
+
     def test_api_rejects_unsupported_receivers_before_loading_any_engine(self):
         for alg,opts,target,resume in [('sat',{},'gold',None),('dfs',{},'edges',None),
                 ('dfs',{'shared_coverage':True},'gold',None),('dfs',{'lcg':True},'gold',None),
@@ -129,6 +168,34 @@ class FrontierCases(unittest.TestCase):
         self.assertEqual((ans['status'],ans['nodes'],ans['stats']['reference_pose_closed']),('infeasible',0,1))
         self.assertEqual(ans['checkpoint']['frontier']['boxes'],[])
         self.assertEqual(prepare_frontier(self.p,portable,lambda:True)[0],portable)
+
+    def test_parallel_and_persistent_sat_prepare_only_portable_jobs(self):
+        gone=self.pieces([5,102])
+        rest=list(self.scope.root);rest[5]=1<<((self.seed[5]+1)%480)
+        mixed=frontier_snapshot(self.scope,[gone,rest])
+        all_gone=frontier_snapshot(self.scope,[gone])
+        for algorithm,options in [('parallel-dfs',{}),('sat',{'persistent_sat':True})]:
+            params=dict(options=options,seconds=10,reference_pose_cuts=True)
+            if algorithm=='parallel-dfs':params['workers']=2
+            done=run_solver(self.p,algorithm,resume=all_gone,**params)
+            self.assertEqual((done['status'],done['nodes'],done['stats']['reference_pose_closed']),('infeasible',0,1))
+            self.assertEqual(done['stats'].get('session_model_builds',done['stats'].get('parallel_workers_started')),0)
+            ticks=iter((False,False))
+            stopped=run_solver(self.p,algorithm,resume=mixed,stop=lambda:next(ticks,True),**params)
+            self.assertFalse(stopped['complete'])
+            saved=stopped['checkpoint']
+            if algorithm=='sat':
+                self.assertEqual(restore_frontier(saved['frontier'],self.scope),(tuple(rest),))
+            else:
+                self.assertEqual(len(saved['jobs']),1)
+                self.assertEqual([int(v,16) for v in saved['jobs'][0]['region']],rest)
+            with patch('r35_pose_frontiers.prepare_frontier',side_effect=AssertionError('opaque continuation cannot be screened')):
+                again=run_solver(self.p,algorithm,resume=saved,stop=lambda:True,**params)
+            self.assertEqual(again['status'],'stopped')
+            if algorithm=='sat':self.assertEqual(again['checkpoint']['frontier'],saved['frontier'])
+            else:self.assertEqual(again['checkpoint']['jobs'],saved['jobs'])
+            for invalid in ({}, {'resume':mixed,'work_frontier':mixed}, {'resume':[]}, {'resume':dict(mixed,digest='wrong')}, {'resume':{'version':99}}):
+                with self.assertRaises(ValueError):run_solver(self.p,algorithm,**invalid,**params)
 
     @unittest.skipUnless(os.environ.get('DIAMOND_TEST_CUDA')=='1','Requires native CUDA')
     def test_existing_live_cuda_resume_keeps_its_unfinished_native_owner(self):
