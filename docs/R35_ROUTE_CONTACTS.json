@@ -1,0 +1,411 @@
+{
+  "puzzle": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "ranks": 4096,
+  "trials": [
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "start": 200000000000,
+      "ranks": 4096,
+      "variants": {
+        "False": {
+          "work": {
+            "interval_probes": 390,
+            "supports_before_generation": 1925
+          },
+          "open_ranks": 2171,
+          "seconds": 0.031,
+          "memo": {
+            "hits": 0,
+            "misses": 0,
+            "maxsize": 1024,
+            "currsize": 0
+          }
+        },
+        "True": {
+          "work": {
+            "interval_probes": 390,
+            "supports_before_generation": 1925
+          },
+          "open_ranks": 2171,
+          "seconds": 0.016,
+          "memo": {
+            "hits": 258,
+            "misses": 4,
+            "maxsize": 1024,
+            "currsize": 4
+          }
+        },
+        "18": {
+          "work": {
+            "interval_probes": 390,
+            "supports_before_generation": 1925
+          },
+          "open_ranks": 2171,
+          "seconds": 0.0,
+          "memo": {
+            "hits": 258,
+            "misses": 4,
+            "maxsize": 1024,
+            "currsize": 4
+          }
+        },
+        "32": {
+          "work": {
+            "interval_probes": 390,
+            "supports_before_generation": 1925
+          },
+          "open_ranks": 2171,
+          "seconds": 0.015,
+          "memo": {
+            "hits": 258,
+            "misses": 4,
+            "maxsize": 1024,
+            "currsize": 4
+          }
+        }
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "start": 301414649175,
+      "ranks": 4096,
+      "variants": {
+        "False": {
+          "work": {
+            "interval_probes": 311,
+            "supports_before_generation": 2786
+          },
+          "open_ranks": 1310,
+          "seconds": 0.016,
+          "memo": {
+            "hits": 0,
+            "misses": 0,
+            "maxsize": 1024,
+            "currsize": 0
+          }
+        },
+        "True": {
+          "work": {
+            "interval_probes": 311,
+            "supports_before_generation": 2786
+          },
+          "open_ranks": 1310,
+          "seconds": 0.0,
+          "memo": {
+            "hits": 205,
+            "misses": 3,
+            "maxsize": 1024,
+            "currsize": 3
+          }
+        },
+        "18": {
+          "work": {
+            "interval_probes": 311,
+            "supports_before_generation": 2786
+          },
+          "open_ranks": 1310,
+          "seconds": 0.0,
+          "memo": {
+            "hits": 205,
+            "misses": 3,
+            "maxsize": 1024,
+            "currsize": 3
+          }
+        },
+        "32": {
+          "work": {
+            "interval_probes": 311,
+            "supports_before_generation": 2786
+          },
+          "open_ranks": 1310,
+          "seconds": 0.0,
+          "memo": {
+            "hits": 205,
+            "misses": 3,
+            "maxsize": 1024,
+            "currsize": 3
+          }
+        }
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        3
+      ],
+      "start": 390001234567,
+      "ranks": 4096,
+      "variants": {
+        "False": {
+          "work": {
+            "interval_probes": 733,
+            "supports_before_generation": 924
+          },
+          "open_ranks": 3172,
+          "seconds": 0.031,
+          "memo": {
+            "hits": 0,
+            "misses": 0,
+            "maxsize": 1024,
+            "currsize": 0
+          }
+        },
+        "True": {
+          "work": {
+            "interval_probes": 733,
+            "supports_before_generation": 924
+          },
+          "open_ranks": 3172,
+          "seconds": 0.016,
+          "memo": {
+            "hits": 485,
+            "misses": 9,
+            "maxsize": 1024,
+            "currsize": 9
+          }
+        },
+        "18": {
+          "work": {
+            "interval_probes": 733,
+            "supports_before_generation": 924
+          },
+          "open_ranks": 3172,
+          "seconds": 0.015,
+          "memo": {
+            "hits": 485,
+            "misses": 9,
+            "maxsize": 1024,
+            "currsize": 9
+          }
+        },
+        "32": {
+          "work": {
+            "interval_probes": 733,
+            "supports_before_generation": 924
+          },
+          "open_ranks": 3172,
+          "seconds": 0.016,
+          "memo": {
+            "hits": 485,
+            "misses": 9,
+            "maxsize": 1024,
+            "currsize": 9
+          }
+        }
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "start": 5360481967048,
+      "ranks": 4096,
+      "variants": {
+        "False": {
+          "work": {
+            "interval_probes": 517,
+            "supports_before_generation": 3122
+          },
+          "open_ranks": 974,
+          "seconds": 0.031,
+          "memo": {
+            "hits": 0,
+            "misses": 0,
+            "maxsize": 1024,
+            "currsize": 0
+          }
+        },
+        "True": {
+          "work": {
+            "interval_probes": 517,
+            "supports_before_generation": 3122
+          },
+          "open_ranks": 974,
+          "seconds": 0.0,
+          "memo": {
+            "hits": 343,
+            "misses": 5,
+            "maxsize": 1024,
+            "currsize": 5
+          }
+        },
+        "18": {
+          "work": {
+            "interval_probes": 517,
+            "supports_before_generation": 3122
+          },
+          "open_ranks": 974,
+          "seconds": 0.0,
+          "memo": {
+            "hits": 343,
+            "misses": 5,
+            "maxsize": 1024,
+            "currsize": 5
+          }
+        },
+        "32": {
+          "work": {
+            "interval_probes": 517,
+            "supports_before_generation": 3122
+          },
+          "open_ranks": 974,
+          "seconds": 0.0,
+          "memo": {
+            "hits": 343,
+            "misses": 5,
+            "maxsize": 1024,
+            "currsize": 5
+          }
+        }
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "start": 1014012345678,
+      "ranks": 4096,
+      "variants": {
+        "False": {
+          "work": {
+            "interval_probes": 1287,
+            "supports_before_generation": 762
+          },
+          "open_ranks": 3334,
+          "seconds": 0.047,
+          "memo": {
+            "hits": 0,
+            "misses": 0,
+            "maxsize": 1024,
+            "currsize": 0
+          }
+        },
+        "True": {
+          "work": {
+            "interval_probes": 1287,
+            "supports_before_generation": 762
+          },
+          "open_ranks": 3334,
+          "seconds": 0.031,
+          "memo": {
+            "hits": 847,
+            "misses": 32,
+            "maxsize": 1024,
+            "currsize": 32
+          }
+        },
+        "18": {
+          "work": {
+            "interval_probes": 1287,
+            "supports_before_generation": 762
+          },
+          "open_ranks": 3334,
+          "seconds": 0.031,
+          "memo": {
+            "hits": 847,
+            "misses": 32,
+            "maxsize": 1024,
+            "currsize": 32
+          }
+        },
+        "32": {
+          "work": {
+            "interval_probes": 1287,
+            "supports_before_generation": 762
+          },
+          "open_ranks": 3334,
+          "seconds": 0.031,
+          "memo": {
+            "hits": 847,
+            "misses": 32,
+            "maxsize": 1024,
+            "currsize": 32
+          }
+        }
+      }
+    },
+    {
+      "family": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "start": 7000012345678,
+      "ranks": 4096,
+      "variants": {
+        "False": {
+          "work": {
+            "interval_probes": 1040,
+            "supports_before_generation": 862
+          },
+          "open_ranks": 3234,
+          "seconds": 0.047,
+          "memo": {
+            "hits": 0,
+            "misses": 0,
+            "maxsize": 1024,
+            "currsize": 0
+          }
+        },
+        "True": {
+          "work": {
+            "interval_probes": 1040,
+            "supports_before_generation": 862
+          },
+          "open_ranks": 3234,
+          "seconds": 0.015,
+          "memo": {
+            "hits": 683,
+            "misses": 26,
+            "maxsize": 1024,
+            "currsize": 26
+          }
+        },
+        "18": {
+          "work": {
+            "interval_probes": 1040,
+            "supports_before_generation": 862
+          },
+          "open_ranks": 3234,
+          "seconds": 0.032,
+          "memo": {
+            "hits": 683,
+            "misses": 26,
+            "maxsize": 1024,
+            "currsize": 26
+          }
+        },
+        "32": {
+          "work": {
+            "interval_probes": 1040,
+            "supports_before_generation": 862
+          },
+          "open_ranks": 3234,
+          "seconds": 0.016,
+          "memo": {
+            "hits": 683,
+            "misses": 26,
+            "maxsize": 1024,
+            "currsize": 26
+          }
+        }
+      }
+    }
+  ]
+}

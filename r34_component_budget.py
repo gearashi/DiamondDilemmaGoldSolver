@@ -6,7 +6,7 @@ from r30_bounds import budget_upper,defect_packings
 
 
 class ComponentBudget:
-    def __init__(self,bound,allowed):
+    def __init__(self,bound,allowed,*,dominance=True,order=None):
         self.bound=bound
         self.pool=tuple(sorted(set(map(int,allowed))))
         if not set(self.pool)<=set(map(int,bound.model.free)):
@@ -28,6 +28,12 @@ class ComponentBudget:
                     overlap.update(footprints[c])
             self.groups.append((tuple(sorted(group)),tuple(sorted(overlap))))
         self.index={c:i for i,c in enumerate(self.pool)}
+        self.dominance=dominance
+        if order not in (None,'small','large'):
+            raise ValueError('Unknown regional join order.')
+        if order:
+            self.groups.sort(key=lambda item:len(item[0]),reverse=order=='large')
+        self.front=None
         self.tables={}
         self.finished={}
         self.packings=defect_packings(bound)
@@ -70,19 +76,34 @@ class ComponentBudget:
             by_mask.setdefault(mask,[]).append((cost,moved,gain))
         return by_mask
 
-    def upper(self,swaps,max_rows=100000,min_moved=0):
+    def upper(self,swaps,max_rows=100000,min_moved=0,*,retain_front=False,meet=False):
         if type(swaps) is not int or swaps<0 or max_rows<1 or not 0<=min_moved<=len(self.pool):
             raise ValueError("Invalid swap or row budget.")
         scope=(swaps,min_moved)
-        if scope in self.finished:
+        if scope in self.finished and not retain_front:
             return dict(**self.finished[scope],work=dict(priced=0,joins=0,reused=0,result_reuses=1))
         b=self.bound
         cap=budget_upper(b,self.packings,swaps,self.pool)
         work=dict(priced=0,joins=0,reused=0)
+        if self.front is not None and self.front[0]>=swaps:
+            candidates=(gain for (_,cost,count),gain in self.front[1].items() if cost<=2*swaps and count>=min_moved)
+            best=max(candidates,default=None)
+            upper=-1 if best is None else min(cap,(b.total+best)//2)
+            return dict(upper=upper,complete=True,groups=len(self.groups),coarse=cap,min_moved=min_moved,
+                        work=dict(priced=0,joins=0,reused=0,front_reuses=1))
         if len(self.groups)<2:
             return dict(upper=cap,complete=False,groups=len(self.groups),reason='one component',work=work)
+        mover_cap=len(self.pool) if retain_front else min_moved
         state={(0,0,0):0}
-        for group,footprint in self.groups:
+        split=None
+        if meet and len(self.groups)>1:
+            sizes=[len(g) for g,_ in self.groups]
+            split=min(range(1,len(sizes)),key=lambda j:abs(2*sum(sizes[:j])-len(self.pool)))
+        left=None
+        for group_index,(group,footprint) in enumerate(self.groups):
+            if group_index==split:
+                left=state
+                state={(0,0,0):0}
             table=self.tables.get(group)
             if table is None:
                 table=self._responses(group,footprint,max_rows,work)
@@ -101,10 +122,22 @@ class ComponentBudget:
                     work['joins']+=1
                     for extra,count,gain in table.get(donors,()):
                         if old+extra<=2*swaps:
-                            key=(mask|donors,old+extra,min(min_moved,moved+count))
+                            key=(mask|donors,old+extra,min(mover_cap,moved+count))
                             following[key]=max(following.get(key,value+gain),value+gain)
-            state=following
-        best=max((value for (_,_,moved),value in state.items() if moved==min_moved),default=None)
+            if self.dominance:
+                from r35_regional_frontier import frontier
+                state=frontier(following)
+                work['dominated']=work.get('dominated',0)+len(following)-len(state)
+            else:
+                state=following
+        if left is not None:
+            from r35_regional_frontier import join_halves
+            state=join_halves(left,state,len(self.pool),mover_cap,swaps,work,max_rows)
+            if state is None:
+                return dict(upper=cap,complete=False,groups=len(self.groups),reason='join budget',work=work)
+        if retain_front:
+            self.front=(swaps,state)
+        best=max((value for (_,_,moved),value in state.items() if moved>=min_moved),default=None)
         upper=-1 if best is None else min(cap,(b.total+best)//2)
         record=dict(upper=upper,complete=True,groups=len(self.groups),coarse=cap,min_moved=min_moved)
         self.finished[scope]=record

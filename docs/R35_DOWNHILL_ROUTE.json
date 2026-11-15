@@ -1,0 +1,50 @@
+{
+  "seed": 16,
+  "pool": [
+    2,
+    3,
+    5,
+    7,
+    8
+  ],
+  "permutation": [
+    1,
+    4,
+    2,
+    0,
+    3
+  ],
+  "optimum": 12,
+  "one_swap_optima": [
+    9,
+    6,
+    9,
+    10,
+    8,
+    10,
+    10,
+    9,
+    8,
+    10
+  ],
+  "native": {
+    "status": "OPTIMAL",
+    "branches": 0,
+    "conflicts": 0,
+    "codes": [
+      18,
+      24,
+      7,
+      22,
+      10,
+      3,
+      14,
+      15,
+      27,
+      2
+    ],
+    "distance": 3,
+    "score": 15,
+    "distance_lower_bound": 3
+  }
+}

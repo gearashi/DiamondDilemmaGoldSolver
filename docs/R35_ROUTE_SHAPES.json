@@ -1,0 +1,1802 @@
+[
+  {
+    "cells": [
+      0,
+      22,
+      48,
+      74,
+      132,
+      147
+    ],
+    "family": [
+      6
+    ],
+    "total": 120,
+    "remaining": 120,
+    "above_star": 0,
+    "work": {}
+  },
+  {
+    "cells": [
+      8,
+      10,
+      53,
+      73,
+      80,
+      133
+    ],
+    "family": [
+      6
+    ],
+    "total": 120,
+    "remaining": 120,
+    "above_star": 0,
+    "work": {}
+  },
+  {
+    "cells": [
+      41,
+      53,
+      78,
+      90,
+      105,
+      151
+    ],
+    "family": [
+      6
+    ],
+    "total": 120,
+    "remaining": 120,
+    "above_star": 0,
+    "work": {}
+  },
+  {
+    "cells": [
+      32,
+      83,
+      107,
+      108,
+      118,
+      150
+    ],
+    "family": [
+      6
+    ],
+    "total": 120,
+    "remaining": 120,
+    "above_star": 0,
+    "work": {}
+  },
+  {
+    "cells": [
+      0,
+      27,
+      68,
+      95,
+      111,
+      156
+    ],
+    "family": [
+      6
+    ],
+    "total": 120,
+    "remaining": 120,
+    "above_star": 0,
+    "work": {}
+  },
+  {
+    "cells": [
+      72,
+      86,
+      102,
+      108,
+      112,
+      114
+    ],
+    "family": [
+      6
+    ],
+    "total": 120,
+    "remaining": 120,
+    "above_star": 0,
+    "work": {}
+  },
+  {
+    "cells": [
+      9,
+      11,
+      19,
+      64,
+      108,
+      117
+    ],
+    "family": [
+      6
+    ],
+    "total": 120,
+    "remaining": 120,
+    "above_star": 0,
+    "work": {}
+  },
+  {
+    "cells": [
+      8,
+      16,
+      69,
+      88,
+      136,
+      146
+    ],
+    "family": [
+      6
+    ],
+    "total": 120,
+    "remaining": 120,
+    "above_star": 0,
+    "work": {}
+  },
+  {
+    "cells": [
+      8,
+      11,
+      35,
+      41,
+      67,
+      127,
+      129
+    ],
+    "family": [
+      2,
+      5
+    ],
+    "total": 504,
+    "remaining": 240,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 11,
+      "regional_prices": 275,
+      "discarded_orders": 264
+    }
+  },
+  {
+    "cells": [
+      10,
+      15,
+      17,
+      34,
+      50,
+      59,
+      88
+    ],
+    "family": [
+      2,
+      5
+    ],
+    "total": 504,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 21,
+      "regional_prices": 525,
+      "discarded_orders": 504
+    }
+  },
+  {
+    "cells": [
+      12,
+      52,
+      69,
+      85,
+      109,
+      128,
+      134
+    ],
+    "family": [
+      2,
+      5
+    ],
+    "total": 504,
+    "remaining": 240,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 11,
+      "regional_prices": 275,
+      "discarded_orders": 264
+    }
+  },
+  {
+    "cells": [
+      4,
+      51,
+      52,
+      75,
+      96,
+      97,
+      137
+    ],
+    "family": [
+      2,
+      5
+    ],
+    "total": 504,
+    "remaining": 384,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 5,
+      "regional_prices": 125,
+      "discarded_orders": 120
+    }
+  },
+  {
+    "cells": [
+      2,
+      4,
+      81,
+      104,
+      106,
+      120,
+      144
+    ],
+    "family": [
+      2,
+      5
+    ],
+    "total": 504,
+    "remaining": 432,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 3,
+      "regional_prices": 75,
+      "discarded_orders": 72
+    }
+  },
+  {
+    "cells": [
+      62,
+      78,
+      84,
+      111,
+      112,
+      115,
+      125
+    ],
+    "family": [
+      2,
+      5
+    ],
+    "total": 504,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 21,
+      "regional_prices": 525,
+      "discarded_orders": 504
+    }
+  },
+  {
+    "cells": [
+      0,
+      2,
+      49,
+      56,
+      72,
+      77,
+      78
+    ],
+    "family": [
+      2,
+      5
+    ],
+    "total": 504,
+    "remaining": 456,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 2,
+      "regional_prices": 50,
+      "discarded_orders": 48
+    }
+  },
+  {
+    "cells": [
+      12,
+      30,
+      54,
+      62,
+      78,
+      83,
+      155
+    ],
+    "family": [
+      2,
+      5
+    ],
+    "total": 504,
+    "remaining": 240,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 11,
+      "regional_prices": 275,
+      "discarded_orders": 264
+    }
+  },
+  {
+    "cells": [
+      17,
+      43,
+      46,
+      92,
+      94,
+      139,
+      142
+    ],
+    "family": [
+      3,
+      4
+    ],
+    "total": 420,
+    "remaining": 384,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 3,
+      "regional_prices": 24,
+      "discarded_orders": 36
+    }
+  },
+  {
+    "cells": [
+      30,
+      55,
+      65,
+      100,
+      120,
+      125,
+      153
+    ],
+    "family": [
+      3,
+      4
+    ],
+    "total": 420,
+    "remaining": 240,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 15,
+      "regional_prices": 120,
+      "discarded_orders": 180
+    }
+  },
+  {
+    "cells": [
+      22,
+      32,
+      44,
+      100,
+      111,
+      115,
+      120
+    ],
+    "family": [
+      3,
+      4
+    ],
+    "total": 420,
+    "remaining": 336,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 7,
+      "regional_prices": 56,
+      "discarded_orders": 84
+    }
+  },
+  {
+    "cells": [
+      27,
+      98,
+      105,
+      116,
+      119,
+      125,
+      126
+    ],
+    "family": [
+      3,
+      4
+    ],
+    "total": 420,
+    "remaining": 336,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 7,
+      "regional_prices": 56,
+      "discarded_orders": 84
+    }
+  },
+  {
+    "cells": [
+      43,
+      60,
+      73,
+      101,
+      107,
+      138,
+      151
+    ],
+    "family": [
+      3,
+      4
+    ],
+    "total": 420,
+    "remaining": 240,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 15,
+      "regional_prices": 120,
+      "discarded_orders": 180
+    }
+  },
+  {
+    "cells": [
+      12,
+      18,
+      36,
+      73,
+      92,
+      98,
+      135
+    ],
+    "family": [
+      3,
+      4
+    ],
+    "total": 420,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 35,
+      "regional_prices": 280,
+      "discarded_orders": 420
+    }
+  },
+  {
+    "cells": [
+      10,
+      15,
+      68,
+      93,
+      97,
+      110,
+      135
+    ],
+    "family": [
+      3,
+      4
+    ],
+    "total": 420,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 35,
+      "regional_prices": 280,
+      "discarded_orders": 420
+    }
+  },
+  {
+    "cells": [
+      16,
+      38,
+      74,
+      91,
+      100,
+      126,
+      136
+    ],
+    "family": [
+      3,
+      4
+    ],
+    "total": 420,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 35,
+      "regional_prices": 280,
+      "discarded_orders": 420
+    }
+  },
+  {
+    "cells": [
+      27,
+      35,
+      44,
+      68,
+      92,
+      98,
+      130,
+      159
+    ],
+    "family": [
+      2,
+      2,
+      4
+    ],
+    "total": 1260,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 210,
+      "regional_prices": 448,
+      "discarded_orders": 1260
+    }
+  },
+  {
+    "cells": [
+      13,
+      32,
+      77,
+      91,
+      108,
+      131,
+      136,
+      153
+    ],
+    "family": [
+      2,
+      2,
+      4
+    ],
+    "total": 1260,
+    "remaining": 480,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 130,
+      "regional_prices": 646,
+      "discarded_orders": 780
+    }
+  },
+  {
+    "cells": [
+      11,
+      12,
+      23,
+      33,
+      51,
+      54,
+      62,
+      134
+    ],
+    "family": [
+      2,
+      2,
+      4
+    ],
+    "total": 1260,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 210,
+      "regional_prices": 448,
+      "discarded_orders": 1260
+    }
+  },
+  {
+    "cells": [
+      35,
+      40,
+      83,
+      95,
+      116,
+      119,
+      122,
+      140
+    ],
+    "family": [
+      2,
+      2,
+      4
+    ],
+    "total": 1260,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 210,
+      "regional_prices": 946,
+      "discarded_orders": 1260
+    }
+  },
+  {
+    "cells": [
+      35,
+      47,
+      90,
+      92,
+      102,
+      109,
+      113,
+      131
+    ],
+    "family": [
+      2,
+      2,
+      4
+    ],
+    "total": 1260,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 210,
+      "regional_prices": 448,
+      "discarded_orders": 1260
+    }
+  },
+  {
+    "cells": [
+      28,
+      78,
+      99,
+      122,
+      130,
+      149,
+      151,
+      158
+    ],
+    "family": [
+      2,
+      2,
+      4
+    ],
+    "total": 1260,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 210,
+      "regional_prices": 946,
+      "discarded_orders": 1260
+    }
+  },
+  {
+    "cells": [
+      17,
+      37,
+      56,
+      75,
+      80,
+      114,
+      120,
+      147
+    ],
+    "family": [
+      2,
+      2,
+      4
+    ],
+    "total": 1260,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 210,
+      "regional_prices": 448,
+      "discarded_orders": 1260
+    }
+  },
+  {
+    "cells": [
+      39,
+      51,
+      87,
+      97,
+      137,
+      150,
+      158,
+      159
+    ],
+    "family": [
+      2,
+      2,
+      4
+    ],
+    "total": 1260,
+    "remaining": 480,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 130,
+      "regional_prices": 646,
+      "discarded_orders": 780
+    }
+  },
+  {
+    "cells": [
+      42,
+      81,
+      101,
+      117,
+      128,
+      137,
+      146,
+      148
+    ],
+    "family": [
+      2,
+      3,
+      3
+    ],
+    "total": 1120,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 280,
+      "regional_prices": 668,
+      "discarded_orders": 1120
+    }
+  },
+  {
+    "cells": [
+      10,
+      46,
+      65,
+      125,
+      143,
+      148,
+      151,
+      155
+    ],
+    "family": [
+      2,
+      3,
+      3
+    ],
+    "total": 1120,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 280,
+      "regional_prices": 668,
+      "discarded_orders": 1120
+    }
+  },
+  {
+    "cells": [
+      7,
+      18,
+      43,
+      67,
+      70,
+      74,
+      97,
+      101
+    ],
+    "family": [
+      2,
+      3,
+      3
+    ],
+    "total": 1120,
+    "remaining": 360,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 190,
+      "regional_prices": 572,
+      "discarded_orders": 760
+    }
+  },
+  {
+    "cells": [
+      1,
+      30,
+      37,
+      53,
+      73,
+      91,
+      109,
+      120
+    ],
+    "family": [
+      2,
+      3,
+      3
+    ],
+    "total": 1120,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 280,
+      "regional_prices": 140,
+      "discarded_orders": 1120
+    }
+  },
+  {
+    "cells": [
+      42,
+      88,
+      91,
+      127,
+      142,
+      153,
+      154,
+      155
+    ],
+    "family": [
+      2,
+      3,
+      3
+    ],
+    "total": 1120,
+    "remaining": 360,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 190,
+      "regional_prices": 572,
+      "discarded_orders": 760
+    }
+  },
+  {
+    "cells": [
+      17,
+      50,
+      66,
+      89,
+      103,
+      107,
+      115,
+      143
+    ],
+    "family": [
+      2,
+      3,
+      3
+    ],
+    "total": 1120,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 280,
+      "regional_prices": 668,
+      "discarded_orders": 1120
+    }
+  },
+  {
+    "cells": [
+      37,
+      61,
+      85,
+      120,
+      137,
+      139,
+      149,
+      156
+    ],
+    "family": [
+      2,
+      3,
+      3
+    ],
+    "total": 1120,
+    "remaining": 792,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 82,
+      "regional_prices": 242,
+      "discarded_orders": 328
+    }
+  },
+  {
+    "cells": [
+      22,
+      44,
+      57,
+      84,
+      108,
+      118,
+      123,
+      139
+    ],
+    "family": [
+      2,
+      3,
+      3
+    ],
+    "total": 1120,
+    "remaining": 360,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 190,
+      "regional_prices": 572,
+      "discarded_orders": 760
+    }
+  },
+  {
+    "cells": [
+      42,
+      57,
+      123,
+      124,
+      139,
+      140,
+      150,
+      151,
+      158
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      3
+    ],
+    "total": 2520,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 1260,
+      "regional_prices": 568,
+      "discarded_orders": 2520
+    }
+  },
+  {
+    "cells": [
+      7,
+      36,
+      45,
+      47,
+      70,
+      76,
+      83,
+      133,
+      149
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      3
+    ],
+    "total": 2520,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 1260,
+      "regional_prices": 568,
+      "discarded_orders": 2520
+    }
+  },
+  {
+    "cells": [
+      58,
+      68,
+      77,
+      81,
+      85,
+      98,
+      128,
+      139,
+      159
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      3
+    ],
+    "total": 2520,
+    "remaining": 960,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 780,
+      "regional_prices": 1030,
+      "discarded_orders": 1560
+    }
+  },
+  {
+    "cells": [
+      12,
+      21,
+      23,
+      24,
+      85,
+      108,
+      116,
+      118,
+      147
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      3
+    ],
+    "total": 2520,
+    "remaining": 720,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 900,
+      "regional_prices": 1303,
+      "discarded_orders": 1800
+    }
+  },
+  {
+    "cells": [
+      17,
+      22,
+      60,
+      66,
+      86,
+      97,
+      125,
+      156,
+      158
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      3
+    ],
+    "total": 2520,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 1260,
+      "regional_prices": 568,
+      "discarded_orders": 2520
+    }
+  },
+  {
+    "cells": [
+      19,
+      21,
+      37,
+      48,
+      86,
+      87,
+      134,
+      150,
+      151
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      3
+    ],
+    "total": 2520,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 1260,
+      "regional_prices": 568,
+      "discarded_orders": 2520
+    }
+  },
+  {
+    "cells": [
+      14,
+      58,
+      69,
+      79,
+      84,
+      93,
+      97,
+      106,
+      144
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      3
+    ],
+    "total": 2520,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 1260,
+      "regional_prices": 204,
+      "discarded_orders": 2520
+    }
+  },
+  {
+    "cells": [
+      6,
+      8,
+      47,
+      60,
+      85,
+      96,
+      102,
+      103,
+      122
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      3
+    ],
+    "total": 2520,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 1260,
+      "regional_prices": 1454,
+      "discarded_orders": 2520
+    }
+  },
+  {
+    "cells": [
+      17,
+      24,
+      32,
+      42,
+      46,
+      52,
+      124,
+      139,
+      153,
+      155
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "total": 945,
+    "remaining": 288,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 657,
+      "regional_prices": 418,
+      "discarded_orders": 657
+    }
+  },
+  {
+    "cells": [
+      0,
+      7,
+      32,
+      51,
+      57,
+      99,
+      124,
+      142,
+      153,
+      159
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "total": 945,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 945,
+      "regional_prices": 526,
+      "discarded_orders": 945
+    }
+  },
+  {
+    "cells": [
+      27,
+      42,
+      62,
+      65,
+      73,
+      95,
+      96,
+      114,
+      116,
+      143
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "total": 945,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 945,
+      "regional_prices": 85,
+      "discarded_orders": 945
+    }
+  },
+  {
+    "cells": [
+      14,
+      38,
+      62,
+      64,
+      66,
+      69,
+      87,
+      93,
+      148,
+      150
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "total": 945,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 945,
+      "regional_prices": 199,
+      "discarded_orders": 945
+    }
+  },
+  {
+    "cells": [
+      5,
+      39,
+      47,
+      105,
+      109,
+      125,
+      133,
+      145,
+      146,
+      150
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "total": 945,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 945,
+      "regional_prices": 85,
+      "discarded_orders": 945
+    }
+  },
+  {
+    "cells": [
+      9,
+      24,
+      27,
+      34,
+      37,
+      59,
+      94,
+      96,
+      133,
+      159
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "total": 945,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 945,
+      "regional_prices": 45,
+      "discarded_orders": 945
+    }
+  },
+  {
+    "cells": [
+      15,
+      16,
+      30,
+      38,
+      42,
+      50,
+      58,
+      84,
+      100,
+      158
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "total": 945,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 945,
+      "regional_prices": 45,
+      "discarded_orders": 945
+    }
+  },
+  {
+    "cells": [
+      7,
+      10,
+      83,
+      88,
+      89,
+      120,
+      122,
+      123,
+      131,
+      133
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "total": 945,
+    "remaining": 576,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 369,
+      "regional_prices": 241,
+      "discarded_orders": 369
+    }
+  },
+  {
+    "cells": [
+      30,
+      41,
+      62,
+      64,
+      89,
+      92,
+      99,
+      104,
+      132,
+      147
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      4
+    ],
+    "total": 18900,
+    "remaining": 2880,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 2670,
+      "regional_prices": 12354,
+      "discarded_orders": 16020
+    }
+  },
+  {
+    "cells": [
+      26,
+      34,
+      53,
+      70,
+      81,
+      86,
+      88,
+      143,
+      152,
+      156
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      4
+    ],
+    "total": 18900,
+    "remaining": 11520,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 1230,
+      "regional_prices": 5205,
+      "discarded_orders": 7380
+    }
+  },
+  {
+    "cells": [
+      11,
+      63,
+      67,
+      94,
+      105,
+      109,
+      110,
+      147,
+      148,
+      152
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      4
+    ],
+    "total": 18900,
+    "remaining": 14904,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 666,
+      "regional_prices": 2803,
+      "discarded_orders": 3996
+    }
+  },
+  {
+    "cells": [
+      11,
+      48,
+      94,
+      113,
+      120,
+      134,
+      138,
+      139,
+      152,
+      153
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      4
+    ],
+    "total": 18900,
+    "remaining": 14400,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 750,
+      "regional_prices": 3572,
+      "discarded_orders": 4500
+    }
+  },
+  {
+    "cells": [
+      12,
+      20,
+      25,
+      53,
+      76,
+      96,
+      104,
+      106,
+      120,
+      121
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      4
+    ],
+    "total": 18900,
+    "remaining": 11520,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 1230,
+      "regional_prices": 5205,
+      "discarded_orders": 7380
+    }
+  },
+  {
+    "cells": [
+      15,
+      25,
+      56,
+      72,
+      87,
+      112,
+      114,
+      115,
+      126,
+      128
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      4
+    ],
+    "total": 18900,
+    "remaining": 2880,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 2670,
+      "regional_prices": 12354,
+      "discarded_orders": 16020
+    }
+  },
+  {
+    "cells": [
+      14,
+      32,
+      46,
+      63,
+      67,
+      71,
+      92,
+      95,
+      118,
+      136
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      4
+    ],
+    "total": 18900,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 3150,
+      "regional_prices": 4033,
+      "discarded_orders": 18900
+    }
+  },
+  {
+    "cells": [
+      7,
+      21,
+      32,
+      42,
+      59,
+      61,
+      85,
+      89,
+      105,
+      158
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      4
+    ],
+    "total": 18900,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 3150,
+      "regional_prices": 1305,
+      "discarded_orders": 18900
+    }
+  },
+  {
+    "cells": [
+      36,
+      39,
+      44,
+      46,
+      52,
+      63,
+      97,
+      104,
+      107,
+      148
+    ],
+    "family": [
+      2,
+      2,
+      3,
+      3
+    ],
+    "total": 25200,
+    "remaining": 6480,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 4680,
+      "regional_prices": 11256,
+      "discarded_orders": 18720
+    }
+  },
+  {
+    "cells": [
+      10,
+      16,
+      27,
+      43,
+      51,
+      64,
+      69,
+      91,
+      93,
+      152
+    ],
+    "family": [
+      2,
+      2,
+      3,
+      3
+    ],
+    "total": 25200,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 6300,
+      "regional_prices": 11039,
+      "discarded_orders": 25200
+    }
+  },
+  {
+    "cells": [
+      0,
+      33,
+      35,
+      36,
+      68,
+      89,
+      103,
+      135,
+      139,
+      152
+    ],
+    "family": [
+      2,
+      2,
+      3,
+      3
+    ],
+    "total": 25200,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 6300,
+      "regional_prices": 11832,
+      "discarded_orders": 25200
+    }
+  },
+  {
+    "cells": [
+      9,
+      21,
+      61,
+      106,
+      113,
+      117,
+      126,
+      129,
+      130,
+      154
+    ],
+    "family": [
+      2,
+      2,
+      3,
+      3
+    ],
+    "total": 25200,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 6300,
+      "regional_prices": 11832,
+      "discarded_orders": 25200
+    }
+  },
+  {
+    "cells": [
+      30,
+      36,
+      49,
+      50,
+      57,
+      89,
+      92,
+      97,
+      109,
+      114
+    ],
+    "family": [
+      2,
+      2,
+      3,
+      3
+    ],
+    "total": 25200,
+    "remaining": 15264,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 2484,
+      "regional_prices": 6146,
+      "discarded_orders": 9936
+    }
+  },
+  {
+    "cells": [
+      8,
+      29,
+      50,
+      76,
+      77,
+      78,
+      83,
+      86,
+      147,
+      150
+    ],
+    "family": [
+      2,
+      2,
+      3,
+      3
+    ],
+    "total": 25200,
+    "remaining": 4320,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 5220,
+      "regional_prices": 14458,
+      "discarded_orders": 20880
+    }
+  },
+  {
+    "cells": [
+      21,
+      24,
+      29,
+      36,
+      54,
+      98,
+      104,
+      107,
+      114,
+      127
+    ],
+    "family": [
+      2,
+      2,
+      3,
+      3
+    ],
+    "total": 25200,
+    "remaining": 6480,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 4680,
+      "regional_prices": 11256,
+      "discarded_orders": 18720
+    }
+  },
+  {
+    "cells": [
+      26,
+      46,
+      62,
+      71,
+      90,
+      96,
+      104,
+      107,
+      108,
+      125
+    ],
+    "family": [
+      2,
+      2,
+      3,
+      3
+    ],
+    "total": 25200,
+    "remaining": 0,
+    "above_star": 0,
+    "work": {
+      "disconnected_shapes": 6300,
+      "regional_prices": 11039,
+      "discarded_orders": 25200
+    }
+  }
+]

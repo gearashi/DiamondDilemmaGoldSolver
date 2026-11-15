@@ -1,4 +1,5 @@
 """Prove whole intervals of colex support ranks using fixed high cells and free low slots."""
+from functools import lru_cache
 from itertools import combinations
 from math import comb
 
@@ -8,19 +9,35 @@ from r31_route_geometry import connected_mask
 
 
 class PrefixRanges:
-    def __init__(self, free, close, cores, requirements, geometries, families, caps, target):
+    def __init__(self, free, close, cores, requirements, geometries, families, caps, target, *, joint=True, joint_four=0):
         self.free = tuple(map(int,free))
         free = self.free
         self.close = close
         self.centers = tuple(zip((tuple(map(int,row)) for row in cores), requirements, geometries, caps))
         self.families = families
         self.target = target
+        self.joint = joint
+        self.joint_four = joint_four
+        self._joint = lru_cache(maxsize=1024)(self._joint_possible)
         self.low = [0]
         for c in free:
             self.low.append(self.low[-1] | (1 << c))
         self.contacts = {c: sum(1 << j for j in free if j != c and close[c, j]) for c in free}
 
+    def _joint_possible(self, fixed, width, limit):
+        if not self._coarse_possible(fixed,width,limit):
+            return False
+        from r35_route_contacts import attainable
+        return attainable(self, fixed, width, limit)
+
     def possible(self, fixed, width, limit):
+        if self.joint_four and width==4 and limit<=self.joint_four:
+            return any(self.possible((self.free[j],*fixed),3,j) for j in range(3,limit))
+        if self.joint and width in (2, 3):
+            return self._joint(tuple(fixed), width, limit)
+        return self._coarse_possible(fixed,width,limit)
+
+    def _coarse_possible(self, fixed, width, limit):
         """Each wildcard can use any lower cell. A retained completion is only optimistic."""
         low = self.low[limit]
         fixed_mask = sum(1 << c for c in fixed)
@@ -72,8 +89,10 @@ class PrefixRanges:
             rejected = False
             # Leave at least one fixed cell. Large blocks are cheap when fully excluded,
             # while testing three free slots at most keeps partial-interval work bounded.
-            for width in range(min(k-1, 3), 0, -1):
+            for width in range(min(k-1, 4 if self.joint_four else 3), 0, -1):
                 limit = indices[width]
+                if width==4 and limit>self.joint_four:
+                    continue
                 block = comb(limit, width)
                 inner = sum(comb(x, i+1) for i,x in enumerate(indices[:width]))
                 boundary = min(stop, current + block - inner)

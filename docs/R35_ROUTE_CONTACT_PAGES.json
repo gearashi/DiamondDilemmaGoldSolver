@@ -1,0 +1,121 @@
+[
+  {
+    "start": 2915631556094,
+    "ranks": 1024,
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "results": {
+      "old": {
+        "work": {
+          "interval_probes": 422,
+          "supports_before_generation": 809,
+          "first_rank_interval": 254835,
+          "first_contact": 31815,
+          "first_connected": 30906,
+          "support_assignments": 156,
+          "local_term_misses": 188,
+          "first_support": 3744,
+          "local_term_hits": 352,
+          "first_core": 1260,
+          "raw_center_endpoints": 322560
+        },
+        "best": null
+      },
+      "new": {
+        "work": {
+          "interval_probes": 220,
+          "supports_before_generation": 820,
+          "first_rank_interval": 258300,
+          "first_contact": 28980,
+          "first_connected": 30906,
+          "support_assignments": 156,
+          "local_term_misses": 188,
+          "first_support": 3744,
+          "local_term_hits": 352,
+          "first_core": 630,
+          "raw_center_endpoints": 322560
+        },
+        "best": null
+      }
+    }
+  },
+  {
+    "start": 7895105511395,
+    "ranks": 1024,
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "results": {
+      "old": {
+        "work": {
+          "interval_probes": 140,
+          "supports_before_generation": 1023,
+          "first_rank_interval": 322245,
+          "raw_center_endpoints": 322560,
+          "first_contact": 315
+        },
+        "best": null
+      },
+      "new": {
+        "work": {
+          "interval_probes": 10,
+          "supports_before_generation": 1024,
+          "first_rank_interval": 322560,
+          "raw_center_endpoints": 322560
+        },
+        "best": null
+      }
+    }
+  },
+  {
+    "start": 8518938640593,
+    "ranks": 1024,
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "results": {
+      "old": {
+        "work": {
+          "interval_probes": 179,
+          "supports_before_generation": 1007,
+          "first_rank_interval": 317205,
+          "first_contact": 5040,
+          "first_connected": 243,
+          "support_assignments": 2,
+          "local_term_misses": 3,
+          "first_support": 72,
+          "local_term_hits": 3,
+          "whole_support_reuses": 1,
+          "raw_center_endpoints": 322560
+        },
+        "best": null
+      },
+      "new": {
+        "work": {
+          "interval_probes": 84,
+          "supports_before_generation": 1008,
+          "first_rank_interval": 317520,
+          "first_contact": 4725,
+          "first_connected": 243,
+          "support_assignments": 2,
+          "local_term_misses": 3,
+          "first_support": 72,
+          "local_term_hits": 3,
+          "whole_support_reuses": 1,
+          "raw_center_endpoints": 322560
+        },
+        "best": null
+      }
+    }
+  }
+]

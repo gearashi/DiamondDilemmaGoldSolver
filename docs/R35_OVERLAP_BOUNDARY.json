@@ -90,6 +90,20 @@
       "decisions": "4007337",
       "conflicts": "2250148",
       "real_seconds": "731.63"
+    },
+    {
+      "model": "learned20",
+      "verdict": "UNKNOWN",
+      "decisions": "3150939",
+      "conflicts": "1892103",
+      "real_seconds": "420.03"
+    },
+    {
+      "model": "learned21",
+      "verdict": "UNKNOWN",
+      "decisions": "2951391",
+      "conflicts": "1638102",
+      "real_seconds": "420.47"
     }
   ],
   "all_groups_checked": [

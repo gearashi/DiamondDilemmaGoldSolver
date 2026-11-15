@@ -686,6 +686,7 @@ def main():
     p.add_argument('--unlimited-extra',action='store_true',help='Allow any number of distant movers in family mode.')
     p.add_argument('--nodes',type=int,default=128)
     p.add_argument('--swaps',type=int,default=4)
+    p.add_argument('--family',nargs='+',type=int,help='Exact cycle lengths for conditional donor-chain pricing in component-budget mode.')
     p.add_argument('--min-moved',type=int,default=0,help='Minimum moved donors in component-budget mode.')
     args = p.parse_args()
     model = BoardModel(SearchProblem(read_json(args.tiles)))
@@ -707,7 +708,12 @@ def main():
         if args.candidates is None:
             p.error("Supply allowed cells via --candidates.")
         from r34_component_budget import ComponentBudget
-        report=ComponentBudget(bound,args.candidates).upper(args.swaps,max_rows=args.nodes,min_moved=args.min_moved)
+        component=ComponentBudget(bound,args.candidates)
+        if args.family:
+            from r35_donor_chains import family_budget
+            report=family_budget(component,args.family,max_rows=args.nodes)
+        else:
+            report=component.upper(args.swaps,max_rows=args.nodes,min_moved=args.min_moved)
     elif args.mode=='budget':
         if args.candidates is None:
             p.error("Supply allowed cells via --candidates.")

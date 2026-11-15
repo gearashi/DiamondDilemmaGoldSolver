@@ -51,9 +51,12 @@ def _scope(model, board, pool, cycles):
 
 
 class CycleModel:
-    def __init__(self, model, board, pool, cycles):
+    def __init__(self, model, board, pool, cycles, *, arbitrary=False):
         from ortools.sat.python import cp_model
         self.center, self.pool, self.cycles, self.binding = _scope(model,board,pool,cycles)
+        self.arbitrary=arbitrary
+        if arbitrary and self.cycles:
+            raise ValueError("A fixed family cannot also allow arbitrary permutations.")
         self.model = model
         self.cp = cp_model.CpModel()
         n = model.n
@@ -86,7 +89,10 @@ class CycleModel:
             self.cp.add(donors[c] == c).only_enforce_if(~flag)
             moved.append(flag)
         # The listed cycles already move every actor. Remaining donors are identity.
-        self.cp.add(sum(moved)==len(actors))
+        if arbitrary:
+            self.cp.add_all_different([donors[c] for c in pool])
+        else:
+            self.cp.add(sum(moved)==len(actors))
         tiles = self.center // 3
         self.codes = []
         self.options = []
@@ -158,6 +164,8 @@ class CycleModel:
     def solve(self, *, target, pins=(), rules=(), seconds=5, optimize=False, core=False,
               move_cores=(), contact=False, predecessors=False, connected=False):
         from ortools.sat.python import cp_model
+        if self.arbitrary:
+            raise ValueError('Use DistanceModel.solve for an unrestricted permutation family.')
         if type(target) is not int or not 0<=target<=len(self.model.problem.edges) or seconds<=0:
             raise ValueError("Invalid target or solve budget.")
         if optimize and (rules or move_cores or contact or predecessors or connected):

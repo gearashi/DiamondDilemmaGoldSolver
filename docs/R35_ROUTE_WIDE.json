@@ -1,0 +1,179 @@
+[
+  {
+    "family": [
+      2,
+      2,
+      4
+    ],
+    "work": {
+      "all_checked": 24,
+      "previous_first": 18,
+      "new_first": 24,
+      "sparse_old": 3,
+      "sparse_new": 24
+    },
+    "independent": [
+      {
+        "cells": [
+          151,
+          152,
+          145,
+          82,
+          144,
+          156
+        ],
+        "cycles": [
+          [
+            151,
+            156
+          ],
+          [
+            144,
+            82,
+            152,
+            145
+          ]
+        ],
+        "predecessor": [
+          42,
+          95
+        ],
+        "price": -1,
+        "dense": -1
+      },
+      {
+        "cells": [
+          72,
+          73,
+          76,
+          77,
+          71,
+          74
+        ],
+        "cycles": [
+          [
+            74,
+            72
+          ],
+          [
+            73,
+            77,
+            71,
+            76
+          ]
+        ],
+        "predecessor": [
+          118,
+          132
+        ],
+        "price": -3,
+        "dense": -3
+      }
+    ]
+  },
+  {
+    "family": [
+      2,
+      2,
+      2,
+      3
+    ],
+    "work": {
+      "all_checked": 24,
+      "previous_first": 23,
+      "new_first": 24,
+      "sparse_old": 0,
+      "sparse_new": 24
+    },
+    "independent": []
+  },
+  {
+    "family": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "work": {
+      "all_checked": 24,
+      "previous_first": 23,
+      "new_first": 24,
+      "sparse_old": 0,
+      "sparse_new": 21
+    },
+    "independent": []
+  },
+  {
+    "family": [
+      2,
+      3,
+      3
+    ],
+    "work": {
+      "all_checked": 24,
+      "previous_first": 14,
+      "new_first": 22,
+      "sparse_old": 3,
+      "sparse_new": 22
+    },
+    "independent": [
+      {
+        "cells": [
+          82,
+          151,
+          81,
+          152,
+          83,
+          145
+        ],
+        "cycles": [
+          [
+            83,
+            151,
+            81
+          ],
+          [
+            82,
+            145,
+            152
+          ]
+        ],
+        "predecessor": [
+          96,
+          53
+        ],
+        "price": -2,
+        "dense": -2
+      },
+      {
+        "cells": [
+          146,
+          147,
+          135,
+          148,
+          129,
+          149
+        ],
+        "cycles": [
+          [
+            129,
+            149,
+            146
+          ],
+          [
+            148,
+            135,
+            147
+          ]
+        ],
+        "predecessor": [
+          73,
+          14
+        ],
+        "price": -3,
+        "dense": -3
+      }
+    ]
+  }
+]

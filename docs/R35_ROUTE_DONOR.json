@@ -1,0 +1,5582 @@
+[
+  {
+    "case": "incumbent",
+    "seed": 0,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      14,
+      91,
+      90,
+      89,
+      10,
+      85,
+      86,
+      159
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5871
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 0,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      14,
+      91,
+      90,
+      89,
+      10,
+      85,
+      86,
+      145
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 145,
+          "cycle": [
+            91,
+            145
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 133,
+      "usable": 133,
+      "response_rows": 2044
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5610
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 0,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      14,
+      91,
+      90,
+      89,
+      10,
+      85,
+      145,
+      111
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 145,
+          "cycle": [
+            91,
+            145
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 111,
+          "cycle": [
+            91,
+            111
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 1791
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 1801
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 0,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      14,
+      91,
+      90,
+      89,
+      10,
+      145,
+      111,
+      24
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 145,
+          "cycle": [
+            91,
+            145
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 111,
+          "cycle": [
+            91,
+            111
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 24,
+          "cycle": [
+            14,
+            24
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5135
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 0,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      14,
+      91,
+      90,
+      89,
+      10,
+      85,
+      86,
+      159
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5871
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 0,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      130,
+      11,
+      2,
+      79,
+      48,
+      42,
+      6,
+      98
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 0
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 1,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      145,
+      146,
+      135,
+      151,
+      129,
+      130,
+      131,
+      137
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 6261
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 1,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      145,
+      146,
+      135,
+      151,
+      129,
+      130,
+      131,
+      44
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 44,
+          "cycle": [
+            146,
+            44
+          ],
+          "conditional_gain": 0
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 131,
+      "usable": 131,
+      "response_rows": 2014
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5627
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 1,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      145,
+      146,
+      135,
+      151,
+      129,
+      130,
+      44,
+      18
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 44,
+          "cycle": [
+            146,
+            44
+          ],
+          "conditional_gain": 0
+        },
+        {
+          "donor": 18,
+          "cycle": [
+            146,
+            18
+          ],
+          "conditional_gain": 0
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 134,
+      "usable": 134,
+      "response_rows": 1778
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 1598
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 1,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      145,
+      146,
+      135,
+      151,
+      129,
+      44,
+      18,
+      30
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 44,
+          "cycle": [
+            146,
+            44
+          ],
+          "conditional_gain": 0
+        },
+        {
+          "donor": 18,
+          "cycle": [
+            146,
+            18
+          ],
+          "conditional_gain": 0
+        },
+        {
+          "donor": 30,
+          "cycle": [
+            151,
+            30
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 1369
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 1,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      145,
+      146,
+      135,
+      151,
+      129,
+      130,
+      131,
+      137
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 6261
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 1,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      148,
+      72,
+      5,
+      151,
+      130,
+      22,
+      117,
+      78
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 0
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 2,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      30,
+      29,
+      31,
+      6,
+      28,
+      24,
+      26,
+      102
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4993
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 2,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      30,
+      29,
+      31,
+      6,
+      28,
+      24,
+      26,
+      0
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 0,
+          "cycle": [
+            31,
+            0
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 2074
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4699
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 2,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      30,
+      29,
+      31,
+      6,
+      28,
+      24,
+      0,
+      157
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 0,
+          "cycle": [
+            31,
+            0
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 157,
+          "cycle": [
+            30,
+            157
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1817
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4245
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 2,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      30,
+      29,
+      31,
+      6,
+      28,
+      0,
+      157,
+      154
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 0,
+          "cycle": [
+            31,
+            0
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 157,
+          "cycle": [
+            30,
+            157
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 154,
+          "cycle": [
+            30,
+            154
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 140,
+      "usable": 140,
+      "response_rows": 1565
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4252
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 2,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      30,
+      29,
+      31,
+      6,
+      28,
+      24,
+      26,
+      102
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [],
+      "anchor_count": 5,
+      "examined": 140,
+      "usable": 140,
+      "response_rows": 1565
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4993
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 2,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      14,
+      40,
+      128,
+      157,
+      46,
+      71,
+      64,
+      16
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 0
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 3,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      14,
+      10,
+      91,
+      90,
+      89,
+      88,
+      87,
+      81
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 2199
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 3,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      14,
+      10,
+      91,
+      90,
+      89,
+      88,
+      87,
+      145
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 145,
+          "cycle": [
+            91,
+            145
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 131,
+      "usable": 131,
+      "response_rows": 2014
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3430
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 3,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      14,
+      10,
+      91,
+      90,
+      89,
+      88,
+      145,
+      111
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 145,
+          "cycle": [
+            91,
+            145
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 111,
+          "cycle": [
+            91,
+            111
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 134,
+      "usable": 134,
+      "response_rows": 1778
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5407
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 3,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      14,
+      10,
+      91,
+      90,
+      89,
+      145,
+      111,
+      24
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 145,
+          "cycle": [
+            91,
+            145
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 111,
+          "cycle": [
+            91,
+            111
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 24,
+          "cycle": [
+            14,
+            24
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5135
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 3,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      14,
+      10,
+      91,
+      90,
+      89,
+      88,
+      87,
+      81
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 2199
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 3,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      36,
+      138,
+      126,
+      28,
+      27,
+      13,
+      93,
+      124
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 0
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 4,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      145,
+      146,
+      151,
+      135,
+      152,
+      136,
+      137,
+      131
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 6083
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 4,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      145,
+      146,
+      151,
+      135,
+      152,
+      136,
+      137,
+      44
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 44,
+          "cycle": [
+            146,
+            44
+          ],
+          "conditional_gain": 0
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 131,
+      "usable": 131,
+      "response_rows": 2014
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5449
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 4,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      145,
+      146,
+      151,
+      135,
+      152,
+      136,
+      44,
+      18
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 44,
+          "cycle": [
+            146,
+            44
+          ],
+          "conditional_gain": 0
+        },
+        {
+          "donor": 18,
+          "cycle": [
+            146,
+            18
+          ],
+          "conditional_gain": 0
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 134,
+      "usable": 134,
+      "response_rows": 1778
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4927
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 4,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      145,
+      146,
+      151,
+      135,
+      152,
+      44,
+      18,
+      30
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 44,
+          "cycle": [
+            146,
+            44
+          ],
+          "conditional_gain": 0
+        },
+        {
+          "donor": 18,
+          "cycle": [
+            146,
+            18
+          ],
+          "conditional_gain": 0
+        },
+        {
+          "donor": 30,
+          "cycle": [
+            151,
+            30
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4452
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 4,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      145,
+      146,
+      151,
+      135,
+      152,
+      136,
+      137,
+      131
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 6083
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 4,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      111,
+      158,
+      12,
+      136,
+      154,
+      145,
+      147,
+      79
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 748
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 5,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      14,
+      10,
+      91,
+      90,
+      89,
+      85,
+      83,
+      86
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 2885
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 5,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      14,
+      10,
+      91,
+      90,
+      89,
+      85,
+      83,
+      145
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 145,
+          "cycle": [
+            91,
+            145
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 133,
+      "usable": 133,
+      "response_rows": 2044
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5594
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 5,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      14,
+      10,
+      91,
+      90,
+      89,
+      85,
+      145,
+      111
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 145,
+          "cycle": [
+            91,
+            145
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 111,
+          "cycle": [
+            91,
+            111
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 1791
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 1801
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 5,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      14,
+      10,
+      91,
+      90,
+      89,
+      145,
+      111,
+      24
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 145,
+          "cycle": [
+            91,
+            145
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 111,
+          "cycle": [
+            91,
+            111
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 24,
+          "cycle": [
+            14,
+            24
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5135
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 5,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      14,
+      10,
+      91,
+      90,
+      89,
+      85,
+      83,
+      86
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 2885
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 5,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      126,
+      100,
+      73,
+      3,
+      81,
+      123,
+      102,
+      45
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 0
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 6,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      145,
+      146,
+      135,
+      151,
+      152,
+      153,
+      154,
+      158
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4709
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 6,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      145,
+      146,
+      135,
+      151,
+      152,
+      153,
+      154,
+      44
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 44,
+          "cycle": [
+            146,
+            44
+          ],
+          "conditional_gain": 0
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 132,
+      "usable": 132,
+      "response_rows": 2029
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5592
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 6,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      145,
+      146,
+      135,
+      151,
+      152,
+      153,
+      44,
+      18
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 44,
+          "cycle": [
+            146,
+            44
+          ],
+          "conditional_gain": 0
+        },
+        {
+          "donor": 18,
+          "cycle": [
+            146,
+            18
+          ],
+          "conditional_gain": 0
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 1791
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4722
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 6,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      145,
+      146,
+      135,
+      151,
+      152,
+      44,
+      18,
+      30
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 44,
+          "cycle": [
+            146,
+            44
+          ],
+          "conditional_gain": 0
+        },
+        {
+          "donor": 18,
+          "cycle": [
+            146,
+            18
+          ],
+          "conditional_gain": 0
+        },
+        {
+          "donor": 30,
+          "cycle": [
+            151,
+            30
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4452
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 6,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      145,
+      146,
+      135,
+      151,
+      152,
+      153,
+      154,
+      158
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4709
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 6,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      68,
+      148,
+      80,
+      58,
+      59,
+      82,
+      104,
+      53
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 1048
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 7,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      122,
+      126,
+      123,
+      117,
+      118,
+      111,
+      109,
+      110
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 6778
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 7,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      122,
+      126,
+      123,
+      117,
+      118,
+      111,
+      109,
+      30
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 30,
+          "cycle": [
+            126,
+            30
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 133,
+      "usable": 133,
+      "response_rows": 2044
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4699
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 7,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      122,
+      126,
+      123,
+      117,
+      118,
+      111,
+      30,
+      103
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 30,
+          "cycle": [
+            126,
+            30
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 103,
+          "cycle": [
+            123,
+            103
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 136,
+      "usable": 136,
+      "response_rows": 1804
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 1018
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 7,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      122,
+      126,
+      123,
+      117,
+      118,
+      30,
+      103,
+      67
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [
+        {
+          "donor": 30,
+          "cycle": [
+            126,
+            30
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 103,
+          "cycle": [
+            123,
+            103
+          ],
+          "conditional_gain": -1
+        },
+        {
+          "donor": 67,
+          "cycle": [
+            123,
+            67
+          ],
+          "conditional_gain": -1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 988
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 7,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      122,
+      126,
+      123,
+      117,
+      118,
+      111,
+      109,
+      110
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {
+      "imports": [],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 6778
+    }
+  },
+  {
+    "case": "incumbent",
+    "seed": 7,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      122,
+      132,
+      36,
+      139,
+      90,
+      96,
+      106,
+      144
+    ],
+    "start": 207,
+    "score": 207,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 786
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 0,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      153,
+      147,
+      148,
+      154,
+      146,
+      145,
+      140,
+      141
+    ],
+    "start": 170,
+    "score": 176,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 6052
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 0,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      153,
+      147,
+      148,
+      154,
+      146,
+      145,
+      140,
+      97
+    ],
+    "start": 170,
+    "score": 177,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            154,
+            148,
+            97
+          ],
+          "conditional_gain": 4
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 132,
+      "usable": 132,
+      "response_rows": 2029
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5297
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 0,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      153,
+      147,
+      148,
+      154,
+      146,
+      145,
+      97,
+      100
+    ],
+    "start": 170,
+    "score": 178,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            154,
+            148,
+            97
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 100,
+          "cycle": [
+            154,
+            148,
+            100
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 1791
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4651
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 0,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      153,
+      147,
+      148,
+      154,
+      146,
+      97,
+      100,
+      45
+    ],
+    "start": 170,
+    "score": 178,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            154,
+            148,
+            97
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 100,
+          "cycle": [
+            154,
+            148,
+            100
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 45,
+          "cycle": [
+            153,
+            148,
+            45
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4410
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 0,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      153,
+      147,
+      148,
+      154,
+      146,
+      97,
+      72,
+      103
+    ],
+    "start": 170,
+    "score": 179,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            154,
+            148,
+            97
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 72,
+          "cycle": [
+            153,
+            72
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 103,
+          "cycle": [
+            147,
+            103
+          ],
+          "conditional_gain": 1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5246
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 0,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      130,
+      11,
+      2,
+      79,
+      48,
+      42,
+      6,
+      98
+    ],
+    "start": 170,
+    "score": 170,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 0
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 1,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      72,
+      71,
+      65,
+      76,
+      50,
+      51,
+      66,
+      73
+    ],
+    "start": 170,
+    "score": 171,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4668
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 1,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      72,
+      71,
+      65,
+      76,
+      50,
+      51,
+      66,
+      153
+    ],
+    "start": 170,
+    "score": 173,
+    "work": {
+      "imports": [
+        {
+          "donor": 153,
+          "cycle": [
+            72,
+            153
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 133,
+      "usable": 133,
+      "response_rows": 2044
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4499
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 1,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      72,
+      71,
+      65,
+      76,
+      50,
+      51,
+      153,
+      141
+    ],
+    "start": 170,
+    "score": 176,
+    "work": {
+      "imports": [
+        {
+          "donor": 153,
+          "cycle": [
+            72,
+            153
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 141,
+          "cycle": [
+            72,
+            141
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 136,
+      "usable": 136,
+      "response_rows": 1804
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4242
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 1,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      72,
+      71,
+      65,
+      76,
+      50,
+      153,
+      141,
+      148
+    ],
+    "start": 170,
+    "score": 179,
+    "work": {
+      "imports": [
+        {
+          "donor": 153,
+          "cycle": [
+            72,
+            153
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 141,
+          "cycle": [
+            72,
+            141
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 148,
+          "cycle": [
+            71,
+            148
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3782
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 1,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      72,
+      71,
+      65,
+      76,
+      50,
+      153,
+      148,
+      131
+    ],
+    "start": 170,
+    "score": 176,
+    "work": {
+      "imports": [
+        {
+          "donor": 153,
+          "cycle": [
+            72,
+            153
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 148,
+          "cycle": [
+            71,
+            148
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 131,
+          "cycle": [
+            65,
+            131
+          ],
+          "conditional_gain": 1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3009
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 1,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      148,
+      72,
+      5,
+      151,
+      130,
+      22,
+      117,
+      78
+    ],
+    "start": 170,
+    "score": 171,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 610
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 2,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      72,
+      71,
+      65,
+      73,
+      50,
+      66,
+      51,
+      52
+    ],
+    "start": 170,
+    "score": 171,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4381
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 2,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      72,
+      71,
+      65,
+      73,
+      50,
+      66,
+      51,
+      153
+    ],
+    "start": 170,
+    "score": 173,
+    "work": {
+      "imports": [
+        {
+          "donor": 153,
+          "cycle": [
+            72,
+            153
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 133,
+      "usable": 133,
+      "response_rows": 2044
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4243
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 2,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      72,
+      71,
+      65,
+      73,
+      50,
+      66,
+      153,
+      141
+    ],
+    "start": 170,
+    "score": 176,
+    "work": {
+      "imports": [
+        {
+          "donor": 153,
+          "cycle": [
+            72,
+            153
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 141,
+          "cycle": [
+            72,
+            141
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 136,
+      "usable": 136,
+      "response_rows": 1804
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3817
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 2,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      72,
+      71,
+      65,
+      73,
+      50,
+      153,
+      141,
+      148
+    ],
+    "start": 170,
+    "score": 179,
+    "work": {
+      "imports": [
+        {
+          "donor": 153,
+          "cycle": [
+            72,
+            153
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 141,
+          "cycle": [
+            72,
+            141
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 148,
+          "cycle": [
+            71,
+            148
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 2144
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 2,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      72,
+      71,
+      65,
+      73,
+      50,
+      153,
+      148,
+      131
+    ],
+    "start": 170,
+    "score": 176,
+    "work": {
+      "imports": [
+        {
+          "donor": 153,
+          "cycle": [
+            72,
+            153
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 148,
+          "cycle": [
+            71,
+            148
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 131,
+          "cycle": [
+            65,
+            131
+          ],
+          "conditional_gain": 1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3693
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 2,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      14,
+      40,
+      128,
+      157,
+      46,
+      71,
+      64,
+      16
+    ],
+    "start": 170,
+    "score": 173,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 931
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 3,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      147,
+      146,
+      145,
+      148,
+      153,
+      154,
+      140,
+      141
+    ],
+    "start": 170,
+    "score": 176,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 6052
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 3,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      147,
+      146,
+      145,
+      148,
+      153,
+      154,
+      140,
+      97
+    ],
+    "start": 170,
+    "score": 177,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            154,
+            148,
+            97
+          ],
+          "conditional_gain": 4
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 132,
+      "usable": 132,
+      "response_rows": 2029
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5297
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 3,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      147,
+      146,
+      145,
+      148,
+      153,
+      154,
+      97,
+      100
+    ],
+    "start": 170,
+    "score": 178,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            154,
+            148,
+            97
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 100,
+          "cycle": [
+            154,
+            148,
+            100
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 1791
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4651
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 3,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      147,
+      146,
+      145,
+      148,
+      153,
+      97,
+      45,
+      72
+    ],
+    "start": 170,
+    "score": 180,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            148,
+            97
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 45,
+          "cycle": [
+            153,
+            148,
+            45
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 72,
+          "cycle": [
+            153,
+            72
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4146
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 3,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      147,
+      146,
+      145,
+      148,
+      153,
+      97,
+      72,
+      61
+    ],
+    "start": 170,
+    "score": 179,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            148,
+            97
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 72,
+          "cycle": [
+            153,
+            72
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 61,
+          "cycle": [
+            146,
+            61
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4079
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 3,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      36,
+      138,
+      126,
+      28,
+      27,
+      13,
+      93,
+      124
+    ],
+    "start": 170,
+    "score": 170,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 0
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 4,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      145,
+      146,
+      147,
+      148,
+      153,
+      154,
+      140,
+      141
+    ],
+    "start": 170,
+    "score": 176,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 6052
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 4,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      145,
+      146,
+      147,
+      148,
+      153,
+      154,
+      140,
+      97
+    ],
+    "start": 170,
+    "score": 177,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            154,
+            148,
+            97
+          ],
+          "conditional_gain": 4
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 132,
+      "usable": 132,
+      "response_rows": 2029
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5297
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 4,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      145,
+      146,
+      147,
+      148,
+      153,
+      154,
+      97,
+      100
+    ],
+    "start": 170,
+    "score": 178,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            154,
+            148,
+            97
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 100,
+          "cycle": [
+            154,
+            148,
+            100
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 1791
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4651
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 4,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      145,
+      146,
+      147,
+      148,
+      153,
+      97,
+      45,
+      72
+    ],
+    "start": 170,
+    "score": 180,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            148,
+            97
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 45,
+          "cycle": [
+            153,
+            148,
+            45
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 72,
+          "cycle": [
+            153,
+            72
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4146
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 4,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      145,
+      146,
+      147,
+      148,
+      153,
+      97,
+      72,
+      61
+    ],
+    "start": 170,
+    "score": 179,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            148,
+            97
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 72,
+          "cycle": [
+            153,
+            72
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 61,
+          "cycle": [
+            146,
+            61
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4079
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 4,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      111,
+      158,
+      12,
+      136,
+      154,
+      145,
+      147,
+      79
+    ],
+    "start": 170,
+    "score": 171,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 940
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 5,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      107,
+      30,
+      101,
+      100,
+      106,
+      92,
+      105,
+      104
+    ],
+    "start": 170,
+    "score": 172,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 6451
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 5,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      107,
+      30,
+      101,
+      100,
+      106,
+      92,
+      105,
+      131
+    ],
+    "start": 170,
+    "score": 174,
+    "work": {
+      "imports": [
+        {
+          "donor": 131,
+          "cycle": [
+            107,
+            131
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 133,
+      "usable": 133,
+      "response_rows": 2044
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3982
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 5,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      107,
+      30,
+      101,
+      100,
+      106,
+      92,
+      131,
+      148
+    ],
+    "start": 170,
+    "score": 175,
+    "work": {
+      "imports": [
+        {
+          "donor": 131,
+          "cycle": [
+            107,
+            131
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 148,
+          "cycle": [
+            100,
+            107,
+            148
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 1791
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3744
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 5,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      107,
+      30,
+      101,
+      100,
+      106,
+      131,
+      148,
+      47
+    ],
+    "start": 170,
+    "score": 178,
+    "work": {
+      "imports": [
+        {
+          "donor": 131,
+          "cycle": [
+            107,
+            131
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 148,
+          "cycle": [
+            100,
+            107,
+            148
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 47,
+          "cycle": [
+            30,
+            101,
+            47
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3525
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 5,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      107,
+      30,
+      101,
+      100,
+      106,
+      131,
+      47,
+      154
+    ],
+    "start": 170,
+    "score": 179,
+    "work": {
+      "imports": [
+        {
+          "donor": 131,
+          "cycle": [
+            107,
+            131
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 47,
+          "cycle": [
+            30,
+            101,
+            47
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 154,
+          "cycle": [
+            100,
+            154
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3313
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 5,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      126,
+      100,
+      73,
+      3,
+      81,
+      123,
+      102,
+      45
+    ],
+    "start": 170,
+    "score": 171,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 736
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 6,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      145,
+      146,
+      147,
+      153,
+      148,
+      154,
+      140,
+      141
+    ],
+    "start": 170,
+    "score": 176,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 6052
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 6,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      145,
+      146,
+      147,
+      153,
+      148,
+      154,
+      140,
+      97
+    ],
+    "start": 170,
+    "score": 177,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            154,
+            148,
+            97
+          ],
+          "conditional_gain": 4
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 132,
+      "usable": 132,
+      "response_rows": 2029
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5297
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 6,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      145,
+      146,
+      147,
+      153,
+      148,
+      154,
+      97,
+      100
+    ],
+    "start": 170,
+    "score": 178,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            154,
+            148,
+            97
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 100,
+          "cycle": [
+            154,
+            148,
+            100
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 1791
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4651
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 6,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      145,
+      146,
+      147,
+      153,
+      148,
+      97,
+      45,
+      72
+    ],
+    "start": 170,
+    "score": 180,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            148,
+            97
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 45,
+          "cycle": [
+            153,
+            148,
+            45
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 72,
+          "cycle": [
+            153,
+            72
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4146
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 6,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      145,
+      146,
+      147,
+      153,
+      148,
+      97,
+      72,
+      61
+    ],
+    "start": 170,
+    "score": 179,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            148,
+            97
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 72,
+          "cycle": [
+            153,
+            72
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 61,
+          "cycle": [
+            146,
+            61
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4079
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 6,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      68,
+      148,
+      80,
+      58,
+      59,
+      82,
+      104,
+      53
+    ],
+    "start": 170,
+    "score": 170,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4068
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 7,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      153,
+      147,
+      146,
+      148,
+      145,
+      154,
+      140,
+      141
+    ],
+    "start": 170,
+    "score": 176,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 6052
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 7,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      153,
+      147,
+      146,
+      148,
+      145,
+      154,
+      140,
+      97
+    ],
+    "start": 170,
+    "score": 177,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            154,
+            148,
+            97
+          ],
+          "conditional_gain": 4
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 132,
+      "usable": 132,
+      "response_rows": 2029
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5297
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 7,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      153,
+      147,
+      146,
+      148,
+      145,
+      154,
+      97,
+      100
+    ],
+    "start": 170,
+    "score": 178,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            154,
+            148,
+            97
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 100,
+          "cycle": [
+            154,
+            148,
+            100
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 1791
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4651
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 7,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      153,
+      147,
+      146,
+      148,
+      145,
+      97,
+      45,
+      72
+    ],
+    "start": 170,
+    "score": 180,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            148,
+            97
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 45,
+          "cycle": [
+            153,
+            148,
+            45
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 72,
+          "cycle": [
+            153,
+            72
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4146
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 7,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      153,
+      147,
+      146,
+      148,
+      145,
+      97,
+      72,
+      61
+    ],
+    "start": 170,
+    "score": 179,
+    "work": {
+      "imports": [
+        {
+          "donor": 97,
+          "cycle": [
+            148,
+            97
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 72,
+          "cycle": [
+            153,
+            72
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 61,
+          "cycle": [
+            146,
+            61
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4079
+    }
+  },
+  {
+    "case": "moderate",
+    "seed": 7,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      122,
+      132,
+      36,
+      139,
+      90,
+      96,
+      106,
+      144
+    ],
+    "start": 170,
+    "score": 170,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 786
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 0,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      95,
+      93,
+      92,
+      100,
+      101,
+      99,
+      98,
+      97
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5740
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 0,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      95,
+      93,
+      92,
+      100,
+      101,
+      99,
+      98,
+      144
+    ],
+    "start": 62,
+    "score": 70,
+    "work": {
+      "imports": [
+        {
+          "donor": 144,
+          "cycle": [
+            98,
+            92,
+            144
+          ],
+          "conditional_gain": 4
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 134,
+      "usable": 134,
+      "response_rows": 2059
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5539
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 0,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      95,
+      93,
+      92,
+      100,
+      101,
+      99,
+      148,
+      145
+    ],
+    "start": 62,
+    "score": 70,
+    "work": {
+      "imports": [
+        {
+          "donor": 148,
+          "cycle": [
+            92,
+            95,
+            148
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 145,
+          "cycle": [
+            92,
+            95,
+            145
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1817
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5241
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 0,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      95,
+      93,
+      92,
+      100,
+      101,
+      148,
+      145,
+      58
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {
+      "imports": [
+        {
+          "donor": 148,
+          "cycle": [
+            92,
+            95,
+            148
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 145,
+          "cycle": [
+            92,
+            95,
+            145
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 58,
+          "cycle": [
+            92,
+            95,
+            58
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 139,
+      "usable": 139,
+      "response_rows": 1554
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4539
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 0,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      95,
+      93,
+      92,
+      100,
+      101,
+      148,
+      150,
+      155
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {
+      "imports": [
+        {
+          "donor": 148,
+          "cycle": [
+            92,
+            95,
+            148
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 150,
+          "cycle": [
+            93,
+            150
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 155,
+          "cycle": [
+            101,
+            155
+          ],
+          "conditional_gain": 1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 139,
+      "usable": 139,
+      "response_rows": 1554
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4689
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 0,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      130,
+      11,
+      2,
+      79,
+      48,
+      42,
+      6,
+      98
+    ],
+    "start": 62,
+    "score": 64,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 1043
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 1,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      102,
+      95,
+      93,
+      92,
+      100,
+      88,
+      99,
+      98
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5994
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 1,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      102,
+      95,
+      93,
+      92,
+      100,
+      88,
+      99,
+      144
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {
+      "imports": [
+        {
+          "donor": 144,
+          "cycle": [
+            95,
+            88,
+            144
+          ],
+          "conditional_gain": 4
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 2074
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5607
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 1,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      102,
+      95,
+      93,
+      92,
+      100,
+      88,
+      144,
+      150
+    ],
+    "start": 62,
+    "score": 70,
+    "work": {
+      "imports": [
+        {
+          "donor": 144,
+          "cycle": [
+            95,
+            88,
+            144
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 150,
+          "cycle": [
+            95,
+            88,
+            150
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1830
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5282
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 1,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      102,
+      95,
+      93,
+      92,
+      100,
+      148,
+      145,
+      58
+    ],
+    "start": 62,
+    "score": 70,
+    "work": {
+      "imports": [
+        {
+          "donor": 148,
+          "cycle": [
+            92,
+            95,
+            148
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 145,
+          "cycle": [
+            92,
+            95,
+            145
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 58,
+          "cycle": [
+            92,
+            95,
+            58
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 140,
+      "usable": 140,
+      "response_rows": 1565
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4587
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 1,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      102,
+      95,
+      93,
+      92,
+      100,
+      148,
+      150,
+      137
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {
+      "imports": [
+        {
+          "donor": 148,
+          "cycle": [
+            92,
+            95,
+            148
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 150,
+          "cycle": [
+            93,
+            150
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 137,
+          "cycle": [
+            100,
+            137
+          ],
+          "conditional_gain": 1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 140,
+      "usable": 140,
+      "response_rows": 1565
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4961
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 1,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      148,
+      72,
+      5,
+      151,
+      130,
+      22,
+      117,
+      78
+    ],
+    "start": 62,
+    "score": 63,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 749
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 2,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      100,
+      99,
+      101,
+      102,
+      31,
+      29,
+      28,
+      95
+    ],
+    "start": 62,
+    "score": 68,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 6459
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 2,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      100,
+      99,
+      101,
+      102,
+      31,
+      29,
+      28,
+      33
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {
+      "imports": [
+        {
+          "donor": 33,
+          "cycle": [
+            28,
+            31,
+            33
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 133,
+      "usable": 133,
+      "response_rows": 2044
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4672
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 2,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      100,
+      99,
+      101,
+      102,
+      31,
+      29,
+      116,
+      41
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {
+      "imports": [
+        {
+          "donor": 116,
+          "cycle": [
+            31,
+            116
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 41,
+          "cycle": [
+            31,
+            41
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 136,
+      "usable": 136,
+      "response_rows": 1804
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5329
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 2,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      100,
+      99,
+      101,
+      102,
+      31,
+      116,
+      41,
+      35
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {
+      "imports": [
+        {
+          "donor": 116,
+          "cycle": [
+            31,
+            116
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 41,
+          "cycle": [
+            31,
+            41
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 35,
+          "cycle": [
+            31,
+            35
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 139,
+      "usable": 139,
+      "response_rows": 1554
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5580
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 2,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      100,
+      99,
+      101,
+      102,
+      31,
+      116,
+      70,
+      155
+    ],
+    "start": 62,
+    "score": 70,
+    "work": {
+      "imports": [
+        {
+          "donor": 116,
+          "cycle": [
+            31,
+            116
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 70,
+          "cycle": [
+            102,
+            70
+          ],
+          "conditional_gain": 1
+        },
+        {
+          "donor": 155,
+          "cycle": [
+            101,
+            155
+          ],
+          "conditional_gain": 1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 139,
+      "usable": 139,
+      "response_rows": 1554
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4273
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 2,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      14,
+      40,
+      128,
+      157,
+      46,
+      71,
+      64,
+      16
+    ],
+    "start": 62,
+    "score": 66,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 1019
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 3,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      147,
+      146,
+      145,
+      144,
+      148,
+      149,
+      150,
+      79
+    ],
+    "start": 62,
+    "score": 68,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4663
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 3,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      147,
+      146,
+      145,
+      144,
+      148,
+      149,
+      150,
+      12
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {
+      "imports": [
+        {
+          "donor": 12,
+          "cycle": [
+            150,
+            144,
+            12
+          ],
+          "conditional_gain": 4
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 132,
+      "usable": 132,
+      "response_rows": 2029
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4211
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 3,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      147,
+      146,
+      145,
+      144,
+      148,
+      149,
+      12,
+      88
+    ],
+    "start": 62,
+    "score": 70,
+    "work": {
+      "imports": [
+        {
+          "donor": 12,
+          "cycle": [
+            148,
+            144,
+            12
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 88,
+          "cycle": [
+            144,
+            88
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 134,
+      "usable": 134,
+      "response_rows": 1778
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 2025
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 3,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      147,
+      146,
+      145,
+      144,
+      148,
+      12,
+      88,
+      113
+    ],
+    "start": 62,
+    "score": 71,
+    "work": {
+      "imports": [
+        {
+          "donor": 12,
+          "cycle": [
+            148,
+            144,
+            12
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 88,
+          "cycle": [
+            144,
+            88
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 113,
+          "cycle": [
+            148,
+            146,
+            113
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4314
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 3,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      147,
+      146,
+      145,
+      144,
+      148,
+      12,
+      137,
+      121
+    ],
+    "start": 62,
+    "score": 70,
+    "work": {
+      "imports": [
+        {
+          "donor": 12,
+          "cycle": [
+            148,
+            144,
+            12
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 137,
+          "cycle": [
+            147,
+            137
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 121,
+          "cycle": [
+            145,
+            121
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4200
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 3,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      36,
+      138,
+      126,
+      28,
+      27,
+      13,
+      93,
+      124
+    ],
+    "start": 62,
+    "score": 64,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 1187
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 4,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      78,
+      74,
+      77,
+      79,
+      54,
+      143,
+      76,
+      53
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4525
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 4,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      78,
+      74,
+      77,
+      79,
+      54,
+      143,
+      76,
+      113
+    ],
+    "start": 62,
+    "score": 73,
+    "work": {
+      "imports": [
+        {
+          "donor": 113,
+          "cycle": [
+            79,
+            113
+          ],
+          "conditional_gain": 4
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 2074
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 2938
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 4,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      78,
+      74,
+      77,
+      79,
+      54,
+      143,
+      113,
+      12
+    ],
+    "start": 62,
+    "score": 72,
+    "work": {
+      "imports": [
+        {
+          "donor": 113,
+          "cycle": [
+            79,
+            113
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 12,
+          "cycle": [
+            54,
+            74,
+            12
+          ],
+          "conditional_gain": 4
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1817
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4256
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 4,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      78,
+      74,
+      77,
+      79,
+      54,
+      113,
+      12,
+      119
+    ],
+    "start": 62,
+    "score": 71,
+    "work": {
+      "imports": [
+        {
+          "donor": 113,
+          "cycle": [
+            79,
+            113
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 12,
+          "cycle": [
+            54,
+            74,
+            12
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 119,
+          "cycle": [
+            74,
+            54,
+            119
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 139,
+      "usable": 139,
+      "response_rows": 1554
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5444
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 4,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      78,
+      74,
+      77,
+      79,
+      54,
+      113,
+      12,
+      127
+    ],
+    "start": 62,
+    "score": 72,
+    "work": {
+      "imports": [
+        {
+          "donor": 113,
+          "cycle": [
+            79,
+            113
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 12,
+          "cycle": [
+            54,
+            74,
+            12
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 127,
+          "cycle": [
+            78,
+            127
+          ],
+          "conditional_gain": 1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 139,
+      "usable": 139,
+      "response_rows": 1554
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3766
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 4,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      111,
+      158,
+      12,
+      136,
+      154,
+      145,
+      147,
+      79
+    ],
+    "start": 62,
+    "score": 65,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 2969
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 5,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      37,
+      36,
+      35,
+      41,
+      38,
+      63,
+      127,
+      34
+    ],
+    "start": 62,
+    "score": 67,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5733
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 5,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      37,
+      36,
+      35,
+      41,
+      38,
+      63,
+      127,
+      19
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {
+      "imports": [
+        {
+          "donor": 19,
+          "cycle": [
+            37,
+            63,
+            19
+          ],
+          "conditional_gain": 4
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 2074
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3992
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 5,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      37,
+      36,
+      35,
+      41,
+      38,
+      63,
+      19,
+      147
+    ],
+    "start": 62,
+    "score": 72,
+    "work": {
+      "imports": [
+        {
+          "donor": 19,
+          "cycle": [
+            37,
+            63,
+            19
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 147,
+          "cycle": [
+            63,
+            41,
+            147
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 136,
+      "usable": 136,
+      "response_rows": 1804
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3951
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 5,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      37,
+      36,
+      35,
+      41,
+      38,
+      19,
+      108,
+      31
+    ],
+    "start": 62,
+    "score": 72,
+    "work": {
+      "imports": [
+        {
+          "donor": 19,
+          "cycle": [
+            37,
+            41,
+            19
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 108,
+          "cycle": [
+            41,
+            108
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 31,
+          "cycle": [
+            41,
+            31
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4307
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 5,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      37,
+      36,
+      35,
+      41,
+      38,
+      19,
+      159,
+      14
+    ],
+    "start": 62,
+    "score": 71,
+    "work": {
+      "imports": [
+        {
+          "donor": 19,
+          "cycle": [
+            37,
+            41,
+            19
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 159,
+          "cycle": [
+            35,
+            159
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 14,
+          "cycle": [
+            36,
+            14
+          ],
+          "conditional_gain": 1
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4509
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 5,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      126,
+      100,
+      73,
+      3,
+      81,
+      123,
+      102,
+      45
+    ],
+    "start": 62,
+    "score": 67,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 2429
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 6,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      145,
+      144,
+      146,
+      147,
+      153,
+      148,
+      140,
+      136
+    ],
+    "start": 62,
+    "score": 67,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5002
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 6,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      145,
+      144,
+      146,
+      147,
+      153,
+      148,
+      140,
+      12
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {
+      "imports": [
+        {
+          "donor": 12,
+          "cycle": [
+            148,
+            144,
+            12
+          ],
+          "conditional_gain": 4
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 132,
+      "usable": 132,
+      "response_rows": 2029
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4578
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 6,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      145,
+      144,
+      146,
+      147,
+      153,
+      148,
+      12,
+      88
+    ],
+    "start": 62,
+    "score": 71,
+    "work": {
+      "imports": [
+        {
+          "donor": 12,
+          "cycle": [
+            148,
+            144,
+            12
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 88,
+          "cycle": [
+            144,
+            88
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 135,
+      "usable": 135,
+      "response_rows": 1791
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4220
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 6,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      145,
+      144,
+      146,
+      147,
+      153,
+      12,
+      88,
+      98
+    ],
+    "start": 62,
+    "score": 70,
+    "work": {
+      "imports": [
+        {
+          "donor": 12,
+          "cycle": [
+            146,
+            144,
+            12
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 88,
+          "cycle": [
+            144,
+            88
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 98,
+          "cycle": [
+            146,
+            144,
+            98
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3773
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 6,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      145,
+      144,
+      146,
+      147,
+      153,
+      12,
+      137,
+      150
+    ],
+    "start": 62,
+    "score": 71,
+    "work": {
+      "imports": [
+        {
+          "donor": 12,
+          "cycle": [
+            146,
+            144,
+            12
+          ],
+          "conditional_gain": 4
+        },
+        {
+          "donor": 137,
+          "cycle": [
+            147,
+            137
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 150,
+          "cycle": [
+            145,
+            150
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 137,
+      "usable": 137,
+      "response_rows": 1532
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4147
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 6,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      68,
+      148,
+      80,
+      58,
+      59,
+      82,
+      104,
+      53
+    ],
+    "start": 62,
+    "score": 66,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 3441
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 7,
+    "size": 8,
+    "imports": 0,
+    "pool": [
+      149,
+      148,
+      147,
+      153,
+      146,
+      140,
+      145,
+      144
+    ],
+    "start": 62,
+    "score": 67,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4854
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 7,
+    "size": 8,
+    "imports": 1,
+    "pool": [
+      149,
+      148,
+      147,
+      153,
+      146,
+      140,
+      145,
+      113
+    ],
+    "start": 62,
+    "score": 68,
+    "work": {
+      "imports": [
+        {
+          "donor": 113,
+          "cycle": [
+            148,
+            146,
+            113
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 7,
+      "examined": 133,
+      "usable": 133,
+      "response_rows": 2044
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 5505
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 7,
+    "size": 8,
+    "imports": 2,
+    "pool": [
+      149,
+      148,
+      147,
+      153,
+      146,
+      140,
+      113,
+      92
+    ],
+    "start": 62,
+    "score": 69,
+    "work": {
+      "imports": [
+        {
+          "donor": 113,
+          "cycle": [
+            148,
+            146,
+            113
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 92,
+          "cycle": [
+            148,
+            146,
+            92
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 6,
+      "examined": 136,
+      "usable": 136,
+      "response_rows": 1804
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4933
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 7,
+    "size": 8,
+    "imports": 3,
+    "pool": [
+      149,
+      148,
+      147,
+      153,
+      146,
+      113,
+      92,
+      42
+    ],
+    "start": 62,
+    "score": 70,
+    "work": {
+      "imports": [
+        {
+          "donor": 113,
+          "cycle": [
+            148,
+            146,
+            113
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 92,
+          "cycle": [
+            148,
+            146,
+            92
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 42,
+          "cycle": [
+            146,
+            148,
+            42
+          ],
+          "conditional_gain": 3
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4814
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 7,
+    "size": 8,
+    "imports": 4,
+    "pool": [
+      149,
+      148,
+      147,
+      153,
+      146,
+      113,
+      59,
+      137
+    ],
+    "start": 62,
+    "score": 70,
+    "work": {
+      "imports": [
+        {
+          "donor": 113,
+          "cycle": [
+            148,
+            146,
+            113
+          ],
+          "conditional_gain": 3
+        },
+        {
+          "donor": 59,
+          "cycle": [
+            149,
+            59
+          ],
+          "conditional_gain": 2
+        },
+        {
+          "donor": 137,
+          "cycle": [
+            147,
+            137
+          ],
+          "conditional_gain": 2
+        }
+      ],
+      "anchor_count": 5,
+      "examined": 138,
+      "usable": 138,
+      "response_rows": 1543
+    },
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 4582
+    }
+  },
+  {
+    "case": "fresh",
+    "seed": 7,
+    "size": 8,
+    "imports": -1,
+    "pool": [
+      122,
+      132,
+      36,
+      139,
+      90,
+      96,
+      106,
+      144
+    ],
+    "start": 62,
+    "score": 65,
+    "work": {},
+    "native": {
+      "status": "OPTIMAL",
+      "branches": 867
+    }
+  }
+]

@@ -1,0 +1,1239 @@
+[
+  {
+    "pool": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "target": 207,
+    "candidate": {
+      "status": "OPTIMAL",
+      "branches": 0,
+      "conflicts": 0,
+      "codes": [
+        437,
+        280,
+        118,
+        463,
+        3,
+        275,
+        282,
+        252,
+        212,
+        31,
+        385,
+        297,
+        365,
+        219,
+        165,
+        421,
+        71,
+        447,
+        346,
+        247,
+        414,
+        238,
+        342,
+        60,
+        228,
+        233,
+        188,
+        126,
+        335,
+        276,
+        131,
+        389,
+        77,
+        154,
+        429,
+        307,
+        453,
+        100,
+        262,
+        191,
+        418,
+        258,
+        97,
+        391,
+        302,
+        34,
+        82,
+        85,
+        477,
+        44,
+        198,
+        469,
+        150,
+        442,
+        23,
+        440,
+        196,
+        450,
+        143,
+        467,
+        425,
+        240,
+        123,
+        16,
+        156,
+        255,
+        245,
+        352,
+        320,
+        63,
+        90,
+        223,
+        398,
+        366,
+        47,
+        104,
+        40,
+        72,
+        114,
+        79,
+        445,
+        51,
+        113,
+        88,
+        250,
+        18,
+        107,
+        160,
+        314,
+        409,
+        68,
+        403,
+        395,
+        339,
+        138,
+        215,
+        13,
+        9,
+        329,
+        193,
+        374,
+        171,
+        305,
+        316,
+        58,
+        264,
+        348,
+        376,
+        108,
+        164,
+        411,
+        271,
+        471,
+        227,
+        93,
+        207,
+        146,
+        428,
+        267,
+        456,
+        407,
+        204,
+        218,
+        296,
+        324,
+        337,
+        311,
+        37,
+        355,
+        133,
+        321,
+        136,
+        401,
+        179,
+        331,
+        149,
+        379,
+        291,
+        29,
+        24,
+        475,
+        201,
+        357,
+        369,
+        55,
+        433,
+        2,
+        170,
+        181,
+        383,
+        285,
+        362,
+        7,
+        49,
+        288,
+        176,
+        121,
+        236,
+        459,
+        185
+      ],
+      "distance": 0,
+      "score": 207,
+      "distance_lower_bound": 0
+    },
+    "fixed": [
+      {
+        "family": [],
+        "status": "OPTIMAL",
+        "branches": 0,
+        "score": 207
+      }
+    ]
+  },
+  {
+    "pool": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "target": 208,
+    "candidate": {
+      "status": "INFEASIBLE",
+      "branches": 0,
+      "conflicts": 0
+    },
+    "fixed": [
+      {
+        "family": [],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          2
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          3
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          4
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      }
+    ]
+  },
+  {
+    "pool": [
+      4,
+      9,
+      16,
+      19,
+      22,
+      43
+    ],
+    "target": 207,
+    "candidate": {
+      "status": "OPTIMAL",
+      "branches": 0,
+      "conflicts": 0,
+      "codes": [
+        437,
+        280,
+        118,
+        463,
+        3,
+        275,
+        282,
+        252,
+        212,
+        31,
+        385,
+        297,
+        365,
+        219,
+        165,
+        421,
+        71,
+        447,
+        346,
+        247,
+        414,
+        238,
+        342,
+        60,
+        228,
+        233,
+        188,
+        126,
+        335,
+        276,
+        131,
+        389,
+        77,
+        154,
+        429,
+        307,
+        453,
+        100,
+        262,
+        191,
+        418,
+        258,
+        97,
+        391,
+        302,
+        34,
+        82,
+        85,
+        477,
+        44,
+        198,
+        469,
+        150,
+        442,
+        23,
+        440,
+        196,
+        450,
+        143,
+        467,
+        425,
+        240,
+        123,
+        16,
+        156,
+        255,
+        245,
+        352,
+        320,
+        63,
+        90,
+        223,
+        398,
+        366,
+        47,
+        104,
+        40,
+        72,
+        114,
+        79,
+        445,
+        51,
+        113,
+        88,
+        250,
+        18,
+        107,
+        160,
+        314,
+        409,
+        68,
+        403,
+        395,
+        339,
+        138,
+        215,
+        13,
+        9,
+        329,
+        193,
+        374,
+        171,
+        305,
+        316,
+        58,
+        264,
+        348,
+        376,
+        108,
+        164,
+        411,
+        271,
+        471,
+        227,
+        93,
+        207,
+        146,
+        428,
+        267,
+        456,
+        407,
+        204,
+        218,
+        296,
+        324,
+        337,
+        311,
+        37,
+        355,
+        133,
+        321,
+        136,
+        401,
+        179,
+        331,
+        149,
+        379,
+        291,
+        29,
+        24,
+        475,
+        201,
+        357,
+        369,
+        55,
+        433,
+        2,
+        170,
+        181,
+        383,
+        285,
+        362,
+        7,
+        49,
+        288,
+        176,
+        121,
+        236,
+        459,
+        185
+      ],
+      "distance": 0,
+      "score": 207,
+      "distance_lower_bound": 0
+    },
+    "fixed": [
+      {
+        "family": [],
+        "status": "OPTIMAL",
+        "branches": 0,
+        "score": 207
+      }
+    ]
+  },
+  {
+    "pool": [
+      4,
+      9,
+      16,
+      19,
+      22,
+      43
+    ],
+    "target": 208,
+    "candidate": {
+      "status": "INFEASIBLE",
+      "branches": 0,
+      "conflicts": 0
+    },
+    "fixed": [
+      {
+        "family": [],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          2
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          3
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          2,
+          2
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          3
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          4
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          4
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          3,
+          3
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          5
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          6
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      }
+    ]
+  },
+  {
+    "pool": [
+      2,
+      6,
+      9,
+      17,
+      43,
+      66
+    ],
+    "target": 207,
+    "candidate": {
+      "status": "OPTIMAL",
+      "branches": 0,
+      "conflicts": 0,
+      "codes": [
+        437,
+        280,
+        118,
+        463,
+        3,
+        275,
+        282,
+        252,
+        212,
+        31,
+        385,
+        297,
+        365,
+        219,
+        165,
+        421,
+        71,
+        447,
+        346,
+        247,
+        414,
+        238,
+        342,
+        60,
+        228,
+        233,
+        188,
+        126,
+        335,
+        276,
+        131,
+        389,
+        77,
+        154,
+        429,
+        307,
+        453,
+        100,
+        262,
+        191,
+        418,
+        258,
+        97,
+        391,
+        302,
+        34,
+        82,
+        85,
+        477,
+        44,
+        198,
+        469,
+        150,
+        442,
+        23,
+        440,
+        196,
+        450,
+        143,
+        467,
+        425,
+        240,
+        123,
+        16,
+        156,
+        255,
+        245,
+        352,
+        320,
+        63,
+        90,
+        223,
+        398,
+        366,
+        47,
+        104,
+        40,
+        72,
+        114,
+        79,
+        445,
+        51,
+        113,
+        88,
+        250,
+        18,
+        107,
+        160,
+        314,
+        409,
+        68,
+        403,
+        395,
+        339,
+        138,
+        215,
+        13,
+        9,
+        329,
+        193,
+        374,
+        171,
+        305,
+        316,
+        58,
+        264,
+        348,
+        376,
+        108,
+        164,
+        411,
+        271,
+        471,
+        227,
+        93,
+        207,
+        146,
+        428,
+        267,
+        456,
+        407,
+        204,
+        218,
+        296,
+        324,
+        337,
+        311,
+        37,
+        355,
+        133,
+        321,
+        136,
+        401,
+        179,
+        331,
+        149,
+        379,
+        291,
+        29,
+        24,
+        475,
+        201,
+        357,
+        369,
+        55,
+        433,
+        2,
+        170,
+        181,
+        383,
+        285,
+        362,
+        7,
+        49,
+        288,
+        176,
+        121,
+        236,
+        459,
+        185
+      ],
+      "distance": 0,
+      "score": 207,
+      "distance_lower_bound": 0
+    },
+    "fixed": [
+      {
+        "family": [],
+        "status": "OPTIMAL",
+        "branches": 0,
+        "score": 207
+      }
+    ]
+  },
+  {
+    "pool": [
+      2,
+      6,
+      9,
+      17,
+      43,
+      66
+    ],
+    "target": 208,
+    "candidate": {
+      "status": "INFEASIBLE",
+      "branches": 0,
+      "conflicts": 0
+    },
+    "fixed": [
+      {
+        "family": [],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          2
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          3
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          2,
+          2
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          3
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          4
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          4
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          3,
+          3
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          5
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          6
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      }
+    ]
+  },
+  {
+    "pool": [
+      18,
+      30,
+      42,
+      44,
+      51,
+      62,
+      118,
+      122
+    ],
+    "target": 207,
+    "candidate": {
+      "status": "OPTIMAL",
+      "branches": 0,
+      "conflicts": 0,
+      "codes": [
+        437,
+        280,
+        118,
+        463,
+        3,
+        275,
+        282,
+        252,
+        212,
+        31,
+        385,
+        297,
+        365,
+        219,
+        165,
+        421,
+        71,
+        447,
+        346,
+        247,
+        414,
+        238,
+        342,
+        60,
+        228,
+        233,
+        188,
+        126,
+        335,
+        276,
+        131,
+        389,
+        77,
+        154,
+        429,
+        307,
+        453,
+        100,
+        262,
+        191,
+        418,
+        258,
+        97,
+        391,
+        302,
+        34,
+        82,
+        85,
+        477,
+        44,
+        198,
+        469,
+        150,
+        442,
+        23,
+        440,
+        196,
+        450,
+        143,
+        467,
+        425,
+        240,
+        123,
+        16,
+        156,
+        255,
+        245,
+        352,
+        320,
+        63,
+        90,
+        223,
+        398,
+        366,
+        47,
+        104,
+        40,
+        72,
+        114,
+        79,
+        445,
+        51,
+        113,
+        88,
+        250,
+        18,
+        107,
+        160,
+        314,
+        409,
+        68,
+        403,
+        395,
+        339,
+        138,
+        215,
+        13,
+        9,
+        329,
+        193,
+        374,
+        171,
+        305,
+        316,
+        58,
+        264,
+        348,
+        376,
+        108,
+        164,
+        411,
+        271,
+        471,
+        227,
+        93,
+        207,
+        146,
+        428,
+        267,
+        456,
+        407,
+        204,
+        218,
+        296,
+        324,
+        337,
+        311,
+        37,
+        355,
+        133,
+        321,
+        136,
+        401,
+        179,
+        331,
+        149,
+        379,
+        291,
+        29,
+        24,
+        475,
+        201,
+        357,
+        369,
+        55,
+        433,
+        2,
+        170,
+        181,
+        383,
+        285,
+        362,
+        7,
+        49,
+        288,
+        176,
+        121,
+        236,
+        459,
+        185
+      ],
+      "distance": 0,
+      "score": 207,
+      "distance_lower_bound": 0
+    },
+    "fixed": [
+      {
+        "family": [],
+        "status": "OPTIMAL",
+        "branches": 0,
+        "score": 207
+      }
+    ]
+  },
+  {
+    "pool": [
+      18,
+      30,
+      42,
+      44,
+      51,
+      62,
+      118,
+      122
+    ],
+    "target": 208,
+    "candidate": {
+      "status": "INFEASIBLE",
+      "branches": 3498,
+      "conflicts": 69
+    },
+    "fixed": [
+      {
+        "family": [],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2
+        ],
+        "status": "INFEASIBLE",
+        "branches": 3743,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          2
+        ],
+        "status": "INFEASIBLE",
+        "branches": 4243,
+        "score": null
+      },
+      {
+        "family": [
+          3
+        ],
+        "status": "INFEASIBLE",
+        "branches": 4376,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          2,
+          2
+        ],
+        "status": "INFEASIBLE",
+        "branches": 4340,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          3
+        ],
+        "status": "INFEASIBLE",
+        "branches": 4693,
+        "score": null
+      },
+      {
+        "family": [
+          4
+        ],
+        "status": "INFEASIBLE",
+        "branches": 4786,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          2,
+          3
+        ],
+        "status": "INFEASIBLE",
+        "branches": 4676,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          4
+        ],
+        "status": "INFEASIBLE",
+        "branches": 5134,
+        "score": null
+      },
+      {
+        "family": [
+          3,
+          3
+        ],
+        "status": "INFEASIBLE",
+        "branches": 4763,
+        "score": null
+      },
+      {
+        "family": [
+          5
+        ],
+        "status": "INFEASIBLE",
+        "branches": 5155,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          2,
+          4
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          3,
+          3
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          5
+        ],
+        "status": "INFEASIBLE",
+        "branches": 5284,
+        "score": null
+      },
+      {
+        "family": [
+          3,
+          4
+        ],
+        "status": "INFEASIBLE",
+        "branches": 5209,
+        "score": null
+      },
+      {
+        "family": [
+          6
+        ],
+        "status": "INFEASIBLE",
+        "branches": 5524,
+        "score": null
+      },
+      {
+        "family": [
+          2,
+          6
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          3,
+          5
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          4,
+          4
+        ],
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "score": null
+      },
+      {
+        "family": [
+          7
+        ],
+        "status": "INFEASIBLE",
+        "branches": 5672,
+        "score": null
+      }
+    ]
+  }
+]

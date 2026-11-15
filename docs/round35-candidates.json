@@ -251,7 +251,14 @@
       "source_id": 1,
       "title": "Attainable two- and three-wildcard rank blocks",
       "proposal_and_validation": "In r32_route_ranges.PrefixRanges.possible, each wildcard beyond one currently borrows all fixed-neighbor bits and every pair of wildcards is treated as adjacent. Group actual available lower cells by fixed contact mask and core membership. Test the existence of distinct pairs/triples with the requisite mutual contacts and core hits, for one common choice. Precompute bitset adjacency between classes or memoize restricted suffixes; try adaptive widths only after that screen pays. Compare support ranks eliminated before enumeration against R32's 10,381/24,576 and full physical leaves under both implementations. Exhaust small pools, arbitrary start/stop inside colex blocks, duplicate contact patterns, pinned cells and positive witnesses.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "Two/three-wildcard colex checks retain all positives; 85,186 to 85,237/196,608 ranks excluded, 28,496 to 26,116 probes. No additional support closure with four wildcards; 160-window cap increased probes to 34,979.",
+      "evidence": [
+        "docs/ROUND35_INCUMBENT_ROUTES.md",
+        "docs/R35_ROUTE_CONTACT_HELDOUT.json",
+        "docs/R35_ROUTE_CONTACTS.json",
+        "docs/R35_ROUTE_CONTACT_PAGES.json"
+      ]
     },
     {
       "id": 17,
@@ -259,7 +266,12 @@
       "source_id": 2,
       "title": "Regional budget join dominance",
       "proposal_and_validation": "In r34_component_budget.ComponentBudget.upper, for the same occupied donor mask, discard rows no better in gain, swap cost and minimum movers settled. Keep A over B only when A.cost<=B.cost, A.gain>=B.gain and A.movers>=B.movers for this at-most-swap, at-least-movers query. Compare lower-cardinality joins first, meet-in-the-middle on higher costs and reuse partial joins across compatible budgets. R34 measured 67,414 cheap joins in a reported comparison; cached exact results for the same budget already exist. Check compatible pool and cap, prefix states/joins/memory and complete bounds against permutation enumeration; protect mismatched mover directions.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "Across 36 pools times four requests: 363,577 joins to 187,550 via same-mask dominance or 79,081 with a small-first complementary-mask reusable front. All 144 ceilings agree.",
+      "evidence": [
+        "docs/ROUND35_INCUMBENT_ROUTES.md",
+        "docs/R35_ROUTE_BUDGETS.json"
+      ]
     },
     {
       "id": 18,
@@ -267,10 +279,15 @@
       "source_id": 3,
       "title": "Account for actual donor chains at geographic cuts",
       "proposal_and_validation": "ComponentBudget._responses currently aggregates crossing count, not open chain endpoints or cycle lengths. Carry endpoint connectivity at small boundaries, stitch donor chains to charge actual cycle budget/family, then condition an articulation/small separator of a connected interaction component that currently returns only the coarse bound. Record incremental closures at each stage and cap/saturation counts. Have an admissible relaxation or return the previous cap above width budget. Compare exhaustive crossing cycles, legal donor restrictions, hidden shared rotations and planted positive pools. R34 summed bounds over disjoint stars, it did not condition connected separators.",
-      "state": "open",
+      "state": "keep with exact scope",
       "decision_changing_followups": [
         "Use the R30 donor-path decision diagram as an oracle for endpoints and cycle lengths; benchmark transfer to geographic joins only on scopes not already cheaply closed.",
         "R30 had fully certified 682/685/684 of the 710 near-pair anchors across three centers. Use the actual unclosed anchors as held-outs for new separator tests; keep closed anchors as existing proof."
+      ],
+      "decision": "49 tighter ceilings in 108 original pools/families. All 18 completed connected-separator scopes drop through 208. Budget or width saturation preserves the coarse proof.",
+      "evidence": [
+        "docs/ROUND35_INCUMBENT_ROUTES.md",
+        "docs/R35_ROUTE_CHAINS.json"
       ]
     },
     {
@@ -279,7 +296,13 @@
       "source_id": 4,
       "title": "Certified predecessor splits for distance five",
       "proposal_and_validation": "r30_multicenter.make_undo uses r34_exchange_undo.CoveredUndo on proper subsets of whole cycles. A single 6-cycle had zero such opportunities in 250 sampled endpoints. R30 Predecessors.consistent_splits and R31 six-cell comparisons already tried splits on specific four-swap families. Apply/transport certified single-cycle vertex removal and within-cycle split, or mixed-cycle partial shortcut, to the actual five-swap runner. Bind each transformed predecessor to the corresponding owner/family/rank or released closed shell. If a certified numeric predecessor ceiling U exists, allow U+G<target even with positive differential ceiling G. A recorded best witness alone is a lower bound; below-target page evidence generally supplies only its certified threshold minus one. Count incremental first rejects over R34's 341/54,152 scoped first cuts, including the single-cycle class and an uncovered predecessor. Independent rotation optima with moved exterior donors, strict equality and positive controls.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "Five-swap certified single-cycle splitting excludes 245/250 original six-cycles vs 0, and moves 113/120 late endpoint checks to verified predecessor exclusions in a complete ranked page.",
+      "evidence": [
+        "docs/ROUND35_INCUMBENT_ROUTES.md",
+        "docs/R35_ROUTE_SPLITS.json",
+        "docs/R35_ROUTE_PAGES.json"
+      ]
     },
     {
       "id": 20,
@@ -287,7 +310,13 @@
       "source_id": 5,
       "title": "Width-bounded differential price above the 12-cell table cap",
       "proposal_and_validation": "CoveredUndo compares old/new nearby arrangements under the same exterior rotation. R34 handles 4- and 5-cell connected interiors where the combined interior/exterior fits 12 cells. Try factor elimination over the joint boundary or branch on a small separator instead of counting all boundary tuples when the cap is exceeded. Must upper-bound max over boundary b of (new optimum given b minus old optimum given b); independently maximizing before and after then subtracting can be unsound. Test exact boundary tables, a counterexample with different maximizing old/new boundary, and real previously skipped supports. Count new first exclusions and factor work, with budget failure returning unknown.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "131/142 previously oversized regions yield exact conditioned prices; 130 nonpositive. On 96 actual five-swap merged-cycle endpoints exclusions increase 78 to 94 with the full verified predecessor set or 6 to 91 with a single verified owner.",
+      "evidence": [
+        "docs/ROUND35_INCUMBENT_ROUTES.md",
+        "docs/R35_ROUTE_SPLITS.json",
+        "docs/R35_ROUTE_WIDE.json"
+      ]
     },
     {
       "id": 21,
@@ -295,9 +324,15 @@
       "source_id": 6,
       "title": "Derived contact-graph alternatives for higher shells",
       "proposal_and_validation": "r30_cycles.certified_contacts, r31_route_geometry.proved_connected and PrefixRanges today have proved connectivity for the relevant four-swap families only. For each five-swap family and then larger ones, bound gains for partitions of its contact graph using checked predecessors and numeric component bounds. Permit unions of feasible shapes, including disconnected pairs of profitable components; prune only when all compatible shapes are excluded by verified inequalities. Propagate allowed graph shapes down to attachment/rank intervals if opportunity exists. Compare pruned interval lengths/endpoint prices beyond existing affordable tests. Check every shape and witness on small domains, then report real verified assumptions per center/family.",
-      "state": "open",
+      "state": "keep with exact scope",
       "decision_changing_followups": [
         "Evaluate family-contact deductions on the authentic remaining hard near-pair anchors in R30_BOUNDS_ALL_SIZES.json. Distinguish bounded donor tests from arbitrary numbers of isolated movers."
+      ],
+      "decision": "Optional late physical contact shapes on 54,152 original ranked endpoints: 8 regional prices for 12 earlier exclusions (8 endpoint prices and 4 predecessor calls avoided). Early use spends 4,638 prices for the same ultimate survivors. Disconnected positive components remain allowed.",
+      "evidence": [
+        "docs/ROUND35_INCUMBENT_ROUTES.md",
+        "docs/R35_ROUTE_SHAPES.json",
+        "docs/R35_ROUTE_SHAPE_PAGES.json"
       ]
     },
     {
@@ -306,7 +341,14 @@
       "source_id": 7,
       "title": "Minimum-transposition optimization beyond a fixed shell",
       "proposal_and_validation": "The family index in r34_cycle_orders and the fixed-family/short-distance CP experiments already address ranks up to five swaps. Test an exact or bounded improvement decision using cycle count relative to the incumbent permutation (distance equals n minus cycles including fixed points) directly alongside the score threshold on confined pools. Preserve free rotations. Use independently certified minimum distance/relaxation bounds before generating further shells; six swaps covers up to twelve movers and each family obeys sum(length-1)=6. The existing r29_exchange_route generic distance enumerator is a control. Compare solver branches, proven distance lower bounds and earliest verified physical route vs family-by-family enumeration. Exhaust tiny planted displacements, exact vs at-most distance, disconnected supports and a case where the shortest route drops score temporarily. A timeout settles no shell.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "All exact distance<=6 on a nontrivial eight-cell 208 residual: 3,498 native branches vs 67,598 across all 21 closed fixed-family queries. Verified a shortest three-swap improvement behind a strict downhill step and a planted twelve-mover distance six.",
+      "evidence": [
+        "docs/ROUND35_INCUMBENT_ROUTES.md",
+        "docs/R35_ROUTE_DISTANCE.json",
+        "docs/R35_DOWNHILL_ROUTE.json",
+        "docs/R35_TWELVE_MOVER_ROUTE.json"
+      ]
     },
     {
       "id": 23,
@@ -314,7 +356,13 @@
       "source_id": 8,
       "title": "Remote-donor exchanges selected by actual boundary demand",
       "proposal_and_validation": "r31_fresh.forest_pool, joint_repair and the ranked finite-pool runner assume the chosen pool supplies all its own pieces. Select promising geographically distant donors whose legal orientations fit a defect neighborhood, include named return paths/targets to preserve the bijection, adapt import/export count to measured gain and combine with seven/eight-mover repair. Distinct from an optimistic satellite/donor bound and from drawing a geographically unrelated random pool. Compare same-size forest/random/response-guided pools, exact verified assignments, steps to gain and unique donors touched. Test a control whose only improvement imports a distant tile, and one with no return path; restricting an optional pool proves nothing about other boards.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "Optional --remote-imports 2: total 962 vs 941 across six 12-round original fresh trajectories; three imports gave 950 with 293,122 vs 318,547 native repair branches. All 18 warm reopens added zero repair rounds. No 208 on incumbent.",
+      "evidence": [
+        "docs/ROUND35_INCUMBENT_ROUTES.md",
+        "docs/R35_ROUTE_DONOR.json",
+        "docs/R35_REMOTE_TRAJECTORIES.json"
+      ]
     },
     {
       "id": 24,
@@ -1142,10 +1190,16 @@
       "source_id": "R32 #26 closure",
       "title": "Resolve the six reciprocal seam-slot projections on the 24-free incumbent residual",
       "proposal_and_validation": "The 207 and 208 controls timed out under tiny budgets while even the simpler 240 control closed. Compare no, one and six layers with geographic equations off/on against exact band/direct controls, including smaller held-outs and up to an hour on decision-relevant cases. Count independently verified additional negatives or saved ground search, all projection costs and materialized witnesses. If only inconclusive projected hits or dominated work persist, close the solver adoption question as rejected for this scope.",
-      "state": "open",
+      "state": "rejected for current solver workload",
       "decision_changing_followups": [
         "Use predeclared, unselected cases reaching the bound stage. Check whether landmark/seam XORs are already implied by the edge model. Report certified additional closures and proof cost separately for ordinary 208 and single-loop Gold, including #6/#12 if signed circuits apply."
-      ]
+      ],
+      "decision": "All four projected models completed on the original 24-free scope at 207 and 208 and returned inadequate physical scores; at 208 170 to 199 vs exact negative in 2,221 SAT decisions. Six- and eight-free held-outs and the 240 presolve add no negative.",
+      "evidence": [
+        "docs/ROUND35_INCUMBENT_ROUTES.md",
+        "docs/R35_ROUTE_LAYERS.json"
+      ],
+      "reopen_if": "A new sound projection closes a nontrivial physical target which the direct or existing band model cannot decide at comparable work."
     }
   ],
   "priorities": [

@@ -1,0 +1,12002 @@
+[
+  {
+    "pool": [
+      88,
+      157,
+      39,
+      94,
+      97,
+      144,
+      65,
+      93
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 199,
+      "complete": true,
+      "groups": 6,
+      "coarse": 210,
+      "min_moved": 7,
+      "work": {
+        "priced": 376,
+        "joins": 2156,
+        "reused": 0,
+        "dominated": 275
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 11293
+      },
+      "separator": [],
+      "parts": [
+        [
+          39
+        ],
+        [
+          65
+        ],
+        [
+          97
+        ],
+        [
+          144
+        ],
+        [
+          157
+        ],
+        [
+          88,
+          93,
+          94
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 11293
+      },
+      "separator": [],
+      "parts": [
+        [
+          39
+        ],
+        [
+          65
+        ],
+        [
+          97
+        ],
+        [
+          144
+        ],
+        [
+          157
+        ],
+        [
+          88,
+          93,
+          94
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      88,
+      157,
+      39,
+      94,
+      97,
+      144,
+      65,
+      93
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 197,
+      "complete": true,
+      "groups": 6,
+      "coarse": 210,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2156,
+        "reused": 173,
+        "dominated": 275
+      }
+    },
+    "plain": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 3340
+      },
+      "separator": [],
+      "parts": [
+        [
+          39
+        ],
+        [
+          65
+        ],
+        [
+          97
+        ],
+        [
+          144
+        ],
+        [
+          157
+        ],
+        [
+          88,
+          93,
+          94
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 3340
+      },
+      "separator": [],
+      "parts": [
+        [
+          39
+        ],
+        [
+          65
+        ],
+        [
+          97
+        ],
+        [
+          144
+        ],
+        [
+          157
+        ],
+        [
+          88,
+          93,
+          94
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      88,
+      157,
+      39,
+      94,
+      97,
+      144,
+      65,
+      93
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 201,
+      "complete": true,
+      "groups": 6,
+      "coarse": 210,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2146,
+        "reused": 173,
+        "dominated": 276
+      }
+    },
+    "plain": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 12870
+      },
+      "separator": [],
+      "parts": [
+        [
+          39
+        ],
+        [
+          65
+        ],
+        [
+          97
+        ],
+        [
+          144
+        ],
+        [
+          157
+        ],
+        [
+          88,
+          93,
+          94
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 12870
+      },
+      "separator": [],
+      "parts": [
+        [
+          39
+        ],
+        [
+          65
+        ],
+        [
+          97
+        ],
+        [
+          144
+        ],
+        [
+          157
+        ],
+        [
+          88,
+          93,
+          94
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      80,
+      103,
+      53,
+      28,
+      5,
+      24,
+      95,
+      51
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 197,
+      "complete": true,
+      "groups": 4,
+      "coarse": 210,
+      "min_moved": 7,
+      "work": {
+        "priced": 1752,
+        "joins": 2098,
+        "reused": 0,
+        "dominated": 218
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 4,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1752,
+        "joins": 15552
+      },
+      "separator": [],
+      "parts": [
+        [
+          80
+        ],
+        [
+          103
+        ],
+        [
+          51,
+          53
+        ],
+        [
+          5,
+          24,
+          28,
+          95
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 4,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1752,
+        "joins": 15552
+      },
+      "separator": [],
+      "parts": [
+        [
+          80
+        ],
+        [
+          103
+        ],
+        [
+          51,
+          53
+        ],
+        [
+          5,
+          24,
+          28,
+          95
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      80,
+      103,
+      53,
+      28,
+      5,
+      24,
+      95,
+      51
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 195,
+      "complete": true,
+      "groups": 4,
+      "coarse": 210,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2098,
+        "reused": 335,
+        "dominated": 218
+      }
+    },
+    "plain": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 4,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1752,
+        "joins": 2909
+      },
+      "separator": [],
+      "parts": [
+        [
+          80
+        ],
+        [
+          103
+        ],
+        [
+          51,
+          53
+        ],
+        [
+          5,
+          24,
+          28,
+          95
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 4,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1752,
+        "joins": 2909
+      },
+      "separator": [],
+      "parts": [
+        [
+          80
+        ],
+        [
+          103
+        ],
+        [
+          51,
+          53
+        ],
+        [
+          5,
+          24,
+          28,
+          95
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      80,
+      103,
+      53,
+      28,
+      5,
+      24,
+      95,
+      51
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 199,
+      "complete": true,
+      "groups": 4,
+      "coarse": 210,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2086,
+        "reused": 335,
+        "dominated": 260
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 4,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1752,
+        "joins": 16918
+      },
+      "separator": [],
+      "parts": [
+        [
+          80
+        ],
+        [
+          103
+        ],
+        [
+          51,
+          53
+        ],
+        [
+          5,
+          24,
+          28,
+          95
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 4,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1752,
+        "joins": 16918
+      },
+      "separator": [],
+      "parts": [
+        [
+          80
+        ],
+        [
+          103
+        ],
+        [
+          51,
+          53
+        ],
+        [
+          5,
+          24,
+          28,
+          95
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      68,
+      45,
+      81,
+      154,
+      33,
+      139,
+      79,
+      21
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 196,
+      "complete": true,
+      "groups": 8,
+      "coarse": 210,
+      "min_moved": 7,
+      "work": {
+        "priced": 64,
+        "joins": 2788,
+        "reused": 0,
+        "dominated": 1
+      }
+    },
+    "plain": {
+      "upper": 196,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 8,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 9277
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          33
+        ],
+        [
+          45
+        ],
+        [
+          68
+        ],
+        [
+          79
+        ],
+        [
+          81
+        ],
+        [
+          139
+        ],
+        [
+          154
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 196,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 8,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 9277
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          33
+        ],
+        [
+          45
+        ],
+        [
+          68
+        ],
+        [
+          79
+        ],
+        [
+          81
+        ],
+        [
+          139
+        ],
+        [
+          154
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      68,
+      45,
+      81,
+      154,
+      33,
+      139,
+      79,
+      21
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 193,
+      "complete": true,
+      "groups": 8,
+      "coarse": 210,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2788,
+        "reused": 64,
+        "dominated": 0
+      }
+    },
+    "plain": {
+      "upper": 193,
+      "complete": true,
+      "coarse": {
+        "upper": 193,
+        "complete": true,
+        "groups": 8,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 3440
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          33
+        ],
+        [
+          45
+        ],
+        [
+          68
+        ],
+        [
+          79
+        ],
+        [
+          81
+        ],
+        [
+          139
+        ],
+        [
+          154
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 193,
+      "complete": true,
+      "coarse": {
+        "upper": 193,
+        "complete": true,
+        "groups": 8,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 3440
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          33
+        ],
+        [
+          45
+        ],
+        [
+          68
+        ],
+        [
+          79
+        ],
+        [
+          81
+        ],
+        [
+          139
+        ],
+        [
+          154
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      68,
+      45,
+      81,
+      154,
+      33,
+      139,
+      79,
+      21
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 8,
+      "coarse": 210,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2780,
+        "reused": 64,
+        "dominated": 9
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 8,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 10333
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          33
+        ],
+        [
+          45
+        ],
+        [
+          68
+        ],
+        [
+          79
+        ],
+        [
+          81
+        ],
+        [
+          139
+        ],
+        [
+          154
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 8,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 10333
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          33
+        ],
+        [
+          45
+        ],
+        [
+          68
+        ],
+        [
+          79
+        ],
+        [
+          81
+        ],
+        [
+          139
+        ],
+        [
+          154
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      84,
+      46,
+      91,
+      121,
+      83,
+      152,
+      153,
+      126
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 3,
+      "coarse": 209,
+      "min_moved": 7,
+      "work": {
+        "priced": 6784,
+        "joins": 406,
+        "reused": 0,
+        "dominated": 177
+      }
+    },
+    "plain": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 3,
+        "coarse": 209,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 6784,
+        "joins": 6389
+      },
+      "separator": [],
+      "parts": [
+        [
+          46
+        ],
+        [
+          121,
+          126
+        ],
+        [
+          83,
+          84,
+          91,
+          152,
+          153
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 3,
+        "coarse": 209,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 6784,
+        "joins": 6389
+      },
+      "separator": [],
+      "parts": [
+        [
+          46
+        ],
+        [
+          121,
+          126
+        ],
+        [
+          83,
+          84,
+          91,
+          152,
+          153
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      84,
+      46,
+      91,
+      121,
+      83,
+      152,
+      153,
+      126
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 196,
+      "complete": true,
+      "groups": 3,
+      "coarse": 209,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 406,
+        "reused": 411,
+        "dominated": 177
+      }
+    },
+    "plain": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 3,
+        "coarse": 209,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 6784,
+        "joins": 1328
+      },
+      "separator": [],
+      "parts": [
+        [
+          46
+        ],
+        [
+          121,
+          126
+        ],
+        [
+          83,
+          84,
+          91,
+          152,
+          153
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 3,
+        "coarse": 209,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 6784,
+        "joins": 1328
+      },
+      "separator": [],
+      "parts": [
+        [
+          46
+        ],
+        [
+          121,
+          126
+        ],
+        [
+          83,
+          84,
+          91,
+          152,
+          153
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      84,
+      46,
+      91,
+      121,
+      83,
+      152,
+      153,
+      126
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 200,
+      "complete": true,
+      "groups": 3,
+      "coarse": 209,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 415,
+        "reused": 411,
+        "dominated": 225
+      }
+    },
+    "plain": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 3,
+        "coarse": 209,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 6784,
+        "joins": 7764
+      },
+      "separator": [],
+      "parts": [
+        [
+          46
+        ],
+        [
+          121,
+          126
+        ],
+        [
+          83,
+          84,
+          91,
+          152,
+          153
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 3,
+        "coarse": 209,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 6784,
+        "joins": 7764
+      },
+      "separator": [],
+      "parts": [
+        [
+          46
+        ],
+        [
+          121,
+          126
+        ],
+        [
+          83,
+          84,
+          91,
+          152,
+          153
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      46,
+      77,
+      21,
+      144,
+      116,
+      65,
+      23,
+      8
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 195,
+      "complete": true,
+      "groups": 8,
+      "coarse": 209,
+      "min_moved": 7,
+      "work": {
+        "priced": 64,
+        "joins": 2788,
+        "reused": 0,
+        "dominated": 1
+      }
+    },
+    "plain": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 8,
+        "coarse": 209,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 9277
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          21
+        ],
+        [
+          23
+        ],
+        [
+          46
+        ],
+        [
+          65
+        ],
+        [
+          77
+        ],
+        [
+          116
+        ],
+        [
+          144
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 8,
+        "coarse": 209,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 9277
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          21
+        ],
+        [
+          23
+        ],
+        [
+          46
+        ],
+        [
+          65
+        ],
+        [
+          77
+        ],
+        [
+          116
+        ],
+        [
+          144
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      46,
+      77,
+      21,
+      144,
+      116,
+      65,
+      23,
+      8
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 193,
+      "complete": true,
+      "groups": 8,
+      "coarse": 209,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2788,
+        "reused": 64,
+        "dominated": 0
+      }
+    },
+    "plain": {
+      "upper": 192,
+      "complete": true,
+      "coarse": {
+        "upper": 193,
+        "complete": true,
+        "groups": 8,
+        "coarse": 209,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 3440
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          21
+        ],
+        [
+          23
+        ],
+        [
+          46
+        ],
+        [
+          65
+        ],
+        [
+          77
+        ],
+        [
+          116
+        ],
+        [
+          144
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 192,
+      "complete": true,
+      "coarse": {
+        "upper": 193,
+        "complete": true,
+        "groups": 8,
+        "coarse": 209,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 3440
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          21
+        ],
+        [
+          23
+        ],
+        [
+          46
+        ],
+        [
+          65
+        ],
+        [
+          77
+        ],
+        [
+          116
+        ],
+        [
+          144
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      46,
+      77,
+      21,
+      144,
+      116,
+      65,
+      23,
+      8
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 197,
+      "complete": true,
+      "groups": 8,
+      "coarse": 209,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2780,
+        "reused": 64,
+        "dominated": 9
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 8,
+        "coarse": 209,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 10333
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          21
+        ],
+        [
+          23
+        ],
+        [
+          46
+        ],
+        [
+          65
+        ],
+        [
+          77
+        ],
+        [
+          116
+        ],
+        [
+          144
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 8,
+        "coarse": 209,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 10333
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          21
+        ],
+        [
+          23
+        ],
+        [
+          46
+        ],
+        [
+          65
+        ],
+        [
+          77
+        ],
+        [
+          116
+        ],
+        [
+          144
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      148,
+      11,
+      129,
+      44,
+      22,
+      63,
+      43,
+      14
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 197,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 7,
+      "work": {
+        "priced": 104,
+        "joins": 3173,
+        "reused": 0,
+        "dominated": 158
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          43
+        ],
+        [
+          44
+        ],
+        [
+          63
+        ],
+        [
+          129
+        ],
+        [
+          148
+        ],
+        [
+          11,
+          14
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          43
+        ],
+        [
+          44
+        ],
+        [
+          63
+        ],
+        [
+          129
+        ],
+        [
+          148
+        ],
+        [
+          11,
+          14
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      148,
+      11,
+      129,
+      44,
+      22,
+      63,
+      43,
+      14
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 194,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 3173,
+        "reused": 89,
+        "dominated": 158
+      }
+    },
+    "plain": {
+      "upper": 193,
+      "complete": true,
+      "coarse": {
+        "upper": 194,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          43
+        ],
+        [
+          44
+        ],
+        [
+          63
+        ],
+        [
+          129
+        ],
+        [
+          148
+        ],
+        [
+          11,
+          14
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 193,
+      "complete": true,
+      "coarse": {
+        "upper": 194,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          43
+        ],
+        [
+          44
+        ],
+        [
+          63
+        ],
+        [
+          129
+        ],
+        [
+          148
+        ],
+        [
+          11,
+          14
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      148,
+      11,
+      129,
+      44,
+      22,
+      63,
+      43,
+      14
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 199,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 3162,
+        "reused": 89,
+        "dominated": 164
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          43
+        ],
+        [
+          44
+        ],
+        [
+          63
+        ],
+        [
+          129
+        ],
+        [
+          148
+        ],
+        [
+          11,
+          14
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          43
+        ],
+        [
+          44
+        ],
+        [
+          63
+        ],
+        [
+          129
+        ],
+        [
+          148
+        ],
+        [
+          11,
+          14
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      22,
+      86,
+      38,
+      35,
+      138,
+      144,
+      46,
+      51
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 197,
+      "complete": true,
+      "groups": 8,
+      "coarse": 209,
+      "min_moved": 7,
+      "work": {
+        "priced": 64,
+        "joins": 2788,
+        "reused": 0,
+        "dominated": 1
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 8,
+        "coarse": 209,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 9277
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          35
+        ],
+        [
+          38
+        ],
+        [
+          46
+        ],
+        [
+          51
+        ],
+        [
+          86
+        ],
+        [
+          138
+        ],
+        [
+          144
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 8,
+        "coarse": 209,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 9277
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          35
+        ],
+        [
+          38
+        ],
+        [
+          46
+        ],
+        [
+          51
+        ],
+        [
+          86
+        ],
+        [
+          138
+        ],
+        [
+          144
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      22,
+      86,
+      38,
+      35,
+      138,
+      144,
+      46,
+      51
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 195,
+      "complete": true,
+      "groups": 8,
+      "coarse": 209,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2788,
+        "reused": 64,
+        "dominated": 0
+      }
+    },
+    "plain": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 8,
+        "coarse": 209,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 3440
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          35
+        ],
+        [
+          38
+        ],
+        [
+          46
+        ],
+        [
+          51
+        ],
+        [
+          86
+        ],
+        [
+          138
+        ],
+        [
+          144
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 8,
+        "coarse": 209,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 3440
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          35
+        ],
+        [
+          38
+        ],
+        [
+          46
+        ],
+        [
+          51
+        ],
+        [
+          86
+        ],
+        [
+          138
+        ],
+        [
+          144
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      22,
+      86,
+      38,
+      35,
+      138,
+      144,
+      46,
+      51
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 199,
+      "complete": true,
+      "groups": 8,
+      "coarse": 209,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2780,
+        "reused": 64,
+        "dominated": 9
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 8,
+        "coarse": 209,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 10333
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          35
+        ],
+        [
+          38
+        ],
+        [
+          46
+        ],
+        [
+          51
+        ],
+        [
+          86
+        ],
+        [
+          138
+        ],
+        [
+          144
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 8,
+        "coarse": 209,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 10333
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          35
+        ],
+        [
+          38
+        ],
+        [
+          46
+        ],
+        [
+          51
+        ],
+        [
+          86
+        ],
+        [
+          138
+        ],
+        [
+          144
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      109,
+      130,
+      10,
+      148,
+      37,
+      31,
+      82,
+      6
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 7,
+      "work": {
+        "priced": 104,
+        "joins": 3222,
+        "reused": 0,
+        "dominated": 199
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          10
+        ],
+        [
+          37
+        ],
+        [
+          82
+        ],
+        [
+          109
+        ],
+        [
+          130
+        ],
+        [
+          148
+        ],
+        [
+          6,
+          31
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          10
+        ],
+        [
+          37
+        ],
+        [
+          82
+        ],
+        [
+          109
+        ],
+        [
+          130
+        ],
+        [
+          148
+        ],
+        [
+          6,
+          31
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      109,
+      130,
+      10,
+      148,
+      37,
+      31,
+      82,
+      6
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 195,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 3222,
+        "reused": 89,
+        "dominated": 198
+      }
+    },
+    "plain": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          10
+        ],
+        [
+          37
+        ],
+        [
+          82
+        ],
+        [
+          109
+        ],
+        [
+          130
+        ],
+        [
+          148
+        ],
+        [
+          6,
+          31
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          10
+        ],
+        [
+          37
+        ],
+        [
+          82
+        ],
+        [
+          109
+        ],
+        [
+          130
+        ],
+        [
+          148
+        ],
+        [
+          6,
+          31
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      109,
+      130,
+      10,
+      148,
+      37,
+      31,
+      82,
+      6
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 200,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 3214,
+        "reused": 89,
+        "dominated": 202
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          10
+        ],
+        [
+          37
+        ],
+        [
+          82
+        ],
+        [
+          109
+        ],
+        [
+          130
+        ],
+        [
+          148
+        ],
+        [
+          6,
+          31
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          10
+        ],
+        [
+          37
+        ],
+        [
+          82
+        ],
+        [
+          109
+        ],
+        [
+          130
+        ],
+        [
+          148
+        ],
+        [
+          6,
+          31
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      7,
+      39,
+      72,
+      149,
+      109,
+      154,
+      0,
+      111
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 5,
+      "coarse": 210,
+      "min_moved": 7,
+      "work": {
+        "priced": 184,
+        "joins": 2414,
+        "reused": 0,
+        "dominated": 186
+      }
+    },
+    "plain": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 5,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 184,
+        "joins": 12770
+      },
+      "separator": [],
+      "parts": [
+        [
+          39
+        ],
+        [
+          72
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          109,
+          111
+        ],
+        [
+          149,
+          154
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 5,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 184,
+        "joins": 12770
+      },
+      "separator": [],
+      "parts": [
+        [
+          39
+        ],
+        [
+          72
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          109,
+          111
+        ],
+        [
+          149,
+          154
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      7,
+      39,
+      72,
+      149,
+      109,
+      154,
+      0,
+      111
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 195,
+      "complete": true,
+      "groups": 5,
+      "coarse": 210,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2414,
+        "reused": 139,
+        "dominated": 186
+      }
+    },
+    "plain": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 5,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 184,
+        "joins": 4268
+      },
+      "separator": [],
+      "parts": [
+        [
+          39
+        ],
+        [
+          72
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          109,
+          111
+        ],
+        [
+          149,
+          154
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 5,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 184,
+        "joins": 4268
+      },
+      "separator": [],
+      "parts": [
+        [
+          39
+        ],
+        [
+          72
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          109,
+          111
+        ],
+        [
+          149,
+          154
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      7,
+      39,
+      72,
+      149,
+      109,
+      154,
+      0,
+      111
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 200,
+      "complete": true,
+      "groups": 5,
+      "coarse": 210,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2414,
+        "reused": 139,
+        "dominated": 186
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 5,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 184,
+        "joins": 13462
+      },
+      "separator": [],
+      "parts": [
+        [
+          39
+        ],
+        [
+          72
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          109,
+          111
+        ],
+        [
+          149,
+          154
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 5,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 184,
+        "joins": 13462
+      },
+      "separator": [],
+      "parts": [
+        [
+          39
+        ],
+        [
+          72
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          109,
+          111
+        ],
+        [
+          149,
+          154
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      80,
+      28,
+      88,
+      81,
+      96,
+      33,
+      102,
+      70
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 5,
+      "coarse": 209,
+      "min_moved": 7,
+      "work": {
+        "priced": 1712,
+        "joins": 983,
+        "reused": 0,
+        "dominated": 64
+      }
+    },
+    "plain": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 5,
+        "coarse": 209,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1712,
+        "joins": 15648
+      },
+      "separator": [],
+      "parts": [
+        [
+          28
+        ],
+        [
+          33
+        ],
+        [
+          70
+        ],
+        [
+          102
+        ],
+        [
+          80,
+          81,
+          88,
+          96
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 5,
+        "coarse": 209,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1712,
+        "joins": 15648
+      },
+      "separator": [],
+      "parts": [
+        [
+          28
+        ],
+        [
+          33
+        ],
+        [
+          70
+        ],
+        [
+          102
+        ],
+        [
+          80,
+          81,
+          88,
+          96
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      80,
+      28,
+      88,
+      81,
+      96,
+      33,
+      102,
+      70
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 196,
+      "complete": true,
+      "groups": 5,
+      "coarse": 209,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 983,
+        "reused": 310,
+        "dominated": 64
+      }
+    },
+    "plain": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 5,
+        "coarse": 209,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1712,
+        "joins": 2889
+      },
+      "separator": [],
+      "parts": [
+        [
+          28
+        ],
+        [
+          33
+        ],
+        [
+          70
+        ],
+        [
+          102
+        ],
+        [
+          80,
+          81,
+          88,
+          96
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 5,
+        "coarse": 209,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1712,
+        "joins": 2889
+      },
+      "separator": [],
+      "parts": [
+        [
+          28
+        ],
+        [
+          33
+        ],
+        [
+          70
+        ],
+        [
+          102
+        ],
+        [
+          80,
+          81,
+          88,
+          96
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      80,
+      28,
+      88,
+      81,
+      96,
+      33,
+      102,
+      70
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 201,
+      "complete": true,
+      "groups": 5,
+      "coarse": 209,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 976,
+        "reused": 310,
+        "dominated": 71
+      }
+    },
+    "plain": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 5,
+        "coarse": 209,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1712,
+        "joins": 17057
+      },
+      "separator": [],
+      "parts": [
+        [
+          28
+        ],
+        [
+          33
+        ],
+        [
+          70
+        ],
+        [
+          102
+        ],
+        [
+          80,
+          81,
+          88,
+          96
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 5,
+        "coarse": 209,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1712,
+        "joins": 17057
+      },
+      "separator": [],
+      "parts": [
+        [
+          28
+        ],
+        [
+          33
+        ],
+        [
+          70
+        ],
+        [
+          102
+        ],
+        [
+          80,
+          81,
+          88,
+          96
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      131,
+      87,
+      98,
+      54,
+      103,
+      90,
+      44,
+      94
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 200,
+      "complete": true,
+      "groups": 5,
+      "coarse": 214,
+      "min_moved": 7,
+      "work": {
+        "priced": 416,
+        "joins": 1899,
+        "reused": 0,
+        "dominated": 209
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 5,
+        "coarse": 214,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 416,
+        "joins": 12205
+      },
+      "separator": [],
+      "parts": [
+        [
+          44
+        ],
+        [
+          54
+        ],
+        [
+          131
+        ],
+        [
+          90,
+          94
+        ],
+        [
+          87,
+          98,
+          103
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 5,
+        "coarse": 214,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 416,
+        "joins": 12205
+      },
+      "separator": [],
+      "parts": [
+        [
+          44
+        ],
+        [
+          54
+        ],
+        [
+          131
+        ],
+        [
+          90,
+          94
+        ],
+        [
+          87,
+          98,
+          103
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      131,
+      87,
+      98,
+      54,
+      103,
+      90,
+      44,
+      94
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 199,
+      "complete": true,
+      "groups": 5,
+      "coarse": 214,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 1899,
+        "reused": 198,
+        "dominated": 209
+      }
+    },
+    "plain": {
+      "upper": 196,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 5,
+        "coarse": 214,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 416,
+        "joins": 3824
+      },
+      "separator": [],
+      "parts": [
+        [
+          44
+        ],
+        [
+          54
+        ],
+        [
+          131
+        ],
+        [
+          90,
+          94
+        ],
+        [
+          87,
+          98,
+          103
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 196,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 5,
+        "coarse": 214,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 416,
+        "joins": 3824
+      },
+      "separator": [],
+      "parts": [
+        [
+          44
+        ],
+        [
+          54
+        ],
+        [
+          131
+        ],
+        [
+          90,
+          94
+        ],
+        [
+          87,
+          98,
+          103
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      131,
+      87,
+      98,
+      54,
+      103,
+      90,
+      44,
+      94
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 201,
+      "complete": true,
+      "groups": 5,
+      "coarse": 214,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 1889,
+        "reused": 198,
+        "dominated": 218
+      }
+    },
+    "plain": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 5,
+        "coarse": 214,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 416,
+        "joins": 13452
+      },
+      "separator": [],
+      "parts": [
+        [
+          44
+        ],
+        [
+          54
+        ],
+        [
+          131
+        ],
+        [
+          90,
+          94
+        ],
+        [
+          87,
+          98,
+          103
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 5,
+        "coarse": 214,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 416,
+        "joins": 13452
+      },
+      "separator": [],
+      "parts": [
+        [
+          44
+        ],
+        [
+          54
+        ],
+        [
+          131
+        ],
+        [
+          90,
+          94
+        ],
+        [
+          87,
+          98,
+          103
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      130,
+      22,
+      126,
+      10,
+      49,
+      9,
+      106,
+      136
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 7,
+      "work": {
+        "priced": 104,
+        "joins": 3231,
+        "reused": 0,
+        "dominated": 147
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          49
+        ],
+        [
+          106
+        ],
+        [
+          126
+        ],
+        [
+          130
+        ],
+        [
+          136
+        ],
+        [
+          9,
+          10
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          49
+        ],
+        [
+          106
+        ],
+        [
+          126
+        ],
+        [
+          130
+        ],
+        [
+          136
+        ],
+        [
+          9,
+          10
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      130,
+      22,
+      126,
+      10,
+      49,
+      9,
+      106,
+      136
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 195,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 3231,
+        "reused": 89,
+        "dominated": 147
+      }
+    },
+    "plain": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          49
+        ],
+        [
+          106
+        ],
+        [
+          126
+        ],
+        [
+          130
+        ],
+        [
+          136
+        ],
+        [
+          9,
+          10
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          49
+        ],
+        [
+          106
+        ],
+        [
+          126
+        ],
+        [
+          130
+        ],
+        [
+          136
+        ],
+        [
+          9,
+          10
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      130,
+      22,
+      126,
+      10,
+      49,
+      9,
+      106,
+      136
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 200,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 3220,
+        "reused": 89,
+        "dominated": 151
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          49
+        ],
+        [
+          106
+        ],
+        [
+          126
+        ],
+        [
+          130
+        ],
+        [
+          136
+        ],
+        [
+          9,
+          10
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          22
+        ],
+        [
+          49
+        ],
+        [
+          106
+        ],
+        [
+          126
+        ],
+        [
+          130
+        ],
+        [
+          136
+        ],
+        [
+          9,
+          10
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      8,
+      151,
+      17,
+      86,
+      27,
+      56,
+      137,
+      61
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 7,
+      "coarse": 212,
+      "min_moved": 7,
+      "work": {
+        "priced": 104,
+        "joins": 2866,
+        "reused": 0,
+        "dominated": 133
+      }
+    },
+    "plain": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 7,
+        "coarse": 212,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          17
+        ],
+        [
+          27
+        ],
+        [
+          86
+        ],
+        [
+          137
+        ],
+        [
+          151
+        ],
+        [
+          56,
+          61
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 7,
+        "coarse": 212,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          17
+        ],
+        [
+          27
+        ],
+        [
+          86
+        ],
+        [
+          137
+        ],
+        [
+          151
+        ],
+        [
+          56,
+          61
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      8,
+      151,
+      17,
+      86,
+      27,
+      56,
+      137,
+      61
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 196,
+      "complete": true,
+      "groups": 7,
+      "coarse": 212,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2866,
+        "reused": 89,
+        "dominated": 133
+      }
+    },
+    "plain": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 7,
+        "coarse": 212,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          17
+        ],
+        [
+          27
+        ],
+        [
+          86
+        ],
+        [
+          137
+        ],
+        [
+          151
+        ],
+        [
+          56,
+          61
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 7,
+        "coarse": 212,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          17
+        ],
+        [
+          27
+        ],
+        [
+          86
+        ],
+        [
+          137
+        ],
+        [
+          151
+        ],
+        [
+          56,
+          61
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      8,
+      151,
+      17,
+      86,
+      27,
+      56,
+      137,
+      61
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 200,
+      "complete": true,
+      "groups": 7,
+      "coarse": 212,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2857,
+        "reused": 89,
+        "dominated": 136
+      }
+    },
+    "plain": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 7,
+        "coarse": 212,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          17
+        ],
+        [
+          27
+        ],
+        [
+          86
+        ],
+        [
+          137
+        ],
+        [
+          151
+        ],
+        [
+          56,
+          61
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 7,
+        "coarse": 212,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          17
+        ],
+        [
+          27
+        ],
+        [
+          86
+        ],
+        [
+          137
+        ],
+        [
+          151
+        ],
+        [
+          56,
+          61
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      105,
+      159,
+      4,
+      101,
+      73,
+      138,
+      29,
+      38
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 199,
+      "complete": true,
+      "groups": 7,
+      "coarse": 210,
+      "min_moved": 7,
+      "work": {
+        "priced": 104,
+        "joins": 2919,
+        "reused": 0,
+        "dominated": 127
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 7,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          38
+        ],
+        [
+          73
+        ],
+        [
+          101
+        ],
+        [
+          105
+        ],
+        [
+          138
+        ],
+        [
+          159
+        ],
+        [
+          4,
+          29
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 7,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          38
+        ],
+        [
+          73
+        ],
+        [
+          101
+        ],
+        [
+          105
+        ],
+        [
+          138
+        ],
+        [
+          159
+        ],
+        [
+          4,
+          29
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      105,
+      159,
+      4,
+      101,
+      73,
+      138,
+      29,
+      38
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 196,
+      "complete": true,
+      "groups": 7,
+      "coarse": 210,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2919,
+        "reused": 89,
+        "dominated": 126
+      }
+    },
+    "plain": {
+      "upper": 196,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 7,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          38
+        ],
+        [
+          73
+        ],
+        [
+          101
+        ],
+        [
+          105
+        ],
+        [
+          138
+        ],
+        [
+          159
+        ],
+        [
+          4,
+          29
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 196,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 7,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          38
+        ],
+        [
+          73
+        ],
+        [
+          101
+        ],
+        [
+          105
+        ],
+        [
+          138
+        ],
+        [
+          159
+        ],
+        [
+          4,
+          29
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      105,
+      159,
+      4,
+      101,
+      73,
+      138,
+      29,
+      38
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 201,
+      "complete": true,
+      "groups": 7,
+      "coarse": 210,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2911,
+        "reused": 89,
+        "dominated": 135
+      }
+    },
+    "plain": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 7,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          38
+        ],
+        [
+          73
+        ],
+        [
+          101
+        ],
+        [
+          105
+        ],
+        [
+          138
+        ],
+        [
+          159
+        ],
+        [
+          4,
+          29
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 7,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          38
+        ],
+        [
+          73
+        ],
+        [
+          101
+        ],
+        [
+          105
+        ],
+        [
+          138
+        ],
+        [
+          159
+        ],
+        [
+          4,
+          29
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      32,
+      47,
+      66,
+      64,
+      46,
+      51,
+      121,
+      26
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 197,
+      "complete": true,
+      "groups": 5,
+      "coarse": 211,
+      "min_moved": 7,
+      "work": {
+        "priced": 416,
+        "joins": 2515,
+        "reused": 0,
+        "dominated": 225
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 5,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 416,
+        "joins": 12205
+      },
+      "separator": [],
+      "parts": [
+        [
+          26
+        ],
+        [
+          51
+        ],
+        [
+          121
+        ],
+        [
+          46,
+          47
+        ],
+        [
+          32,
+          64,
+          66
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 5,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 416,
+        "joins": 12205
+      },
+      "separator": [],
+      "parts": [
+        [
+          26
+        ],
+        [
+          51
+        ],
+        [
+          121
+        ],
+        [
+          46,
+          47
+        ],
+        [
+          32,
+          64,
+          66
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      32,
+      47,
+      66,
+      64,
+      46,
+      51,
+      121,
+      26
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 194,
+      "complete": true,
+      "groups": 5,
+      "coarse": 211,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2515,
+        "reused": 198,
+        "dominated": 225
+      }
+    },
+    "plain": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 194,
+        "complete": true,
+        "groups": 5,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 416,
+        "joins": 3824
+      },
+      "separator": [],
+      "parts": [
+        [
+          26
+        ],
+        [
+          51
+        ],
+        [
+          121
+        ],
+        [
+          46,
+          47
+        ],
+        [
+          32,
+          64,
+          66
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 194,
+        "complete": true,
+        "groups": 5,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 416,
+        "joins": 3824
+      },
+      "separator": [],
+      "parts": [
+        [
+          26
+        ],
+        [
+          51
+        ],
+        [
+          121
+        ],
+        [
+          46,
+          47
+        ],
+        [
+          32,
+          64,
+          66
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      32,
+      47,
+      66,
+      64,
+      46,
+      51,
+      121,
+      26
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 199,
+      "complete": true,
+      "groups": 5,
+      "coarse": 211,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2500,
+        "reused": 198,
+        "dominated": 246
+      }
+    },
+    "plain": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 5,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 416,
+        "joins": 13452
+      },
+      "separator": [],
+      "parts": [
+        [
+          26
+        ],
+        [
+          51
+        ],
+        [
+          121
+        ],
+        [
+          46,
+          47
+        ],
+        [
+          32,
+          64,
+          66
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 5,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 416,
+        "joins": 13452
+      },
+      "separator": [],
+      "parts": [
+        [
+          26
+        ],
+        [
+          51
+        ],
+        [
+          121
+        ],
+        [
+          46,
+          47
+        ],
+        [
+          32,
+          64,
+          66
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      141,
+      36,
+      100,
+      84,
+      21,
+      118,
+      89,
+      126
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 201,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 7,
+      "work": {
+        "priced": 104,
+        "joins": 2658,
+        "reused": 0,
+        "dominated": 144
+      }
+    },
+    "plain": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          36
+        ],
+        [
+          100
+        ],
+        [
+          118
+        ],
+        [
+          126
+        ],
+        [
+          141
+        ],
+        [
+          84,
+          89
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          36
+        ],
+        [
+          100
+        ],
+        [
+          118
+        ],
+        [
+          126
+        ],
+        [
+          141
+        ],
+        [
+          84,
+          89
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      141,
+      36,
+      100,
+      84,
+      21,
+      118,
+      89,
+      126
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 199,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2658,
+        "reused": 89,
+        "dominated": 143
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          36
+        ],
+        [
+          100
+        ],
+        [
+          118
+        ],
+        [
+          126
+        ],
+        [
+          141
+        ],
+        [
+          84,
+          89
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          36
+        ],
+        [
+          100
+        ],
+        [
+          118
+        ],
+        [
+          126
+        ],
+        [
+          141
+        ],
+        [
+          84,
+          89
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      141,
+      36,
+      100,
+      84,
+      21,
+      118,
+      89,
+      126
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 202,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2650,
+        "reused": 89,
+        "dominated": 152
+      }
+    },
+    "plain": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 202,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          36
+        ],
+        [
+          100
+        ],
+        [
+          118
+        ],
+        [
+          126
+        ],
+        [
+          141
+        ],
+        [
+          84,
+          89
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 202,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          36
+        ],
+        [
+          100
+        ],
+        [
+          118
+        ],
+        [
+          126
+        ],
+        [
+          141
+        ],
+        [
+          84,
+          89
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      73,
+      100,
+      101,
+      27,
+      129,
+      156,
+      57,
+      99
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 194,
+      "complete": true,
+      "groups": 6,
+      "coarse": 207,
+      "min_moved": 7,
+      "work": {
+        "priced": 376,
+        "joins": 1898,
+        "reused": 0,
+        "dominated": 199
+      }
+    },
+    "plain": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 194,
+        "complete": true,
+        "groups": 6,
+        "coarse": 207,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 11293
+      },
+      "separator": [],
+      "parts": [
+        [
+          27
+        ],
+        [
+          57
+        ],
+        [
+          73
+        ],
+        [
+          129
+        ],
+        [
+          156
+        ],
+        [
+          99,
+          100,
+          101
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 194,
+        "complete": true,
+        "groups": 6,
+        "coarse": 207,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 11293
+      },
+      "separator": [],
+      "parts": [
+        [
+          27
+        ],
+        [
+          57
+        ],
+        [
+          73
+        ],
+        [
+          129
+        ],
+        [
+          156
+        ],
+        [
+          99,
+          100,
+          101
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      73,
+      100,
+      101,
+      27,
+      129,
+      156,
+      57,
+      99
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 192,
+      "complete": true,
+      "groups": 6,
+      "coarse": 207,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 1898,
+        "reused": 173,
+        "dominated": 199
+      }
+    },
+    "plain": {
+      "upper": 191,
+      "complete": true,
+      "coarse": {
+        "upper": 192,
+        "complete": true,
+        "groups": 6,
+        "coarse": 207,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 3340
+      },
+      "separator": [],
+      "parts": [
+        [
+          27
+        ],
+        [
+          57
+        ],
+        [
+          73
+        ],
+        [
+          129
+        ],
+        [
+          156
+        ],
+        [
+          99,
+          100,
+          101
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 191,
+      "complete": true,
+      "coarse": {
+        "upper": 192,
+        "complete": true,
+        "groups": 6,
+        "coarse": 207,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 3340
+      },
+      "separator": [],
+      "parts": [
+        [
+          27
+        ],
+        [
+          57
+        ],
+        [
+          73
+        ],
+        [
+          129
+        ],
+        [
+          156
+        ],
+        [
+          99,
+          100,
+          101
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      73,
+      100,
+      101,
+      27,
+      129,
+      156,
+      57,
+      99
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 197,
+      "complete": true,
+      "groups": 6,
+      "coarse": 207,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 1890,
+        "reused": 173,
+        "dominated": 201
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 6,
+        "coarse": 207,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 12870
+      },
+      "separator": [],
+      "parts": [
+        [
+          27
+        ],
+        [
+          57
+        ],
+        [
+          73
+        ],
+        [
+          129
+        ],
+        [
+          156
+        ],
+        [
+          99,
+          100,
+          101
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 6,
+        "coarse": 207,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 12870
+      },
+      "separator": [],
+      "parts": [
+        [
+          27
+        ],
+        [
+          57
+        ],
+        [
+          73
+        ],
+        [
+          129
+        ],
+        [
+          156
+        ],
+        [
+          99,
+          100,
+          101
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      127,
+      136,
+      95,
+      101,
+      104,
+      128,
+      6,
+      85
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 196,
+      "complete": true,
+      "groups": 6,
+      "coarse": 210,
+      "min_moved": 7,
+      "work": {
+        "priced": 376,
+        "joins": 3111,
+        "reused": 0,
+        "dominated": 299
+      }
+    },
+    "plain": {
+      "upper": 196,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 11293
+      },
+      "separator": [],
+      "parts": [
+        [
+          85
+        ],
+        [
+          104
+        ],
+        [
+          127
+        ],
+        [
+          128
+        ],
+        [
+          136
+        ],
+        [
+          6,
+          95,
+          101
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 196,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 11293
+      },
+      "separator": [],
+      "parts": [
+        [
+          85
+        ],
+        [
+          104
+        ],
+        [
+          127
+        ],
+        [
+          128
+        ],
+        [
+          136
+        ],
+        [
+          6,
+          95,
+          101
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      127,
+      136,
+      95,
+      101,
+      104,
+      128,
+      6,
+      85
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 193,
+      "complete": true,
+      "groups": 6,
+      "coarse": 210,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 3111,
+        "reused": 173,
+        "dominated": 299
+      }
+    },
+    "plain": {
+      "upper": 193,
+      "complete": true,
+      "coarse": {
+        "upper": 193,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 3340
+      },
+      "separator": [],
+      "parts": [
+        [
+          85
+        ],
+        [
+          104
+        ],
+        [
+          127
+        ],
+        [
+          128
+        ],
+        [
+          136
+        ],
+        [
+          6,
+          95,
+          101
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 193,
+      "complete": true,
+      "coarse": {
+        "upper": 193,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 3340
+      },
+      "separator": [],
+      "parts": [
+        [
+          85
+        ],
+        [
+          104
+        ],
+        [
+          127
+        ],
+        [
+          128
+        ],
+        [
+          136
+        ],
+        [
+          6,
+          95,
+          101
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      127,
+      136,
+      95,
+      101,
+      104,
+      128,
+      6,
+      85
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 6,
+      "coarse": 210,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 3103,
+        "reused": 173,
+        "dominated": 306
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 12870
+      },
+      "separator": [],
+      "parts": [
+        [
+          85
+        ],
+        [
+          104
+        ],
+        [
+          127
+        ],
+        [
+          128
+        ],
+        [
+          136
+        ],
+        [
+          6,
+          95,
+          101
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 376,
+        "joins": 12870
+      },
+      "separator": [],
+      "parts": [
+        [
+          85
+        ],
+        [
+          104
+        ],
+        [
+          127
+        ],
+        [
+          128
+        ],
+        [
+          136
+        ],
+        [
+          6,
+          95,
+          101
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      22,
+      128,
+      84,
+      70,
+      118,
+      1,
+      108,
+      121
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 7,
+      "coarse": 208,
+      "min_moved": 7,
+      "work": {
+        "priced": 104,
+        "joins": 3477,
+        "reused": 0,
+        "dominated": 156
+      }
+    },
+    "plain": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 7,
+        "coarse": 208,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          1
+        ],
+        [
+          70
+        ],
+        [
+          84
+        ],
+        [
+          108
+        ],
+        [
+          121
+        ],
+        [
+          128
+        ],
+        [
+          22,
+          118
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 7,
+        "coarse": 208,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          1
+        ],
+        [
+          70
+        ],
+        [
+          84
+        ],
+        [
+          108
+        ],
+        [
+          121
+        ],
+        [
+          128
+        ],
+        [
+          22,
+          118
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      22,
+      128,
+      84,
+      70,
+      118,
+      1,
+      108,
+      121
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 195,
+      "complete": true,
+      "groups": 7,
+      "coarse": 208,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 3477,
+        "reused": 89,
+        "dominated": 156
+      }
+    },
+    "plain": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 7,
+        "coarse": 208,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          1
+        ],
+        [
+          70
+        ],
+        [
+          84
+        ],
+        [
+          108
+        ],
+        [
+          121
+        ],
+        [
+          128
+        ],
+        [
+          22,
+          118
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 7,
+        "coarse": 208,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          1
+        ],
+        [
+          70
+        ],
+        [
+          84
+        ],
+        [
+          108
+        ],
+        [
+          121
+        ],
+        [
+          128
+        ],
+        [
+          22,
+          118
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      22,
+      128,
+      84,
+      70,
+      118,
+      1,
+      108,
+      121
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 200,
+      "complete": true,
+      "groups": 7,
+      "coarse": 208,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 3467,
+        "reused": 89,
+        "dominated": 158
+      }
+    },
+    "plain": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 7,
+        "coarse": 208,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          1
+        ],
+        [
+          70
+        ],
+        [
+          84
+        ],
+        [
+          108
+        ],
+        [
+          121
+        ],
+        [
+          128
+        ],
+        [
+          22,
+          118
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 7,
+        "coarse": 208,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          1
+        ],
+        [
+          70
+        ],
+        [
+          84
+        ],
+        [
+          108
+        ],
+        [
+          121
+        ],
+        [
+          128
+        ],
+        [
+          22,
+          118
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      46,
+      129,
+      116,
+      62,
+      110,
+      99,
+      52,
+      141
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 195,
+      "complete": true,
+      "groups": 8,
+      "coarse": 210,
+      "min_moved": 7,
+      "work": {
+        "priced": 64,
+        "joins": 2788,
+        "reused": 0,
+        "dominated": 1
+      }
+    },
+    "plain": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 8,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 9277
+      },
+      "separator": [],
+      "parts": [
+        [
+          46
+        ],
+        [
+          52
+        ],
+        [
+          62
+        ],
+        [
+          99
+        ],
+        [
+          110
+        ],
+        [
+          116
+        ],
+        [
+          129
+        ],
+        [
+          141
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 8,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 9277
+      },
+      "separator": [],
+      "parts": [
+        [
+          46
+        ],
+        [
+          52
+        ],
+        [
+          62
+        ],
+        [
+          99
+        ],
+        [
+          110
+        ],
+        [
+          116
+        ],
+        [
+          129
+        ],
+        [
+          141
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      46,
+      129,
+      116,
+      62,
+      110,
+      99,
+      52,
+      141
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 193,
+      "complete": true,
+      "groups": 8,
+      "coarse": 210,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2788,
+        "reused": 64,
+        "dominated": 0
+      }
+    },
+    "plain": {
+      "upper": 193,
+      "complete": true,
+      "coarse": {
+        "upper": 193,
+        "complete": true,
+        "groups": 8,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 3440
+      },
+      "separator": [],
+      "parts": [
+        [
+          46
+        ],
+        [
+          52
+        ],
+        [
+          62
+        ],
+        [
+          99
+        ],
+        [
+          110
+        ],
+        [
+          116
+        ],
+        [
+          129
+        ],
+        [
+          141
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 193,
+      "complete": true,
+      "coarse": {
+        "upper": 193,
+        "complete": true,
+        "groups": 8,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 3440
+      },
+      "separator": [],
+      "parts": [
+        [
+          46
+        ],
+        [
+          52
+        ],
+        [
+          62
+        ],
+        [
+          99
+        ],
+        [
+          110
+        ],
+        [
+          116
+        ],
+        [
+          129
+        ],
+        [
+          141
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      46,
+      129,
+      116,
+      62,
+      110,
+      99,
+      52,
+      141
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 8,
+      "coarse": 210,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2780,
+        "reused": 64,
+        "dominated": 9
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 8,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 10333
+      },
+      "separator": [],
+      "parts": [
+        [
+          46
+        ],
+        [
+          52
+        ],
+        [
+          62
+        ],
+        [
+          99
+        ],
+        [
+          110
+        ],
+        [
+          116
+        ],
+        [
+          129
+        ],
+        [
+          141
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 8,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 10333
+      },
+      "separator": [],
+      "parts": [
+        [
+          46
+        ],
+        [
+          52
+        ],
+        [
+          62
+        ],
+        [
+          99
+        ],
+        [
+          110
+        ],
+        [
+          116
+        ],
+        [
+          129
+        ],
+        [
+          141
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      36,
+      92,
+      62,
+      33,
+      109,
+      51,
+      8,
+      31
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 201,
+      "complete": true,
+      "groups": 8,
+      "coarse": 213,
+      "min_moved": 7,
+      "work": {
+        "priced": 64,
+        "joins": 2788,
+        "reused": 0,
+        "dominated": 1
+      }
+    },
+    "plain": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 8,
+        "coarse": 213,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 9277
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          31
+        ],
+        [
+          33
+        ],
+        [
+          36
+        ],
+        [
+          51
+        ],
+        [
+          62
+        ],
+        [
+          92
+        ],
+        [
+          109
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 8,
+        "coarse": 213,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 9277
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          31
+        ],
+        [
+          33
+        ],
+        [
+          36
+        ],
+        [
+          51
+        ],
+        [
+          62
+        ],
+        [
+          92
+        ],
+        [
+          109
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      36,
+      92,
+      62,
+      33,
+      109,
+      51,
+      8,
+      31
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 199,
+      "complete": true,
+      "groups": 8,
+      "coarse": 213,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2788,
+        "reused": 64,
+        "dominated": 0
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 8,
+        "coarse": 213,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 3440
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          31
+        ],
+        [
+          33
+        ],
+        [
+          36
+        ],
+        [
+          51
+        ],
+        [
+          62
+        ],
+        [
+          92
+        ],
+        [
+          109
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 8,
+        "coarse": 213,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 3440
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          31
+        ],
+        [
+          33
+        ],
+        [
+          36
+        ],
+        [
+          51
+        ],
+        [
+          62
+        ],
+        [
+          92
+        ],
+        [
+          109
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      36,
+      92,
+      62,
+      33,
+      109,
+      51,
+      8,
+      31
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 204,
+      "complete": true,
+      "groups": 8,
+      "coarse": 213,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2780,
+        "reused": 64,
+        "dominated": 9
+      }
+    },
+    "plain": {
+      "upper": 204,
+      "complete": true,
+      "coarse": {
+        "upper": 204,
+        "complete": true,
+        "groups": 8,
+        "coarse": 213,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 10333
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          31
+        ],
+        [
+          33
+        ],
+        [
+          36
+        ],
+        [
+          51
+        ],
+        [
+          62
+        ],
+        [
+          92
+        ],
+        [
+          109
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 204,
+      "complete": true,
+      "coarse": {
+        "upper": 204,
+        "complete": true,
+        "groups": 8,
+        "coarse": 213,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 10333
+      },
+      "separator": [],
+      "parts": [
+        [
+          8
+        ],
+        [
+          31
+        ],
+        [
+          33
+        ],
+        [
+          36
+        ],
+        [
+          51
+        ],
+        [
+          62
+        ],
+        [
+          92
+        ],
+        [
+          109
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      124,
+      65,
+      128,
+      149,
+      39,
+      21,
+      130,
+      155
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 196,
+      "complete": true,
+      "groups": 6,
+      "coarse": 210,
+      "min_moved": 7,
+      "work": {
+        "priced": 144,
+        "joins": 2332,
+        "reused": 0,
+        "dominated": 87
+      }
+    },
+    "plain": {
+      "upper": 196,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 144,
+        "joins": 12866
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          39
+        ],
+        [
+          65
+        ],
+        [
+          124
+        ],
+        [
+          128,
+          130
+        ],
+        [
+          149,
+          155
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 196,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 144,
+        "joins": 12866
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          39
+        ],
+        [
+          65
+        ],
+        [
+          124
+        ],
+        [
+          128,
+          130
+        ],
+        [
+          149,
+          155
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      124,
+      65,
+      128,
+      149,
+      39,
+      21,
+      130,
+      155
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 193,
+      "complete": true,
+      "groups": 6,
+      "coarse": 210,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2332,
+        "reused": 114,
+        "dominated": 87
+      }
+    },
+    "plain": {
+      "upper": 192,
+      "complete": true,
+      "coarse": {
+        "upper": 193,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 144,
+        "joins": 4248
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          39
+        ],
+        [
+          65
+        ],
+        [
+          124
+        ],
+        [
+          128,
+          130
+        ],
+        [
+          149,
+          155
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 192,
+      "complete": true,
+      "coarse": {
+        "upper": 193,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 144,
+        "joins": 4248
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          39
+        ],
+        [
+          65
+        ],
+        [
+          124
+        ],
+        [
+          128,
+          130
+        ],
+        [
+          149,
+          155
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      124,
+      65,
+      128,
+      149,
+      39,
+      21,
+      130,
+      155
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 6,
+      "coarse": 210,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2332,
+        "reused": 114,
+        "dominated": 88
+      }
+    },
+    "plain": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 144,
+        "joins": 13601
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          39
+        ],
+        [
+          65
+        ],
+        [
+          124
+        ],
+        [
+          128,
+          130
+        ],
+        [
+          149,
+          155
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 6,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 144,
+        "joins": 13601
+      },
+      "separator": [],
+      "parts": [
+        [
+          21
+        ],
+        [
+          39
+        ],
+        [
+          65
+        ],
+        [
+          124
+        ],
+        [
+          128,
+          130
+        ],
+        [
+          149,
+          155
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      80,
+      56,
+      99,
+      8,
+      122,
+      26,
+      68,
+      16
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 7,
+      "work": {
+        "priced": 104,
+        "joins": 3618,
+        "reused": 0,
+        "dominated": 147
+      }
+    },
+    "plain": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          16
+        ],
+        [
+          26
+        ],
+        [
+          56
+        ],
+        [
+          80
+        ],
+        [
+          99
+        ],
+        [
+          122
+        ],
+        [
+          8,
+          68
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          16
+        ],
+        [
+          26
+        ],
+        [
+          56
+        ],
+        [
+          80
+        ],
+        [
+          99
+        ],
+        [
+          122
+        ],
+        [
+          8,
+          68
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      80,
+      56,
+      99,
+      8,
+      122,
+      26,
+      68,
+      16
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 195,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 3618,
+        "reused": 89,
+        "dominated": 147
+      }
+    },
+    "plain": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          16
+        ],
+        [
+          26
+        ],
+        [
+          56
+        ],
+        [
+          80
+        ],
+        [
+          99
+        ],
+        [
+          122
+        ],
+        [
+          8,
+          68
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          16
+        ],
+        [
+          26
+        ],
+        [
+          56
+        ],
+        [
+          80
+        ],
+        [
+          99
+        ],
+        [
+          122
+        ],
+        [
+          8,
+          68
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      80,
+      56,
+      99,
+      8,
+      122,
+      26,
+      68,
+      16
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 200,
+      "complete": true,
+      "groups": 7,
+      "coarse": 211,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 3608,
+        "reused": 89,
+        "dominated": 149
+      }
+    },
+    "plain": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          16
+        ],
+        [
+          26
+        ],
+        [
+          56
+        ],
+        [
+          80
+        ],
+        [
+          99
+        ],
+        [
+          122
+        ],
+        [
+          8,
+          68
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 7,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          16
+        ],
+        [
+          26
+        ],
+        [
+          56
+        ],
+        [
+          80
+        ],
+        [
+          99
+        ],
+        [
+          122
+        ],
+        [
+          8,
+          68
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      119,
+      114,
+      82,
+      126,
+      41,
+      19,
+      121,
+      56
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 5,
+      "coarse": 210,
+      "min_moved": 7,
+      "work": {
+        "priced": 1712,
+        "joins": 1109,
+        "reused": 0,
+        "dominated": 6
+      }
+    },
+    "plain": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 5,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1712,
+        "joins": 15648
+      },
+      "separator": [],
+      "parts": [
+        [
+          19
+        ],
+        [
+          41
+        ],
+        [
+          56
+        ],
+        [
+          82
+        ],
+        [
+          114,
+          119,
+          121,
+          126
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 5,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1712,
+        "joins": 15648
+      },
+      "separator": [],
+      "parts": [
+        [
+          19
+        ],
+        [
+          41
+        ],
+        [
+          56
+        ],
+        [
+          82
+        ],
+        [
+          114,
+          119,
+          121,
+          126
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      119,
+      114,
+      82,
+      126,
+      41,
+      19,
+      121,
+      56
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 195,
+      "complete": true,
+      "groups": 5,
+      "coarse": 210,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 1109,
+        "reused": 310,
+        "dominated": 6
+      }
+    },
+    "plain": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 5,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1712,
+        "joins": 2889
+      },
+      "separator": [],
+      "parts": [
+        [
+          19
+        ],
+        [
+          41
+        ],
+        [
+          56
+        ],
+        [
+          82
+        ],
+        [
+          114,
+          119,
+          121,
+          126
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 195,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 5,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1712,
+        "joins": 2889
+      },
+      "separator": [],
+      "parts": [
+        [
+          19
+        ],
+        [
+          41
+        ],
+        [
+          56
+        ],
+        [
+          82
+        ],
+        [
+          114,
+          119,
+          121,
+          126
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      119,
+      114,
+      82,
+      126,
+      41,
+      19,
+      121,
+      56
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 201,
+      "complete": true,
+      "groups": 5,
+      "coarse": 210,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 1109,
+        "reused": 310,
+        "dominated": 7
+      }
+    },
+    "plain": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 5,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1712,
+        "joins": 17057
+      },
+      "separator": [],
+      "parts": [
+        [
+          19
+        ],
+        [
+          41
+        ],
+        [
+          56
+        ],
+        [
+          82
+        ],
+        [
+          114,
+          119,
+          121,
+          126
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 201,
+        "complete": true,
+        "groups": 5,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 1712,
+        "joins": 17057
+      },
+      "separator": [],
+      "parts": [
+        [
+          19
+        ],
+        [
+          41
+        ],
+        [
+          56
+        ],
+        [
+          82
+        ],
+        [
+          114,
+          119,
+          121,
+          126
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      104,
+      21,
+      120,
+      5,
+      2,
+      89,
+      141,
+      18
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 199,
+      "complete": true,
+      "groups": 8,
+      "coarse": 211,
+      "min_moved": 7,
+      "work": {
+        "priced": 64,
+        "joins": 2788,
+        "reused": 0,
+        "dominated": 1
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 8,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 9277
+      },
+      "separator": [],
+      "parts": [
+        [
+          2
+        ],
+        [
+          5
+        ],
+        [
+          18
+        ],
+        [
+          21
+        ],
+        [
+          89
+        ],
+        [
+          104
+        ],
+        [
+          120
+        ],
+        [
+          141
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 8,
+        "coarse": 211,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 9277
+      },
+      "separator": [],
+      "parts": [
+        [
+          2
+        ],
+        [
+          5
+        ],
+        [
+          18
+        ],
+        [
+          21
+        ],
+        [
+          89
+        ],
+        [
+          104
+        ],
+        [
+          120
+        ],
+        [
+          141
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      104,
+      21,
+      120,
+      5,
+      2,
+      89,
+      141,
+      18
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 197,
+      "complete": true,
+      "groups": 8,
+      "coarse": 211,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2788,
+        "reused": 64,
+        "dominated": 0
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 8,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 3440
+      },
+      "separator": [],
+      "parts": [
+        [
+          2
+        ],
+        [
+          5
+        ],
+        [
+          18
+        ],
+        [
+          21
+        ],
+        [
+          89
+        ],
+        [
+          104
+        ],
+        [
+          120
+        ],
+        [
+          141
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 8,
+        "coarse": 211,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 3440
+      },
+      "separator": [],
+      "parts": [
+        [
+          2
+        ],
+        [
+          5
+        ],
+        [
+          18
+        ],
+        [
+          21
+        ],
+        [
+          89
+        ],
+        [
+          104
+        ],
+        [
+          120
+        ],
+        [
+          141
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      104,
+      21,
+      120,
+      5,
+      2,
+      89,
+      141,
+      18
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 200,
+      "complete": true,
+      "groups": 8,
+      "coarse": 211,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2780,
+        "reused": 64,
+        "dominated": 9
+      }
+    },
+    "plain": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 8,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 10333
+      },
+      "separator": [],
+      "parts": [
+        [
+          2
+        ],
+        [
+          5
+        ],
+        [
+          18
+        ],
+        [
+          21
+        ],
+        [
+          89
+        ],
+        [
+          104
+        ],
+        [
+          120
+        ],
+        [
+          141
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 8,
+        "coarse": 211,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 64,
+        "joins": 10333
+      },
+      "separator": [],
+      "parts": [
+        [
+          2
+        ],
+        [
+          5
+        ],
+        [
+          18
+        ],
+        [
+          21
+        ],
+        [
+          89
+        ],
+        [
+          104
+        ],
+        [
+          120
+        ],
+        [
+          141
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      152,
+      154,
+      127,
+      7,
+      80,
+      107,
+      113,
+      20
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 199,
+      "complete": true,
+      "groups": 7,
+      "coarse": 210,
+      "min_moved": 7,
+      "work": {
+        "priced": 104,
+        "joins": 2579,
+        "reused": 0,
+        "dominated": 5
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 7,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          7
+        ],
+        [
+          20
+        ],
+        [
+          80
+        ],
+        [
+          107
+        ],
+        [
+          113
+        ],
+        [
+          127
+        ],
+        [
+          152,
+          154
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 7,
+        "coarse": 210,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          7
+        ],
+        [
+          20
+        ],
+        [
+          80
+        ],
+        [
+          107
+        ],
+        [
+          113
+        ],
+        [
+          127
+        ],
+        [
+          152,
+          154
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      152,
+      154,
+      127,
+      7,
+      80,
+      107,
+      113,
+      20
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 195,
+      "complete": true,
+      "groups": 7,
+      "coarse": 210,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2579,
+        "reused": 89,
+        "dominated": 5
+      }
+    },
+    "plain": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 7,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          7
+        ],
+        [
+          20
+        ],
+        [
+          80
+        ],
+        [
+          107
+        ],
+        [
+          113
+        ],
+        [
+          127
+        ],
+        [
+          152,
+          154
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 195,
+        "complete": true,
+        "groups": 7,
+        "coarse": 210,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          7
+        ],
+        [
+          20
+        ],
+        [
+          80
+        ],
+        [
+          107
+        ],
+        [
+          113
+        ],
+        [
+          127
+        ],
+        [
+          152,
+          154
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      152,
+      154,
+      127,
+      7,
+      80,
+      107,
+      113,
+      20
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 200,
+      "complete": true,
+      "groups": 7,
+      "coarse": 210,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2579,
+        "reused": 89,
+        "dominated": 6
+      }
+    },
+    "plain": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 7,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          7
+        ],
+        [
+          20
+        ],
+        [
+          80
+        ],
+        [
+          107
+        ],
+        [
+          113
+        ],
+        [
+          127
+        ],
+        [
+          152,
+          154
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 200,
+        "complete": true,
+        "groups": 7,
+        "coarse": 210,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          7
+        ],
+        [
+          20
+        ],
+        [
+          80
+        ],
+        [
+          107
+        ],
+        [
+          113
+        ],
+        [
+          127
+        ],
+        [
+          152,
+          154
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      41,
+      112,
+      67,
+      141,
+      57,
+      90,
+      69,
+      155
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 196,
+      "complete": true,
+      "groups": 7,
+      "coarse": 209,
+      "min_moved": 7,
+      "work": {
+        "priced": 104,
+        "joins": 2689,
+        "reused": 0,
+        "dominated": 146
+      }
+    },
+    "plain": {
+      "upper": 196,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 7,
+        "coarse": 209,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          41
+        ],
+        [
+          57
+        ],
+        [
+          90
+        ],
+        [
+          112
+        ],
+        [
+          141
+        ],
+        [
+          155
+        ],
+        [
+          67,
+          69
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 196,
+      "complete": true,
+      "coarse": {
+        "upper": 196,
+        "complete": true,
+        "groups": 7,
+        "coarse": 209,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          41
+        ],
+        [
+          57
+        ],
+        [
+          90
+        ],
+        [
+          112
+        ],
+        [
+          141
+        ],
+        [
+          155
+        ],
+        [
+          67,
+          69
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      41,
+      112,
+      67,
+      141,
+      57,
+      90,
+      69,
+      155
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 192,
+      "complete": true,
+      "groups": 7,
+      "coarse": 209,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 2689,
+        "reused": 89,
+        "dominated": 146
+      }
+    },
+    "plain": {
+      "upper": 192,
+      "complete": true,
+      "coarse": {
+        "upper": 192,
+        "complete": true,
+        "groups": 7,
+        "coarse": 209,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          41
+        ],
+        [
+          57
+        ],
+        [
+          90
+        ],
+        [
+          112
+        ],
+        [
+          141
+        ],
+        [
+          155
+        ],
+        [
+          67,
+          69
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 192,
+      "complete": true,
+      "coarse": {
+        "upper": 192,
+        "complete": true,
+        "groups": 7,
+        "coarse": 209,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          41
+        ],
+        [
+          57
+        ],
+        [
+          90
+        ],
+        [
+          112
+        ],
+        [
+          141
+        ],
+        [
+          155
+        ],
+        [
+          67,
+          69
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      41,
+      112,
+      67,
+      141,
+      57,
+      90,
+      69,
+      155
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 198,
+      "complete": true,
+      "groups": 7,
+      "coarse": 209,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2678,
+        "reused": 89,
+        "dominated": 155
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 7,
+        "coarse": 209,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          41
+        ],
+        [
+          57
+        ],
+        [
+          90
+        ],
+        [
+          112
+        ],
+        [
+          141
+        ],
+        [
+          155
+        ],
+        [
+          67,
+          69
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 198,
+        "complete": true,
+        "groups": 7,
+        "coarse": 209,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          41
+        ],
+        [
+          57
+        ],
+        [
+          90
+        ],
+        [
+          112
+        ],
+        [
+          141
+        ],
+        [
+          155
+        ],
+        [
+          67,
+          69
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      128,
+      28,
+      120,
+      151,
+      17,
+      137,
+      159,
+      5
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 197,
+      "complete": true,
+      "groups": 7,
+      "coarse": 212,
+      "min_moved": 7,
+      "work": {
+        "priced": 104,
+        "joins": 3003,
+        "reused": 0,
+        "dominated": 159
+      }
+    },
+    "plain": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 7,
+        "coarse": 212,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          17
+        ],
+        [
+          120
+        ],
+        [
+          128
+        ],
+        [
+          137
+        ],
+        [
+          151
+        ],
+        [
+          159
+        ],
+        [
+          5,
+          28
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 197,
+      "complete": true,
+      "coarse": {
+        "upper": 197,
+        "complete": true,
+        "groups": 7,
+        "coarse": 212,
+        "min_moved": 7,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 9215
+      },
+      "separator": [],
+      "parts": [
+        [
+          17
+        ],
+        [
+          120
+        ],
+        [
+          128
+        ],
+        [
+          137
+        ],
+        [
+          151
+        ],
+        [
+          159
+        ],
+        [
+          5,
+          28
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      128,
+      28,
+      120,
+      151,
+      17,
+      137,
+      159,
+      5
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 194,
+      "complete": true,
+      "groups": 7,
+      "coarse": 212,
+      "min_moved": 8,
+      "work": {
+        "priced": 0,
+        "joins": 3003,
+        "reused": 89,
+        "dominated": 158
+      }
+    },
+    "plain": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 194,
+        "complete": true,
+        "groups": 7,
+        "coarse": 212,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          17
+        ],
+        [
+          120
+        ],
+        [
+          128
+        ],
+        [
+          137
+        ],
+        [
+          151
+        ],
+        [
+          159
+        ],
+        [
+          5,
+          28
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 194,
+      "complete": true,
+      "coarse": {
+        "upper": 194,
+        "complete": true,
+        "groups": 7,
+        "coarse": 212,
+        "min_moved": 8,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 3372
+      },
+      "separator": [],
+      "parts": [
+        [
+          17
+        ],
+        [
+          120
+        ],
+        [
+          128
+        ],
+        [
+          137
+        ],
+        [
+          151
+        ],
+        [
+          159
+        ],
+        [
+          5,
+          28
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      128,
+      28,
+      120,
+      151,
+      17,
+      137,
+      159,
+      5
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 199,
+      "complete": true,
+      "groups": 7,
+      "coarse": 212,
+      "min_moved": 6,
+      "work": {
+        "priced": 0,
+        "joins": 2995,
+        "reused": 89,
+        "dominated": 165
+      }
+    },
+    "plain": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 7,
+        "coarse": 212,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          17
+        ],
+        [
+          120
+        ],
+        [
+          128
+        ],
+        [
+          137
+        ],
+        [
+          151
+        ],
+        [
+          159
+        ],
+        [
+          5,
+          28
+        ]
+      ]
+    },
+    "cut": {
+      "upper": 198,
+      "complete": true,
+      "coarse": {
+        "upper": 199,
+        "complete": true,
+        "groups": 7,
+        "coarse": 212,
+        "min_moved": 6,
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0,
+          "result_reuses": 1
+        }
+      },
+      "work": {
+        "conditionings": 1,
+        "rows": 104,
+        "joins": 10294
+      },
+      "separator": [],
+      "parts": [
+        [
+          17
+        ],
+        [
+          120
+        ],
+        [
+          128
+        ],
+        [
+          137
+        ],
+        [
+          151
+        ],
+        [
+          159
+        ],
+        [
+          5,
+          28
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      12,
+      68,
+      67,
+      69,
+      75,
+      70,
+      13,
+      159
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 40656,
+        "joins": 6486
+      },
+      "separator": [
+        69,
+        70
+      ],
+      "parts": [
+        [
+          159
+        ],
+        [
+          12,
+          13,
+          67,
+          68,
+          75
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      12,
+      68,
+      67,
+      69,
+      75,
+      70,
+      13,
+      159
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 31944,
+        "joins": 1326
+      },
+      "separator": [
+        69,
+        70
+      ],
+      "parts": [
+        [
+          159
+        ],
+        [
+          12,
+          13,
+          67,
+          68,
+          75
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      12,
+      68,
+      67,
+      69,
+      75,
+      70,
+      13,
+      159
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 203,
+      "complete": true,
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 39930,
+        "joins": 7906
+      },
+      "separator": [
+        69,
+        70
+      ],
+      "parts": [
+        [
+          159
+        ],
+        [
+          12,
+          13,
+          67,
+          68,
+          75
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      121,
+      120,
+      124,
+      132,
+      115,
+      133,
+      131,
+      119
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 40656,
+        "joins": 6486
+      },
+      "separator": [
+        120,
+        121
+      ],
+      "parts": [
+        [
+          115
+        ],
+        [
+          119,
+          124,
+          131,
+          132,
+          133
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      121,
+      120,
+      124,
+      132,
+      115,
+      133,
+      131,
+      119
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 199,
+      "complete": true,
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 31944,
+        "joins": 1326
+      },
+      "separator": [
+        120,
+        121
+      ],
+      "parts": [
+        [
+          115
+        ],
+        [
+          119,
+          124,
+          131,
+          132,
+          133
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      121,
+      120,
+      124,
+      132,
+      115,
+      133,
+      131,
+      119
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 202,
+      "complete": true,
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 39930,
+        "joins": 7906
+      },
+      "separator": [
+        120,
+        121
+      ],
+      "parts": [
+        [
+          115
+        ],
+        [
+          119,
+          124,
+          131,
+          132,
+          133
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      127,
+      125,
+      134,
+      126,
+      133,
+      124,
+      43,
+      132
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 202,
+      "complete": true,
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 40656,
+        "joins": 6486
+      },
+      "separator": [
+        125,
+        126
+      ],
+      "parts": [
+        [
+          43
+        ],
+        [
+          124,
+          127,
+          132,
+          133,
+          134
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      127,
+      125,
+      134,
+      126,
+      133,
+      124,
+      43,
+      132
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 31944,
+        "joins": 1326
+      },
+      "separator": [
+        125,
+        126
+      ],
+      "parts": [
+        [
+          43
+        ],
+        [
+          124,
+          127,
+          132,
+          133,
+          134
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      127,
+      125,
+      134,
+      126,
+      133,
+      124,
+      43,
+      132
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 203,
+      "complete": true,
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 39930,
+        "joins": 7906
+      },
+      "separator": [
+        125,
+        126
+      ],
+      "parts": [
+        [
+          43
+        ],
+        [
+          124,
+          127,
+          132,
+          133,
+          134
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      83,
+      89,
+      84,
+      82,
+      88,
+      85,
+      90,
+      156
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 208,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 208,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 208,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 208,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 208,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    }
+  },
+  {
+    "pool": [
+      83,
+      89,
+      84,
+      82,
+      88,
+      85,
+      90,
+      156
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 208,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 208,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 208,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 208,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 208,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    }
+  },
+  {
+    "pool": [
+      83,
+      89,
+      84,
+      82,
+      88,
+      85,
+      90,
+      156
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 208,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 208,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 208,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 208,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 208,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    }
+  },
+  {
+    "pool": [
+      143,
+      150,
+      54,
+      53,
+      52,
+      79,
+      76,
+      77
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    }
+  },
+  {
+    "pool": [
+      143,
+      150,
+      54,
+      53,
+      52,
+      79,
+      76,
+      77
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    }
+  },
+  {
+    "pool": [
+      143,
+      150,
+      54,
+      53,
+      52,
+      79,
+      76,
+      77
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    }
+  },
+  {
+    "pool": [
+      20,
+      19,
+      18,
+      25,
+      17,
+      44,
+      23,
+      2
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 211,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 211,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 211,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 202,
+      "complete": true,
+      "coarse": {
+        "upper": 211,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 40656,
+        "joins": 6486
+      },
+      "separator": [
+        17,
+        23
+      ],
+      "parts": [
+        [
+          2
+        ],
+        [
+          18,
+          19,
+          20,
+          25,
+          44
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      20,
+      19,
+      18,
+      25,
+      17,
+      44,
+      23,
+      2
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 211,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 211,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 211,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 200,
+      "complete": true,
+      "coarse": {
+        "upper": 211,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 31944,
+        "joins": 1326
+      },
+      "separator": [
+        17,
+        23
+      ],
+      "parts": [
+        [
+          2
+        ],
+        [
+          18,
+          19,
+          20,
+          25,
+          44
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      20,
+      19,
+      18,
+      25,
+      17,
+      44,
+      23,
+      2
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 211,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 211,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 211,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 203,
+      "complete": true,
+      "coarse": {
+        "upper": 211,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 39930,
+        "joins": 7906
+      },
+      "separator": [
+        17,
+        23
+      ],
+      "parts": [
+        [
+          2
+        ],
+        [
+          18,
+          19,
+          20,
+          25,
+          44
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      145,
+      151,
+      146,
+      82,
+      81,
+      152,
+      87,
+      144
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 211,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 211,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 211,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 203,
+      "complete": true,
+      "coarse": {
+        "upper": 211,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 40656,
+        "joins": 6486
+      },
+      "separator": [
+        81,
+        82
+      ],
+      "parts": [
+        [
+          87
+        ],
+        [
+          144,
+          145,
+          146,
+          151,
+          152
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      145,
+      151,
+      146,
+      82,
+      81,
+      152,
+      87,
+      144
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 211,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 211,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 211,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 202,
+      "complete": true,
+      "coarse": {
+        "upper": 211,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 31944,
+        "joins": 1326
+      },
+      "separator": [
+        81,
+        82
+      ],
+      "parts": [
+        [
+          87
+        ],
+        [
+          144,
+          145,
+          146,
+          151,
+          152
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      145,
+      151,
+      146,
+      82,
+      81,
+      152,
+      87,
+      144
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 211,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 211,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 211,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 204,
+      "complete": true,
+      "coarse": {
+        "upper": 211,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 39930,
+        "joins": 7906
+      },
+      "separator": [
+        81,
+        82
+      ],
+      "parts": [
+        [
+          87
+        ],
+        [
+          144,
+          145,
+          146,
+          151,
+          152
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      50,
+      71,
+      51,
+      57,
+      72,
+      49,
+      65,
+      76
+    ],
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 203,
+      "complete": true,
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 40656,
+        "joins": 6486
+      },
+      "separator": [
+        50,
+        51
+      ],
+      "parts": [
+        [
+          57
+        ],
+        [
+          49,
+          65,
+          71,
+          72,
+          76
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      50,
+      71,
+      51,
+      57,
+      72,
+      49,
+      65,
+      76
+    ],
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 201,
+      "complete": true,
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 31944,
+        "joins": 1326
+      },
+      "separator": [
+        50,
+        51
+      ],
+      "parts": [
+        [
+          57
+        ],
+        [
+          49,
+          65,
+          71,
+          72,
+          76
+        ]
+      ]
+    }
+  },
+  {
+    "pool": [
+      50,
+      71,
+      51,
+      57,
+      72,
+      49,
+      65,
+      76
+    ],
+    "family": [
+      6
+    ],
+    "broad": {
+      "upper": 209,
+      "complete": false,
+      "groups": 1,
+      "reason": "one component",
+      "work": {
+        "priced": 0,
+        "joins": 0,
+        "reused": 0
+      }
+    },
+    "plain": {
+      "upper": 209,
+      "complete": false,
+      "work": {},
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      }
+    },
+    "cut": {
+      "upper": 202,
+      "complete": true,
+      "coarse": {
+        "upper": 209,
+        "complete": false,
+        "groups": 1,
+        "reason": "one component",
+        "work": {
+          "priced": 0,
+          "joins": 0,
+          "reused": 0
+        }
+      },
+      "work": {
+        "conditionings": 56,
+        "rows": 39930,
+        "joins": 7906
+      },
+      "separator": [
+        50,
+        51
+      ],
+      "parts": [
+        [
+          57
+        ],
+        [
+          49,
+          65,
+          71,
+          72,
+          76
+        ]
+      ]
+    }
+  }
+]
