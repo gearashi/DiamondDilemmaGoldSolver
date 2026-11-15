@@ -346,7 +346,7 @@ def relink(model, first, second, assemblies, limit=6):
     return out
 
 
-def simultaneous_swaps(model, board, allowed, prices, *, exact=False):
+def simultaneous_swaps(model, board, allowed, prices, *, exact=False, touch=None, packing_work=None, separator_depth=0):
     """Compare all two-cycles and pack compatible positive gains across the full board."""
     cells=np.array(sorted(allowed),dtype=int)
     if not len(cells):
@@ -365,13 +365,17 @@ def simultaneous_swaps(model, board, allowed, prices, *, exact=False):
     ii,jj=np.nonzero(np.triu(gains,1)>0)
     excluded=set()
     candidate=board.copy()
-    order=np.argsort(-gains[ii,jj],kind='stable')
+    priority=np.argsort(-gains[ii,jj],kind='stable')
+    active=range(len(priority))
+    if exact or touch:
+        pairs=[(int(cells[ii[t]]),int(cells[jj[t]])) for t in priority]
+        weight=[int(gains[ii[t],jj[t]]) for t in priority]
     if exact:
         from r34_swap_packing import pack_swaps
-        pairs=[(int(cells[ii[t]]),int(cells[jj[t]])) for t in order]
-        weight=[int(gains[ii[t],jj[t]]) for t in order]
-        order=order[pack_swaps(model,pairs,weight)]
-    for index in order:
+        active=pack_swaps(model,pairs,weight,separator_depth=separator_depth,stats=packing_work)
+    selected=[]
+    for slot in active:
+        index=priority[slot]
         i,j=ii[index],jj[index]
         a,b=cells[i],cells[j]
         if a in excluded or b in excluded:
@@ -379,6 +383,15 @@ def simultaneous_swaps(model, board, allowed, prices, *, exact=False):
         candidate[a]=3*tiles[j]+int(grid[i,j].argmax())
         candidate[b]=3*tiles[i]+int(grid[j,i].argmax())
         excluded.update((a,b,*model.problem.neighbors[a],*model.problem.neighbors[b]))
+        if touch:
+            selected.append(slot)
+    if touch:
+        from r35_touch_packing import augment
+        oriented=[(int(3*tiles[jj[t]]+grid[ii[t],jj[t]].argmax()),
+                   int(3*tiles[ii[t]]+grid[jj[t],ii[t]].argmax())) for t in priority]
+        candidate,_,metrics=augment(model,board,pairs,oriented,weight,selected,touch)
+        if packing_work is not None:
+            packing_work.update({'touch_'+k:v for k,v in metrics.items()})
     return candidate,len(ii)
 
 
@@ -520,7 +533,8 @@ def forest_pool(model,board,available,size,rng):
 
 class Engine:
     def __init__(self,problem,*,bonds=False,joint=False,adjacent=False,ties=0,fork=False,
-                 relink=False,slate=1,pool=10,tie_slack=0,cycle_budget=0,contacts=None,disjoint=False,exact_packing=False,pair_cycles=0,forest=False,contact_group=0):
+                 relink=False,slate=1,pool=10,tie_slack=0,cycle_budget=0,contacts=None,disjoint=False,exact_packing=False,pair_cycles=0,forest=False,contact_group=0,
+                 touch_packing=None,separator_packing=False):
         if min(slate,pool)<1 or min(ties,cycle_budget)<0 or tie_slack not in (0,1,2):
             raise ValueError("Invalid candidate or repair limits.")
         self.model=BoardModel(problem)
@@ -536,10 +550,14 @@ class Engine:
         self.contact_group=contact_group
         self.forest=forest
         self.pair_cycles=pair_cycles
-        self.exact_packing=exact_packing
+        if touch_packing not in (None, 'priced', 'complete', 'cp'):
+            raise ValueError("Unknown fixed-orientation swap packing policy.")
+        self.touch_packing = touch_packing
+        self.separator_packing = separator_packing
+        self.exact_packing = bool(exact_packing or touch_packing or separator_packing)
         self.contacts=contacts
         self.disjoint=disjoint
-        self.joint=joint or adjacent or cycle_budget>0 or contacts is not None or disjoint or exact_packing or pair_cycles>0 or forest
+        self.joint=joint or adjacent or cycle_budget>0 or contacts is not None or disjoint or self.exact_packing or pair_cycles>0 or forest
         self.cycle_budget=cycle_budget
         self.adjacent=adjacent
         self.ties=ties
@@ -559,7 +577,9 @@ class Engine:
             protected=[]
         available=np.setdiff1d(model.free,protected)
         if self.joint and len(available):
-            board,n=simultaneous_swaps(model,board,available,prices,exact=self.exact_packing)
+            board,n=simultaneous_swaps(model,board,available,prices,exact=self.exact_packing,
+                                       touch=self.touch_packing,packing_work=stats,
+                                       separator_depth=3 if self.separator_packing else 0)
             stats['positive_swap_pairs']+=n
             stats['potential_pairs_priced']+=len(available)*(len(available)-1)//2
             if self.cycle_budget:
@@ -652,6 +672,10 @@ class Engine:
                 config['contact_group']=self.contact_group
             if self.exact_packing:
                 config['exact_packing']=True
+            if self.touch_packing:
+                config['touch_packing']=self.touch_packing
+            if self.separator_packing:
+                config['separator_packing']=True
             if self.contacts is not None or self.disjoint:
                 config.update(contacts=self.contacts,disjoint=self.disjoint)
             key=[2 if self.assemblies else 1,domain_binding(model),config,seed,backend,replicas,dispatches,ranked,list(hints)]
@@ -797,6 +821,11 @@ def main():
     parser.add_argument('--pair-cycles',type=int,choices=(0,2,3),default=0,help='Price interacting donor cycles in the joint pool up to this length.')
     parser.add_argument('--contact-group',type=int,choices=(1,2,3),default=0,help='Pack positive cycles alone (1), or also price two or three touching cycles. With no --pair-cycles, consider cycles up to length three.')
     parser.add_argument('--exact-packing',action='store_true',help='Solve small and bipartite swap conflicts exactly.')
+    parser.add_argument('--touch-packing',choices=('priced','complete','cp'),
+                        help='Allow swaps on neighboring cells and price their exact oriented seam interactions. '
+                             'Complete solves small components; cp also tries bounded fixed-code CP-SAT.')
+    parser.add_argument('--separator-packing',action='store_true',
+                        help='Split bounded nonbipartite components in the noncontacting swap pack.')
     parser.add_argument('--disjoint-contacts',action='store_true',help='Permit at most one changed neighbor per changed cell.')
     parser.add_argument('--ties',type=int,default=0)
     parser.add_argument('--tie-slack',type=int,choices=(0,1,2),default=0)
@@ -816,8 +845,12 @@ def main():
         config['pair_cycles']=args.pair_cycles
     if args.contact_group:
         config['contact_group']=args.contact_group
-    if args.exact_packing:
+    if args.exact_packing or args.touch_packing or args.separator_packing:
         config['exact_packing']=True
+    if args.touch_packing:
+        config['touch_packing']=args.touch_packing
+    if args.separator_packing:
+        config['separator_packing']=True
     if args.contacts is not None or args.disjoint_contacts:
         config.update(contacts=args.contacts,disjoint=args.disjoint_contacts)
     engine=Engine(p,**config)

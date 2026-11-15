@@ -39,3 +39,53 @@ Across those 48 pools the physical seam index considered 60,057 disjoint, actual
 A 64-round eight-cell-forest trajectory used the released, expanded pair and triple policy on the same four seeds. All three finished with identical best board hashes (178, 168, 172, 169). Applying each local stage before the full-board circulation instead produced 176/171/170/174, 177/171/169/173 and 177/170/171/173 respectively. This earlier order shortened the time to 160 on some seeds and lowered some final scores. Keep the new two/three-cycle rules as opt-in exact local repair capabilities; reject the early reordering and their promotion over individual cycles for ordinary sustained search. No method in this comparison reached 208 or Gold.
 
 [Per-seed scores, witness digests, work and 48 local comparisons](R35_CYCLE_REPAIR.json). Reproduce with `bench_r35_trajectories.py --help` and `bench_r35_cycle_contacts.py --help`; use an isolated output directory, the installed physical tile file, and seeds 3500 through 3503 for the trajectory arms.
+
+## 33. Select neighboring swaps by their physical seam gains
+
+Each candidate exchanges two nonadjacent cells in its individually best legal orientations. Different candidates may touch one another. The new packing stage retains one move per cell and computes changes to shared seams directly from both replacement codes. A neighboring change can make a previously rejected move profitable, so only candidates touching newly changed cells are reconsidered. `--touch-packing priced` keeps the better of a zero-correction pack and a signed marginal pack. `complete` also solves each connected component of up to 18 candidate swaps exactly, including all signed pairwise corrections. A seam touches at most two disjoint selected moves, so these pair corrections determine the exact physical objective for a fixed list of oriented swaps. The original witness wins ties.
+
+The `cp` profile adds bounded whole-list CP-SAT when a component exceeds that limit and there are at most 512 candidates. It encodes one Boolean per fixed move, at most one move per cell, and the actual edge mask comparison on every seam. It starts with the feasible previous pack, keeps that pack after UNKNOWN or a tie, and checks any improved outcome against the full board. The candidate-count gate separates the tested moderate pools from the large, low-yield controls. Its numeric cutoff is an engineering bound.
+
+Each of 24 additional original-board starts was tested over all free cells and a 30-cell sample. Twelve starts were raw placements and twelve were polished with eight independent repairs. The sums below add strictly comparable one-step gains on separate boards. All 48 returned legal physical arrangements.
+
+| Scope | Zero correction | Signed | Signed plus exact small components | New cases helped by the last stage beyond signed |
+|---|---:|---:|---:|---:|
+| Full board, summed extra seams over released exact packing | 259 | 262 | 265 | 2 cases, 3 extra seams |
+| 30-cell pool, summed extra seams | 22 | 23 | 23 | 0 |
+
+On a 12-seed subset, bounded CP added 12 further seams across all six raw 30-cell cases. Nine of the 12 pool models proved optimal and three returned feasible improvements. None of the 12 full-board calls improved the existing witness. The six large raw cases returned UNKNOWN. Increasing deterministic effort from 0.2 to 2.0 on two raw and two polished held-outs confirmed all four pool optima, including 30 matches versus 27 and 28 versus 26 on the raw boards. Both large raw full-board calls found a feasible incumbent only and gained zero. The four starts at higher effort are a subset of the first 12.
+
+A planted triangle of three mutually touching exchanges gains only 2, 1 and 3 seams individually. Applying them together recovers the known 15-edge one-loop solution from 3 matched edges. Independent physical enumeration also checks the small-component and CP optima, including legal orientations, endpoint conflicts and retained ties.
+
+## 34. Split nonbipartite conflict components with bounded residual work
+
+`--separator-packing` first uses the released exact routines for components of up to 22 candidates and for bipartite graphs. For an unresolved component of up to 64 candidates it branches on including or excluding an articulation vertex, or a vertex on a recovered odd cycle. It combines disconnected residuals and retries the released exact routines. A depth-three limit leaves unproved components to the released packer. An exact optimum tied with the existing witness retains that witness. Exactness here applies to the noncontacting subset of the stated fixed candidate list.
+
+Across the 48 physical controls, the extension attempted 62 bounded nonbipartite components and proved nine. Eight matched the released witness value. One 30-cell case gained one seam; there was no gain on the 24 full-board cases. The additional local seam disappeared when signed packing was already active. Independent 25-vertex positives for both articulation and odd-cycle branches verify gains over the old fallback; a tied odd cycle verifies identical returned move IDs. Leaving equal-weight ties to the branch solver changed two held-out 320-round bests. Retaining the released tie policy restored one of those results.
+
+## Sustained comparison and settings
+
+All variants below used four independently validated eight-bond starts with the same codes by seed, no archive hints, CPU sampling, full-board cycle budget three, a ten-cell repair pool, and rounds 16, 64 and 320. The 64- and 320-round runs reused the previous deterministic prefix. A separate cold 64-round replay for seed 3500 reproduced every variant's best board and work. Counts for a threshold are rounds per start, and a dash means that start did not reach the threshold.
+
+| Packing policy | Best at 320 rounds, seeds 3500–3503 | Rounds to 180 |
+|---|---|---|
+| Released exact packing | 171, 182, 181, 180 | –, 155, 315, 210 |
+| Zero-correction contacts | 176, 176, 180, 176 | –, –, 220, – |
+| Signed contacts | 176, 176, 183, 178 | –, –, 147, – |
+| Signed plus small exact components | 178, 176, 181, 178 | –, –, 204, – |
+| Signed, small exact and bounded CP | 177, 177, 171, 181 | –, –, –, 105 |
+| Separators, released ties preserved | 171, 182, 181, 179 | –, 155, 315, – |
+| Separators, counterfactual arbitrary ties | 171, 182, 178, 179 | –, 155, –, – |
+| Released exact packing plus individual cycles | 183, 176, 181, 175 | 90, –, 273, – |
+| Exact small signed components plus individual cycles | 178, 176, 174, 178 | –, –, –, – |
+| Bounded CP, separators and individual cycles | 179, 177, 174, 180 | –, –, –, 253 |
+
+**Decision.** Retain signed, component-exact, bounded-CP and tie-preserving separator modes for the tested local objectives. Reject arbitrary tie replacement, unconditioned full-board fixed-code CP, and enabling all the options as the ordinary sustained profile. On these four starts the released `--exact-packing` reached 180 most often. The individual-cycle mode reached 160 within 11–14 rounds on all four and reached 180 on two. Adding individual cycles to exact packing attained the earliest 180 (round 90) and a peak of 183 but also missed 180 on two starts. None reached 208 or Gold. A materially different repeated physical repair distribution or an independently verified target improvement would warrant a new comparison.
+
+For independent discovery at the measured 180 threshold:
+
+```powershell
+.\venv\Scripts\python.exe r31_fresh.py --backend cpu --bonds --cycle-budget 3 --exact-packing --rounds 320 --starts 0 --database runtime/fresh-exact-swap.sqlite --output runtime/fresh-exact-swap.json
+```
+
+[Physical pools, branches, per-seed milestones and board digests](R35_SWAP_PACKING.json). Reproduce with `bench_r35_packing.py`, `bench_r35_fixed_packing.py` and `bench_r35_trajectories.py` using the original tile file. Fixed packing optimizes only the supplied oriented candidates. A feasible CP result establishes its checked score. A proof of optimality on that scope never closes a full unexamined board.

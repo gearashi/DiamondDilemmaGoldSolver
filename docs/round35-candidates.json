@@ -352,7 +352,16 @@
       "source_id": 18,
       "title": "Permit touching chosen moves with verified additive or pairwise score",
       "proposal_and_validation": "r34_swap_packing.pack_swaps and r31_fresh.simultaneous_swaps prohibit all neighboring footprints; an exact zero seam correction may allow both chosen code assignments, as may a nonzero correction whose total is profitable. Start with zero-correction pairs; then solve the sparse weighted pairwise objective for fixed move/orientation alternatives, treating reused cells as incompatible. Each physical seam must be charged once; retain the current packing witness as a fallback. This tests selection across a global move list, independently of generating corrected local clusters (#17). Compare packed gain on identical candidates and verify direct physical rescoring, including a connected triangle of candidate moves.",
-      "state": "open"
+      "state": "retain fixed-orientation local packing; reject general default",
+      "mechanism": "REPAIR-SIGNED-SWAPS",
+      "measurement": "48 paired original pools. On 24 full boards zero, signed and exact-small contacts added a summed 259, 262 and 265 seams over released exact packing. On 24 smaller pools: 22, 23 and 23. Bounded CP added 12 more seams on six raw 30-cell cases and zero on the 12 full-board controls. Tenfold CP effort did not improve the large raw controls. All fixed-code profiles and combinations were tested to 320 rounds on four matched fresh starts.",
+      "closure_reason": "Retain --touch-packing priced/complete/cp for verified local gains. A connected triple reconstructs a planted single-loop Gold. Preserve the incumbent on UNKNOWN/ties. Distinct coefficient lists and sums do not confer whole-board optimality. Reject unconditional CP and general sustained promotion; released exact packing alone reached 180 on three of four versus one for each standalone expanded mode.",
+      "reopen_trigger": "A materially different recurring touching-move distribution or independently verified target improvement changes the local-versus-trajectory decision.",
+      "evidence": [
+        "docs/ROUND35_REPAIR.md",
+        "docs/R35_SWAP_PACKING.json",
+        "test_r35_swap_packing.py"
+      ]
     },
     {
       "id": 34,
@@ -360,7 +369,16 @@
       "source_id": 19,
       "title": "Exact packing of large nearly bipartite or separable conflict graphs",
       "proposal_and_validation": "r34_swap_packing.pack_swaps already solves small components (up to 22) or large bipartite components via weighted min cut. Test articulation/block-cut dynamic programming and bounded branching over an odd-cycle transversal with the existing exact bipartite routine on residues. Screen actual conflict graph structure before enabling expensive branching. Compare gain and explored residuals vs old greedy on identical lists; match complete independent-set enumeration on small graphs and retain the greedy witness whenever a budget ends.",
-      "state": "open"
+      "state": "retain bounded nonbipartite certificates as opt-in",
+      "mechanism": "REPAIR-SEPARATOR-MWIS",
+      "measurement": "62 bounded nonbipartite component attempts across the same 48 original physical controls, nine exact certificates, eight preserved ties and one extra seam on a 30-cell board. At 320 rounds tie-preserving scores were 171/182/181/179 vs released 171/182/181/180; arbitrary ties produced 171/182/178/179. Planted odd-cycle and articulation controls each beat the old fallback.",
+      "closure_reason": "Retain --separator-packing as a scoped certificate for the noncontacting fixed-move list, depth three and up to 64 candidates. The single local gain did not extend signed augmentation on these data. Keep existing witnesses on ties, existing fallback on budget exhaustion and released ordinary sustained settings.",
+      "reopen_trigger": "A measured new distribution contains enough unresolved, locally consequential nearly bipartite or articulation components to change the production decision.",
+      "evidence": [
+        "docs/ROUND35_REPAIR.md",
+        "docs/R35_SWAP_PACKING.json",
+        "test_r35_swap_packing.py"
+      ]
     },
     {
       "id": 35,

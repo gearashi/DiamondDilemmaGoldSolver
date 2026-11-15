@@ -27,6 +27,28 @@ class RawSingles(Engine):
             return super().repair(board,rng,step,stats,prices)
 
 
+class ReleasedTieOrder(Engine):
+    """Counterfactual that takes an arbitrary optimal witness on tied separators."""
+    def repair(self,*args):
+        from r34_swap_packing import pack_swaps
+        def unstable(*values,**kwargs):
+            return pack_swaps(*values,**kwargs,preserve_ties=False)
+        with patch('r34_swap_packing.pack_swaps',unstable):
+            return super().repair(*args)
+
+
+class NeutralContacts(Engine):
+    """Zero-correction ablation for the public signed fixed-code policy."""
+    def repair(self,*args):
+        import r31_fresh
+        original = r31_fresh.simultaneous_swaps
+        def neutral(*values,**kwargs):
+            kwargs['touch'] = 'neutral'
+            return original(*values,**kwargs)
+        with patch('r31_fresh.simultaneous_swaps',neutral):
+            return super().repair(*args)
+
+
 class EarlyContacts(Engine):
     """Held-out ablation: apply one local cycle repair before full-board matching."""
     def repair(self, board, rng, step, stats, prices):
@@ -53,6 +75,13 @@ def engine_for(problem,policy):
     engine=EarlyContacts if policy.startswith('early-') else Engine
     if policy=='singles':
         engine=RawSingles
+    if policy.startswith(('pack-','combined-')):
+        name=policy.split('-',1)[1]
+        cls={'neutral':NeutralContacts,'separator':ReleasedTieOrder}.get(name,Engine)
+        touch={'priced':'priced','complete':'complete','cp':'cp','both':'priced','all':'cp'}.get(name)
+        return cls(problem,bonds=True,joint=True,cycle_budget=3,exact_packing=True,touch_packing=touch,
+                   separator_packing=name in ('separator','stable','both','all'),
+                   contact_group=1 if policy.startswith('combined-') else 0)
     return engine(problem,bonds=True,joint=True,cycle_budget=3,pool=8 if forest else 10,forest=forest,
                   pair_cycles=0 if policy=='baseline' else 3,
                   contact_group={'singles':1,'positive':2,'triples':3}.get(policy.rsplit('-',1)[-1],0))
@@ -117,7 +146,9 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--seeds', type=int, nargs='+', required=True)
     parser.add_argument('--policy', choices=('baseline','pairs','singles','factored-singles','forest-release','forest-positive','forest-triples',
-                                                  'early-release','early-positive','early-triples'), required=True)
+                                                  'early-release','early-positive','early-triples','pack-base',
+                                                  'pack-neutral','pack-priced','pack-separator','pack-stable','pack-complete','pack-cp','pack-both',
+                                                  'combined-base','combined-complete','combined-all'), required=True)
     parser.add_argument('--rounds', type=int, nargs='+', default=[16, 64, 320])
     parser.add_argument('--cold-seed', type=int, default=3500)
     args = parser.parse_args()
