@@ -134,5 +134,90 @@ class SeedProofTests(TestCase):
         self.assertGreater(row['derived_rows'],0)
         self.assertEqual(row['stats']['repair_completed_queries'],1)
 
+    def test_archived_v115_terminal_consumers_reopen_twice_without_native_work(self):
+        import json
+        from pathlib import Path
+        from constraint_repair_round24 import fragment_crossover,loop_merge_trade,scoped_repair_failure
+        archived=json.loads((Path(__file__).parent/'docs/R35_REPAIR_LEGACY_CONSUMERS.json').read_bytes())
+        p=SearchProblem(*tetrahedron_tiles());seed=[0,4,6,9]
+        bad=SearchProblem(multiple_loops(),double_face())
+        calls={
+            'core_solved': lambda saved: core_guided_repair(p,seed,durable=True,seconds=0,resume=saved),
+            'core_impossible': lambda saved: core_guided_repair(bad,[0,3],durable=True,seconds=0,resume=saved),
+            'scope': lambda saved: scoped_repair_failure(p,seed,[0,1],durable=True,seconds=0,resume=saved),
+            'fragment': lambda saved: fragment_crossover(p,[seed,[1,3,6,9]],max_fragment=1,durable=True,seconds=0,resume=saved),
+            'trade': lambda saved: loop_merge_trade(bad,[0,3],[0,1],durable=True,seconds=0,resume=saved)}
+        with patch('constraint_repair_resume_round25._oracle',side_effect=AssertionError('repeated native work')):
+            for name,call in calls.items():
+                record=archived['lf'][name]
+                for saved in (record,{**record,**archived['crlf'][name]}):
+                    counters=saved['state']['stats']
+                    for _ in range(2):
+                        answer=call(saved)
+                        self.assertEqual(answer['status'],record['state']['status'])
+                        self.assertEqual(answer['best_board'],record['state']['best_board'])
+                        self.assertTrue(answer['continuation_complete'])
+                        for key in ('repair_completed_queries','repair_completed_masters','repair_native_attempts','oracle_branches'):
+                            self.assertEqual(answer['stats'][key],counters[key])
+                        saved=answer['checkpoint']
+        with self.assertRaisesRegex(ValueError,'scope, policy or source'):
+            fragment_crossover(p,[seed,[1,3,6,9]],max_fragment=2,durable=True,seconds=0,resume=archived['lf']['fragment'])
+        p.domains[0]=p.domains[0][1:]
+        with self.assertRaisesRegex(ValueError,'scope, policy or source'):
+            calls['core_solved'](archived['lf']['core_solved'])
+
+    @requires_ortools
+    def test_archived_pool_reuses_both_master_and_verified_gold(self):
+        import json
+        from pathlib import Path
+        from importlib.metadata import version
+        from constraint_lns import _Control
+        from constraint_repair_gold_round26 import GoldRepairPool
+        from ortools.sat.python import cp_model
+        archived=json.loads((Path(__file__).parent/'docs/R35_REPAIR_LEGACY_CONSUMERS.json').read_bytes())
+        p=SearchProblem(*tetrahedron_tiles())
+        record=archived['lf']['pool']
+        for saved in (record,{**record,**archived['crlf']['pool']}):
+            if version('ortools')!=archived['ortools']:
+                with self.assertRaisesRegex(ValueError,'identity|scope'):
+                    GoldRepairPool(p,resume=saved)
+                continue
+            for _ in range(2):
+                pool=GoldRepairPool(p,resume=saved)
+                original=pool.stats
+                with patch.object(pool,'_native_oracle',side_effect=AssertionError('unexpected native oracle')):
+                    chosen,branches=pool.minimum_hitting_set([[0,1],[1,2]],list(range(4)),
+                        _Control(5,None),cp_model,seed=[0,4,6,9])
+                    self.assertEqual((chosen,branches),({1},0))
+                    known=record['results'][0]
+                    answer=pool.oracle(_Control(5,None)).query(known['assumptions'])
+                    self.assertEqual(answer['status'],'solved')
+                    self.assertEqual(answer['codes'],known['codes'])
+                for key in ('gold_pool_master_calls','gold_pool_native_calls','gold_pool_master_build_attempts'):
+                    self.assertEqual(pool.stats[key],original[key])
+                self.assertEqual(pool.stats['gold_pool_master_completed_hits'],original['gold_pool_master_completed_hits']+1)
+                saved=pool.snapshot()
+
+    def test_each_reviewed_repair_producer_and_new_proof_source_fail_closed_if_edited(self):
+        import json
+        from pathlib import Path
+        from r27_incumbent_compat import _variants
+        archived=json.loads((Path(__file__).parent/'docs/R35_REPAIR_LEGACY_CONSUMERS.json').read_bytes())
+        p=SearchProblem(*tetrahedron_tiles())
+        seed=[0,4,6,9];old=archived['lf']['core_solved']
+        def open_record(record):
+            return core_guided_repair(p,seed,seconds=0,durable=True,resume=record)
+        fresh=open_record(old)['checkpoint']
+        reader=Path.read_bytes
+        sources=('constraint_repair_round24.py','constraint_repair_resume_round25.py','constraint_repair_gold_round26.py','r35_repair_seeds.py')
+        for name in sources:
+            with self.subTest(name=name),patch.object(Path,'read_bytes',lambda path: reader(path)+(b'# incompatible' if path.name==name else b'')):
+                _variants.cache_clear()
+                records=[fresh] if name.startswith('r35_') else [old,{**old,**archived['crlf']['core_solved']},fresh]
+                for record in records:
+                    with self.assertRaisesRegex(ValueError,'scope, policy or source'):
+                        open_record(record)
+        _variants.cache_clear()
+
 
 if __name__=='__main__':main()

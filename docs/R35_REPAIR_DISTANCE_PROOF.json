@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "source_commit": "c2f4c05ddf45687a77086b1e2011a6470f6abac8",
+  "reference_score": 207,
+  "physical_cells": 160,
+  "minimum_changed_cells": 89,
+  "cap": 88,
+  "pose_obligations": 3804,
+  "unit_propagation": 3800,
+  "proper_circuits": 4,
+  "external_result": "VERIFIED",
+  "resolution_steps": 2788450,
+  "dimacs_header": "p cnf 1344 17709",
+  "catalog_sha256": "d72d6c147d3af5798f9f53a96832adf1ac82ae7e4fdc9f009c48700ddf020818",
+  "generator": "bench_r35_repair_seeds.py",
+  "files": {
+    "cap88.cnf": {
+      "sha256": "98260bd39b8ff78fe8f4d082d106bf4ab593dc7e7503973f6f8ce7ceb2e3a1e1",
+      "bytes": 265133
+    },
+    "cap88.drat": {
+      "sha256": "e1743d0308dde91151323ad1f6ccce4470db1f2316fc8b23e586a42eef7176e1",
+      "bytes": 7848757
+    },
+    "solve.log": {
+      "sha256": "7b489864e7a0a6942c7427752ac01be4e6b9f8c6c9d8b5d3be4b2a6cb809a450",
+      "bytes": 15295
+    },
+    "check.log": {
+      "sha256": "e98cc9f77b32b85646b89771f5d9dde4688c2e134e5204f043215d629a252c7b",
+      "bytes": 460
+    },
+    "placements.json": {
+      "sha256": "929b3832d2c7c0e33538a5c35ac6ac8563c5c4ee4ff1f14dbd103a1288bb4c09",
+      "bytes": 45398
+    },
+    "replay.json": {
+      "sha256": "6f039f2bc5609d4f7a77f49d2d78b71eccaf5856c0c93450c129d7ca37d49bf7",
+      "bytes": 1876
+    },
+    "README.txt": {
+      "sha256": "bd8d39ed824e61332b06ef63ae60a32c4193e950151671837425f80efe1c2b60",
+      "bytes": 925
+    }
+  },
+  "asset": {
+    "name": "DiamondDilemmaGoldSolver-R35-repair-distance-proof.zip",
+    "sha256": "80cb88afcf04ffe35be5fe146fddcf4993e7a687be6e4d776a7a87cfb171a7e1",
+    "bytes": 4003265
+  }
+}
