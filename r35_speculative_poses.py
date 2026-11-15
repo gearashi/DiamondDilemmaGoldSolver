@@ -3,8 +3,16 @@ from collections import Counter
 
 
 class PoseJoins:
-    def __init__(self,assemblies):
+    def __init__(self,assemblies,*,gold=False):
         self.model=assemblies.model
+        self.neighbors=getattr(self.model.problem.board,'neighbors',None)
+        if self.neighbors is None:
+            self.neighbors=[tuple(zip(map(int,row),map(int,sides)))
+                            for row,sides in zip(self.model.problem.neighbors,self.model.problem.sides)]
+        self.geometry=None
+        if gold:
+            from r35_pose_contacts import Boundaries
+            self.geometry=Boundaries(self.model.problem)
         self.base=[(frozenset(group),rows,()) for group,rows in assemblies.groups]
         self.cache={}
         self.singletons={}
@@ -41,7 +49,7 @@ class PoseJoins:
         left_rows=self.singleton_rows(a//3) if left[1] is None else left[1]
         for p in left_rows:
             c,r=next((c,v%3) for c,v in p if v//3==a//3)
-            dest,side=self.model.problem.board.neighbors[c][(a%3+r)%3]
+            dest,side=self.neighbors[c][(a%3+r)%3]
             self.work['join_probes']+=1
             if dest<0:continue
             slots=frozenset(i for i,v in p)
@@ -53,7 +61,11 @@ class PoseJoins:
                 candidates=table.get((dest,rotation),())
             for q,other in candidates:
                 if slots.isdisjoint(other):
-                    result.append(tuple(sorted((*p,*q),key=lambda row:row[1]//3)))
+                    merged=tuple(sorted((*p,*q),key=lambda row:row[1]//3))
+                    if self.geometry is not None and self.geometry.describe(merged)[3]:
+                        self.work['incompatible_incidental_rows']+=1
+                        continue
+                    result.append(merged)
         result.sort(key=lambda pose:(pose[0][0],pose[0][1]%3))
         self.cache[key]=result
         self.work['joined_tables_built']+=1

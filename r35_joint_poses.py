@@ -6,8 +6,12 @@ from constraint_pruning import _tile_choices
 from r27_structure_filters import Work,WorkLimit,bits
 
 
-def narrowed_poses(domains,clusters,*,residual=True,work_limit=200000,free_support=True):
+def narrowed_poses(domains,clusters,*,residual=True,work_limit=200000,free_support=True,problem=None,contact_options=None,bonds=()):
     n=len(domains)
+    join_stats={}
+    if bonds and problem is not None:
+        from r35_pose_contacts import conditioned_components
+        clusters,join_stats=conditioned_components(problem,domains,clusters,bonds)
     groups=[]
     masks=[]
     for members,member_codes,embeddings in clusters:
@@ -21,6 +25,13 @@ def narrowed_poses(domains,clusters,*,residual=True,work_limit=200000,free_suppo
         groups.append(choices);masks.append(member_codes)
     stats=Counter(initial_labelled=sum(len(v) for g in groups for v in g.values()),
                   initial_footprints=sum(map(len,groups)))
+    stats.update(join_stats)
+    work=Work(work_limit)
+    complete=True
+    if problem is not None:
+        from r35_pose_contacts import compatible_poses
+        groups,contact_stats,complete=compatible_poses(problem,groups,work,**(contact_options or {}))
+        stats.update(contact_stats)
     free_mask=(1<<(3*n))-1
     for mask in masks:free_mask&=~mask
     free_rows=[_tile_choices(row&free_mask) for row in domains]
@@ -34,11 +45,9 @@ def narrowed_poses(domains,clusters,*,residual=True,work_limit=200000,free_suppo
     for pool in distinct_pools:
         if covered_tiles&pool:disjoint_pools=False;break
         covered_tiles|=pool
-    work=Work(work_limit)
-    complete=True
 
     def unfillable():
-        return dict(domains=tuple(0 for _ in domains),poses=(),complete=True,stats=dict(stats,impossible=1))
+        return dict(domains=tuple(0 for _ in domains),poses=(),complete=True,stats=dict(stats+work.counters,impossible=1))
 
     if any(not row for row in domains) or any(not g for g in groups):return unfillable()
     occupied_by=[0]*len(groups)

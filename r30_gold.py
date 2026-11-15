@@ -509,9 +509,14 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
         from constraint_pruning import Pruner
         from r35_joint_poses import narrowed_poses
         clusters=Pruner(problem,regions=[],parity=False,gold_bonds=True).clusters
-        joint=narrowed_poses(domains,clusters)
+        joint=narrowed_poses(domains,clusters,problem=problem,bonds=bonds)
         domains=joint['domains']
         stats['joint_pose_support']=dict(joint['stats'],complete=joint['complete'])
+        if not all(domains) and not (cutsets or type_cuts or bridges or geographic_cores or edge_perfect_cores
+                                    or departure_rules or physical_loss is not None):
+            from r28_geo_color import _sphere
+            _sphere(problem)
+            return dict(status='INFEASIBLE',**stats)
     from ortools.sat.python import cp_model
     if matching:
         # These optional full-side formulas refer directly to individual blank literals.
