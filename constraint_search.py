@@ -224,6 +224,9 @@ def main(argv=None):
             # Validate the named generation before replacing the previous saved
             # envelope; reading its frontier does not decode native GPU arrays.
             gpu_frontier=checkpoint_frontier(payload,learning_state['_gpu_checkpoint_dir'])
+            if gpu_frontier is not None and options['portable_frontier']:
+                from constraint_portable import export_frontier
+                gpu_frontier=export_frontier(problem,gpu_frontier,'gold',options)
         envelope = {'version': 1, 'algorithm': args.algorithm, 'target': 'gold', 'binding': binding, 'payload': payload, 'work_scope':dict(state['work_scope'])}
         atomic_json(checkpoint_path, envelope)
         if gpu_frontier is not None:atomic_json(folder/'remaining-work.json',gpu_frontier)

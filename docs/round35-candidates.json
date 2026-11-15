@@ -588,7 +588,39 @@
       "source_id": 3,
       "title": "Coalesce compatible siblings in portable search remainders",
       "proposal_and_validation": "Evaluate lossless sibling coalescing specifically for exported portable remainders. It already exists as a box-algebra helper and symbolic diagrams cover some cases. Screen actual compressed/archive sizes and avoid partitioning the same siblings immediately after reopening. Native owner groups and native history must remain distinguishable.",
-      "state": "open"
+      "state": "retained for explicit portable v1 transfers",
+      "mechanism": "Lossless coalescing of disjoint Cartesian domain boxes at transfer",
+      "evidence": "docs/ROUND35_COVERAGE.md",
+      "measurement": {
+        "reproducible_inputs": 19,
+        "matched_cpu_and_sat_completions_per_arm": 7,
+        "dfs_nodes": [
+          120,
+          51
+        ],
+        "sat_calls": [
+          137,
+          60
+        ],
+        "sat_decisions": [
+          142,
+          189
+        ],
+        "recommended_original_frontier": [
+          81,
+          81
+        ],
+        "original_saved_dfs": [
+          19,
+          19
+        ],
+        "original_saved_hybrid": [
+          18,
+          18
+        ]
+      },
+      "closure_reason": "Exact cover and ownership tests passed; fewer CPU roots and DFS nodes in all changed controls. SAT decisions can rise. Native and implicit GPU exports keep their original cursors and rows.",
+      "reopen_trigger": "A new compatible transfer consumer with different partition requirements, or a counterexample to exact coverage or restart ownership."
     },
     {
       "id": 68,

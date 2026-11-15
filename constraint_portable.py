@@ -3,13 +3,17 @@
 A portable frontier represents unfinished work, not a proof that the original
 puzzle is exhausted. Checksums protect local checkpoint integrity only.
 """
-from constraint_work import WorkScope,checkpoint_boxes,frontier_snapshot,restore_frontier
+from constraint_work import WorkScope,checkpoint_boxes,compact_frontier,frontier_snapshot,restore_frontier
 
 
 def export_frontier(problem,checkpoint,target='gold',options=None):
     scope=WorkScope.for_problem(problem,target)
+    compact = bool((options or {}).get('portable_frontier'))
     if isinstance(checkpoint,dict) and checkpoint.get('work_version')==1:
+        if compact:
+            return compact_frontier(checkpoint, scope)
         rows=restore_frontier(checkpoint,scope)
+        scope=WorkScope.restore(checkpoint['scope'])
     elif isinstance(checkpoint,dict) and checkpoint.get('schema')=='diamond-sat-session-v1':
         from constraint_sat_session import PersistentSatSession
         session=PersistentSatSession.restore(problem,checkpoint,target)
@@ -23,7 +27,7 @@ def export_frontier(problem,checkpoint,target='gold',options=None):
         from constraint_dfs import solve
         checked=solve(problem,seconds=0,target=target,resume=checkpoint,options=options)
         rows=checkpoint_boxes(checked['checkpoint'])
-    return frontier_snapshot(scope,rows)
+    return frontier_snapshot(scope,rows,compact=compact)
 
 
 def dfs_roots(problem,payload,target='gold',seed=0,options=None):

@@ -1,0 +1,369 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "cases": [
+    {
+      "name": "original-32-all",
+      "before": {
+        "boxes": 32,
+        "json_bytes": 678437,
+        "zlib_bytes": 2809
+      },
+      "after": {
+        "boxes": 1,
+        "json_bytes": 60235,
+        "zlib_bytes": 445
+      },
+      "export_seconds": 0.02294
+    },
+    {
+      "name": "original-32-inventory-screened",
+      "before": {
+        "boxes": 32,
+        "json_bytes": 678437,
+        "zlib_bytes": 2809
+      },
+      "after": {
+        "boxes": 1,
+        "json_bytes": 60235,
+        "zlib_bytes": 445
+      },
+      "export_seconds": 0.02225
+    },
+    {
+      "name": "original-64-all",
+      "before": {
+        "boxes": 64,
+        "json_bytes": 1316581,
+        "zlib_bytes": 5199
+      },
+      "after": {
+        "boxes": 1,
+        "json_bytes": 60235,
+        "zlib_bytes": 445
+      },
+      "export_seconds": 0.03987
+    },
+    {
+      "name": "original-64-inventory-screened",
+      "before": {
+        "boxes": 64,
+        "json_bytes": 1316581,
+        "zlib_bytes": 5199
+      },
+      "after": {
+        "boxes": 1,
+        "json_bytes": 60235,
+        "zlib_bytes": 445
+      },
+      "export_seconds": 0.0466
+    },
+    {
+      "name": "original-128-all",
+      "before": {
+        "boxes": 128,
+        "json_bytes": 2592869,
+        "zlib_bytes": 9955
+      },
+      "after": {
+        "boxes": 1,
+        "json_bytes": 60235,
+        "zlib_bytes": 445
+      },
+      "export_seconds": 0.08046
+    },
+    {
+      "name": "original-128-inventory-screened",
+      "before": {
+        "boxes": 81,
+        "json_bytes": 1655535,
+        "zlib_bytes": 6460
+      },
+      "after": {
+        "boxes": 81,
+        "json_bytes": 1655535,
+        "zlib_bytes": 6460
+      },
+      "export_seconds": 0.08126
+    },
+    {
+      "name": "original-256-all",
+      "before": {
+        "boxes": 256,
+        "json_bytes": 5132065,
+        "zlib_bytes": 19735
+      },
+      "after": {
+        "boxes": 1,
+        "json_bytes": 60235,
+        "zlib_bytes": 445
+      },
+      "export_seconds": 0.16911
+    },
+    {
+      "name": "original-256-inventory-screened",
+      "before": {
+        "boxes": 81,
+        "json_bytes": 1655535,
+        "zlib_bytes": 6460
+      },
+      "after": {
+        "boxes": 81,
+        "json_bytes": 1655535,
+        "zlib_bytes": 6460
+      },
+      "export_seconds": 0.11393
+    },
+    {
+      "name": "original-512-all",
+      "before": {
+        "boxes": 512,
+        "json_bytes": 10184657,
+        "zlib_bytes": 39409
+      },
+      "after": {
+        "boxes": 1,
+        "json_bytes": 60235,
+        "zlib_bytes": 445
+      },
+      "export_seconds": 0.35267
+    },
+    {
+      "name": "original-512-inventory-screened",
+      "before": {
+        "boxes": 81,
+        "json_bytes": 1655535,
+        "zlib_bytes": 6462
+      },
+      "after": {
+        "boxes": 81,
+        "json_bytes": 1655535,
+        "zlib_bytes": 6462
+      },
+      "export_seconds": 0.10225
+    },
+    {
+      "name": "two-piece-gold",
+      "before": {
+        "boxes": 18,
+        "json_bytes": 525,
+        "zlib_bytes": 256,
+        "dfs_import_roots": 18,
+        "dfs_nodes": 5,
+        "dfs_jobs_completed": 5,
+        "sat_status": "solved",
+        "sat_calls": 5,
+        "sat_decisions": 2,
+        "sat_cubes_closed": 4
+      },
+      "after": {
+        "boxes": 2,
+        "json_bytes": 291,
+        "zlib_bytes": 208,
+        "dfs_import_roots": 2,
+        "dfs_nodes": 2,
+        "dfs_jobs_completed": 1,
+        "sat_status": "solved",
+        "sat_calls": 1,
+        "sat_decisions": 4,
+        "sat_cubes_closed": 0
+      },
+      "export_seconds": 0.00061
+    },
+    {
+      "name": "two-piece-multiple-loops",
+      "before": {
+        "boxes": 18,
+        "json_bytes": 525,
+        "zlib_bytes": 256,
+        "dfs_import_roots": 18,
+        "dfs_nodes": 18,
+        "dfs_jobs_completed": 18,
+        "sat_status": "infeasible",
+        "sat_calls": 24,
+        "sat_decisions": 12,
+        "sat_cubes_closed": 18
+      },
+      "after": {
+        "boxes": 2,
+        "json_bytes": 291,
+        "zlib_bytes": 207,
+        "dfs_import_roots": 2,
+        "dfs_nodes": 6,
+        "dfs_jobs_completed": 6,
+        "sat_status": "infeasible",
+        "sat_calls": 8,
+        "sat_decisions": 28,
+        "sat_cubes_closed": 2
+      },
+      "export_seconds": 0.00021
+    },
+    {
+      "name": "joint-hall",
+      "before": {
+        "boxes": 6,
+        "json_bytes": 467,
+        "zlib_bytes": 239,
+        "dfs_import_roots": 6,
+        "dfs_nodes": 6,
+        "dfs_jobs_completed": 6,
+        "sat_status": "infeasible",
+        "sat_calls": 9,
+        "sat_decisions": 6,
+        "sat_cubes_closed": 6
+      },
+      "after": {
+        "boxes": 6,
+        "json_bytes": 467,
+        "zlib_bytes": 239,
+        "dfs_import_roots": 6,
+        "dfs_nodes": 6,
+        "dfs_jobs_completed": 6,
+        "sat_status": "infeasible",
+        "sat_calls": 9,
+        "sat_decisions": 6,
+        "sat_cubes_closed": 6
+      },
+      "export_seconds": 0.00012
+    },
+    {
+      "name": "word-boundary",
+      "before": {
+        "boxes": 18,
+        "json_bytes": 2617,
+        "zlib_bytes": 319,
+        "dfs_import_roots": 18,
+        "dfs_nodes": 18,
+        "dfs_jobs_completed": 18,
+        "sat_status": "infeasible",
+        "sat_calls": 36,
+        "sat_decisions": 36,
+        "sat_cubes_closed": 18
+      },
+      "after": {
+        "boxes": 2,
+        "json_bytes": 709,
+        "zlib_bytes": 246,
+        "dfs_import_roots": 2,
+        "dfs_nodes": 6,
+        "dfs_jobs_completed": 6,
+        "sat_status": "infeasible",
+        "sat_calls": 20,
+        "sat_decisions": 103,
+        "sat_cubes_closed": 2
+      },
+      "export_seconds": 0.0004
+    },
+    {
+      "name": "precise-reasons",
+      "before": {
+        "boxes": 59,
+        "json_bytes": 3347,
+        "zlib_bytes": 480,
+        "dfs_import_roots": 59,
+        "dfs_nodes": 69,
+        "dfs_jobs_completed": 69,
+        "sat_status": "infeasible",
+        "sat_calls": 59,
+        "sat_decisions": 82,
+        "sat_cubes_closed": 59
+      },
+      "after": {
+        "boxes": 20,
+        "json_bytes": 1389,
+        "zlib_bytes": 367,
+        "dfs_import_roots": 20,
+        "dfs_nodes": 29,
+        "dfs_jobs_completed": 29,
+        "sat_status": "infeasible",
+        "sat_calls": 20,
+        "sat_decisions": 44,
+        "sat_cubes_closed": 20
+      },
+      "export_seconds": 0.00113
+    },
+    {
+      "name": "inventory",
+      "before": {
+        "boxes": 4,
+        "json_bytes": 511,
+        "zlib_bytes": 244,
+        "dfs_import_roots": 4,
+        "dfs_nodes": 1,
+        "dfs_jobs_completed": 1,
+        "sat_status": "solved",
+        "sat_calls": 1,
+        "sat_decisions": 2,
+        "sat_cubes_closed": 0
+      },
+      "after": {
+        "boxes": 4,
+        "json_bytes": 511,
+        "zlib_bytes": 244,
+        "dfs_import_roots": 4,
+        "dfs_nodes": 1,
+        "dfs_jobs_completed": 1,
+        "sat_status": "solved",
+        "sat_calls": 1,
+        "sat_decisions": 2,
+        "sat_cubes_closed": 0
+      },
+      "export_seconds": 0.0001
+    },
+    {
+      "name": "planted160",
+      "before": {
+        "boxes": 27,
+        "json_bytes": 304345,
+        "zlib_bytes": 10458,
+        "dfs_import_roots": 27,
+        "dfs_nodes": 3,
+        "dfs_jobs_completed": 3,
+        "sat_status": "solved",
+        "sat_calls": 3,
+        "sat_decisions": 2,
+        "sat_cubes_closed": 2
+      },
+      "after": {
+        "boxes": 1,
+        "json_bytes": 31693,
+        "zlib_bytes": 1354,
+        "dfs_import_roots": 1,
+        "dfs_nodes": 1,
+        "dfs_jobs_completed": 1,
+        "sat_status": "solved",
+        "sat_calls": 1,
+        "sat_decisions": 2,
+        "sat_cubes_closed": 0
+      },
+      "export_seconds": 0.00657
+    },
+    {
+      "name": "dfs-saved-stack",
+      "before": {
+        "boxes": 19,
+        "json_bytes": 398583,
+        "zlib_bytes": 27883
+      },
+      "after": {
+        "boxes": 19,
+        "json_bytes": 398583,
+        "zlib_bytes": 27883
+      },
+      "export_seconds": 0.05429
+    },
+    {
+      "name": "hybrid-saved-stack",
+      "before": {
+        "boxes": 18,
+        "json_bytes": 382470,
+        "zlib_bytes": 27850
+      },
+      "after": {
+        "boxes": 18,
+        "json_bytes": 382470,
+        "zlib_bytes": 27850
+      },
+      "export_seconds": 0.04977
+    }
+  ]
+}

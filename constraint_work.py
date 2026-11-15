@@ -118,6 +118,52 @@ def coalesce(boxes):
     return tuple(rows)
 
 
+def _compact_siblings(rows, check):
+    """Coalesce a validated, disjoint portable cover. Native cursors own their rows."""
+    if len(rows) < 2:
+        return rows
+    first = rows[0]
+    axes = [i for i, mask in enumerate(first) if any(row[i] != mask for row in rows)]
+    short = [tuple(row[i] for i in axes) for row in rows]
+    hull = [0] * len(axes)
+    volume = 0
+    for row in short:
+        check()
+        size = 1
+        for i, mask in enumerate(row):
+            hull[i] |= mask
+            size *= mask.bit_count()
+        volume += size
+    hull_size = 1
+    for mask in hull:
+        hull_size *= mask.bit_count()
+    # Disjoint subsets fill their Cartesian hull exactly iff their sizes sum to it.
+    if volume == hull_size:
+        short = [hull]
+    else:
+        while True:
+            before = len(short)
+            for i in range(len(axes)):
+                groups = {}
+                for row in short:
+                    check()
+                    rest = row[:i] + row[i + 1:]
+                    groups[rest] = groups.get(rest, 0) | row[i]
+                if len(groups) < len(short):
+                    short = [rest[:i] + (mask,) + rest[i:] for rest, mask in groups.items()]
+            if len(short) == before:
+                break
+    if len(short) == len(rows):
+        return rows
+    merged = []
+    for row in short:
+        full = list(first)
+        for axis, mask in zip(axes, row):
+            full[axis] = mask
+        merged.append(tuple(full))
+    return tuple(merged)
+
+
 @dataclass(frozen=True)
 class WorkScope:
     fingerprint:str
@@ -149,24 +195,43 @@ class WorkScope:
         return cls(value['fingerprint'],value['target'],tuple(int(x,16) for x in value['original']),tuple(int(x,16) for x in value['root']))
 
 
-def frontier_snapshot(scope,boxes,*,check=lambda:None):
+def _validated_boxes(scope, boxes, check):
     boxes=tuple(cube(x,len(scope.root)) for x in boxes)
     if any(not contains(scope.root,x) for x in boxes) or not disjoint(boxes,check):
         raise ValueError('Portable frontier overlaps or escapes its root.')
+    return boxes
+
+
+def _frontier_payload(scope, boxes):
     result={'work_version':1,'scope':scope.payload(),'boxes':[[hex(x) for x in row] for row in boxes]}
     result['digest']=digest(result)
     return result
 
 
-def restore_frontier(payload,expected,*,check=lambda:None):
+def frontier_snapshot(scope,boxes,*,check=lambda:None, compact=False):
+    boxes = _validated_boxes(scope, boxes, check)
+    return _frontier_payload(scope, _compact_siblings(boxes, check) if compact else boxes)
+
+
+def _read_frontier(payload, expected, check):
     if not isinstance(payload,dict) or set(payload)!={'work_version','scope','boxes','digest'} or payload['work_version']!=1:
         raise ValueError('Unknown portable frontier format.')
     if digest({k:v for k,v in payload.items() if k!='digest'})!=payload['digest']:raise ValueError('Portable frontier checksum differs.')
     source=WorkScope.restore(payload['scope'])
     if not expected.accepts(source):raise ValueError('Portable frontier belongs to another puzzle/objective/root.')
     rows=tuple(tuple(int(x,16) for x in row) for row in payload['boxes'])
-    frontier_snapshot(source,rows,check=check)
-    return rows
+    return source, _validated_boxes(source, rows, check)
+
+
+def restore_frontier(payload,expected,*,check=lambda:None):
+    return _read_frontier(payload, expected, check)[1]
+
+
+def compact_frontier(payload, expected, *, check=lambda:None):
+    """Preserve the original transfer identity when its verified rows cannot merge."""
+    scope, rows = _read_frontier(payload, expected, check)
+    merged = _compact_siblings(rows, check)
+    return payload if merged is rows else _frontier_payload(scope, merged)
 
 
 def checkpoint_boxes(checkpoint):
