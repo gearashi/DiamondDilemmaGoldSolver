@@ -1783,8 +1783,18 @@
       "source_id": "Final release review of the bookmarked dashboard launch and 1 Hz polls",
       "title": "Verify the listener without reading search state and reuse unchanged dashboard inputs",
       "mechanism": "DASHBOARD-IDENTITY-AND-TELEMETRY-READS",
-      "state": "testing",
-      "proposal_and_validation": "The published launcher verifies the installation by requesting the full /api/state. This reads the saved board, status, live candidates and history, inspects checkpoints and verifies optional native source/library digests. Reproduce the launcher's one-mebibyte failure using a legitimate large dashboard state. Test a lightweight identity route, compatibility with a running older version, occupied or mismatched ports, and actual Windows startup/reopen. Compare immutable published status reads and native hash work across repeated polls with changing and atomically replaced files. Preserve fresh validation of solver starts and the live Gold search."
+      "state": "keep lightweight listener identity and version-bound display reads",
+      "proposal_and_validation": "The published launcher verifies the installation by requesting the full /api/state. This reads the saved board, status, live candidates and history, inspects checkpoints and verifies optional native source/library digests. Reproduce the launcher's one-mebibyte failure using a legitimate large dashboard state. Test a lightweight identity route, compatibility with a running older version, occupied or mismatched ports, and actual Windows startup/reopen. Compare immutable published status reads and native hash work across repeated polls with changing and atomically replaced files. Preserve fresh validation of solver starts and the live Gold search.",
+      "decision": "Use the small identity route on new servers and fall back to state when a pre-upgrade server reports 404. Cache unchanged runtime snapshots and native build inputs for display. Actual starts validate native files afresh. On Windows and other unsupported profiles, skip the SAT package-version lookup for native persistence.",
+      "measurement": "Eight isolated Windows listeners and 16 CMD open/reopen calls. Across seven original archived-state polls including one changed status, the public JSON snapshots read fell from 28 to 5 (102,869 to 15,544 bytes), native hashes from 14 to 2 (929,418 to 132,774 bytes) and build-manifest reads from 7 to 1 (5,089 to 727 bytes). All seven normalized state responses matched. A stress fixture reached 1,442,627 response bytes; the prior launcher refused it and the new identity route opened it. An older live server with an oversized stress state still requires a one-time restart. Regular owner state worked with both generations. Independently tested concurrent polls, atomic replacement preserving mtime, missing and corrupt files, repaired builds, unsupported platforms and uncached starts.",
+      "evidence": [
+        "docs/R35_DASHBOARD_READS.json",
+        "test_platform.py",
+        "test_r35_dashboard_reads.py",
+        "test_runtime_capabilities.py",
+        "test_dashboard_control.py"
+      ],
+      "reopen_if": "An actual current listener cannot be recognized or a measured regular poll rereads an unchanged tracked file. The owner's previous port message has no established cause in these experiments."
     }
   ],
   "priorities": [
