@@ -56,10 +56,21 @@ class PhaseAnchorTests(unittest.TestCase):
         p,parents,boards=ring_donors(103)
         with self.assertRaisesRegex(ValueError,'embed'):
             search(p,geography=False,phase_anchors='roots')
+        for option in ('tour_mode','corner_mode','neighbor_mode','turn_length','project_blanks','mate_correlations'):
+            with self.subTest(option=option), self.assertRaises(ValueError):
+                search(p,geography=True,phase_anchors='shared',bonds=[(0,3)],forbidden=[(0,3)],**{option:'bad-mode'})
         ds=domain_bits(p)
         self.assertEqual(narrow(p,ds,{},required=[(0,3),(0,6)])['status'],'INFEASIBLE')
         with self.assertRaises(ValueError):narrow(p,ds,{},anchors=[p.n])
         with self.assertRaises(ValueError):geographic_roots(p,ds,set(),anchor=-1)
+
+    def test_crossing_artwork_is_rejected_before_a_terminal_preflight(self):
+        p,_,_=ring_donors(103)
+        tiles=[{**t,'segments':[list(seg) for seg in t['segments']]} for t in p.tiles]
+        tiles[0]['segments']=[[[0,1],[1,1]],[[0,2],[1,2]]]
+        bad=SearchProblem(tiles,p.board)
+        with self.assertRaisesRegex(ValueError,'Crossing'):
+            search(bad,geography=True,phase_anchors='shared',bonds=[(0,3)],forbidden=[(0,3)])
 
     def test_rotation_transports_every_pose_bit(self):
         for n in range(1,6):

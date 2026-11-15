@@ -415,11 +415,29 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
     for a,b in [*bonds,*forbidden]:
         if type(a) is not int or type(b) is not int or not 0<=a<3*problem.n or not 0<=b<3*problem.n:
             raise ValueError("Invalid physical side index.")
+    if tour_mode not in (None,'raw','contract','sparse') or (tour_mode and not matching):
+        raise ValueError('Physical strand circuit requires a supported matching mode.')
+    if turn_length is not None and (not geography or type(turn_length) is not int or not 3<=turn_length<=16):
+        raise ValueError('Mixed-turn cycle lengths from 3 to 16 require geographic matching.')
+    if neighbor_mode not in (None,'local','connectivity') or (neighbor_mode and not geography):
+        raise ValueError("Physical tile-neighbor constraints require an embed search.")
+    if corner_mode not in (None,'chains','packing','positions') or (corner_mode and not geography):
+        raise ValueError("Corner constraints require an embed search and a supported corner mode.")
+    if type(project_blanks) is not bool:
+        raise ValueError("Expected a boolean blank-side projection option.")
+    if mate_correlations not in (False,True,'full','signed'):
+        raise ValueError('Unknown physical mate correlation mode.')
+    if mate_correlations and not matching:
+        raise ValueError('Mate correlations require physical matching.')
+    if project_blanks and not matching:
+        raise ValueError("Blank-side projection requires a physical matching search.")
     started=time.monotonic()
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
     if phase_anchors is not None:
         if not geography or phase_anchors not in ('roots','shared'):
             raise ValueError('Geographic phase anchors require embed and a supported anchor mode.')
+        from r28_geo_color import _sphere
+        _sphere(problem)
         from r35_phase_anchors import narrow
         required=list(bonds)
         blocked=list(forbidden)
@@ -480,22 +498,6 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
         joint=narrowed_poses(domains,clusters)
         domains=joint['domains']
         stats['joint_pose_support']=dict(joint['stats'],complete=joint['complete'])
-    if tour_mode not in (None,'raw','contract','sparse') or (tour_mode and not matching):
-        raise ValueError('Physical strand circuit requires a supported matching mode.')
-    if turn_length is not None and (not geography or type(turn_length) is not int or not 3<=turn_length<=16):
-        raise ValueError('Mixed-turn cycle lengths from 3 to 16 require geographic matching.')
-    if neighbor_mode not in (None,'local','connectivity') or (neighbor_mode and not geography):
-        raise ValueError("Physical tile-neighbor constraints require an embed search.")
-    if corner_mode not in (None,'chains','packing','positions') or (corner_mode and not geography):
-        raise ValueError("Corner constraints require an embed search and a supported corner mode.")
-    if type(project_blanks) is not bool:
-        raise ValueError("Expected a boolean blank-side projection option.")
-    if mate_correlations not in (False,True,'full','signed'):
-        raise ValueError('Unknown physical mate correlation mode.')
-    if mate_correlations and not matching:
-        raise ValueError('Mate correlations require physical matching.')
-    if project_blanks and not matching:
-        raise ValueError("Blank-side projection requires a physical matching search.")
     from ortools.sat.python import cp_model
     if matching:
         # These optional full-side formulas refer directly to individual blank literals.
