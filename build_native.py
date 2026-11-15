@@ -44,6 +44,8 @@ def build(*,compiler=None,output_dir=None):
     result=_build_one(compiler=compiler,output_dir=output_dir)
     result['search']=_build_one(compiler=compiler,output_dir=output_dir,
                               stem='constraint_native_search',manifest_name='search-build.json')
+    result['physical_board']=_build_one(compiler=compiler,output_dir=output_dir,
+                                       stem='r35_board_codec_decode',manifest_name='physical-board-build.json')
     return result
 
 def main(argv=None):
