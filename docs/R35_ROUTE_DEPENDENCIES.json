@@ -1,0 +1,20 @@
+{
+  "installed": {
+    "receipts": 240,
+    "source_points": 245760,
+    "point_baseline_reads": 245760,
+    "old_rows_with_dependencies": 0,
+    "page_reads": 240,
+    "interval_hits": 245520
+  },
+  "finite": {
+    "families": {
+      "((2, 4), (3, 3))": 1524,
+      "((2, 4), (2, 4))": 2402,
+      "((3, 3), (2, 4))": 1514,
+      "((3, 3), (3, 3))": 632
+    },
+    "distinct_links": 2082,
+    "endpoints": 6072
+  }
+}

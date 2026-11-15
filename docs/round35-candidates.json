@@ -330,7 +330,13 @@
       "source_id": 10,
       "title": "Reuse checked owner intervals and the actual transformed family",
       "proposal_and_validation": "r32_route_store.PageProofs caches a successful point (source,owner,rank,family), even when the row certifies a long interval. r30_multicenter.SharedSupports.earlier_support returns only owner and rank while computing actual transformed cycle type. Store the transformed family and, where worthwhile, dependent rank/order subranges. Resolve interval hits in memory and ledger dependencies iteratively with cycle detection; current depth limit 64 leaves a valid long acyclic chain unknown. Full dependency union gives a conservative fallback on older rows. Check mixed-family positive, missing/arriving/cyclic/deep dependencies, cross-threshold replay. Measure distinct ranks/SQL reads and newly transferable certified intervals vs today's repeated-same-rank cache.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "Verified 245,760 real owner points with 240 proof-row reads instead of point-by-point reads. Iterative checking accepts 120-link acyclic receipts after their dependency arrives. Typed sparse receipts preserve the transformed family, with 3,038 cross-family transports among 6,072 independently reconstructed endpoints.",
+      "evidence": [
+        "docs/ROUND35_ROUTE_DEPENDENCIES.md",
+        "docs/R35_ROUTE_DEPENDENCIES.json",
+        "test_r35_route_dependencies.py"
+      ]
     },
     {
       "id": 26,
@@ -338,7 +344,7 @@
       "source_id": 11,
       "title": "Live, two-way root/region/ranked coverage",
       "proposal_and_validation": "RootCoverage caches false and snapshots available scopes. r30_multicenter.make_undo.covered caches missed ranks. r31_routes.search_roots fixes ranked_exists at startup and caches support misses; its fast coverage path looks for a bare singleton page whose best is null. Key failed lookups to a cheap commit generation, or cache successes only with bounded negative expiry. Consume certified multicenter owner/family negatives, lower-threshold proof data and pinned pool membership using PageProofs, including witnesses on a different owner. Verify both traversal orders using separate connections where the other worker finishes during a run. Count duplicate leaf and pricing calls, time spent polling and source registration misses. Partial work, an unfenced dependency or an insufficient threshold cannot prove a negative.",
-      "state": "open"
+      "state": "in progress"
     },
     {
       "id": 27,

@@ -105,19 +105,24 @@ class SharedSupports:
     def transforms(self):
         return legal_cell_rotations(self.model)
 
-    def earlier_support(self, index, cells, order):
+    def earlier_location(self, index, cells, order):
         """Return the prior center and ranked support under the same successful rotation."""
         from r32_route_store import colex
         if self.copies[index]:
             mapped = {c:cells[j] for c,j in zip(cells,order)}
             for other, earlier, inverse_cells in self.copies[index]:
-                if sparse_cycle_type(mapped, other) not in self.families:
+                family=sparse_cycle_type(mapped,other)
+                if family not in self.families:
                     continue
                 changed = [int(inverse_cells[c]) for c in mapped.keys() | other.keys()
                            if mapped.get(c,c) != other.get(c,c)]
                 if all(c in self.indices for c in changed):
-                    return earlier, colex(changed, self.indices)
+                    return earlier, colex(changed, self.indices),family
         return None
+
+    def earlier_support(self,index,cells,order):
+        located=self.earlier_location(index,cells,order)
+        return located[:2] if located is not None else None
 
     def covered_by_earlier(self, index, cells, order):
         return self.earlier_support(index, cells, order) is not None
@@ -206,7 +211,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
     if not families or any(f not in FOUR_FAMILIES + FIVE_FAMILIES for f in families):
         raise ValueError("Expected a supported four- or five-swap cycle partition.")
     sizes = {sum(f) for f in families}
-    if (len(sizes)!=1 or len(filters)!=len(set(filters)) or set(filters)-{'contact','core','connected','star','family','diagram','ranges','orderprice'}
+    if (len(sizes)!=1 or len(filters)!=len(set(filters)) or set(filters)-{'contact','core','connected','star','family','diagram','ranges','orderprice','shapes'}
             or not 0<=target<=len(problem.edges) or seconds<0 or page<1 or max_pages is not None and max_pages<0):
         raise ValueError("Invalid multi-center search scope or page settings.")
     k, = sizes
@@ -275,6 +280,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
         from r30_cycles import Predecessors, canonical_cycles
         predecessor = {}
         previous_shells = {}
+        shape_filters = {}
         undo_checks = {}
         support_indices = {c:i for i,c in enumerate(graph.free)}
 
@@ -296,7 +302,22 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                 rank = colex(cells,support_indices)
                 return inherited_end(db,key,binding,(family,),target,(owners[index],),rank,rank+1)>rank
 
-            return CoveredUndo(graph.bounds[index],covered)
+            # A finished lower-target page can give a stronger numeric ceiling
+            # than target-1. Only use it after rechecking all owner dependencies.
+            thresholds = tuple(row[0] for row in db.execute(
+                "SELECT DISTINCT target FROM r31_members WHERE domain=? AND owner=? AND target<? ORDER BY target",
+                (binding,owners[index],target)))
+            @lru_cache(maxsize=8192)
+            def predecessor_upper(group):
+                family=tuple(sorted(map(len,group)))
+                if thresholds and family in FOUR_FAMILIES:
+                    rank=colex([c for cycle in group for c in cycle],support_indices)
+                    for threshold in thresholds:
+                        if inherited_end(db,key,binding,(family,),threshold,(owners[index],),rank,rank+1)>rank:
+                            return threshold-1
+                return target-1 if covered(group) else None
+
+            return CoveredUndo(graph.bounds[index],covered,predecessor_upper=predecessor_upper,target=target)
 
         closed_centers = existing_balls(model,target)
         if closed_centers:
@@ -384,6 +405,8 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                     cells_batch = np.concatenate(chunks) if chunks else np.empty((0,k),dtype=int)
                     counters['first_rank_interval'] = counters['supports_before_generation'] * len(owners) * multiplicity
                     deferred.clear()
+                    from r35_route_dependencies import Dependencies
+                    links=Dependencies()
                     page_best = None
                     scores = {}
                     use_cores = 'core' in filters
@@ -460,6 +483,19 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                                         else:
                                             retained.append(f)
                                     left = retained
+                                if left and rule=='shapes':
+                                    from r35_route_shapes import ContactShapes
+                                    if ix not in shape_filters:
+                                        shape_filters[ix]=ContactShapes(graph.clusters[ix])
+                                    shape_filter=shape_filters[ix]
+                                    before=shape_filter.work['regional_prices']
+                                    for f in left:
+                                        if len(f)>1:
+                                            remaining=tuple(shape_filter.allowed_orders(cells,active_orders[f],target))
+                                            counters['first_shapes']+=len(active_orders[f])-len(remaining)
+                                            active_orders[f]=remaining
+                                    counters['shape_regional_prices']+=shape_filter.work['regional_prices']-before
+                                    left=[f for f in left if active_orders[f]]
                                 if left and rule=='diagram':
                                     retained = []
                                     for f in left:
@@ -484,9 +520,11 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                                     if is_owned(previous_shells[ix],cells,order):
                                         counters['first_owned'] += 1
                                         continue
-                                    previous = graph.earlier_support(ix, cells, order)
+                                    previous = graph.earlier_location(ix, cells, order)
                                     if previous is not None:
-                                        earlier, rank = previous
+                                        earlier, rank, transformed = previous
+                                        from r32_route_store import colex
+                                        links.add(owners[ix],f,colex(cells,graph.indices),owners[earlier],rank,transformed)
                                         deferred[owners[ix]].add((owners[earlier], rank))
                                         counters['first_owned'] += 1
                                         continue
@@ -531,7 +569,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                                 if page_best is None or item['score']>page_best['score']:
                                     page_best = item
                     endpoints = multiplicity*len(graph.bounds)*(end-current)
-                    if sum(counters[s] for s in ('first_budget','first_orderprice','first_rank_interval','first_typed','first_contact','first_core','first_connected','first_support','first_diagram','first_owned',
+                    if sum(counters[s] for s in ('first_budget','first_shapes','first_orderprice','first_rank_interval','first_typed','first_contact','first_core','first_connected','first_support','first_diagram','first_owned',
                                                  'first_root','first_predecessor','first_endpoint','illegal','exact_reused','exact_solved'))!=endpoints:
                         raise RuntimeError("Incomplete page accounting.")
                     counters['raw_center_endpoints'] = endpoints
@@ -543,6 +581,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                         detailed_scores = page_best is not None and (len(owners)>1 or len(families)>1)
                         if len(owners)>1 or detailed_scores:
                             publish_page(db,key,current,end,owners,deferred)
+                            links.publish(db,key,current,owners,families)
                         if detailed_scores:
                             publish_scores(db,key,current,owners,families,scores)
                     work.update(counters)
