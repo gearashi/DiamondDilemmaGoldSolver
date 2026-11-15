@@ -1750,6 +1750,11 @@
           }
         }
       }
+    },
+    "actual_database_bytes": {
+      "rebuild": 37195776,
+      "text_edges": 53653504,
+      "integer_edges": 43503616
     }
   }
 }
