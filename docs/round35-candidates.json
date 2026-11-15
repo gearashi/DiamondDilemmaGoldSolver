@@ -654,7 +654,17 @@
       "source_id": 26,
       "title": "Reuse a whole small exact joint-repair residual",
       "proposal_and_validation": "r31_fresh.joint_repair builds a new local model. Screen actual repeated small residuals across nearby repair steps and seeds by exact donor resources, slots, rotations, internal graph, signed/forbidden constraints if active and exterior masks. Bind move/contact options, score offset, query and proof status, and map cached witness labels into actual positions. R32 signed price-row reuse, R34 snapshots and complete trajectory reuse are established. Measure full-model hits, builds/branches eliminated, bytes and physical witness validation. Timeout assignments are feasible suggestions only; if no certified repeat occurs beyond existing caches, close the hypothesis immediately.",
-      "state": "open"
+      "state": "keep exact regional proofs and certified repeat replay with scope",
+      "mechanism": "REPAIR-JOINT-RESIDUAL",
+      "measurement": "Twelve actual forest CP repeats saved 12,945 branches, with all sixteen control trajectories retaining their witnesses. On 640 fixed queries, independent checks found 617 zero-gain optima and 23 positive optima; sixteen beat bounded CP by 24 total seams. On twelve 320-round trajectories all 3,840 exact-region optima were independently verified, 26 were positive, and no local CP was needed. Both installed 207/54 and shipped 207/52 centers retained their exact local scores on 256 sampled pools each.",
+      "closure_reason": "Retain full checked CP replay when outside the exact local contact scope, donor-price and changed-support bounds, and exact optimum recovery for separated changed contacts. Retain threshold-aware subproblem reuse on larger one-contact pools and ordinary pruned subsets on small forests. Random raw CP pools rarely repeat, and sustained fresh score effects are seed-dependent.",
+      "reopen_trigger": "New recurring physical residuals beyond the matched contact scope, or a verified original trajectory that benefits from overlapping changed components, supply a new separated comparison. Existing repeated scope, threshold-aware reopening, donor-tail and support-order ablations are closed.",
+      "evidence": [
+        "docs/ROUND35_JOINT_REPAIR.md",
+        "docs/R35_JOINT_REPAIR.json",
+        "test_r35_joint_residual.py",
+        "test_r35_contact_bound.py"
+      ]
     },
     {
       "id": 42,

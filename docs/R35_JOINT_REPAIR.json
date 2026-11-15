@@ -1,0 +1,2169 @@
+{
+  "input": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "replay_320": [
+    {
+      "profile": "random-contact",
+      "seed": 3500,
+      "score": 171,
+      "witness_sha256": "dfd13fa755d8e4d680057f2c537b9d87b6681ef37cf0ebf71e9d3e86ddef80c2",
+      "requests": 320,
+      "original_branches": 355370,
+      "cache_branches": 355370,
+      "physical_hits_if_unbounded": 0,
+      "cache": {
+        "models_built": 320,
+        "optima_admitted": 278,
+        "peak_payload_bytes": 183232
+      },
+      "regional_proofs": 0
+    },
+    {
+      "profile": "random-contact",
+      "seed": 3501,
+      "score": 182,
+      "witness_sha256": "1b5bcf787a13258c8720e94540b52cde3bc39bdfbd3d4c5928691e8f339692e1",
+      "requests": 320,
+      "original_branches": 361403,
+      "cache_branches": 361403,
+      "physical_hits_if_unbounded": 0,
+      "cache": {
+        "models_built": 320,
+        "optima_admitted": 282,
+        "peak_payload_bytes": 184285
+      },
+      "regional_proofs": 0
+    },
+    {
+      "profile": "random-contact",
+      "seed": 3502,
+      "score": 181,
+      "witness_sha256": "7f8157d3286c598a5fd498cb4ca7b3351a78613af6f19a9e12ef9cae2c6a7e3b",
+      "requests": 320,
+      "original_branches": 326906,
+      "cache_branches": 326906,
+      "physical_hits_if_unbounded": 0,
+      "cache": {
+        "models_built": 320,
+        "optima_admitted": 281,
+        "peak_payload_bytes": 180307
+      },
+      "regional_proofs": 0
+    },
+    {
+      "profile": "random-contact",
+      "seed": 3503,
+      "score": 175,
+      "witness_sha256": "3601639cbf9d69ac0ba0866783aa0ece1dd8e3a0adae394a318e387707c90092",
+      "requests": 320,
+      "original_branches": 335863,
+      "cache_branches": 335863,
+      "physical_hits_if_unbounded": 0,
+      "cache": {
+        "models_built": 320,
+        "optima_admitted": 289,
+        "peak_payload_bytes": 182998
+      },
+      "regional_proofs": 0
+    },
+    {
+      "profile": "forest-disjoint",
+      "seed": 3500,
+      "score": 185,
+      "witness_sha256": "ca96440386618c988490a5b11bedd9ec7ebfe2ff2c588b8425815eaac2cf3e25",
+      "requests": 320,
+      "original_branches": 339679,
+      "cache_branches": 339679,
+      "physical_hits_if_unbounded": 0,
+      "cache": {
+        "models_built": 320,
+        "optima_admitted": 15,
+        "peak_payload_bytes": 14100
+      },
+      "regional_proofs": 0
+    },
+    {
+      "profile": "forest-disjoint",
+      "seed": 3501,
+      "score": 172,
+      "witness_sha256": "eec226c0878eca186a07f0d7db84b9655f286b6597044c8416ad2588be1de627",
+      "requests": 320,
+      "original_branches": 327864,
+      "cache_branches": 320355,
+      "physical_hits_if_unbounded": 7,
+      "cache": {
+        "models_built": 313,
+        "optima_admitted": 22,
+        "peak_payload_bytes": 20680,
+        "proved_hits": 7,
+        "original_branches_bypassed": 7509
+      },
+      "regional_proofs": 0
+    },
+    {
+      "profile": "forest-disjoint",
+      "seed": 3502,
+      "score": 180,
+      "witness_sha256": "86bc9611917f128e77262b76994ff4083d09c33e4219fc8c02830c64d4ce84b5",
+      "requests": 320,
+      "original_branches": 331517,
+      "cache_branches": 329451,
+      "physical_hits_if_unbounded": 2,
+      "cache": {
+        "models_built": 318,
+        "optima_admitted": 14,
+        "peak_payload_bytes": 13160,
+        "proved_hits": 2,
+        "original_branches_bypassed": 2066
+      },
+      "regional_proofs": 0
+    },
+    {
+      "profile": "forest-disjoint",
+      "seed": 3503,
+      "score": 175,
+      "witness_sha256": "1a7de09cc1d78644f2e02127fd5a81ed4529bf103f18a189a5fee4a8705171bb",
+      "requests": 320,
+      "original_branches": 352699,
+      "cache_branches": 349329,
+      "physical_hits_if_unbounded": 2,
+      "cache": {
+        "models_built": 317,
+        "optima_admitted": 26,
+        "peak_payload_bytes": 24440,
+        "proved_hits": 3,
+        "original_branches_bypassed": 3370
+      },
+      "regional_proofs": 0
+    },
+    {
+      "profile": "regional",
+      "seed": 3500,
+      "score": 180,
+      "witness_sha256": "1f2cb0b8976de5f952c225504401a62167b1b87306795afeab0f816dc5cddd63",
+      "requests": 0,
+      "original_branches": 0,
+      "cache_branches": 0,
+      "physical_hits_if_unbounded": 0,
+      "cache": {},
+      "regional_proofs": 320
+    },
+    {
+      "profile": "regional",
+      "seed": 3501,
+      "score": 176,
+      "witness_sha256": "4b3295b8f9d0d00027815f28896199a9dea7ce0598325f37253a97b8df882738",
+      "requests": 0,
+      "original_branches": 0,
+      "cache_branches": 0,
+      "physical_hits_if_unbounded": 0,
+      "cache": {},
+      "regional_proofs": 320
+    },
+    {
+      "profile": "regional",
+      "seed": 3502,
+      "score": 184,
+      "witness_sha256": "9fa82beb539975e3b9423d0ba3e50fe3daa706b966923dbd7492ad03170c5880",
+      "requests": 0,
+      "original_branches": 0,
+      "cache_branches": 0,
+      "physical_hits_if_unbounded": 0,
+      "cache": {},
+      "regional_proofs": 320
+    },
+    {
+      "profile": "regional",
+      "seed": 3503,
+      "score": 175,
+      "witness_sha256": "aa48f82f8f3ea973622f477a75bf6c7faef529107a77ae485ce987a9fe262fb8",
+      "requests": 0,
+      "original_branches": 0,
+      "cache_branches": 0,
+      "physical_hits_if_unbounded": 0,
+      "cache": {},
+      "regional_proofs": 320
+    },
+    {
+      "profile": "guarded-contact",
+      "seed": 3500,
+      "score": 176,
+      "witness_sha256": "a6533506e7305bb2e378a63a7a59dd6d38bf917f3c14095ce1e871643a0f662e",
+      "requests": 320,
+      "original_branches": 333761,
+      "cache_branches": 333761,
+      "physical_hits_if_unbounded": 0,
+      "cache": {
+        "models_built": 320,
+        "optima_admitted": 274,
+        "peak_payload_bytes": 200098
+      },
+      "regional_proofs": 0
+    },
+    {
+      "profile": "guarded-contact",
+      "seed": 3501,
+      "score": 179,
+      "witness_sha256": "7a5c602ec196d347a68e5c50401b4dff4b65b2f79bd95e9ddcffce23de9d361b",
+      "requests": 320,
+      "original_branches": 329884,
+      "cache_branches": 329884,
+      "physical_hits_if_unbounded": 0,
+      "cache": {
+        "models_built": 320,
+        "optima_admitted": 280,
+        "peak_payload_bytes": 198488
+      },
+      "regional_proofs": 0
+    },
+    {
+      "profile": "guarded-contact",
+      "seed": 3502,
+      "score": 183,
+      "witness_sha256": "f76fa7a6b22bec0a10cc53b4c1518ac69aee5e1930a0556b6e8843eaedc3fc17",
+      "requests": 320,
+      "original_branches": 342447,
+      "cache_branches": 342447,
+      "physical_hits_if_unbounded": 0,
+      "cache": {
+        "models_built": 320,
+        "optima_admitted": 287,
+        "peak_payload_bytes": 201248
+      },
+      "regional_proofs": 0
+    },
+    {
+      "profile": "guarded-contact",
+      "seed": 3503,
+      "score": 186,
+      "witness_sha256": "c4f07083534e70308401662ad4191f9b3e1aa8c6fb99c3df9e000194459d3a41",
+      "requests": 320,
+      "original_branches": 340360,
+      "cache_branches": 340360,
+      "physical_hits_if_unbounded": 0,
+      "cache": {
+        "models_built": 320,
+        "optima_admitted": 285,
+        "peak_payload_bytes": 203778
+      },
+      "regional_proofs": 0
+    }
+  ],
+  "public_resume": {
+    "seed": 3501,
+    "initial_score": 161,
+    "final_score": 164,
+    "checkpoint_round": 36,
+    "final_round": 64,
+    "cold_equal": true,
+    "checkpoint_payload_characters": 284,
+    "physical_hash": "1de46ff18be999476fb78186553a1dd3d3e03be29b207fd2e9e6502e1d03805a",
+    "work": {
+      "models_built": 63,
+      "optima_admitted": 6,
+      "peak_payload_bytes": 5640,
+      "proved_hits": 1,
+      "original_branches_bypassed": 1048
+    }
+  },
+  "checked_trajectories": {
+    "dual_64": [
+      {
+        "profile": "random-contact",
+        "seed": 3500,
+        "score": 170,
+        "codes": "daf30734d6fac6e3780c236864e09e20faa50daf789d312c8a6f6e403a65af73",
+        "checks": {
+          "certificates_checked": 63,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 65,
+          "contact_bound_root_dual_proofs": 63,
+          "joint_CONTACT_OPTIMAL": 63
+        },
+        "fallback_calls": 1
+      },
+      {
+        "profile": "random-contact",
+        "seed": 3501,
+        "score": 173,
+        "codes": "6553e71c397911750c084447bf0b46c57b2294690b4876bbcdfbd5d5e0639d80",
+        "checks": {
+          "certificates_checked": 60,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 60,
+          "contact_bound_root_dual_proofs": 60,
+          "joint_CONTACT_OPTIMAL": 60
+        },
+        "fallback_calls": 4
+      },
+      {
+        "profile": "random-contact",
+        "seed": 3502,
+        "score": 172,
+        "codes": "11dd96e2d0fa6ed48e4ad867499f578aca0ec4b5cffca0dd9aee9f1c84b3e4ea",
+        "checks": {
+          "certificates_checked": 62,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 48,
+          "contact_bound_root_dual_proofs": 62,
+          "joint_CONTACT_OPTIMAL": 62
+        },
+        "fallback_calls": 2
+      },
+      {
+        "profile": "random-contact",
+        "seed": 3503,
+        "score": 172,
+        "codes": "4f7be63724c1351abc9a7450eb5ccca73bffd0aa8b45bd6c03945a7152df3028",
+        "checks": {
+          "certificates_checked": 61,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 60,
+          "contact_bound_root_dual_proofs": 61,
+          "joint_CONTACT_OPTIMAL": 61
+        },
+        "fallback_calls": 3
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3500,
+        "score": 167,
+        "codes": "4381261af3660b576f2237fa790f3104a76c811a3f735fbc0e69eca3bce116fe",
+        "checks": {
+          "certificates_checked": 49,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 448,
+          "contact_bound_root_dual_proofs": 49,
+          "joint_CONTACT_OPTIMAL": 49
+        },
+        "fallback_calls": 15
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3501,
+        "score": 164,
+        "codes": "1de46ff18be999476fb78186553a1dd3d3e03be29b207fd2e9e6502e1d03805a",
+        "checks": {
+          "certificates_checked": 51,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 448,
+          "contact_bound_root_dual_proofs": 51,
+          "joint_CONTACT_OPTIMAL": 51
+        },
+        "fallback_calls": 13
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3502,
+        "score": 175,
+        "codes": "c7786eaa9918283dcfdda090b09743109366b0c56ce781fe68cb99457a0b188e",
+        "checks": {
+          "certificates_checked": 48,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 448,
+          "contact_bound_root_dual_proofs": 48,
+          "joint_CONTACT_OPTIMAL": 48
+        },
+        "fallback_calls": 16
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3503,
+        "score": 169,
+        "codes": "8f09f30271bb48412306596d939abd941c58513bccd85a54fe32e62d2dab6f09",
+        "checks": {
+          "certificates_checked": 53,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 448,
+          "contact_bound_root_dual_proofs": 53,
+          "joint_CONTACT_OPTIMAL": 53
+        },
+        "fallback_calls": 11
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3500,
+        "score": 172,
+        "codes": "bd379fd7f758e4f7c1119a97dbe4ca7e4e5f12ba9e17fd4ce11318bf2d35e6a9",
+        "checks": {
+          "certificates_checked": 63,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 55,
+          "contact_bound_root_dual_proofs": 63,
+          "joint_CONTACT_OPTIMAL": 63
+        },
+        "fallback_calls": 1
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3501,
+        "score": 172,
+        "codes": "abf4e3d95d8b626cb9b0c1423c7b327d23c3f1003da393666d701cbd3ed91da3",
+        "checks": {
+          "certificates_checked": 63,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 55,
+          "contact_bound_root_dual_proofs": 63,
+          "joint_CONTACT_OPTIMAL": 63
+        },
+        "fallback_calls": 1
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3502,
+        "score": 175,
+        "codes": "51b7a51818238d3b9e21ec9eecd5eb569bfa6fa7fa1668c23474bd8d9a7f55ae",
+        "checks": {
+          "certificates_checked": 61,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 54,
+          "contact_bound_root_dual_proofs": 61,
+          "joint_CONTACT_OPTIMAL": 61
+        },
+        "fallback_calls": 3
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3503,
+        "score": 177,
+        "codes": "963024df3041c6714cac9e3487ed8afb1435fb290474aa32b1a3bb91870c78b7",
+        "checks": {
+          "certificates_checked": 63,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 50,
+          "contact_bound_root_dual_proofs": 63,
+          "joint_CONTACT_OPTIMAL": 63
+        },
+        "fallback_calls": 1
+      }
+    ],
+    "supports_64": [
+      {
+        "profile": "random-contact",
+        "seed": 3500,
+        "score": 170,
+        "codes": "daf30734d6fac6e3780c236864e09e20faa50daf789d312c8a6f6e403a65af73",
+        "checks": {
+          "certificates_checked": 63,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 65,
+          "contact_bound_supports_bounded": 3,
+          "contact_bound_loose_supports": 1,
+          "contact_bound_root_dual_proofs": 63,
+          "joint_CONTACT_OPTIMAL": 63
+        },
+        "fallback_calls": 1
+      },
+      {
+        "profile": "random-contact",
+        "seed": 3501,
+        "score": 173,
+        "codes": "6553e71c397911750c084447bf0b46c57b2294690b4876bbcdfbd5d5e0639d80",
+        "checks": {
+          "certificates_checked": 61,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 60,
+          "contact_bound_supports_bounded": 989,
+          "contact_bound_loose_supports": 3,
+          "contact_bound_root_dual_proofs": 60,
+          "joint_CONTACT_OPTIMAL": 61,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 0,
+          "contact_bound_support_proofs": 1
+        },
+        "fallback_calls": 3
+      },
+      {
+        "profile": "random-contact",
+        "seed": 3502,
+        "score": 172,
+        "codes": "11dd96e2d0fa6ed48e4ad867499f578aca0ec4b5cffca0dd9aee9f1c84b3e4ea",
+        "checks": {
+          "certificates_checked": 62,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 48,
+          "contact_bound_supports_bounded": 123,
+          "contact_bound_loose_supports": 2,
+          "contact_bound_root_dual_proofs": 62,
+          "joint_CONTACT_OPTIMAL": 62
+        },
+        "fallback_calls": 2
+      },
+      {
+        "profile": "random-contact",
+        "seed": 3503,
+        "score": 172,
+        "codes": "4f7be63724c1351abc9a7450eb5ccca73bffd0aa8b45bd6c03945a7152df3028",
+        "checks": {
+          "certificates_checked": 61,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 60,
+          "contact_bound_supports_bounded": 41,
+          "contact_bound_loose_supports": 3,
+          "contact_bound_root_dual_proofs": 61,
+          "joint_CONTACT_OPTIMAL": 61
+        },
+        "fallback_calls": 3
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3500,
+        "score": 167,
+        "codes": "4381261af3660b576f2237fa790f3104a76c811a3f735fbc0e69eca3bce116fe",
+        "checks": {
+          "certificates_checked": 60,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 448,
+          "contact_bound_supports_bounded": 1760,
+          "contact_bound_loose_supports": 4,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 0,
+          "contact_bound_support_proofs": 11,
+          "joint_CONTACT_OPTIMAL": 60,
+          "contact_bound_root_dual_proofs": 49
+        },
+        "fallback_calls": 4
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3501,
+        "score": 164,
+        "codes": "1de46ff18be999476fb78186553a1dd3d3e03be29b207fd2e9e6502e1d03805a",
+        "checks": {
+          "certificates_checked": 61,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 448,
+          "contact_bound_supports_bounded": 1497,
+          "contact_bound_loose_supports": 3,
+          "contact_bound_root_dual_proofs": 51,
+          "joint_CONTACT_OPTIMAL": 61,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 0,
+          "contact_bound_support_proofs": 10
+        },
+        "fallback_calls": 3
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3502,
+        "score": 175,
+        "codes": "c7786eaa9918283dcfdda090b09743109366b0c56ce781fe68cb99457a0b188e",
+        "checks": {
+          "certificates_checked": 60,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 448,
+          "contact_bound_supports_bounded": 1784,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 0,
+          "contact_bound_support_proofs": 12,
+          "joint_CONTACT_OPTIMAL": 60,
+          "contact_bound_loose_supports": 4,
+          "contact_bound_root_dual_proofs": 48
+        },
+        "fallback_calls": 4
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3503,
+        "score": 169,
+        "codes": "8f09f30271bb48412306596d939abd941c58513bccd85a54fe32e62d2dab6f09",
+        "checks": {
+          "certificates_checked": 59,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 448,
+          "contact_bound_supports_bounded": 1097,
+          "contact_bound_loose_supports": 5,
+          "contact_bound_root_dual_proofs": 53,
+          "joint_CONTACT_OPTIMAL": 59,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 0,
+          "contact_bound_support_proofs": 6
+        },
+        "fallback_calls": 5
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3500,
+        "score": 172,
+        "codes": "bd379fd7f758e4f7c1119a97dbe4ca7e4e5f12ba9e17fd4ce11318bf2d35e6a9",
+        "checks": {
+          "certificates_checked": 63,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 55,
+          "contact_bound_supports_bounded": 3,
+          "contact_bound_loose_supports": 1,
+          "contact_bound_root_dual_proofs": 63,
+          "joint_CONTACT_OPTIMAL": 63
+        },
+        "fallback_calls": 1
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3501,
+        "score": 172,
+        "codes": "abf4e3d95d8b626cb9b0c1423c7b327d23c3f1003da393666d701cbd3ed91da3",
+        "checks": {
+          "certificates_checked": 63,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 55,
+          "contact_bound_supports_bounded": 596,
+          "contact_bound_loose_supports": 1,
+          "contact_bound_root_dual_proofs": 63,
+          "joint_CONTACT_OPTIMAL": 63
+        },
+        "fallback_calls": 1
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3502,
+        "score": 175,
+        "codes": "51b7a51818238d3b9e21ec9eecd5eb569bfa6fa7fa1668c23474bd8d9a7f55ae",
+        "checks": {
+          "certificates_checked": 62,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 54,
+          "contact_bound_supports_bounded": 1259,
+          "contact_bound_loose_supports": 2,
+          "contact_bound_root_dual_proofs": 61,
+          "joint_CONTACT_OPTIMAL": 62,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 0,
+          "contact_bound_support_proofs": 1
+        },
+        "fallback_calls": 2
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3503,
+        "score": 177,
+        "codes": "963024df3041c6714cac9e3487ed8afb1435fb290474aa32b1a3bb91870c78b7",
+        "checks": {
+          "certificates_checked": 63,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 50,
+          "contact_bound_supports_bounded": 160,
+          "contact_bound_loose_supports": 1,
+          "contact_bound_root_dual_proofs": 63,
+          "joint_CONTACT_OPTIMAL": 63
+        },
+        "fallback_calls": 1
+      }
+    ],
+    "original_exact_320": [
+      {
+        "profile": "random-contact",
+        "seed": 3500,
+        "score": 180,
+        "codes": "1f2cb0b8976de5f952c225504401a62167b1b87306795afeab0f816dc5cddd63",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 1
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 273,
+          "contact_bound_supports_bounded": 1886,
+          "contact_bound_subset_states": 44518,
+          "contact_bound_refined_supports": 521,
+          "contact_bound_positive_optima": 1,
+          "contact_bound_physical_gain": 3,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 318,
+          "contact_bound_support_proofs": 1
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "random-contact",
+        "seed": 3501,
+        "score": 177,
+        "codes": "93c416cfdfb92f8841fdd50b1ac0f17cdd5ee685dbecf4747b3812b7323f4158",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 1
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 283,
+          "contact_bound_supports_bounded": 1982,
+          "contact_bound_subset_states": 4,
+          "contact_bound_refined_supports": 1,
+          "contact_bound_positive_optima": 1,
+          "contact_bound_physical_gain": 1,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 318,
+          "contact_bound_support_proofs": 1
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "random-contact",
+        "seed": 3502,
+        "score": 181,
+        "codes": "647086bb6a7f1f338557c28b083699e06929c74fef71f8eb2cb6b6595b0d7437",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 3
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 249,
+          "contact_bound_supports_bounded": 4731,
+          "contact_bound_subset_states": 68122,
+          "contact_bound_refined_supports": 967,
+          "contact_bound_positive_optima": 3,
+          "contact_bound_physical_gain": 4,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 315,
+          "contact_bound_support_proofs": 2
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "random-contact",
+        "seed": 3503,
+        "score": 180,
+        "codes": "7170f07b3ef4bbde2f6473ff4974f2f9e1c9580e908761b848fce03f94c90022",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 1
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 302,
+          "contact_bound_supports_bounded": 2046,
+          "contact_bound_subset_states": 56676,
+          "contact_bound_refined_supports": 678,
+          "contact_bound_positive_optima": 1,
+          "contact_bound_physical_gain": 2,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 318,
+          "contact_bound_support_proofs": 1
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3500,
+        "score": 177,
+        "codes": "2051b9a4e66e1fa434a03e818a2167f525e08d15186b8678e8e9c6369e3a401a",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 2
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 2240,
+          "contact_bound_supports_bounded": 2646,
+          "contact_bound_subset_states": 610,
+          "contact_bound_refined_supports": 52,
+          "contact_bound_positive_optima": 2,
+          "contact_bound_physical_gain": 2,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 302,
+          "contact_bound_support_proofs": 16
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3501,
+        "score": 179,
+        "codes": "06592cfac3d314fbe9b01633c9a0263f752b0f97a039c2f5406bcedb878615fe",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 5
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 2240,
+          "contact_bound_supports_bounded": 1750,
+          "contact_bound_subset_states": 1214,
+          "contact_bound_refined_supports": 109,
+          "contact_bound_positive_optima": 5,
+          "contact_bound_physical_gain": 6,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 308,
+          "contact_bound_support_proofs": 7
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3502,
+        "score": 181,
+        "codes": "ada3af09c4c1fc59cc29dac290e66227735c383b6a58108874badf360d58bad6",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 3
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 2240,
+          "contact_bound_supports_bounded": 3016,
+          "contact_bound_subset_states": 829,
+          "contact_bound_refined_supports": 58,
+          "contact_bound_support_proofs": 18,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_positive_optima": 3,
+          "contact_bound_physical_gain": 4,
+          "contact_bound_root_dual_proofs": 299
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3503,
+        "score": 176,
+        "codes": "10ae46e3665dd87e3b64855262c7d208ea22b3f155432ccbb2e9dfe2d9061974",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 3
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 2240,
+          "contact_bound_supports_bounded": 5285,
+          "contact_bound_subset_states": 1915,
+          "contact_bound_refined_supports": 142,
+          "contact_bound_positive_optima": 3,
+          "contact_bound_physical_gain": 4,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 284,
+          "contact_bound_support_proofs": 33
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3500,
+        "score": 179,
+        "codes": "352b29cc216e01c793ab0dfe1c2991142030b6c30e9512489b22ab58a04dea0e",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 1
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 262,
+          "contact_bound_supports_bounded": 1023,
+          "contact_bound_subset_states": 44518,
+          "contact_bound_refined_supports": 521,
+          "contact_bound_positive_optima": 1,
+          "contact_bound_physical_gain": 3,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 319
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3501,
+        "score": 179,
+        "codes": "d910cbbec0fb98f51fe748040c69026a55e2eca886c8d48f75d044c73e7eef68",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 278,
+          "contact_bound_supports_bounded": 1854,
+          "contact_bound_subset_states": 1184,
+          "contact_bound_refined_supports": 16,
+          "contact_bound_support_proofs": 2,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 318
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3502,
+        "score": 174,
+        "codes": "dd3cef70e3fb18d60e4e39e395e8075875aa39244b00b7b2213965f650b1cd50",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 2
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 289,
+          "contact_bound_supports_bounded": 2941,
+          "contact_bound_subset_states": 56875,
+          "contact_bound_refined_supports": 772,
+          "contact_bound_positive_optima": 2,
+          "contact_bound_physical_gain": 3,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 317,
+          "contact_bound_support_proofs": 1
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3503,
+        "score": 175,
+        "codes": "b54923732534945d4b0309bb0e140337fde0db0863c94a1064313a443553fc4a",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 1
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 271,
+          "contact_bound_supports_bounded": 1023,
+          "contact_bound_subset_states": 16923,
+          "contact_bound_refined_supports": 129,
+          "contact_bound_positive_optima": 1,
+          "contact_bound_physical_gain": 1,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 319
+        },
+        "fallback_calls": 0
+      }
+    ],
+    "final_exact_320": [
+      {
+        "profile": "random-contact",
+        "seed": 3500,
+        "score": 176,
+        "codes": "36524e65629bafc158b5fcd667106afa319eeba94826a2ccd2b151ec94bf35de",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 1
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 283,
+          "contact_bound_bounded_subproblems": 12635,
+          "contact_bound_bounded_hits": 19883,
+          "contact_bound_supports_bounded": 2046,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 503,
+          "contact_bound_positive_optima": 1,
+          "contact_bound_physical_gain": 3,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 318,
+          "contact_bound_support_proofs": 1
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "random-contact",
+        "seed": 3501,
+        "score": 177,
+        "codes": "93c416cfdfb92f8841fdd50b1ac0f17cdd5ee685dbecf4747b3812b7323f4158",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 1
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 283,
+          "contact_bound_bounded_subproblems": 2,
+          "contact_bound_supports_bounded": 1982,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 1,
+          "contact_bound_positive_optima": 1,
+          "contact_bound_physical_gain": 1,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 318,
+          "contact_bound_support_proofs": 1
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "random-contact",
+        "seed": 3502,
+        "score": 181,
+        "codes": "647086bb6a7f1f338557c28b083699e06929c74fef71f8eb2cb6b6595b0d7437",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 3
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 249,
+          "contact_bound_bounded_subproblems": 10470,
+          "contact_bound_bounded_hits": 10526,
+          "contact_bound_supports_bounded": 4731,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 866,
+          "contact_bound_positive_optima": 3,
+          "contact_bound_physical_gain": 4,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 315,
+          "contact_bound_support_proofs": 2
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "random-contact",
+        "seed": 3503,
+        "score": 180,
+        "codes": "7170f07b3ef4bbde2f6473ff4974f2f9e1c9580e908761b848fce03f94c90022",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 1
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 302,
+          "contact_bound_bounded_subproblems": 13127,
+          "contact_bound_bounded_hits": 17603,
+          "contact_bound_supports_bounded": 2046,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 675,
+          "contact_bound_positive_optima": 1,
+          "contact_bound_physical_gain": 2,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 318,
+          "contact_bound_support_proofs": 1
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3500,
+        "score": 177,
+        "codes": "2051b9a4e66e1fa434a03e818a2167f525e08d15186b8678e8e9c6369e3a401a",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 2
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 2240,
+          "contact_bound_supports_bounded": 2646,
+          "contact_bound_subset_states": 111,
+          "contact_bound_refined_supports": 52,
+          "contact_bound_positive_optima": 2,
+          "contact_bound_physical_gain": 2,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 302,
+          "contact_bound_support_proofs": 16
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3501,
+        "score": 179,
+        "codes": "06592cfac3d314fbe9b01633c9a0263f752b0f97a039c2f5406bcedb878615fe",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 5
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 2240,
+          "contact_bound_supports_bounded": 1750,
+          "contact_bound_subset_states": 248,
+          "contact_bound_refined_supports": 106,
+          "contact_bound_positive_optima": 5,
+          "contact_bound_physical_gain": 6,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 308,
+          "contact_bound_support_proofs": 7
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3502,
+        "score": 181,
+        "codes": "ada3af09c4c1fc59cc29dac290e66227735c383b6a58108874badf360d58bad6",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 3
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 2240,
+          "contact_bound_supports_bounded": 3016,
+          "contact_bound_subset_states": 170,
+          "contact_bound_refined_supports": 54,
+          "contact_bound_support_proofs": 18,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_positive_optima": 3,
+          "contact_bound_physical_gain": 4,
+          "contact_bound_root_dual_proofs": 299
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "forest-disjoint",
+        "seed": 3503,
+        "score": 181,
+        "codes": "149fdb2bdae1c38f339f604ffaf79ad4a2bc9e8a99e258faa508d00ef308f552",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 6
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 2240,
+          "contact_bound_supports_bounded": 4108,
+          "contact_bound_subset_states": 609,
+          "contact_bound_refined_supports": 227,
+          "contact_bound_positive_optima": 6,
+          "contact_bound_physical_gain": 7,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_support_proofs": 22,
+          "contact_bound_root_dual_proofs": 292
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3500,
+        "score": 178,
+        "codes": "8d4b9270a35df4cf7725897863e947cf3063cbee38bcb6a2ba2d5d31715306a9",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 1
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 300,
+          "contact_bound_bounded_subproblems": 12446,
+          "contact_bound_bounded_hits": 18453,
+          "contact_bound_supports_bounded": 1982,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 503,
+          "contact_bound_positive_optima": 1,
+          "contact_bound_physical_gain": 3,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 318,
+          "contact_bound_support_proofs": 1
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3501,
+        "score": 179,
+        "codes": "d910cbbec0fb98f51fe748040c69026a55e2eca886c8d48f75d044c73e7eef68",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 0
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 278,
+          "contact_bound_bounded_subproblems": 264,
+          "contact_bound_supports_bounded": 1854,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 16,
+          "contact_bound_support_proofs": 2,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 318
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3502,
+        "score": 174,
+        "codes": "dd3cef70e3fb18d60e4e39e395e8075875aa39244b00b7b2213965f650b1cd50",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 2
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 289,
+          "contact_bound_bounded_subproblems": 8460,
+          "contact_bound_bounded_hits": 8565,
+          "contact_bound_supports_bounded": 2941,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 671,
+          "contact_bound_positive_optima": 2,
+          "contact_bound_physical_gain": 3,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 317,
+          "contact_bound_support_proofs": 1
+        },
+        "fallback_calls": 0
+      },
+      {
+        "profile": "guarded-contact",
+        "seed": 3503,
+        "score": 175,
+        "codes": "b54923732534945d4b0309bb0e140337fde0db0863c94a1064313a443553fc4a",
+        "checks": {
+          "certificates_checked": 320,
+          "positive_optima": 1
+        },
+        "bound_work": {
+          "contact_bound_internal_seams": 271,
+          "contact_bound_bounded_subproblems": 1897,
+          "contact_bound_bounded_hits": 73,
+          "contact_bound_supports_bounded": 1023,
+          "contact_bound_subset_states": 0,
+          "contact_bound_refined_supports": 129,
+          "contact_bound_positive_optima": 1,
+          "contact_bound_physical_gain": 1,
+          "joint_CONTACT_OPTIMAL": 320,
+          "contact_bound_root_dual_proofs": 319
+        },
+        "fallback_calls": 0
+      }
+    ]
+  },
+  "fixed_queries": {
+    "fresh_and_installed_207_54": {
+      "per_seed": [
+        {
+          "mode": "random-contact",
+          "seed": 3500,
+          "counts": {
+            "new_full_requests": 32,
+            "positive_summed_seams": 3,
+            "strict_gains_over_cp": 1,
+            "additional_seams_over_cp": 3,
+            "positive feasible placement": 1,
+            "root_closed": 31,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 12635,
+            "bounded_hits": 19883,
+            "branches_on_closed_CP_queries": 37768,
+            "cp_uncertain_closed": 5,
+            "physical component dual": 31
+          }
+        },
+        {
+          "mode": "random-contact",
+          "seed": 3501,
+          "counts": {
+            "new_full_requests": 32,
+            "positive_summed_seams": 3,
+            "strict_gains_over_cp": 2,
+            "additional_seams_over_cp": 2,
+            "positive feasible placement": 3,
+            "root_closed": 29,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 14322,
+            "bounded_hits": 16541,
+            "branches_on_closed_CP_queries": 43170,
+            "cp_uncertain_closed": 7,
+            "physical component dual": 29
+          }
+        },
+        {
+          "mode": "random-contact",
+          "seed": 3502,
+          "counts": {
+            "new_full_requests": 32,
+            "positive_summed_seams": 3,
+            "strict_gains_over_cp": 0,
+            "additional_seams_over_cp": 0,
+            "positive feasible placement": 2,
+            "root_closed": 30,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 5787,
+            "bounded_hits": 6983,
+            "branches_on_closed_CP_queries": 36087,
+            "cp_uncertain_closed": 4,
+            "physical component dual": 30
+          }
+        },
+        {
+          "mode": "random-contact",
+          "seed": 3503,
+          "counts": {
+            "new_full_requests": 32,
+            "positive_summed_seams": 4,
+            "strict_gains_over_cp": 1,
+            "additional_seams_over_cp": 2,
+            "positive feasible placement": 2,
+            "root_closed": 29,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 22831,
+            "bounded_hits": 38737,
+            "branches_on_closed_CP_queries": 38339,
+            "cp_uncertain_closed": 3,
+            "physical component dual": 29,
+            "physical support enumeration": 1,
+            "exact_support_closed": 1
+          }
+        },
+        {
+          "mode": "forest-disjoint",
+          "seed": 3500,
+          "counts": {
+            "new_full_requests": 32,
+            "positive_summed_seams": 3,
+            "strict_gains_over_cp": 3,
+            "additional_seams_over_cp": 3,
+            "positive feasible placement": 3,
+            "root_closed": 22,
+            "matched_subset_states": 41,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 31453,
+            "cp_uncertain_closed": 28,
+            "physical support enumeration": 7,
+            "unit_upper_closed": 6,
+            "physical component dual": 22,
+            "exact_support_closed": 1
+          }
+        },
+        {
+          "mode": "forest-disjoint",
+          "seed": 3501,
+          "counts": {
+            "new_full_requests": 32,
+            "positive_summed_seams": 6,
+            "strict_gains_over_cp": 3,
+            "additional_seams_over_cp": 6,
+            "positive feasible placement": 3,
+            "root_closed": 29,
+            "matched_subset_states": 73,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 29134,
+            "cp_uncertain_closed": 29,
+            "physical component dual": 29
+          }
+        },
+        {
+          "mode": "forest-disjoint",
+          "seed": 3502,
+          "counts": {
+            "new_full_requests": 32,
+            "physical support enumeration": 7,
+            "root_closed": 23,
+            "unit_upper_closed": 6,
+            "matched_subset_states": 133,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 35515,
+            "cp_uncertain_closed": 29,
+            "positive_summed_seams": 2,
+            "strict_gains_over_cp": 2,
+            "additional_seams_over_cp": 2,
+            "positive feasible placement": 2,
+            "exact_support_closed": 1,
+            "physical component dual": 23
+          }
+        },
+        {
+          "mode": "forest-disjoint",
+          "seed": 3503,
+          "counts": {
+            "new_full_requests": 32,
+            "positive_summed_seams": 4,
+            "strict_gains_over_cp": 2,
+            "additional_seams_over_cp": 2,
+            "positive feasible placement": 3,
+            "root_closed": 25,
+            "matched_subset_states": 175,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 31823,
+            "cp_uncertain_closed": 26,
+            "physical component dual": 25,
+            "physical support enumeration": 4,
+            "unit_upper_closed": 3,
+            "exact_support_closed": 1
+          }
+        },
+        {
+          "mode": "guarded-contact",
+          "seed": 3500,
+          "counts": {
+            "new_full_requests": 32,
+            "positive_summed_seams": 3,
+            "strict_gains_over_cp": 1,
+            "additional_seams_over_cp": 3,
+            "positive feasible placement": 1,
+            "root_closed": 31,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 12446,
+            "bounded_hits": 18453,
+            "branches_on_closed_CP_queries": 21741,
+            "cp_uncertain_closed": 3,
+            "physical component dual": 31
+          }
+        },
+        {
+          "mode": "guarded-contact",
+          "seed": 3501,
+          "counts": {
+            "new_full_requests": 32,
+            "physical support enumeration": 1,
+            "root_closed": 31,
+            "exact_support_closed": 1,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 264,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 39546,
+            "cp_uncertain_closed": 5,
+            "physical component dual": 31
+          }
+        },
+        {
+          "mode": "guarded-contact",
+          "seed": 3502,
+          "counts": {
+            "new_full_requests": 32,
+            "positive_summed_seams": 3,
+            "strict_gains_over_cp": 0,
+            "additional_seams_over_cp": 0,
+            "positive feasible placement": 2,
+            "root_closed": 29,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 7046,
+            "bounded_hits": 8175,
+            "branches_on_closed_CP_queries": 39477,
+            "cp_uncertain_closed": 5,
+            "physical component dual": 29,
+            "physical support enumeration": 1,
+            "unit_upper_closed": 1
+          }
+        },
+        {
+          "mode": "guarded-contact",
+          "seed": 3503,
+          "counts": {
+            "new_full_requests": 32,
+            "positive_summed_seams": 1,
+            "strict_gains_over_cp": 1,
+            "additional_seams_over_cp": 1,
+            "positive feasible placement": 1,
+            "root_closed": 31,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 1897,
+            "bounded_hits": 73,
+            "branches_on_closed_CP_queries": 34371,
+            "cp_uncertain_closed": 4,
+            "physical component dual": 31
+          }
+        },
+        {
+          "mode": "207-random",
+          "seed": 3500,
+          "counts": {
+            "new_full_requests": 32,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 32176,
+            "cp_uncertain_closed": 1
+          }
+        },
+        {
+          "mode": "207-random",
+          "seed": 3501,
+          "counts": {
+            "new_full_requests": 32,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 29159,
+            "cp_uncertain_closed": 3
+          }
+        },
+        {
+          "mode": "207-random",
+          "seed": 3502,
+          "counts": {
+            "new_full_requests": 32,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 30427,
+            "cp_uncertain_closed": 4
+          }
+        },
+        {
+          "mode": "207-random",
+          "seed": 3503,
+          "counts": {
+            "new_full_requests": 32,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 32009,
+            "cp_uncertain_closed": 1
+          }
+        },
+        {
+          "mode": "207-forest",
+          "seed": 3500,
+          "counts": {
+            "new_full_requests": 29,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 30568,
+            "cp_uncertain_closed": 32
+          }
+        },
+        {
+          "mode": "207-forest",
+          "seed": 3501,
+          "counts": {
+            "new_full_requests": 28,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 30183,
+            "cp_uncertain_closed": 31
+          }
+        },
+        {
+          "mode": "207-forest",
+          "seed": 3502,
+          "counts": {
+            "new_full_requests": 29,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 29981,
+            "cp_uncertain_closed": 31
+          }
+        },
+        {
+          "mode": "207-forest",
+          "seed": 3503,
+          "counts": {
+            "new_full_requests": 30,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 31364,
+            "cp_uncertain_closed": 31
+          }
+        }
+      ],
+      "globally_distinct_by_mode": {
+        "random-contact": 128,
+        "forest-disjoint": 128,
+        "guarded-contact": 128,
+        "207-random": 128,
+        "207-forest": 64
+      }
+    },
+    "published_207_52": {
+      "per_seed": [
+        {
+          "mode": "207-random",
+          "seed": 3500,
+          "counts": {
+            "new_full_requests": 32,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 32366,
+            "cp_uncertain_closed": 1
+          }
+        },
+        {
+          "mode": "207-random",
+          "seed": 3501,
+          "counts": {
+            "new_full_requests": 32,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 29410,
+            "cp_uncertain_closed": 3
+          }
+        },
+        {
+          "mode": "207-random",
+          "seed": 3502,
+          "counts": {
+            "new_full_requests": 32,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 30448,
+            "cp_uncertain_closed": 4
+          }
+        },
+        {
+          "mode": "207-random",
+          "seed": 3503,
+          "counts": {
+            "new_full_requests": 32,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 31535,
+            "cp_uncertain_closed": 1
+          }
+        },
+        {
+          "mode": "207-forest",
+          "seed": 3500,
+          "counts": {
+            "new_full_requests": 23,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 35417,
+            "cp_uncertain_closed": 32
+          }
+        },
+        {
+          "mode": "207-forest",
+          "seed": 3501,
+          "counts": {
+            "new_full_requests": 23,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 31763,
+            "cp_uncertain_closed": 31
+          }
+        },
+        {
+          "mode": "207-forest",
+          "seed": 3502,
+          "counts": {
+            "new_full_requests": 26,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 35385,
+            "cp_uncertain_closed": 31
+          }
+        },
+        {
+          "mode": "207-forest",
+          "seed": 3503,
+          "counts": {
+            "new_full_requests": 27,
+            "physical component dual": 32,
+            "root_closed": 32,
+            "matched_subset_states": 0,
+            "bounded_subproblems": 0,
+            "bounded_hits": 0,
+            "branches_on_closed_CP_queries": 34507,
+            "cp_uncertain_closed": 30
+          }
+        }
+      ],
+      "globally_distinct_by_mode": {
+        "207-random": 128,
+        "207-forest": 60
+      }
+    }
+  },
+  "support_orders": {
+    "independent": 383473,
+    "pruned": 95929,
+    "ordered": 125962,
+    "size": 93343,
+    "size-upper": 93284
+  },
+  "alternative_tails": {
+    "random-contact": {
+      "subset": {
+        "subset_states": 65154
+      },
+      "singles": {
+        "weighted_problems": 2112,
+        "weighted_rows": 11742,
+        "weighted_legal_arcs": 68204,
+        "subset_states": 30224
+      },
+      "one-pair": {
+        "weighted_problems": 8892,
+        "weighted_rows": 48787,
+        "weighted_legal_arcs": 277075,
+        "subset_states": 1246
+      },
+      "memoized": {
+        "exact_subproblems": 68955,
+        "exact_subproblem_hits": 255080,
+        "subset_states": 0
+      },
+      "bounded-memo": {
+        "bounded_subproblems": 55575,
+        "bounded_hits": 82144,
+        "subset_states": 0
+      }
+    },
+    "forest-disjoint": {
+      "subset": {
+        "subset_states": 422
+      },
+      "singles": {
+        "subset_states": 403,
+        "weighted_problems": 7,
+        "weighted_rows": 28,
+        "weighted_legal_arcs": 112
+      },
+      "one-pair": {
+        "subset_states": 403,
+        "weighted_problems": 7,
+        "weighted_rows": 28,
+        "weighted_legal_arcs": 112
+      },
+      "memoized": {
+        "exact_subproblems": 1315,
+        "subset_states": 0,
+        "exact_subproblem_hits": 2255
+      },
+      "bounded-memo": {
+        "bounded_subproblems": 1060,
+        "subset_states": 0,
+        "bounded_hits": 180
+      }
+    },
+    "guarded-contact": {
+      "subset": {
+        "subset_states": 27708
+      },
+      "singles": {
+        "weighted_problems": 786,
+        "weighted_rows": 4467,
+        "weighted_legal_arcs": 26443,
+        "subset_states": 14345
+      },
+      "one-pair": {
+        "weighted_problems": 2921,
+        "weighted_rows": 16477,
+        "weighted_legal_arcs": 96073,
+        "subset_states": 399
+      },
+      "memoized": {
+        "exact_subproblems": 28678,
+        "exact_subproblem_hits": 111251,
+        "subset_states": 0
+      },
+      "bounded-memo": {
+        "bounded_subproblems": 21653,
+        "bounded_hits": 26701,
+        "subset_states": 0
+      }
+    },
+    "207-random": {
+      "subset": {
+        "subset_states": 0
+      },
+      "singles": {
+        "subset_states": 0
+      },
+      "one-pair": {
+        "subset_states": 0
+      },
+      "memoized": {
+        "subset_states": 0
+      },
+      "bounded-memo": {
+        "subset_states": 0
+      }
+    },
+    "207-forest": {
+      "subset": {
+        "subset_states": 0
+      },
+      "singles": {
+        "subset_states": 0
+      },
+      "one-pair": {
+        "subset_states": 0
+      },
+      "memoized": {
+        "subset_states": 0
+      },
+      "bounded-memo": {
+        "subset_states": 0
+      }
+    }
+  },
+  "installed_center": {
+    "codes": [
+      437,
+      280,
+      118,
+      463,
+      3,
+      275,
+      282,
+      252,
+      212,
+      31,
+      385,
+      297,
+      365,
+      219,
+      165,
+      421,
+      71,
+      447,
+      0,
+      247,
+      414,
+      238,
+      342,
+      60,
+      228,
+      233,
+      188,
+      126,
+      335,
+      276,
+      131,
+      389,
+      77,
+      154,
+      429,
+      307,
+      453,
+      100,
+      262,
+      191,
+      418,
+      258,
+      97,
+      391,
+      302,
+      34,
+      82,
+      85,
+      477,
+      44,
+      198,
+      469,
+      150,
+      442,
+      23,
+      440,
+      196,
+      450,
+      143,
+      467,
+      425,
+      240,
+      123,
+      16,
+      156,
+      255,
+      245,
+      352,
+      320,
+      63,
+      90,
+      223,
+      398,
+      366,
+      47,
+      104,
+      40,
+      72,
+      114,
+      79,
+      445,
+      51,
+      113,
+      88,
+      250,
+      18,
+      107,
+      160,
+      314,
+      409,
+      68,
+      403,
+      395,
+      339,
+      138,
+      215,
+      13,
+      9,
+      329,
+      193,
+      374,
+      171,
+      305,
+      316,
+      58,
+      264,
+      348,
+      376,
+      108,
+      164,
+      411,
+      271,
+      471,
+      227,
+      93,
+      207,
+      146,
+      428,
+      267,
+      456,
+      407,
+      204,
+      218,
+      296,
+      324,
+      337,
+      311,
+      37,
+      355,
+      133,
+      321,
+      136,
+      401,
+      179,
+      331,
+      149,
+      379,
+      291,
+      29,
+      24,
+      475,
+      201,
+      357,
+      369,
+      55,
+      433,
+      345,
+      170,
+      181,
+      383,
+      285,
+      362,
+      7,
+      49,
+      288,
+      176,
+      121,
+      236,
+      459,
+      185
+    ],
+    "matched_edges": 207,
+    "line_components": 54
+  },
+  "portable_315_16": {
+    "codes": [
+      253,
+      245,
+      39,
+      88,
+      277,
+      326,
+      476,
+      140,
+      239,
+      385,
+      281,
+      18,
+      190,
+      399,
+      435,
+      471,
+      194,
+      264,
+      83,
+      329,
+      92,
+      159,
+      79,
+      251,
+      95,
+      232,
+      36,
+      156,
+      207,
+      145,
+      256,
+      283,
+      317,
+      387,
+      303,
+      114,
+      42,
+      368,
+      427,
+      314,
+      444,
+      466,
+      290,
+      198,
+      259,
+      419,
+      57,
+      24,
+      364,
+      218,
+      300,
+      371,
+      204,
+      105,
+      147,
+      210,
+      224,
+      108,
+      16,
+      376,
+      128,
+      339,
+      220,
+      298,
+      318,
+      267,
+      130,
+      432,
+      54,
+      354,
+      68,
+      34,
+      425,
+      241,
+      215,
+      291,
+      322,
+      134,
+      113,
+      272,
+      336,
+      228,
+      394,
+      73,
+      28,
+      294,
+      226,
+      168,
+      4,
+      352,
+      183,
+      119,
+      450,
+      143,
+      263,
+      460,
+      186,
+      362,
+      135,
+      246,
+      202,
+      448,
+      275,
+      13,
+      2,
+      416,
+      75,
+      69,
+      310,
+      151,
+      51,
+      155,
+      379,
+      347,
+      178,
+      454,
+      197,
+      456,
+      287,
+      335,
+      359,
+      350,
+      442,
+      165,
+      162,
+      9,
+      124,
+      373,
+      45,
+      172,
+      308,
+      398,
+      438,
+      175,
+      383,
+      403,
+      469,
+      61,
+      332,
+      478,
+      182,
+      101,
+      464,
+      96,
+      86,
+      342,
+      21,
+      49,
+      234,
+      408,
+      63,
+      420,
+      429,
+      8,
+      121,
+      390,
+      104,
+      407,
+      30,
+      411
+    ],
+    "matched_edges": 161,
+    "line_components": 110,
+    "valid": false,
+    "seed": 3501
+  }
+}

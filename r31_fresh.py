@@ -620,7 +620,7 @@ def forest_pool(model,board,available,size,rng):
 class Engine:
     def __init__(self,problem,*,bonds=False,joint=False,adjacent=False,ties=0,fork=False,
                  relink=False,slate=1,pool=10,tie_slack=0,cycle_budget=0,contacts=None,disjoint=False,exact_packing=False,pair_cycles=0,forest=False,contact_group=0,
-                 touch_packing=None,separator_packing=False,cycle_partition=None,regional_cycle_budget=0,regional_only=False,forbidden_repair=None,assembly_relocation=None,assembly_constructor=None):
+                 remote_imports=0,touch_packing=None,separator_packing=False,cycle_partition=None,regional_cycle_budget=0,regional_only=False,forbidden_repair=None,assembly_relocation=None,assembly_constructor=None,joint_cache=False,joint_bound=None):
         if min(slate,pool)<1 or min(ties,cycle_budget)<0 or tie_slack not in (0,1,2):
             raise ValueError("Invalid candidate or repair limits.")
         self.model=BoardModel(problem)
@@ -630,6 +630,11 @@ class Engine:
             raise ValueError("Unknown mandatory assembly relocation option.")
         if assembly_constructor not in (None,'forward','hall','matching','compact'):
             raise ValueError("Unknown mandatory pose construction policy.")
+        if joint_bound not in (None,'dual','supports','exact'):
+            raise ValueError('Unknown contacting-region bound.')
+        self.joint_bound=joint_bound
+        self.cache_joint=joint_cache
+        self.joint_cache=None
         self.assembly_constructor=assembly_constructor
         self.assemblies=Assemblies(self.model) if bonds or forbidden_repair or assembly_relocation or assembly_constructor else None
         self.assembly_relocation=assembly_relocation
@@ -652,6 +657,9 @@ class Engine:
             pair_cycles=3
         self.contact_group=contact_group
         self.forest=forest
+        if not isinstance(remote_imports,int) or not 0<=remote_imports<pool:
+            raise ValueError('Remote imports must be smaller than the repair pool.')
+        self.remote_imports=remote_imports
         self.pair_cycles=pair_cycles
         if touch_packing not in (None, 'priced', 'complete', 'cp'):
             raise ValueError("Unknown fixed-orientation swap packing policy.")
@@ -660,7 +668,7 @@ class Engine:
         self.exact_packing = bool(exact_packing or touch_packing or separator_packing)
         self.contacts=contacts
         self.disjoint=disjoint
-        self.joint=joint or adjacent or cycle_budget>0 or contacts is not None or disjoint or self.exact_packing or pair_cycles>0 or forest
+        self.joint=joint or joint_bound is not None or joint_cache or adjacent or cycle_budget>0 or contacts is not None or disjoint or self.exact_packing or pair_cycles>0 or forest
         if cycle_partition not in (None,'disjoint','neighbors','warm'):
             raise ValueError("Unknown circulation branching policy.")
         self.cycle_partition=cycle_partition
@@ -726,7 +734,14 @@ class Engine:
                 for key,value in cycle_work.items():
                     stats['full_cycle_'+key]+=value
             # A capped model also explores longer donor cycles inside this variable pool.
-            if self.forest:
+            if self.remote_imports:
+                from r35_remote_donors import response_pool
+                size=min(self.pool,len(available))
+                chosen,priced=response_pool(model,board,size,rng,imports=min(size-1,self.remote_imports),available=available)
+                stats['remote_return_cycles']+=len(priced['imports'])
+                stats['remote_donors_examined']+=priced['examined']
+                chosen=np.asarray(chosen,dtype=int)
+            elif self.forest:
                 chosen=forest_pool(model,board,available,self.pool,rng)
             else:
                 chosen=rng.choice(available,min(len(available),self.pool),replace=False)
@@ -752,9 +767,26 @@ class Engine:
                 status='CIRCULATION_OPTIMAL' if decision['complete'] else 'CIRCULATION_FEASIBLE'
                 board,info=regional,dict(status=status,branches=0)
             else:
-                board,info=joint_repair(model,board,chosen,adjacent=self.adjacent,
-                                       contacts=self.contacts,disjoint=self.disjoint,
-                                       forbidden=self.mate_rules if guarded else None)
+                options=dict(adjacent=self.adjacent,contacts=self.contacts,disjoint=self.disjoint,
+                             forbidden=self.mate_rules if guarded else None)
+                decided=False
+                if self.joint_bound:
+                    from r35_contact_bound import no_contact_gain
+                    witness=[]
+                    zero,bounds=no_contact_gain(model,board,chosen,contacts=contact_limit,disjoint=self.disjoint,
+                                                forbidden=options['forbidden'],level=self.joint_bound,witness=witness)
+                    stats.update({'contact_bound_'+k:v for k,v in bounds.items()})
+                    decided=zero or bool(witness)
+                    if decided:
+                        if witness:board=witness[0]
+                        info=dict(status='CONTACT_OPTIMAL',branches=0)
+                if not decided and self.cache_joint:
+                    if self.joint_cache is None:
+                        from r35_joint_residual import JointResidualCache
+                        self.joint_cache=JointResidualCache()
+                    board,info=self.joint_cache.solve(joint_repair,model,board,chosen,**options)
+                elif not decided:
+                    board,info=joint_repair(model,board,chosen,**options)
                 if regional is not None and model.matches(regional).sum()>model.matches(board).sum():
                     board=regional
                     stats['regional_partial_witnesses_used']+=1
@@ -837,9 +869,14 @@ class Engine:
         if reusable:
             config=dict(bonds=self.assemblies is not None,joint=self.joint,adjacent=self.adjacent,
                         cycle_budget=self.cycle_budget,pool=self.pool,ties=self.ties,tie_slack=self.tie_slack)
-            if self.assembly_constructor:
+            if self.joint_bound or self.assembly_constructor:
                 from importlib.util import find_spec
                 config['repair_native_assignment']=find_spec('ortools') is not None
+            if self.joint_bound:
+                config['joint_bound']=self.joint_bound
+            if self.cache_joint:
+                config['joint_cache']=True
+            if self.assembly_constructor:
                 config['assembly_constructor']=self.assembly_constructor
             if self.assembly_relocation:
                 config['assembly_relocation']=self.assembly_relocation
@@ -853,6 +890,8 @@ class Engine:
                 from importlib.util import find_spec
                 config['regional_only']=True
                 config['regional_native_assignment']=find_spec('ortools') is not None
+            if self.remote_imports:
+                config['remote_imports']=self.remote_imports
             if self.forest:
                 config['forest']=True
             if self.pair_cycles:
@@ -879,6 +918,12 @@ class Engine:
                 if saved is None or shared['best']['gold'] or shared['cursor']>saved['cursor']:
                     saved=shared
         started_at=saved['cursor'] if saved is not None else 0
+        if self.cache_joint:
+            from r35_joint_residual import JointResidualCache
+            self.joint_cache=JointResidualCache()
+            cache_scope=domain_binding(model)
+            if saved is not None and 'joint_residual_cache' in saved:
+                self.joint_cache.restore(cache_scope,saved['joint_residual_cache'])
         def keep_prefix(cursor,state):
             if reusable:
                 with closing(sqlite3.connect(trajectory_db,timeout=60)) as db,db:
@@ -937,6 +982,8 @@ class Engine:
                           work=dict(stats),tested=sorted(tested),rng=rng.bit_generator.state,relinked=relinked,
                           trial_rounds=trial_rounds,states=[dict(current=s['current'],best=s['best'],
                               rng=s['rng'].bit_generator.state) for s in states])
+                if self.cache_joint and self.joint_cache.work:
+                    state['joint_residual_cache']=self.joint_cache.snapshot(cache_scope)
                 if save:
                     save(state)
                 keep_prefix(cursor,state)
@@ -992,6 +1039,8 @@ class Engine:
         if self.assemblies:
             stats['mandatory_bonds']=len(self.assemblies.bonds)
         item=dict(**best,seed=seed,initial=initial,work=dict(stats))
+        if self.cache_joint:
+            item['joint_residual_cache']=dict(self.joint_cache.work)
         if trajectory_db:
             item['reused_repair_steps']=started_at
             item['new_repair_steps']=stats['repair_steps']-started_at
@@ -1016,6 +1065,8 @@ def main():
                         help='Price displaced pieces and optionally move mutually blocking mandatory assemblies.')
     parser.add_argument('--forbidden-repair',choices=('project','prices','guarded'),
                         help='Use the mandatory Gold mate inventory during fresh repair. Implies --bonds.')
+    parser.add_argument('--joint-bound',choices=('dual','supports','exact'),help='Certify local repair by donor prices, changed supports, or exact separated-pair assignments, up to twelve cells.')
+    parser.add_argument('--joint-cache',action='store_true',help='Reuse certified physical local CP optima, including restricted contacting repairs.')
     parser.add_argument('--regional-only',action='store_true',
                         help='Keep the physically checked regional witness if the no-contact budget ends. '
                              'Skips local CP and supports the NumPy-only profile.')
@@ -1027,6 +1078,7 @@ def main():
                              'Neighbors also pins every neighbor of a required change. Warm reuses parent matchings. '
                              'Implies a cycle budget of three unless a positive budget was selected.')
     parser.add_argument('--contacts',type=int,help='Maximum contacting changed pairs in joint repair (-1 for unlimited).')
+    parser.add_argument('--remote-imports',type=int,default=0,help='Price distant physical donors with legal return cycles for this repair pool.')
     parser.add_argument('--forest',action='store_true',help='Choose a low-width repair pool along defective seams.')
     parser.add_argument('--pair-cycles',type=int,choices=(0,2,3),default=0,help='Price interacting donor cycles in the joint pool up to this length.')
     parser.add_argument('--contact-group',type=int,choices=(1,2,3),default=0,help='Pack positive cycles alone (1), or also price two or three touching cycles. With no --pair-cycles, consider cycles up to length three.')
@@ -1060,8 +1112,14 @@ def main():
         config.update(bonds=True,forbidden_repair=args.forbidden_repair)
     if args.assembly_relocation:
         config.update(bonds=True,assembly_relocation=args.assembly_relocation)
+    if args.joint_bound:
+        config['joint_bound']=args.joint_bound
+    if args.joint_cache:
+        config['joint_cache']=True
     if args.assembly_constructor:
         config.update(bonds=True,assembly_constructor=args.assembly_constructor)
+    if args.remote_imports:
+        config.update(joint=True,remote_imports=args.remote_imports)
     if args.forest:
         config['forest']=True
     if args.pair_cycles:
@@ -1077,7 +1135,7 @@ def main():
     if args.contacts is not None or args.disjoint_contacts:
         config.update(contacts=args.contacts,disjoint=args.disjoint_contacts)
     engine=Engine(p,**config)
-    if args.assembly_constructor:
+    if args.joint_bound or args.assembly_constructor:
         from importlib.util import find_spec
         config['repair_native_assignment']=find_spec('ortools') is not None
     if args.regional_only:
