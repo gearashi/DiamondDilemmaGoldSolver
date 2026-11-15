@@ -1,0 +1,52 @@
+{
+  "historical_work": {
+    "native_calls": 132,
+    "saved_clauses": 3726,
+    "avoided_solves": 116
+  },
+  "runs": [
+    {
+      "label": "first",
+      "statuses": {
+        "OPTIMAL": 36,
+        "INFEASIBLE": 88,
+        "CACHED_INFEASIBLE": 116
+      },
+      "work": {
+        "native_calls": 139,
+        "saved_clauses": 3726,
+        "absorbed_cores": 0,
+        "candidate_checks": 6053,
+        "avoided_solves": 116
+      },
+      "retried": 15,
+      "live_cores": 88,
+      "checked_queries": 240
+    },
+    {
+      "label": "reopen_reversed",
+      "statuses": {
+        "CACHED_INFEASIBLE": 204,
+        "OPTIMAL": 36
+      },
+      "work": {
+        "disk_candidates": 88,
+        "candidate_checks": 8031,
+        "cold_verifications": 87,
+        "avoided_solves": 204,
+        "native_calls": 36
+      },
+      "retried": 0,
+      "live_cores": 88,
+      "checked_queries": 240
+    }
+  ],
+  "exact_clauses": {
+    "direct_stars": 38400,
+    "stars_built": 666,
+    "directional_pair_tests": 1722,
+    "queries": 240,
+    "unchanged_stars": 34950,
+    "changed_signatures_requested": 3450
+  }
+}

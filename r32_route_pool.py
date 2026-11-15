@@ -1,61 +1,18 @@
 """Joint defect-cover bounds for forced donor prefixes with a small remaining mover budget."""
-from collections import Counter, deque
+from collections import Counter
 from itertools import combinations
 import numpy as np
 
 
-class CoverCores:
-    """Infeasible sets of seam-failure or optional-mover clauses."""
-    def __init__(self):
-        self.cores = deque(maxlen=1024)
-        self.work = Counter()
-
-    def covered(self, rows, remaining, failures):
-        # Each new clause on the same geographic failures with fewer eligible
-        # movers entails its saved counterpart. Smaller budgets are stronger.
-        by_edges = {}
-        for edges,movers in rows:
-            by_edges.setdefault(edges,[]).append(movers)
-        return any(remaining<=limit and failures<=cap and all(
-            any(mask & ~old == 0 for mask in by_edges.get(edges,())) for edges,old in core)
-            for limit,cap,core in self.cores)
-
-    def add(self, rows, remaining, failures):
-        self.cores.append((remaining,failures,tuple(rows)))
-        self.work['saved_clauses'] += len(rows)
+from r35_defect_cores import CoverCores
 
 
 def defect_cover(bound, group, free, remaining, target, *, seconds=0.5, cores=None):
     """A true seam failure can cover several obstructions; each equally changed cell can deactivate several."""
     from ortools.sat.python import cp_model
-    from r31_route_geometry import cycle_mapping
-    sources = cycle_mapping(group)
-    ids = bound.tiles.copy()
-    for cell,donor in sources.items():
-        ids[cell] = bound.tiles[donor]
-    available = set(free) - sources.keys()
-    inventory = bound.model.problem
-    neighbors = [[] for _ in range(bound.n)]
-    requirements = []
-    for edge,(a,s,b,t) in enumerate(inventory.edges):
-        matches = (bound.masks[ids[a],:,s,None] == bound.model.reverse[bound.masks[ids[b],:,t]])
-        if not matches.any():
-            requirements.append(((edge,), {a,b}))
-        else:
-            neighbors[a].append((edge,b,matches.any(1)))
-            neighbors[b].append((edge,a,matches.any(0)))
-    for cell,adjacent in enumerate(neighbors):
-        smaller = []
-        for n in range(2,len(adjacent)+1):
-            for row in combinations(adjacent,n):
-                edges = frozenset(e for e,_,_ in row)
-                if any(old <= edges for old in smaller):
-                    continue
-                if not np.logical_and.reduce([mask for _,_,mask in row]).any():
-                    requirements.append((tuple(sorted(edges)),{cell, *(b for _,b,_ in row)}))
-                    smaller.append(edges)
-    failures = len(inventory.edges)-target
-    rows = [(edges,sum(1<<int(c) for c in available.intersection(cells))) for edges,cells in requirements]
+    from r35_defect_inventory import for_bound
+    rows=for_bound(bound).rows(group,free)
+    failures=len(bound.model.problem.edges)-target
     if cores is not None and cores.covered(rows,remaining,failures):
         cores.work['avoided_solves'] += 1
         return dict(closed=True,status='CACHED_INFEASIBLE',clauses=len(rows),branches=0)
@@ -91,9 +48,9 @@ def defect_cover(bound, group, free, remaining, target, *, seconds=0.5, cores=No
         cores.work['native_calls'] += 1
         if status==cp_model.INFEASIBLE:
             core = [assumptions[i] for i in solver.sufficient_assumptions_for_infeasibility()]
-            cores.add(core,remaining,failures)
+            cores.add(core,remaining,failures,certified=True)
     return dict(closed=status==cp_model.INFEASIBLE,status=solver.status_name(status),
-                clauses=len(requirements),branches=solver.num_branches)
+                clauses=len(rows),branches=solver.num_branches)
 
 
 def load_prefix_certificates(bound, target, family):
@@ -247,7 +204,7 @@ def _evaluate_assigned(problem, boards, pool, family, target, *, database, paire
             oracle = RotationOracle(model)
             best = {}
             rows,work = traverse([joins[i] for i in indices],pair=paired,buckets=buckets,bridge=bridge,together=together,
-                                 cover=cover)
+                                 cover=cover,cover_cores=CoverCores(db,scope) if cover else None)
             for sub,cells,order in rows:
                 ix = indices[sub]
                 r = rank(cells,model.free)
@@ -373,13 +330,14 @@ def stream_prefixes(problem, boards, pool, family, target, database, *, start=0,
     def expired():
         return seconds and monotonic()-clock>=seconds
     prev_id = None
-    cover_cores = CoverCores() if cover else None
+    cover_cores = None
     from r34_rank_leases import RankedLeases, LostRankLease, covered_end
     busy=False
     leases=None
     with closing(sqlite3.connect(database,timeout=90,uri=True,isolation_level=None)) as db, ExitStack() as renewal:
         db.execute('CREATE TABLE IF NOT EXISTS r32_joint_pages(scope TEXT,lo INTEGER,hi INTEGER,best TEXT,PRIMARY KEY(scope,lo))')
         db.execute('CREATE TABLE IF NOT EXISTS optima(key TEXT PRIMARY KEY,result TEXT NOT NULL)')
+        cover_cores=CoverCores(db,binding) if cover else None
         while (current<stop or busy) and not expired() and (max_pages is None or pages<max_pages):
             if current>=stop:
                 current=covered_end(db,'r32_joint_pages',scope,start,stop)

@@ -291,7 +291,7 @@ def bridge_upper(stars, group):
     return None
 
 
-def traverse(joins, *, pair=True, buckets=True, bridge=False, together=True, cover=False):
+def traverse(joins, *, pair=True, buckets=True, bridge=False, together=True, cover=False,cover_cores=None):
     """Existence/optimum within a finite pool. Centers keep separate exact endpoint sets."""
     first = joins[0]
     if any(j.pool!=first.pool or j.family!=first.family or not np.array_equal(j.close,first.close) for j in joins):
@@ -311,7 +311,7 @@ def traverse(joins, *, pair=True, buckets=True, bridge=False, together=True, cov
             from r32_route_pool import defect_cover
             viable = []
             for i in active:
-                test = defect_cover(joins[i].bound,group,first.pool,sum(pending),joins[i].target)
+                test = defect_cover(joins[i].bound,group,first.pool,sum(pending),joins[i].target,cores=cover_cores)
                 work['overlap_calls'] += 1
                 if test['closed']:
                     work['overlap_closed'] += 1
@@ -365,4 +365,5 @@ def traverse(joins, *, pair=True, buckets=True, bridge=False, together=True, cov
                 for g in cycle_options(first.pool,width,first.pool):
                     yield from visit((g,), active)
         work.update(catalog.work)
+        if cover_cores is not None:work.update({'cover_'+k:v for k,v in cover_cores.work.items()})
     return rows(),work

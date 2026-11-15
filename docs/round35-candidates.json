@@ -370,7 +370,13 @@
       "source_id": 9,
       "title": "Incremental donor-prefix defect obligations and durable budget cores",
       "proposal_and_validation": "r32_route_pool.defect_cover rebuilds every seam/star for a typed prefix and CoverCores scans a process-local latest-1,024 deque. Recompute changed obligations only on affected stars, apply available-mover masks after the immutable inventory work, index a minimal core antichain by rare failure sets and persist proved cores under domain/semantic binding. If enough distinct budgets recur, derive verified frontier points in the (remaining movers, permitted seam failures) plane, using actual certified infeasibility or bounds. R34 already avoided 116 CP calls on the published comparison. Measure clauses/stars rebuilt, new first hits/avoided calls across prefix orders and restarts. Check both implication directions and multiple clauses for identical failed-seam sets, no shared global negatives from UNKNOWN.",
-      "state": "in progress"
+      "state": "keep with exact scope",
+      "decision": "All 240 original outcomes and ordered clauses agree. Incremental compilation built 666 versus 38,400 stars. On reverse restart all 204 negative queries reused durable cores after 87 native core checks; 36 feasible queries remained. Only two nested budgets occur in the original corpus.",
+      "evidence": [
+        "docs/ROUND35_DEFECT_CORES.md",
+        "docs/R35_DEFECT_CORES.json",
+        "test_r35_defect_cores.py"
+      ]
     },
     {
       "id": 25,
