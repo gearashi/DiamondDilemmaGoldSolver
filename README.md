@@ -10,7 +10,7 @@ The [v1.7.0 results and recommended settings](docs/ROUND26_RESULTS.md) cover 17 
 
 ## Search improvements in v1.16.0
 
-The saved reference board has 207 matched edges and predates this round. The new checks reduce search on measured Gold and scored-board queries. The results include tested dashboard settings for an RTX 2060 with 6 GB of VRAM, options for resuming a classic GPU search, and commands for the ranked CPU search toward 208. [Results, settings and benchmarks](docs/ROUND35_RESULTS.md)
+The published proof reference and an archived second arrangement both have 207 matched edges and predate this round. They differ at two cells. The new checks reduce search on measured Gold and scored-board queries. The results include tested dashboard settings for an RTX 2060 with 6 GB of VRAM, options for resuming a classic GPU search, and commands for the ranked CPU search toward 208. [Results, settings and benchmarks](docs/ROUND35_RESULTS.md)
 
 ## Search improvements in v1.15.0
 

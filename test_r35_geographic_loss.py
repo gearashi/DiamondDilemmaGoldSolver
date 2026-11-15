@@ -15,6 +15,55 @@ from search_problem import SearchProblem
 
 
 class GeographicLossTests(unittest.TestCase):
+    def test_transferred_cap_preserves_every_complete_physical_matching(self):
+        from r35_geographic_loss import overlap_lower_bound
+        def pairings(sides):
+            if not sides:
+                yield frozenset()
+                return
+            a,*rest=sides
+            for b in rest:
+                for tail in pairings([v for v in rest if v != b]):
+                    yield tail | {(a,b)}
+        all_boards=list(pairings(range(8)))
+        random=Random(89351)
+        for _ in range(500):
+            source,target=random.sample(all_boards,2)
+            limit=random.randrange(len(source)+1)
+            required=set(random.sample(sorted(random.choice(all_boards)),random.randrange(3)))
+            forbidden=set(random.sample(sorted(target),random.randrange(3)))
+            actual=[len(target-board) for board in all_boards if len(board&source)<=limit and
+                    required<=board and board.isdisjoint(forbidden)]
+            lower=overlap_lower_bound(source,limit,target,required,forbidden)
+            if lower is None:
+                self.assertFalse(actual)
+            elif actual:
+                self.assertLessEqual(lower,min(actual))
+        self.assertIsNone(overlap_lower_bound(set(),1,set(),[(0,1),(0,2)]))
+
+    def test_published_centers_have_distinct_limits_and_cache_scope(self):
+        from tempfile import TemporaryDirectory
+        from r32_gold_loss import geographic, reference_groups
+        from r35_geographic_loss import geographic_loss_cutoff
+        docs=Path(__file__).resolve().parent/'docs'
+        data=next((p for p in (docs.parent/'data/tiles.json',docs.parent.parent/'data/tiles.json') if p.is_file()),None)
+        if data is None:self.skipTest('Original prepared artwork unavailable')
+        p=SearchProblem(read_json(data),physical_gold_support=True)
+        codes=read_json(docs/'R29_GOLD_RESULTS.json')['residual_reference']
+        target,cert,groups=reference_groups(p,codes)
+        with TemporaryDirectory() as folder:
+            db=Path(folder)/'scopes.sqlite'
+            first=geographic(p,target,[],cert.rows,[],0,29,None,5,db)
+            self.assertEqual(first['certified_reference_overlap']['minimum_lost'],30)
+            self.assertEqual(first['cp_calls'],0)
+            again=geographic(p,target,[],cert.rows,[],0,29,None,5,db)
+            self.assertTrue(again['reused'])
+            self.assertIsNone(geographic_loss_cutoff(p,target,30,[],[]))
+            with self.assertRaises(ValueError):
+                geographic(p,target,[],[[(0,0)]],[],0,28,None,5,db)
+        p.masks[0,0]^=1
+        self.assertIsNone(geographic_loss_cutoff(p,target,29,[],[]))
+
     def test_saturation_on_all_edge_perfect_residual_boards(self):
         rng=Random(35)
         for seed in (4,31,70):

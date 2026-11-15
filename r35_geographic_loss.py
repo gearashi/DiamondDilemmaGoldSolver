@@ -46,6 +46,44 @@ def certified_reference(problem, codes=None):
     return result
 
 
+def overlap_lower_bound(source, retained_limit, target, required=(), forbidden=()):
+    """Minimum lost target bonds implied by the source retention cap and branch literals."""
+    from r32_gold_loss import pairset
+    required, forbidden = pairset(required), pairset(forbidden)
+    # Every side of a physical triangle has exactly one mate in Gold.
+    occupied = {side for pair in required for side in pair}
+    if len(occupied) != 2*len(required) or required & forbidden:
+        return None
+    source, target = pairset(source), pairset(target)
+    if len(source & required) > retained_limit:
+        return None
+    eligible = {p for p in target if p not in forbidden and
+                (p in required or occupied.isdisjoint(p))}
+    shared = source & eligible
+    remaining = retained_limit - len(required & (source-target))
+    return len(target) - len(eligible-source) - min(remaining,len(shared))
+
+
+def geographic_loss_cutoff(problem, target, upper, required, forbidden):
+    """Use a certified geographic bound only during a full-board geographic search."""
+    from r35_claim_catalogue import published_scope
+    if upper >= len(target) or not published_scope(problem):
+        return None
+    proof = certified_reference(problem)
+    if proof is None:
+        return None
+    source, limit = proof
+    physical = inventory(problem)
+    lower = overlap_lower_bound(source,limit,target,set(required)|physical.required,
+                                set(forbidden)|physical.forbidden)
+    if lower is not None and lower <= upper:
+        return None
+    return dict(status='INFEASIBLE',cp_calls=0,branches=0,
+                certified_reference_overlap=dict(source_retained_limit=limit,
+                    shared_bonds=len(source & set(target)),target_bonds=len(target),
+                    minimum_lost=lower,required_inconsistent=lower is None))
+
+
 def retained_bound(problem,domains,reference,limit,required=()):
     """For a proven bound, count distinct physically entailed joins and all saturated units."""
     scope=frozenset(reference)

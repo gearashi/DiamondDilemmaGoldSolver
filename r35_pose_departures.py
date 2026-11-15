@@ -125,27 +125,11 @@ def checked_profile(problem):
 
 
 def dense_tile_support(domains):
-    """Certify all remaining cell/tile edges by greedy extension of any chosen edge."""
+    """Do the allowed poses already have complete one-copy-per-tile support?"""
+    from r35_cut_inventory import dense_support
     starts = ((1 << (3*len(domains)))-1)//7
-    fixed = 0
-    free = []
-    for mask in domains:
-        tiles = (mask | mask >> 1 | mask >> 2) & starts
-        if not tiles:
-            return False
-        if tiles & (tiles-1):
-            free.append(tiles)
-        elif tiles & fixed:
-            return False
-        else:
-            fixed |= tiles
-    if any(row & fixed for row in free):
-        return False
-    # Fix any one free cell and tile. Each other row can lose at most
-    # one option. In increasing row-size order the i-th remaining row
-    # still has at least i options (one-based), so greed always succeeds.
-    sizes = sorted(row.bit_count() for row in free)
-    return all(size >= i+2 for i,size in enumerate(sizes[:-1]))
+    tiles = tuple((mask | mask >> 1 | mask >> 2) & starts for mask in domains)
+    return dense_support(tiles) == tiles
 
 
 def crossover_seams(problem,domains,images):

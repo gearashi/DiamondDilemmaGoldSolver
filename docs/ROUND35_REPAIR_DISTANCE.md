@@ -1,6 +1,6 @@
 # Minimum geographic changes from the 207 board
 
-Every Gold board differs from the published 207-matched-edge arrangement in **at least 95 of its 160 oriented cell assignments**. Rotating the same triangle in its original cell counts as one change. Replacing it with another triangle also counts as one change, regardless of the replacement's orientation. An independent DRAT verifier checked the 94-change exclusion. A 95-cell assignment satisfies the full placement hitting-set relaxation.
+Every Gold board differs from the published 207-matched-edge, 52-component proof reference in **at least 95 of its 160 oriented cell assignments**. Rotating the same triangle in its original cell counts as one change. Replacing it with another triangle also counts as one change, regardless of the replacement's orientation. An independent DRAT verifier checked the 94-change exclusion. A 95-cell assignment satisfies the full placement hitting-set relaxation.
 
 ## Where the lower bound comes from
 
@@ -76,3 +76,11 @@ To examine a different candidate without changing solver evidence, supply a JSON
 For unrestricted CPU DFS on Windows, use `.\StartSolver.cmd -Algorithm dfs -Unlimited`. The Linux and macOS CPU equivalent is `bash StartSolver.sh --algorithm dfs --unlimited`. The scored-board repair mode searches for minimum change from a supplied board. The best geographic score in these tests remained 207/240. For the measured RTX 2060 CUDA settings, see the [Round 35 settings and results](ROUND35_RESULTS.md).
 
 The measured controls and file identities are in [the result record](R35_REPAIR_DISTANCE.json), [the antecedent proof receipt](R35_REPAIR_DISTANCE_PROOF.json), [the refined proof receipt](R35_REFINED_REPAIR_PROOF.json) and [the regional proof receipt](R35_REGIONAL_REPAIR_PROOF.json).
+
+Minimum-change repair recognizes the archived 52-component board and the public 54-component alternate under all ten proper rotations. The two boards admit 4,229 and 4,059 transferred rows, respectively. On a rotated alternate with 92 movable cells, the distance check saved 132 candidate-row inspections, one neighborhood pass and 40 bond projections. Both runs reached the same infeasible result. [Rotation and scope controls](R35_REPAIR_ROTATIONS.json)
+
+To test whether Gold can break at most 29 bonds from a saved board, run the following command with the saved board as the center. The 54-component alternate closes immediately. A cap of 30 still requires search.
+
+```sh
+python r32_gold.py geographic --center runtime/best.json --upper 29 --seconds 6
+```

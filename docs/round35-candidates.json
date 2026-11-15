@@ -1,6 +1,6 @@
 {
   "round": 35,
-  "state": "active",
+  "state": "complete",
   "baseline_release": "v1.15.0",
   "initial_candidates": 71,
   "candidates": [
@@ -1809,8 +1809,26 @@
       "source_id": "Combined-tree review after the independently checked 95-cell repair lower bound",
       "title": "Use checked original-pose exclusions and oriented-cell distance in geographic Gold queries",
       "mechanism": "REPAIR-POSE-CLAUSES-IN-GOLD",
-      "state": "testing",
-      "proposal_and_validation": "The 4,225 original-pose clauses now certify a 95-cell distance. The repair master consumes them, while geographic Gold --reference-bound counts named physical bonds and has no oriented-cell rows. Compare fixed near-reference, held-out and broad queries against the released geographic checks. Measure novel early rejection, pose removal or real native calls, validate raw proof bindings, full-board automorphisms if useful, independence from scores and alternate artwork, and screen existing unrestricted root propagation before considering broader deployment."
+      "state": "keep with exact scope",
+      "proposal_and_validation": "The 4,225 original-pose clauses now certify a 95-cell distance. The repair master consumes them, while geographic Gold --reference-bound counts named physical bonds and has no oriented-cell rows. Compare fixed near-reference, held-out and broad queries against the released geographic checks. Measure novel early rejection, pose removal or real native calls, validate raw proof bindings, full-board automorphisms if useful, independence from scores and alternate artwork, and screen existing unrestricted root propagation before considering broader deployment.",
+      "evidence": [
+        "docs/ROUND35_POSE_DEPARTURES.md",
+        "docs/R35_POSE_DEPARTURES.json",
+        "docs/ROUND35_POSE_FRONTIERS.md",
+        "docs/R35_POSE_FRONTIERS.json",
+        "docs/R35_POSE_PORTABLE_RESUME.json",
+        "docs/R35_POSE_LITERAL_SCREEN.json",
+        "docs/R35_POSE_IMAGE_PAIRS.json",
+        "docs/ROUND35_POSE_MATCHING.md",
+        "docs/R35_CUT_INVENTORY.json",
+        "docs/R35_REFERENCE_CENTERS.json",
+        "docs/R35_REPAIR_ROTATIONS.json",
+        "test_r35_pose_transfer_authority.py",
+        "test_r35_geographic_query_inputs.py",
+        "test_r35_repair_rotations.py"
+      ],
+      "decision": "Retain authenticated geographic pose clauses, distance and ownership under the ten legal rotations, full seam/tile propagation, one- and two-image cheap quota checks, and opt-in targeted frontier receivers. Five restricted geographic searches closed before native branching. Complete physical-tile ownership still supplied a new cutoff after full geometric propagation. Full preflight excluded 60 of 132 matched scopes. It used 31,832 queue visits instead of 46,226 with identical final domains. All 42 unrestricted native DFS subtrees retained identical node counts. Marked conditional DFS reduced matching steps from 1,558,781 to 808,535 on 24 preserved scopes. Respect existing worker, checkpoint and proof ownership. Preserve genuine old SAT journals. Reject eager clause posting in SAT/CP and expensive two-image numerical and cycle checks for the tested populations. For the alternate 207/54 center, certified overlap and oriented distance distinguish its 30-bond and 93-cell lower bounds from the 32-bond and 95-cell 207/52 reference proof. Across all ten orientations, the two repair bounds recovered 4,229 and 4,059 applicable rows respectively. The bond-overlap test closes strict sub-threshold geographic queries before model allocation. Equality reaches the original solver. Stored results must still match the authenticated artwork and validated query arguments.",
+      "reopen_if": "A new original-puzzle proof, a new consumer with different search ownership, or genuinely different residuals that survive the final geometric and assignment checks can establish an additional exclusion. An unresolved search is not by itself evidence for another algorithm change."
     }
   ],
   "priorities": [

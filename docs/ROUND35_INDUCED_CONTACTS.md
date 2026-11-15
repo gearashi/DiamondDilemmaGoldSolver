@@ -1,6 +1,6 @@
 # How many of the 207 reference bonds can Gold keep?
 
-**Every Gold board must drop at least 31 of the 207 named physical bonds in the saved reference. It can retain at most 176.** The exact signed-inventory relaxation attains 31 with the explicit tile-color phase and physical losses recorded in the receipt. Constructing a full one-loop board from those choices remains a separate search. The highest verified complete board remains at 207 matched edges. [Exact proof receipt and witness](R35_CONTACT_WIDE_PROOF.json)
+**Every Gold board must drop at least 31 of the 207 named physical bonds in the 52-component published reference. It can retain at most 176.** The exact signed-inventory relaxation attains 31 with the explicit tile-color phase and physical losses recorded in the receipt. Constructing a full one-loop board from those choices remains a separate search. The highest verified complete board remains at 207 matched edges. [Exact proof receipt and witness](R35_CONTACT_WIDE_PROOF.json)
 
 ## Running the bound
 

@@ -1,0 +1,241 @@
+{
+  "source": "R29_INCUMBENT.json",
+  "alternate": "R29_GOLD_RESULTS.json/residual_reference",
+  "cases": [
+    {
+      "name": "proof reference",
+      "edges": 207,
+      "components": 52,
+      "differences_by_rotation": [
+        0,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160
+      ],
+      "shared_bonds": 207,
+      "loss_lower": 32,
+      "queries": [
+        {
+          "cap": 31,
+          "path": [],
+          "policy": "prior",
+          "seconds": 7.4774,
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 0,
+          "channel": {
+            "status": "CHANNELLED",
+            "encoding": "partner-elements",
+            "entries": 115200,
+            "geographic_seams": 240
+          }
+        },
+        {
+          "cap": 31,
+          "path": [],
+          "policy": "overlap",
+          "seconds": 0.1113,
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "certified_reference_overlap": {
+            "source_retained_limit": 175,
+            "shared_bonds": 207,
+            "target_bonds": 207,
+            "minimum_lost": 32,
+            "required_inconsistent": false
+          }
+        },
+        {
+          "cap": 32,
+          "path": [],
+          "policy": "prior",
+          "seconds": 9.1192,
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 0,
+          "channel": {
+            "status": "CHANNELLED",
+            "encoding": "partner-elements",
+            "entries": 115200,
+            "geographic_seams": 240
+          }
+        },
+        {
+          "cap": 32,
+          "path": [],
+          "policy": "overlap",
+          "seconds": 9.0189,
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 0,
+          "channel": {
+            "status": "CHANNELLED",
+            "encoding": "partner-elements",
+            "entries": 115200,
+            "geographic_seams": 240
+          }
+        },
+        {
+          "cap": 31,
+          "path": [
+            0
+          ],
+          "policy": "prior",
+          "seconds": 7.8644,
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 0,
+          "channel": {
+            "status": "CHANNELLED",
+            "encoding": "partner-elements",
+            "entries": 115200,
+            "geographic_seams": 240
+          }
+        },
+        {
+          "cap": 31,
+          "path": [
+            0
+          ],
+          "policy": "overlap",
+          "seconds": 0.0551,
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "certified_reference_overlap": {
+            "source_retained_limit": 175,
+            "shared_bonds": 207,
+            "target_bonds": 207,
+            "minimum_lost": 32,
+            "required_inconsistent": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "published alternate",
+      "edges": 207,
+      "components": 54,
+      "differences_by_rotation": [
+        2,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160,
+        160
+      ],
+      "shared_bonds": 205,
+      "loss_lower": 30,
+      "queries": [
+        {
+          "cap": 29,
+          "path": [],
+          "policy": "prior",
+          "seconds": 7.7175,
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 0,
+          "channel": {
+            "status": "CHANNELLED",
+            "encoding": "partner-elements",
+            "entries": 115200,
+            "geographic_seams": 240
+          }
+        },
+        {
+          "cap": 29,
+          "path": [],
+          "policy": "overlap",
+          "seconds": 0.0359,
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "certified_reference_overlap": {
+            "source_retained_limit": 175,
+            "shared_bonds": 205,
+            "target_bonds": 207,
+            "minimum_lost": 30,
+            "required_inconsistent": false
+          }
+        },
+        {
+          "cap": 30,
+          "path": [],
+          "policy": "prior",
+          "seconds": 6.9434,
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 0,
+          "channel": {
+            "status": "CHANNELLED",
+            "encoding": "partner-elements",
+            "entries": 115200,
+            "geographic_seams": 240
+          }
+        },
+        {
+          "cap": 30,
+          "path": [],
+          "policy": "overlap",
+          "seconds": 6.5671,
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 0,
+          "channel": {
+            "status": "CHANNELLED",
+            "encoding": "partner-elements",
+            "entries": 115200,
+            "geographic_seams": 240
+          }
+        },
+        {
+          "cap": 29,
+          "path": [
+            0
+          ],
+          "policy": "prior",
+          "seconds": 6.2831,
+          "status": "UNKNOWN",
+          "cp_calls": 1,
+          "branches": 0,
+          "channel": {
+            "status": "CHANNELLED",
+            "encoding": "partner-elements",
+            "entries": 115200,
+            "geographic_seams": 240
+          }
+        },
+        {
+          "cap": 29,
+          "path": [
+            0
+          ],
+          "policy": "overlap",
+          "seconds": 0.034,
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "certified_reference_overlap": {
+            "source_retained_limit": 175,
+            "shared_bonds": 205,
+            "target_bonds": 207,
+            "minimum_lost": 30,
+            "required_inconsistent": false
+          }
+        }
+      ]
+    }
+  ],
+  "conditions": "Full geographic Gold, never scored-208 or phase-only; baseline and trial use identical data and a cold in-memory job with an eight-second allowance."
+}

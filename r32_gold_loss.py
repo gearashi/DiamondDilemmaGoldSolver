@@ -27,6 +27,13 @@ def pairset(rows):
     return frozenset(result)
 
 
+def checked_core_pairs(rows, side_count):
+    pairs = pairset(rows)
+    if any(not 0 <= a < b < side_count or a//3 == b//3 for a,b in pairs):
+        raise ValueError('Expected two different physical tile sides')
+    return pairs
+
+
 def read_json(path):
     return json.loads(Path(path).read_text(encoding='utf-8-sig'))
 
@@ -55,10 +62,7 @@ class Certificates:
         return None
 
     def conflicts(self, rows):
-        pairs = pairset(rows)
-        for a,b in pairs:
-            if not 0<=a<b<len(self.sides) or a//3==b//3:
-                raise ValueError('Expected two different physical tile sides')
+        pairs = checked_core_pairs(rows, len(self.sides))
         bad = pairs - self.inventory.possible
         if bad:
             return {frozenset([p]) for p in bad}
@@ -105,9 +109,9 @@ def loss_partition(problem, reference, groups, outside_losses, bounds):
     """Build disjoint ownership constraints on real mating variables."""
     outside = set(reference)-set().union(*groups)
     lower,upper = bounds
-    if not 0<=lower<=upper<=len(reference):
+    if type(lower) is not int or type(upper) is not int or not 0<=lower<=upper<=len(reference):
         raise ValueError("Invalid reference loss interval")
-    if outside_losses is not None and not 0<=outside_losses<=len(outside):
+    if outside_losses is not None and (type(outside_losses) is not int or not 0<=outside_losses<=len(outside)):
         raise ValueError("Invalid outside loss count")
     return dict(outside=sorted(outside),lower=lower,upper=upper,outside_losses=outside_losses,
                 groups=[sorted(g) for g in groups])
@@ -347,10 +351,21 @@ def geographic(problem, reference, groups, checked, path, lower, upper, outside,
     if seconds<=0:raise ValueError('Invalid Gold solve budget.')
     from r29_gold_geography import checked_domains
     ds=tuple(checked_domains(problem,domains))
+    spec=loss_partition(problem,reference,groups,outside,(lower,upper))
+    # Unproved well-formed hints are harmless. Only a native model consuming
+    # them needs to replay the physical proof; all paths check the side IDs.
+    checked=tuple(checked_core_pairs(row,3*problem.n) for row in checked)
     parts=first_loss_partition(groups,path=path)
     if parts is None:return dict(status='INFEASIBLE',cp_calls=0)
     require,forbid,options=parts
-    spec=loss_partition(problem,reference,groups,outside,(lower,upper))
+    for a,b in [*require,*forbid]:
+        if type(a) is not int or type(b) is not int or not (0 <= a < 3*problem.n and 0 <= b < 3*problem.n):
+            raise ValueError("Invalid physical side index.")
+    if database is not None:
+        from r35_claim_catalogue import published_scope
+        if (problem.fingerprint == 'e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853'
+                and not published_scope(problem)):
+            raise ValueError('Stored geographic queries require the authenticated published puzzle.')
     from r34_geographic_reuse import related,schema,verify_board
     from r29_gold_phase import checked_pins
     pins_for_board=checked_pins(problem.n,{0:0} if pins is None else pins)
@@ -361,6 +376,10 @@ def geographic(problem, reference, groups, checked, path, lower, upper, outside,
     key=key_for_domains(ds)
     deadline=time.monotonic()+seconds
     def solve():
+        from r35_geographic_loss import geographic_loss_cutoff
+        cutoff=geographic_loss_cutoff(problem,reference,upper,require,forbid)
+        if cutoff is not None:
+            return cutoff
         remaining=deadline-time.monotonic()
         if remaining<=0:return dict(status='UNKNOWN',cp_calls_now=0)
         return search(problem,domains=ds,geography=True,channel=True,learned_geometry=True,
