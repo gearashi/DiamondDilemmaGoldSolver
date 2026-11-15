@@ -24,7 +24,7 @@ def certified_reference(problem, codes=None):
     identity=digest([3,problem.fingerprint,sorted(reference),sorted(required),[sorted(g) for g in packed]])
     if identity!=REFERENCE_SCOPE:return None
     from r35_contact_certificate import checked_contact_bound
-    loss=max(checked_lower_bound(identity,groups),checked_contact_bound(problem,reference,required,groups))
+    loss=max(checked_lower_bound(identity,groups),checked_contact_bound(problem,reference,required,groups,signed_parity=True))
     return frozenset(reference),len(reference)-loss
 
 

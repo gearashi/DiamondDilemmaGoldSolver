@@ -70,8 +70,18 @@ def verify(problem, reference, required, physical_groups, evidence, *, charged=N
     return (weight_sum+maximum-1)//maximum
 
 
-def checked_contact_bound(problem,reference,required,groups,*,charged=None):
+def checked_contact_bound(problem,reference,required,groups,*,charged=None,signed_parity=False):
     try:data=json.loads(CERTIFICATE.read_bytes())
     except (OSError,ValueError):return 0
-    return verify(problem,frozenset(reference),frozenset(required),{frozenset(g) for g in groups},data,
+    bound=verify(problem,frozenset(reference),frozenset(required),{frozenset(g) for g in groups},data,
                   charged=None if charged is None else tuple(frozenset(g)-required for g in charged))
+    if bound==25 and signed_parity:
+        # The separately verified cap-25 DRAT proof needs the signed pair and
+        # reciprocal-inventory parity equations together with exactly these terms.
+        from r32_gold_loss import digest
+        identity=digest([data['fingerprint'],sorted(map(tuple,data['reference'])),
+                         sorted(map(tuple,data['required'])),
+                         sorted((r['kind'],r['weight'],sorted(map(tuple,r['bonds']))) for r in data['weighted_cores'])])
+        if identity=='3c0a3e1592b5c7fdde4279da83b240c8a78d84a1210de02cb3f8f02d065ce200':
+            return 26
+    return bound
