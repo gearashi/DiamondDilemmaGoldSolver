@@ -49,6 +49,13 @@ def _native_explanation_build(root=None, *, display=False):
     return {'available':bool(available),'reason':'' if available else reason,'detection':'native_build_metadata'}
 
 
+def _tested_sat_version():
+    try:
+        return package_version('python-sat') == '1.9.dev15'
+    except PackageNotFoundError:
+        return False
+
+
 def runtime_capabilities(*, display=False):
     """Describe this interpreter, never another installed Python environment."""
     def feature(available, requirement):
@@ -56,11 +63,9 @@ def runtime_capabilities(*, display=False):
 
     cp = feature(_installed('ortools'), 'Requires OR-Tools in this Python environment.')
     sat = feature(_installed('pysat'), 'Requires python-sat in this Python environment.')
-    try:sat_version=package_version('python-sat')
-    except PackageNotFoundError:sat_version=None
     proof_arch=platform.machine().lower() in ({'x86_64','amd64'} if sys.platform=='linux' else {'x86_64','amd64','arm64','aarch64'})
     sat_persistence=feature(sat['available'] and sys.platform in ('linux','darwin') and proof_arch
-                            and platform.python_implementation()=='CPython' and sys.version_info[:2]==(3,12) and sat_version=='1.9.dev15',
+                            and platform.python_implementation()=='CPython' and sys.version_info[:2]==(3,12) and _tested_sat_version(),
                             'Verified native SAT clause persistence requires tested Linux x86-64 or macOS x86-64/ARM64, CPython 3.12 and python-sat 1.9.dev15; the tested Windows build is unavailable.')
     cuda = feature(sys.platform != 'darwin' and _installed('cupy'),
                    'CUDA is unavailable on macOS.' if sys.platform == 'darwin' else

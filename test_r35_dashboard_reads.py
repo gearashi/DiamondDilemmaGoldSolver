@@ -89,6 +89,36 @@ class DashboardReadTests(unittest.TestCase):
         self.assertEqual(read_display_file(path,decode),{'step':1})
         self.assertEqual(read_display_file(path,decode),{'step':2})
 
+    def test_concurrent_polls_share_each_published_generation(self):
+        from concurrent.futures import ThreadPoolExecutor
+        path = self.root/'status.json'
+        read = Mock(wraps=read_json_shared)
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            for generation in range(6):
+                atomic_json(path,{'generation':generation})
+                jobs = [pool.submit(read_display_file,path,read) for _ in range(6)]
+                self.assertEqual([job.result() for job in jobs],[{'generation':generation}]*6)
+        self.assertEqual(read.call_count,6)
+
+    def test_sat_package_metadata_is_read_only_on_supported_profiles(self):
+        for environment, arch, version, installed, eligible in (
+                ('win32','AMD64',(3,12),True,False),
+                ('darwin','arm64',(3,15),True,False),
+                ('linux','aarch64',(3,12),True,False),
+                ('darwin','arm64',(3,12),False,False),
+                ('linux','x86_64',(3,12),True,True),
+                ('darwin','arm64',(3,12),True,True)):
+            with self.subTest(environment=environment,arch=arch,version=version), \
+                    patch.object(runtime_capabilities.sys,'platform',environment), \
+                    patch.object(runtime_capabilities.sys,'version_info',version), \
+                    patch.object(runtime_capabilities.platform,'machine',return_value=arch), \
+                    patch.object(runtime_capabilities.platform,'python_implementation',return_value='CPython'), \
+                    patch.object(runtime_capabilities,'_installed',return_value=installed), \
+                    patch.object(runtime_capabilities,'package_version',return_value='1.9.dev15') as metadata:
+                caps=runtime_capabilities.runtime_capabilities(display=True)
+                self.assertEqual(caps['options']['native_sat_persistence']['available'],eligible)
+                self.assertEqual(metadata.call_count,int(eligible))
+
     def test_native_display_caches_digests_but_strict_validation_checks_current_bytes(self):
         root=self.root
         folder=root/'.native'
