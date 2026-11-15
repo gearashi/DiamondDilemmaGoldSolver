@@ -1,0 +1,1694 @@
+[
+  {
+    "scope": {
+      "errors": [
+        7,
+        84,
+        109,
+        117
+      ],
+      "retained_outside": 0
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 152,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 152,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        7,
+        84,
+        109,
+        117
+      ],
+      "retained_outside": 24
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 128,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 128,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        7,
+        84,
+        109,
+        117
+      ],
+      "retained_outside": 60
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 93,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "UNKNOWN",
+      "native": "OPTIMAL",
+      "free_components": 93,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        7,
+        84,
+        109,
+        117
+      ],
+      "retained_outside": 90
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 64,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "UNKNOWN",
+      "native": "OPTIMAL",
+      "free_components": 64,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        7,
+        84,
+        109,
+        117
+      ],
+      "retained_outside": 120
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 38,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 38,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        11,
+        81,
+        92,
+        105
+      ],
+      "retained_outside": 0
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 152,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 152,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        11,
+        81,
+        92,
+        105
+      ],
+      "retained_outside": 24
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 128,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 128,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        11,
+        81,
+        92,
+        105
+      ],
+      "retained_outside": 60
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 93,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "UNKNOWN",
+      "native": "OPTIMAL",
+      "free_components": 93,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        11,
+        81,
+        92,
+        105
+      ],
+      "retained_outside": 90
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 64,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 64,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        11,
+        81,
+        92,
+        105
+      ],
+      "retained_outside": 120
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 38,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 38,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        79,
+        84,
+        109,
+        117
+      ],
+      "retained_outside": 0
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 152,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 152,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        79,
+        84,
+        109,
+        117
+      ],
+      "retained_outside": 24
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 128,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 128,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        79,
+        84,
+        109,
+        117
+      ],
+      "retained_outside": 60
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 93,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "UNKNOWN",
+      "native": "OPTIMAL",
+      "free_components": 93,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        79,
+        84,
+        109,
+        117
+      ],
+      "retained_outside": 90
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 64,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "UNKNOWN",
+      "native": "OPTIMAL",
+      "free_components": 64,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "errors": [
+        79,
+        84,
+        109,
+        117
+      ],
+      "retained_outside": 120
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 38,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 38,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_minimal_core": true
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 87,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 87,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 0
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 1
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 2
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 3
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 4
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 5
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 6
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 7
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 8
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 9
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 10
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 11
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 12
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 13
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 14
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 15
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 16
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 17
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 18
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 19
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 20
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 21
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 22
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 23
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 24
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 25
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 26
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 27
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 28
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 29
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 30
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "INFEASIBLE",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 31
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 32
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 33
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 34
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 35
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 36
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 37
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 38
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 39
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 40
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 41
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 42
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 43
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 44
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 45
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 46
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 47
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 48
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 49
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 50
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 51
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 52
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 53
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 54
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 55
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 56
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 57
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 58
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 59
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 60
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 61
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 62
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 63
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 64
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 65
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 66
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 67
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 68
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "UNKNOWN",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 69
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 70
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 71
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  },
+  {
+    "scope": {
+      "historical_core_delete": 72
+    },
+    "gf2_pass": true,
+    "balance": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    },
+    "euler": {
+      "lattice": "PASSES",
+      "native": "OPTIMAL",
+      "free_components": 88,
+      "proofs": []
+    }
+  }
+]

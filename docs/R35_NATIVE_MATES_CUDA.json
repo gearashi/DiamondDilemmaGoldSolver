@@ -1,0 +1,70 @@
+{
+  "remote": [
+    {
+      "exhausted": 0,
+      "tries": 919,
+      "lanes": 16,
+      "table_words": 0
+    },
+    {
+      "exhausted": 16,
+      "tries": 0,
+      "lanes": 16,
+      "table_words": 7861
+    }
+  ],
+  "external": [
+    {
+      "exhausted": 0,
+      "tries": 922,
+      "lanes": 16,
+      "table_words": 0
+    },
+    {
+      "exhausted": 16,
+      "tries": 0,
+      "lanes": 16,
+      "table_words": 7861
+    }
+  ],
+  "permitted": [
+    {
+      "exhausted": 0,
+      "tries": 0,
+      "lanes": 16,
+      "table_words": 0
+    },
+    {
+      "exhausted": 0,
+      "tries": 0,
+      "lanes": 16,
+      "table_words": 7861
+    }
+  ],
+  "later_unrelated_candidate": [
+    {
+      "tried": 16,
+      "placed": 0
+    },
+    {
+      "tried": 16,
+      "placed": 0
+    }
+  ],
+  "restore_static": {
+    "restored": 16,
+    "unplaced": 16,
+    "actual_child_rank": 1,
+    "static_child_rank": 1
+  },
+  "restore_dynamic": {
+    "restored": 16,
+    "unplaced": 16,
+    "actual_child_rank": 1,
+    "static_child_rank": 40
+  },
+  "edges": {
+    "table_words": 0,
+    "tries": 951
+  }
+}
