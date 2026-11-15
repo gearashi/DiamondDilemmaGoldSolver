@@ -124,7 +124,7 @@ _R34_HEURISTIC = {
 }
 # Only digest() from this file participates in the historical heuristic controller.
 _R35_HEURISTIC = {
-    'constraint_work.py': ('24f703932422baa555a180cc42fa1032dbb6dd2ddfbda7fe5f467c13f104eef6',
+    'constraint_work.py': ('7d7ee75b416c997751a950a5254a083cc650e25040d5ff73af1c2b0f21ce70e9',
                            'a7804dfb62f7585ebe0ef578a86968646c0bc0ebdca093d811452832d7a8f48c',
                            'd04c92c4d207ad17f095554f3e163f105c4a31ceea716491194fe61bfbb638c5'),
 }

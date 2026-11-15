@@ -766,12 +766,16 @@
       "source_id": 1,
       "title": "Index exact coverage by cells that distinguish pending work",
       "proposal_and_validation": "For shared exact coverage, compare the current scope-only SQL index with conflict filtering on highly restricted cell masks before decoding whole 160-cell records. Screen a selective axis index and cheap bound-based skip under target roots and pending frontier boxes. Include symbolic and ordinary subtraction, old ledgers, concurrent inserts, deletes, corrupt records and no-selectivity controls. Compare certified work remaining and database reads/bytes.",
-      "state": "testing actual coverage lookups",
-      "measurement": "Original 64-proof, 128-query screen: four axes select 64/8192 rows and 2,084,870/266,863,360 bytes. Wide queries have no selectivity.",
+      "state": "testing dense shared-root memory extension",
+      "measurement": "Original 128-query control: 6176 actual payloads in released stream, 127 with four checked axes, 64 using the complete checked row cache, 64 symbolic. Eight true SAT slices: 60 to 11 checks at identical 8 calls and outcomes. Dense outer scope 3332 to 2285 at 4 MiB, to 512 at 16 MiB.",
       "evidence": [
-        "docs/R35_COVERAGE_SELECTIVITY.json"
+        "docs/ROUND35_COVERAGE.md",
+        "docs/R35_COVERAGE_SELECTIVITY.json",
+        "docs/R35_COVERAGE_READS.json",
+        "docs/R35_COVERAGE_CONSUMERS.json",
+        "docs/R35_DENSE_COVERAGE.json"
       ],
-      "next_step": "Evaluate checked cache or persisted lookup, exact residuals, corruption, snapshots and ordinary/symbolic consumers."
+      "next_step": "Compare verified shared roots or interned blocks against 512 dense restrictions and interleaved heterogeneous/no-reuse controls, choose a cap using true matched payload counts. Exercise normal CPU coordinator and cold reopened GPU and SAT consumers; maintain cold corruption rejection."
     },
     {
       "id": 66,

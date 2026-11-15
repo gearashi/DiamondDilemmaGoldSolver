@@ -1,0 +1,72 @@
+{
+  "budgets": [
+    {
+      "cap": 0,
+      "checked": 6176,
+      "payload": 200735985,
+      "retained": 0
+    },
+    {
+      "cap": 4096,
+      "checked": 5551,
+      "payload": 180385304,
+      "retained": 3632
+    },
+    {
+      "cap": 32768,
+      "checked": 1288,
+      "payload": 41850984,
+      "retained": 32604
+    },
+    {
+      "cap": 65536,
+      "checked": 64,
+      "payload": 2080006,
+      "retained": 44304
+    },
+    {
+      "cap": 4194304,
+      "checked": 64,
+      "payload": 2080006,
+      "retained": 44304
+    },
+    {
+      "cap": 16777216,
+      "checked": 64,
+      "payload": 2080006,
+      "retained": 44304
+    }
+  ],
+  "stream": {
+    "closes": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "native": 8,
+    "decisions": 0,
+    "checked": 60,
+    "payload": 19278
+  },
+  "cached": {
+    "closes": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "native": 8,
+    "decisions": 0,
+    "checked": 11,
+    "payload": 3553
+  }
+}

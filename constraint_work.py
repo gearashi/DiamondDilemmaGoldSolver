@@ -262,6 +262,12 @@ class CoverageLedger:
     def __init__(self,path,scope,*,symbolic=False,max_symbolic_nodes=200000):
         self.scope=scope;self.path=Path(path)
         self.symbolic=bool(symbolic);self.max_symbolic_nodes=max_symbolic_nodes;self._symbolic_state=None;self._symbolic_additions={}
+        # Private, checked prefix for repeated ordinary coverage queries.
+        self._coverage_key = None
+        self._coverage_prefix = []
+        self._coverage_cache_limit = 4 * 1024 * 1024
+        self._coverage_bytes = 0
+        self._coverage_after = 0
         self.path.parent.mkdir(parents=True,exist_ok=True)
         self.db=sqlite3.connect(str(self.path),timeout=10)
         self.db.execute('PRAGMA journal_mode=WAL')
@@ -288,14 +294,21 @@ class CoverageLedger:
             if len(self._symbolic_additions)>4096:self._symbolic_state=None;self._symbolic_additions={}
         return bool(cursor.rowcount)
 
-    def exclusions(self,target_scope=None,*,check=lambda:None):
-        return tuple(self.iter_exclusions(target_scope,check=check))
+    def _coverage_target(self, target_scope):
+        target = self.scope if target_scope is None else target_scope
+        if (target.fingerprint, target.target, target.original) != (self.scope.fingerprint, self.scope.target, self.scope.original):
+            raise ValueError('Coverage target differs from bound puzzle/objective.')
+        return target
+
+    def exclusions(self, target_scope=None, *, check=lambda:None):
+        target = self._coverage_target(target_scope)
+        if self._coverage_cache_limit and not self.db.in_transaction:
+            return self._use_checked_coverage(target, target.root, check, tuple)
+        return tuple(self.iter_exclusions(target, check=check))
 
     def iter_exclusions(self,target_scope=None,*,check=lambda:None):
         """Stream independently checked local records; no unbounded eager copy."""
-        target=self.scope if target_scope is None else target_scope
-        if (target.fingerprint,target.target,target.original)!=(self.scope.fingerprint,self.scope.target,self.scope.original):
-            raise ValueError('Coverage target differs from bound puzzle/objective.')
+        target = self._coverage_target(target_scope)
         from r34_coverage_index import scope_id
         yield from self._checked_rows(target,scope_id(self.db,target),0,2**63-1,{},check)
 
@@ -307,20 +320,112 @@ class CoverageLedger:
                 clipped=intersect(local[identity],target.root)
                 if clipped is not None:yield clipped
                 continue
-            self.stats['coverage_records_checked']+=1
-            body={'scope':json.loads(scope_json),'box':json.loads(box_json),'evidence':json.loads(evidence_json)}
-            if digest(body)!=checksum:raise ValueError('Completed coverage is corrupted.')
-            source=WorkScope.restore(body['scope'])
-            if (source.fingerprint,source.target,source.original)!=(target.fingerprint,target.target,target.original):continue
-            row=cube((int(x,16) for x in body['box']),len(target.root))
-            if not contains(source.root,row):raise ValueError('Stored closed box escapes its root.')
-            clipped=intersect(row,target.root)
-            if clipped is not None:yield clipped
+            row = self._verified_coverage_row(target, scope_json, box_json, evidence_json, checksum)
+            if row is not None:
+                yield row
+
+    def _verified_coverage_row(self, target, scope_json, box_json, evidence_json, checksum):
+        self.stats['coverage_records_checked'] += 1
+        body = {'scope': json.loads(scope_json), 'box': json.loads(box_json), 'evidence': json.loads(evidence_json)}
+        if digest(body) != checksum:
+            raise ValueError('Completed coverage is corrupted.')
+        source = WorkScope.restore(body['scope'])
+        if (source.fingerprint, source.target, source.original) != (target.fingerprint, target.target, target.original):
+            return None
+        row = cube((int(x, 16) for x in body['box']), len(target.root))
+        if not contains(source.root, row):
+            raise ValueError('Stored closed box escapes its root.')
+        return intersect(row, target.root)
+
+    def _selective_remaining(self, source, target, hull, max_boxes, check):
+        def subtract_checked(records):
+            return subtract_many(source, records, max_boxes=max_boxes, check=check)
+        return self._use_checked_coverage(target, hull, check, subtract_checked)
+
+    def _use_checked_coverage(self, target, hull, check, consume):
+        from sys import getsizeof
+        from r34_coverage_index import scope_id, version
+        # Read the generation and payloads in the same committed WAL snapshot.
+        self.db.execute('BEGIN')
+        try:
+            group = scope_id(self.db, target)
+            epoch, through = version(self.db, group)
+            if self._coverage_key != (target, group, epoch):
+                self._coverage_key = (target, group, epoch)
+                self._coverage_prefix = []
+                self._coverage_after = 0
+                self._coverage_bytes = 0
+
+            def survives(deltas):
+                return deltas is not None and all(hull[axis] & mask for axis, mask in deltas)
+
+            def records():
+                for delta in self._coverage_prefix:
+                    check()
+                    if survives(delta):
+                        row = list(target.root)
+                        for axis, mask in delta:
+                            row[axis] = mask
+                        yield tuple(row)
+                if self._coverage_after == through:
+                    return
+                sql = """SELECT s.seq,c.scope,c.box,c.evidence,c.checksum
+                    FROM coverage_sequence s JOIN closed c ON c.identity=s.identity
+                    WHERE s.scope_id=? AND s.seq>? AND s.seq<=? ORDER BY s.seq"""
+                cursor = self.db.execute(sql, (group, self._coverage_after, through))
+                can_extend = True
+                try:
+                    for seq, *columns in cursor:
+                        check()
+                        row = self._verified_coverage_row(target, *columns)
+                        # Only cache a contiguous, independently checked sequence prefix.
+                        # Sparse deltas reconstruct the complete box in this exact root.
+                        if can_extend:
+                            delta = None if row is None else tuple((i, v) for i, v in enumerate(row) if v != target.root[i])
+                            size = 16 + getsizeof(delta)  # List slot and spare capacity.
+                            if delta is not None:
+                                size += sum(getsizeof(pair) + getsizeof(pair[0]) + getsizeof(pair[1]) for pair in delta)
+                            can_extend = self._coverage_bytes + size <= self._coverage_cache_limit
+                            if can_extend:
+                                self._coverage_prefix.append(delta)
+                                self._coverage_bytes += size
+                                self._coverage_after = seq
+                        if row is not None:
+                            yield row
+                finally:
+                    cursor.close()
+            rows = records()
+            try:
+                return consume(rows)
+            finally:
+                rows.close()
+        finally:
+            self.db.rollback()
 
     def remaining(self,boxes,*,target_scope=None,max_boxes=65536,check=lambda:None):
         source=tuple(cube(row) for row in boxes)
         if self.symbolic:return self._remaining_symbolic(source,target_scope,max_boxes,check)
-        result,done=subtract_many(source,self.iter_exclusions(target_scope,check=check),max_boxes=max_boxes,check=check)
+        target = self.scope if target_scope is None else target_scope
+        hull = None
+        if source and len(source) <= max_boxes and self._coverage_cache_limit and not self.db.in_transaction:
+            self._coverage_target(target)
+            hull = [0] * len(target.root)
+            for row in source:
+                check()
+                if len(row) != len(hull):
+                    hull = None
+                    break
+                for axis, mask in enumerate(row):
+                    if mask & ~target.root[axis]:
+                        hull = None
+                        break
+                    hull[axis] |= mask
+                if hull is None:
+                    break
+        if hull is not None and (self._coverage_prefix or tuple(hull) != target.root):
+            result, done = self._selective_remaining(source, target, hull, max_boxes, check)
+        else:
+            result, done = subtract_many(source, self.iter_exclusions(target_scope, check=check), max_boxes=max_boxes, check=check)
         if done and result!=source:self.stats['coverage_hits']+=1
         return result,done
 
@@ -336,6 +441,7 @@ class CoverageLedger:
         state=self._symbolic_state;diagram=None;before=0
         own_snapshot=not self.db.in_transaction
         if own_snapshot:self.db.execute('BEGIN')
+        else:state=None  # An outer transaction can roll back; never cache its proofs.
         try:
             group=scope_id(self.db,target)
             epoch,through=version(self.db,group)
@@ -353,8 +459,9 @@ class CoverageLedger:
                 closed=diagram.union(self._checked_rows(target,group,0,through,{},check),check)
                 self.stats['coverage_symbolic_builds']+=1
             check()
-            self._symbolic_state=(key,through,diagram,closed)
-            self._symbolic_additions={}
+            if own_snapshot:
+                self._symbolic_state=(key,through,diagram,closed)
+                self._symbolic_additions={}
             original_pending=diagram.union(source,check)
             pending=diagram.apply('difference',original_pending,closed,check)
             result=diagram.boxes(pending,max_boxes=max_boxes,check=check);check()

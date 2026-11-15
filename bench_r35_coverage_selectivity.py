@@ -50,17 +50,17 @@ def case(problem,covers,queries):
     return dict(records=len(records),scope=problem.fingerprint,queries=results)
 
 
-def hall_case(problem):
+def hall_case(problem,evaluate):
     scope=WorkScope.for_problem(problem)
     split=split_cubes([scope.root],128)
     live,closed=inventory_screen(split,problem.n)
     proofs=[(box,{'kind':'physical_inventory_hall','cells':list(cells)}) for box,cells in inventory_coverage(closed,scope.root)]
     queries={'wide':[[scope.root]],'whole_frontier':[split],'one_live':[[r] for r in live],
              'one_closed':[[b] for b,_ in closed]}
-    return case(problem,proofs,queries)
+    return evaluate(problem,proofs,queries)
 
 
-def benchmark(tiles):
+def benchmark(tiles,evaluate=case):
     from test_gpu_domain_round25 import precise_reason_fixture, word_boundary_fixture
     original=SearchProblem(tiles)
     restricted,witness=original_residual(tiles)
@@ -68,8 +68,8 @@ def benchmark(tiles):
     # Every partial assignment here contains the same independently immovable
     # mismatched seam. Publish half the disjoint branches, preserving a remainder.
     proofs=[(box,{'kind':'independent_fixed_mismatch','seam':witness}) for box in boxes[::2]]
-    return {'original_hall':hall_case(original),'six_piece_hall':hall_case(precise_reason_fixture()),
-            'word_boundary_hall':hall_case(word_boundary_fixture()),'fixed_scope':case(restricted,proofs,{
+    return {'original_hall':hall_case(original,evaluate),'six_piece_hall':hall_case(precise_reason_fixture(),evaluate),
+            'word_boundary_hall':hall_case(word_boundary_fixture(),evaluate),'fixed_scope':evaluate(restricted,proofs,{
             'wide':[[WorkScope.for_problem(restricted).root]],'whole_frontier':[boxes],
             'one_box':[[row] for row in boxes],'eight_box':[boxes[i:i+8] for i in range(0,len(boxes),8)]})}
 

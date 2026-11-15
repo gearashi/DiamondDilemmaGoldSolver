@@ -1,0 +1,38 @@
+[
+  {
+    "cap": 0,
+    "checked": 3332,
+    "payload": 139749246,
+    "estimated_bytes": 0
+  },
+  {
+    "cap": 65536,
+    "checked": 3317,
+    "payload": 139119703,
+    "estimated_bytes": 48192
+  },
+  {
+    "cap": 1048576,
+    "checked": 3071,
+    "payload": 128811985,
+    "estimated_bytes": 1034572
+  },
+  {
+    "cap": 4194304,
+    "checked": 2285,
+    "payload": 95850499,
+    "estimated_bytes": 4188732
+  },
+  {
+    "cap": 16777216,
+    "checked": 512,
+    "payload": 21474749,
+    "estimated_bytes": 12329704
+  },
+  {
+    "cap": 33554432,
+    "checked": 512,
+    "payload": 21474749,
+    "estimated_bytes": 12329704
+  }
+]

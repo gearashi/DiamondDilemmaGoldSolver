@@ -1,0 +1,554 @@
+{
+  "original_hall": {
+    "wide": {
+      "stream": {
+        "queries": 1,
+        "rows": 1,
+        "payload_bytes": 61099,
+        "seconds": 0.0032,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 1,
+        "rows": 1,
+        "payload_bytes": 61099,
+        "seconds": 0.003,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 1,
+        "rows": 1,
+        "payload_bytes": 61099,
+        "seconds": 0.0034,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "symbolic": {
+        "queries": 1,
+        "rows": 1,
+        "payload_bytes": 61099,
+        "seconds": 0.0166,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    },
+    "whole_frontier": {
+      "stream": {
+        "queries": 1,
+        "rows": 1,
+        "payload_bytes": 61099,
+        "seconds": 0.0411,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 1,
+        "rows": 1,
+        "payload_bytes": 61099,
+        "seconds": 0.0813,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 1,
+        "rows": 1,
+        "payload_bytes": 61099,
+        "seconds": 0.0565,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "symbolic": {
+        "queries": 1,
+        "rows": 1,
+        "payload_bytes": 61099,
+        "seconds": 0.2409,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    },
+    "one_live": {
+      "stream": {
+        "queries": 81,
+        "rows": 81,
+        "payload_bytes": 4949019,
+        "seconds": 0.2975,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 81,
+        "rows": 77,
+        "payload_bytes": 4704623,
+        "seconds": 0.2593,
+        "indexed_sequences": 1,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 81,
+        "rows": 1,
+        "payload_bytes": 61099,
+        "seconds": 0.0737,
+        "indexed_sequences": 1,
+        "retained_bytes": 14636
+      },
+      "symbolic": {
+        "queries": 81,
+        "rows": 1,
+        "payload_bytes": 61099,
+        "seconds": 0.1411,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    },
+    "one_closed": {
+      "stream": {
+        "queries": 47,
+        "rows": 47,
+        "payload_bytes": 2871653,
+        "seconds": 0.2146,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 47,
+        "rows": 47,
+        "payload_bytes": 2871653,
+        "seconds": 0.1589,
+        "indexed_sequences": 1,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 47,
+        "rows": 1,
+        "payload_bytes": 61099,
+        "seconds": 0.0807,
+        "indexed_sequences": 1,
+        "retained_bytes": 14636
+      },
+      "symbolic": {
+        "queries": 47,
+        "rows": 1,
+        "payload_bytes": 61099,
+        "seconds": 0.0657,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    }
+  },
+  "six_piece_hall": {
+    "wide": {
+      "stream": {
+        "queries": 1,
+        "rows": 19,
+        "payload_bytes": 8149,
+        "seconds": 0.019,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 1,
+        "rows": 19,
+        "payload_bytes": 8149,
+        "seconds": 0.0263,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 1,
+        "rows": 19,
+        "payload_bytes": 8149,
+        "seconds": 0.0344,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "symbolic": {
+        "queries": 1,
+        "rows": 19,
+        "payload_bytes": 8149,
+        "seconds": 0.0094,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    },
+    "whole_frontier": {
+      "stream": {
+        "queries": 1,
+        "rows": 19,
+        "payload_bytes": 8149,
+        "seconds": 0.0464,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 1,
+        "rows": 19,
+        "payload_bytes": 8149,
+        "seconds": 0.0848,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 1,
+        "rows": 19,
+        "payload_bytes": 8149,
+        "seconds": 0.0573,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "symbolic": {
+        "queries": 1,
+        "rows": 19,
+        "payload_bytes": 8149,
+        "seconds": 0.0287,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    },
+    "one_live": {
+      "stream": {
+        "queries": 59,
+        "rows": 1121,
+        "payload_bytes": 480791,
+        "seconds": 0.1893,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 59,
+        "rows": 290,
+        "payload_bytes": 125468,
+        "seconds": 0.0789,
+        "indexed_sequences": 19,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 59,
+        "rows": 19,
+        "payload_bytes": 8149,
+        "seconds": 0.0193,
+        "indexed_sequences": 19,
+        "retained_bytes": 10304
+      },
+      "symbolic": {
+        "queries": 59,
+        "rows": 19,
+        "payload_bytes": 8149,
+        "seconds": 0.0276,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    },
+    "one_closed": {
+      "stream": {
+        "queries": 69,
+        "rows": 555,
+        "payload_bytes": 237307,
+        "seconds": 0.0966,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 69,
+        "rows": 181,
+        "payload_bytes": 77821,
+        "seconds": 0.0538,
+        "indexed_sequences": 19,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 69,
+        "rows": 19,
+        "payload_bytes": 8149,
+        "seconds": 0.0244,
+        "indexed_sequences": 19,
+        "retained_bytes": 10304
+      },
+      "symbolic": {
+        "queries": 69,
+        "rows": 19,
+        "payload_bytes": 8149,
+        "seconds": 0.0278,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    }
+  },
+  "word_boundary_hall": {
+    "wide": {
+      "stream": {
+        "queries": 1,
+        "rows": 2,
+        "payload_bytes": 1262,
+        "seconds": 0.0006,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 1,
+        "rows": 2,
+        "payload_bytes": 1262,
+        "seconds": 0.001,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 1,
+        "rows": 2,
+        "payload_bytes": 1262,
+        "seconds": 0.0006,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "symbolic": {
+        "queries": 1,
+        "rows": 2,
+        "payload_bytes": 1262,
+        "seconds": 0.0008,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    },
+    "whole_frontier": {
+      "stream": {
+        "queries": 1,
+        "rows": 2,
+        "payload_bytes": 1262,
+        "seconds": 0.002,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 1,
+        "rows": 2,
+        "payload_bytes": 1262,
+        "seconds": 0.0293,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 1,
+        "rows": 2,
+        "payload_bytes": 1262,
+        "seconds": 0.0027,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "symbolic": {
+        "queries": 1,
+        "rows": 2,
+        "payload_bytes": 1262,
+        "seconds": 0.0045,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    },
+    "one_live": {
+      "stream": {
+        "queries": 18,
+        "rows": 36,
+        "payload_bytes": 22716,
+        "seconds": 0.0087,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 18,
+        "rows": 2,
+        "payload_bytes": 1262,
+        "seconds": 0.0036,
+        "indexed_sequences": 2,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 18,
+        "rows": 2,
+        "payload_bytes": 1262,
+        "seconds": 0.0026,
+        "indexed_sequences": 2,
+        "retained_bytes": 608
+      },
+      "symbolic": {
+        "queries": 18,
+        "rows": 2,
+        "payload_bytes": 1262,
+        "seconds": 0.0042,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    },
+    "one_closed": {
+      "stream": {
+        "queries": 18,
+        "rows": 27,
+        "payload_bytes": 17037,
+        "seconds": 0.0066,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 18,
+        "rows": 18,
+        "payload_bytes": 11358,
+        "seconds": 0.0057,
+        "indexed_sequences": 2,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 18,
+        "rows": 2,
+        "payload_bytes": 1262,
+        "seconds": 0.0023,
+        "indexed_sequences": 2,
+        "retained_bytes": 608
+      },
+      "symbolic": {
+        "queries": 18,
+        "rows": 2,
+        "payload_bytes": 1262,
+        "seconds": 0.0027,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    }
+  },
+  "fixed_scope": {
+    "wide": {
+      "stream": {
+        "queries": 1,
+        "rows": 64,
+        "payload_bytes": 2080774,
+        "seconds": 0.7335,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 1,
+        "rows": 64,
+        "payload_bytes": 2080774,
+        "seconds": 0.6325,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 1,
+        "rows": 64,
+        "payload_bytes": 2080774,
+        "seconds": 0.5986,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "symbolic": {
+        "queries": 1,
+        "rows": 64,
+        "payload_bytes": 2080774,
+        "seconds": 0.1236,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    },
+    "whole_frontier": {
+      "stream": {
+        "queries": 1,
+        "rows": 64,
+        "payload_bytes": 2080774,
+        "seconds": 1.2533,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 1,
+        "rows": 64,
+        "payload_bytes": 2080774,
+        "seconds": 1.263,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 1,
+        "rows": 64,
+        "payload_bytes": 2080774,
+        "seconds": 1.1923,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "symbolic": {
+        "queries": 1,
+        "rows": 64,
+        "payload_bytes": 2080774,
+        "seconds": 0.1695,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    },
+    "one_box": {
+      "stream": {
+        "queries": 128,
+        "rows": 6176,
+        "payload_bytes": 200810097,
+        "seconds": 12.1683,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 128,
+        "rows": 127,
+        "payload_bytes": 4128987,
+        "seconds": 0.3598,
+        "indexed_sequences": 64,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 128,
+        "rows": 64,
+        "payload_bytes": 2080774,
+        "seconds": 0.238,
+        "indexed_sequences": 64,
+        "retained_bytes": 44304
+      },
+      "symbolic": {
+        "queries": 128,
+        "rows": 64,
+        "payload_bytes": 2080774,
+        "seconds": 0.2571,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    },
+    "eight_box": {
+      "stream": {
+        "queries": 16,
+        "rows": 1024,
+        "payload_bytes": 33292384,
+        "seconds": 3.0296,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      },
+      "four_axes": {
+        "queries": 16,
+        "rows": 607,
+        "payload_bytes": 19731031,
+        "seconds": 1.7008,
+        "indexed_sequences": 64,
+        "retained_bytes": 0
+      },
+      "prefix": {
+        "queries": 16,
+        "rows": 192,
+        "payload_bytes": 6242322,
+        "seconds": 1.0234,
+        "indexed_sequences": 64,
+        "retained_bytes": 44304
+      },
+      "symbolic": {
+        "queries": 16,
+        "rows": 64,
+        "payload_bytes": 2080774,
+        "seconds": 0.2118,
+        "indexed_sequences": 0,
+        "retained_bytes": 0
+      }
+    }
+  }
+}
