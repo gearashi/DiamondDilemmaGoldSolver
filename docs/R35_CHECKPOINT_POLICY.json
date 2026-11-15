@@ -1,0 +1,242 @@
+{
+  "control_source": "7a76a49",
+  "automatic_source": "f8ea1d51",
+  "readback_scopes": [
+    {
+      "backend": "CUDA",
+      "scope": "max-dynamic",
+      "untracked_read_bytes": 170586057,
+      "always_tracked_read_bytes": 167393485,
+      "automatic_read_bytes_before_density_adjustment": 167169049,
+      "pilot_deltas": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "backend": "CUDA",
+      "scope": "portable",
+      "untracked_read_bytes": 79645308,
+      "always_tracked_read_bytes": 73394360,
+      "automatic_read_bytes_before_density_adjustment": 73394360,
+      "pilot_deltas": [
+        0,
+        -115084,
+        0
+      ]
+    },
+    {
+      "backend": "CUDA",
+      "scope": "small",
+      "untracked_read_bytes": 400512,
+      "always_tracked_read_bytes": 289276,
+      "automatic_read_bytes_before_density_adjustment": 289276,
+      "pilot_deltas": []
+    },
+    {
+      "backend": "CUDA",
+      "scope": "sparse",
+      "untracked_read_bytes": 1412304,
+      "always_tracked_read_bytes": 1145412,
+      "automatic_read_bytes_before_density_adjustment": 1145412,
+      "pilot_deltas": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "backend": "CUDA",
+      "scope": "dynamic",
+      "untracked_read_bytes": 4609276,
+      "always_tracked_read_bytes": 3933864,
+      "automatic_read_bytes_before_density_adjustment": 3933864,
+      "pilot_deltas": []
+    },
+    {
+      "backend": "CUDA",
+      "scope": "maximum",
+      "untracked_read_bytes": 262520040,
+      "always_tracked_read_bytes": 237175948,
+      "automatic_read_bytes_before_density_adjustment": 237184840,
+      "pilot_deltas": [
+        0,
+        0
+      ]
+    },
+    {
+      "backend": "Vulkan",
+      "scope": "max-dynamic",
+      "untracked_read_bytes": 302928944,
+      "always_tracked_read_bytes": 299759840,
+      "automatic_read_bytes_before_density_adjustment": 299530556,
+      "pilot_deltas": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "backend": "Vulkan",
+      "scope": "portable",
+      "untracked_read_bytes": 134607000,
+      "always_tracked_read_bytes": 128359796,
+      "automatic_read_bytes_before_density_adjustment": 128359796,
+      "pilot_deltas": [
+        0,
+        -116096,
+        0
+      ]
+    },
+    {
+      "backend": "Vulkan",
+      "scope": "small",
+      "untracked_read_bytes": 612352,
+      "always_tracked_read_bytes": 501116,
+      "automatic_read_bytes_before_density_adjustment": 501116,
+      "pilot_deltas": []
+    },
+    {
+      "backend": "Vulkan",
+      "scope": "sparse",
+      "untracked_read_bytes": 2259664,
+      "always_tracked_read_bytes": 1992772,
+      "automatic_read_bytes_before_density_adjustment": 1992772,
+      "pilot_deltas": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "backend": "Vulkan",
+      "scope": "dynamic",
+      "untracked_read_bytes": 7351296,
+      "always_tracked_read_bytes": 6663224,
+      "automatic_read_bytes_before_density_adjustment": 6663224,
+      "pilot_deltas": []
+    },
+    {
+      "backend": "Vulkan",
+      "scope": "maximum",
+      "untracked_read_bytes": 440448832,
+      "always_tracked_read_bytes": 415151812,
+      "automatic_read_bytes_before_density_adjustment": 415160704,
+      "pilot_deltas": [
+        0,
+        0
+      ]
+    },
+    {
+      "backend": "D3D12",
+      "scope": "max-dynamic",
+      "untracked_read_bytes": 302928944,
+      "always_tracked_read_bytes": 299759840,
+      "automatic_read_bytes_before_density_adjustment": 299530556,
+      "pilot_deltas": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "backend": "D3D12",
+      "scope": "portable",
+      "untracked_read_bytes": 134607000,
+      "always_tracked_read_bytes": 128359796,
+      "automatic_read_bytes_before_density_adjustment": 128359796,
+      "pilot_deltas": [
+        0,
+        -116096,
+        0
+      ]
+    },
+    {
+      "backend": "D3D12",
+      "scope": "small",
+      "untracked_read_bytes": 612352,
+      "always_tracked_read_bytes": 501116,
+      "automatic_read_bytes_before_density_adjustment": 501116,
+      "pilot_deltas": []
+    },
+    {
+      "backend": "D3D12",
+      "scope": "sparse",
+      "untracked_read_bytes": 2259664,
+      "always_tracked_read_bytes": 1992772,
+      "automatic_read_bytes_before_density_adjustment": 1992772,
+      "pilot_deltas": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "backend": "D3D12",
+      "scope": "dynamic",
+      "untracked_read_bytes": 7351296,
+      "always_tracked_read_bytes": 6663224,
+      "automatic_read_bytes_before_density_adjustment": 6663224,
+      "pilot_deltas": []
+    },
+    {
+      "backend": "D3D12",
+      "scope": "maximum",
+      "untracked_read_bytes": 440448832,
+      "always_tracked_read_bytes": 415151812,
+      "automatic_read_bytes_before_density_adjustment": 415160704,
+      "pilot_deltas": [
+        0,
+        0
+      ]
+    }
+  ],
+  "normal_policy": "Use attained frame rectangles instead of fetching per-lane marks when an interval has 1 to 8 candidate tries per changed lane in a dense pool with at least 32768 allocated replicas. Sparse pools and long or zero-candidate intervals still inspect available native marks.",
+  "measurement": "For each of eighteen original scopes across three native backends, automatic policy fields and candidate totals matched both counterbalanced controls. The final density predicate was tested on short intervals in twelve further original scopes: it eliminated 115084/116096/116096 bytes on portable short captures. The other nine cases had identical readback totals. Old and new checkpoints keep all physical fields.",
+  "recovery": {
+    "initial": {
+      "generation": 26,
+      "origin": "20261115T081248526914Z",
+      "external": false,
+      "total": 2051,
+      "completed": 12,
+      "cursor": 2051,
+      "paused": 0,
+      "counters": [
+        371017,
+        89185,
+        49345
+      ]
+    },
+    "after_kill": {
+      "generation": 206,
+      "origin": "20261115T081300469792Z",
+      "external": true,
+      "total": 2051,
+      "completed": 12,
+      "cursor": 2051,
+      "paused": 1911,
+      "counters": [
+        526070,
+        115858,
+        75743
+      ]
+    },
+    "normal_resume": {
+      "generation": 1422,
+      "origin": "20261115T081308277523Z",
+      "external": false,
+      "total": 2051,
+      "completed": 12,
+      "cursor": 2051,
+      "paused": 1975,
+      "counters": [
+        1051146,
+        211955,
+        171672
+      ]
+    },
+    "verified_origin": true
+  }
+}

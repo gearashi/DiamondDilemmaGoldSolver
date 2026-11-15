@@ -345,7 +345,7 @@ class CheckpointRanges:
                 # fetching a separate word per lane can cost more than the
                 # frame rows it eliminates. Existing counters are already local.
                 use_marks = True
-                if self.auto_trace and len(frame_lanes) >= 32768:
+                if self.auto_trace and gpu.n >= 32768 and 2 * len(frame_lanes) >= gpu.n:
                     attempts = fields['counters'][0,frame_lanes] - self.prior['counters'][0,frame_lanes]
                     use_marks = not (0 < attempts.sum(dtype=np.uint64) <= 8 * len(frame_lanes))
                 if use_marks:

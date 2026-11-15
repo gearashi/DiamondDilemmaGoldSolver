@@ -30,3 +30,16 @@ class OriginalProofTests(unittest.TestCase):
         bond=next(b for b in proof['reference'] if b not in proof['required'])
         with self.assertRaisesRegex(ValueError,'unproved edge_perfect'):
             audit(self.tiles,self.codes,{**proof,'weighted_cores':[{'kind':'edge_perfect','weight':1,'bonds':[bond]}]})
+
+    def test_regenerated_formula_matches_checked_drat(self):
+        from importlib.util import find_spec
+        from tempfile import TemporaryDirectory
+        if find_spec('pysat') is None:
+            self.skipTest('requires python-sat to regenerate DIMACS')
+        from verify_r35_contact_parity import write_formula
+        root=Path(__file__).resolve().parent
+        receipt=json.loads((root/'docs/R35_CONTACT_PARITY_PROOF.json').read_bytes())
+        with TemporaryDirectory() as folder:
+            path=Path(folder)/'cap25.cnf'
+            self.assertEqual(write_formula(path,self.tiles,self.codes,self.proof),receipt['files']['cap25.cnf']['sha256'])
+            self.assertEqual(path.stat().st_size,receipt['files']['cap25.cnf']['bytes'])

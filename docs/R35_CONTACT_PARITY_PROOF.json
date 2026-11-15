@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "reference_bonds": 207,
+  "minimum_lost": 26,
+  "maximum_retained": 181,
+  "cap": 25,
+  "weighted_terms": 40,
+  "weighted_terms_semantic_sha256": "ce81105b9b481a23d780cb47e802dcff36c2bde59f1951d35f892c8f12437ce9",
+  "semantic_serialization": "Sort (kind, positive integer weight, sorted canonical endpoint pairs) tuples lexicographically. Encode as compact ASCII JSON arrays before SHA-256.",
+  "original_tiles_sha256": "81e5e40ab23afb135cafe913af3e9d6579d68eea4c096c60d2ddd57a1c8cfe79",
+  "weighted_certificate_sha256": "e683da5c22be0e55b887f0a0695dae0d43c1ea6c7bead9fa92a2ebc64825ff21",
+  "reference_sha256": "ca0a089fa219f93713bf3a26ce3191d8090e2410b0072ee9146c90297049f492",
+  "generator": "verify_r35_contact_parity.py",
+  "external_result": "VERIFIED",
+  "resolution_steps": 400410,
+  "dimacs_header": "p cnf 1865 15817",
+  "methods": "Independent scalar replay of forty weighted constraints and eight compulsory bonds. Retained reference bonds must satisfy signed pair equations. Each signed reciprocal class has even inventory. At most 25 actual losses are represented; a forced single or pair is excluded only if the remaining losses cannot cover the residual term weight.",
+  "files": {
+    "cap25.cnf": {
+      "sha256": "d4e77dbfea00da97321ad5ab62933d54420333cd137f980bdd79c9ce016c685f",
+      "bytes": 250545
+    },
+    "cap25.drat": {
+      "sha256": "58fbb084ae6e7f9cace581fc63993733c8b6dc2b0f98ab2a851e7d51f4531a68",
+      "bytes": 287937
+    },
+    "solve.log": {
+      "sha256": "e208eb73da81fbbc5bfe426c4277ec9a88c1894a6babc00a8a22339e55dfa7b6",
+      "bytes": 5373
+    },
+    "check.log": {
+      "sha256": "09cbd889c1ec1d19535cf9853029fdacc1f87c33b5f455a265ac72917dac325b",
+      "bytes": 454
+    }
+  },
+  "asset": {
+    "name": "DiamondDilemmaGoldSolver-R35-contact-parity-proof.zip",
+    "bytes": 236070,
+    "sha256": "e5676fb47146b678c5f2b36fe0f5cae762e8b047bcea5ef77277f28b7220b328"
+  }
+}
