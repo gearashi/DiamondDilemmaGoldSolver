@@ -15,17 +15,17 @@ from validator import validate_arrangement
 
 DOCS = Path(__file__).resolve().parent / 'docs'
 SOURCE = {
-    'R35_REPAIR_PLACEMENTS': 'd72d6c147d3af5798f9f53a96832adf1ac82ae7e4fdc9f009c48700ddf020818',
-    'R35_REPAIR_REFINED': '3369433c96e41f6af984ba4d8fed42998d26b62538f7920395b1df7a16719397',
-    'R35_REPAIR_REGIONAL': '5ae4ed6a4af821eb01d653e11d202aa5122ce73334f1c15114745c17768d4c61',
-    'R35_REGIONAL_REPAIR_PROOF': '1e69943dde427ea7b19add2bada26d4f54662a4f8366f5a765995371f7771eed',
+    'R35_REPAIR_PLACEMENTS': '929b3832d2c7c0e33538a5c35ac6ac8563c5c4ee4ff1f14dbd103a1288bb4c09',
+    'R35_REPAIR_REFINED': 'f8ae3b5405b7613ad3d269001616c4fb4a11be4d1b8331fbc6a2062d5231107e',
+    'R35_REPAIR_REGIONAL': '2deb7f2688d8feadb6260c3d7988c87c4114df569343a5f29be107af21df595d',
+    'R35_REGIONAL_REPAIR_PROOF': '3504e5756c5a453fa0173f7c08ba1eee6ea502fc85ace9f3b56ba2e0a7ad3586',
 }
 
 
-def catalog():
+def catalog(docs_dir=DOCS):
     docs = {}
     for name, expected in SOURCE.items():
-        data = (DOCS / (name + '.json')).read_bytes().strip()
+        data = (docs_dir / (name + '.json')).read_bytes().replace(b'\r\n', b'\n')
         if sha256(data).hexdigest() != expected:
             raise ValueError('Source receipt changed: ' + name)
         docs[name] = json.loads(data)
@@ -99,6 +99,23 @@ def planted_on_codes(codes):
 
 
 class PoseTransferAuthority(unittest.TestCase):
+    def test_catalog_checks_complete_receipts_on_both_line_endings(self):
+        from tempfile import TemporaryDirectory
+
+        reference = catalog()
+        with TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            for newline in (b'\n', b'\r\n'):
+                for name in SOURCE:
+                    source = DOCS / (name + '.json')
+                    data = source.read_bytes().replace(b'\r\n', b'\n')
+                    (folder / source.name).write_bytes(data.replace(b'\n', newline))
+                self.assertEqual(catalog(folder), reference)
+            proof = folder / 'R35_REGIONAL_REPAIR_PROOF.json'
+            proof.write_bytes(proof.read_bytes() + b' ')
+            with self.assertRaisesRegex(ValueError, 'Source receipt changed'):
+                catalog(folder)
+
     def test_every_authenticated_row_in_every_oriented_mesh_map(self):
         codes,rows,hit,proof = catalog()
         self.assertEqual((len(rows),len(set(hit)),proof['lower_bound'],proof['excluded_cap']),(4225,95,95,94))
