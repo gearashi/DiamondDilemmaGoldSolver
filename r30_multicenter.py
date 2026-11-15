@@ -275,7 +275,9 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
         register(db,key,binding,families,target,owners)
         from r32_route_store import PageProofs, RootCoverage, publish_page, publish_scores
         page_proofs = PageProofs(db, target)
-        root_coverage = {(i,f):RootCoverage(db,binding,owner,f,target) for i,owner in enumerate(owners) for f in families}
+        from r35_route_live import ReceiptEpoch,EpochMemo
+        receipt_epoch=ReceiptEpoch(db)
+        root_coverage = {(i,f):RootCoverage(db,binding,owner,f,target,epoch=receipt_epoch) for i,owner in enumerate(owners) for f in families}
         deferred = defaultdict(set)
         from r30_cycles import Predecessors, canonical_cycles
         predecessor = {}
@@ -288,8 +290,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
             from r34_exchange_undo import CoveredUndo
             from r32_route_store import colex
 
-            @lru_cache(maxsize=8192)
-            def covered(group):
+            def known_covered(group):
                 cells = sorted(c for cycle in group for c in cycle)
                 indices = {c:i for i,c in enumerate(cells)}
                 moves = {c:d for cycle in group for c,d in zip(cycle,(*cycle[1:],cycle[0]))}
@@ -300,24 +301,29 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                 if family not in FOUR_FAMILIES:
                     return False
                 rank = colex(cells,support_indices)
-                return inherited_end(db,key,binding,(family,),target,(owners[index],),rank,rank+1)>rank
+                return inherited_end(db,key,binding,(family,),target,(owners[index],),rank,rank+1,proofs=page_proofs)>rank
 
             # A finished lower-target page can give a stronger numeric ceiling
             # than target-1. Only use it after rechecking all owner dependencies.
-            thresholds = tuple(row[0] for row in db.execute(
+            covered=EpochMemo(receipt_epoch,known_covered)
+            def lower_targets():
+                return tuple(row[0] for row in db.execute(
                 "SELECT DISTINCT target FROM r31_members WHERE domain=? AND owner=? AND target<? ORDER BY target",
                 (binding,owners[index],target)))
-            @lru_cache(maxsize=8192)
-            def predecessor_upper(group):
+            thresholds=EpochMemo(receipt_epoch,lower_targets,permanent=lambda x:False)
+            by_threshold={}
+            def lookup_upper(group):
                 family=tuple(sorted(map(len,group)))
-                if thresholds and family in FOUR_FAMILIES:
+                if family in FOUR_FAMILIES:
                     rank=colex([c for cycle in group for c in cycle],support_indices)
-                    for threshold in thresholds:
-                        if inherited_end(db,key,binding,(family,),threshold,(owners[index],),rank,rank+1)>rank:
+                    for threshold in thresholds():
+                        if threshold not in by_threshold:by_threshold[threshold]=PageProofs(db,threshold)
+                        if inherited_end(db,key,binding,(family,),threshold,(owners[index],),rank,rank+1,proofs=by_threshold[threshold])>rank:
                             return threshold-1
                 return target-1 if covered(group) else None
 
-            return CoveredUndo(graph.bounds[index],covered,predecessor_upper=predecessor_upper,target=target)
+            upper=EpochMemo(receipt_epoch,lookup_upper,permanent=lambda x:False)
+            return CoveredUndo(graph.bounds[index],covered,predecessor_upper=upper,target=target)
 
         closed_centers = existing_balls(model,target)
         if closed_centers:
@@ -399,6 +405,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
             db.commit()
             try:
                 with leases.computing(claim):
+                    receipt_epoch.refresh(force=True)
                     counters = Counter()
                     spans = list(intervals.spans(k,current,end,counters)) if intervals else [(current,end)]
                     chunks = [combination_batch(graph.free,k,lo,hi-lo) for lo,hi in spans]
@@ -514,7 +521,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                                     if ix not in previous_shells:
                                         previous_shells[ix] = list(owner_copies(model,closed_centers,b.tiles,k,transforms=graph.transforms) if closed_centers else ())
                                     rc = root_coverage[ix,f]
-                                    if rc.scopes and rc.covered(cells,order,graph.clusters[ix].close):
+                                    if rc.covered(cells,order,graph.clusters[ix].close):
                                         counters['first_root'] += 1
                                         continue
                                     if is_owned(previous_shells[ix],cells,order):

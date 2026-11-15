@@ -118,12 +118,10 @@ def _evaluate_assigned(problem, boards, pool, family, target, *, database, paire
     bound = [ExchangeBound(model,b) for b in boards]
     if not bound or any(not proved_connected(b,target,family) for b in bound):
         raise ValueError("Pool requires a published connectivity proof for every supplied center.")
-    joins = [ConnectedJoin(StarClusters(b),pool,family,target) for b in bound]
     scope = domain_binding(model)
     owners = [physical_hash(b.tiles) for b in bound]
     if len(set(owners))!=len(owners):
         raise ValueError("Duplicate physical center.")
-    keys = [hashlib.sha256(json.dumps([1,scope,[tuple(map(int,b.tiles))],(family,),target]).encode()).hexdigest() for b in bound]
     supports = tuple(rank(s,model.free) for s in combinations(pool,sum(family)))
     from itertools import groupby
     from time import time
@@ -132,13 +130,31 @@ def _evaluate_assigned(problem, boards, pool, family, target, *, database, paire
     with closing(sqlite3.connect(database,timeout=90,isolation_level=None,uri=True)) as db:
         db.execute("CREATE TABLE IF NOT EXISTS r30_pages(scope TEXT,lo INTEGER,hi INTEGER,work TEXT,best TEXT,PRIMARY KEY(scope,lo))")
         db.execute("CREATE TABLE IF NOT EXISTS optima(key TEXT PRIMARY KEY,result TEXT NOT NULL)")
+        from r35_route_live import ReceiptEpoch,EndpointReceipts
+        epoch=ReceiptEpoch(db)
+        receipts=[EndpointReceipts(db,epoch,scope,b,o,family,target) for b,o in zip(bound,owners)]
+        keys=[reader.key for reader in receipts]
+        by_key=dict(zip(keys,receipts))
+        db.execute("CREATE TABLE IF NOT EXISTS r35_pool_results(scope TEXT,rank INTEGER,best TEXT,PRIMARY KEY(scope,rank))")
         missing = []
         saved_best = []
         def covered(key,r):
-            row = db.execute('SELECT hi,best FROM r30_pages WHERE scope=? AND lo<=? ORDER BY lo DESC LIMIT 1',(key,r)).fetchone()
-            return row if row and row[0]>r else None
-        for key,o in zip(keys,owners):
-            register(db,key,scope,(family,),target,(o,))
+            row=db.execute('SELECT lo,hi,best FROM r30_pages WHERE scope=? AND lo<=? ORDER BY lo DESC LIMIT 1',(key,r)).fetchone()
+            if row and row[1]>r:
+                if row[2]=='null' or json.loads(row[2])['score']<target:return row[1],'null'
+                if row[:2]==(r,r+1):return row[1:]
+                # A coarse positive may belong to a different support. A per-rank
+                # result may coexist with the original complete aggregate page.
+                exact=db.execute('SELECT best FROM r35_pool_results WHERE scope=? AND rank=?',(key,r)).fetchone()
+                if exact:return r+1,exact[0]
+            if by_key[key].ranked.covered_rank(r):return r+1,'null'
+            return None
+        root_proven=set()
+        for key in keys:
+            if by_key[key].roots.all_negative(pool):
+                root_proven.add(key)
+                missing.append(set())
+                continue
             left = set()
             for r in supports:
                 previous = covered(key,r)
@@ -150,7 +166,8 @@ def _evaluate_assigned(problem, boards, pool, family, target, *, database, paire
         indices = [i for i,m in enumerate(missing) if m]
         if not indices:
             return dict(best=max(saved_best,key=lambda x:x['score'],default=None),complete=True,
-                        work={'reused_center_supports':len(keys)*len(supports)})
+                        work={'reused_center_supports':len(keys)*len(supports),
+                              **({'finite_root_pool_supports':len(root_proven)*len(supports)} if root_proven else {})})
         # A finite pool can contain separated colex runs. Share one token and
         # one heartbeat across them, with the same rank namespace as multicenter.
         leases={}
@@ -203,7 +220,11 @@ def _evaluate_assigned(problem, boards, pool, family, target, *, database, paire
         with holder.computing(first):
             oracle = RotationOracle(model)
             best = {}
-            rows,work = traverse([joins[i] for i in indices],pair=paired,buckets=buckets,bridge=bridge,together=together,
+            joins=[ConnectedJoin(StarClusters(bound[i]),pool,family,target) for i in indices]
+            def covered_endpoint(sub,cells,order):
+                ix=indices[sub]
+                return rank(cells,model.free) not in owned[ix] or receipts[ix].covered(cells,order,joins[sub].close)
+            rows,work = traverse(joins,covered_endpoint=covered_endpoint,pair=paired,buckets=buckets,bridge=bridge,together=together,
                                  cover=cover,cover_cores=CoverCores(db,scope) if cover else None)
             for sub,cells,order in rows:
                 ix = indices[sub]
@@ -244,8 +265,13 @@ def _evaluate_assigned(problem, boards, pool, family, target, *, database, paire
                                 continue
                             n=len(orders(family))
                             result=best.get((ix,r))
-                            db.execute('INSERT INTO r30_pages VALUES(?,?,?,?,?)',
-                                       (keys[ix],r,r+1,json.dumps({'joint_pool':1,'raw_center_endpoints':n}),json.dumps(result)))
+                            aggregate=db.execute('SELECT hi FROM r30_pages WHERE scope=? AND lo<=? ORDER BY lo DESC LIMIT 1',
+                                                 (keys[ix],r)).fetchone()
+                            if aggregate and aggregate[0]>r:
+                                db.execute('INSERT OR REPLACE INTO r35_pool_results VALUES(?,?,?)',(keys[ix],r,json.dumps(result)))
+                            else:
+                                db.execute('INSERT INTO r30_pages VALUES(?,?,?,?,?)',
+                                           (keys[ix],r,r+1,json.dumps({'joint_pool':1,'raw_center_endpoints':n}),json.dumps(result)))
                             if result:
                                 saved_best.append(result)
                             work['published_center_supports']+=1
@@ -338,6 +364,11 @@ def stream_prefixes(problem, boards, pool, family, target, database, *, start=0,
         db.execute('CREATE TABLE IF NOT EXISTS r32_joint_pages(scope TEXT,lo INTEGER,hi INTEGER,best TEXT,PRIMARY KEY(scope,lo))')
         db.execute('CREATE TABLE IF NOT EXISTS optima(key TEXT PRIMARY KEY,result TEXT NOT NULL)')
         cover_cores=CoverCores(db,binding) if cover else None
+        from r35_route_live import EndpointReceipts,ReceiptEpoch
+        from r29_exchange_route import physical_hash
+        epoch=ReceiptEpoch(db)
+        db.execute("CREATE TABLE IF NOT EXISTS r30_pages(scope TEXT,lo INTEGER,hi INTEGER,work TEXT,best TEXT,PRIMARY KEY(scope,lo))")
+        readers=[EndpointReceipts(db,epoch,binding,b,physical_hash(b.tiles),family,target) for b in bounds]
         while (current<stop or busy) and not expired() and (max_pages is None or pages<max_pages):
             if current>=stop:
                 current=covered_end(db,'r32_joint_pages',scope,start,stop)
@@ -412,6 +443,9 @@ def stream_prefixes(problem, boards, pool, family, target, database, *, start=0,
                                 order=tuple(cells.index(mapping[c]) for c in cells)
                                 for i in active:
                                     j=joins[i]
+                                    if readers[i].covered(cells,order,j.close):
+                                        w['receipt_stars_avoided']+=1
+                                        continue
                                     ub=bridge_upper(j.stars,group) if bridge else None
                                     if ub is None:
                                         ub=j.stars.price(cells,order)

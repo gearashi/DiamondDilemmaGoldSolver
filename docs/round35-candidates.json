@@ -398,7 +398,14 @@
       "source_id": 11,
       "title": "Live, two-way root/region/ranked coverage",
       "proposal_and_validation": "RootCoverage caches false and snapshots available scopes. r30_multicenter.make_undo.covered caches missed ranks. r31_routes.search_roots fixes ranked_exists at startup and caches support misses; its fast coverage path looks for a bare singleton page whose best is null. Key failed lookups to a cheap commit generation, or cache successes only with bounded negative expiry. Consume certified multicenter owner/family negatives, lower-threshold proof data and pinned pool membership using PageProofs, including witnesses on a different owner. Verify both traversal orders using separate connections where the other worker finishes during a run. Count duplicate leaf and pricing calls, time spent polling and source registration misses. Partial work, an unfenced dependency or an insufficient threshold cannot prove a negative.",
-      "state": "in progress"
+      "state": "keep with exact scope",
+      "decision": "Real negative region/rank handoffs closed 140 and 28 original roots from eight and one ranked supports, avoiding 308 and 4,543 cursor steps. Reverse handoffs avoid 2,660 and 1,170 cycle prices; ambiguous coarse positives are independently refined.",
+      "evidence": [
+        "docs/ROUND35_LIVE_ROOTS.md",
+        "docs/R35_LIVE_ROOTS.json",
+        "test_r35_root_fence.py",
+        "test_r35_route_live.py"
+      ]
     },
     {
       "id": 27,
@@ -406,7 +413,14 @@
       "source_id": 12,
       "title": "Fence root-cursor page work",
       "proposal_and_validation": "r31_routes.search_roots still holds BEGIN IMMEDIATE around advance and possibly an exact rotation query. R34 fenced four other writer paths. Claim an independent root/page by generation, save stack/best under compare-and-swap and keep long pricing outside the writer transaction. Permit an available root to proceed while another is being computed. Check completed intervals before building a full join/catalogue/oracle where practical. Compare actual duplicate cursor steps, contention and warm setup with one/two workers, stale lease reclamation and termination during an exact positive. Root completion must cover its entire original subtree.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "Two overlapping original workers used the same 6 and 691 cursor steps as serial, admitted an independent writer, skipped warm catalogue/oracle setup, and recovered a checked positive after interruption. Stale tokens cannot overwrite a successor.",
+      "evidence": [
+        "docs/ROUND35_LIVE_ROOTS.md",
+        "docs/R35_LIVE_ROOTS.json",
+        "test_r35_root_fence.py",
+        "test_r35_route_live.py"
+      ]
     },
     {
       "id": 28,

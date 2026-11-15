@@ -291,7 +291,7 @@ def bridge_upper(stars, group):
     return None
 
 
-def traverse(joins, *, pair=True, buckets=True, bridge=False, together=True, cover=False,cover_cores=None):
+def traverse(joins, *, pair=True, buckets=True, bridge=False, together=True, cover=False,cover_cores=None,covered_endpoint=None):
     """Existence/optimum within a finite pool. Centers keep separate exact endpoint sets."""
     first = joins[0]
     if any(j.pool!=first.pool or j.family!=first.family or not np.array_equal(j.close,first.close) for j in joins):
@@ -350,6 +350,9 @@ def traverse(joins, *, pair=True, buckets=True, bridge=False, together=True, cov
             order = tuple(cells.index(mapping[c]) for c in cells)
             for ix in owners:
                 j = joins[ix]
+                if covered_endpoint is not None and covered_endpoint(ix,cells,order):
+                    work['receipt_or_unowned_stars_avoided']+=1
+                    continue
                 upper = bridge_upper(j.stars,child) if bridge else None
                 if upper is None:
                     upper = j.stars.price(cells,order)

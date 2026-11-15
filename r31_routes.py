@@ -70,9 +70,11 @@ def search(problem,board,cells,family,target,*,database=':memory:',price=True,
         survivors=join.survivors(price=price)
         if component_rows:
             from r34_component_budget import ComponentBudget
-            cap=ComponentBudget(b,cells).upper(sum(family)-len(family),max_rows=component_rows,
-                                               min_moved=sum(family))
-            count.update({'component_'+k:v for k,v in cap['work'].items()})
+            component=ComponentBudget(b,cells)
+            from r35_donor_chains import family_budget
+            cap=family_budget(component,family,max_rows=component_rows,target=target)
+            count.update({'component_'+k:v for k,v in cap['coarse']['work'].items()})
+            count.update({'chain_'+k:v for k,v in cap['work'].items()})
             if cap['upper']<target:
                 count['component_pools_closed']+=1
                 survivors=()
@@ -142,8 +144,8 @@ def search(problem,board,cells,family,target,*,database=':memory:',price=True,
 def search_roots(problem,board,family,target,database,*,pool=None,start=0,stop=None,seconds=0,quantum=256,max_pages=None,catalogue=True):
     """Durable, disjoint root intervals on the complete board or a restricted pool.
 
-    Short cursor pages are atomic. A crash can replay its current page;
-    complete subtrees, partial roots and exact physical scores survive.
+    Workers price independent roots outside the writer transaction and compare
+    the claimed cursor before publication. A crash can replay its current page.
     """
     from r28_exchange_cuda import unrank
     from r31_route_cursor import advance,restore_frames
@@ -169,12 +171,14 @@ def search_roots(problem,board,family,target,database,*,pool=None,start=0,stop=N
     owner = physical_hash(tiles)
     key = hashlib.sha256(json.dumps([1,binding,owner,pool,family,target]).encode()).hexdigest()
     ranked_key = hashlib.sha256(json.dumps([1,binding,[tiles],(family,),target]).encode()).hexdigest()
-    join = ConnectedJoin(StarClusters(bound),pool,family,target)
-    oracle = RotationOracle(model)
+    join = None
+    oracle = None
     work = Counter()
     clock = monotonic()
     current = start
-    with closing(sqlite3.connect(database,timeout=90)) as db:
+    from contextlib import ExitStack
+    from r34_rank_leases import RankedLeases,LostRankLease
+    with closing(sqlite3.connect(database,timeout=90,isolation_level=None)) as db, ExitStack() as renewal:
         db.executescript("""
             CREATE TABLE IF NOT EXISTS r31_roots(scope TEXT,idx INTEGER,best TEXT,
                 PRIMARY KEY(scope,idx));
@@ -191,46 +195,36 @@ def search_roots(problem,board,family,target,database,*,pool=None,start=0,stop=N
         db.execute('INSERT OR IGNORE INTO r32_root_binding VALUES(?,?,?,?,?,?)',
                    (key,binding,owner,json.dumps(family),target,json.dumps(pool)))
         db.commit()
-        if catalogue:
-            from r32_catalogue import install
-            install(join,db,binding,owner)
-            db.commit()
-        ranked_exists = db.execute('SELECT 1 FROM r30_pages WHERE scope=? LIMIT 1',(ranked_key,)).fetchone()
-        if ranked_exists:
-            from functools import lru_cache
-            @lru_cache(maxsize=1024)
-            def covered_support(support):
-                point = rank(support,model.free)
-                previous = db.execute('SELECT hi,best FROM r30_pages WHERE scope=? AND lo<=? ORDER BY lo DESC LIMIT 1',
-                                      (ranked_key,point)).fetchone()
-                return previous is not None and previous[0]>point and previous[1]=='null'
-            join.covered_support = covered_support
+        from r31_route_coverage import register
+        from r35_route_live import ReceiptEpoch,RankedCoverage
+        register(db,ranked_key,binding,(family,),target,(owner,))
+        receipt_epoch=ReceiptEpoch(db)
+        ranked=RankedCoverage(db,receipt_epoch,binding,owner,family,target,key,ranked_key,
+                              {c:i for i,c in enumerate(sorted(model.free))})
         frames = {}
         def expired():
             return bool(seconds and monotonic()-clock>=seconds)
-        while current<stop and not expired() and (max_pages is None or work['cursor_pages']<max_pages):
-            # Serialize only one bounded page. Another writer may commit this
-            # root during our wait, so read its current cursor after acquiring.
-            if seconds:
-                db.execute("PRAGMA busy_timeout="+str(max(1,int(1000*(seconds-(monotonic()-clock))))))
-            try:
-                db.execute('BEGIN IMMEDIATE')
-            except sqlite3.OperationalError as e:
-                if seconds and 'locked' in str(e).lower() and expired():
-                    break
-                raise
-            if db.execute('SELECT 1 FROM r31_roots WHERE scope=? AND idx=?',(key,current)).fetchone():
-                db.commit()
-                work['roots_reused'] += 1
-                current += 1
-                frames.clear()
-                continue
-            saved = db.execute('SELECT stack,best FROM r31_root_cursor WHERE scope=? AND idx=?',(key,current)).fetchone()
+        leases=RankedLeases(db,'root-cursor',key,private=database==':memory:',lifetime=renewal)
+        def first_open(low):
+            for (idx,) in db.execute('SELECT idx FROM r31_roots WHERE scope=? AND idx>=? AND idx<? ORDER BY idx',
+                                     (key,low,stop)):
+                if idx!=low:break
+                low+=1
+            return low
+
+        def do_page(idx,saved,claim):
+            nonlocal join
+            if join is None:
+                join=ConnectedJoin(StarClusters(bound),pool,family,target)
+                join.covered_support=ranked.covered
+                if catalogue:
+                    from r32_catalogue import install
+                    install(join,db,binding,owner)
             if saved:
                 stack = restore_frames(json.loads(saved[0]))
                 best = json.loads(saved[1])
             else:
-                offset = current
+                offset = idx
                 for size,count in groups:
                     if offset<count:
                         break
@@ -241,10 +235,8 @@ def search_roots(problem,board,family,target,database,*,pool=None,start=0,stop=N
                 stack = [((cycle,),(0,0,0))]
                 best = None
             def consume(support,order):
-                nonlocal best
-                r = rank(support,model.free)
-                prev = db.execute('SELECT hi,best FROM r30_pages WHERE scope=? AND lo<=? ORDER BY lo DESC LIMIT 1',(ranked_key,r)).fetchone()
-                if prev and prev[0]>r and prev[1]=='null':
+                nonlocal best,oracle
+                if ranked.covered(tuple(support)):
                     work['ranked_negatives_reused'] += 1
                     return True
                 seed = bound.witness_seed(support,order)
@@ -273,26 +265,82 @@ def search_roots(problem,board,family,target,database,*,pool=None,start=0,stop=N
                         row = dict(score=valid['matched_edges'],codes=codes,
                                    gold=valid['valid'],components=valid['line_components'])
                     else:
+                        if oracle is None:oracle=RotationOracle(model)
                         row = rotation_optimum(bound,oracle,seed)
-                    db.execute('INSERT INTO optima VALUES(?,?)',(perm,json.dumps(row)))
+                    db.execute('INSERT OR IGNORE INTO optima VALUES(?,?)',(perm,json.dumps(row)))
                     work['exact_solved'] += 1
                 if row['score']>=target and (best is None or row['score']>best['score']):
                     best = row
                 return True
             steps = advance(join,stack,frames,work,consume,expired,quantum)
-            if stack:
-                db.execute('INSERT OR REPLACE INTO r31_root_cursor VALUES(?,?,?,?)',
-                           (key,current,json.dumps(stack),json.dumps(best)))
-            else:
-                db.execute('INSERT INTO r31_roots VALUES(?,?,?)',(key,current,json.dumps(best)))
-                db.execute('DELETE FROM r31_root_cursor WHERE scope=? AND idx=?',(key,current))
-                current += 1
-                frames.clear()
-                work['roots_completed'] += 1
-            db.commit()
-            work['cursor_pages'] += 1
-            if steps==0:
-                break
+            with db:
+                db.execute('BEGIN IMMEDIATE')
+                leases.fence(claim)
+                closed=db.execute('SELECT 1 FROM r31_roots WHERE scope=? AND idx=?',(key,idx)).fetchone()
+                previous=db.execute('SELECT stack,best FROM r31_root_cursor WHERE scope=? AND idx=?',(key,idx)).fetchone()
+                if closed or previous!=saved:
+                    raise LostRankLease('Another solver advanced the same root cursor.')
+                if stack:
+                    db.execute('INSERT OR REPLACE INTO r31_root_cursor VALUES(?,?,?,?)',
+                               (key,idx,json.dumps(stack),json.dumps(best)))
+                else:
+                    db.execute('INSERT INTO r31_roots VALUES(?,?,?)',(key,idx,json.dumps(best)))
+                    db.execute('DELETE FROM r31_root_cursor WHERE scope=? AND idx=?',(key,idx))
+            return not stack,steps
+
+        if start<stop and max_pages!=0 and first_open(start)<stop and ranked.all_negative(pool):
+            # A bounded family-wide set of independently proved ranks covers
+            # every order beneath every root of this same pool.
+            with db:
+                db.execute("BEGIN IMMEDIATE")
+                for idx in range(start,stop):
+                    prior=db.execute('SELECT best FROM r31_root_cursor WHERE scope=? AND idx=?',(key,idx)).fetchone()
+                    if prior and prior[0]!='null' and json.loads(prior[0])['score']>=target:continue
+                    added=db.execute("INSERT OR IGNORE INTO r31_roots VALUES(?,?,'null')",(key,idx)).rowcount
+                    if added:
+                        db.execute('DELETE FROM r31_root_cursor WHERE scope=? AND idx=?',(key,idx))
+                        work['ranked_pool_roots_closed']+=1
+            current=first_open(start)
+        busy=False
+        while (current<stop or busy) and not expired() and (max_pages is None or work['cursor_pages']<max_pages):
+            if current>=stop:
+                current=first_open(start)
+                if current>=stop:break
+                leases.wait(current,clock+seconds if seconds else float('inf'))
+                busy=False
+                continue
+            begin=first_open(current)
+            if begin>current:
+                work['roots_reused']+=begin-current
+                current=begin;frames.clear()
+                continue
+            if seconds:
+                db.execute('PRAGMA busy_timeout='+str(max(1,int(1000*(seconds-(monotonic()-clock))))))
+            try:
+                with db:
+                    db.execute('BEGIN IMMEDIATE')
+                    if db.execute('SELECT 1 FROM r31_roots WHERE scope=? AND idx=?',(key,current)).fetchone():
+                        work['roots_reused']+=1;current+=1;frames.clear();continue
+                    claim,_=leases.take(current,current+1)
+                    if claim is None:
+                        work['root_lease_conflicts']+=1
+                        busy=True;current+=1;frames.clear();continue
+                    saved=db.execute('SELECT stack,best FROM r31_root_cursor WHERE scope=? AND idx=?',
+                                     (key,current)).fetchone()
+            except sqlite3.OperationalError as error:
+                if seconds and 'locked' in str(error).lower() and expired():break
+                raise
+            try:
+                with leases.computing(claim):
+                    receipt_epoch.refresh(force=True)
+                    complete,steps=do_page(current,saved,claim)
+            except LostRankLease:
+                work['cursor_fences_lost']+=1;frames.clear();continue
+            work['cursor_pages']+=1
+            if complete:
+                work['roots_completed']+=1;current+=1;frames.clear()
+            if steps==0:break
+        if busy:current=first_open(start)
         count, = db.execute('SELECT count(*) FROM r31_roots WHERE scope=?',(key,)).fetchone()
         best = max((json.loads(raw) for raw, in db.execute("SELECT best FROM r31_roots WHERE scope=? AND best!='null'",(key,))),key=lambda r:r['score'],default=None)
         for raw, in db.execute("SELECT best FROM r31_root_cursor WHERE scope=? AND best!='null'",(key,)):
@@ -318,7 +366,7 @@ def search_roots(problem,board,family,target,database,*,pool=None,start=0,stop=N
                 for a,b in gaps:
                     db.execute('INSERT INTO r30_pages VALUES(?,?,?,?,?)',(ranked_key,a,b,json.dumps({'connected_full':b-a}),'null'))
     return dict(next_root=current,total_roots=total,completed_roots=count,complete=count==total,
-                range_finished=current>=stop,best=best,work=dict(work+join.work))
+                range_finished=current>=stop,best=best,work=dict(work+(join.work if join is not None else Counter())+ranked.work+receipt_epoch.work))
 
 
 def main():

@@ -1,0 +1,144 @@
+[
+  {
+    "family": [
+      2,
+      2,
+      3
+    ],
+    "pool": [
+      18,
+      30,
+      42,
+      44,
+      51,
+      62,
+      118,
+      122
+    ],
+    "roots": 140,
+    "root_first": {
+      "cursor_steps": 308,
+      "cursor_pages": 140,
+      "roots_completed": 140,
+      "generation_polls": 141
+    },
+    "region_after": {
+      "reused_center_supports": 8,
+      "finite_root_pool_supports": 8
+    },
+    "region_first": {
+      "geometry_prefixes": 140,
+      "individual_cycle_prices": 2660,
+      "suffix_rows_skipped": 27700,
+      "joint_parents_closed": 140,
+      "joint_physical_prices": 27,
+      "published_center_supports": 8
+    },
+    "root_after": {
+      "ranked_pool_roots_closed": 140,
+      "ranked_receipt_queries": 8,
+      "generation_polls": 1
+    },
+    "serial_two": {
+      "cursor_steps": 6,
+      "cursor_pages": 2,
+      "roots_completed": 2,
+      "generation_polls": 3
+    },
+    "dual_two": [
+      {
+        "cursor_steps": 3,
+        "cursor_pages": 1,
+        "roots_completed": 1,
+        "generation_polls": 2
+      },
+      {
+        "root_lease_conflicts": 1,
+        "cursor_steps": 3,
+        "cursor_pages": 1,
+        "roots_completed": 1,
+        "generation_polls": 2
+      },
+      {
+        "roots_reused": 2
+      }
+    ],
+    "warm": {
+      "roots_reused": 2
+    }
+  },
+  {
+    "family": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "pool": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "roots": 28,
+    "root_first": {
+      "cursor_steps": 4543,
+      "cursor_pages": 28,
+      "roots_completed": 28,
+      "catalogue_rows": 56,
+      "generation_polls": 29
+    },
+    "region_after": {
+      "reused_center_supports": 1,
+      "finite_root_pool_supports": 1
+    },
+    "region_first": {
+      "geometry_prefixes": 223,
+      "owned_attachments": 195,
+      "individual_cycle_prices": 1170,
+      "suffix_rows_skipped": 7014,
+      "joint_parents_closed": 195,
+      "wrong_owner_buckets": 4,
+      "published_center_supports": 1
+    },
+    "root_after": {
+      "ranked_pool_roots_closed": 28,
+      "ranked_receipt_queries": 1,
+      "generation_polls": 1
+    },
+    "serial_two": {
+      "cursor_steps": 691,
+      "cursor_pages": 2,
+      "roots_completed": 2,
+      "catalogue_rows": 49,
+      "generation_polls": 3
+    },
+    "dual_two": [
+      {
+        "cursor_steps": 332,
+        "cursor_pages": 1,
+        "roots_completed": 1,
+        "catalogue_rows": 42,
+        "generation_polls": 2
+      },
+      {
+        "root_lease_conflicts": 1,
+        "cursor_steps": 359,
+        "cursor_pages": 1,
+        "roots_completed": 1,
+        "catalogue_rows": 42,
+        "generation_polls": 2
+      },
+      {
+        "roots_reused": 2
+      }
+    ],
+    "warm": {
+      "roots_reused": 2
+    }
+  }
+]

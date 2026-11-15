@@ -1,7 +1,6 @@
 """Exact ownership dependencies and cross-traversal coverage for four-swap search."""
 from collections import Counter
 from r35_route_dependencies import CheckedRanges,selected
-from functools import lru_cache
 from itertools import permutations
 import json
 from math import comb, factorial
@@ -104,24 +103,44 @@ def colex(values, indices):
 
 class RootCoverage:
     """Compute the represented order mask on demand from completed, negative roots."""
-    def __init__(self,db,binding,owner,family,target):
-        self.db = db
-        self.family = tuple(family)
-        self.target = target
-        self.scopes = []
-        for scope,raw in db.execute("""SELECT scope,pool FROM r32_root_binding WHERE domain=?
-            AND owner=? AND family=? AND target<=?""",(binding,owner,json.dumps(family),target)):
-            pool = json.loads(raw)
-            if not db.execute('SELECT 1 FROM r31_roots WHERE scope=? LIMIT 1',(scope,)).fetchone():
-                continue
+    def __init__(self,db,binding,owner,family,target,*,epoch=None):
+        from r35_route_live import EpochMemo,ReceiptEpoch
+        self.db=db;self.binding=binding;self.owner=owner
+        self.family=tuple(family);self.target=target;self.scopes=[]
+        self.epoch=epoch or ReceiptEpoch(db)
+        self.seen_epoch=None;self.finished=EpochMemo(self.epoch,self._finished)
+        self.refresh()
+
+    def refresh(self):
+        generation=self.epoch.refresh()
+        if generation==self.seen_epoch:return
+        self.seen_epoch=generation
+        self.scopes=[]
+        for scope,raw in self.db.execute("""SELECT scope,pool FROM r32_root_binding WHERE domain=?
+            AND owner=? AND family=? AND target<=?""",(self.binding,self.owner,json.dumps(self.family),self.target)):
+            pool=json.loads(raw)
             self.scopes.append((scope,{c:i for i,c in enumerate(pool)}))
-        self.finished = lru_cache(maxsize=8192)(self._finished)
+
+    def all_negative(self,pool):
+        self.refresh()
+        for scope,indices in self.scopes:
+            if not set(pool).issubset(indices):continue
+            total=sum(comb(len(indices),n)*factorial(n-1) for n in set(self.family))
+            count=self.db.execute("SELECT count(*) FROM r31_roots WHERE scope=? AND idx>=0 AND idx<?",
+                                  (scope,total)).fetchone()[0]
+            if count!=total:continue
+            positives=self.db.execute("SELECT best FROM r31_roots WHERE scope=? AND idx>=0 AND idx<? AND best!='null'",
+                                      (scope,total))
+            if all(json.loads(raw)['score']<self.target for raw, in positives):return True
+        return False
 
     def _finished(self,scope,idx):
         row = self.db.execute('SELECT best FROM r31_roots WHERE scope=? AND idx=?',(scope,idx)).fetchone()
         return row is not None and (row[0]=='null' or json.loads(row[0])['score']<self.target)
 
     def covered(self,cells,order,close):
+        self.refresh()
+        if not self.scopes:return False
         from r31_route_geometry import parent,connected
         group = tuple(sorted(canonical_cycles(cells,order)))
         if not connected(group,close):
