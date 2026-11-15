@@ -72,6 +72,40 @@ class PhaseAnchorTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Crossing'):
             search(bad,geography=True,phase_anchors='shared',bonds=[(0,3)],forbidden=[(0,3)])
 
+    def test_shared_phase_rules_recheck_wider_domains_and_preserve_gauge(self):
+        from r35_anchor_rules import check_rules
+        p,donors,_=ring_donors(103)
+        pins=dict(enumerate(donors[0]['phases']))
+        row=tuple(pins.items())
+        candidates=[(0,row)]
+        def check(values,deadline=float("inf")):
+            return check_rules(p,values,deadline,candidates=candidates)
+        base=p.domains[0]
+        p.domains[0]=[]
+        self.assertEqual(check(pins,0)[0],[])
+        self.assertTrue(check(pins)[1]['terminal'])
+        complement={tile:1-value for tile,value in pins.items()}
+        cached=check(complement)[1]
+        self.assertTrue(cached['terminal'])
+        self.assertEqual((cached['replayed'],cached['reused']),(0,1))
+        self.assertFalse(check({0:pins[0]})[1]['terminal'])
+        p.domains[0]=base
+        kept,stats=check(pins)
+        self.assertEqual(kept,[])
+        self.assertEqual(stats['replayed'],1)
+
+    @unittest.skipUnless(find_spec('ortools'),'requires CP-SAT')
+    def test_posted_phase_rule_excludes_only_both_proved_assignments(self):
+        from ortools.sat.python import cp_model
+        from r35_anchor_rules import post_rules
+        for assignment in product(range(2),repeat=3):
+            m=cp_model.CpModel()
+            phase=[m.new_bool_var(f'p{i}') for i in range(3)]
+            post_rules(m,phase,[((0,1),(2,0))])
+            for var,value in zip(phase,assignment):m.add(var==value)
+            result=cp_model.CpSolver().solve(m)
+            self.assertEqual(result==cp_model.INFEASIBLE,assignment[0]!=assignment[2])
+
     def test_rotation_transports_every_pose_bit(self):
         for n in range(1,6):
             full=(1<<(3*n))-1

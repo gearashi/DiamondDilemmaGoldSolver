@@ -433,11 +433,18 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
         raise ValueError("Blank-side projection requires a physical matching search.")
     started=time.monotonic()
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
+    phase_rules=()
     if phase_anchors is not None:
-        if not geography or phase_anchors not in ('roots','shared'):
+        if not geography or phase_anchors not in ('rules','roots','shared'):
             raise ValueError('Geographic phase anchors require embed and a supported anchor mode.')
         from r28_geo_color import _sphere
         _sphere(problem)
+        if phase_anchors=='rules':
+            from r35_anchor_rules import check_rules
+            phase_rules,stats['phase_rules']=check_rules(problem,pins or {},started+seconds)
+            if stats['phase_rules']['terminal']:
+                return dict(status='INFEASIBLE',**stats)
+    if phase_anchors in ('roots','shared'):
         from r35_phase_anchors import narrow
         required=list(bonds)
         blocked=list(forbidden)
@@ -576,6 +583,9 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
         seen=set()
     data=check.inputs if matching else inputs
     phase_vars=check.phase if matching else phase
+    if phase_rules:
+        from r35_anchor_rules import post_rules
+        post_rules(m,phase_vars,phase_rules)
     seen_types=check.type_seen if matching else seen
     fresh=[]
     reusable=[]
@@ -687,7 +697,7 @@ def main():
     cli.add_argument("--seconds",type=float,default=5)
     cli.add_argument("--rounds",type=int,default=32)
     cli.add_argument("--mate-correlations",nargs="?",const="full",choices=("full","signed"),help="Post verified conditional mate implications in represented reciprocal classes.")
-    cli.add_argument("--phase-anchors",choices=("roots","shared"),help="Test geographic placements of scarce tiles under signed phase pins before allocating a Gold model.")
+    cli.add_argument("--phase-anchors",choices=("rules","roots","shared"),help="Replay geographic phase exclusions or probe scarce tile placements before searching for Gold.")
     cli.add_argument("--reference-bound",action="store_true",help="Apply the published certified incumbent-loss bound in geographic Gold.")
     cli.add_argument("--joint-poses",action="store_true",help="Prune unsupported simultaneous mandatory component poses before geographic search.")
     cli.add_argument("--tour-mode",choices=("raw","contract","sparse"),help="Post a circuit on mandatory physical strand paths.")

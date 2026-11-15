@@ -17,9 +17,11 @@ def encode_board(problem,phase,domains,emit):
     from pysat.card import CardEnc,EncType
     from pysat.formula import IDPool
     from r27_structure_filters import bits
+    from r29_gold_geography import checked_domains
 
     if type(phase) is not int or not 0<=phase<1<<problem.n:
         raise ValueError('Expected one signed phase bit per tile.')
+    domains=checked_domains(problem,domains)
     ids=IDPool();by_tile=[[] for _ in range(problem.n)]
     placement=[]
     raw=raw_sides(problem.tiles)
@@ -103,20 +105,37 @@ if __name__=='__main__':
     cli=argparse.ArgumentParser(description=__doc__)
     cli.add_argument('--tiles',type=Path,required=True)
     cli.add_argument('--phase',required=True,type=lambda s:int(s,0))
-    cli.add_argument('--seconds',type=float,default=90)
+    cli.add_argument('--seconds',type=float,default=90,help='Native solve time in seconds after setup; zero runs to completion.')
     cli.add_argument('--anchor',type=int)
+    cli.add_argument('--probe-tiles',type=int,nargs='+',help='Prune poses of these physical tiles before the native solve.')
     output=cli.add_mutually_exclusive_group(required=True)
     output.add_argument('--output',type=Path)
-    output.add_argument('--formula',type=Path,help='Export deterministic DIMACS for another solver and proof checker.')
+    output.add_argument('--formula',type=Path,help='Export deterministic DIMACS. With --probe-tiles it represents the domains after those deductions.')
     args=cli.parse_args()
+    if args.seconds<0:cli.error('Expected a nonnegative solve budget.')
     p=SearchProblem(read_json(args.tiles))
     ds=domain_bits(p)
     if args.anchor is not None:
         ds,meta=canonical_root_domains(p,anchor_tile=args.anchor)
         if not meta['applied']:raise RuntimeError('Could not verify requested rotation symmetry.')
+    probe=None
+    if args.probe_tiles:
+        from r35_phase_anchors import narrow
+        pins={t:args.phase>>t&1 for t in range(p.n)}
+        if not 0<=args.phase<1<<p.n:
+            cli.error('Expected one phase bit per tile.')
+        probe=narrow(p,ds,pins,anchors=args.probe_tiles)
+        ds=probe.pop('domains')
+        if probe['status']=='INFEASIBLE':
+            if args.formula:
+                ds=(0,*ds[1:])
+            else:
+                atomic_json(args.output,dict(phase=hex(args.phase),status='INFEASIBLE',decisions=0,probe=probe))
+                raise SystemExit(0)
     if args.formula:
         export_board(p,args.phase,ds,args.formula)
         raise SystemExit(0)
     result=solve_board(p,args.phase,ds,args.seconds,candidate_path=args.output.with_suffix('.verified-board.json'))
+    if probe:result['probe']=probe
     atomic_json(args.output,result)
     print({k:v for k,v in result.items() if k not in ('codes','validation')})

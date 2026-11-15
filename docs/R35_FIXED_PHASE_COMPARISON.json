@@ -1,0 +1,66 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "anchor_macroface_tile": 25,
+  "prefilter_tiles": [
+    25,
+    159,
+    23,
+    14,
+    22,
+    37,
+    90
+  ],
+  "solver": "CaDiCaL 1.5.3, full fixed tile phases, all edge-compatible placements",
+  "baseline": {
+    "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+    "status": "INFEASIBLE",
+    "build_seconds": 2.2810000000172295,
+    "solve_seconds": 218.96899999998277,
+    "variables": 260320,
+    "clauses": 445616,
+    "restarts": 567,
+    "conflicts": 64935,
+    "decisions": 472912,
+    "propagations": 449378856
+  },
+  "prefiltered": {
+    "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+    "prefilter": {
+      "status": "SURVIVING",
+      "removed": 12291,
+      "stats": {
+        "root_probes": 4183,
+        "cell_revisions": 93787,
+        "anchor_splits": 21,
+        "changed_passes": 2
+      },
+      "symmetries": 1,
+      "seconds": 2.5310000000172295
+    },
+    "anchor": 25,
+    "solve": {
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "status": "INFEASIBLE",
+      "build_seconds": 2.2820000000065193,
+      "solve_seconds": 123.71799999999348,
+      "variables": 218392,
+      "clauses": 781837,
+      "restarts": 528,
+      "conflicts": 33433,
+      "decisions": 299387,
+      "propagations": 216660069
+    }
+  },
+  "short_budget_control": {
+    "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+    "status": "UNKNOWN",
+    "build_seconds": 1.9839999999967404,
+    "solve_seconds": 2.3280000000086147,
+    "variables": 260320,
+    "clauses": 743524,
+    "restarts": 3,
+    "conflicts": 391,
+    "decisions": 7712,
+    "propagations": 3677120
+  }
+}

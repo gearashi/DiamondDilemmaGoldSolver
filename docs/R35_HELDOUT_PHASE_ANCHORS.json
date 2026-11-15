@@ -1,0 +1,124 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "held_out": 105,
+  "modes": {
+    "tile_zero": {
+      "rejected": 0,
+      "passing_euler": 0,
+      "passing_small_mate_checks": 0,
+      "passing_both": 0
+    },
+    "scarce": {
+      "rejected": 48,
+      "passing_euler": 19,
+      "passing_small_mate_checks": 1,
+      "passing_both": 0
+    }
+  },
+  "near_source": [
+    {
+      "source": "0x11dd1924c56c109dc8801f0d1d8f435119f1920",
+      "pins": 21,
+      "native": {
+        "clauses": 460480,
+        "variables": 76800,
+        "checked_roots": 480,
+        "roots_rejected_by_unit_propagation": 480,
+        "unresolved_roots": 0
+      },
+      "four_flip_neighbors": 54,
+      "four_flip_hits": 19,
+      "covered_passing_euler": 7,
+      "covered_passing_mates": 19,
+      "covered_passing_both": 7,
+      "one_flip_neighbors": 160,
+      "one_flip_hits": 139,
+      "verified_neighbor_queries": 19,
+      "neighbor_rule_replays": 1,
+      "public": {
+        "baseline": {
+          "status": "UNKNOWN",
+          "cp_calls": 15,
+          "branches": 191655
+        },
+        "roots": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "phase_anchors": {
+            "status": "INFEASIBLE",
+            "removed": 0,
+            "stats": {
+              "root_probes": 48,
+              "cell_revisions": 394
+            },
+            "symmetries": 10
+          }
+        },
+        "rules": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 1,
+            "clauses": 2,
+            "terminal": true
+          }
+        }
+      }
+    },
+    {
+      "source": "0x998e5d18e3d15cf020e4db269f8d8d051a38e042",
+      "pins": 18,
+      "native": {
+        "clauses": 460480,
+        "variables": 76800,
+        "checked_roots": 480,
+        "roots_rejected_by_unit_propagation": 480,
+        "unresolved_roots": 0
+      },
+      "four_flip_neighbors": 54,
+      "four_flip_hits": 43,
+      "covered_passing_euler": 21,
+      "covered_passing_mates": 42,
+      "covered_passing_both": 20,
+      "one_flip_neighbors": 160,
+      "one_flip_hits": 142,
+      "verified_neighbor_queries": 43,
+      "neighbor_rule_replays": 1,
+      "public": {
+        "baseline": {
+          "status": "UNKNOWN",
+          "cp_calls": 17,
+          "branches": 200530
+        },
+        "roots": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "phase_anchors": {
+            "status": "INFEASIBLE",
+            "removed": 0,
+            "stats": {
+              "root_probes": 48,
+              "cell_revisions": 1086
+            },
+            "symmetries": 10
+          }
+        },
+        "rules": {
+          "status": "INFEASIBLE",
+          "cp_calls": 0,
+          "branches": 0,
+          "phase_rules": {
+            "replayed": 0,
+            "reused": 2,
+            "clauses": 4,
+            "terminal": true
+          }
+        }
+      }
+    }
+  ]
+}
