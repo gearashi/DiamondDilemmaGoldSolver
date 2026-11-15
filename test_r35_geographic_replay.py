@@ -78,7 +78,11 @@ class GeographicReplayTests(unittest.TestCase):
             if find_spec('ortools'):engines.extend(('cp-sat','cp-sat-circuit','cp'))
             for engine in engines:
                 for target in ('gold','edges'):
-                    out=dfs(p,target=target,seconds=5) if engine=='dfs' else solve(p,engine=engine,target=target,seconds=5)
+                    # These finite fixtures assert exact decisions. Cold imports and
+                    # native model construction also count against the solver deadline.
+                    answer = dfs if engine == 'dfs' else solve
+                    options = {} if engine == 'dfs' else {'engine': engine}
+                    out = answer(p, target=target, seconds=60, **options)
                     if target=='gold':
                         self.assertEqual(out['status'],'solved' if expected else 'infeasible',(engine,target,out))
                     else:
