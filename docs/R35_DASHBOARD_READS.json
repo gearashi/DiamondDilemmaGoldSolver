@@ -1,0 +1,572 @@
+{
+  "candidate": 88,
+  "platform": "Windows AMD64",
+  "python": "3.12.14",
+  "verified": true,
+  "classification": "Retain small installation identity and display-only JSON/digest reuse.",
+  "source_tag": {
+    "name": "v1.15.0",
+    "commit": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
+    "verification": "git ls-remote --tags origin refs/tags/v1.15.0"
+  },
+  "sources": {
+    "tag-v1.15.0": {
+      "commit": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
+      "sha256": {
+        "OpenDashboard.cmd": "c02a42593e0359890b66ea4896438c27ba3d8809bf202863e0c8deb3a28050fa",
+        "OpenDashboard.ps1": "3a955bdd4c29d38b1b169ad959a0eb5530d56f9b169308aeef395379f9a4f014",
+        "constraint_native_search.c": "f12e1378a7848d56aba3683eb0f35d9091351bc4cc0e3a4117be0c6b183843cb",
+        "dashboard_server.py": "cfa77caf871d8e9bb586e197267263a809c7ade493e39c29baddb7de19f166d5",
+        "platform_launcher.py": "ae8a60514e54d0b10231e35521bbac9e75715bfbaadc78c05a5150fe6433a8f7",
+        "runtime_capabilities.py": "08eb7894d9845934e066d8cff54b691a0dc599bd308258a0bee7a9ac747c1254"
+      }
+    },
+    "prechange": {
+      "commit": "67b39047339a129ed9ee73f7dd8d1b375fc81c88",
+      "sha256": {
+        "OpenDashboard.cmd": "c02a42593e0359890b66ea4896438c27ba3d8809bf202863e0c8deb3a28050fa",
+        "OpenDashboard.ps1": "3a955bdd4c29d38b1b169ad959a0eb5530d56f9b169308aeef395379f9a4f014",
+        "constraint_native_search.c": "f12e1378a7848d56aba3683eb0f35d9091351bc4cc0e3a4117be0c6b183843cb",
+        "dashboard_server.py": "cfa77caf871d8e9bb586e197267263a809c7ade493e39c29baddb7de19f166d5",
+        "platform_launcher.py": "fbb137c48e875b735db81e390d201b33816fa578df16e936145f46a1c793adc9",
+        "runtime_capabilities.py": "08eb7894d9845934e066d8cff54b691a0dc599bd308258a0bee7a9ac747c1254"
+      }
+    },
+    "candidate": {
+      "commit": "916da8f21eba863980e6c63eaa31e8725b011449",
+      "sha256": {
+        "OpenDashboard.cmd": "c02a42593e0359890b66ea4896438c27ba3d8809bf202863e0c8deb3a28050fa",
+        "OpenDashboard.ps1": "3a955bdd4c29d38b1b169ad959a0eb5530d56f9b169308aeef395379f9a4f014",
+        "constraint_native_search.c": "f12e1378a7848d56aba3683eb0f35d9091351bc4cc0e3a4117be0c6b183843cb",
+        "dashboard_server.py": "7db3c03760400a9603d5150e34188d7b0ed8c8d69030d63856f8a1a2f5ac07f4",
+        "platform_launcher.py": "789e350b14e33d7c18f0050c0443453984401ceb55d83117696e80466f777468",
+        "runtime_capabilities.py": "1939d18febde8eca516b0c89180d785816f488e54011d6e7df51efa398bb75b8"
+      }
+    },
+    "final": {
+      "commit": "47a8fb39ee03b3bc9959c42eb37db00145a1bf0c",
+      "sha256": {
+        "OpenDashboard.cmd": "c02a42593e0359890b66ea4896438c27ba3d8809bf202863e0c8deb3a28050fa",
+        "OpenDashboard.ps1": "3a955bdd4c29d38b1b169ad959a0eb5530d56f9b169308aeef395379f9a4f014",
+        "constraint_native_search.c": "f12e1378a7848d56aba3683eb0f35d9091351bc4cc0e3a4117be0c6b183843cb",
+        "dashboard_server.py": "7db3c03760400a9603d5150e34188d7b0ed8c8d69030d63856f8a1a2f5ac07f4",
+        "platform_launcher.py": "789e350b14e33d7c18f0050c0443453984401ceb55d83117696e80466f777468",
+        "runtime_capabilities.py": "1a5a00ba60d00585600c6f8b1de508baef47a6a051cbf8275f637401a2d50164"
+      }
+    }
+  },
+  "fixtures": {
+    "owner_archived_runtime": {
+      "best.json": {
+        "bytes": 11820,
+        "sha256": "a45cc1e980343e96d807672910711878dfb2a5577f08ddf039e677cb2aa82435"
+      },
+      "history.json": {
+        "bytes": 82,
+        "sha256": "bf60a78e91d39aef0c8e97e4caaa64f81cd36a726cfc78fde93ae90359fa3ba1"
+      },
+      "live.json": {
+        "bytes": 1946,
+        "sha256": "d6a76adb7cfb017742b3122c41ac3b0a85ef8907634ac8cde11b0e0714b670a7"
+      },
+      "status.json": {
+        "bytes": 847,
+        "sha256": "7c42aab1f33dbc0c2571bb79ebd7c8fcec3cd43ddbc0175feedf0da9cda25aee"
+      }
+    },
+    "changed_status": "Copy status.json, add 17 to nodes_checked (21184 to 21201), serialize JSON with indentation and atomically replace the isolated status. The resulting file is 849 bytes.",
+    "stress_history": {
+      "bytes": 1980895,
+      "sha256": "e3b27e65eb31e857b6edca445d507dbbf53f2822e5b4cb146f4b6df7371974e8",
+      "rows": 24000,
+      "origin": "Synthetic stress fixture. Replicated original record-shaped entries with ascending elapsed_seconds exercise the dashboard response limit. The archived one-record history did not encounter the limit. The fixture is not evidence of the cause of an earlier Windows port error."
+    },
+    "artwork_sha256": "81e5e40ab23afb135cafe913af3e9d6579d68eea4c096c60d2ddd57a1c8cfe79",
+    "native_library_sha256": "b431a8dfa1c4331fe0e1c9ff49147a1ed561212188834817113e5108b52d3917",
+    "native_manifest_sha256": "5e15be84a774e2d5ddeaa24af5368e3d69f57d1adf45e1b3d59969fa636aa415"
+  },
+  "scope": [
+    "Windows 3.12 project environment, native search library available. Independent, serial loopback listeners on ephemeral ports. No solver start or stop commands were sent.",
+    "Instrumentation delegates every observed call. It counts successful read_json_shared decodes by file size, full Path.read_bytes reads of the two digest inputs by actual length, and native manifest reads by file size. Counts cover the named inputs only; they do not measure total OS disk I/O or all requests made by Python.",
+    "Every normal response was JSON-decoded, validated against all four copied files, and tied to its installation. For the seven archive polls, the full JSON response was compared after removing only the per-process token and the deliberately different installation root. Strict solver-start verification was left outside this HTTP benchmark.",
+    "The synthetic case was tested with an already large history on first launch and again on reopening. The pre-fix batch script returned failure on both calls despite one healthy listener serving valid full state. The candidate kept one listener and its security token."
+  ],
+  "reproduction": [
+    "Use git archive on the four listed commits, each in its own project-relative audit directory. Copy the four named runtime snapshots, data/tiles.json and .native/{search-build.json,constraint_native_search.dll}. The local venv uses the project Python shim/cfg and its installed packages.",
+    "From each isolated installation, run OpenDashboard.cmd -NoBrowser -Port <available temporary port>. GET /api/state, reopen with exactly the same command, GET /api/state four further times, atomically update only status.json, then GET /api/state twice. Inspect /api/identity once where supported. Shut down only the isolated server.",
+    "For the stress case use 24000 archived-schema history records before launching. Run the same batch command twice, each followed by a full JSON GET. Distinguish the exit code from the liveness of the actual listener.",
+    "From a checkout use python -m unittest test_r35_dashboard_reads test_platform for public automated regression coverage. The original owner-specific independent inputs and raw traces are retained locally under audit/r35/dashboard88-independent/.",
+    "To exercise the legacy fallback, keep each v1.15.0 listener running, update only the launcher to the final commit in that installation, and reopen using the same batch command and port."
+  ],
+  "audit_files_sha256": {
+    "run.py": "7a17314f4c77e3ebe36cb2d1a83bcd7627027c4723396406d85b170336a406a8",
+    "run_final.py": "1e216cef26bda22b987b07581588d2356bceb0f55e1cf68f49e1758111e5bbd2",
+    "probe/sitecustomize.py": "419e3d385e07e8d51442109b057e60b846bd5ccaaad296816ee06f9bf62853cd",
+    "combined.json": "9f81b8480ed3a7466d6bd1e77c8f86af5165423b73bfa481d5940f01c9d2f501",
+    "final.json": "389832298842ccb9b984a99a3644df80f491e94b68ee432e82e578ee168ffd6e",
+    "legacy_probe.py": "29b7e0cef0df59bde9e9dc22d90d57afee3aa23aec76d93e7c42fa528113ae40",
+    "legacy-upgrade.json": "2eb00fb28f73e9c387a3c76ecdcf719cceeef7ab2d15876adb78ef3c004dbfbf",
+    "report.py": "ec612d922b1160675f8eb50e83620b6ff6c9caae46fd5757cb94dbf0d753cb87"
+  },
+  "runs": [
+    {
+      "source_commit": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
+      "scope": "tag-v1.15.0",
+      "input": "archive",
+      "port": 54186,
+      "launcher_exit": [
+        0,
+        0
+      ],
+      "elapsed_launcher_seconds": [
+        4.75,
+        0.984
+      ],
+      "listener_pids": [
+        13868
+      ],
+      "control_token_stable_at_reopen": true,
+      "launcher_paths": [
+        "/api/state",
+        "/api/state"
+      ],
+      "launcher_reads": {
+        "snapshot_reads": 8,
+        "snapshot_bytes": 29390,
+        "native_hashes": 4,
+        "native_hash_bytes": 265548,
+        "native_manifest_reads": 2,
+        "native_manifest_bytes": 1454
+      },
+      "state_response_bytes": 13793,
+      "explicit_state_polls": 7,
+      "total_explicit_state_reads": {
+        "snapshot_reads": 28,
+        "snapshot_bytes": 102869,
+        "native_hashes": 14,
+        "native_hash_bytes": 929418,
+        "native_manifest_reads": 7,
+        "native_manifest_bytes": 5089
+      },
+      "inputs_at_first_state": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 14695,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "per_unchanged_state_after_first": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 14695,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "normalized_initial_payload_sha256": "158b2b23dba3a9cefccf13c2223eee0ae4ecc889d8d5bb7acc9ad929aa279562",
+      "after_status_atomic_replace": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 14697,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "unchanged_after_replace": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 14697,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "normalized_changed_payload_sha256": "e6b6584679ad1333f9b7d9ee165ceef89ef90676e11be2200d094bfe47020026"
+    },
+    {
+      "source_commit": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
+      "scope": "tag-v1.15.0",
+      "input": "stress",
+      "port": 54202,
+      "launcher_exit": [
+        1,
+        1
+      ],
+      "elapsed_launcher_seconds": [
+        4.391,
+        1.016
+      ],
+      "listener_pids": [
+        23588
+      ],
+      "control_token_stable_at_reopen": true,
+      "launcher_paths": [
+        "/api/state",
+        "/api/state"
+      ],
+      "launcher_reads": {
+        "snapshot_reads": 8,
+        "snapshot_bytes": 3991016,
+        "native_hashes": 4,
+        "native_hash_bytes": 265548,
+        "native_manifest_reads": 2,
+        "native_manifest_bytes": 1454
+      },
+      "state_response_bytes": 1442627,
+      "explicit_state_polls": 2,
+      "total_explicit_state_reads": {
+        "snapshot_reads": 8,
+        "snapshot_bytes": 3991016,
+        "native_hashes": 4,
+        "native_hash_bytes": 265548,
+        "native_manifest_reads": 2,
+        "native_manifest_bytes": 1454
+      },
+      "inputs_at_first_state": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 1995508,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "per_unchanged_state_after_first": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 1995508,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "normalized_initial_payload_sha256": "76d1ae95a913d1885497d6f5402e875e3544a47c664a07729c8507c63cbdbb83",
+      "launcher_error_lines": [
+        "Error: The dashboard response is unexpectedly large.",
+        "Error: The dashboard response is unexpectedly large."
+      ]
+    },
+    {
+      "source_commit": "67b39047339a129ed9ee73f7dd8d1b375fc81c88",
+      "scope": "prechange",
+      "input": "archive",
+      "port": 54221,
+      "launcher_exit": [
+        0,
+        0
+      ],
+      "elapsed_launcher_seconds": [
+        4.156,
+        0.954
+      ],
+      "listener_pids": [
+        16648
+      ],
+      "control_token_stable_at_reopen": true,
+      "launcher_paths": [
+        "/api/state",
+        "/api/state"
+      ],
+      "launcher_reads": {
+        "snapshot_reads": 8,
+        "snapshot_bytes": 29390,
+        "native_hashes": 4,
+        "native_hash_bytes": 265548,
+        "native_manifest_reads": 2,
+        "native_manifest_bytes": 1454
+      },
+      "state_response_bytes": 13791,
+      "explicit_state_polls": 7,
+      "total_explicit_state_reads": {
+        "snapshot_reads": 28,
+        "snapshot_bytes": 102869,
+        "native_hashes": 14,
+        "native_hash_bytes": 929418,
+        "native_manifest_reads": 7,
+        "native_manifest_bytes": 5089
+      },
+      "inputs_at_first_state": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 14695,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "per_unchanged_state_after_first": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 14695,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "normalized_initial_payload_sha256": "158b2b23dba3a9cefccf13c2223eee0ae4ecc889d8d5bb7acc9ad929aa279562",
+      "after_status_atomic_replace": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 14697,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "unchanged_after_replace": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 14697,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "normalized_changed_payload_sha256": "e6b6584679ad1333f9b7d9ee165ceef89ef90676e11be2200d094bfe47020026"
+    },
+    {
+      "source_commit": "916da8f21eba863980e6c63eaa31e8725b011449",
+      "scope": "candidate",
+      "input": "archive",
+      "port": 54240,
+      "launcher_exit": [
+        0,
+        0
+      ],
+      "elapsed_launcher_seconds": [
+        3.515,
+        0.938
+      ],
+      "listener_pids": [
+        2676
+      ],
+      "control_token_stable_at_reopen": true,
+      "launcher_paths": [
+        "/api/identity",
+        "/api/identity"
+      ],
+      "launcher_reads": {
+        "snapshot_reads": 0,
+        "snapshot_bytes": 0,
+        "native_hashes": 0,
+        "native_hash_bytes": 0,
+        "native_manifest_reads": 0,
+        "native_manifest_bytes": 0
+      },
+      "state_response_bytes": 13791,
+      "explicit_state_polls": 7,
+      "total_explicit_state_reads": {
+        "snapshot_reads": 5,
+        "snapshot_bytes": 15544,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 7,
+        "native_manifest_bytes": 5089
+      },
+      "inputs_at_first_state": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 14695,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "per_unchanged_state_after_first": {
+        "snapshot_reads": 0,
+        "snapshot_bytes": 0,
+        "native_hashes": 0,
+        "native_hash_bytes": 0,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "normalized_initial_payload_sha256": "158b2b23dba3a9cefccf13c2223eee0ae4ecc889d8d5bb7acc9ad929aa279562",
+      "identity_response_bytes": 140,
+      "after_status_atomic_replace": {
+        "snapshot_reads": 1,
+        "snapshot_bytes": 849,
+        "native_hashes": 0,
+        "native_hash_bytes": 0,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "unchanged_after_replace": {
+        "snapshot_reads": 0,
+        "snapshot_bytes": 0,
+        "native_hashes": 0,
+        "native_hash_bytes": 0,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "normalized_changed_payload_sha256": "e6b6584679ad1333f9b7d9ee165ceef89ef90676e11be2200d094bfe47020026"
+    },
+    {
+      "source_commit": "916da8f21eba863980e6c63eaa31e8725b011449",
+      "scope": "candidate",
+      "input": "stress",
+      "port": 54258,
+      "launcher_exit": [
+        0,
+        0
+      ],
+      "elapsed_launcher_seconds": [
+        3.907,
+        1.203
+      ],
+      "listener_pids": [
+        10812
+      ],
+      "control_token_stable_at_reopen": true,
+      "launcher_paths": [
+        "/api/identity",
+        "/api/identity"
+      ],
+      "launcher_reads": {
+        "snapshot_reads": 0,
+        "snapshot_bytes": 0,
+        "native_hashes": 0,
+        "native_hash_bytes": 0,
+        "native_manifest_reads": 0,
+        "native_manifest_bytes": 0
+      },
+      "state_response_bytes": 1442625,
+      "explicit_state_polls": 2,
+      "total_explicit_state_reads": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 1995508,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 2,
+        "native_manifest_bytes": 1454
+      },
+      "inputs_at_first_state": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 1995508,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "per_unchanged_state_after_first": {
+        "snapshot_reads": 0,
+        "snapshot_bytes": 0,
+        "native_hashes": 0,
+        "native_hash_bytes": 0,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "normalized_initial_payload_sha256": "76d1ae95a913d1885497d6f5402e875e3544a47c664a07729c8507c63cbdbb83",
+      "identity_response_bytes": 140
+    },
+    {
+      "source_commit": "47a8fb39ee03b3bc9959c42eb37db00145a1bf0c",
+      "scope": "final",
+      "input": "archive",
+      "port": 54463,
+      "launcher_exit": [
+        0,
+        0
+      ],
+      "elapsed_launcher_seconds": [
+        3.64,
+        1.25
+      ],
+      "listener_pids": [
+        11364
+      ],
+      "control_token_stable_at_reopen": true,
+      "launcher_paths": [
+        "/api/identity",
+        "/api/identity"
+      ],
+      "launcher_reads": {
+        "snapshot_reads": 0,
+        "snapshot_bytes": 0,
+        "native_hashes": 0,
+        "native_hash_bytes": 0,
+        "native_manifest_reads": 0,
+        "native_manifest_bytes": 0
+      },
+      "state_response_bytes": 13787,
+      "explicit_state_polls": 7,
+      "total_explicit_state_reads": {
+        "snapshot_reads": 5,
+        "snapshot_bytes": 15544,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "inputs_at_first_state": {
+        "snapshot_reads": 4,
+        "snapshot_bytes": 14695,
+        "native_hashes": 2,
+        "native_hash_bytes": 132774,
+        "native_manifest_reads": 1,
+        "native_manifest_bytes": 727
+      },
+      "per_unchanged_state_after_first": {
+        "snapshot_reads": 0,
+        "snapshot_bytes": 0,
+        "native_hashes": 0,
+        "native_hash_bytes": 0,
+        "native_manifest_reads": 0,
+        "native_manifest_bytes": 0
+      },
+      "normalized_initial_payload_sha256": "158b2b23dba3a9cefccf13c2223eee0ae4ecc889d8d5bb7acc9ad929aa279562",
+      "identity_response_bytes": 136,
+      "after_status_atomic_replace": {
+        "snapshot_reads": 1,
+        "snapshot_bytes": 849,
+        "native_hashes": 0,
+        "native_hash_bytes": 0,
+        "native_manifest_reads": 0,
+        "native_manifest_bytes": 0
+      },
+      "unchanged_after_replace": {
+        "snapshot_reads": 0,
+        "snapshot_bytes": 0,
+        "native_hashes": 0,
+        "native_hash_bytes": 0,
+        "native_manifest_reads": 0,
+        "native_manifest_bytes": 0
+      },
+      "normalized_changed_payload_sha256": "e6b6584679ad1333f9b7d9ee165ceef89ef90676e11be2200d094bfe47020026"
+    }
+  ],
+  "old_listener_during_upgrade": {
+    "running_server_commit": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
+    "replacement_launcher_commit": "47a8fb39ee03b3bc9959c42eb37db00145a1bf0c",
+    "method": "Start the v1.15.0 listener via its normal batch script, then replace the isolated platform_launcher.py with the final file before calling the batch script a second time. One PID served all requests in each case. The running server still exposes only its legacy state.",
+    "result": "The upgraded launcher reopened the 13,796-byte archived legacy state and correctly kept the same process. The synthetic 1,442,630-byte legacy state still exceeded the fallback limit, so that old listener needs one restart after updating. A new candidate listener passed the oversized fixture.",
+    "cases": [
+      {
+        "input": "archive",
+        "port": 54502,
+        "listener_pids": [
+          1944
+        ],
+        "launcher_exit": [
+          0,
+          0
+        ],
+        "launcher_probes": [
+          "/api/state",
+          "/api/identity",
+          "/api/state"
+        ],
+        "state_response_bytes": 13796
+      },
+      {
+        "input": "stress",
+        "port": 54519,
+        "listener_pids": [
+          24252
+        ],
+        "launcher_exit": [
+          1,
+          1
+        ],
+        "launcher_probes": [
+          "/api/state",
+          "/api/identity",
+          "/api/state"
+        ],
+        "state_response_bytes": 1442630
+      }
+    ]
+  }
+}
