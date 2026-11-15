@@ -76,5 +76,155 @@
     "primary": 135660,
     "cold_secondary": 126758,
     "secondary": 88176
+  },
+  "49": {
+    "decision": "keep-scoped",
+    "four_tail_visits": [
+      1090000,
+      1088938
+    ],
+    "five_tail_visits": [
+      3400598,
+      3388797
+    ]
+  },
+  "50": {
+    "decision": "keep-scoped",
+    "four_pair_tail_visits": [
+      1090000,
+      209143
+    ],
+    "five_pair_tail_visits": [
+      3400598,
+      1884626
+    ],
+    "triple_adverse": [
+      348392,
+      385449
+    ]
+  },
+  "51": {
+    "decision": "keep-scoped",
+    "rank_skips": [
+      1764,
+      3499,
+      17922
+    ],
+    "weighted_extra_skips": 1
+  },
+  "52": {
+    "decision": "keep-scoped",
+    "finite_assignments": 112,
+    "arrivals": 7,
+    "native_unrestricted_disjoint_minimum": 20,
+    "verified_negative_caps": [
+      17,
+      18,
+      19
+    ],
+    "geographic_gold_lower_bound": 20
+  },
+  "53": {
+    "decision": "keep-scoped",
+    "different_reference": 205,
+    "joint_queries": [
+      40247,
+      40015
+    ],
+    "indexed_tails": [
+      324542,
+      323801
+    ],
+    "phase_assignments": [
+      448,
+      256
+    ],
+    "far_reference_projections_feasible": 16
+  },
+  "59": {
+    "decision": "keep-scoped",
+    "source": "complete signed phases from the solver",
+    "controls": "positive, exact-cap, smaller and larger cap, wrong scope, invalid data",
+    "published_checked_cost": 20
+  },
+  "61": {
+    "decision": "keep-scoped",
+    "trajectory_pairs": 8,
+    "refits": [
+      56,
+      50
+    ],
+    "native_branches": [
+      858934,
+      855080
+    ],
+    "high_effort_refits": [
+      15,
+      14
+    ]
+  },
+  "62": {
+    "decision": "keep-scoped",
+    "widths": [
+      0,
+      2,
+      4
+    ],
+    "cold_calls": [
+      14,
+      14,
+      16
+    ],
+    "fixed_calls": [
+      12,
+      12,
+      14
+    ],
+    "scored_refit_branches": [
+      855080,
+      897271
+    ]
+  },
+  "63": {
+    "decision": "keep-scoped",
+    "full_edge_evaluations": 122880,
+    "optimized_edge_evaluations": 8346,
+    "distinct_tour_cost": [
+      230400,
+      6168
+    ],
+    "changed_darts": 2972,
+    "standard_and_high_effort_changed_refits": 0
+  },
+  "64": {
+    "decision": "opt-in",
+    "seeds": [
+      4,
+      5,
+      6,
+      7,
+      11,
+      19,
+      31,
+      51
+    ],
+    "scores_total": [
+      1082,
+      1174
+    ],
+    "signed_total": [
+      1071,
+      1101
+    ],
+    "raw_140_by_32": [
+      0,
+      7
+    ],
+    "signed_wins_losses": [
+      6,
+      2
+    ],
+    "diverse_fit_attempts": 11,
+    "accepted_diverse_fits": 0
   }
 }

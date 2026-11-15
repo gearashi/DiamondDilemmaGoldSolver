@@ -842,7 +842,16 @@
       "source_id": 13,
       "title": "Alternate disjoint contradiction packings as parallel bounds on the same assignment",
       "proposal_and_validation": "A reference may have more checked proper-loop/inventory conflicts than fit the one maximized disjoint packing. For an outside pattern in the *primary* rank space, project a secondary disjoint packing onto the *same* physical bond variables or obtain an independent compatible lower bound over its unpinned bonds. Take the maximum of valid lower bounds, never add overlapping groups or equate the two layoutsÃ¢â‚¬â„¢ outside counts. Screen alternative packings for structural/effective diversity first. Close this candidate when current certificates force one useful packing or none of the new projections tightens an original joint call. This complements the physical workstream transporting certified cardinalities into geographic domains.",
-      "state": "in progress"
+      "state": "keep with exact scope",
+      "decision": "Optional physical-hitting-set bound on the original 13 groups excludes all seven original weak cap-17 phase arrivals before independent signed checking. All 6,903 four-error and 65,536 tested five-error primary prefix owners are preserved. Signed all-group optimum lies in [20,21]; disjoint minimum 20 is exact. 331 independently replayed additional compulsory-departure cores improve maximum disjoint packing from 10 to 11 but alone add no certified global lower bound.",
+      "evidence": [
+        "docs/R35_LOSS_OVERLAP_PHASES.json",
+        "docs/R35_LOSS_OVERLAP_STREAMS.json",
+        "docs/R35_OVERLAP_BOUNDARY.json",
+        "docs/R35_INTEGER_DEPARTURE_PACKING.json",
+        "test_r35_overlap_loss.py"
+      ],
+      "reopen_if": "A checkable proof or complete raw-checked phase decides all thirteen groups at 20, or a stronger valid inequality saves additional real work."
     },
     {
       "id": 61,

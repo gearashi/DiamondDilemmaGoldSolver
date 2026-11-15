@@ -4,6 +4,7 @@ from math import comb, inf
 from tempfile import TemporaryDirectory
 from pathlib import Path
 import sqlite3
+from contextlib import closing
 from unittest import TestCase
 from unittest.mock import patch
 
@@ -58,7 +59,7 @@ class FrontierTests(TestCase):
     def test_positive_caps_modes_and_foreign_or_damaged_phase(self):
         p,ref,groups,req,out=fixture(False,False)
         phase=next(z for z in range(1<<p.n) if (res:=physical_price(p.tiles,ref,groups,req,z)) and res[0]==0)
-        with sqlite3.connect(':memory:') as db:
+        with closing(sqlite3.connect(':memory:')) as db:
             save_witness(db,'same',phase)
             self.assertEqual(checked_hits(db,'other',p,ref,groups,req,out,0,True),{})
             self.assertIn(0,checked_hits(db,'same',p,ref,groups,req,out,0,False))

@@ -1,0 +1,134 @@
+[
+  {
+    "scope": "packed",
+    "errors": 4,
+    "stop": 6903,
+    "arrivals": [
+      [
+        7,
+        84,
+        109,
+        117
+      ],
+      [
+        11,
+        81,
+        92,
+        105
+      ],
+      [
+        79,
+        84,
+        109,
+        117
+      ]
+    ],
+    "native": {
+      "suffix_rows": 7140,
+      "prefixes": 5139,
+      "bucket_prices_reused": 128689,
+      "indexed_tails": 209143,
+      "unowned_tail_visits_skipped": 1116008,
+      "joint_queries": 1103,
+      "unreachable_prefixes": 1764,
+      "overlap_checks": 3,
+      "overlap_rejections": 3
+    },
+    "finite": {
+      "parity_phase_assignments": 48
+    },
+    "completed": true
+  },
+  {
+    "scope": "all",
+    "errors": 4,
+    "stop": 6903,
+    "arrivals": [],
+    "native": {
+      "suffix_rows": 7140,
+      "prefixes": 5139,
+      "bucket_prices_reused": 128689,
+      "indexed_tails": 209143,
+      "unowned_tail_visits_skipped": 1116008,
+      "joint_queries": 1103,
+      "unreachable_prefixes": 1764,
+      "overlap_checks": 3,
+      "overlap_rejections": 3
+    },
+    "finite": {
+      "parity_phase_assignments": 48
+    },
+    "completed": true
+  },
+  {
+    "scope": "packed",
+    "errors": 5,
+    "stop": 65536,
+    "arrivals": [
+      [
+        1,
+        11,
+        55,
+        65,
+        102
+      ],
+      [
+        2,
+        11,
+        60,
+        69,
+        110
+      ],
+      [
+        7,
+        40,
+        47,
+        57,
+        86
+      ],
+      [
+        7,
+        105,
+        109,
+        110,
+        117
+      ]
+    ],
+    "native": {
+      "suffix_rows": 7140,
+      "prefixes": 47614,
+      "bucket_prices_reused": 716068,
+      "indexed_tails": 1884626,
+      "unowned_tail_visits_skipped": 10877751,
+      "joint_queries": 1860,
+      "unreachable_prefixes": 17922,
+      "overlap_checks": 4,
+      "overlap_rejections": 4
+    },
+    "finite": {
+      "parity_phase_assignments": 64
+    },
+    "completed": true
+  },
+  {
+    "scope": "all",
+    "errors": 5,
+    "stop": 65536,
+    "arrivals": [],
+    "native": {
+      "suffix_rows": 7140,
+      "prefixes": 47614,
+      "bucket_prices_reused": 716068,
+      "indexed_tails": 1884626,
+      "unowned_tail_visits_skipped": 10877751,
+      "joint_queries": 1860,
+      "unreachable_prefixes": 17922,
+      "overlap_checks": 4,
+      "overlap_rejections": 4
+    },
+    "finite": {
+      "parity_phase_assignments": 64
+    },
+    "completed": true
+  }
+]

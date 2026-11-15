@@ -76,15 +76,23 @@ def _negative_page(db, scope, errors, start, stop):
     return inserted
 
 
-def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False):
+def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False, all_groups=False):
     """Save completed disjoint prefix ranges together with their negative result."""
     if page<1 or seconds<0:raise ValueError('Expected positive page size and nonnegative duration')
+    ref = frozenset(ref)
+    groups = [frozenset(g) for g in groups]
     layout = OutsideSyndromes.layout(ref, groups, inventory(problem).required)
     packed, required, outside = layout
     max_error = min(len(outside), max(0, upper-len(packed)))
     all_layers_requested = indices is None
     indices = list(range(max_error+1)) if all_layers_requested else list(indices)
     identity = [3,problem.fingerprint,sorted(ref),sorted(required),[sorted(c) for c in packed]]
+    packed_scope = digest([*identity,upper])
+    packed_identity = digest(identity)
+    aggregate=all_groups and any(g not in packed for g in groups)
+    charged_groups=groups if aggregate else packed
+    if aggregate:
+        identity=[*identity,'all-verified-groups-v1',sorted(sorted(g) for g in groups)]
     scope = digest([*identity,upper])
     # A plain negative page excludes every integer-feasible pattern inside it.
     # A plain hit can coexist with further candidates in the same prefix.
@@ -92,6 +100,10 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     if refine_integer:
         scope = digest([plain_scope, 'integer-pattern-v1'])
     read_scopes = (plain_scope, scope) if refine_integer else (scope,)
+    if aggregate:
+        read_scopes += (packed_scope,)
+        if refine_integer:
+            read_scopes += (digest([packed_scope,'integer-pattern-v1']),)
     searched_caps = registered_cap = False
     budget = monotonic()+seconds if seconds else float('inf')
     pattern_filter = None
@@ -101,9 +113,16 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     def get_filter():
         nonlocal pattern_filter, excludes
         if pattern_filter is None:
-            from r33_gold_refine import IntegerCoreStore, make_integer_filter
-            pattern_filter = make_integer_filter(problem,ref,packed,required,outside,upper,
-                                                  store=IntegerCoreStore(db,scope),work=work)
+            if aggregate:
+                from r35_overlap_loss import OverlapPattern
+                pattern_filter=OverlapPattern(problem,packed,groups,required,outside,upper,refine_integer,work)
+            else:
+                from r33_gold_refine import IntegerCoreStore, make_integer_filter
+                pattern_filter = make_integer_filter(problem,ref,packed,required,outside,upper,
+                                                      store=IntegerCoreStore(db,scope),work=work)
+            close_filter = getattr(pattern_filter,"close",None)
+            if close_filter is not None:
+                renewal.callback(close_filter)
             excludes = getattr(pattern_filter,"excludes",None)
         return pattern_filter
 
@@ -123,18 +142,27 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     total = solved = pages = 0
     witness_hits = None
     identity_key = digest(identity)
-    from r35_loss_bound import CHECKED_LOWER_BOUND, REFERENCE_SCOPE, published_hit
+    from r35_loss_bound import CHECKED_LOWER_BOUND, REFERENCE_SCOPE, REFERENCE_PHASE, published_hit
     if any(type(e) is not int or not 0 <= e <= len(outside) for e in indices) or type(upper) is not int or upper < 0:
         raise ValueError('Invalid loss cap or outside-error layer')
-    if refine_integer and identity_key == REFERENCE_SCOPE and upper < CHECKED_LOWER_BOUND:
+    if refine_integer and packed_identity == REFERENCE_SCOPE and upper < CHECKED_LOWER_BOUND:
         covered = sum(comb(len(outside)-min(e,2),max(0,e-2)) for e in indices)
         return dict(status='INFEASIBLE',loss_budget=upper,checked_layers=indices,
                     all_outside_layers=set(indices)>=set(range(max_error+1)),completed_prefixes=covered,
                     total_prefixes=covered,new_pages=0,work={'reference_loss_certificate_reused':1},
-                    certified_minimum_loss=CHECKED_LOWER_BOUND)
-    public = published_hit(problem,ref,packed,required,outside,identity_key,upper,refine_integer)
-    if all_layers_requested and public is not None:
-        return dict(public,pages=0,work={})
+                    certified_loss_lower_bound=CHECKED_LOWER_BOUND,
+                    relaxation="all_group_signed_inventory" if aggregate else "disjoint_group_signed_inventory")
+    public_hits={}
+    for phase in (REFERENCE_PHASE,0xce55aaa6e89109fca073547e8c580ba32e0e5fa2):
+        positive=published_hit(problem,ref,charged_groups,required,outside,packed_identity,upper,refine_integer,phase)
+        if positive is not None:
+            if aggregate:
+                positive['relaxation']='all_group_signed_inventory' if refine_integer else 'all_group_parity'
+            old=public_hits.get(positive['errors'])
+            if old is None or positive['loss_cost']<old['loss_cost']:
+                public_hits[positive['errors']]=positive
+    if all_layers_requested and public_hits:
+        return dict(min(public_hits.values(),key=lambda row:row['loss_cost']),pages=0,work={})
     query = None
     from r34_rank_leases import RankedLeases, LostRankLease
     with closing(sqlite3.connect(db_path, timeout=30, uri=True, isolation_level=None)) as db, ExitStack() as renewal:
@@ -153,9 +181,9 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
                 return dict(json.loads(known[0]), reused=True, pages=pages, work=work)
             if witness_hits is None:
                 from r35_loss_witness import checked_hits
-                witness_hits = checked_hits(db,identity_key,problem,ref,packed,required,outside,upper,refine_integer)
-                if public is not None:
-                    witness_hits.setdefault(public['errors'],public)
+                witness_hits = checked_hits(db,identity_key,problem,ref,charged_groups,required,outside,upper,refine_integer)
+                for layer,positive in public_hits.items():
+                    witness_hits.setdefault(layer,positive)
             if errors in witness_hits:
                 return dict(witness_hits[errors],pages=pages,work=work)
             current = _advance_saved(db, read_scopes, errors, 0)
@@ -244,6 +272,9 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
                     with leases.computing(claim):
                         options = {'accept_errors':accept_errors, 'reject_before_joint':reject_before_joint,
                                    'verified_cores':lambda: getattr(pattern_filter,'verified',())} if refine_integer else {}
+                        if aggregate:
+                            options={'accept_errors':accept_errors,
+                                     'accept_status':('INTEGER_RELAXATION_FEASIBLE' if refine_integer else 'PHASE_RELAXATION_FEASIBLE')}
                         out=query.indexed(upper,errors,remaining,start=current,stop=end,**options)
                         for k,v in out['work'].items():work[k]=work.get(k,0)+v
                         with db:
@@ -292,6 +323,8 @@ def main():
     parser.add_argument('--outside',type=int,help='In loss, outside phase errors. In geographic, exact physical bond losses outside the packed groups.')
     parser.add_argument('--page',type=int,default=8192)
     parser.add_argument('--refine-integer',action='store_true',help='In loss mode, check signed integer inventories before accepting a phase pattern (wide phase images use OR-Tools).')
+    parser.add_argument('--excess-charges',action='store_true',help='In integer-bound, subtract disjoint compulsory departures before charging the remaining losses.')
+    parser.add_argument('--all-groups',action='store_true',help='In loss or integer-bound, enforce every verified physical departure group, including overlaps.')
     parser.add_argument('--stage',choices=('xor','integer','euler','mating'),default='integer')
     parser.add_argument('--branch',nargs='*',type=int,default=[])
     parser.add_argument('--limit',type=int,default=10000)
@@ -299,6 +332,8 @@ def main():
     args=parser.parse_args()
     if args.seconds<0 or args.limit<0 or args.page<1 or args.upper<0 or (args.mode not in ('loss','integer-bound') and args.seconds==0):
         parser.error('Invalid budget')
+    if args.excess_charges and args.mode!='integer-bound':parser.error('--excess-charges requires integer-bound')
+    if args.all_groups and args.mode not in ('loss','integer-bound'):parser.error('--all-groups requires loss or integer-bound')
     if args.backend!='cpu' and args.mode!='watch':parser.error('CUDA applies to watch mode')
     if args.refine_integer:
         if args.mode != 'loss':
@@ -332,13 +367,14 @@ def main():
             if case.keys()-{'codes'}:parser.error('loss accepts an unrestricted physical reference only')
             indices=None if args.outside is None else [args.outside]
             out=run_syndrome(p,ref,groups,args.upper,indices,args.database,args.seconds,args.page,
-                             refine_integer=args.refine_integer)
+                             refine_integer=args.refine_integer,all_groups=args.all_groups)
         elif args.mode=='integer-bound':
             if case.keys()-{'codes'} or args.outside is not None:
                 parser.error('integer-bound solves every outside pattern of one unrestricted reference')
             from r35_loss_bound import global_integer
             packed, mandatory, outside = OutsideSyndromes.layout(ref, groups, rules.required)
-            out = global_integer(p,ref,packed,mandatory,outside,args.upper,args.seconds)
+            extra_groups = [g for g in groups if g not in packed] if args.all_groups else []
+            out = global_integer(p,ref,packed,mandatory,outside,args.upper,args.seconds,additional_groups=extra_groups,excess=args.excess_charges)
         elif args.mode=='master':
             out=master(p,ref,cert,args.upper,args.seconds,req,forbid,ds)
         elif args.mode=='geographic':

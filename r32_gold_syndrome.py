@@ -410,7 +410,7 @@ class OutsideSyndromes:
             blocked |= eligible
         return blocked
 
-    def indexed(self, cap, errors, seconds=60, start=0, stop=None, *, accept_errors=None, reject_before_joint=None, verified_cores=None, cursor=None, checkpoint=None):
+    def indexed(self, cap, errors, seconds=60, start=0, stop=None, *, accept_errors=None, reject_before_joint=None, verified_cores=None, cursor=None, checkpoint=None, accept_status='INTEGER_RELAXATION_FEASIBLE'):
         """Index all suffixes of size at most two by their outside-only syndrome.
 
         The owned prefix ranks have a different scope from check()'s full-set ranks.
@@ -618,11 +618,12 @@ class OutsideSyndromes:
                                 stage='integer'
                                 if checkpoint is not None:
                                     flush(rank,price_index,tail,stage,force=True)
-                                stats['integer_checks'] += 1
+                                label = 'overlap' if accept_status == 'PHASE_RELAXATION_FEASIBLE' else 'integer'
+                                stats[label+'_checks'] += 1
                                 if not accept_errors(errors_here, duration):
-                                    stats['integer_rejections'] += 1
+                                    stats[label+'_rejections'] += 1
                                     continue
-                                status = 'INTEGER_RELAXATION_FEASIBLE'
+                                status = accept_status
                             return report(status, rank, outside_errors=[self.outside[i] for i in chain(prefix, tail)])
                         except TimeoutError as exc:
                             saved = exc.path if isinstance(exc,GroupDropTimeout) else (inner if stage=='joint' else ())

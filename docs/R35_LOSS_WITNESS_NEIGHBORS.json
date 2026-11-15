@@ -1,0 +1,11 @@
+{
+  "status": "UNKNOWN",
+  "cap": 20,
+  "seconds": 150.0,
+  "stats": {
+    "target_queries": 221,
+    "target_unsat_slices": 117,
+    "new_checked_nearby": 0,
+    "donor_queries": 36
+  }
+}

@@ -23,6 +23,30 @@ def reciprocal(label):
     return tuple(12 - k for k in reversed(slots)), color ^ (len(slots) % 2)
 
 
+def cover_missing(groups, required, failed):
+    """Choose the fewest additional compatible bonds that hit every remaining conflict."""
+    from functools import lru_cache
+    unresolved = [group-required for group in groups if not group&failed]
+    if not unresolved:
+        return frozenset()
+    occurrences = {}
+    for i, group in enumerate(unresolved):
+        for bond in group:
+            occurrences[bond] = occurrences.get(bond,0) | (1<<i)
+    if all(bits.bit_count()==1 for bits in occurrences.values()):
+        return frozenset(min(g) for g in unresolved)
+
+    @lru_cache(maxsize=None)
+    def hits(mask):
+        if not mask:
+            return ()
+        i = min((j for j in range(len(unresolved)) if mask>>j & 1), key=lambda j:len(unresolved[j]))
+        choices = [(bond,*hits(mask & ~occurrences[bond])) for bond in sorted(unresolved[i])]
+        return min(choices,key=lambda row:(len(row),row))
+
+    return frozenset(hits((1<<len(unresolved))-1))
+
+
 def physical_price(tiles, reference, groups, required, phase, *, integer=True):
     if type(phase) is not int or not 0 <= phase < 1 << len(tiles):
         return None
@@ -39,7 +63,7 @@ def physical_price(tiles, reference, groups, required, phase, *, integer=True):
     failed = {p for p in reference | required if sides[p[0]] != reciprocal(sides[p[1]])}
     if required & failed or any(g <= required for g in groups):
         return None
-    return len(failed & reference) + sum(not (g & failed) for g in groups), failed
+    return len(failed & reference) + len(cover_missing(groups,required,failed)), failed
 
 
 def save_witness(db, identity, phase):

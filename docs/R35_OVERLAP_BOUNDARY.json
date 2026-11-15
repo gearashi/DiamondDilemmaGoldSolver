@@ -1,0 +1,779 @@
+{
+  "controls": [
+    {
+      "model": "cap17",
+      "verdict": "UNSATISFIABLE",
+      "decisions": "315496",
+      "conflicts": "201614",
+      "real_seconds": "36.63"
+    },
+    {
+      "model": "cap18",
+      "verdict": "UNSATISFIABLE",
+      "decisions": "976104",
+      "conflicts": "631015",
+      "real_seconds": "140.07"
+    },
+    {
+      "model": "cap19",
+      "verdict": "UNSATISFIABLE",
+      "decisions": "2419375",
+      "conflicts": "1596572",
+      "real_seconds": "673.43"
+    },
+    {
+      "model": "sorted20",
+      "verdict": "UNKNOWN",
+      "decisions": "1354465",
+      "conflicts": "778758",
+      "real_seconds": "120.17"
+    },
+    {
+      "model": "sorted22",
+      "verdict": "SATISFIABLE",
+      "decisions": "377953",
+      "conflicts": "139116",
+      "real_seconds": "32.72"
+    },
+    {
+      "model": "excess17",
+      "verdict": "UNSATISFIABLE",
+      "decisions": "337452",
+      "conflicts": "219546",
+      "real_seconds": "41.45"
+    },
+    {
+      "model": "excess18",
+      "verdict": "UNSATISFIABLE",
+      "decisions": "995500",
+      "conflicts": "632427",
+      "real_seconds": "284.60"
+    },
+    {
+      "model": "excess19",
+      "verdict": "UNKNOWN",
+      "decisions": "2336597",
+      "conflicts": "1475442",
+      "real_seconds": "540.06"
+    },
+    {
+      "model": "excess20",
+      "verdict": "SATISFIABLE",
+      "decisions": "98225",
+      "conflicts": "37798",
+      "real_seconds": "15.16"
+    },
+    {
+      "model": "all20",
+      "verdict": "UNKNOWN",
+      "decisions": "3790587",
+      "conflicts": "2335621",
+      "real_seconds": "900.04"
+    },
+    {
+      "model": "all21",
+      "verdict": "SATISFIABLE",
+      "decisions": "1442431",
+      "conflicts": "822442",
+      "real_seconds": "224.02"
+    },
+    {
+      "model": "project20",
+      "verdict": "UNKNOWN",
+      "decisions": "3697306",
+      "conflicts": "2201354",
+      "real_seconds": "900.06"
+    },
+    {
+      "model": "project21",
+      "verdict": "SATISFIABLE",
+      "decisions": "4007337",
+      "conflicts": "2250148",
+      "real_seconds": "731.63"
+    }
+  ],
+  "all_groups_checked": [
+    {
+      "size": 1,
+      "proper_loop": true,
+      "parity_conflict": false
+    },
+    {
+      "size": 1,
+      "proper_loop": true,
+      "parity_conflict": false
+    },
+    {
+      "size": 3,
+      "proper_loop": true,
+      "parity_conflict": false
+    },
+    {
+      "size": 5,
+      "proper_loop": true,
+      "parity_conflict": false
+    },
+    {
+      "size": 6,
+      "proper_loop": true,
+      "parity_conflict": false
+    },
+    {
+      "size": 7,
+      "proper_loop": true,
+      "parity_conflict": false
+    },
+    {
+      "size": 8,
+      "proper_loop": false,
+      "parity_conflict": true
+    },
+    {
+      "size": 8,
+      "proper_loop": false,
+      "parity_conflict": true
+    },
+    {
+      "size": 9,
+      "proper_loop": false,
+      "parity_conflict": true
+    },
+    {
+      "size": 9,
+      "proper_loop": false,
+      "parity_conflict": true
+    },
+    {
+      "size": 10,
+      "proper_loop": false,
+      "parity_conflict": true
+    },
+    {
+      "size": 11,
+      "proper_loop": false,
+      "parity_conflict": true
+    },
+    {
+      "size": 17,
+      "proper_loop": false,
+      "parity_conflict": true
+    }
+  ],
+  "all21_witness": {
+    "phase": "0xce55aaa6e89109fca073547e8c580ba32e0e5fa2",
+    "cost": 21,
+    "phase_mismatches": 18,
+    "additional": [
+      [
+        96,
+        392
+      ],
+      [
+        115,
+        176
+      ],
+      [
+        171,
+        376
+      ]
+    ],
+    "outside_indices": [
+      3,
+      11,
+      29,
+      30,
+      64,
+      109
+    ]
+  },
+  "disjoint20": {
+    "phase": "0xd237aba7e99101e88041403e8c589902025e5326",
+    "cost": 20,
+    "outside_errors": [
+      1,
+      10,
+      11,
+      55,
+      63,
+      77,
+      80,
+      81
+    ]
+  },
+  "global_gold_departure_lower_bound": 20,
+  "all_group_interval": [
+    20,
+    21
+  ],
+  "parity_arrivals": [
+    {
+      "arrival": [
+        7,
+        84,
+        109,
+        117
+      ],
+      "packed": 17,
+      "all_groups": 19,
+      "image_prices": [
+        [
+          45,
+          45
+        ],
+        [
+          31,
+          33
+        ],
+        [
+          43,
+          43
+        ],
+        [
+          39,
+          41
+        ],
+        [
+          39,
+          39
+        ],
+        [
+          17,
+          19
+        ],
+        [
+          33,
+          33
+        ],
+        [
+          25,
+          27
+        ],
+        [
+          45,
+          45
+        ],
+        [
+          35,
+          37
+        ],
+        [
+          41,
+          41
+        ],
+        [
+          41,
+          43
+        ],
+        [
+          45,
+          45
+        ],
+        [
+          23,
+          25
+        ],
+        [
+          37,
+          37
+        ],
+        [
+          29,
+          31
+        ]
+      ]
+    },
+    {
+      "arrival": [
+        11,
+        81,
+        92,
+        105
+      ],
+      "packed": 17,
+      "all_groups": 18,
+      "image_prices": [
+        [
+          43,
+          44
+        ],
+        [
+          35,
+          36
+        ],
+        [
+          39,
+          40
+        ],
+        [
+          37,
+          38
+        ],
+        [
+          39,
+          39
+        ],
+        [
+          20,
+          21
+        ],
+        [
+          35,
+          35
+        ],
+        [
+          17,
+          18
+        ],
+        [
+          45,
+          46
+        ],
+        [
+          37,
+          38
+        ],
+        [
+          43,
+          44
+        ],
+        [
+          41,
+          42
+        ],
+        [
+          39,
+          39
+        ],
+        [
+          24,
+          25
+        ],
+        [
+          37,
+          37
+        ],
+        [
+          23,
+          24
+        ]
+      ]
+    },
+    {
+      "arrival": [
+        79,
+        84,
+        109,
+        117
+      ],
+      "packed": 17,
+      "all_groups": 19,
+      "image_prices": [
+        [
+          45,
+          45
+        ],
+        [
+          31,
+          33
+        ],
+        [
+          43,
+          43
+        ],
+        [
+          39,
+          41
+        ],
+        [
+          39,
+          39
+        ],
+        [
+          17,
+          19
+        ],
+        [
+          33,
+          33
+        ],
+        [
+          25,
+          27
+        ],
+        [
+          45,
+          45
+        ],
+        [
+          35,
+          37
+        ],
+        [
+          41,
+          41
+        ],
+        [
+          41,
+          43
+        ],
+        [
+          45,
+          45
+        ],
+        [
+          23,
+          25
+        ],
+        [
+          37,
+          37
+        ],
+        [
+          29,
+          31
+        ]
+      ]
+    },
+    {
+      "arrival": [
+        1,
+        11,
+        55,
+        65,
+        102
+      ],
+      "packed": 17,
+      "all_groups": 19,
+      "image_prices": [
+        [
+          44,
+          44
+        ],
+        [
+          32,
+          33
+        ],
+        [
+          36,
+          36
+        ],
+        [
+          38,
+          39
+        ],
+        [
+          40,
+          40
+        ],
+        [
+          17,
+          19
+        ],
+        [
+          36,
+          36
+        ],
+        [
+          22,
+          24
+        ],
+        [
+          46,
+          46
+        ],
+        [
+          34,
+          35
+        ],
+        [
+          36,
+          36
+        ],
+        [
+          38,
+          39
+        ],
+        [
+          44,
+          44
+        ],
+        [
+          25,
+          27
+        ],
+        [
+          38,
+          38
+        ],
+        [
+          28,
+          30
+        ]
+      ]
+    },
+    {
+      "arrival": [
+        2,
+        11,
+        60,
+        69,
+        110
+      ],
+      "packed": 17,
+      "all_groups": 18,
+      "image_prices": [
+        [
+          46,
+          47
+        ],
+        [
+          32,
+          33
+        ],
+        [
+          40,
+          41
+        ],
+        [
+          40,
+          41
+        ],
+        [
+          38,
+          38
+        ],
+        [
+          17,
+          18
+        ],
+        [
+          36,
+          36
+        ],
+        [
+          24,
+          25
+        ],
+        [
+          50,
+          51
+        ],
+        [
+          36,
+          37
+        ],
+        [
+          42,
+          43
+        ],
+        [
+          42,
+          43
+        ],
+        [
+          40,
+          40
+        ],
+        [
+          23,
+          24
+        ],
+        [
+          36,
+          36
+        ],
+        [
+          28,
+          29
+        ]
+      ]
+    },
+    {
+      "arrival": [
+        7,
+        40,
+        47,
+        57,
+        86
+      ],
+      "packed": 17,
+      "all_groups": 19,
+      "image_prices": [
+        [
+          42,
+          42
+        ],
+        [
+          17,
+          19
+        ],
+        [
+          36,
+          36
+        ],
+        [
+          24,
+          26
+        ],
+        [
+          46,
+          47
+        ],
+        [
+          32,
+          33
+        ],
+        [
+          36,
+          37
+        ],
+        [
+          40,
+          41
+        ],
+        [
+          44,
+          44
+        ],
+        [
+          23,
+          25
+        ],
+        [
+          36,
+          36
+        ],
+        [
+          28,
+          30
+        ],
+        [
+          50,
+          51
+        ],
+        [
+          36,
+          37
+        ],
+        [
+          38,
+          39
+        ],
+        [
+          42,
+          43
+        ]
+      ]
+    },
+    {
+      "arrival": [
+        7,
+        105,
+        109,
+        110,
+        117
+      ],
+      "packed": 17,
+      "all_groups": 20,
+      "image_prices": [
+        [
+          46,
+          46
+        ],
+        [
+          32,
+          33
+        ],
+        [
+          42,
+          42
+        ],
+        [
+          38,
+          39
+        ],
+        [
+          42,
+          42
+        ],
+        [
+          17,
+          20
+        ],
+        [
+          38,
+          38
+        ],
+        [
+          26,
+          29
+        ],
+        [
+          46,
+          46
+        ],
+        [
+          36,
+          37
+        ],
+        [
+          40,
+          40
+        ],
+        [
+          40,
+          41
+        ],
+        [
+          48,
+          48
+        ],
+        [
+          23,
+          26
+        ],
+        [
+          42,
+          42
+        ],
+        [
+          30,
+          33
+        ]
+      ]
+    }
+  ],
+  "independent_glucose": {
+    "status": "None",
+    "work": {
+      "restarts": 433,
+      "conflicts": 462982,
+      "decisions": 557589,
+      "propagations": 288758856
+    },
+    "elapsed": 480.39101507600026
+  },
+  "maxsat_240_seconds": {
+    "lower": 19,
+    "winning_phase": null,
+    "work": {
+      "restarts": 6094,
+      "conflicts": 1259547,
+      "decisions": 1521315,
+      "propagations": 734642426
+    },
+    "seconds": 240
+  },
+  "neighborhood": {
+    "status": "UNKNOWN",
+    "cap": 20,
+    "seconds": 150.0,
+    "stats": {
+      "target_queries": 221,
+      "target_unsat_slices": 117,
+      "new_checked_nearby": 0,
+      "donor_queries": 36
+    }
+  },
+  "harvested_cores": 331
+}

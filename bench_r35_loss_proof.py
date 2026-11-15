@@ -25,9 +25,13 @@ def original(tiles):
     return problem, reference, groups, required, outside
 
 
-def export(tiles, cap, destination, *, excess=False):
+def export(tiles, cap, destination, *, excess=False, all_groups=False, projected=False):
     p, reference, groups, required, outside = original(tiles)
-    cnf = InventorySAT(p, groups, required, outside, cap, native=None, excess=excess)
+    extra = []
+    if all_groups:
+        _, _, certified = reference_groups(p, read_json(Path(__file__).parent/'docs/R29_INCUMBENT.json')['codes'])
+        extra = [g for g in certified if g not in groups]
+    cnf = InventorySAT(p, groups, required, outside, cap, native=None, excess=excess, additional_groups=extra, projected=projected)
     clauses = cnf.clauses
     variables = max(abs(v) for c in clauses for v in c)
     with destination.open('w', encoding='ascii', newline='\n') as stream:
@@ -35,7 +39,7 @@ def export(tiles, cap, destination, *, excess=False):
         for row in clauses:
             stream.write(' '.join(map(str, row)) + ' 0\n')
     return dict(problem=p.fingerprint, cap=cap, bonds=len(reference), disjoint_groups=len(groups),
-                required=len(required), outside=len(outside), excess=excess, variables=variables, clauses=len(clauses),
+                required=len(required), outside=len(outside), excess=excess, extra_groups=len(extra), projected=projected, variables=variables, clauses=len(clauses),
                 cnf_sha256=hashlib.sha256(destination.read_bytes()).hexdigest())
 
 
@@ -153,11 +157,13 @@ if __name__ == '__main__':
     cli.add_argument('--tiles', type=Path, required=True)
     cli.add_argument('--cap', type=int, required=True)
     cli.add_argument('--excess', action='store_true')
+    cli.add_argument('--projected',action='store_true')
+    cli.add_argument('--all-groups',action='store_true')
     cli.add_argument('--output', type=Path)
     cli.add_argument('--phase', type=lambda x: int(x, 0))
     args = cli.parse_args()
     if args.action == 'export':
-        print(json.dumps(export(args.tiles, args.cap, args.output, excess=args.excess)))
+        print(json.dumps(export(args.tiles, args.cap, args.output, excess=args.excess, all_groups=args.all_groups,projected=args.projected)))
     else:
         p, ref, groups, req, out = original(args.tiles)
         price = physical_price(p.tiles, ref, groups, req, args.phase)

@@ -1,0 +1,385 @@
+{
+  "schema": 1,
+  "engine_commit": "74c353c96108cd1d4137b56c7ebddaf5d8bbc9e8",
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "reference_scope": "d639db280cbffdd887d81f336825b94e4e08d272d94fd11deaace4777e7d96b6",
+  "relation": "exact minimum of signed inventory and ten disjoint physical departure groups",
+  "minimum": 20,
+  "public_phase": {
+    "phase": "0xd237aba7e99101e88041403e8c589902025e5326",
+    "cost": 20,
+    "outside_errors": [
+      1,
+      10,
+      11,
+      55,
+      63,
+      77,
+      80,
+      81
+    ]
+  },
+  "inputs": [
+    {
+      "name": "tiles.json",
+      "bytes": 125546,
+      "sha256": "81e5e40ab23afb135cafe913af3e9d6579d68eea4c096c60d2ddd57a1c8cfe79"
+    },
+    {
+      "name": "R29_INCUMBENT.json",
+      "bytes": 1658,
+      "sha256": "ca0a089fa219f93713bf3a26ce3191d8090e2410b0072ee9146c90297049f492"
+    },
+    {
+      "name": "R31_GOLD_RESULTS.json",
+      "bytes": 65376,
+      "sha256": "9f48dfbf96a80ad1208d5ec8c0895d86d3aa17f393a4f489e1ace3b8b7dd631b"
+    }
+  ],
+  "tools": [
+    {
+      "name": "cadical",
+      "bytes": 952032,
+      "sha256": "4acf586001aa286dff6e1a390a273023c3160f0175aba2693e3e6a0065089e70"
+    },
+    {
+      "name": "drat-trim",
+      "bytes": 47488,
+      "sha256": "e0be57a73addb80cd2e9321c7c42c17e2d52065fad7ca4c0799e63584101a1a6"
+    }
+  ],
+  "debs": [
+    {
+      "name": "cadical_2.1.3-2_amd64.deb",
+      "bytes": 533164,
+      "sha256": "3177fef4a63166b8c89ab92e74ffa02e7a65f3fae722db5b4c8a9eebae50e189"
+    },
+    {
+      "name": "drat-trim_0.0~git20240428.effa1dc-2build1_amd64.deb",
+      "bytes": 29762,
+      "sha256": "721bcace56ffc6ddf532a0e6cff8aa634fdb7614fff5216006e3de3a32a6cc61"
+    }
+  ],
+  "budgets": [
+    {
+      "cap": 17,
+      "proof": {
+        "name": "cap17.drat",
+        "bytes": 14338981,
+        "sha256": "44e21a680bb2ef3d29163310e79d28d8163d8da629fec1bb9c56726525a69b76"
+      },
+      "solver_log": {
+        "name": "cap17-solve.log",
+        "bytes": 14866,
+        "sha256": "d6b4c9d39c6cd9ecfc3a3e7b47f59569f00f6e52c14c342af1affedbf5536950"
+      },
+      "checks": [
+        {
+          "cnf": {
+            "name": "cap17.cnf",
+            "bytes": 304738,
+            "sha256": "31d7cd724a91110af6931136ba4de2d1549620aa3c158dbc41bfb07f43154c62"
+          },
+          "check_log": {
+            "name": "cap17-check.log",
+            "bytes": 466,
+            "sha256": "7e6ea9ff75ca427de998ae1e373e7a85d9571cd6912daac5311b54c7741aaee0"
+          },
+          "lemmas": 150592,
+          "emitted_lemmas": 276407,
+          "resolution_steps": 10058973
+        },
+        {
+          "cnf": {
+            "name": "sorted17.cnf",
+            "bytes": 304738,
+            "sha256": "56ead986e84753cc785aa3202e7b837ca30f44290399e5a04411c9904620f443"
+          },
+          "check_log": {
+            "name": "sorted17-check.log",
+            "bytes": 467,
+            "sha256": "b3ea6c3b8baadf5b685882ea793deee0e210e5f203947ef1c33af8c8daa873e7"
+          },
+          "lemmas": 150592,
+          "emitted_lemmas": 276407,
+          "resolution_steps": 10058973
+        }
+      ],
+      "conflicts": 201614,
+      "decisions": 315496
+    },
+    {
+      "cap": 18,
+      "proof": {
+        "name": "cap18.drat",
+        "bytes": 46026106,
+        "sha256": "07e1b460fafc08b7d935bbed7348125e48d1d494e5485b5ab2349a4222bdfb29"
+      },
+      "solver_log": {
+        "name": "cap18-solve.log",
+        "bytes": 20877,
+        "sha256": "fb67c753ebcd7c613cccfdcd8923a7356008f1ad8cd404a72e4da44c427ff8f7"
+      },
+      "checks": [
+        {
+          "cnf": {
+            "name": "cap18.cnf",
+            "bytes": 310656,
+            "sha256": "de887054220bd9032e51cab2304c6f26a5a9e6b9b4db5d42ee6cda785a7f8985"
+          },
+          "check_log": {
+            "name": "cap18-check.log",
+            "bytes": 468,
+            "sha256": "6c0e7e0729453e735345bcb3f4c59ecc31f385383291d3a557decc9dbede64e3"
+          },
+          "lemmas": 382147,
+          "emitted_lemmas": 752031,
+          "resolution_steps": 21936830
+        },
+        {
+          "cnf": {
+            "name": "sorted18.cnf",
+            "bytes": 310656,
+            "sha256": "2d85b244caa7c0c8da97617078e09a16c0b73decea5ad60339883de724d81473"
+          },
+          "check_log": {
+            "name": "sorted18-check.log",
+            "bytes": 468,
+            "sha256": "2d3b3fc963bb0ca105d4f3d8053d50497a61aea226eade4f075e2200d1f61eca"
+          },
+          "lemmas": 382147,
+          "emitted_lemmas": 752031,
+          "resolution_steps": 21936830
+        }
+      ],
+      "conflicts": 631015,
+      "decisions": 976104
+    },
+    {
+      "cap": 19,
+      "proof": {
+        "name": "cap19.drat",
+        "bytes": 119027636,
+        "sha256": "12a36658be6972a050de534d867d4447ce80318dce41c6730cf9a44dab1b9075"
+      },
+      "solver_log": {
+        "name": "cap19-solve.log",
+        "bytes": 29469,
+        "sha256": "8050b75e94ac3301c6bfe15ee62e82704a608e46d3af4e75931011ada1700868"
+      },
+      "checks": [
+        {
+          "cnf": {
+            "name": "cap19.cnf",
+            "bytes": 316502,
+            "sha256": "78236970e6769fa84deef0775dd8d9f11e138b33fec2d059f8ae9fc761d0111f"
+          },
+          "check_log": {
+            "name": "cap19-check.log",
+            "bytes": 471,
+            "sha256": "f4a815fcc9d610f83877b1702a4f5eaf9bee03cf7667e259cf0bf8a02585fe55"
+          },
+          "lemmas": 1070323,
+          "emitted_lemmas": 1798846,
+          "resolution_steps": 58925746
+        },
+        {
+          "cnf": {
+            "name": "sorted19.cnf",
+            "bytes": 316502,
+            "sha256": "2a84c15bc2ee3cea04de5605df7f6a6a70b7d59378e4bb9441d8dd85df7e92cf"
+          },
+          "check_log": {
+            "name": "sorted19-check.log",
+            "bytes": 471,
+            "sha256": "9b05eeefc9ba6eb436246d6789421dd78121a98353e40b6fb81f15a379a5b0f1"
+          },
+          "lemmas": 1070323,
+          "emitted_lemmas": 1798846,
+          "resolution_steps": 58925746
+        }
+      ],
+      "conflicts": 1596572,
+      "decisions": 2419375
+    }
+  ],
+  "files": [
+    {
+      "name": "cap17.cnf",
+      "bytes": 304738,
+      "sha256": "31d7cd724a91110af6931136ba4de2d1549620aa3c158dbc41bfb07f43154c62"
+    },
+    {
+      "name": "sorted17.cnf",
+      "bytes": 304738,
+      "sha256": "56ead986e84753cc785aa3202e7b837ca30f44290399e5a04411c9904620f443"
+    },
+    {
+      "name": "cap17.drat",
+      "bytes": 14338981,
+      "sha256": "44e21a680bb2ef3d29163310e79d28d8163d8da629fec1bb9c56726525a69b76"
+    },
+    {
+      "name": "cap17-solve.log",
+      "bytes": 14866,
+      "sha256": "d6b4c9d39c6cd9ecfc3a3e7b47f59569f00f6e52c14c342af1affedbf5536950"
+    },
+    {
+      "name": "cap17-check.log",
+      "bytes": 466,
+      "sha256": "7e6ea9ff75ca427de998ae1e373e7a85d9571cd6912daac5311b54c7741aaee0"
+    },
+    {
+      "name": "sorted17-check.log",
+      "bytes": 467,
+      "sha256": "b3ea6c3b8baadf5b685882ea793deee0e210e5f203947ef1c33af8c8daa873e7"
+    },
+    {
+      "name": "cap18.cnf",
+      "bytes": 310656,
+      "sha256": "de887054220bd9032e51cab2304c6f26a5a9e6b9b4db5d42ee6cda785a7f8985"
+    },
+    {
+      "name": "sorted18.cnf",
+      "bytes": 310656,
+      "sha256": "2d85b244caa7c0c8da97617078e09a16c0b73decea5ad60339883de724d81473"
+    },
+    {
+      "name": "cap18.drat",
+      "bytes": 46026106,
+      "sha256": "07e1b460fafc08b7d935bbed7348125e48d1d494e5485b5ab2349a4222bdfb29"
+    },
+    {
+      "name": "cap18-solve.log",
+      "bytes": 20877,
+      "sha256": "fb67c753ebcd7c613cccfdcd8923a7356008f1ad8cd404a72e4da44c427ff8f7"
+    },
+    {
+      "name": "cap18-check.log",
+      "bytes": 468,
+      "sha256": "6c0e7e0729453e735345bcb3f4c59ecc31f385383291d3a557decc9dbede64e3"
+    },
+    {
+      "name": "sorted18-check.log",
+      "bytes": 468,
+      "sha256": "2d3b3fc963bb0ca105d4f3d8053d50497a61aea226eade4f075e2200d1f61eca"
+    },
+    {
+      "name": "cap19.cnf",
+      "bytes": 316502,
+      "sha256": "78236970e6769fa84deef0775dd8d9f11e138b33fec2d059f8ae9fc761d0111f"
+    },
+    {
+      "name": "sorted19.cnf",
+      "bytes": 316502,
+      "sha256": "2a84c15bc2ee3cea04de5605df7f6a6a70b7d59378e4bb9441d8dd85df7e92cf"
+    },
+    {
+      "name": "cap19.drat",
+      "bytes": 119027636,
+      "sha256": "12a36658be6972a050de534d867d4447ce80318dce41c6730cf9a44dab1b9075"
+    },
+    {
+      "name": "cap19-solve.log",
+      "bytes": 29469,
+      "sha256": "8050b75e94ac3301c6bfe15ee62e82704a608e46d3af4e75931011ada1700868"
+    },
+    {
+      "name": "cap19-check.log",
+      "bytes": 471,
+      "sha256": "f4a815fcc9d610f83877b1702a4f5eaf9bee03cf7667e259cf0bf8a02585fe55"
+    },
+    {
+      "name": "sorted19-check.log",
+      "bytes": 471,
+      "sha256": "9b05eeefc9ba6eb436246d6789421dd78121a98353e40b6fb81f15a379a5b0f1"
+    },
+    {
+      "name": "physical-obligations.json",
+      "bytes": 2118,
+      "sha256": "9f4b108b738b02a7fd74ce83b87fe9e1cbca195d272659f6664090822d87d992"
+    },
+    {
+      "name": "partition.json",
+      "bytes": 17156,
+      "sha256": "ffcf46e8bd27a0e3d0b9fa33637e892bb318c378fb01c83acfbaf1b47c001cd6"
+    },
+    {
+      "name": "regeneration.json",
+      "bytes": 1551,
+      "sha256": "f871c0d91bbe661d8c1485eda6c7c429d13b33fabcff9d3b6ddbba175be30a99"
+    },
+    {
+      "name": "cap20-positive.json",
+      "bytes": 177,
+      "sha256": "f50c37316833cf29c586181309cc6d96c0f45e7d3bb51a1f555e9fee15f504be"
+    },
+    {
+      "name": "contract.json",
+      "bytes": 869,
+      "sha256": "612ac13d6a29a1ec962c659c157115cb08a73beeff4c8f6fbf23fcd738dd7e87"
+    },
+    {
+      "name": "README.txt",
+      "bytes": 2516,
+      "sha256": "58de9434d7988bb208a176736e01087e1f0979564c74d34dcb6ec48927234583"
+    }
+  ],
+  "regeneration": {
+    "commit": "74c353c96108cd1d4137b56c7ebddaf5d8bbc9e8",
+    "source_archive_sha256": "cd5e41819b1dcecd8a4db51405eda84e075e064224c185353d90d63cf394fa4b",
+    "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "rows": [
+      {
+        "hash_seed": "0",
+        "cap": 17,
+        "sha256": "56ead986e84753cc785aa3202e7b837ca30f44290399e5a04411c9904620f443"
+      },
+      {
+        "hash_seed": "0",
+        "cap": 18,
+        "sha256": "2d85b244caa7c0c8da97617078e09a16c0b73decea5ad60339883de724d81473"
+      },
+      {
+        "hash_seed": "0",
+        "cap": 19,
+        "sha256": "2a84c15bc2ee3cea04de5605df7f6a6a70b7d59378e4bb9441d8dd85df7e92cf"
+      },
+      {
+        "hash_seed": "1",
+        "cap": 17,
+        "sha256": "56ead986e84753cc785aa3202e7b837ca30f44290399e5a04411c9904620f443"
+      },
+      {
+        "hash_seed": "1",
+        "cap": 18,
+        "sha256": "2d85b244caa7c0c8da97617078e09a16c0b73decea5ad60339883de724d81473"
+      },
+      {
+        "hash_seed": "1",
+        "cap": 19,
+        "sha256": "2a84c15bc2ee3cea04de5605df7f6a6a70b7d59378e4bb9441d8dd85df7e92cf"
+      },
+      {
+        "hash_seed": "987654",
+        "cap": 17,
+        "sha256": "56ead986e84753cc785aa3202e7b837ca30f44290399e5a04411c9904620f443"
+      },
+      {
+        "hash_seed": "987654",
+        "cap": 18,
+        "sha256": "2d85b244caa7c0c8da97617078e09a16c0b73decea5ad60339883de724d81473"
+      },
+      {
+        "hash_seed": "987654",
+        "cap": 19,
+        "sha256": "2a84c15bc2ee3cea04de5605df7f6a6a70b7d59378e4bb9441d8dd85df7e92cf"
+      }
+    ]
+  },
+  "asset": {
+    "name": "DiamondDilemmaGoldSolver-R35-reference-loss-proof.zip",
+    "bytes": 87023764,
+    "sha256": "2c3efa71961980bffa0ff98ec13191afeb7da9734308dffec9b574d9742a5be8"
+  }
+}

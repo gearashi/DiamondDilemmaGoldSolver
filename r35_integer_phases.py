@@ -79,7 +79,7 @@ class IntegerPhaseImages:
         self.inventories=inventories
         self.groups=groups
 
-    def minimum(self, flipped, deadline=inf, work=None):
+    def minimum(self, flipped, deadline=inf, work=None, *, require_integer=True, price=None):
         """Return the attained integer cost and phase, or a sufficient inventory core."""
         if monotonic()>=deadline:
             raise TimeoutError
@@ -101,17 +101,21 @@ class IntegerPhaseImages:
                 raise TimeoutError
             phase=origin^image
             if work is not None:
-                work['integer_phase_assignments']=work.get('integer_phase_assignments',0)+1
-            for support,mod2,base,terms in self.inventories:
+                label='integer_phase_assignments' if require_integer else 'parity_phase_assignments'
+                work[label]=work.get(label,0)+1
+            for support,mod2,base,terms in (self.inventories if require_integer else ()):
                 balance=base+sum(weight*(phase&mask).bit_count() for weight,mask in terms)
                 if (balance%2 if mod2 else balance):
                     sufficient|=support
                     break
             else:
-                charge=len(flipped)
-                for _,group in self.groups:
-                    mismatches=sum(((phase&mask).bit_count()&1)^rhs for mask,rhs in group)
-                    charge+=max(1,mismatches)
+                if price is None:
+                    charge=len(flipped)
+                    for _,group in self.groups:
+                        mismatches=sum(((phase&mask).bit_count()&1)^rhs for mask,rhs in group)
+                        charge+=max(1,mismatches)
+                else:
+                    charge=price(phase,flipped)
                 if charge<best:
                     best=charge
                     witness=phase
@@ -120,7 +124,8 @@ class IntegerPhaseImages:
 
 
 class EnumeratedPatternFilter:
-    def __init__(self, image, outside, cap, store=None, work=None, published=None):
+    def __init__(self, image, outside, cap, store=None, work=None, published=None, *, transfer=None):
+        self.transfer=transfer
         self.image=image
         self.outside=tuple(outside)
         self.cap=cap
@@ -156,6 +161,8 @@ class EnumeratedPatternFilter:
                 self.verified.difference_update(supersets)
                 self.verified.add((mask,subset))
                 self._increment('integer_cores_learned')
+                if support is not None and self.transfer is not None:
+                    self.transfer.remember(mask,subset)
                 if self.store is not None:
                     self.store.remember(mask,subset)
         self._last=value,feasible,self.last_witness
@@ -164,6 +171,8 @@ class EnumeratedPatternFilter:
     def excludes(self,indices,deadline=inf):
         value=sum(1<<i for i in indices)
         if any((value&mask)==v for mask,v in self.verified):
+            return True
+        if self._check_transfer(value,deadline):
             return True
         matched=[(mask,v) for mask,v in self.pending if (value&mask)==v]
         if not matched:
@@ -175,6 +184,20 @@ class EnumeratedPatternFilter:
         self._increment('integer_core_replays')
         return not answer
 
+    def _check_transfer(self,value,deadline):
+        core = self.transfer.matched(value,deadline,self.work) if self.transfer is not None else None
+        if core is None:
+            return False
+        self.verified.add(core)
+        if self.store is not None:
+            self.store.remember(*core)
+        self.last_witness=None
+        return True
+
+    def close(self):
+        if self.transfer is not None:
+            self.transfer.close()
+
     def __call__(self,indices,deadline):
         indices=frozenset(indices)
         if any(type(i) is not int or not 0<=i<len(self.outside) for i in indices):
@@ -185,5 +208,7 @@ class EnumeratedPatternFilter:
         if any((value&mask)==v for mask,v in self.verified):
             self._increment('integer_native_calls_avoided')
             self.last_witness=None
+            return False
+        if self._check_transfer(value,deadline):
             return False
         return self._evaluate(indices,value,deadline)

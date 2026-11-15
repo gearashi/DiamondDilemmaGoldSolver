@@ -78,3 +78,36 @@ class FiniteInventoryTests(TestCase):
             self.assertFalse(baseline.solve(1,1))
         finally:
             baseline.close()
+
+    @skipUnless(find_spec('pysat'), 'Optional SAT backend')
+    def test_overlapping_groups_and_voluntary_outside_drop_match_enumeration(self):
+        from itertools import combinations
+        from r35_integer_sat import InventorySAT
+        from r35_loss_witness import cover_missing
+        p,ref,groups,req,outside=fixture(True,True)
+        existing=sorted(set().union(*groups)-req)
+        extras=[frozenset([outside[0],outside[1]]),
+                frozenset([outside[0],existing[0]]),frozenset([outside[1],existing[0]])]
+        costs={}
+        for z in range(1<<p.n):
+            check=physical_price(p.tiles,ref,groups,req,z)
+            if check is None:
+                continue
+            _,failed=check
+            pending=[g for g in [*groups,*extras] if not g&failed]
+            eligible=sorted(set().union(*pending)-req)
+            expected=next(k for k in range(len(eligible)+1)
+                          if any(all(set(chosen)&g for g in pending)
+                                 for chosen in combinations(eligible,k)))
+            self.assertEqual(len(cover_missing([*groups,*extras],req,failed)),expected)
+            pat=sum(1<<i for i,b in enumerate(outside) if b in failed)
+            costs[pat]=min(costs.get(pat,inf),len(failed&ref)+expected)
+        self.assertTrue(costs)
+        for cap in range(min(costs.values())-1,max(costs.values())+2):
+            for excess,projected in ((False,False),(True,False),(True,True)):
+                check=InventorySAT(p,groups,req,outside,cap,excess=excess,additional_groups=extras,projected=projected)
+                try:
+                    for value in range(1<<len(outside)):
+                        self.assertEqual(check.solve((1<<len(outside))-1,value),costs.get(value,inf)<=cap)
+                finally:
+                    check.close()
