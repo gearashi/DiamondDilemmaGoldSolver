@@ -109,6 +109,40 @@ class BlankFamilyTests(TestCase):
         self.assertIsNone(published_witness(p,ref,req,groups,36,allowed,True,exact))
         self.assertIsNone(published_witness(p,ref,req,groups,37,allowed-{next(iter(req))},True,exact))
 
+    def test_installed_physical_case_reports_absolute_pins(self):
+        import json
+        import sys
+        from contextlib import redirect_stderr, redirect_stdout
+        from io import StringIO
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from unittest.mock import patch
+        from r32_gold import main
+        tiles=next((p for p in map(Path,('data/tiles.json','../data/tiles.json')) if p.is_file()),None)
+        if tiles is None:
+            self.skipTest('Original prepared pieces unavailable')
+        center=Path(__file__).resolve().parent/'docs/R29_INCUMBENT.json'
+        with TemporaryDirectory() as temp:
+            case=Path(temp)/'case.json'
+            def invoke(pins,*options):
+                case.write_text(json.dumps({'pins':pins}),encoding='utf8')
+                args=['r32_gold.py','integer-bound','--case',str(case),'--tiles',str(tiles),
+                      '--center',str(center),'--upper','34','--seconds','1',*options]
+                output=StringIO()
+                with patch.object(sys,'argv',args),redirect_stdout(output),redirect_stderr(StringIO()):
+                    main()
+                return json.loads(output.getvalue())
+            found=invoke({'0':1},'--physical-pairing')
+            self.assertEqual(int(found['phase'],16)&1,1)
+            self.assertEqual(found['phase_pins'],{'0':1})
+            self.assertEqual(found['work']['nodes'],0)
+            with self.assertRaises(SystemExit):
+                invoke({'0':1})
+            with self.assertRaises(SystemExit):
+                invoke({'0':0,'00':1},'--physical-pairing')
+            with self.assertRaises(SystemExit):
+                invoke({'-1':1},'--physical-pairing')
+
     def test_two_actual_blank_choices_preserve_named_losses_and_strand_cycles(self):
         import json
         from pathlib import Path

@@ -495,8 +495,22 @@ def main():
             out.update(verified_geographic_departures=len(geo),verified_contact_departures=len(contacts))
             if circuits:out['verified_gold_path_circuits']=len(circuits)
         elif args.mode=='integer-bound':
-            if case.keys()-{'codes'} or args.outside is not None:
-                parser.error('integer-bound solves every outside pattern of one unrestricted reference')
+            accepted_keys = {'codes', 'pins'} if args.physical_pairing else {'codes'}
+            if case.keys()-accepted_keys or args.outside is not None:
+                parser.error('integer-bound accepts a reference and optional sign pins with --physical-pairing')
+            pins = {}
+            if 'pins' in case:
+                from r29_gold_phase import checked_pins
+                supplied = case['pins']
+                if not isinstance(supplied, dict) or any(not key.isascii() or not key.isdecimal()
+                                                        for key in supplied):
+                    parser.error('Physical sign pins must map tile numbers to integer bits.')
+                try:
+                    pins = checked_pins(p.n, {int(key): value for key, value in supplied.items()})
+                except ValueError as exc:
+                    parser.error(str(exc))
+                if len(pins) != len(supplied):
+                    parser.error('Each physical sign pin must name a distinct tile.')
             from r35_loss_bound import global_integer
             packed, mandatory, outside = OutsideSyndromes.layout(ref, groups, rules.required)
             extra_groups = [g for g in groups if g not in packed] if args.all_groups else []
@@ -521,7 +535,7 @@ def main():
             elif args.physical_pairing:
                 from r35_mip_pairing import decide as physical_decision
                 out=physical_decision(p,ref,[*packed,*extra_groups,*conditional_groups],mandatory,args.upper,args.seconds,
-                                      sphere=args.sphere_euler,mode=args.physical_pairing,published=not args.independent_native)
+                                      sphere=args.sphere_euler,mode=args.physical_pairing,pins=pins,published=not args.independent_native)
             else:
                 conditions=None
                 if args.sphere_euler or args.mate_support or args.mate_cost:
@@ -545,6 +559,8 @@ def main():
                 out.update(verified_gold_path_circuits=len(circuits),relaxation="gold_geographic_departures")
             if args.physical_pairing:
                 out['relaxation']='complete_physical_mates'
+                if pins:
+                    out['phase_pins']=pins
         elif args.mode=='master':
             out=master(p,ref,cert,args.upper,args.seconds,req,forbid,ds)
         elif args.mode=='geographic':
