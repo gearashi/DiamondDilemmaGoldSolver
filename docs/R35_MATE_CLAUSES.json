@@ -3149,5 +3149,16 @@
     "rounds": [],
     "verified_geographic_departures": 194,
     "verified_contact_departures": 985
+  },
+  "python315_expanded_clean_install": {
+    "cap": 37,
+    "status": "CONNECTED_SEWING",
+    "certified_loss_lower_bound": 37,
+    "published_pairing_revalidated": true,
+    "loss": 37,
+    "genus": 28,
+    "rounds": [],
+    "verified_geographic_departures": 204,
+    "verified_contact_departures": 988
   }
 }

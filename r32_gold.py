@@ -402,7 +402,7 @@ def main():
     parser.add_argument('--outside',type=int,help='In loss, outside phase errors. In geographic, exact physical bond losses outside the packed groups.')
     parser.add_argument('--page',type=int,default=8192)
     parser.add_argument('--refine-integer',action='store_true',help='In loss mode, check signed integer inventories before accepting a phase pattern (wide phase images use OR-Tools).')
-    parser.add_argument('--independent-native',action='store_true',help='In integer-bound, rerun the native all-pattern solver even for an independently checked published result.')
+    parser.add_argument('--independent-native',action='store_true',help='Rerun integer-bound without published decisions, or phase-sewing without bundled or saved witness hints.')
     parser.add_argument('--sphere-euler',action='store_true',help='Require the spherical one-loop Euler equation in signed integer search.')
     parser.add_argument('--mate-cost',action='store_true',help='Price lost reference pairs in small reciprocal classes, extending to twelve sides for broad overlapping departures.')
     parser.add_argument('--mate-support',action='store_true',help='Require signed physical mates and perfect matchings in reciprocal classes of up to sixteen sides.')
@@ -421,7 +421,7 @@ def main():
     if args.sewing_hint and args.mode!='phase-sewing':parser.error('--sewing-hint requires phase-sewing')
     if (args.sphere_euler or args.mate_support or args.mate_cost) and not (args.mode=='integer-bound' or args.mode=='loss' and args.refine_integer):
         parser.error('Signed physical conditions require integer-bound or loss --refine-integer')
-    if args.independent_native and args.mode!='integer-bound':parser.error('--independent-native requires integer-bound')
+    if args.independent_native and args.mode not in ('integer-bound','phase-sewing'):parser.error('--independent-native requires integer-bound or phase-sewing')
     if args.excess_charges and args.mode!='integer-bound':parser.error('--excess-charges requires integer-bound')
     if args.all_groups and args.mode not in ('loss','integer-bound'):parser.error('--all-groups requires loss or integer-bound')
     if args.backend!='cpu' and args.mode!='watch':parser.error('CUDA applies to watch mode')
@@ -474,13 +474,13 @@ def main():
             from io_utils import atomic_json
             saved=None
             hint_path=args.sewing_hint or args.output
-            if hint_path and Path(hint_path).is_file():
+            if not args.independent_native and hint_path and Path(hint_path).is_file():
                 try:
                     saved=read_json(hint_path)
                 except (ValueError,OSError):
                     saved=None
             out=phase_sewing(p,ref,[*groups,*geo,*contacts],rules.required,args.phase,args.upper,args.seconds,
-                             switch_trials=args.switch_trials,saved=saved,
+                             switch_trials=args.switch_trials,saved=saved,published=not args.independent_native,
                              publish=(lambda row:atomic_json(Path(args.output),row)) if args.output else None)
             out.update(verified_geographic_departures=len(geo),verified_contact_departures=len(contacts))
         elif args.mode=='integer-bound':

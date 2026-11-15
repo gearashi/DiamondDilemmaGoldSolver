@@ -96,6 +96,20 @@ class PhaseSewingTests(TestCase):
                     self.assertTrue(any(0<size<problem.total_segments for size in strand_components(problem,map(tuple,cut),complete=False)))
 
 
+        for case in portfolios.get('residual_cases',()):
+            extra=json.loads((root/case['additional_source']).read_bytes())
+            selected=[frozenset(map(tuple,row))-req for key in ('geographic_cores','edge_perfect_cores')
+                      for row in extra[key]]
+            all_typed=[frozenset(map(tuple,row))-req for row in typed]
+            rules=groups[:13]+raw+all_typed+selected
+            result=case['public']
+            mesh=frozenset(map(tuple,result['pairs']))
+            full_mesh(mesh)
+            self.assertTrue(req<=mesh and all(not g<=mesh for g in rules))
+            self.assertEqual((len(ref-mesh),strand_components(problem,mesh)),(result['loss'],[365]))
+            self.assertEqual((result['verified_geographic_departures'],result['verified_contact_departures']),(204,988))
+            self.assertEqual(result['loss'],result['certified_loss_lower_bound'])
+
     def test_cached_candidate_rebuilds_phase_groups_witness_and_geographic_lift(self):
         from r35_phase_sewing import _checked_incumbent
         from bench_r35_loss_boundary344 import problem_scope
@@ -114,6 +128,8 @@ class PhaseSewingTests(TestCase):
         result=search(problem,ref,charges,req,phase,37,10,saved=forged)
         self.assertEqual((result["status"],result["loss"],result["rounds"]),("CONNECTED_SEWING",37,[]))
         self.assertTrue(result["saved_pairing_revalidated"])
+        bundled=search(problem,ref,charges,req,phase,37,10,published=True)
+        self.assertEqual((bundled['loss'],bundled['rounds'],bundled['published_pairing_revalidated']),(37,[],True))
         self.assertIsNone(result["codes"])
         complement=phase ^ ((1<<problem.n)-1)
         self.assertTrue(search(problem,ref,charges,req,complement,37,10,saved=prior)["saved_pairing_revalidated"])

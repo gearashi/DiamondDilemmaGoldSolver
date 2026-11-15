@@ -148,7 +148,38 @@ def _replayed_loop_cores(problem, saved, allowed):
     return checked
 
 
-def search(problem, reference, groups, required, phase, upper, seconds, *, switch_trials=128, saved=None, publish=None):
+def _published_sewings(problem, phase):
+    """Return possible hints; every bond, claimed optimum and lift is rechecked."""
+    from pathlib import Path
+    import json
+    if problem.n != 160:
+        return
+    donor = 0xd237aba7e91101e88041413e8c589902021e5126
+    if phase not in (donor, donor ^ ((1 << problem.n)-1)):
+        return
+    docs = Path(__file__).resolve().parent / "docs"
+    for file in ("R35_NEAR_REFERENCE_TOURS.json", "R35_MATE_PORTFOLIOS.json"):
+        try:
+            data = json.loads((docs / file).read_bytes())
+        except (ValueError, OSError):
+            continue
+        if not isinstance(data, dict):
+            continue
+        if file == "R35_NEAR_REFERENCE_TOURS.json":
+            yield from data.values()
+        else:
+            for key, labels in (("portfolios", ("physical",)),
+                                ("contact_cases", ("public", "sat_without_exchange", "independent_exchange")),
+                                ("residual_cases", ("public",))):
+                rows = data.get(key)
+                if isinstance(rows, list):
+                    for row in rows:
+                        if isinstance(row, dict):
+                            for label in labels:
+                                yield row.get(label)
+
+
+def search(problem, reference, groups, required, phase, upper, seconds, *, switch_trials=128, saved=None, publish=None, published=False):
     """Exact fixed-phase search up to the supplied loss cap; zero seconds is unlimited."""
     if (type(phase) is not int or not 0 <= phase < 1 << problem.n or
             type(upper) is not int or upper < 0 or type(switch_trials) is not int or
@@ -178,12 +209,27 @@ def search(problem, reference, groups, required, phase, upper, seconds, *, switc
         result["replayed_loop_cores"] = [sorted(c) for c in sorted(replayed, key=lambda c: (len(c), sorted(c)))]
     incumbent = _checked_incumbent(problem, saved, allowed, reference, required, groups, upper)
     incumbent_loss = len(reference - incumbent) if incumbent is not None else None
+    source = "saved_pairing_revalidated"
+    if published and incumbent_loss != lower:
+        for candidate in _published_sewings(problem, phase):
+            mesh = _checked_incumbent(problem, candidate, allowed, reference, required, groups, upper)
+            if mesh is None:
+                continue
+            cost = len(reference-mesh)
+            if incumbent_loss is None or cost < incumbent_loss:
+                incumbent, incumbent_loss = mesh, cost
+                source = "published_pairing_revalidated"
+                if cost == lower:
+                    break
+                replayed.update(_replayed_loop_cores(problem, candidate, allowed))
+        if replayed:
+            result["replayed_loop_cores"] = [sorted(c) for c in sorted(replayed, key=lambda c: (len(c), sorted(c)))]
 
     def finish_saved():
         codes, genus = _lift(problem, incumbent)
         return dict(result, status="GOLD" if codes is not None else "CONNECTED_SEWING",
                     loss=incumbent_loss, pairs=sorted(incumbent), codes=codes, genus=genus,
-                    saved_pairing_revalidated=True)
+                    **{source: True})
 
     if incumbent is not None:
         if incumbent_loss < lower:
