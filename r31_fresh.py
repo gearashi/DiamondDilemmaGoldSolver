@@ -348,51 +348,41 @@ def relink(model, first, second, assemblies, limit=6):
 
 def simultaneous_swaps(model, board, allowed, prices, *, exact=False, touch=None, packing_work=None, separator_depth=0):
     """Compare all two-cycles and pack compatible positive gains across the full board."""
+    from r35_swap_catalog import SwapCatalog
     cells=np.array(sorted(allowed),dtype=int)
     if not len(cells):
         return board,0
     prices.update(board)
-    tiles=board[cells]//3
-    grid=prices.prices[cells][:,tiles]
-    gain=grid.max(axis=2).astype(int)
-    old=grid[np.arange(len(cells)),np.arange(len(cells)),board[cells]%3]
-    gain-=old[:,None]
-    gains=gain+gain.T
-    legal=grid.max(axis=2)>=0
-    gains[~(legal&legal.T)]=0
-    for i,c in enumerate(cells):
-        gains[i,np.isin(cells,model.problem.neighbors[c])]=0
-    ii,jj=np.nonzero(np.triu(gains,1)>0)
-    excluded=set()
-    candidate=board.copy()
-    priority=np.argsort(-gains[ii,jj],kind='stable')
-    active=range(len(priority))
-    if exact or touch:
-        pairs=[(int(cells[ii[t]]),int(cells[jj[t]])) for t in priority]
-        weight=[int(gains[ii[t],jj[t]]) for t in priority]
+    catalog=getattr(prices,'swap_catalog',None)
+    if catalog is None or catalog.model is not model:
+        catalog=prices.swap_catalog=SwapCatalog(model)
+    ranked=catalog.rank(prices,board,cells)
+    left,right,new_left,new_right,weights=ranked
+    count=len(weights)
+    active=range(count)
     if exact:
         from r34_swap_packing import pack_swaps
-        active=pack_swaps(model,pairs,weight,separator_depth=separator_depth,stats=packing_work)
+        active=catalog.noncontacting(ranked,separator_depth,packing_work,pack_swaps)
+    excluded=set()
     selected=[]
+    candidate=board.copy()
     for slot in active:
-        index=priority[slot]
-        i,j=ii[index],jj[index]
-        a,b=cells[i],cells[j]
+        a,b=left[slot],right[slot]
         if a in excluded or b in excluded:
             continue
-        candidate[a]=3*tiles[j]+int(grid[i,j].argmax())
-        candidate[b]=3*tiles[i]+int(grid[j,i].argmax())
+        candidate[a],candidate[b]=new_left[slot],new_right[slot]
         excluded.update((a,b,*model.problem.neighbors[a],*model.problem.neighbors[b]))
         if touch:
             selected.append(slot)
     if touch:
         from r35_touch_packing import augment
-        oriented=[(int(3*tiles[jj[t]]+grid[ii[t],jj[t]].argmax()),
-                   int(3*tiles[ii[t]]+grid[jj[t],ii[t]].argmax())) for t in priority]
-        candidate,_,metrics=augment(model,board,pairs,oriented,weight,selected,touch)
+        pairs=list(zip(left.tolist(),right.tolist()))
+        gain=weights.tolist()
+        oriented=list(zip(new_left.tolist(),new_right.tolist()))
+        candidate,_,metrics=augment(model,board,pairs,oriented,gain,selected,touch)
         if packing_work is not None:
             packing_work.update({'touch_'+k:v for k,v in metrics.items()})
-    return candidate,len(ii)
+    return candidate,count
 
 
 def pack_cycles(model, board, cells, prices, *, relaxations=3):

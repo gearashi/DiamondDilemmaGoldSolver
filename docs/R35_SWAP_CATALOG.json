@@ -1,0 +1,1880 @@
+{
+  "physical_controls_and_final_selectivity": {
+    "input": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "isolated": {
+      "rotation": {
+        "calls": 32,
+        "available_pairs": 407040,
+        "affected_unordered_pairs": 32094,
+        "full_rebuilds": 1,
+        "pairs_reconsidered": 32094,
+        "nonadjacent_gains_evaluated": 31577,
+        "incremental_updates": 31,
+        "positive_rows_retained": 126231,
+        "rank_entries_compared": 137113,
+        "graph_reuse": {
+          "nontrivial_lists": 32
+        },
+        "dense_fallback_work": {
+          "calls": 32,
+          "available_pairs": 407040,
+          "affected_unordered_pairs": 32094,
+          "full_rebuilds": 1,
+          "pairs_reconsidered": 32094,
+          "nonadjacent_gains_evaluated": 31577,
+          "incremental_updates": 31,
+          "positive_rows_retained": 126231
+        }
+      },
+      "one_swap": {
+        "calls": 32,
+        "available_pairs": 407040,
+        "affected_unordered_pairs": 50980,
+        "full_rebuilds": 1,
+        "pairs_reconsidered": 50980,
+        "nonadjacent_gains_evaluated": 50186,
+        "incremental_updates": 31,
+        "positive_rows_retained": 113002,
+        "rank_entries_compared": 129377,
+        "graph_reuse": {
+          "nontrivial_lists": 32
+        },
+        "dense_fallback_work": {
+          "calls": 32,
+          "available_pairs": 407040,
+          "affected_unordered_pairs": 50980,
+          "full_rebuilds": 1,
+          "pairs_reconsidered": 50980,
+          "nonadjacent_gains_evaluated": 50186,
+          "incremental_updates": 31,
+          "positive_rows_retained": 113002
+        }
+      },
+      "four_swaps": {
+        "calls": 32,
+        "available_pairs": 407040,
+        "affected_unordered_pairs": 141435,
+        "full_rebuilds": 1,
+        "pairs_reconsidered": 141435,
+        "nonadjacent_gains_evaluated": 139284,
+        "incremental_updates": 31,
+        "positive_rows_retained": 82904,
+        "rank_entries_compared": 127493,
+        "graph_reuse": {
+          "nontrivial_lists": 32
+        },
+        "dense_fallback_work": {
+          "calls": 32,
+          "available_pairs": 407040,
+          "affected_unordered_pairs": 141435,
+          "full_rebuilds": 1,
+          "pairs_reconsidered": 141435,
+          "nonadjacent_gains_evaluated": 139284,
+          "incremental_updates": 31,
+          "positive_rows_retained": 82904
+        }
+      },
+      "protection": {
+        "calls": 32,
+        "available_pairs": 367232,
+        "affected_unordered_pairs": 46615,
+        "full_rebuilds": 1,
+        "pairs_reconsidered": 46615,
+        "nonadjacent_gains_evaluated": 45735,
+        "incremental_updates": 31,
+        "positive_rows_retained": 104781,
+        "rank_entries_compared": 119973,
+        "graph_reuse": {
+          "nontrivial_lists": 32
+        },
+        "dense_fallback_work": {
+          "calls": 32,
+          "available_pairs": 367232,
+          "affected_unordered_pairs": 46615,
+          "full_rebuilds": 1,
+          "pairs_reconsidered": 46615,
+          "nonadjacent_gains_evaluated": 45735,
+          "incremental_updates": 31,
+          "positive_rows_retained": 104781
+        }
+      },
+      "unrelated": {
+        "calls": 32,
+        "available_pairs": 407040,
+        "affected_unordered_pairs": 407040,
+        "full_rebuilds": 32,
+        "pairs_reconsidered": 407040,
+        "nonadjacent_gains_evaluated": 399360,
+        "rank_entries_compared": 131503,
+        "graph_reuse": {
+          "nontrivial_lists": 32
+        },
+        "dense_fallback_work": {
+          "calls": 32,
+          "available_pairs": 407040,
+          "affected_unordered_pairs": 407040,
+          "full_rebuilds": 32,
+          "pairs_reconsidered": 407040,
+          "nonadjacent_gains_evaluated": 399360
+        }
+      },
+      "unchanged": {
+        "calls": 32,
+        "available_pairs": 407040,
+        "affected_unordered_pairs": 12720,
+        "full_rebuilds": 1,
+        "pairs_reconsidered": 12720,
+        "nonadjacent_gains_evaluated": 12480,
+        "unchanged_rankings": 31,
+        "rank_entries_compared": 132096,
+        "unchanged_nonempty_conflict_lists": 31,
+        "graph_reuse": {
+          "nontrivial_lists": 32,
+          "hits_1": 31,
+          "moves_1": 127968,
+          "large_hits_1": 31,
+          "hits_2": 31,
+          "moves_2": 127968,
+          "large_hits_2": 31,
+          "hits_4": 31,
+          "moves_4": 127968,
+          "large_hits_4": 31,
+          "hits_8": 31,
+          "moves_8": 127968,
+          "large_hits_8": 31,
+          "hits_16": 31,
+          "moves_16": 127968,
+          "large_hits_16": 31,
+          "hits_32": 31,
+          "moves_32": 127968,
+          "large_hits_32": 31,
+          "hits_64": 31,
+          "moves_64": 127968,
+          "large_hits_64": 31,
+          "hits_320": 31,
+          "moves_320": 127968,
+          "large_hits_320": 31
+        },
+        "dense_fallback_work": {
+          "calls": 32,
+          "available_pairs": 407040,
+          "affected_unordered_pairs": 12720,
+          "full_rebuilds": 1,
+          "pairs_reconsidered": 12720,
+          "nonadjacent_gains_evaluated": 12480,
+          "unchanged_rankings": 31
+        }
+      }
+    },
+    "trajectories": [
+      {
+        "seed": 3500,
+        "rounds": 320,
+        "profile": "base",
+        "score": 171,
+        "components": 98,
+        "final_hash": "36324ed1957da52b953ada80ddd09642a10d6ea24c4109a5aaa3134ac5ab9995",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 288888,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 288888,
+          "nonadjacent_gains_evaluated": 284065,
+          "nonempty_packs_solved": 32,
+          "peak_cached_graph_key_bytes": 48120,
+          "incremental_updates": 191,
+          "positive_rows_retained": 650,
+          "singleton_packs": 1,
+          "nonempty_packs_reused": 287,
+          "unchanged_rankings": 127
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 17,
+          "round_to_170": 63
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 288888,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 288888,
+          "nonadjacent_gains_evaluated": 284065,
+          "incremental_updates": 191,
+          "positive_rows_retained": 650,
+          "unchanged_rankings": 127,
+          "rank_entries_compared": 5096,
+          "unchanged_nonempty_conflict_lists": 267,
+          "graph_reuse": {
+            "nontrivial_lists": 319,
+            "singleton_lists": 1,
+            "hits_1": 267,
+            "moves_1": 1016,
+            "hits_2": 276,
+            "moves_2": 1047,
+            "hits_4": 281,
+            "moves_4": 1063,
+            "hits_8": 287,
+            "moves_8": 1085,
+            "hits_16": 287,
+            "moves_16": 1085,
+            "hits_32": 287,
+            "moves_32": 1085,
+            "hits_64": 287,
+            "moves_64": 1085,
+            "hits_320": 287,
+            "moves_320": 1085
+          },
+          "dense_fallback_work": {
+            "calls": 320,
+            "available_pairs": 3294720,
+            "affected_unordered_pairs": 288888,
+            "full_rebuilds": 7,
+            "pairs_reconsidered": 299552,
+            "nonadjacent_gains_evaluated": 294449,
+            "incremental_updates": 186,
+            "positive_rows_retained": 649,
+            "unchanged_rankings": 127
+          }
+        }
+      },
+      {
+        "seed": 3501,
+        "rounds": 320,
+        "profile": "base",
+        "score": 182,
+        "components": 80,
+        "final_hash": "9d789adee9503f405c3a2a74944983731ae299423c1088fd71fb08740aa9124f",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 407202,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 407202,
+          "nonadjacent_gains_evaluated": 400674,
+          "nonempty_packs_solved": 17,
+          "peak_cached_graph_key_bytes": 45420,
+          "incremental_updates": 238,
+          "positive_rows_retained": 15,
+          "nonempty_packs_reused": 1,
+          "singleton_packs": 9,
+          "unchanged_rankings": 80
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 12,
+          "round_to_170": 30,
+          "round_to_175": 77,
+          "round_to_180": 155
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 407202,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 407202,
+          "nonadjacent_gains_evaluated": 400674,
+          "incremental_updates": 238,
+          "positive_rows_retained": 15,
+          "unchanged_rankings": 80,
+          "rank_entries_compared": 3805,
+          "unchanged_nonempty_conflict_lists": 1,
+          "graph_reuse": {
+            "nontrivial_lists": 18,
+            "hits_1": 1,
+            "moves_1": 11,
+            "hits_2": 1,
+            "moves_2": 11,
+            "hits_4": 1,
+            "moves_4": 11,
+            "hits_8": 1,
+            "moves_8": 11,
+            "hits_16": 1,
+            "moves_16": 11,
+            "hits_32": 1,
+            "moves_32": 11,
+            "hits_64": 1,
+            "moves_64": 11,
+            "hits_320": 1,
+            "moves_320": 11,
+            "singleton_lists": 9
+          },
+          "dense_fallback_work": {
+            "calls": 320,
+            "available_pairs": 3294720,
+            "affected_unordered_pairs": 407202,
+            "full_rebuilds": 7,
+            "pairs_reconsidered": 416276,
+            "nonadjacent_gains_evaluated": 409473,
+            "incremental_updates": 233,
+            "positive_rows_retained": 15,
+            "unchanged_rankings": 80
+          }
+        }
+      },
+      {
+        "seed": 3502,
+        "rounds": 320,
+        "profile": "base",
+        "score": 181,
+        "components": 90,
+        "final_hash": "137495c007831e978623fecaeca446df0671154a9702dab1c5c1f8bdac18d585",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 573176,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 573176,
+          "nonadjacent_gains_evaluated": 564258,
+          "nonempty_packs_solved": 27,
+          "peak_cached_graph_key_bytes": 47724,
+          "incremental_updates": 286,
+          "positive_rows_retained": 15,
+          "singleton_packs": 9,
+          "unchanged_rankings": 32
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 16,
+          "round_to_170": 41,
+          "round_to_175": 143,
+          "round_to_180": 315
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 573176,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 573176,
+          "nonadjacent_gains_evaluated": 564258,
+          "incremental_updates": 286,
+          "positive_rows_retained": 15,
+          "unchanged_rankings": 32,
+          "rank_entries_compared": 3986,
+          "graph_reuse": {
+            "nontrivial_lists": 27,
+            "singleton_lists": 9
+          },
+          "dense_fallback_work": {
+            "calls": 320,
+            "available_pairs": 3294720,
+            "affected_unordered_pairs": 573176,
+            "full_rebuilds": 7,
+            "pairs_reconsidered": 584508,
+            "nonadjacent_gains_evaluated": 575274,
+            "incremental_updates": 281,
+            "positive_rows_retained": 15,
+            "unchanged_rankings": 32
+          }
+        }
+      },
+      {
+        "seed": 3503,
+        "rounds": 320,
+        "profile": "base",
+        "score": 180,
+        "components": 87,
+        "final_hash": "c6169f5173fee4d25e75d9969c5067f6ba68eb7dacd159db9e341d914d9ab465",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 430561,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 430561,
+          "nonadjacent_gains_evaluated": 423628,
+          "nonempty_packs_solved": 21,
+          "peak_cached_graph_key_bytes": 41760,
+          "incremental_updates": 226,
+          "positive_rows_retained": 17,
+          "singleton_packs": 7,
+          "unchanged_rankings": 92,
+          "nonempty_packs_reused": 1
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 15,
+          "round_to_170": 35,
+          "round_to_175": 98,
+          "round_to_180": 210
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 430561,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 430561,
+          "nonadjacent_gains_evaluated": 423628,
+          "incremental_updates": 226,
+          "positive_rows_retained": 17,
+          "unchanged_rankings": 92,
+          "rank_entries_compared": 3489,
+          "unchanged_nonempty_conflict_lists": 2,
+          "graph_reuse": {
+            "nontrivial_lists": 22,
+            "singleton_lists": 7,
+            "hits_1": 1,
+            "moves_1": 2,
+            "hits_2": 1,
+            "moves_2": 2,
+            "hits_4": 1,
+            "moves_4": 2,
+            "hits_8": 1,
+            "moves_8": 2,
+            "hits_16": 1,
+            "moves_16": 2,
+            "hits_32": 1,
+            "moves_32": 2,
+            "hits_64": 1,
+            "moves_64": 2,
+            "hits_320": 1,
+            "moves_320": 2
+          },
+          "dense_fallback_work": {
+            "calls": 320,
+            "available_pairs": 3294720,
+            "affected_unordered_pairs": 430561,
+            "full_rebuilds": 6,
+            "pairs_reconsidered": 437120,
+            "nonadjacent_gains_evaluated": 430001,
+            "incremental_updates": 222,
+            "positive_rows_retained": 17,
+            "unchanged_rankings": 92
+          }
+        }
+      }
+    ]
+  },
+  "preselection_sixty_percent_with_bounded_graph_reuse": {
+    "base": [
+      {
+        "seed": 3500,
+        "rounds": 320,
+        "profile": "base",
+        "score": 171,
+        "components": 98,
+        "final_hash": "36324ed1957da52b953ada80ddd09642a10d6ea24c4109a5aaa3134ac5ab9995",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 299552,
+          "nonadjacent_gains_evaluated": 294449,
+          "nonempty_packs_solved": 32,
+          "peak_cached_graph_key_bytes": 48120,
+          "singleton_packs": 1,
+          "incremental_updates": 186,
+          "positive_rows_retained": 649,
+          "nonempty_packs_reused": 287,
+          "unchanged_rankings": 127
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 17,
+          "round_to_170": 63
+        },
+        "work": {
+          "graph_reuse": {}
+        }
+      },
+      {
+        "seed": 3501,
+        "rounds": 320,
+        "profile": "base",
+        "score": 182,
+        "components": 80,
+        "final_hash": "9d789adee9503f405c3a2a74944983731ae299423c1088fd71fb08740aa9124f",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 416276,
+          "nonadjacent_gains_evaluated": 409473,
+          "nonempty_packs_solved": 17,
+          "peak_cached_graph_key_bytes": 45420,
+          "incremental_updates": 233,
+          "positive_rows_retained": 15,
+          "nonempty_packs_reused": 1,
+          "singleton_packs": 9,
+          "unchanged_rankings": 80
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 12,
+          "round_to_170": 30,
+          "round_to_175": 77,
+          "round_to_180": 155
+        },
+        "work": {
+          "graph_reuse": {}
+        }
+      },
+      {
+        "seed": 3502,
+        "rounds": 320,
+        "profile": "base",
+        "score": 181,
+        "components": 90,
+        "final_hash": "137495c007831e978623fecaeca446df0671154a9702dab1c5c1f8bdac18d585",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 584508,
+          "nonadjacent_gains_evaluated": 575274,
+          "nonempty_packs_solved": 27,
+          "peak_cached_graph_key_bytes": 47724,
+          "incremental_updates": 281,
+          "positive_rows_retained": 15,
+          "singleton_packs": 9,
+          "unchanged_rankings": 32
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 16,
+          "round_to_170": 41,
+          "round_to_175": 143,
+          "round_to_180": 315
+        },
+        "work": {
+          "graph_reuse": {}
+        }
+      },
+      {
+        "seed": 3503,
+        "rounds": 320,
+        "profile": "base",
+        "score": 180,
+        "components": 87,
+        "final_hash": "c6169f5173fee4d25e75d9969c5067f6ba68eb7dacd159db9e341d914d9ab465",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 437120,
+          "nonadjacent_gains_evaluated": 430001,
+          "nonempty_packs_solved": 21,
+          "peak_cached_graph_key_bytes": 41760,
+          "singleton_packs": 7,
+          "incremental_updates": 222,
+          "positive_rows_retained": 17,
+          "unchanged_rankings": 92,
+          "nonempty_packs_reused": 1
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 15,
+          "round_to_170": 35,
+          "round_to_175": 98,
+          "round_to_180": 210
+        },
+        "work": {
+          "graph_reuse": {}
+        }
+      }
+    ],
+    "stable": [
+      {
+        "seed": 3500,
+        "rounds": 320,
+        "profile": "stable",
+        "score": 171,
+        "components": 98,
+        "final_hash": "36324ed1957da52b953ada80ddd09642a10d6ea24c4109a5aaa3134ac5ab9995",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 299552,
+          "nonadjacent_gains_evaluated": 294449,
+          "nonempty_packs_solved": 32,
+          "peak_cached_graph_key_bytes": 48120,
+          "singleton_packs": 1,
+          "incremental_updates": 186,
+          "positive_rows_retained": 649,
+          "nonempty_packs_reused": 287,
+          "unchanged_rankings": 127
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 17,
+          "round_to_170": 63
+        },
+        "work": {
+          "graph_reuse": {}
+        }
+      },
+      {
+        "seed": 3501,
+        "rounds": 320,
+        "profile": "stable",
+        "score": 182,
+        "components": 80,
+        "final_hash": "9d789adee9503f405c3a2a74944983731ae299423c1088fd71fb08740aa9124f",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 416276,
+          "nonadjacent_gains_evaluated": 409473,
+          "nonempty_packs_solved": 17,
+          "peak_cached_graph_key_bytes": 45420,
+          "incremental_updates": 233,
+          "positive_rows_retained": 15,
+          "nonempty_packs_reused": 1,
+          "singleton_packs": 9,
+          "unchanged_rankings": 80
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 12,
+          "round_to_170": 30,
+          "round_to_175": 77,
+          "round_to_180": 155
+        },
+        "work": {
+          "graph_reuse": {}
+        }
+      },
+      {
+        "seed": 3502,
+        "rounds": 320,
+        "profile": "stable",
+        "score": 181,
+        "components": 90,
+        "final_hash": "137495c007831e978623fecaeca446df0671154a9702dab1c5c1f8bdac18d585",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 584508,
+          "nonadjacent_gains_evaluated": 575274,
+          "nonempty_packs_solved": 27,
+          "peak_cached_graph_key_bytes": 47724,
+          "incremental_updates": 281,
+          "positive_rows_retained": 15,
+          "singleton_packs": 9,
+          "unchanged_rankings": 32
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 16,
+          "round_to_170": 41,
+          "round_to_175": 143,
+          "round_to_180": 315
+        },
+        "work": {
+          "graph_reuse": {}
+        }
+      },
+      {
+        "seed": 3503,
+        "rounds": 320,
+        "profile": "stable",
+        "score": 179,
+        "components": 91,
+        "final_hash": "0618f6f24b9073682d6cb14b1c18210327336c8aa039a72a91f80ca7d8221d17",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 325140,
+          "nonadjacent_gains_evaluated": 319870,
+          "nonempty_packs_solved": 64,
+          "peak_cached_graph_key_bytes": 44736,
+          "singleton_packs": 5,
+          "incremental_updates": 183,
+          "positive_rows_retained": 1002,
+          "nonempty_packs_reused": 217,
+          "unchanged_rankings": 131
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 17,
+          "round_to_170": 69,
+          "round_to_175": 163
+        },
+        "work": {
+          "graph_reuse": {}
+        }
+      }
+    ],
+    "cp": [
+      {
+        "seed": 3500,
+        "rounds": 320,
+        "profile": "cp",
+        "score": 177,
+        "components": 88,
+        "final_hash": "59b4fd0b5b34a45a6d18f78914f5ae07f2d0c21b9e29baab15f487f326f68fdf",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 486648,
+          "nonadjacent_gains_evaluated": 478822,
+          "nonempty_packs_solved": 46,
+          "peak_cached_graph_key_bytes": 46452,
+          "incremental_updates": 260,
+          "positive_rows_retained": 302,
+          "nonempty_packs_reused": 69,
+          "singleton_packs": 12,
+          "unchanged_rankings": 54
+        },
+        "milestones": {
+          "round_to_150": 5,
+          "round_to_160": 17,
+          "round_to_170": 99,
+          "round_to_175": 113
+        },
+        "work": {
+          "graph_reuse": {}
+        }
+      },
+      {
+        "seed": 3501,
+        "rounds": 320,
+        "profile": "cp",
+        "score": 177,
+        "components": 94,
+        "final_hash": "3ec917c7d8c889657a808f9c619766a914ef60567bff16ef74d535f5dff1b766",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 484788,
+          "nonadjacent_gains_evaluated": 476922,
+          "nonempty_packs_solved": 51,
+          "peak_cached_graph_key_bytes": 45720,
+          "incremental_updates": 259,
+          "positive_rows_retained": 76,
+          "singleton_packs": 7,
+          "nonempty_packs_reused": 61,
+          "unchanged_rankings": 55
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 49,
+          "round_to_170": 125,
+          "round_to_175": 140
+        },
+        "work": {
+          "graph_reuse": {}
+        }
+      },
+      {
+        "seed": 3502,
+        "rounds": 320,
+        "profile": "cp",
+        "score": 171,
+        "components": 105,
+        "final_hash": "9ed33266ca6a42a80a2cecb1810a5623c51d3140eb35d5c1a417dc68bf132b7f",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 5,
+          "pairs_reconsidered": 333417,
+          "nonadjacent_gains_evaluated": 327934,
+          "nonempty_packs_solved": 30,
+          "peak_cached_graph_key_bytes": 47556,
+          "incremental_updates": 201,
+          "positive_rows_retained": 77,
+          "singleton_packs": 5,
+          "unchanged_rankings": 114,
+          "nonempty_packs_reused": 41
+        },
+        "milestones": {
+          "round_to_150": 5,
+          "round_to_160": 17,
+          "round_to_170": 304
+        },
+        "work": {
+          "graph_reuse": {}
+        }
+      },
+      {
+        "seed": 3503,
+        "rounds": 320,
+        "profile": "cp",
+        "score": 181,
+        "components": 88,
+        "final_hash": "dd1b6de6554dc0e3821eff289fbf51a6862bbd13de70f6988b3677844c98eb95",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 301706,
+          "nonadjacent_gains_evaluated": 296896,
+          "nonempty_packs_solved": 23,
+          "peak_cached_graph_key_bytes": 41892,
+          "incremental_updates": 197,
+          "positive_rows_retained": 22,
+          "singleton_packs": 7,
+          "nonempty_packs_reused": 1,
+          "unchanged_rankings": 117
+        },
+        "milestones": {
+          "round_to_150": 4,
+          "round_to_160": 10,
+          "round_to_170": 30,
+          "round_to_175": 51,
+          "round_to_180": 105
+        },
+        "work": {
+          "graph_reuse": {}
+        }
+      }
+    ]
+  },
+  "per_round_full_oracle_with_sixty_percent_preselection_and_last_graph_only": {
+    "base": [
+      {
+        "seed": 3500,
+        "rounds": 320,
+        "profile": "base",
+        "score": 171,
+        "components": 98,
+        "final_hash": "36324ed1957da52b953ada80ddd09642a10d6ea24c4109a5aaa3134ac5ab9995",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 299552,
+          "nonadjacent_gains_evaluated": 294449,
+          "nonempty_packs_solved": 53,
+          "incremental_updates": 186,
+          "positive_rows_retained": 649,
+          "nonempty_packs_reused": 267,
+          "unchanged_rankings": 127
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 17,
+          "round_to_170": 63
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 299552,
+          "nonadjacent_gains_evaluated": 294449,
+          "incremental_updates": 186,
+          "positive_rows_retained": 649,
+          "unchanged_rankings": 127,
+          "rank_entries_compared": 5096,
+          "unchanged_nonempty_conflict_lists": 267
+        }
+      },
+      {
+        "seed": 3501,
+        "rounds": 320,
+        "profile": "base",
+        "score": 182,
+        "components": 80,
+        "final_hash": "9d789adee9503f405c3a2a74944983731ae299423c1088fd71fb08740aa9124f",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 416276,
+          "nonadjacent_gains_evaluated": 409473,
+          "nonempty_packs_solved": 26,
+          "incremental_updates": 233,
+          "positive_rows_retained": 15,
+          "nonempty_packs_reused": 1,
+          "unchanged_rankings": 80
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 12,
+          "round_to_170": 30,
+          "round_to_175": 77,
+          "round_to_180": 155
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 416276,
+          "nonadjacent_gains_evaluated": 409473,
+          "incremental_updates": 233,
+          "positive_rows_retained": 15,
+          "unchanged_rankings": 80,
+          "rank_entries_compared": 3805,
+          "unchanged_nonempty_conflict_lists": 1
+        }
+      },
+      {
+        "seed": 3502,
+        "rounds": 320,
+        "profile": "base",
+        "score": 181,
+        "components": 90,
+        "final_hash": "137495c007831e978623fecaeca446df0671154a9702dab1c5c1f8bdac18d585",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 584508,
+          "nonadjacent_gains_evaluated": 575274,
+          "nonempty_packs_solved": 36,
+          "incremental_updates": 281,
+          "positive_rows_retained": 15,
+          "unchanged_rankings": 32
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 16,
+          "round_to_170": 41,
+          "round_to_175": 143,
+          "round_to_180": 315
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 584508,
+          "nonadjacent_gains_evaluated": 575274,
+          "incremental_updates": 281,
+          "positive_rows_retained": 15,
+          "unchanged_rankings": 32,
+          "rank_entries_compared": 3986
+        }
+      },
+      {
+        "seed": 3503,
+        "rounds": 320,
+        "profile": "base",
+        "score": 180,
+        "components": 87,
+        "final_hash": "c6169f5173fee4d25e75d9969c5067f6ba68eb7dacd159db9e341d914d9ab465",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 437120,
+          "nonadjacent_gains_evaluated": 430001,
+          "nonempty_packs_solved": 27,
+          "incremental_updates": 222,
+          "positive_rows_retained": 17,
+          "unchanged_rankings": 92,
+          "nonempty_packs_reused": 2
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 15,
+          "round_to_170": 35,
+          "round_to_175": 98,
+          "round_to_180": 210
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 437120,
+          "nonadjacent_gains_evaluated": 430001,
+          "incremental_updates": 222,
+          "positive_rows_retained": 17,
+          "unchanged_rankings": 92,
+          "rank_entries_compared": 3489,
+          "unchanged_nonempty_conflict_lists": 2
+        }
+      }
+    ],
+    "stable": [
+      {
+        "seed": 3500,
+        "rounds": 320,
+        "profile": "stable",
+        "score": 171,
+        "components": 98,
+        "final_hash": "36324ed1957da52b953ada80ddd09642a10d6ea24c4109a5aaa3134ac5ab9995",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 299552,
+          "nonadjacent_gains_evaluated": 294449,
+          "nonempty_packs_solved": 53,
+          "incremental_updates": 186,
+          "positive_rows_retained": 649,
+          "nonempty_packs_reused": 267,
+          "unchanged_rankings": 127
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 17,
+          "round_to_170": 63
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 299552,
+          "nonadjacent_gains_evaluated": 294449,
+          "incremental_updates": 186,
+          "positive_rows_retained": 649,
+          "unchanged_rankings": 127,
+          "rank_entries_compared": 5096,
+          "unchanged_nonempty_conflict_lists": 267
+        }
+      },
+      {
+        "seed": 3501,
+        "rounds": 320,
+        "profile": "stable",
+        "score": 182,
+        "components": 80,
+        "final_hash": "9d789adee9503f405c3a2a74944983731ae299423c1088fd71fb08740aa9124f",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 416276,
+          "nonadjacent_gains_evaluated": 409473,
+          "nonempty_packs_solved": 26,
+          "incremental_updates": 233,
+          "positive_rows_retained": 15,
+          "nonempty_packs_reused": 1,
+          "unchanged_rankings": 80
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 12,
+          "round_to_170": 30,
+          "round_to_175": 77,
+          "round_to_180": 155
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 416276,
+          "nonadjacent_gains_evaluated": 409473,
+          "incremental_updates": 233,
+          "positive_rows_retained": 15,
+          "unchanged_rankings": 80,
+          "rank_entries_compared": 3805,
+          "unchanged_nonempty_conflict_lists": 1
+        }
+      },
+      {
+        "seed": 3502,
+        "rounds": 320,
+        "profile": "stable",
+        "score": 181,
+        "components": 90,
+        "final_hash": "137495c007831e978623fecaeca446df0671154a9702dab1c5c1f8bdac18d585",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 584508,
+          "nonadjacent_gains_evaluated": 575274,
+          "nonempty_packs_solved": 36,
+          "incremental_updates": 281,
+          "positive_rows_retained": 15,
+          "unchanged_rankings": 32
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 16,
+          "round_to_170": 41,
+          "round_to_175": 143,
+          "round_to_180": 315
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 7,
+          "pairs_reconsidered": 584508,
+          "nonadjacent_gains_evaluated": 575274,
+          "incremental_updates": 281,
+          "positive_rows_retained": 15,
+          "unchanged_rankings": 32,
+          "rank_entries_compared": 3986
+        }
+      },
+      {
+        "seed": 3503,
+        "rounds": 320,
+        "profile": "stable",
+        "score": 179,
+        "components": 91,
+        "final_hash": "0618f6f24b9073682d6cb14b1c18210327336c8aa039a72a91f80ca7d8221d17",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 325140,
+          "nonadjacent_gains_evaluated": 319870,
+          "nonempty_packs_solved": 85,
+          "incremental_updates": 183,
+          "positive_rows_retained": 1002,
+          "nonempty_packs_reused": 201,
+          "unchanged_rankings": 131
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 17,
+          "round_to_170": 69,
+          "round_to_175": 163
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 325140,
+          "nonadjacent_gains_evaluated": 319870,
+          "incremental_updates": 183,
+          "positive_rows_retained": 1002,
+          "unchanged_rankings": 131,
+          "rank_entries_compared": 5277,
+          "unchanged_nonempty_conflict_lists": 201
+        }
+      }
+    ],
+    "cp": [
+      {
+        "seed": 3500,
+        "rounds": 320,
+        "profile": "cp",
+        "score": 177,
+        "components": 88,
+        "final_hash": "59b4fd0b5b34a45a6d18f78914f5ae07f2d0c21b9e29baab15f487f326f68fdf",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 486648,
+          "nonadjacent_gains_evaluated": 478822,
+          "nonempty_packs_solved": 57,
+          "incremental_updates": 260,
+          "positive_rows_retained": 302,
+          "nonempty_packs_reused": 70,
+          "unchanged_rankings": 54
+        },
+        "milestones": {
+          "round_to_150": 5,
+          "round_to_160": 17,
+          "round_to_170": 99,
+          "round_to_175": 113
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 486648,
+          "nonadjacent_gains_evaluated": 478822,
+          "incremental_updates": 260,
+          "positive_rows_retained": 302,
+          "unchanged_rankings": 54,
+          "rank_entries_compared": 4388,
+          "unchanged_nonempty_conflict_lists": 66
+        }
+      },
+      {
+        "seed": 3501,
+        "rounds": 320,
+        "profile": "cp",
+        "score": 177,
+        "components": 94,
+        "final_hash": "3ec917c7d8c889657a808f9c619766a914ef60567bff16ef74d535f5dff1b766",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 484788,
+          "nonadjacent_gains_evaluated": 476922,
+          "nonempty_packs_solved": 86,
+          "incremental_updates": 259,
+          "positive_rows_retained": 76,
+          "nonempty_packs_reused": 33,
+          "unchanged_rankings": 55
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 49,
+          "round_to_170": 125,
+          "round_to_175": 140
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 484788,
+          "nonadjacent_gains_evaluated": 476922,
+          "incremental_updates": 259,
+          "positive_rows_retained": 76,
+          "unchanged_rankings": 55,
+          "rank_entries_compared": 4358,
+          "unchanged_nonempty_conflict_lists": 33
+        }
+      },
+      {
+        "seed": 3502,
+        "rounds": 320,
+        "profile": "cp",
+        "score": 171,
+        "components": 105,
+        "final_hash": "9ed33266ca6a42a80a2cecb1810a5623c51d3140eb35d5c1a417dc68bf132b7f",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 5,
+          "pairs_reconsidered": 333417,
+          "nonadjacent_gains_evaluated": 327934,
+          "nonempty_packs_solved": 43,
+          "incremental_updates": 201,
+          "positive_rows_retained": 77,
+          "unchanged_rankings": 114,
+          "nonempty_packs_reused": 33
+        },
+        "milestones": {
+          "round_to_150": 5,
+          "round_to_160": 17,
+          "round_to_170": 304
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 5,
+          "pairs_reconsidered": 333417,
+          "nonadjacent_gains_evaluated": 327934,
+          "incremental_updates": 201,
+          "positive_rows_retained": 77,
+          "unchanged_rankings": 114,
+          "rank_entries_compared": 4153,
+          "unchanged_nonempty_conflict_lists": 29
+        }
+      },
+      {
+        "seed": 3503,
+        "rounds": 320,
+        "profile": "cp",
+        "score": 181,
+        "components": 88,
+        "final_hash": "dd1b6de6554dc0e3821eff289fbf51a6862bbd13de70f6988b3677844c98eb95",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 301706,
+          "nonadjacent_gains_evaluated": 296896,
+          "nonempty_packs_solved": 30,
+          "incremental_updates": 197,
+          "positive_rows_retained": 22,
+          "nonempty_packs_reused": 1,
+          "unchanged_rankings": 117
+        },
+        "milestones": {
+          "round_to_150": 4,
+          "round_to_160": 10,
+          "round_to_170": 30,
+          "round_to_175": 51,
+          "round_to_180": 105
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "full_rebuilds": 6,
+          "pairs_reconsidered": 301706,
+          "nonadjacent_gains_evaluated": 296896,
+          "incremental_updates": 197,
+          "positive_rows_retained": 22,
+          "unchanged_rankings": 117,
+          "rank_entries_compared": 3500,
+          "unchanged_nonempty_conflict_lists": 1
+        }
+      }
+    ]
+  },
+  "final_strict_and_bounded_production": {
+    "base": [
+      {
+        "seed": 3500,
+        "rounds": 320,
+        "profile": "base",
+        "score": 171,
+        "components": 98,
+        "final_hash": "36324ed1957da52b953ada80ddd09642a10d6ea24c4109a5aaa3134ac5ab9995",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 288888,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 288888,
+          "nonadjacent_gains_evaluated": 284065,
+          "nonempty_packs_solved": 32,
+          "peak_cached_graph_key_bytes": 48120,
+          "incremental_updates": 191,
+          "positive_rows_retained": 650,
+          "singleton_packs": 1,
+          "nonempty_packs_reused": 287,
+          "unchanged_rankings": 127
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 17,
+          "round_to_170": 63
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 288888,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 288888,
+          "nonadjacent_gains_evaluated": 284065,
+          "incremental_updates": 191,
+          "positive_rows_retained": 650,
+          "unchanged_rankings": 127,
+          "rank_entries_compared": 5096,
+          "unchanged_nonempty_conflict_lists": 267,
+          "graph_reuse": {
+            "nontrivial_lists": 319,
+            "singleton_lists": 1,
+            "hits_1": 267,
+            "moves_1": 1016,
+            "hits_2": 276,
+            "moves_2": 1047,
+            "hits_4": 281,
+            "moves_4": 1063,
+            "hits_8": 287,
+            "moves_8": 1085,
+            "hits_16": 287,
+            "moves_16": 1085,
+            "hits_32": 287,
+            "moves_32": 1085,
+            "hits_64": 287,
+            "moves_64": 1085,
+            "hits_320": 287,
+            "moves_320": 1085
+          },
+          "dense_fallback_work": {
+            "calls": 320,
+            "available_pairs": 3294720,
+            "affected_unordered_pairs": 288888,
+            "full_rebuilds": 7,
+            "pairs_reconsidered": 299552,
+            "nonadjacent_gains_evaluated": 294449,
+            "incremental_updates": 186,
+            "positive_rows_retained": 649,
+            "unchanged_rankings": 127
+          }
+        }
+      },
+      {
+        "seed": 3501,
+        "rounds": 320,
+        "profile": "base",
+        "score": 182,
+        "components": 80,
+        "final_hash": "9d789adee9503f405c3a2a74944983731ae299423c1088fd71fb08740aa9124f",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 407202,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 407202,
+          "nonadjacent_gains_evaluated": 400674,
+          "nonempty_packs_solved": 17,
+          "peak_cached_graph_key_bytes": 45420,
+          "incremental_updates": 238,
+          "positive_rows_retained": 15,
+          "nonempty_packs_reused": 1,
+          "singleton_packs": 9,
+          "unchanged_rankings": 80
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 12,
+          "round_to_170": 30,
+          "round_to_175": 77,
+          "round_to_180": 155
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 407202,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 407202,
+          "nonadjacent_gains_evaluated": 400674,
+          "incremental_updates": 238,
+          "positive_rows_retained": 15,
+          "unchanged_rankings": 80,
+          "rank_entries_compared": 3805,
+          "unchanged_nonempty_conflict_lists": 1,
+          "graph_reuse": {
+            "nontrivial_lists": 18,
+            "hits_1": 1,
+            "moves_1": 11,
+            "hits_2": 1,
+            "moves_2": 11,
+            "hits_4": 1,
+            "moves_4": 11,
+            "hits_8": 1,
+            "moves_8": 11,
+            "hits_16": 1,
+            "moves_16": 11,
+            "hits_32": 1,
+            "moves_32": 11,
+            "hits_64": 1,
+            "moves_64": 11,
+            "hits_320": 1,
+            "moves_320": 11,
+            "singleton_lists": 9
+          },
+          "dense_fallback_work": {
+            "calls": 320,
+            "available_pairs": 3294720,
+            "affected_unordered_pairs": 407202,
+            "full_rebuilds": 7,
+            "pairs_reconsidered": 416276,
+            "nonadjacent_gains_evaluated": 409473,
+            "incremental_updates": 233,
+            "positive_rows_retained": 15,
+            "unchanged_rankings": 80
+          }
+        }
+      },
+      {
+        "seed": 3502,
+        "rounds": 320,
+        "profile": "base",
+        "score": 181,
+        "components": 90,
+        "final_hash": "137495c007831e978623fecaeca446df0671154a9702dab1c5c1f8bdac18d585",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 573176,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 573176,
+          "nonadjacent_gains_evaluated": 564258,
+          "nonempty_packs_solved": 27,
+          "peak_cached_graph_key_bytes": 47724,
+          "incremental_updates": 286,
+          "positive_rows_retained": 15,
+          "singleton_packs": 9,
+          "unchanged_rankings": 32
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 16,
+          "round_to_170": 41,
+          "round_to_175": 143,
+          "round_to_180": 315
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 573176,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 573176,
+          "nonadjacent_gains_evaluated": 564258,
+          "incremental_updates": 286,
+          "positive_rows_retained": 15,
+          "unchanged_rankings": 32,
+          "rank_entries_compared": 3986,
+          "graph_reuse": {
+            "nontrivial_lists": 27,
+            "singleton_lists": 9
+          },
+          "dense_fallback_work": {
+            "calls": 320,
+            "available_pairs": 3294720,
+            "affected_unordered_pairs": 573176,
+            "full_rebuilds": 7,
+            "pairs_reconsidered": 584508,
+            "nonadjacent_gains_evaluated": 575274,
+            "incremental_updates": 281,
+            "positive_rows_retained": 15,
+            "unchanged_rankings": 32
+          }
+        }
+      },
+      {
+        "seed": 3503,
+        "rounds": 320,
+        "profile": "base",
+        "score": 180,
+        "components": 87,
+        "final_hash": "c6169f5173fee4d25e75d9969c5067f6ba68eb7dacd159db9e341d914d9ab465",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 430561,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 430561,
+          "nonadjacent_gains_evaluated": 423628,
+          "nonempty_packs_solved": 21,
+          "peak_cached_graph_key_bytes": 41760,
+          "incremental_updates": 226,
+          "positive_rows_retained": 17,
+          "singleton_packs": 7,
+          "unchanged_rankings": 92,
+          "nonempty_packs_reused": 1
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 15,
+          "round_to_170": 35,
+          "round_to_175": 98,
+          "round_to_180": 210
+        },
+        "work": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 430561,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 430561,
+          "nonadjacent_gains_evaluated": 423628,
+          "incremental_updates": 226,
+          "positive_rows_retained": 17,
+          "unchanged_rankings": 92,
+          "rank_entries_compared": 3489,
+          "unchanged_nonempty_conflict_lists": 2,
+          "graph_reuse": {
+            "nontrivial_lists": 22,
+            "singleton_lists": 7,
+            "hits_1": 1,
+            "moves_1": 2,
+            "hits_2": 1,
+            "moves_2": 2,
+            "hits_4": 1,
+            "moves_4": 2,
+            "hits_8": 1,
+            "moves_8": 2,
+            "hits_16": 1,
+            "moves_16": 2,
+            "hits_32": 1,
+            "moves_32": 2,
+            "hits_64": 1,
+            "moves_64": 2,
+            "hits_320": 1,
+            "moves_320": 2
+          },
+          "dense_fallback_work": {
+            "calls": 320,
+            "available_pairs": 3294720,
+            "affected_unordered_pairs": 430561,
+            "full_rebuilds": 6,
+            "pairs_reconsidered": 437120,
+            "nonadjacent_gains_evaluated": 430001,
+            "incremental_updates": 222,
+            "positive_rows_retained": 17,
+            "unchanged_rankings": 92
+          }
+        }
+      }
+    ],
+    "cp": [
+      {
+        "seed": 3500,
+        "rounds": 320,
+        "profile": "cp",
+        "score": 177,
+        "components": 88,
+        "final_hash": "59b4fd0b5b34a45a6d18f78914f5ae07f2d0c21b9e29baab15f487f326f68fdf",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 476390,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 476390,
+          "nonadjacent_gains_evaluated": 468829,
+          "nonempty_packs_solved": 46,
+          "peak_cached_graph_key_bytes": 46452,
+          "incremental_updates": 264,
+          "positive_rows_retained": 302,
+          "nonempty_packs_reused": 69,
+          "singleton_packs": 12,
+          "unchanged_rankings": 54
+        },
+        "milestones": {
+          "round_to_150": 5,
+          "round_to_160": 17,
+          "round_to_170": 99,
+          "round_to_175": 113
+        },
+        "work": {
+          "graph_reuse": {},
+          "dense_fallback_work": {}
+        }
+      },
+      {
+        "seed": 3501,
+        "rounds": 320,
+        "profile": "cp",
+        "score": 177,
+        "components": 94,
+        "final_hash": "3ec917c7d8c889657a808f9c619766a914ef60567bff16ef74d535f5dff1b766",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 475615,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 475615,
+          "nonadjacent_gains_evaluated": 467994,
+          "nonempty_packs_solved": 51,
+          "peak_cached_graph_key_bytes": 45720,
+          "incremental_updates": 263,
+          "positive_rows_retained": 81,
+          "singleton_packs": 7,
+          "nonempty_packs_reused": 61,
+          "unchanged_rankings": 55
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 49,
+          "round_to_170": 125,
+          "round_to_175": 140
+        },
+        "work": {
+          "graph_reuse": {},
+          "dense_fallback_work": {}
+        }
+      },
+      {
+        "seed": 3502,
+        "rounds": 320,
+        "profile": "cp",
+        "score": 171,
+        "components": 105,
+        "final_hash": "9ed33266ca6a42a80a2cecb1810a5623c51d3140eb35d5c1a417dc68bf132b7f",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 325580,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 325580,
+          "nonadjacent_gains_evaluated": 320309,
+          "nonempty_packs_solved": 30,
+          "peak_cached_graph_key_bytes": 47556,
+          "incremental_updates": 204,
+          "positive_rows_retained": 77,
+          "singleton_packs": 5,
+          "unchanged_rankings": 114,
+          "nonempty_packs_reused": 41
+        },
+        "milestones": {
+          "round_to_150": 5,
+          "round_to_160": 17,
+          "round_to_170": 304
+        },
+        "work": {
+          "graph_reuse": {},
+          "dense_fallback_work": {}
+        }
+      },
+      {
+        "seed": 3503,
+        "rounds": 320,
+        "profile": "cp",
+        "score": 181,
+        "components": 88,
+        "final_hash": "dd1b6de6554dc0e3821eff289fbf51a6862bbd13de70f6988b3677844c98eb95",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 292169,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 292169,
+          "nonadjacent_gains_evaluated": 287617,
+          "nonempty_packs_solved": 23,
+          "peak_cached_graph_key_bytes": 41892,
+          "incremental_updates": 201,
+          "positive_rows_retained": 25,
+          "singleton_packs": 7,
+          "nonempty_packs_reused": 1,
+          "unchanged_rankings": 117
+        },
+        "milestones": {
+          "round_to_150": 4,
+          "round_to_160": 10,
+          "round_to_170": 30,
+          "round_to_175": 51,
+          "round_to_180": 105
+        },
+        "work": {
+          "graph_reuse": {},
+          "dense_fallback_work": {}
+        }
+      }
+    ],
+    "stable": [
+      {
+        "seed": 3500,
+        "rounds": 320,
+        "profile": "stable",
+        "score": 171,
+        "components": 98,
+        "final_hash": "36324ed1957da52b953ada80ddd09642a10d6ea24c4109a5aaa3134ac5ab9995",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 288888,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 288888,
+          "nonadjacent_gains_evaluated": 284065,
+          "nonempty_packs_solved": 32,
+          "peak_cached_graph_key_bytes": 48120,
+          "incremental_updates": 191,
+          "positive_rows_retained": 650,
+          "singleton_packs": 1,
+          "nonempty_packs_reused": 287,
+          "unchanged_rankings": 127
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 17,
+          "round_to_170": 63
+        },
+        "work": {
+          "graph_reuse": {},
+          "dense_fallback_work": {}
+        }
+      },
+      {
+        "seed": 3501,
+        "rounds": 320,
+        "profile": "stable",
+        "score": 182,
+        "components": 80,
+        "final_hash": "9d789adee9503f405c3a2a74944983731ae299423c1088fd71fb08740aa9124f",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 407202,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 407202,
+          "nonadjacent_gains_evaluated": 400674,
+          "nonempty_packs_solved": 17,
+          "peak_cached_graph_key_bytes": 45420,
+          "incremental_updates": 238,
+          "positive_rows_retained": 15,
+          "nonempty_packs_reused": 1,
+          "singleton_packs": 9,
+          "unchanged_rankings": 80
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 12,
+          "round_to_170": 30,
+          "round_to_175": 77,
+          "round_to_180": 155
+        },
+        "work": {
+          "graph_reuse": {},
+          "dense_fallback_work": {}
+        }
+      },
+      {
+        "seed": 3502,
+        "rounds": 320,
+        "profile": "stable",
+        "score": 181,
+        "components": 90,
+        "final_hash": "137495c007831e978623fecaeca446df0671154a9702dab1c5c1f8bdac18d585",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 573176,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 573176,
+          "nonadjacent_gains_evaluated": 564258,
+          "nonempty_packs_solved": 27,
+          "peak_cached_graph_key_bytes": 47724,
+          "incremental_updates": 286,
+          "positive_rows_retained": 15,
+          "singleton_packs": 9,
+          "unchanged_rankings": 32
+        },
+        "milestones": {
+          "round_to_150": 7,
+          "round_to_160": 16,
+          "round_to_170": 41,
+          "round_to_175": 143,
+          "round_to_180": 315
+        },
+        "work": {
+          "graph_reuse": {},
+          "dense_fallback_work": {}
+        }
+      },
+      {
+        "seed": 3503,
+        "rounds": 320,
+        "profile": "stable",
+        "score": 179,
+        "components": 91,
+        "final_hash": "0618f6f24b9073682d6cb14b1c18210327336c8aa039a72a91f80ca7d8221d17",
+        "work_and_codes_match_original": true,
+        "physical_operations": {
+          "calls": 320,
+          "available_pairs": 3294720,
+          "affected_unordered_pairs": 315593,
+          "full_rebuilds": 2,
+          "pairs_reconsidered": 315593,
+          "nonadjacent_gains_evaluated": 310575,
+          "nonempty_packs_solved": 64,
+          "peak_cached_graph_key_bytes": 44736,
+          "incremental_updates": 187,
+          "positive_rows_retained": 1002,
+          "singleton_packs": 5,
+          "nonempty_packs_reused": 217,
+          "unchanged_rankings": 131
+        },
+        "milestones": {
+          "round_to_150": 6,
+          "round_to_160": 17,
+          "round_to_170": 69,
+          "round_to_175": 163
+        },
+        "work": {
+          "graph_reuse": {},
+          "dense_fallback_work": {}
+        }
+      }
+    ]
+  }
+}

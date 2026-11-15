@@ -89,3 +89,24 @@ For independent discovery at the measured 180 threshold:
 ```
 
 [Physical pools, branches, per-seed milestones and board digests](R35_SWAP_PACKING.json). Reproduce with `bench_r35_packing.py`, `bench_r35_fixed_packing.py` and `bench_r35_trajectories.py` using the original tile file. Fixed packing optimizes only the supplied oriented candidates. A feasible CP result establishes its checked score. A proof of optimality on that scope never closes a full unexamined board.
+
+## 35. Retain profitable swap candidates when the board changes
+
+The standard fresh repair now keeps an in-memory move catalog per trajectory. A candidate is reconsidered when one of its two endpoint codes changes, an active endpoint sees a different facing mask, or a previously protected endpoint becomes eligible. Removing a cell from the allowed set also removes its candidates. Dirty/dirty and dirty/clean pairs form disjoint sets. Existing positive rows keep their order, and newly priced pairs merge by gain, then by their original cell order. A second stage reuses the noncontacting packing only when the ordered endpoints, gains, packing policy and geographic model agree. It puts the current replacement codes on the current board and reprices signed contacts there. It keeps at most 32 exact graph keys and 256 KiB of key bytes per trajectory.
+
+Four standard exact-packing trajectories, 320 rounds each, represented 13,178,880 possible unordered pairs. The released calculation built every current gain matrix. Strict selective maintenance reconsidered 1,699,827 pairs, of which 1,672,625 needed nonadjacent donor pricing. A trial that switched back to a full rebuild once 60% of pairs were dirty reconsidered 1,737,456. All 16,376 positive ranked entries agreed with full reconstruction, including replacement codes and tie priority. A completely unchanged ranking applied on 331 rounds. The active set and original domains are part of the test.
+
+| Original-board edit, 32 calls per control | Available unordered pairs across the calls | Pairs reconsidered |
+|---|---:|---:|
+| Rotate one movable piece | 407,040 | 32,094 |
+| Exchange two physical pieces | 407,040 | 50,980 |
+| Apply four exchanges | 407,040 | 141,435 |
+| Replace the eight protected cells | 367,232 | 46,615 |
+| Independently regenerate the whole board | 407,040 | 407,040 |
+| Repeat an unchanged board | 407,040 | 12,720 |
+
+Under standard exact packing, a one-entry history recovered 269 nontrivial graph packings. Capacities of 2, 4 and 8 recovered 278, 283 and 289. Capacities 16, 32, 64 and 320 recovered the same 289. The case with no recurring nontrivial graph was retained. Across four actual 320-round matching trajectories per policy, bounded reuse avoided 289 standard graph solves, 505 separator graph solves, and 172 graph solves before signed CP. Empty and single-candidate lists are excluded from these gains. The largest observed charge for graph keys was 48,120 bytes. Positive counts sum work across independently run policies.
+
+**Decision.** Retain selective candidate and noncontacting-graph reuse transparently. A full price pass is appropriate for a fresh state or when every available pair has a dirty endpoint. All twelve sustained production runs reproduced the frozen pre-catalog best codes and logical search counters. Cold or resumed workers reconstruct the volatile catalog from their legal board on first use; existing saved trajectory formats and work receipts are compatible. No new search setting is required. Reopen only with evidence of useful nontrivial cross-process reuse or a distinct dependency omitted by the present masks.
+
+[Direct comparisons, physical controls and per-seed outputs](R35_SWAP_CATALOG.json). Reproduce with `bench_r35_swap_catalog.py`. The finite regression checks every legal pair of rotations against an independent full score, including an unchanged swap invalidated by rotating its excluded neighbor.
