@@ -9,13 +9,21 @@ import numpy as np
 
 
 class RotationOracle:
-    def __init__(self, model, capacity=4096, *, observe=None, cache_bytes=None):
+    def __init__(self, model, capacity=4096, *, observe=None, cache_bytes=None, components=True, poll=None):
         self.model = model
         self.capacity = capacity
         self.observe = observe
+        self.poll=poll
         if cache_bytes is not None and (type(cache_bytes) is not int or cache_bytes < 1):
             raise ValueError("Positive factor-cache byte budget required")
         self.cache_bytes = cache_bytes
+        self.component_cache=None
+        self.factor_budget=cache_bytes
+        if components and observe is None and (capacity or cache_bytes):
+            from r35_rotation_components import ComponentCache
+            limit=min(512*1024,128*capacity) if cache_bytes is None else min(512*1024,cache_bytes//4)
+            self.component_cache=ComponentCache(limit)
+            if cache_bytes is not None:self.factor_budget-=limit
         self.priority = {}
         self.cache_size = 0
         self.age = 0.
@@ -30,6 +38,8 @@ class RotationOracle:
         self.work = dict(dominated=0, messages=0, avoided=0, hits=0, threshold_removed=0, threshold_rejected=0,
                          threshold_stars=0, threshold_supports=0, threshold_argmax_checks=0,
                          threshold_remote_events=0, threshold_condition_hits=0,
+                         singleton_responses=0, component_keys=0, component_hits=0, component_factors_reused=0, component_frame_hits=0, component_reindex=0, component_vertex_hits=0,
+                         component_tuples_encoded=0, component_tuples_decoded=0, numeric_keys=0,
                          plan_hits=0, plan_builds=0, plan_extensions=0, plan_neighbor_products=0)
 
     def _edge(self, left, ls, right, rs):
@@ -128,7 +138,7 @@ class RotationOracle:
             if remainder is not None:
                 size += sys.getsizeof(remainder) + sum(sys.getsizeof(row) + sys.getsizeof(row[1])
                                                        + sys.getsizeof(row[2]) for row in remainder)
-            budget = self.plan_limit if self.cache_bytes is None else min(self.plan_limit, self.cache_bytes-self.cache_size)
+            budget = self.plan_limit if self.cache_bytes is None else min(self.plan_limit, self.factor_budget-self.cache_size)
             if size <= budget:
                 self._trim_plans(budget-size)
                 self.plans[key] = steps,remainder,size
@@ -150,10 +160,35 @@ class RotationOracle:
             if np.any(remainder):
                 factors.append(((a,b),remainder) if a<b else ((b,a),remainder.T))
         plan = self._plan(widths, [scope for scope,_ in factors], max_entries)
-        factors.extend(((c,),u) for c,u in enumerate(unary))
+        if (self.component_cache is not None and self.observe is None and len(plan)==n
+                and all(product<=max_entries for _,_,product in plan)):
+            from r35_rotation_components import solve_components
+            score,trace=solve_components(self,widths,unary,factors,plan,max_entries)
+        else:
+            factors.extend(((c,),u) for c,u in enumerate(unary))
+            solved=self._factor_trace(widths,factors,plan,max_entries)
+            if solved is None:return None
+            score,trace=solved
+        def reconstruct(index):
+            if index < 0:
+                yield (3*tiles+np.array([domains[c][index_by_cell[c]] for c in range(n)])).tolist()
+                return
+            cell,rest,alternatives = trace[index]
+            mask = int(alternatives[tuple(index_by_cell[v] for v in rest)])
+            for r in range(widths[cell]):
+                if mask & (1<<r):
+                    index_by_cell[cell] = r
+                    yield from reconstruct(index-1)
+                    if not ties:
+                        return
+        index_by_cell = [0]*n
+        return score, itertools.islice(reconstruct(n-1), limit)
+
+    def _factor_trace(self,widths,factors,plan,max_entries):
         trace = []
         score = 0
         for cell,scope,product in plan:
+            if self.poll is not None:self.poll()
             if product > max_entries:
                 return None
             local = [(s,v) for s,v in factors if cell in s]
@@ -163,6 +198,7 @@ class RotationOracle:
             # input; unrelated assignments can safely reuse this table.
             key = (axis,tuple(widths[c] for c in scope),
                    tuple((tuple(scope.index(v) for v in s),f.tobytes()) for s,f in local))
+            self.work['numeric_keys']+=1
             entry = self.cache.get(key)
             if entry is None:
                 grid = np.zeros(tuple(widths[v] for v in scope),dtype=np.int32)
@@ -177,9 +213,9 @@ class RotationOracle:
                     # Match the trace metric: serialized operand representation
                     # and numeric answers. Python object headers are additional.
                     size = len(repr(key).encode("ascii")) + best.nbytes + alternatives.nbytes
-                    if size <= self.cache_bytes:
-                        self._trim_plans(self.cache_bytes-self.cache_size-size)
-                        while self.cache_size + size > self.cache_bytes:
+                    if size <= self.factor_budget:
+                        self._trim_plans(self.factor_budget-self.cache_size-size)
+                        while self.cache_size + size > self.factor_budget:
                             victim = min(self.priority, key=lambda k: self.priority[k][0])
                             self.age, removed = self.priority.pop(victim)
                             self.cache_size -= removed
@@ -207,17 +243,4 @@ class RotationOracle:
                 factors.append((rest,best))
             else:
                 score += int(best)
-        def reconstruct(index):
-            if index < 0:
-                yield (3*tiles+np.array([domains[c][index_by_cell[c]] for c in range(n)])).tolist()
-                return
-            cell,rest,alternatives = trace[index]
-            mask = int(alternatives[tuple(index_by_cell[v] for v in rest)])
-            for r in range(widths[cell]):
-                if mask & (1<<r):
-                    index_by_cell[cell] = r
-                    yield from reconstruct(index-1)
-                    if not ties:
-                        return
-        index_by_cell = [0]*n
-        return score, itertools.islice(reconstruct(n-1), limit)
+        return score,trace

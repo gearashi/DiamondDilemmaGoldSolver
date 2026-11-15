@@ -1341,9 +1341,17 @@
       "source_id": "post-R35 #46",
       "title": "Reuse whole disconnected numeric rotation responses with complete tied witnesses",
       "proposal_and_validation": "Count actual structural/component overlap beyond the existing individual factor message and structural plan caches. Include every local unary and binary table, real rotation frames, cap behavior and complete directional ties. Compare first/all witnesses, numeric factor key construction and backtraces over six fresh and twelve adjacent original boards, disconnected controls and changed operands. Close generalization if extra hashing or no whole components win.",
-      "state": "testing",
+      "state": "keep complete component responses with bounded vertex transport",
       "owner": "repair34",
-      "mechanism": "ROT-DISCONNECTED-NUMERIC-RESPONSE"
+      "mechanism": "ROT-DISCONNECTED-NUMERIC-RESPONSE",
+      "measurement": "Across 58 queries numeric factor keys fell 18,105 to 2,064, with 1,946 component keys and 264 small-frame canonicalizations. Computed numeric grid entries fell 593,183 to 592,579. All scored witnesses, ordering and capped outcomes matched. The complete original 87-swap query used 784 numeric factor keys instead of 14,646 for the same 88 independently verified exact witnesses.",
+      "closure_reason": "Retain singleton answers, exact offset-normalized component traces, and deferred optimal-tuple transport under stable rank and vertex ordering through three cells. Preserve the full individual-factor observer and cap path. Broader exhaustive rank/vertex permutations cost more proof work, and four-cell aliasing saved eight keys and 15 grid entries for 61 extra canonicalizations. Five through eight brought no additional gains.",
+      "reopen_trigger": "A new population with substantially repeated four-plus-cell numeric vertex aliases, or a different costed conditional-response representation beyond the tested trace, rank, vertex, cap and delayed-tuple methods.",
+      "evidence": [
+        "docs/ROUND35_ROTATION_COMPONENTS.md",
+        "docs/R35_ROTATION_COMPONENTS.json",
+        "test_r35_rotation_components.py"
+      ]
     },
     {
       "id": 75,

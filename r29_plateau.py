@@ -23,7 +23,7 @@ class SwapGraph:
         self.model = model
         self.binding = domain_binding(model)
         self.deadline=float('inf')
-        self.oracle = RotationOracle(model,observe=lambda *_:self.check_time())
+        self.oracle = RotationOracle(model,poll=self.check_time)
         self.pairs = np.array(list(itertools.combinations(model.free, 2)), dtype=int).reshape(-1, 2)
         db.executescript("""
             CREATE TABLE IF NOT EXISTS optima(key TEXT PRIMARY KEY, result TEXT NOT NULL);
