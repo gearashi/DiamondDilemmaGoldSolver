@@ -136,7 +136,7 @@
         "docs/R35_MIXED_CONTACT_DONOR.json",
         "test_r35_mixed_sewings.py"
       ],
-      "decision": "Retain the original common-phase search plus exact child-specific XOR phases, forced alternating cycles, signed frontier caching and the all-donor geographic root check. Thirteen complete original physical counts and planted real Gold children agree with independent verification. The combined 793 physical seams of eight recorded donors, including the connected contact-priced repair, exclude all 480 geographic roots by independent SAT unit propagation. Every iterated recombination confined to those seams is geographically exhausted. Two larger purely abstract counts remain bounded diagnostics.",
+      "decision": "Retain the original common-phase search plus exact child-specific XOR phases, forced alternating cycles, signed frontier caching and the all-donor geographic root check. Thirteen complete original physical counts and planted real Gold children agree with independent verification. The expanded 852-seam union, including the connected contact-priced repair and later 117/985-contact portfolio pairings, exclude all 480 geographic roots by independent SAT unit propagation. Every iterated recombination confined to those seams is geographically exhausted. Two larger purely abstract counts remain bounded diagnostics.",
       "reopen_if": "A new physical donor supplies seams outside the documented union and at least one root survives the combined geographic test, or a material application requires one of the two unresolved physical-only counts. The three full signed mate pools admit geographic roots and remain distinct from the named donor family."
     },
     {
@@ -1199,7 +1199,7 @@
       "source_id": 4,
       "title": "Checkpoint only changed classic GPU fields and frame chunks",
       "proposal_and_validation": "The classic (non-domain) GPU checkpoint is still an uncompressed whole NPZ. The installed native sample has 43 members and 260,190,250 bytes, including six arrays of 41,943,168 bytes each. Screen constant prefix data, idle lanes, and dirty frame/column chunks across real consecutive saves. Compare reusing the existing incremental checkpoint store with chunked certified native payloads, preserve old NPZ imports, cheap host-only exhaustion checks, crash-safe publication, checksums, independent witnesses and exact restart ownership. Count device readbacks, writes and unchanged payloads; cover Windows and Vulkan and disk-full fallback.",
-      "state": "testing final native board, frame and recovery controls",
+      "state": "keep scoped physical ranges, compressed portable heads and authenticated parked banks",
       "evidence": [
         "bench_r35_native_chunks.py",
         "docs/R35_NATIVE_CHUNKS.json",
@@ -1225,11 +1225,17 @@
         "docs/ROUND35_PHYSICAL_BOARD_CODEC.md",
         "test_r35_board_delta.py",
         "test_r35_frame_packet.py",
-        "bench_r35_frame_tracking.py"
+        "bench_r35_frame_tracking.py",
+        "docs/R35_CHECKPOINT_POLICY.json",
+        "docs/R35_DISPATCH_CONTINUATION.json",
+        "docs/R35_CLASSIC_SOURCE_HISTORY_DENSITY.json",
+        "docs/ROUND35_GPU_PAGES.md",
+        "test_r35_frame_defaults.py",
+        "test_r35_frame_spans.py"
       ],
       "measurement": "At 131072 lanes, final 512-step native captures transferred 72488448/216924160 CUDA and 139471872/427819008 Vulkan or D3D12 bytes with all fields equal. Sparse 512-job case: 338560 CUDA/655616 WebGPU. Actual D3D12 OOM fixed; dispersed 384-job installation 311040 to 23 queue writes, one job 810 to 17. Frozen final source recovered a 1911-job parked process kill from generation 223 to portable 973. Static board-only screen has 870235 structurally mutable of 5152480 entries; dynamic occupancy screen 1812630 of 4992000.",
-      "next_step": "Check frozen-source cost and equivalence of native write tracking including actual dynamic 131072-lane runs. Finish independent exact initialization-vs-cursor span transport, default-valued initial/reset frame comparison and final process-kill, package and source provenance regression.",
-      "decision_to_date": "Keep authenticated parked-bank storage, ownership-aware native frame readback and compact sparse WebGPU transfers for the verified layouts. The separate board-array projection has materially fewer values in the original controls and requires an actual native transport and independent validity checks."
+      "decision": "Keep native readback limited to changed owners, separately tracked cursor and initialization spans, cost-selected board/frame gather and cold defaults. Keep the cheaper direct dense frame fallback, portable compressed heads and authenticated banks for suspended lanes. All 18 paired original configurations and six final committed CUDA/Vulkan/Direct3D controls matched full physical snapshots. A 131072-lane static profile read 237184840 versus 262520040 bytes on CUDA. At 32768 lanes the final density policy avoided a further 115084 or 116096 bytes on early-retired short portable captures. Some dense host merges remain slower. A real stopped 2051-job run recovered after killing the test process at generation 270 with 1911 parked and produced portable generation 1231 with verified ownership. Existing live checkpoints were read-only throughout.",
+      "reopen_if": "A different physical state layout, a concrete missed writer or lost ownership, or a measured transfer crossover on a new native backend can change selection. Keep the strict final provenance regression attached to each future producer release."
     },
     {
       "id": 69,

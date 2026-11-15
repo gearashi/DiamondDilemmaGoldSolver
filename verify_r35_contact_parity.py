@@ -8,13 +8,14 @@ from pathlib import Path
 from verify_r35_contact_proof import RawPuzzle, audit
 
 
-def formula(data,codes,certificate,*,inventory_parity=True):
+def formula(data,codes,certificate,*,inventory_parity=True,cap=25,weighted=False):
     from pysat.card import CardEnc, EncType
     from pysat.formula import IDPool
 
-    cap=audit(data,codes,certificate)['minimum_lost']
-    if cap!=25:
+    if audit(data,codes,certificate)['minimum_lost']!=25:
         raise ValueError('Expected the independently verified original 25-loss weighted certificate.')
+    if type(cap) is not int or not 25<=cap<=207:
+        raise ValueError('Expected a loss cap from 25 through 207.')
     puzzle=RawPuzzle(data)
     reference=puzzle.reference(codes)
     required=set(map(tuple,certificate['required']))
@@ -41,7 +42,8 @@ def formula(data,codes,certificate,*,inventory_parity=True):
     candidates=sorted(set(optional)-keep)
     clauses.extend([[-loss[e]] for e in sorted(keep)])
     clauses.extend([[-loss[a],-loss[b]] for a,b in combinations(candidates,2) if over({a,b})])
-    clauses.extend(CardEnc.atmost([loss[e] for e in candidates],bound=cap,vpool=ids,encoding=EncType.totalizer).clauses)
+    if len(candidates)>cap:
+        clauses.extend(CardEnc.atmost([loss[e] for e in candidates],bound=cap,vpool=ids,encoding=EncType.totalizer).clauses)
 
     if inventory_parity:
         # For each unoriented signed reciprocal class the number of sides on
@@ -68,11 +70,14 @@ def formula(data,codes,certificate,*,inventory_parity=True):
                 clauses.extend([[x,y,-z],[-x,-y,-z],[x,-y,z],[-x,y,z]])
                 x=z
             clauses.append([x if odd else -x])
+    if weighted:
+        from r35_contact_weight_replay import budget_clauses
+        clauses.extend(budget_clauses(ids,loss,terms,maximum,cap))
     return ids.top,clauses
 
 
-def write_formula(path,data,codes,certificate):
-    n,clauses=formula(data,codes,certificate)
+def write_formula(path,data,codes,certificate,*,cap=25,weighted=False):
+    n,clauses=formula(data,codes,certificate,cap=cap,weighted=weighted)
     with path.open('w',encoding='ascii',newline='\n') as out:
         out.write(f'p cnf {n} {len(clauses)}\n')
         for row in clauses:
@@ -86,7 +91,9 @@ if __name__=='__main__':
     cli.add_argument('--tiles',type=Path,required=True)
     cli.add_argument('--reference',type=Path,default=root/'docs/R29_INCUMBENT.json')
     cli.add_argument('--certificate',type=Path,default=root/'docs/R35_CONTACT_LOSS_CERTIFICATE.json')
+    cli.add_argument('--cap',type=int,default=25)
+    cli.add_argument('--weighted',action='store_true',help='Also constrain the full weighted cover margin.')
     cli.add_argument('--output',type=Path,required=True)
     args=cli.parse_args()
     read=lambda path:json.loads(path.read_bytes())
-    print(write_formula(args.output,read(args.tiles),read(args.reference)['codes'],read(args.certificate)))
+    print(write_formula(args.output,read(args.tiles),read(args.reference)['codes'],read(args.certificate),cap=args.cap,weighted=args.weighted))

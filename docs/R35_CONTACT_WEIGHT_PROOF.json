@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "reference_bonds": 207,
+  "minimum_lost": 27,
+  "maximum_retained": 180,
+  "relaxation_optimum": 27,
+  "cap": 26,
+  "weighted_terms": 40,
+  "weighted_terms_semantic_sha256": "ce81105b9b481a23d780cb47e802dcff36c2bde59f1951d35f892c8f12437ce9",
+  "original_tiles_sha256": "81e5e40ab23afb135cafe913af3e9d6579d68eea4c096c60d2ddd57a1c8cfe79",
+  "weighted_certificate_sha256": "e683da5c22be0e55b887f0a0695dae0d43c1ea6c7bead9fa92a2ebc64825ff21",
+  "reference_sha256": "ca0a089fa219f93713bf3a26ce3191d8090e2410b0072ee9146c90297049f492",
+  "generator": "verify_r35_contact_parity.py --cap 26 --weighted",
+  "external_result": "VERIFIED",
+  "resolution_steps": 483061,
+  "dimacs_header": "p cnf 7838 218495",
+  "interpretation": "An original Gold board loses at least 27 reference bonds. The positive only attains 27 in this forty-term signed parity relaxation. The witness does not satisfy all signed integer inventories.",
+  "files": {
+    "cap26.cnf": {
+      "sha256": "c34c7fded68e2c00b45c20974914473fc91e38dcddc916deafeffecd9ebff916",
+      "bytes": 4018984
+    },
+    "cap26.drat": {
+      "sha256": "90f6d6239f4cce21b088fde5d046905ccce889df0cbb23afba7eafe9b60f5c44",
+      "bytes": 3374884
+    },
+    "solve.log": {
+      "sha256": "b1a349026e9c2b4799f5eede1c0b61f3c971ccd2b28dc2d49dbc5d56be0c5253",
+      "bytes": 5856
+    },
+    "check.log": {
+      "sha256": "8298eb21bb9f97cb7eddf0efa85aaaf8591df0c4dbf33410a9b8aec932511e82",
+      "bytes": 459
+    },
+    "witness27.json": {
+      "sha256": "a834c70f368491b2b1df8fbaaf0ac8c0f84cb9487fee5911640cf1f046479c8f",
+      "bytes": 1134
+    }
+  },
+  "asset": {
+    "name": "DiamondDilemmaGoldSolver-R35-contact-weight-proof.zip",
+    "bytes": 2070131,
+    "sha256": "4f06128329552fbfd63070c666744acb8ad64ee89db55ae700f00e81fc67a9df"
+  }
+}

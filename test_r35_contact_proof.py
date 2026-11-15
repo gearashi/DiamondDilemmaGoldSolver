@@ -43,3 +43,24 @@ class OriginalProofTests(unittest.TestCase):
             path=Path(folder)/'cap25.cnf'
             self.assertEqual(write_formula(path,self.tiles,self.codes,self.proof),receipt['files']['cap25.cnf']['sha256'])
             self.assertEqual(path.stat().st_size,receipt['files']['cap25.cnf']['bytes'])
+
+    def test_weighted_budget_agrees_with_all_small_loss_sets(self):
+        from importlib.util import find_spec
+        if find_spec('pysat') is None:
+            self.skipTest('requires a SAT solver for exhaustive auxiliary-variable checks')
+        from pysat.formula import IDPool
+        from pysat.solvers import Solver
+        from r35_contact_weight_replay import budget_clauses
+        examples=[([({0,1},2),({1,2,3},3),({2,3,4},1)],6),([({0},2),({0,1,2,3},4)],6)]
+        for terms,count in examples:
+            loss={e:e+1 for e in range(count)}
+            maximum=max(sum(w for g,w in terms if e in g) for e in loss)
+            for cap in range(count+1):
+                ids=IDPool(start_from=count+1)
+                clauses=[[loss[e] for e in g] for g,_ in terms]
+                clauses.extend(budget_clauses(ids,loss,terms,maximum,cap))
+                with Solver(bootstrap_with=clauses) as engine:
+                    for mask in range(1<<count):
+                        selected={e for e in loss if mask>>e&1}
+                        self.assertEqual(engine.solve(assumptions=[v if e in selected else -v for e,v in loss.items()]),
+                                         len(selected)<=cap and all(selected&g for g,_ in terms))

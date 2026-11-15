@@ -238,5 +238,89 @@
       ]
     },
     "verified_origin": true
+  },
+  "final_implementation": "024d076",
+  "committed_hardware_cases": [
+    {
+      "api": "CUDA",
+      "scope": "portable",
+      "checked": 3,
+      "candidates": 2072392
+    },
+    {
+      "api": "CUDA",
+      "scope": "max-dynamic",
+      "checked": 3,
+      "candidates": 7393479
+    },
+    {
+      "api": "Vulkan",
+      "scope": "portable",
+      "checked": 3,
+      "candidates": 2072392
+    },
+    {
+      "api": "Vulkan",
+      "scope": "max-dynamic",
+      "checked": 3,
+      "candidates": 7393479
+    },
+    {
+      "api": "D3D12",
+      "scope": "portable",
+      "checked": 3,
+      "candidates": 2072392
+    },
+    {
+      "api": "D3D12",
+      "scope": "max-dynamic",
+      "checked": 3,
+      "candidates": 7393479
+    }
+  ],
+  "committed_crash_resume": {
+    "initial": {
+      "generation": 51,
+      "origin": "20261115T082752279803Z",
+      "external": false,
+      "total": 2051,
+      "completed": 12,
+      "cursor": 2051,
+      "paused": 0,
+      "counters": [
+        717846,
+        152474,
+        110316
+      ]
+    },
+    "after_kill": {
+      "generation": 270,
+      "origin": "20261115T082801102845Z",
+      "external": true,
+      "total": 2051,
+      "completed": 12,
+      "cursor": 2051,
+      "paused": 1911,
+      "counters": [
+        906854,
+        185012,
+        142654
+      ]
+    },
+    "normal_resume": {
+      "generation": 1231,
+      "origin": "20261115T082810077857Z",
+      "external": false,
+      "total": 2051,
+      "completed": 12,
+      "cursor": 2051,
+      "paused": 1975,
+      "counters": [
+        1321413,
+        261110,
+        218585
+      ]
+    },
+    "verified_origin": true
   }
 }
