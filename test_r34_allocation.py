@@ -4,7 +4,7 @@ from unittest import TestCase
 from unittest.mock import patch
 import random
 
-from gpu_domain_runner import inventory_screen,solve,split_cubes
+from gpu_domain_runner import inventory_coverage,inventory_screen,solve,split_cubes
 from search_fixtures import planted_gold
 from search_problem import SearchProblem
 
@@ -74,3 +74,71 @@ class HostHallTests(TestCase):
         self.assertEqual((first['status'],again['status']),('infeasible','infeasible'))
         self.assertEqual(first['checkpoint']['host_hall_closed'],1)
         self.assertEqual(again['stats']['gpu_host_hall_closed'],1)
+
+    def test_ledger_combines_original_root_cuts_and_reopens_identical_work(self):
+        from constraint_work import CoverageLedger, WorkScope
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        n = 160
+        root = ((1 << (3 * n)) - 1,) * n
+        scope = WorkScope('full-physical-inventory', 'gold', root, root)
+        boxes = split_cubes([root], 128)
+        live, cuts = inventory_screen(boxes, n)
+        merged = list(inventory_coverage(cuts, root))
+        self.assertEqual((len(cuts), len(merged)), (47, 1))
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'coverage.sqlite'
+            with CoverageLedger(path, scope) as ledger:
+                for box, cells in merged:
+                    ledger.record_completed(box, status='infeasible', complete=True,
+                                            evidence={'kind': 'physical_inventory_hall', 'cells': list(cells)})
+            with CoverageLedger(path, scope) as ledger:
+                left, complete = ledger.remaining(boxes)
+                self.assertTrue(complete)
+                self.assertEqual(list(left), live)
+                self.assertEqual(len(ledger.exclusions()), 1)
+
+    def test_lifted_cuts_preserve_every_physical_injection_in_restricted_roots(self):
+        from constraint_work import contains
+        from itertools import product
+
+        # These two failed boxes have a feasible hull. Each tile can use distinct
+        # rotations, and the third cell has a genuine restriction in the root.
+        root = (63, 63, 448)
+        failed = [(1, 4, 64), (8, 32, 64)]
+        live, cuts = inventory_screen(failed, len(root))
+        self.assertFalse(live)
+        proofs = list(inventory_coverage(cuts, root))
+        self.assertEqual(len(proofs), 2)
+        for box, cells in proofs:
+            self.assertTrue(contains(root, box))
+            available = {v // 3 for i in cells for v in range(9) if box[i] & (1 << v)}
+            self.assertLess(len(available), len(cells))
+        self.assertTrue(all(any(contains(box, row) for box, _ in proofs) for row in failed))
+        for row in product(*(tuple(v for v in range(9) if choices & (1 << v)) for choices in root)):
+            if len({v // 3 for v in row}) == len(root):
+                self.assertFalse(any(all(mask & (1 << v) for mask, v in zip(box, row)) for box, _ in proofs))
+        self.assertEqual(list(inventory_coverage([], root)), [])
+        self.assertEqual(len(list(inventory_coverage(cuts * 2, root))), 2)
+
+    def test_solver_publishes_group_once_and_second_start_recovers_without_gpu(self):
+        from constraint_work import CoverageLedger, WorkScope
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+
+        tiles, geometry, _ = planted_gold(43, 1, 4)
+        problem = SearchProblem(tiles, geometry)
+        problem.domains = [[0, 1, 2, 3, 4, 5] for _ in range(problem.n)]
+        scope = WorkScope.for_problem(problem, 'gold')
+        with TemporaryDirectory() as tmp:
+            file = Path(tmp) / 'coverage.sqlite'
+            args = dict(backend='cuda', replicas=8, learning_state={'_coverage_path': str(file)},
+                        options={'gpu_global_matching': True, 'shared_coverage': True})
+            with patch('gpu_domain_round24.DomainCUDA', side_effect=AssertionError('Excluded queue allocated GPU')):
+                first = solve(problem, **args)
+                second = solve(problem, **args)
+            self.assertEqual([first['status'], second['status']], ['infeasible', 'infeasible'])
+            self.assertEqual(first['checkpoint']['host_hall_closed'], 8)
+            self.assertEqual(second['stats']['gpu_host_hall_closed'], 0)
+            with CoverageLedger(file, scope) as ledger:
+                self.assertEqual(tuple(ledger.exclusions()), (scope.root,))

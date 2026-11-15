@@ -95,7 +95,7 @@
     {
       "id": 10,
       "area": "Routes to 208 and repair on unrelated boards",
-      "proposal_and_validation": "Extend exact typed exchange enumeration to all five-swap families: (6), (2,5), (3,4), (2,2,4), (2,3,3), (2,2,2,3) and (2,2,2,2,2). Test lazy family-specific rank/unrank, 9\u201310 mover ownership and checkpoint reopens against full permutation enumeration on finite pools.",
+      "proposal_and_validation": "Extend exact typed exchange enumeration to all five-swap families: (6), (2,5), (3,4), (2,2,4), (2,3,3), (2,2,2,3) and (2,2,2,2,2). Test lazy family-specific rank/unrank, 9–10 mover ownership and checkpoint reopens against full permutation enumeration on finite pools.",
       "state": "retained in worktree",
       "evidence": "docs/ROUND34_REPAIR.md"
     },
@@ -434,12 +434,37 @@
       "area": "Classic exact GPU evidence",
       "proposal_and_validation": "Bind classic systematic exhaustion to the actual physical and GPU source closure, independently verify terminal reuse, and preserve resumable older partial stacks.",
       "evidence": "docs/ROUND34_PHYSICAL.md"
+    },
+    {
+      "id": 59,
+      "state": "open",
+      "area": "Exact-search source snapshots",
+      "proposal_and_validation": "Measure duplicate immutable-source bytes in real run evidence. Screen independent, portable per-run copies or safe filesystem-level copy-on-write reuse, checking interruption, corruption isolation and old evidence readers. Compare writes and cost before promotion."
+    },
+    {
+      "id": 60,
+      "state": "retained in worktree",
+      "area": "GPU inventory and persistent CPU/GPU coverage",
+      "proposal_and_validation": "Combine host Hall exclusions when the enclosing domain box has its own independently replayable physical-inventory witness. Test grouped fallback on positive enclosing boxes, retained witnesses, reopened ledger work, and original 128/256/512-way partitions.",
+      "evidence": "docs/ROUND34_ALLOCATION.md"
+    },
+    {
+      "id": 61,
+      "state": "open",
+      "area": "Unrestricted CUDA domain partition and propagation",
+      "proposal_and_validation": "Compare newest-first splitting with breadth-first and largest-volume balanced partitions and propagation before forking. Count native work, witnessed solutions and completed finite residuals. Equal box volumes alone cannot establish a benefit."
     }
   ],
   "release_gate": "All open workstreams and follow-ups, final full discovery review, migration and checkpoint compatibility, full suite, independent release CI/packages, measured settings.",
   "next_parallel_groups": [
     [
       58
+    ],
+    [
+      59
+    ],
+    [
+      61
     ]
   ],
   "baseline_release": "v1.14.0",

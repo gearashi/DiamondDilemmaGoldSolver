@@ -1,4 +1,4 @@
-# Round 34 backend allocation and portable inventory screening (43, 52)
+# Round 34 backend allocation and portable inventory screening (43, 52, 60)
 
 The paired controls used the local i7-4790 and RTX 2060. Separate exact proof and discovery cases were assigned before scheduling. Only independent finite enumeration, full witness validation or a replayed physical-inventory proof received credit. Backend decision counters retain their own native units. Data: [R34_ALLOCATION.json](R34_ALLOCATION.json).
 
@@ -27,3 +27,9 @@ A fresh RTX legacy checkpoint exported 128 pending original boxes. The screen in
 At 24 repair rounds each, the CPU-only fresh starts scored 167/169/165/170 on seeds 340-343. CUDA-assisted fresh starts at 512 replicas and 16 dispatches scored 166/162/168/166. Each cold CUDA start made 524,288 proposals, and exact archive reopens made zero new proposals with identical scores. CPU-only reached 160 in 13/12/12/12 rounds; CUDA-assisted took 18/14/11/7. There is no stable cross-seed win warranting a change of discovery default.
 
 Use `bench_r34_allocation.py exact|transfer|boxes --legacy-split` to reproduce the allocator comparisons with the original split. Use its `discovery` and `screen` modes for the fresh and before/after host checks. The `hall-extensions` and `hall-migration` modes reproduce the held-out and migration controls. Set `--tiles` and `--output` explicitly for an isolated project run.
+
+## Sharing one inventory exclusion across multiple branches
+
+With **Share completed exact regions across policies** enabled, the host checks whether a single physical-tile deficit explains several excluded boxes. It checks the union of their choices in each cell. If that larger box still has too few distinct tiles for some group of cells, every assignment inside it is impossible. Otherwise it tries smaller groups. A certified group of cells may use any rotation of its scarce tiles within the saved search root. Duplicate and contained certificates can then share one ledger record.
+
+On the original 128-box split, reopening the same partition read **one** certificate in place of **47** and returned the same 81 pending boxes in the same order. The fresh SQLite databases took 135,168 and 2,965,504 bytes, respectively. At 256 and 512 original boxes one certificate covered all 175 and 431 excluded leaves. Four independent fixture comparisons reduced 92, 48, 18 and 69 individual records to 6, 12, 2 and 19. All four known single-loop solutions in the positive fixture survived. Reproduce these counts with the `hall-coverage` mode of `bench_r34_allocation.py`. A regular GPU search with a fully impossible eight-lane queue also closed without allocating the GPU, and a second start reused its single saved record.

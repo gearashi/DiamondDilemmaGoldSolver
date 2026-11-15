@@ -882,5 +882,66 @@
     "host_survivors": 7,
     "positive": "solved",
     "positive_score": 240
+  },
+  "grouped_inventory_coverage": {
+    "original-32": {
+      "partition": 32,
+      "individual_records": 0,
+      "grouped_records": 0
+    },
+    "original-64": {
+      "partition": 64,
+      "individual_records": 0,
+      "grouped_records": 0
+    },
+    "original-128": {
+      "partition": 128,
+      "individual_records": 47,
+      "grouped_records": 1,
+      "baseline": {
+        "sqlite_bytes": 2965504,
+        "remaining": 81,
+        "records_checked": 47
+      },
+      "grouped": {
+        "sqlite_bytes": 135168,
+        "remaining": 81,
+        "records_checked": 1
+      }
+    },
+    "original-256": {
+      "partition": 256,
+      "individual_records": 175,
+      "grouped_records": 1
+    },
+    "original-512": {
+      "partition": 512,
+      "individual_records": 431,
+      "grouped_records": 1
+    },
+    "inventory_fixture-128": {
+      "partition": 96,
+      "individual_records": 92,
+      "grouped_records": 6,
+      "gold_preserved": 4
+    },
+    "joint_hall_fixture-128": {
+      "partition": 54,
+      "individual_records": 48,
+      "grouped_records": 12,
+      "gold_preserved": 0
+    },
+    "word_boundary_fixture-128": {
+      "partition": 36,
+      "individual_records": 18,
+      "grouped_records": 2,
+      "gold_preserved": 0
+    },
+    "precise_reason_fixture-128": {
+      "partition": 128,
+      "individual_records": 69,
+      "grouped_records": 19,
+      "gold_preserved": 0
+    }
   }
 }

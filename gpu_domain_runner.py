@@ -80,6 +80,50 @@ def inventory_screen(cubes,n):
     return live,closed
 
 
+def _group_inventory_cuts(closed, n):
+    """Combine exclusions only when their enclosing box independently fails matching."""
+    from functools import reduce
+    from operator import or_
+
+    if len(closed) <= 1:
+        yield from closed
+        return
+    hull = tuple(reduce(or_, masks) for masks in zip(*(box for box, _ in closed)))
+    _, proof = inventory_screen([hull], n)
+    if proof:
+        yield from proof
+        return
+    middle = len(closed) // 2
+    yield from _group_inventory_cuts(closed[:middle], n)
+    yield from _group_inventory_cuts(closed[middle:], n)
+
+
+def inventory_coverage(closed, root):
+    """Publish each necessary physical inventory restriction in the proved root."""
+    from constraint_pruning import _tile_choices
+    from constraint_work import contains
+
+    n = len(root)
+    # Portable queues can contain more work than one native 512-lane batch.
+    for start in range(0, len(closed), 512):
+        cuts = {}
+        for box, cells in _group_inventory_cuts(closed[start:start + 512], n):
+            tiles = 0
+            for cell in cells:
+                tiles |= _tile_choices(box[cell])
+            if tiles.bit_count() >= len(cells):
+                raise ArithmeticError("Inventory exclusion has no physical tile deficit.")
+            # All three rotations of a tile consume the same physical piece.
+            poses = sum(7 << (3 * tile) for tile in range(n) if tiles & (1 << tile))
+            lifted = list(root)
+            for cell in cells:
+                lifted[cell] &= poses
+            cuts.setdefault(tuple(lifted), cells)
+        for box, cells in cuts.items():
+            if not any(outer != box and contains(outer, box) for outer in cuts):
+                yield box, cells
+
+
 def pack_native(engine,snapshot=None):
     payload=dict(snapshot) if snapshot is not None else engine.checkpoint();array=payload.pop('state')
     payload['shape']=list(array.shape)
@@ -296,7 +340,7 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
                 completed+=len(empty)
                 host_hall+=len(empty)
                 if ledger:
-                    for box,cells in empty:
+                    for box,cells in inventory_coverage(empty,scope.root):
                         ledger.record_completed(box,status='infeasible',complete=True,
                             evidence={'kind':'physical_inventory_hall','cells':list(cells)})
 

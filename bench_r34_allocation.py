@@ -336,9 +336,53 @@ def hall_migration(problem,path):
                           positive_score=planted.validate(result['codes'])['matched_edges']))
 
 
+def hall_coverage(problem, path):
+    from tempfile import TemporaryDirectory
+    from constraint_work import CoverageLedger, contains
+    from gpu_domain_runner import inventory_coverage, inventory_screen, split_cubes
+    from test_gpu_exact_round26 import inventory_fixture
+    from test_gpu_domain_round25 import joint_hall_fixture, word_boundary_fixture, independent_solutions
+
+    scope = WorkScope.for_problem(problem, 'gold')
+    report = {}
+    cases = [('original', problem, count) for count in (32, 64, 128, 256, 512)]
+    for build in (inventory_fixture, joint_hall_fixture, word_boundary_fixture, precise_reason_fixture):
+        cases.append((build.__name__, build(), 128))
+    for name, fixture, count in cases:
+        root = WorkScope.for_problem(fixture, 'gold').root
+        boxes = split_cubes([root], count)
+        live, cuts = inventory_screen(boxes, fixture.n)
+        merged = list(inventory_coverage(cuts, root))
+        assert all(any(contains(cover, original) for cover, _ in merged) for original, _ in cuts)
+        for cover, cells in merged:
+            union = {code // 3 for c in cells for code in range(3 * fixture.n) if cover[c] & (1 << code)}
+            assert len(union) < len(cells) and contains(root, cover)
+        row = dict(partition=len(boxes), individual_records=len(cuts), grouped_records=len(merged))
+        if name != 'original':
+            valid = independent_solutions(fixture, 'gold')
+            assert not any(all(mask & (1 << code) for mask, code in zip(box, solution))
+                           for solution in valid for box, _ in merged)
+            row['gold_preserved'] = len(valid)
+        elif count == 128:
+            for label, records in [('baseline', cuts), ('grouped', merged)]:
+                with TemporaryDirectory(dir=path.parent) as tmp:
+                    file = Path(tmp) / 'coverage.sqlite'
+                    with CoverageLedger(file, scope) as ledger:
+                        for box, cells in records:
+                            ledger.record_completed(box, status='infeasible', complete=True,
+                                                    evidence={'kind':'physical_inventory_hall', 'cells':list(cells)})
+                    with CoverageLedger(file, scope) as ledger:
+                        remaining, finished = ledger.remaining(boxes)
+                        assert finished and list(remaining) == live
+                        row[label] = dict(sqlite_bytes=file.stat().st_size, remaining=len(remaining),
+                                          records_checked=ledger.stats['coverage_records_checked'])
+        report[f'{name}-{count}'] = row
+    atomic_json(path, report)
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('mode',choices=('exact','discovery','transfer','boxes','screen','hall-extensions','hall-migration'))
+    p.add_argument('mode',choices=('exact','discovery','transfer','boxes','screen','hall-extensions','hall-migration','hall-coverage'))
     p.add_argument('--tiles',default='data/tiles.json')
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--legacy-split',action='store_true',help='Reproduce the allocation matrix before the host Hall filter.')
@@ -349,7 +393,7 @@ def main():
     old=patch('gpu_domain_runner.inventory_screen',side_effect=lambda cubes,n:(cubes,[]))
     with old if args.legacy_split else nullcontext():
         {'exact':exact,'discovery':discovery,'transfer':transfer,'boxes':migrated_boxes,
-         'screen':hall_control,'hall-extensions':hall_extensions,'hall-migration':hall_migration}[args.mode](problem,args.output)
+         'screen':hall_control,'hall-extensions':hall_extensions,'hall-migration':hall_migration,'hall-coverage':hall_coverage}[args.mode](problem,args.output)
 
 
 if __name__=='__main__':
