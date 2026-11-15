@@ -1,5 +1,5 @@
 // Exact persistent DFS. One invocation owns one disjoint prefix and private stack.
-struct Parameters { n: u32, budget: u32, colors: u32, gold_total: u32, flags: u32, reserved0: u32, reserved1: u32, reserved2: u32 }
+struct Parameters { n: u32, budget: u32, colors: u32, gold_total: u32, flags: u32, mate_offset: u32, reserved1: u32, reserved2: u32 }
 @group(0) @binding(0) var<storage, read_write> board_used: array<u32>;
 @group(0) @binding(1) var<storage, read_write> firsts: array<u32>;
 @group(0) @binding(2) var<storage, read_write> lengths: array<u32>;
@@ -68,8 +68,23 @@ fn mark(tile: u32, lane: u32, occupied: bool) {
     let bit = 1u << (tile & 31u);
     if occupied { board_used[location] |= bit; } else { board_used[location] &= ~bit; }
 }
+fn forbidden_neighbor(cell:u32,code:u32,lane:u32) -> i32 {
+    if parameters.mate_offset!=0u {
+        for(var side=0u;side<3u;side++) {
+            let nb=neighbor(cell,side);
+            let raw=board(nb,lane);
+            if raw<0 {continue;}
+            let other=u32(raw);
+            let a=(code/3u)*3u+(side+3u-code%3u)%3u;
+            let b=(other/3u)*3u+(other_side(cell,side)+3u-other%3u)%3u;
+            if (policy(parameters.mate_offset+a*15u+(b>>5u)) & (1u<<(b&31u)))!=0u {return i32(nb);}
+        }
+    }
+    return -1;
+}
 // bucket() already covers the first two occupied sides of this candidate.
 fn matches_after_bucket(cell: u32, code: u32, lane: u32) -> bool {
+    if forbidden_neighbor(cell,code,lane)>=0 {return false;}
     if board(neighbor(cell, 0u), lane) < 0 || board(neighbor(cell, 1u), lane) < 0 { return true; }
     let other = board(neighbor(cell, 2u), lane);
     return other < 0 || face(code, 2u) == reverse_face(u32(other), other_side(cell, 2u));
@@ -102,6 +117,10 @@ fn possible(cell: u32, lane: u32) -> bool {
     }
     return false;
 }
+fn neighbor_supported(cell: u32, side: u32, lane: u32) -> bool {
+    let nb = neighbor(cell, side);
+    return board(nb, lane) >= 0 || possible(nb, lane);
+}
 struct Choices { count: u32, index: u32, pieces: vec3<u32> }
 fn choices(cell: u32, lane: u32, limit: u32, collect: bool) -> Choices {
     let bucket_values = bucket(cell,lane); var result: Choices; var unique = 0u;
@@ -110,9 +129,16 @@ fn choices(cell: u32, lane: u32, limit: u32, collect: bool) -> Choices {
         if taken(code/3u,lane) || !allowed(cell,code) || !matches_after_bucket(cell,code,lane) {continue;}
         result.count++;result.index=j;
         if collect {
-            let tile=code/3u;var known=false;
-            for(var k=0u;k<unique;k++) {if result.pieces[k]==tile {known=true;}}
-            if !known {if unique==3u {result.count=4u;return result;}result.pieces[unique]=tile;unique++;}
+            let tile = code/3u;
+            if (unique >= 1u && result.pieces.x == tile) || (unique >= 2u && result.pieces.y == tile)
+                || (unique >= 3u && result.pieces.z == tile) { continue; }
+            switch unique {
+                case 0u: { result.pieces.x = tile; }
+                case 1u: { result.pieces.y = tile; }
+                case 2u: { result.pieces.z = tile; }
+                default: { result.count = 4u; return result; }
+            }
+            unique++;
         } else if result.count>=limit {return result;}
     }
     if collect {result.count=unique;}
@@ -222,7 +248,11 @@ fn dfs_search(@builtin(global_invocation_id) invocation: vec3<u32>) {
         while work < parameters.budget && metadata[11u * n + lane] != 255u {
             let scan = metadata[11u * n + lane];
             if scan >= depth { metadata[11u * n + lane] = 255u; break; }
-            let closed = gold_closed_rank(selected_cell(scan,floor,lane), lane, &ranks);
+            let cell=selected_cell(scan,floor,lane);
+            let other=forbidden_neighbor(cell,u32(board(cell,lane)),lane);
+            var closed:i32;
+            if other>=0 {closed=i32(max(rank_at(cell,&ranks),rank_at(u32(other),&ranks)));}
+            else {closed=gold_closed_rank(cell,lane,&ranks);}
             work++;
             if closed < 0 {
                 metadata[11u * n + lane] = select(scan + 1u, 255u, scan + 1u >= depth);
@@ -273,10 +303,10 @@ fn dfs_search(@builtin(global_invocation_id) invocation: vec3<u32>) {
         if !allowed(cell,code) || taken(tile, lane) || !matches_after_bucket(cell, code, lane) { continue; }
         board_used[cell * n + lane] = code; mark(tile, lane, true);
         var feasible = (parameters.flags&192u)==0u || shared_ok(lane);
-        for (var side = 0u; side < 3u; side++) {
-            if !feasible {break;}
-            let next_cell = neighbor(cell, side);
-            if board(next_cell, lane) < 0 && !possible(next_cell, lane) { feasible = false; break; }
+        // FXC cannot unroll a side loop containing the full candidate support scan.
+        if feasible {
+            feasible = neighbor_supported(cell, 0u, lane) && neighbor_supported(cell, 1u, lane)
+                && neighbor_supported(cell, 2u, lane);
         }
         if feasible && (parameters.flags&1u)!=0u && !forward(lane) {feasible=false;}
         if feasible && (parameters.flags&2u)!=0u && !hall(lane) {feasible=false;}

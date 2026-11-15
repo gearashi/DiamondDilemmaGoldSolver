@@ -6,6 +6,7 @@ Pending complete boards freeze until their CPU validation is acknowledged.
 """
 from __future__ import annotations
 import argparse
+from functools import lru_cache
 import hashlib
 import json
 import os
@@ -73,6 +74,25 @@ def ensure_disjoint_prefixes(prefixes):
             raise ValueError('DFS jobs overlap: duplicate or ancestor/descendant prefixes.')
 
 
+@lru_cache(maxsize=4)
+def _physical_gold_table(topology):
+    """Closed-board Gold mating restrictions depend only on physical segment pairs."""
+    from search_problem import SearchProblem
+    from r32_gold_bonds import inventory
+    tiles=[{'id':str(i),'segments':[[pair[:2],pair[2:]] for pair in segments]}
+           for i,segments in enumerate(topology)]
+    blocked=inventory(SearchProblem(tiles)).forbidden
+    if blocked:
+        table=np.zeros((480,15),np.uint32)
+        for a,b in blocked:
+            table[a,b//32] |= np.uint32(1<<(b%32))
+            table[b,a//32] |= np.uint32(1<<(a%32))
+    else:
+        table=np.zeros(1,np.uint32)
+    table.setflags(write=False)
+    return table
+
+
 class DFS:
     """Disjoint fixed-prefix DFS jobs: states0active,1pending,2exhausted,3idle.
 
@@ -103,11 +123,13 @@ class DFS:
         self.pair_offsets = cp.asarray(self.host_pair_offsets)
         self.device_order = cp.asarray(self.order)
         self.gold_partners = cp.asarray(self.host_gold_partners)
+        self.device_gold_blocked = cp.asarray(self.host_gold_blocked)
         self.gold_ranks = cp.asarray(self.order_rank.astype(np.int16))
         self.gold_checked = cp.zeros(n, np.uint8)
         self.device_policy = cp.asarray(self.host_policy)
         self.module = cp.RawModule(code=(ROOT / 'dfs_kernels.cu').read_text(encoding='utf-8-sig'),
-                                  options=('--std=c++17', '-DREASONING_FLAGS='+str(self.feature_bits)), name_expressions=('dfs_search',))
+                                  options=('--std=c++17', '-DREASONING_FLAGS='+str(self.feature_bits),
+                                           '-DPHYSICAL_GOLD='+str(int(self.host_gold_blocked.ndim==2))), name_expressions=('dfs_search',))
         self.kernel = self.module.get_function('dfs_search')
         self.boards = cp.full((160, n), -1, np.int16)
         self.used = cp.zeros((5, n), np.uint32)
@@ -182,6 +204,7 @@ class DFS:
         self.host_gold_partners = np.full((480, 33), 255, np.uint8)
         self.gold_segments = 0
         self.gold_fingerprint = ''
+        self.host_gold_blocked = np.zeros(1,np.uint32)
         if data is None:
             return
         from validator import normalize_tiles, orientation_masks
@@ -197,6 +220,10 @@ class DFS:
                     self.host_gold_partners[3 * tile + rotation, a] = b
                     self.host_gold_partners[3 * tile + rotation, b] = a
         self.gold_fingerprint = hashlib.sha256(self.host_gold_partners.tobytes()).hexdigest()
+        if self.gold_segments:
+            topology=tuple(tuple((*left,*right) for left,right in tile['segments']) for tile in tiles)
+            self.host_gold_blocked=_physical_gold_table(topology)
+
 
     def _prepare_tables(self):
         """Shared exact candidate buckets, independent of the device API."""
@@ -310,7 +337,7 @@ class DFS:
             self.kernel(((self.n + 127) // 128,), (128,), (self.boards, self.used, self.depths,
                 self.maxdepths, self.floors, self.states, self.firsts, self.lengths, self.cursors, self.shifts,
                 self.rng, self.counters, self.device_order, *self.tables, self.single_offsets,
-                self.pair_offsets, self.pool, self.gold_partners, self.gold_ranks, self.gold_checked, self.device_policy, np.int32(self.feature_bits),
+                self.pair_offsets, self.pool, self.gold_partners, self.gold_ranks, self.gold_checked, self.device_policy, self.device_gold_blocked, np.int32(self.feature_bits),
                 np.int32(self.gold_segments), np.int32(self.colors), np.int32(self.n), np.int32(nodes)))
             end.record()
             end.synchronize()
@@ -626,7 +653,16 @@ class DFS:
                         if all(self.host_faces[code,side] == self.host_reverse[
                                 arrays['boards'][int(self.neighbors[cell,side]),lane],int(self.neighbor_sides[cell,side])]
                                for side in known): supported.append(code)
-                    if len(supported) != 1 or int(self.host_pool[first+shift]) != supported[0]:
+                    selected=int(self.host_pool[first+shift])
+                    # Legacy frames may have been forced by mask matching alone.
+                    if supported != [selected] and getattr(self,'host_gold_blocked',np.empty(0)).ndim==2:
+                        for side in known:
+                            cell2=int(self.neighbors[cell,side])
+                            code2=int(arrays['boards'][cell2,lane])
+                            dart2=3*(code2//3)+(int(self.neighbor_sides[cell,side])-code2%3)%3
+                            supported=[c for c in supported if not int(self.host_gold_blocked[
+                                3*(c//3)+(side-c%3)%3,dart2//32]) & (1<<(dart2%32))]
+                    if supported != [selected]:
                         raise ValueError('DFS forced checkpoint frame is not a proved singleton at its saved shift.')
                 if frame < depth:
                     if not cursor or not length or int(self.host_pool[first+(cursor-1+shift)%length]) != int(arrays['boards'][cell,lane]):

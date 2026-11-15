@@ -14,7 +14,7 @@ MAX_DONATION_QUEUE=4096
 
 class LanePool:
     def __init__(self,scope,queued,*,counters=None):
-        self.scope=scope;self.queue=list(queued);self.owners={};self.queued_owners=[];self.lanes=[];self.next_id=0
+        self.scope=scope;self.queue=list(queued);self.owners={};self.queued_owners=[];self.lanes=[];self.parked=[];self.next_id=0
         self.counters=dict.fromkeys(COUNTERS,0)
         if counters:self.counters.update({k:v for k,v in counters.items() if k in COUNTERS})
         self.queue_peak=max(len(queued),(counters or {}).get('gpu_lane_queue_peak',0))
@@ -39,7 +39,7 @@ class LanePool:
         if engine.delivered:raise ValueError('Enumeration exclusions cannot retire infeasible owners.')
         old=engine.stats(ids);engine.clear_lane_counters(ids)
         for lane in ids:self.lanes[lane]=None
-        referenced=set(self.queued_owners)|set(self.lanes);finished=[]
+        referenced=set(self.queued_owners)|set(self.lanes)|set(self.parked);finished=[]
         for owner in list(self.owners):
             if owner not in referenced:finished.append(self.owners.pop(owner))
         self.counters['gpu_lane_owners_completed']+=len(finished)
@@ -98,10 +98,11 @@ class LanePool:
     def snapshot(self):
         payload={'version':1,'owners':[[key,[hex(x) for x in row]] for key,row in sorted(self.owners.items())],
                  'lanes':list(self.lanes),'queued_owners':list(self.queued_owners),'next_id':self.next_id,'stats':self.public_stats()}
+        if self.parked:payload['parked']=list(self.parked)
         payload['digest']=digest(payload);return payload
     @classmethod
-    def restore(cls,scope,queued,engine,payload):
-        if (not isinstance(payload,dict) or set(payload)!={'version','owners','lanes','queued_owners','next_id','stats','digest'}
+    def restore(cls,scope,queued,engine,payload,*,lane_records=None,parked_records=()):
+        if (not isinstance(payload,dict) or set(payload)-{'parked'}!={'version','owners','lanes','queued_owners','next_id','stats','digest'}
                 or type(payload['version'])is not int or payload['version']!=1 or payload['digest']!=digest({k:v for k,v in payload.items() if k!='digest'})):
             raise ValueError('Invalid GPU lane ownership checkpoint.')
         obj=cls(scope,[]);obj.queue=list(queued)
@@ -117,11 +118,15 @@ class LanePool:
             frontier_snapshot(scope,[row]);obj.owners[key]=row
         if not disjoint(obj.owners.values()):raise ValueError('Owner roots overlap.')
         lanes=payload['lanes'];qowners=payload['queued_owners']
-        if not isinstance(lanes,list) or len(lanes)!=(engine.lanes if engine else 0) or not isinstance(qowners,list) or len(qowners)!=len(queued):
+        expected_lanes=len(lane_records) if lane_records is not None else (engine.lanes if engine else 0)
+        parked=payload.get('parked',[])
+        if not isinstance(parked,list) or len(parked)!=len(parked_records):
+            raise ValueError('Parked GPU owner dimensions differ.')
+        if not isinstance(lanes,list) or len(lanes)!=expected_lanes or not isinstance(qowners,list) or len(qowners)!=len(queued):
             raise ValueError('Owner task dimensions differ.')
         if any(type(key)is not int or key not in obj.owners for key in qowners):raise ValueError('Unknown queued owner.')
-        if any(key is not None and (type(key)is not int or key not in obj.owners) for key in lanes):raise ValueError('Unknown lane owner.')
-        if set(qowners)|{key for key in lanes if key is not None}!=set(obj.owners):raise ValueError('Unreferenced owner root.')
+        if any(key is not None and (type(key)is not int or key not in obj.owners) for key in lanes+parked):raise ValueError('Unknown lane owner.')
+        if set(qowners)|{key for key in lanes+parked if key is not None}!=set(obj.owners):raise ValueError('Unreferenced owner root.')
         for row,key in zip(queued,qowners):
             if not contains(obj.owners[key],row):raise ValueError('Queued task escapes owner.')
         if engine:
@@ -132,6 +137,14 @@ class LanePool:
                     if int(meta[0,lane])!=2 or any(v for k,v in counters.items() if k not in ('lanes','state_bytes','active','pending','exhausted')):
                         raise ValueError('Retired GPU lane is not inactive and accounted.')
                 elif not contains(obj.owners[key],engine.cubes[lane]):raise ValueError('Native lane escapes owner.')
+        records=list(parked_records) if lane_records is None else [*lane_records,*parked_records]
+        ids=parked if lane_records is None else [*lanes,*parked]
+        for (root,clean_idle),key in zip(records,ids):
+            if key is None and not clean_idle:
+                raise ValueError('A parked idle lane remains active or unaccounted.')
+            if key is not None and not contains(obj.owners[key],root):
+                raise ValueError('A saved native lane escapes its owner.')
+        obj.parked=list(parked)
         stats=payload['stats']
         if (not isinstance(stats,dict) or set(stats)!=set(COUNTERS+GAUGES)
                 or any(type(v)is not int or v<0 for v in stats.values())

@@ -120,6 +120,24 @@ def load_prefix_certificates(bound, target, family):
 
 def evaluate(problem, boards, pool, family, target, *, database, paired=True, buckets=True, bridge=False,
              together=True, cover=False):
+    """Complete the finite pool, reclaiming outstanding ranks when owners expire."""
+    import sqlite3
+    from contextlib import closing
+    from r34_rank_leases import RankedLeases
+    total=Counter()
+    boards,pool,family=tuple(boards),tuple(pool),tuple(family)
+    while True:
+        result=_evaluate_assigned(problem,boards,pool,family,target,database=database,paired=paired,
+                                  buckets=buckets,bridge=bridge,together=together,cover=cover)
+        total.update(result['work'])
+        if result['complete']:
+            return dict(result,work=dict(total))
+        key,r=result['waiting']
+        with closing(sqlite3.connect(database,timeout=90,uri=True,isolation_level=None)) as db:
+            RankedLeases(db,'support',key).wait(r)
+
+
+def _evaluate_assigned(problem, boards, pool, family, target, *, database, paired, buckets, bridge, together, cover):
     """A finished pool is a complete connected scope per center; publish checked negatives to ranked search."""
     from contextlib import closing
     from itertools import combinations
@@ -150,7 +168,11 @@ def evaluate(problem, boards, pool, family, target, *, database, paired=True, bu
         raise ValueError("Duplicate physical center.")
     keys = [hashlib.sha256(json.dumps([1,scope,[tuple(map(int,b.tiles))],(family,),target]).encode()).hexdigest() for b in bound]
     supports = tuple(rank(s,model.free) for s in combinations(pool,sum(family)))
-    with closing(sqlite3.connect(database,timeout=90)) as db:
+    from itertools import groupby
+    from time import time
+    from uuid import uuid4
+    from r34_rank_leases import RankedLeases,LostRankLease
+    with closing(sqlite3.connect(database,timeout=90,isolation_level=None,uri=True)) as db:
         db.execute("CREATE TABLE IF NOT EXISTS r30_pages(scope TEXT,lo INTEGER,hi INTEGER,work TEXT,best TEXT,PRIMARY KEY(scope,lo))")
         db.execute("CREATE TABLE IF NOT EXISTS optima(key TEXT PRIMARY KEY,result TEXT NOT NULL)")
         missing = []
@@ -172,43 +194,118 @@ def evaluate(problem, boards, pool, family, target, *, database, paired=True, bu
         if not indices:
             return dict(best=max(saved_best,key=lambda x:x['score'],default=None),complete=True,
                         work={'reused_center_supports':len(keys)*len(supports)})
-        oracle = RotationOracle(model)
-        best = {}
-        rows,work = traverse([joins[i] for i in indices],pair=paired,buckets=buckets,bridge=bridge,together=together,
-                             cover=cover)
-        for sub,cells,order in rows:
-            ix = indices[sub]
-            r = rank(cells,model.free)
-            if r not in missing[ix]:
-                continue
-            b = bound[ix]
-            seed = b.witness_seed(cells,order)
-            if seed is None:
-                continue
-            pkey=scope+':'+','.join(map(str,seed//3))
-            old=db.execute('SELECT result FROM optima WHERE key=?',(pkey,)).fetchone()
-            if old:
-                result=json.loads(old[0])
-                work['exact_reused']+=1
-            else:
-                result=rotation_optimum(b,oracle,seed)
-                with db:
-                    db.execute('INSERT OR IGNORE INTO optima VALUES(?,?)',(pkey,json.dumps(result)))
-                work['exact_solved']+=1
-            if result['score']>=target and result['score']>best.get((ix,r),{}).get('score',-1):
-                best[ix,r]=result
-        # Publish only after the complete finite traversal. Another writer may have completed the rank.
+        # A finite pool can contain separated colex runs. Share one token and
+        # one heartbeat across them, with the same rank namespace as multicenter.
+        leases={}
+        claims={}
+        owned=[set() for _ in keys]
+        token=uuid4().hex
+        busy=False
+        first_claim=None
+        waiting=None
         with db:
-            db.execute('BEGIN IMMEDIATE')
+            db.execute("BEGIN IMMEDIATE")
+            now=time()
             for ix in indices:
+                leases[ix]=RankedLeases(db,'support',keys[ix],private=database==':memory:')
+                leases[ix].purge(now)
+                claims[ix]=[]
+                ranks=[]
                 for r in sorted(missing[ix]):
-                    if covered(keys[ix],r):
-                        continue
-                    n=len(orders(family))
-                    db.execute('INSERT INTO r30_pages VALUES(?,?,?,?,?)',
-                               (keys[ix],r,r+1,json.dumps({'joint_pool':1,'raw_center_endpoints':n}),json.dumps(best.get((ix,r)))))
-                    work['published_center_supports']+=1
-    return dict(best=max([*best.values(),*saved_best],key=lambda a:a['score'],default=None),complete=True,work=dict(work))
+                    prior=covered(keys[ix],r)
+                    if prior is None:
+                        ranks.append(r)
+                    elif prior[1]!='null':
+                        saved_best.append(json.loads(prior[1]))
+                for _,sequence in groupby(enumerate(ranks),lambda pair:pair[1]-pair[0]):
+                    run=[r for _,r in sequence]
+                    lo,hi=run[0],run[-1]+1
+                    while lo<hi:
+                        claim,skip=leases[ix].take(lo,hi,token=token,batch_time=now)
+                        if claim is None:
+                            waiting=keys[ix],lo
+                            busy=True
+                            lo=skip
+                        else:
+                            if first_claim is None:
+                                first_claim=(leases[ix],claim)
+                            claims[ix].append(claim)
+                            owned[ix].update(range(lo,claim.hi))
+                            lo=claim.hi
+            # No other writer can reclaim during acquisition. Start the full
+            # heartbeat period at commit even for a large sparse catalog.
+            if first_claim is not None and database!=':memory:':
+                db.execute("UPDATE r34_rank_leases SET expires=? WHERE token=?",(time()+first_claim[0].ttl,token))
+        indices=[i for i in indices if owned[i]]
+        if not indices:
+            result=dict(best=max(saved_best,key=lambda x:x['score'],default=None),complete=not busy,work={})
+            if busy:
+                result['waiting']=waiting
+            return result
+        holder,first=first_claim
+        with holder.computing(first):
+            oracle = RotationOracle(model)
+            best = {}
+            rows,work = traverse([joins[i] for i in indices],pair=paired,buckets=buckets,bridge=bridge,together=together,
+                                 cover=cover)
+            for sub,cells,order in rows:
+                ix = indices[sub]
+                r = rank(cells,model.free)
+                if r not in owned[ix]:
+                    continue
+                b = bound[ix]
+                seed = b.witness_seed(cells,order)
+                if seed is None:
+                    continue
+                pkey=scope+':'+','.join(map(str,seed//3))
+                old=db.execute('SELECT result FROM optima WHERE key=?',(pkey,)).fetchone()
+                if old:
+                    result=json.loads(old[0])
+                    work['exact_reused']+=1
+                else:
+                    result=rotation_optimum(b,oracle,seed)
+                    with db:
+                        db.execute('INSERT OR IGNORE INTO optima VALUES(?,?)',(pkey,json.dumps(result)))
+                    work['exact_solved']+=1
+                if result['score']>=target and result['score']>best.get((ix,r),{}).get('score',-1):
+                    best[ix,r]=result
+            # Publish ranks and positive outcomes only after the finite traversal.
+            with db:
+                db.execute('BEGIN IMMEDIATE')
+                for ix in indices:
+                    for claim in claims[ix]:
+                        try:
+                            leases[ix].fence(claim)
+                        except LostRankLease:
+                            busy=True
+                            continue
+                        for r in range(claim.lo,claim.hi):
+                            previous=covered(keys[ix],r)
+                            if previous:
+                                if previous[1]!='null':
+                                    saved_best.append(json.loads(previous[1]))
+                                continue
+                            n=len(orders(family))
+                            result=best.get((ix,r))
+                            db.execute('INSERT INTO r30_pages VALUES(?,?,?,?,?)',
+                                       (keys[ix],r,r+1,json.dumps({'joint_pool':1,'raw_center_endpoints':n}),json.dumps(result)))
+                            if result:
+                                saved_best.append(result)
+                            work['published_center_supports']+=1
+        # Only committed page results may enter a complete or partial report.
+        if busy:
+            waiting=next(((key,r) for key in keys for r in supports if covered(key,r) is None),None)
+            busy=waiting is not None
+            for key in keys:
+                for r in supports:
+                    row=covered(key,r)
+                    if row and row[1]!='null':
+                        saved_best.append(json.loads(row[1]))
+    result=dict(best=max(saved_best,key=lambda a:a['score'],default=None),complete=not busy,work=dict(work))
+    if busy:
+        result['waiting']=waiting
+    return result
+
 
 
 
@@ -221,7 +318,7 @@ def stream_prefixes(problem, boards, pool, family, target, database, *, start=0,
     so every completion has exactly one owner. Within a 2+2+2+2 item choose
     the least two swaps in sorted order. This ordering admits any intermediate score.
     """
-    from contextlib import closing
+    from contextlib import closing, ExitStack
     import sqlite3, hashlib, json
     from itertools import combinations
     from time import monotonic
@@ -277,10 +374,25 @@ def stream_prefixes(problem, boards, pool, family, target, database, *, start=0,
         return seconds and monotonic()-clock>=seconds
     prev_id = None
     cover_cores = CoverCores() if cover else None
-    with closing(sqlite3.connect(database,timeout=90)) as db:
+    from r34_rank_leases import RankedLeases, LostRankLease, covered_end
+    busy=False
+    leases=None
+    with closing(sqlite3.connect(database,timeout=90,uri=True,isolation_level=None)) as db, ExitStack() as renewal:
         db.execute('CREATE TABLE IF NOT EXISTS r32_joint_pages(scope TEXT,lo INTEGER,hi INTEGER,best TEXT,PRIMARY KEY(scope,lo))')
         db.execute('CREATE TABLE IF NOT EXISTS optima(key TEXT PRIMARY KEY,result TEXT NOT NULL)')
-        while current<stop and not expired() and (max_pages is None or pages<max_pages):
+        while (current<stop or busy) and not expired() and (max_pages is None or pages<max_pages):
+            if current>=stop:
+                current=covered_end(db,'r32_joint_pages',scope,start,stop)
+                if current>=stop or max_pages is not None:
+                    break
+                leases.wait(current,clock+seconds if seconds else float("inf"))
+                busy=False
+                continue
+            current=covered_end(db,'r32_joint_pages',scope,current,stop)
+            if current==stop:
+                if busy:
+                    continue
+                break
             offs,pos = divmod(current,stride)
             if offs!=prev_id:
                 # Reads precede expensive catalogues, so a fully completed interval reopens without pricing.
@@ -298,64 +410,82 @@ def stream_prefixes(problem, boards, pool, family, target, database, *, start=0,
                     continue
                 nextpage = db.execute('SELECT min(lo) FROM r32_joint_pages WHERE scope=? AND lo>?',(scope,current)).fetchone()[0]
                 end = min(stop, (offs+1)*stride, nextpage if nextpage is not None else stop)
-                if prices is None:
-                    active = []
-                    for i,j in enumerate(joins):
-                        if cover and defect_cover(j.bound,prefix,pool,4,target,cores=cover_cores)['closed']:
-                            w['overlap_closed']+=1
+                if leases is None:
+                    leases=RankedLeases(db,'route-prefix',scope,private=database==':memory:',lifetime=renewal)
+                claim,skip=leases.take(current,end)
+                if claim is None:
+                    current=skip
+                    busy=True
+                    continue
+                end=claim.hi
+            try:
+                with leases.computing(claim):
+                    if prices is None:
+                        active = []
+                        for i,j in enumerate(joins):
+                            if cover and defect_cover(j.bound,prefix,pool,4,target,cores=cover_cores)['closed']:
+                                w['overlap_closed']+=1
+                            else:
+                                active.append(i)
+                        pairs = list(combinations(available,2))
+                        prices = [(i,prepared[i].pair_catalog(prefix,pairs)) for i in active]
+                        w['individual_cycle_prices'] += len(prices)*len(pairs)
+                    best = None
+                    if prices:
+                        first = tuple(available[t] for t in unrank(pos,len(available),2))
+                        end = current+1
+                        if root_size==4 and first<=prefix[-1]:
+                            # The first two swaps of this four-swap representation own the endpoint.
+                            w['wrong_owner_work_items']+=1
                         else:
-                            active.append(i)
-                    pairs = list(combinations(available,2))
-                    prices = [(i,prepared[i].pair_catalog(prefix,pairs)) for i in active]
-                    w['individual_cycle_prices'] += len(prices)*len(pairs)
-                best = None
-                if prices:
-                    first = tuple(available[t] for t in unrank(pos,len(available),2))
-                    end = current+1
-                    if root_size==4 and first<=prefix[-1]:
-                        # The first two swaps of this four-swap representation own the endpoint.
-                        w['wrong_owner_work_items']+=1
-                    else:
-                        proposals = {}
-                        for i,p in prices:
-                            for pair in prepared[i].partners(p, first, w):
-                                if first>=pair:
+                            proposals = {}
+                            for i,p in prices:
+                                for pair in prepared[i].partners(p, first, w):
+                                    if first>=pair:
+                                        continue
+                                    proposals.setdefault(pair,[]).append(i)
+                            for pair,active in proposals.items():
+                                group=tuple(sorted((*prefix,first,pair)))
+                                w['shared_geometry_queries']+=1
+                                if not connected(group,joins[0].close):
                                     continue
-                                proposals.setdefault(pair,[]).append(i)
-                        for pair,active in proposals.items():
-                            group=tuple(sorted((*prefix,first,pair)))
-                            w['shared_geometry_queries']+=1
-                            if not connected(group,joins[0].close):
-                                continue
-                            mapping=cycle_mapping(group)
-                            cells=tuple(sorted(mapping))
-                            order=tuple(cells.index(mapping[c]) for c in cells)
-                            for i in active:
-                                j=joins[i]
-                                ub=bridge_upper(j.stars,group) if bridge else None
-                                if ub is None:
-                                    ub=j.stars.price(cells,order)
-                                w['stars']+=1
-                                if ub<2*target:
-                                    continue
-                                seed=j.bound.witness_seed(cells,order)
-                                if seed is None:
-                                    continue
-                                key=binding+':'+','.join(map(str,seed//3))
-                                old=db.execute('SELECT result FROM optima WHERE key=?',(key,)).fetchone()
-                                if old:
-                                    row=json.loads(old[0])
-                                    w['exact_reused']+=1
-                                else:
-                                    row=rotation_optimum(j.bound,oracle,seed)
-                                    db.execute('INSERT INTO optima VALUES(?,?)',(key,json.dumps(row)))
-                                    w['exact_solved']+=1
-                                if row['score']>=target and (best is None or row['score']>best['score']):
-                                    best=row
-                db.execute('INSERT INTO r32_joint_pages VALUES(?,?,?,?)',(scope,current,end,json.dumps(best)))
-                current=end
-                pages+=1
-                work.update(w)
+                                mapping=cycle_mapping(group)
+                                cells=tuple(sorted(mapping))
+                                order=tuple(cells.index(mapping[c]) for c in cells)
+                                for i in active:
+                                    j=joins[i]
+                                    ub=bridge_upper(j.stars,group) if bridge else None
+                                    if ub is None:
+                                        ub=j.stars.price(cells,order)
+                                    w['stars']+=1
+                                    if ub<2*target:
+                                        continue
+                                    seed=j.bound.witness_seed(cells,order)
+                                    if seed is None:
+                                        continue
+                                    key=binding+':'+','.join(map(str,seed//3))
+                                    old=db.execute('SELECT result FROM optima WHERE key=?',(key,)).fetchone()
+                                    if old:
+                                        row=json.loads(old[0])
+                                        w['exact_reused']+=1
+                                    else:
+                                        row=rotation_optimum(j.bound,oracle,seed)
+                                        db.execute('INSERT OR IGNORE INTO optima VALUES(?,?)',(key,json.dumps(row)))
+                                        w['exact_solved']+=1
+                                    if row['score']>=target and (best is None or row['score']>best['score']):
+                                        best=row
+                    with db:
+                        db.execute("BEGIN IMMEDIATE")
+                        leases.fence_uncovered(claim,'r32_joint_pages',current,end)
+                        db.execute('INSERT INTO r32_joint_pages VALUES(?,?,?,?)',(scope,current,end,json.dumps(best)))
+                    current=end
+                    pages+=1
+                    work.update(w)
+            except LostRankLease:
+                busy=True
+                continue
+        if busy:
+            current=covered_end(db,'r32_joint_pages',scope,start,stop)
         best=max((json.loads(row) for row, in db.execute("SELECT best FROM r32_joint_pages WHERE scope=? AND best!='null'",(scope,))),
                  key=lambda r:r['score'],default=None)
         done=db.execute('SELECT coalesce(sum(hi-lo),0) FROM r32_joint_pages WHERE scope=?',(scope,)).fetchone()[0]

@@ -493,9 +493,34 @@ def diverse(model, rows, limit):
     return [r for r,_ in selected]
 
 
+def forest_pool(model,board,available,size,rng):
+    """Build a forest of seam interactions, giving defective seams first choice."""
+    allowed=set(map(int,available))
+    if not allowed:
+        return np.zeros(0,dtype=int)
+    incident=np.zeros(model.n,dtype=int)
+    failed=~model.matches(board)
+    np.add.at(incident,model.a[failed],1)
+    np.add.at(incident,model.b[failed],1)
+    tie={int(c):i for i,c in enumerate(rng.permutation(sorted(allowed)))}
+    selected=[]
+    contacts={c:0 for c in allowed}
+    while allowed and len(selected)<size:
+        options=[c for c in allowed if contacts[c]<=1]
+        if not options:
+            break
+        cell=max(options,key=lambda c:(contacts[c],int(incident[c]),tie[c]))
+        selected.append(cell)
+        allowed.remove(cell)
+        for nbr in model.problem.neighbors[cell]:
+            if nbr in allowed:
+                contacts[int(nbr)]+=1
+    return np.array(selected,dtype=int)
+
+
 class Engine:
     def __init__(self,problem,*,bonds=False,joint=False,adjacent=False,ties=0,fork=False,
-                 relink=False,slate=1,pool=10,tie_slack=0,cycle_budget=0,contacts=None,disjoint=False,exact_packing=False,pair_cycles=0):
+                 relink=False,slate=1,pool=10,tie_slack=0,cycle_budget=0,contacts=None,disjoint=False,exact_packing=False,pair_cycles=0,forest=False):
         if min(slate,pool)<1 or min(ties,cycle_budget)<0 or tie_slack not in (0,1,2):
             raise ValueError("Invalid candidate or repair limits.")
         self.model=BoardModel(problem)
@@ -504,11 +529,12 @@ class Engine:
             raise ValueError("Invalid joint-repair contact limit.")
         if pair_cycles not in (0,2,3):
             raise ValueError("Expected zero, two or three for local cycle pairs.")
+        self.forest=forest
         self.pair_cycles=pair_cycles
         self.exact_packing=exact_packing
         self.contacts=contacts
         self.disjoint=disjoint
-        self.joint=joint or adjacent or cycle_budget>0 or contacts is not None or disjoint or exact_packing or pair_cycles>0
+        self.joint=joint or adjacent or cycle_budget>0 or contacts is not None or disjoint or exact_packing or pair_cycles>0 or forest
         self.cycle_budget=cycle_budget
         self.adjacent=adjacent
         self.ties=ties
@@ -536,7 +562,10 @@ class Engine:
                 for key,value in cycle_work.items():
                     stats['full_cycle_'+key]+=value
             # A capped model also explores longer donor cycles inside this variable pool.
-            chosen=rng.choice(available,min(len(available),self.pool),replace=False)
+            if self.forest:
+                chosen=forest_pool(model,board,available,self.pool,rng)
+            else:
+                chosen=rng.choice(available,min(len(available),self.pool),replace=False)
             if self.pair_cycles:
                 from r34_pair_cycles import pair_repair
                 board,pair_work=pair_repair(model,board,chosen,self.pair_cycles)
@@ -610,6 +639,8 @@ class Engine:
         if reusable:
             config=dict(bonds=self.assemblies is not None,joint=self.joint,adjacent=self.adjacent,
                         cycle_budget=self.cycle_budget,pool=self.pool,ties=self.ties,tie_slack=self.tie_slack)
+            if self.forest:
+                config['forest']=True
             if self.pair_cycles:
                 config['pair_cycles']=self.pair_cycles
             if self.exact_packing:
@@ -755,6 +786,7 @@ def main():
     parser.add_argument('--pool',type=int,default=10)
     parser.add_argument('--cycle-budget',type=int,default=0,help='Full-board assignment relaxations per repair.')
     parser.add_argument('--contacts',type=int,help='Maximum contacting changed pairs in joint repair (-1 for unlimited).')
+    parser.add_argument('--forest',action='store_true',help='Choose a low-width repair pool along defective seams.')
     parser.add_argument('--pair-cycles',type=int,choices=(0,2,3),default=0,help='Price interacting donor cycles in the joint pool up to this length.')
     parser.add_argument('--exact-packing',action='store_true',help='Solve small and bipartite swap conflicts exactly.')
     parser.add_argument('--disjoint-contacts',action='store_true',help='Permit at most one changed neighbor per changed cell.')
@@ -770,6 +802,8 @@ def main():
     from r31_sampling import run_seeds
     p=SearchProblem(read_json(args.tiles))
     config={k:getattr(args,k) for k in ('bonds','joint','adjacent','ties','tie_slack','fork','relink','slate','pool','cycle_budget')}
+    if args.forest:
+        config['forest']=True
     if args.pair_cycles:
         config['pair_cycles']=args.pair_cycles
     if args.exact_packing:

@@ -120,13 +120,13 @@ def speculate(model, assemblies, hint, phases, rng, merges=3):
 
 
 def fresh(problem, seed, *, rounds=32, cube_bits=2, refit=0, merges=0, cache=None, backend='cpu',
-          replicas=512, dispatches=64, sampler_cache=None, effort=.15, contour=False, saved=None, save=None):
+          replicas=512, dispatches=64, sampler_cache=None, effort=.15, contour=False, saved=None, save=None, independent_cubes=False):
     if min(seed,rounds,refit,merges)<0 or effort<=0:
         raise ValueError('Invalid seed or repair configuration.')
     model=BoardModel(problem)
     assemblies=Assemblies(model)
     inv=inventory(problem)
-    pins=phase_cube(problem,cube_bits,seed%(1<<cube_bits))
+    pins=phase_cube(problem,cube_bits,seed%(1<<cube_bits),independent=independent_cubes)
     rng=np.random.default_rng(seed)
     if saved:
         board=model.legal_board(saved['current'])
@@ -174,6 +174,9 @@ def fresh(problem, seed, *, rounds=32, cube_bits=2, refit=0, merges=0, cache=Non
         best=result(model,board)
         first=0
     signed=SignedRepair(model,phases,forbidden=inv.forbidden,database=cache)
+    if saved and saved.get('dart_prices'):
+        from r34_signed_snapshot import restore
+        restore(signed,saved['dart_prices'])
     if first==0:
         best['signed'],best['forbidden_bonds']=signed.score(board)
         best['phases']=list(phases)
@@ -205,7 +208,8 @@ def fresh(problem, seed, *, rounds=32, cube_bits=2, refit=0, merges=0, cache=Non
             if item['signed']>=threshold:
                 stats.setdefault('round_to_signed_'+str(threshold),step+1)
         if save and ((step+1)%8==0 or step+1==rounds or best['gold']):
-            save(dict(current=board.tolist(),rng=rng.bit_generator.state,phases=phases,best=best,
+            from r34_signed_snapshot import snapshot
+            save(dict(dart_prices=snapshot(signed),current=board.tolist(),rng=rng.bit_generator.state,phases=phases,best=best,
                       stats=dict(stats+signed.stats),cursor=step+1))
         if best['gold']:
             break
@@ -214,6 +218,33 @@ def fresh(problem, seed, *, rounds=32, cube_bits=2, refit=0, merges=0, cache=Non
     if not assemblies.bonds<=physical_bonds(model,model.legal_board(best['codes'])):
         raise ArithmeticError('Signed repair lost a mandatory bond.')
     return dict(**best,seed=seed,work=dict(stats))
+
+
+def run_fresh_seeds(problem, database, seed, starts, opts, *, row_cache=None, sampler_cache=None,
+                    progress=None, output=None):
+    """Keep exact-horizon result ownership and reusable pre-horizon trajectory states separate."""
+    from importlib.metadata import PackageNotFoundError, version
+    try:
+        cp_version=version('ortools')
+    except PackageNotFoundError:
+        cp_version=None
+    binding=domain_binding(BoardModel(problem))
+    scope=hashlib.sha256(json.dumps(['r32-fresh-v2',binding,opts],sort_keys=True).encode()).hexdigest()
+    policy={key:value for key,value in opts.items() if key!='rounds'}
+    sources={name:hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
+             for name in ('r32_fresh.py','r32_fresh_phases.py','r32_fresh_skeleton.py','r31_fresh.py',
+                          'r27_incumbent.py','r32_gold_bonds.py','r28_geo_color.py','r29_gold_phase.py',
+                          'r32_fresh_geometry.py','r34_contour_walk.py','r31_sampling.py','r34_signed_snapshot.py',
+                          'r27_structure_filters.py','search_problem.py','validator.py','geometry.py')}
+    if opts.get('backend','cpu')!='cpu':
+        from r31_sampling import _archive_request
+        sources['sampler']=_archive_request(problem,policy)
+    stream=hashlib.sha256(json.dumps(['phase-trajectory-v1',binding,policy,np.__version__,cp_version,sources],
+                                     sort_keys=True).encode()).hexdigest()
+    def run(seed,state,save):
+        return fresh(problem,seed,**opts,cache=row_cache,sampler_cache=sampler_cache,saved=state,save=save)
+    return run_seeds(database,scope,seed,starts,run,progress=progress,checkpointed=True,output=output,
+                     trajectory=(stream,opts['rounds']))
 
 
 def main():
@@ -228,6 +259,7 @@ def main():
     cli.add_argument('--starts',type=int,default=1)
     cli.add_argument('--rounds',type=int,default=32)
     cli.add_argument('--cube-bits',type=int,default=2)
+    cli.add_argument('--independent-cubes',action='store_true',help='Branch on independent physical tile phases after forced mates.')
     cli.add_argument('--refit',type=int,default=0)
     cli.add_argument('--merges',type=int,default=0)
     cli.add_argument('--backend',choices=['cpu','cuda','webgpu'],default='cpu')
@@ -240,6 +272,8 @@ def main():
     cli.add_argument('--limit',type=int,default=1)
     cli.add_argument('--target',type=int)
     cli.add_argument('--layers',type=int,nargs='+',default=[0])
+    cli.add_argument('--contour-walk',action='store_true',help='Lift successive exact-count flips by reassigning only changed cells in skeleton mode.')
+    cli.add_argument('--mandatory-poses',action='store_true',help='Require a surviving pose of each mandatory Gold cluster in skeleton search.')
     cli.add_argument('--lift',action='store_true')
     cli.add_argument('--contour',action='store_true',help='Sample a geographic odd-seam skeleton before placing tiles.')
     cli.add_argument('--conditioned-contour',dest='contour',action='store_const',const='conditioned',
@@ -258,14 +292,14 @@ def main():
         if domains is not None:
             cli.error('use cube, slots or skeleton for restricted domains')
         opts={k:getattr(args,k) for k in ('rounds','cube_bits','refit','merges','backend','replicas','dispatches','effort','contour')}
-        scope=hashlib.sha256(json.dumps(['r32-fresh-v2',domain_binding(BoardModel(p)),opts],sort_keys=True).encode()).hexdigest()
-        def run(seed,state,save):
-            return fresh(p,seed,**opts,cache=args.row_cache,sampler_cache=args.sampler_cache,saved=state,save=save)
+        if args.independent_cubes:
+            opts['independent_cubes']=True
         def progress(row):
             print(json.dumps({k:v for k,v in row.items() if k!='codes'}),flush=True)
-        answer=run_seeds(args.database,scope,args.seed,args.starts,run,progress=progress,checkpointed=True,output=args.output)
+        answer=run_fresh_seeds(p,args.database,args.seed,args.starts,opts,row_cache=args.row_cache,
+                               sampler_cache=args.sampler_cache,progress=progress,output=args.output)
     elif args.mode=='cube':
-        pins=phase_cube(p,args.cube_bits,args.seed)
+        pins=phase_cube(p,args.cube_bits,args.seed,independent=args.independent_cubes)
         required=inventory(p).required
         answer=lift_cube(p,required,pins,ds,args.seconds,args.database) if args.lift else fit(
             p,required,pins,physical_bonds(BoardModel(p),BoardModel(p).legal_board(request['codes']))
@@ -273,12 +307,15 @@ def main():
         answer['pins']=pins
     elif args.mode=='skeleton':
         from r32_fresh_geometry import skeletons, skeleton_domains
-        if args.contour:
+        if args.contour_walk:
+            from r34_contour_walk import contour_walk
+            answer=contour_walk(p,args.seed,ds,trials=args.nodes,limit=args.limit)
+        elif args.contour:
             from r32_fresh_skeleton import parity_seed
             sample=parity_seed(p,args.seed,domains=ds,trials=args.nodes,conditioned=args.contour=='conditioned')
             answer=dict(sample=sample,patterns=[sample['patterns']] if 'patterns' in sample else [],complete=False)
         else:
-            answer=skeletons(p,ds,max_nodes=args.nodes,limit=args.limit)
+            answer=skeletons(p,ds,max_nodes=args.nodes,limit=args.limit,mandatory_poses=args.mandatory_poses)
         if args.lift:
             required=inventory(p).required
             answer['lifts']=[]

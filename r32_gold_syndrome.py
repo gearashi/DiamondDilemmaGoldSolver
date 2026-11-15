@@ -9,6 +9,8 @@ from dataclasses import dataclass
 from itertools import combinations
 import time
 from math import comb
+from hashlib import sha256
+import json
 
 from r29_gold_phase import SignedParity
 from r32_gold_partition import insert, maximize_disjoint
@@ -54,6 +56,7 @@ class _SuffixTable:
     packed_tails: dict
     secondary: tuple | None
     split_buckets: dict
+    order_key: str
 
 
 class OutsideSyndromes:
@@ -69,6 +72,10 @@ class OutsideSyndromes:
             self.layout(reference, groups, required) if layout is None else layout)
         # This index belongs to this fixed reference and projection. Only the
         # most recent layer survives, which bounds memory on multi-layer runs.
+        self._cursor_scope = (problem.fingerprint, self.outside, tuple(sorted(self.required)),
+                              tuple(tuple(sorted(g)) for g in self.groups))
+        self.resume_cursor = None
+        self.checkpoint_progress = None
         self.reuse_suffix_tables = reuse_suffix_tables
         self.seek_ordered_tails = seek_ordered_tails
         self.use_bucket_price = use_bucket_price
@@ -246,8 +253,12 @@ class OutsideSyndromes:
                     value = (packed_tails[tail] >> offset) & mask
                     positions[value] |= 1 << ordinal
                 split_buckets[key] = dict(positions)
+        # Tails are lexicographic within each first-anchor bucket. Bind the
+        # precise bucket ordering to any later suffix resume token.
+        order_key = sha256(repr((1,self._cursor_scope,cap,errors,self.outside_check,
+                                anchor[:2] if anchor is not None else (),charges)).encode()).hexdigest()
         return _SuffixTable(anchor, charges, dict(buckets),
-                            packed_tails, secondary, split_buckets)
+                            packed_tails, secondary, split_buckets, order_key)
 
     @staticmethod
     def _owned_tails(bucket, last, stats):
@@ -263,7 +274,7 @@ class OutsideSyndromes:
         return bucket[first:]
 
     @staticmethod
-    def _secondary_tails(bucket, positions, prefix, prices, spare, last, stats):
+    def _secondary_tails(bucket, positions, prefix, prices, spare, last, stats, resume_tail=None):
         """Emit surviving tails in the original first-anchor and tuple order."""
         selected = 0
         for value, ordinals in positions.items():
@@ -274,12 +285,15 @@ class OutsideSyndromes:
             unowned = selected & ((1 << cut)-1)
             stats['unowned_tail_visits_skipped'] += unowned.bit_count()
             selected ^= unowned
+        if selected and resume_tail is not None:
+            cut = bisect_left(bucket,resume_tail)
+            selected &= -(1 << cut)
         while selected:
             first = selected & -selected
             yield bucket[first.bit_length()-1]
             selected ^= first
 
-    def indexed(self, cap, errors, seconds=60, start=0, stop=None, *, accept_errors=None, reject_before_joint=None):
+    def indexed(self, cap, errors, seconds=60, start=0, stop=None, *, accept_errors=None, reject_before_joint=None, cursor=None, checkpoint=None):
         """Index all suffixes of size at most two by their outside-only syndrome.
 
         The owned prefix ranks have a different scope from check()'s full-set ranks.
@@ -314,6 +328,36 @@ class OutsideSyndromes:
             if self.reuse_suffix_tables:
                 self._suffix_cache = (signature, table)
             stats['suffix_rows'] = comb(n, length)
+        cursor = self.resume_cursor if cursor is None else cursor
+        checkpoint = self.checkpoint_progress if checkpoint is None else checkpoint
+        refined = accept_errors is not None
+
+        def make_cursor(rank, price, tail, stage):
+            payload = [table.order_key,refined,rank,price,list(tail),stage]
+            return [payload,sha256(json.dumps(payload,separators=(',',':')).encode()).hexdigest()]
+
+        resume = None
+        if isinstance(cursor,(tuple,list)) and len(cursor)==2:
+            try:
+                key,mode,rank,price,tail,stage = cursor[0]
+                tail = tuple(tail)
+                if (key==table.order_key and mode is refined and type(rank) is int and rank==start
+                        and type(price) is int and 0<=price<len(table.prices)
+                        and len(tail)==length and all(type(t) is int and 0<=t<n for t in tail)
+                        and tuple(sorted(set(tail)))==tail and stage in ('tail','joint','integer')
+                        and (stage!='integer' or refined)
+                        and make_cursor(rank,price,tail,stage)[1]==cursor[1]):
+                    resume = price,tail,stage
+            except (TypeError,ValueError):
+                pass
+        next_flush = time.monotonic()+2.0
+
+        def flush(rank, price, tail, stage, force=False):
+            nonlocal next_flush
+            if checkpoint is not None and (force or time.monotonic()>=next_flush):
+                checkpoint(rank,make_cursor(rank,price,tail,stage))
+                next_flush=time.monotonic()+2.0
+
         # For the anchor group, a matched bucket already determines its exact
         # projected cost. The remaining group tests and the joint check still run.
         prepaid = self.use_bucket_price and table.anchor is not None
@@ -340,7 +384,20 @@ class OutsideSyndromes:
             key = (state >> outside_offset) & outside_mask
             local = (state >> anchor_offset) & anchor_mask
             last=prefix[-1] if prefix else -1
-            for syndrome, charge in table.prices:
+            start_price = 0
+            if rank==start and resume is not None:
+                price,tail,stage = resume
+                coordinate = (key,local ^ table.prices[price][0])
+                bucket = table.buckets.get(coordinate,())
+                i = bisect_left(bucket,tail)
+                if i<len(bucket) and bucket[i]==tail and (not tail or tail[0]>last):
+                    start_price=price
+                    stats['suffix_cursors_resumed']+=1
+                else:
+                    resume=None
+            for price_index in range(start_price,len(table.prices)):
+                syndrome, charge = table.prices[price_index]
+                resume_tail = resume[1] if resume is not None and rank==start and price_index==start_price else None
                 bucket_key = (key, local ^ syndrome)
                 bucket = table.buckets.get(bucket_key, ())
                 available = spare - charge if prepaid else spare
@@ -349,16 +406,25 @@ class OutsideSyndromes:
                     offset, mask = self._fields[id(table.secondary)]
                     prefix_value = (state >> offset) & mask
                     bucket = self._secondary_tails(bucket, split, prefix_value, table.secondary[2],
-                                                   available, last if self.seek_ordered_tails else -1, stats)
-                elif self.seek_ordered_tails:
-                    bucket = self._owned_tails(bucket, last, stats)
+                                                   available, last if self.seek_ordered_tails else -1, stats, resume_tail)
+                else:
+                    if self.seek_ordered_tails:
+                        bucket = self._owned_tails(bucket, last, stats)
+                    if resume_tail is not None:
+                        bucket = bucket[bisect_left(bucket,resume_tail):]
                 for ntail,tail in enumerate(bucket):
                     if ntail == 0 and prepaid:
                         stats['bucket_prices_reused'] += 1
-                    if ntail%4096==0 and time.monotonic()>=duration:return report('UNKNOWN',rank)
                     if not self.seek_ordered_tails and tail and tail[0] <= last:
                         stats['unowned_tail_visits'] += 1
                         continue
+                    resume_integer = tail==resume_tail and resume[2]=='integer'
+                    if ntail%4096==0:
+                        if time.monotonic()>=duration:
+                            stage='integer' if resume_integer else 'tail'
+                            return report('UNKNOWN',rank,cursor=make_cursor(rank,price_index,tail,stage))
+                        if checkpoint is not None:
+                            flush(rank,price_index,tail,'integer' if resume_integer else 'tail')
                     stats['indexed_tails']+=1
                     slack = available
                     residual = state ^ table.packed_tails[tail]
@@ -368,22 +434,32 @@ class OutsideSyndromes:
                         if slack<0:break
                     else:
                         errors_here = set(chain(prefix, tail))
+                        stage = 'integer' if resume_integer else 'joint'
                         try:
                             if reject_before_joint is not None and reject_before_joint(errors_here,duration):
                                 stats['integer_core_joint_queries_avoided'] += 1
                                 continue
-                            stats['joint_queries']+=1
-                            if not self.joint(errors_here, cap, duration):
-                                continue
+                            if resume_integer:
+                                stats['saved_joint_decisions_reused'] += 1
+                            else:
+                                if checkpoint is not None:
+                                    flush(rank,price_index,tail,'joint')
+                                stats['joint_queries']+=1
+                                if not self.joint(errors_here, cap, duration):
+                                    continue
                             status = 'PHASE_RELAXATION_FEASIBLE'
                             if accept_errors is not None:
+                                stage='integer'
+                                if checkpoint is not None:
+                                    flush(rank,price_index,tail,stage,force=True)
                                 stats['integer_checks'] += 1
                                 if not accept_errors(errors_here, duration):
                                     stats['integer_rejections'] += 1
                                     continue
                                 status = 'INTEGER_RELAXATION_FEASIBLE'
                             return report(status, rank, outside_errors=[self.outside[i] for i in chain(prefix, tail)])
-                        except TimeoutError:return report('UNKNOWN',rank)
+                        except TimeoutError:
+                            return report('UNKNOWN',rank,cursor=make_cursor(rank,price_index,tail,stage))
         return report('INFEASIBLE',end)
 
     def check(self, cap, errors, seconds=60, start=0, stop=None):

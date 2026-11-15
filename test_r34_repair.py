@@ -276,3 +276,163 @@ class ExteriorReuseTests(unittest.TestCase):
                 self.assertLessEqual(cache.bytes,cache.max_bytes)
         with self.assertRaises(ValueError):
             CompactExterior(ExchangeBound(m,codes),cells,cache=cache)
+
+
+class AdaptiveCenterTests(unittest.TestCase):
+    def test_archive_duplicates_and_nested_disjoint_union(self):
+        from r34_centers import archive_boards,select
+        import json
+        import sqlite3
+        tiles,geo,codes=planted_gold(18,2,3)
+        problem=SearchProblem(tiles,geo)
+        other=codes[19:]+codes[:19]
+        with tempfile.TemporaryDirectory() as tmp:
+            archive=Path(tmp)/'source.sqlite'
+            db=sqlite3.connect(archive)
+            db.execute('CREATE TABLE r31_jobs(scope,seed,result)')
+            db.executemany('INSERT INTO r31_jobs VALUES(?,?,?)',[('s',0,json.dumps(dict(codes=codes))),
+                ('s',1,None),('s',2,json.dumps(dict(codes=other))),('s',3,json.dumps(dict(codes=codes)))])
+            db.commit();db.close()
+            boards=list(archive_boards([archive]))
+            self.assertEqual(len(boards),3)
+            for policy in ('score','defects','novel'):
+                args=(problem,boards,Path(tmp)/'budget.sqlite',(2,2,3),0)
+                _,one,first=select(*args,1,policy)
+                _,two,second=select(*args,2,policy)
+                self.assertEqual(second['candidates'],2)
+                self.assertEqual(first['selected'],second['selected'][:1])
+                self.assertTrue(one[0] in two)
+                self.assertEqual(list(map(len,two)),[1,1])
+
+    def test_ranked_overlap_first_witness_and_same_page_reopen(self):
+        from r34_centers import search
+        tiles,geo,gold=planted_gold(88,1,4)
+        problem=SearchProblem(tiles,geo)
+        a,b=list(gold),list(gold)
+        family=(2,2,3)
+        poses=CycleOrders(family)
+        for i in range(7):
+            a[i]=gold[poses[0][i]]
+            b[i]=gold[poses[1][i]]
+        with tempfile.TemporaryDirectory() as tmp:
+            db=Path(tmp)/'ranked.sqlite'
+            args=dict(family=family,target=len(problem.edges),limit=2,start=0,stop=1,page=1)
+            cold=search(problem,[a,b],db,**args)
+            warm=search(problem,[a,b],db,**args)
+            self.assertEqual(list(map(len,cold['groups'])),[2])
+            self.assertEqual(cold['best']['score'],len(problem.edges))
+            self.assertEqual(warm['searches'][0]['new_pages'],0)
+            self.assertEqual(warm['best'],cold['best'])
+
+
+class ComponentBudgetTests(unittest.TestCase):
+    def test_crossing_donor_witness_and_capped_resume(self):
+        import numpy as np
+        from r34_component_budget import ComponentBudget
+        from r30_bounds import pattern_distance_upper
+        tiles,geo,codes=planted_gold(62,2,4)
+        model=BoardModel(SearchProblem(tiles,geo))
+        cells=[0,18,22,30,36]
+        original=np.asarray(codes)
+        moved=original.copy()
+        moved[[cells[0],cells[-1]]]=moved[[cells[-1],cells[0]]]
+        b=ExchangeBound(model,moved)
+        c=ComponentBudget(b,cells)
+        self.assertGreater(len(c.groups),1)
+        self.assertFalse(c.upper(1,max_rows=1)['complete'])
+        maximum=len(model.problem.edges)
+        self.assertLess(c.upper(0)['upper'],maximum)
+        self.assertEqual(c.upper(1)['upper'],maximum)
+        warm=c.upper(1,max_rows=1)
+        self.assertEqual(warm['upper'],maximum)
+        self.assertEqual(warm['work']['priced'],0)
+        self.assertEqual(warm['work']['joins'],0)
+        for swaps in (0,1,2,3):
+            reference=pattern_distance_upper(b,cells,swaps)
+            self.assertTrue(reference['complete'])
+            self.assertGreaterEqual(c.upper(swaps)['upper'],reference['upper'])
+
+    def test_mover_floor_covers_every_seven_and_eight_piece_exchange(self):
+        import numpy as np
+        from r34_component_budget import ComponentBudget
+        tiles,geo,codes=planted_gold(92,2,4)
+        m=BoardModel(SearchProblem(tiles,geo));b=ExchangeBound(m,codes)
+        pool=(0,4,10,15,19,25,31,36)
+        c=ComponentBudget(b,pool)
+        self.assertGreater(len(c.groups),1)
+        candidate=c.upper(4,min_moved=7,max_rows=100000)
+        self.assertTrue(candidate['complete'])
+        maximum=-1
+        for family in ((2,2,3),(2,2,2,2)):
+            for support in itertools.combinations(pool,sum(family)):
+                for order in CycleOrders(family):
+                    physical=b.pieces.copy()
+                    physical[list(support)]=b.tiles[np.asarray(support)[list(order)]]
+                    value=int(b.stars(physical,physical[b.neighbors]).sum())//2
+                    maximum=max(maximum,value)
+        self.assertGreaterEqual(candidate['upper'],min(maximum,candidate['coarse']))
+        self.assertEqual(c.upper(4,min_moved=7)['work']['result_reuses'],1)
+
+    def test_touching_undo_matches_conditioned_rotations(self):
+        import numpy as np
+        from r34_exchange_undo import CoveredUndo
+        tiles,geo,codes=planted_gold(38,1,4)
+        model=BoardModel(SearchProblem(tiles,geo))
+        b=ExchangeBound(model,codes)
+        a=0
+        other=int(next(x for x in b.neighbors[0] if x<b.n))
+        cells=tuple(sorted((a,other)))
+        donor=cells[::-1]
+        exterior=sorted(set().union(*(set(map(int,b.neighbors[c])) for c in cells))-{*cells,b.n})
+        undo=CoveredUndo(b,lambda group:True)
+        differences=[]
+        for rotations in itertools.product(range(3),repeat=len(exterior)):
+            board=np.array(codes)
+            board[exterior]=3*b.tiles[exterior]+rotations
+            scores=[]
+            for placed in (cells,donor):
+                best=-1
+                for local in itertools.product(range(3),repeat=2):
+                    board[list(cells)]=3*b.tiles[list(placed)]+local
+                    best=max(best,int(model.matches(board).sum()))
+                scores.append(best)
+            differences.append(scores[1]-scores[0])
+        self.assertEqual(undo._cycle_gain(cells),max(differences))
+
+
+@unittest.skipUnless(find_spec('ortools'), 'CP-SAT requires the full Python profile')
+class SeamMasterTests(unittest.TestCase):
+    def test_exact_small_scope_and_pin_direction(self):
+        from r30_exact_routes import CycleModel
+        from r34_seam_master import SeamMaster
+        from r28_exchange_rotations import RotationOracle
+        tiles,geo,codes=planted_gold(77,1,4)
+        model=BoardModel(SearchProblem(tiles,geo))
+        bound=ExchangeBound(model,codes)
+        q=CycleModel(model,codes,[0,1,2,3],(2,))
+        master=SeamMaster(q)
+        oracle=RotationOracle(model)
+        maximum=max(oracle.optimum(bound.witness_seed(pair,(1,0)))[0] for pair in itertools.combinations(range(4),2))
+        high=master.solve(maximum+1,8,pins=((0,1),))
+        self.assertEqual(high['status'],'INFEASIBLE')
+        unpinned=master.solve(maximum+1,8)
+        self.assertEqual(unpinned['status'],'INFEASIBLE')
+        self.assertNotIn('inherited_cuts',unpinned['work'])
+        witness=master.solve(maximum,8)
+        self.assertEqual(witness['score'],maximum)
+        self.assertTrue(master.solve(maximum,8)['work']['witness_reuse'])
+
+class ForestPoolTests(unittest.TestCase):
+    def test_pool_is_a_forest_and_uses_only_eligible_donors(self):
+        import numpy as np
+        from r31_fresh import forest_pool
+        tiles,geo,board=planted_gold(83,2,6)
+        m=BoardModel(SearchProblem(tiles,geo))
+        allowed=set(range(31))
+        cells=forest_pool(m,np.array(board),list(allowed),18,np.random.default_rng(34))
+        self.assertEqual(len(set(cells)),18)
+        selected=set()
+        for c in cells:
+            self.assertIn(c,allowed)
+            self.assertLessEqual(len(selected.intersection(m.problem.neighbors[c])),1)
+            selected.add(c)

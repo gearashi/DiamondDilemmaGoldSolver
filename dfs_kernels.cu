@@ -5,12 +5,26 @@ __device__ __forceinline__ unsigned int next_random(unsigned int &state) {
 __device__ __forceinline__ bool taken(const unsigned int *used, int tile, int n, int tid) {
     return (used[(tile >> 5) * n + tid] & (1u << (tile & 31))) != 0;
 }
+__device__ __forceinline__ int forbidden_neighbor(const short *board,const short *neighbors,
+    const unsigned char *sides,const unsigned int *blocked,int cell,int code,int n,int tid) {
+#if PHYSICAL_GOLD
+    for(int side=0;side<3;++side) {
+        int nb=neighbors[3*cell+side],other=board[nb*n+tid];
+        if(other<0) continue;
+        int a=(code/3)*3+(side+3-code%3)%3;
+        int b=(other/3)*3+(sides[3*cell+side]+3-other%3)%3;
+        if(blocked[a*15+(b>>5)] & (1u<<(b&31))) return nb;
+    }
+#endif
+    return -1;
+}
 // The candidate came from bucket(), which covers the first two occupied sides.
 // With three sides total, only an occupied third side can remain unchecked.
 __device__ __forceinline__ bool matches_after_bucket(
     const short *board, const unsigned short *faces, const unsigned short *reverse,
-    const short *neighbors, const unsigned char *sides, int cell, int code, int n, int tid
+    const short *neighbors, const unsigned char *sides, const unsigned int *blocked, int cell, int code, int n, int tid
 ) {
+    if(forbidden_neighbor(board,neighbors,sides,blocked,cell,code,n,tid)>=0) return false;
     if (board[neighbors[cell * 3] * n + tid] < 0 ||
         board[neighbors[cell * 3 + 1] * n + tid] < 0) return true;
     int other = board[neighbors[cell * 3 + 2] * n + tid];
@@ -45,14 +59,14 @@ __device__ __forceinline__ void bucket(
 __device__ __forceinline__ bool possible(
     const short *board, const unsigned int *used, const unsigned short *faces,
     const unsigned short *reverse, const short *neighbors, const unsigned char *sides,
-    const int *single_offsets, const int *pair_offsets, const short *pool, int colors,
+    const int *single_offsets, const int *pair_offsets, const short *pool, const unsigned int *blocked, int colors,
     int cell, int n, int tid
 ) {
     int first, length;
     bucket(board, reverse, neighbors, sides, single_offsets, pair_offsets, colors, cell, n, tid, first, length);
     for (int j = 0; j < length; ++j) {
         int code = pool[first + j];
-        if (!taken(used, code / 3, n, tid) && matches_after_bucket(board, faces, reverse, neighbors, sides, cell, code, n, tid)) return true;
+        if (!taken(used, code / 3, n, tid) && matches_after_bucket(board, faces, reverse, neighbors, sides, blocked, cell, code, n, tid)) return true;
     }
     return false;
 }
@@ -64,7 +78,7 @@ struct Reasoning {
     const unsigned short *faces; const unsigned short *reverse;
     const short *neighbors; const unsigned char *sides;
     const int *single_offsets; const int *pair_offsets; const short *pool;
-    const unsigned char *partners; const unsigned int *policy;
+    const unsigned char *partners; const unsigned int *policy; const unsigned int *blocked;
     int colors, n, tid, flags;
     __device__ bool allowed(int cell, int code) const {
         return !(flags & 32) || code / 3 != 0 || policy[cell];
@@ -74,7 +88,7 @@ struct Reasoning {
         bucket(board, reverse, neighbors, sides, single_offsets, pair_offsets, colors, cell,n,tid,first,length);
         for(int j=0;j<length;++j) {
             int code=pool[first+j];
-            if(taken(used,code/3,n,tid)||!allowed(cell,code)||!matches_after_bucket(board,faces,reverse,neighbors,sides,cell,code,n,tid)) continue;
+            if(taken(used,code/3,n,tid)||!allowed(cell,code)||!matches_after_bucket(board,faces,reverse,neighbors,sides,blocked,cell,code,n,tid)) continue;
             singleton_index=j; ++count;
             if(pieces) {
                 int tile=code/3; bool known=false;
@@ -205,7 +219,7 @@ extern "C" __global__ void dfs_search(
     const short *neighbors, const unsigned char *sides,
     const int *single_offsets, const int *pair_offsets, const short *pool,
     const unsigned char *gold_partners, const short *gold_ranks, unsigned char *gold_checked,
-    const unsigned int *policy, int flags,
+    const unsigned int *policy, const unsigned int *blocked, int flags,
     int gold_total, int colors, int n, int budget
 ) {
     flags = REASONING_FLAGS;
@@ -214,7 +228,7 @@ extern "C" __global__ void dfs_search(
     if (states[tid] != 0 && !(gold_total && states[tid] == 1 && gold_checked[tid] != 255)) return;
     int depth = depths[tid], high = maximum[tid], floor = floors[tid];
     unsigned int random = rng[tid];
-    Reasoning reasoning={board,used,faces,reverse,neighbors,sides,single_offsets,pair_offsets,pool,gold_partners,policy,colors,n,tid,flags};
+    Reasoning reasoning={board,used,faces,reverse,neighbors,sides,single_offsets,pair_offsets,pool,gold_partners,policy,blocked,colors,n,tid,flags};
     short private_ranks[160]; const short *ranks=gold_ranks;
     if(flags&12) {ranks=private_ranks;for(int i=0;i<depth;++i) private_ranks[selected_cell(i,floor,order,firsts,shifts,n,tid,flags)]=i;}
     bool initial_ok=true;
@@ -233,8 +247,10 @@ extern "C" __global__ void dfs_search(
         while (work < budget && gold_checked[tid] != 255) {
             int scan = gold_checked[tid];
             if (scan >= depth) { gold_checked[tid] = 255; break; }
-            int closed = gold_closed_rank(board, gold_partners, neighbors, sides, ranks,
-                                          selected_cell(scan,floor,order,firsts,shifts,n,tid,flags), n, tid, gold_total);
+            int cell=selected_cell(scan,floor,order,firsts,shifts,n,tid,flags);
+            int other=forbidden_neighbor(board,neighbors,sides,blocked,cell,board[cell*n+tid],n,tid);
+            int closed=other>=0 ? max((int)ranks[cell],(int)ranks[other]) :
+                gold_closed_rank(board,gold_partners,neighbors,sides,ranks,cell,n,tid,gold_total);
             ++work;
             if (closed < 0) {
                 gold_checked[tid] = scan + 1 >= depth ? 255 : scan + 1;
@@ -288,7 +304,7 @@ extern "C" __global__ void dfs_search(
         int code = pool[(firsts[location]&4095) + (cursor + (shifts[location]&4095)) % length];
         cursors[location] = cursor + 1; ++tried;
         int tile = code / 3, cell = selected_cell(depth,floor,order,firsts,shifts,n,tid,flags);
-        if (!reasoning.allowed(cell,code) || taken(used, tile, n, tid) || !matches_after_bucket(board, faces, reverse, neighbors, sides, cell, code, n, tid)) continue;
+        if (!reasoning.allowed(cell,code) || taken(used, tile, n, tid) || !matches_after_bucket(board, faces, reverse, neighbors, sides, blocked, cell, code, n, tid)) continue;
         board[cell * n + tid] = code;
         used[(tile >> 5) * n + tid] |= 1u << (tile & 31);
         bool feasible = !(flags&192) || reasoning.shared();
@@ -297,7 +313,7 @@ extern "C" __global__ void dfs_search(
             if (!feasible) break;
             int nb = neighbors[cell * 3 + s];
             if (board[nb * n + tid] < 0 && !possible(board, used, faces, reverse, neighbors,
-                sides, single_offsets, pair_offsets, pool, colors, nb, n, tid)) { feasible = false; break; }
+                sides, single_offsets, pair_offsets, pool, blocked, colors, nb, n, tid)) { feasible = false; break; }
         }
         if(feasible && (flags&1) && !reasoning.forward()) feasible=false;
         if(feasible && (flags&2) && !reasoning.hall()) feasible=false;

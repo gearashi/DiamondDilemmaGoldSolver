@@ -305,32 +305,82 @@ def master(problem, reference, cert, budget, seconds, required=(), forbidden=(),
     return dict(status='UNKNOWN',calls=counts,clauses=cert.clauses())
 
 
-def save_query(database, key, query):
-    """Only final exact decisions can serve the same disjoint geographic query."""
+def save_query(database,key,query,*,deadline=float('inf'),setup=None,related=None,publish=None,check=None):
+    """Fence duplicate native calls and atomically publish final verified evidence."""
+    from r34_query_ownership import LostQueryLease,query_lease
     if database is None:return query()
     with closing(sqlite3.connect(database,timeout=60)) as db:
         with db:
             db.execute('CREATE TABLE IF NOT EXISTS r32_gold(key TEXT PRIMARY KEY,result TEXT NOT NULL)')
-        row=db.execute('SELECT result FROM r32_gold WHERE key=?',(key,)).fetchone()
-        if row:
-            return dict(json.loads(row[0]),reused=True,cp_calls_now=0)
-        answer=query()
-        if answer['status'] in ('GOLD','INFEASIBLE'):
-            with db:db.execute('INSERT OR IGNORE INTO r32_gold VALUES(?,?)',(key,json.dumps(answer)))
-        return answer
+            if setup:setup(db)
+        def lookup():
+            row=db.execute('SELECT result FROM r32_gold WHERE key=?',(key,)).fetchone()
+            if row:
+                answer=json.loads(row[0])
+                if check:answer=check(answer)
+            else:
+                answer=related(db) if related else None
+            return dict(answer,reused=True,cp_calls_now=0) if answer is not None else None
+        cached=lookup()
+        if cached is not None:return cached
+        try:
+            with query_lease(db,database,'geographic:'+key,deadline) as guard:
+                cached=lookup()
+                if cached is not None:return cached
+                if guard is not None:
+                    answer=query()
+                    if answer['status'] in ('GOLD','INFEASIBLE'):
+                        if check:answer=check(answer)
+                        with db:
+                            db.execute('BEGIN IMMEDIATE')
+                            guard()
+                            db.execute('INSERT OR IGNORE INTO r32_gold VALUES(?,?)',(key,json.dumps(answer)))
+                            if publish:publish(db,answer)
+                    return answer
+        except LostQueryLease:
+            pass
+        return lookup() or dict(status='UNKNOWN',cp_calls_now=0)
 
 
 def geographic(problem, reference, groups, checked, path, lower, upper, outside, seconds, database, domains=None, pins=None):
     from r30_gold import search
-    ds=tuple(domains or domain_bits(problem))
+    if seconds<=0:raise ValueError('Invalid Gold solve budget.')
+    from r29_gold_geography import checked_domains
+    ds=tuple(checked_domains(problem,domains))
     parts=first_loss_partition(groups,path=path)
     if parts is None:return dict(status='INFEASIBLE',cp_calls=0)
     require,forbid,options=parts
     spec=loss_partition(problem,reference,groups,outside,(lower,upper))
-    key=digest([1,problem.fingerprint,list(ds),sorted(reference),spec,require,forbid,sorted((pins or {}).items())])
+    from r34_geographic_reuse import related,schema,verify_board
+    from r29_gold_phase import checked_pins
+    pins_for_board=checked_pins(problem.n,{0:0} if pins is None else pins)
+    physical=[sorted(reference),spec,require,forbid,sorted((pins or {}).items())]
+    context=digest([problem.fingerprint,*physical])
+    def key_for_domains(rows):
+        return digest([1,problem.fingerprint,list(rows),*physical])
+    key=key_for_domains(ds)
+    deadline=time.monotonic()+seconds
     def solve():
+        remaining=deadline-time.monotonic()
+        if remaining<=0:return dict(status='UNKNOWN',cp_calls_now=0)
         return search(problem,domains=ds,geography=True,channel=True,learned_geometry=True,
-                      seconds=seconds,pins=pins,bonds=require,forbidden=forbid,
+                      seconds=remaining,pins=pins,bonds=require,forbidden=forbid,
                       physical_loss=(reference,spec,checked))
-    result=save_query(database,key,solve)
+    def positive(row):
+        return verify_board(problem,row,ds,pins_for_board,require,forbid,reference,spec)
+    def validate(row):
+        if row['status']=='INFEASIBLE':
+            return row
+        result=positive(row) if row['status']=='GOLD' else None
+        if result is None:
+            raise ValueError('Geographic query failed independent validation.')
+        return result
+    def save(db,row):
+        if row['status']=='GOLD':
+            db.execute('INSERT OR IGNORE INTO r34_geo_boards VALUES(?,?)',(problem.fingerprint,key))
+        else:
+            db.execute('INSERT OR IGNORE INTO r34_geo_domains VALUES(?,?,?)',
+                       (context,key,json.dumps([hex(v) for v in ds])))
+    result=save_query(database,key,solve,deadline=deadline,setup=schema,
+                      related=lambda db:related(db,problem,context,ds,positive,key_for_domains),publish=save,check=validate)
     return dict(result,branch=path,children=len(options))

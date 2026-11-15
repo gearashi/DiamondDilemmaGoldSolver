@@ -16,11 +16,63 @@ from validator import reverse_mask
 from functools import lru_cache
 
 
-def phase_cube(problem, width, index):
+def independent_phases(problem):
+    """Order independent tile colors by how many other phases a choice fixes."""
+    from r29_gold_phase import SignedParity
+    from r32_gold_bonds import inventory
+    saved = getattr(problem,'_independent_phase_order',None)
+    if saved is not None:
+        return saved
+    parity = SignedParity(problem)
+    parity.pin(0,0)
+    for a,b in sorted(inventory(problem).required):
+        parity.bond(a,b)
+    if parity.base.conflict is not None:
+        raise ValueError('No signed parity assignment for the mandatory Gold mates.')
+    expressions = []
+    free = []
+    for t in range(problem.n):
+        pivot = parity.base.pivots.get(t)
+        if pivot is None:
+            free.append(t)
+            expressions.append(1<<t)
+        else:
+            dependencies = pivot[0]^(1<<t)
+            mask = 0
+            while dependencies:
+                bit = dependencies & -dependencies
+                mask ^= expressions[bit.bit_length()-1]
+                dependencies ^= bit
+            expressions.append(mask)
+    order = []
+    while free:
+        # Prefer immediate contractions first, then shorten the fewest-variable
+        # residual equations. Tie-breaking by physical tile ID is reproducible.
+        def benefit(tile):
+            counts = [0]*(problem.n+1)
+            for mask in expressions:
+                if mask >> tile & 1:
+                    counts[mask.bit_count()] += 1
+            return counts
+        t = max(free,key=benefit)
+        free.remove(t)
+        order.append(t)
+        expressions = [mask & ~(1<<t) for mask in expressions]
+    problem._independent_phase_order = tuple(order)
+    return problem._independent_phase_order
+
+
+def phase_cube(problem, width, index, *, independent=False):
     """Low numbered physical tile phases partition assignments modulo global color reversal."""
     if not 0 <= width < problem.n or not 0 <= index < 2**width:
         raise ValueError('Phase cube index or width is out of range.')
-    return {0: 0, **{i+1: index >> i & 1 for i in range(width)}}
+    if independent and width:
+        coordinates = independent_phases(problem)
+        if width>len(coordinates):
+            raise ValueError('Cube width exceeds the remaining independent phase dimension.')
+    else:
+        coordinates = range(1,problem.n)
+    return {0: 0, **{tile: index >> i & 1 for i,tile in enumerate(coordinates[:width])}}
 
 
 def fit(problem, required, pins, bonds=(), *, seed=0, effort=.15, hint=None):
@@ -125,24 +177,57 @@ def lift_cube(problem, required, pins, domains=None, seconds=1, cache=None):
     return row
 
 
+class _DartPrices:
+    """One phase-independent compatibility vector per physical exterior side."""
+    def __init__(self, model, forbidden):
+        p = model.problem
+        self.fingerprint = p.fingerprint
+        self.forbidden = forbidden
+        self.sides = np.array([[3*(v//3)+(s-v%3)%3 for s in range(3)] for v in range(3*p.n)])
+        data = EndpointCuts(p)
+        self.masks = np.asarray([mask for mask,_ in data.sides],dtype=np.int16)
+        self.colors = np.asarray([color for _,color in data.sides],dtype=np.int8)
+        self.reverse = np.asarray([2*int(model.reverse[v//2]) + ((v%2)^((v//2).bit_count()%2)) for v in range(4096)])
+        self.blocked = {}
+        for a,b in forbidden:
+            self.blocked.setdefault(a,[]).append(b)
+            self.blocked.setdefault(b,[]).append(a)
+        self.templates = {}
+
+    def price(self, dart, phases, stats):
+        if dart not in self.templates:
+            mask = int(self.masks[dart])
+            ok = self.masks==reverse_mask(mask)
+            required = np.where(ok,self.colors^self.colors[dart]^(mask.bit_count()%2),-1).astype(np.int8)
+            required[self.blocked.get(dart,[])] = -1
+            self.templates[dart] = required
+            stats['dart_templates_built'] += 1
+        else:
+            stats['dart_templates_reused'] += 1
+        stats['signed_dart_prices'] += 1
+        return self.templates[dart] == (phases^phases[dart])
+
+
 class SignedRepair:
     """Optimize the count of signed-compatible seams on nonadjacent cells with distinct donors."""
     def __init__(self, model, phases, forbidden=(), database=None):
         self.model = model
         p = model.problem
-        data = EndpointCuts(p)
         if len(phases) != p.n or any(v not in (0,1) for v in phases):
             raise ValueError('Expected one phase bit per physical tile.')
         self.phases = tuple(phases)
-        self.sides = np.array([[3*(v//3)+(s-v%3)%3 for s in range(3)] for v in range(3*p.n)])
-        base = [2*m+(c^phases[i//3]) for i,(m,c) in enumerate(data.sides)]
-        self.labels = np.array(base)[self.sides]
-        self.reverse = np.array([2*int(model.reverse[v//2]) + ((v%2)^((v//2).bit_count()%2)) for v in range(4096)])
         self.forbid = frozenset(tuple(sorted(x)) for x in forbidden)
-        self.blocked = {}
-        for a,b in self.forbid:
-            self.blocked.setdefault(a, []).append(b)
-            self.blocked.setdefault(b, []).append(a)
+        geometry = getattr(p,'_signed_dart_prices',None)
+        if geometry is None or geometry.fingerprint != p.fingerprint or geometry.forbidden != self.forbid:
+            geometry = _DartPrices(model,self.forbid)
+            p._signed_dart_prices = geometry
+        self.geometry = geometry
+        self.sides = geometry.sides
+        self.blocked = geometry.blocked
+        self.reverse = geometry.reverse
+        self.dart_phases = np.repeat(np.asarray(phases,dtype=np.int8),3)
+        self.labels = (2*geometry.masks+(geometry.colors^self.dart_phases))[self.sides]
+        self.prices = {}
         self.stats = Counter()
         self.last_hit_keys = set()
         self.last_new_keys = set()
@@ -206,11 +291,11 @@ class SignedRepair:
                     for s,dart in enumerate(sides):
                         if dart < 0:
                             continue
-                        t,u=divmod(dart,3)
-                        ok=self.labels[:,s]==self.reverse[self.labels[3*t,u]]
-                        if dart in self.blocked:
-                            ok &= ~np.isin(self.sides[:,s], self.blocked[dart])
-                        row+=ok
+                        if dart not in self.prices:
+                            self.prices[dart] = self.geometry.price(dart,self.dart_phases,self.stats)
+                        else:
+                            self.stats['signed_dart_reuses'] += 1
+                        row += self.prices[dart][self.sides[:,s]]
                     self.stats['rows_computed']+=1
                     self.last_new_keys.add(key)
                     if db is not None:

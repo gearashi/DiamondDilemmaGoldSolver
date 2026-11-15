@@ -39,6 +39,7 @@ class PersistentSatSession:
         self.encoder=SatAssist(problem,scope.root,'edges',capture_clauses=True)
         self.solver=None;self.variables=None;self.next_id=0;self.selector=None
         self.core_lifting=bool(core_lifting);self._guard_domains={};self._base_clauses=();self._core_verifier=None
+        self._physical_clauses=None
         self.gold_cuts=[];self.closed=[];self.last_codes=None;self._imported_masks=set()
         self.stats={'session_model_builds':0,'session_warm_slices':0,'session_native_calls':0,'session_cubes_closed':0,'session_gold_cuts':0,'session_decisions':0,'session_candidates':0,'session_imported_loops':0,'session_imported_masks':0}
         self.stats.update(session_core_candidates=0,session_core_verifications=0,session_core_model_builds=0,session_core_decisions=0,session_core_verified=0,session_core_unknown=0,session_core_boxes_removed=0,session_core_assignments_removed=0)
@@ -68,6 +69,11 @@ class PersistentSatSession:
         self._base_clauses=tuple(model['clauses'])
         self.next_id=max((abs(x) for row in model['clauses'] for x in row),default=0)
         self._prepare_regions(check)
+        if self.scope.target=='gold' and self.problem.physical_gold_support and self._physical_clauses is None:
+            from r34_geographic_mates import post_sat
+            physical = []
+            self.stats.update(post_sat(self.problem,self.variables,physical.append,check))
+            self._physical_clauses = physical
         clauses=self._search_formula(check)
         if self.theory:
             from pysat.solvers import Cadical195
@@ -174,6 +180,8 @@ class PersistentSatSession:
         # stats_sink already charges completed and interrupted compilation.
 
     def _post_regions(self,solver):
+        for row in self._physical_clauses or ():
+            solver.add_clause(row)
         for record in self._imported_masks:self._post_checked_mask(solver,record)
         if self.regional_compiler:
             for row in self._region_clauses:solver.add_clause(list(row))

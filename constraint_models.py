@@ -303,6 +303,9 @@ def _sat(run, domains, hints):
                     support = [variables[cell][code] for code in codes]
                     clause([-signature, *support])
                     for literal in support: clause([-literal, signature])
+        if run.target=='gold' and run.problem.physical_gold_support:
+            from r34_geographic_mates import post_sat
+            run.stats.update(post_sat(run.problem,variables,clause,run.check))
         if run.options['regional_compiler']:
             from types import SimpleNamespace
             from constraint_region_models import add_regional_dags
@@ -392,6 +395,9 @@ def _cpsat(run, domains, hints):
         seam = model.new_int_var_from_domain(cp_model.Domain.from_values(common), f'seam_{edge_index}')
         model.add_allowed_assignments([codes[a], seam], [(code, mask) for mask in common for code in left[mask]])
         model.add_allowed_assignments([codes[b], seam], [(code, mask) for mask in common for code in right[mask]])
+    if run.target=='gold' and run.problem.physical_gold_support:
+        from r34_geographic_mates import post_cpsat
+        run.stats.update(post_cpsat(run.problem,model,codes,domains,run.check))
     def add_cut(cut):
         model.add_forbidden_assignments([codes[cell] for cell, _ in cut], [tuple(code for _, code in cut)])
     for cut in run.cuts: add_cut(cut)
@@ -445,6 +451,9 @@ def _cpsat_circuit(run,domains,hints):
         result=run.finish('unsupported');result['reason']=str(exc)
         return result
     model,codes=built.model,built.codes
+    if run.problem.physical_gold_support:
+        from r34_geographic_mates import post_cpsat
+        run.stats.update(post_cpsat(run.problem,model,codes,domains,run.check,built.placements))
     if run.options['regional_compiler']:
         from constraint_region_models import add_regional_dags
         run.stats.update(add_regional_dags(run.problem,domains,backend='cp-sat',model=model,codes=codes,target=run.target,check=run.check,stats_sink=run.stats,cache_dir=run.regional_cache_dir))
@@ -497,6 +506,9 @@ def _cp(run, domains, hints):
         seam = solver.IntVar(common, f'seam_{edge_index}')
         solver.Add(solver.AllowedAssignments([codes[a], seam], [(code, mask) for mask in common for code in left[mask]]))
         solver.Add(solver.AllowedAssignments([codes[b], seam], [(code, mask) for mask in common for code in right[mask]]))
+    if run.target=='gold' and run.problem.physical_gold_support:
+        from r34_geographic_mates import post_cp
+        run.stats.update(post_cp(run.problem,solver,codes,domains,run.check))
     def add_cut(cut):
         solver.Add(solver.Sum([solver.IsDifferentCstVar(codes[cell], code) for cell, code in cut]) >= 1)
     for cut in run.cuts: add_cut(cut)

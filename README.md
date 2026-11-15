@@ -8,6 +8,10 @@ The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaap
 
 The [v1.7.0 results and recommended settings](docs/ROUND26_RESULTS.md) cover 17 workstreams and 81 scoped evaluations. They include exact CPU and CUDA search, shared SAT reasoning, disk-backed progress, regional pruning, incremental GPU scoring and repair. The [workstream register](docs/round26-workstreams.json) records which candidates reduced steps, which saved repeated work and where extra work outweighed the benefit. Earlier evaluations are available for [Round 25](docs/ROUND25_RESULTS.md), [Round 24](docs/ROUND24.md) and [Round 23](docs/ROUND23.md).
 
+## Search improvements in v1.15.0
+
+GPU domain search can lower its lane count and resume native branches in batches. The solver also reuses independently checked SAT results, skips disallowed physical mates in classic GPU DFS, and resumes phase searches across longer runs. The best verified original board has 207 matched seams. [Measurements, hardware settings and commands](docs/ROUND34_RESULTS.md)
+
 ## Search improvements in v1.14.0
 
 The CPU Gold loss search now builds one suffix lookup per active layer and reuses it across checkpoint pages. On the original five-error layer this cut 235,620 row constructions to 7,140, with the same exclusions and joint checks. The optional `--refine-integer` check rejected the first budget-17 phase witness and can continue on the same SQLite database. [Measured results, settings and commands](docs/ROUND33_RESULTS.md)

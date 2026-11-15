@@ -37,6 +37,58 @@ def split_cubes(cubes,count):
         for value in (part,mask):copy=list(row);copy[axis]=value;push(tuple(copy))
     return [item[3] for item in heap]
 
+def inventory_screen(cubes,n):
+    """Preflight queued physical inventories and retain a Hall witness for each cut."""
+    from constraint_advanced import _complete_matching
+    from constraint_pruning import _tile_choices
+    full=(1<<n)-1
+    live=[]
+    closed=[]
+    hint=None
+    for box in cubes:
+        rows=tuple(map(_tile_choices,box))
+        groups={}
+        for i,tiles in enumerate(rows):
+            members=groups.setdefault(tiles,[])
+            members.append(i)
+            if len(members)>tiles.bit_count():
+                closed.append((box,tuple(members)))
+                break
+        else:
+            # Independent restricted tile sets fit once the count test passes;
+            # full-domain rows can take any remaining tiles.
+            used=0
+            for tiles in groups:
+                if tiles==full:
+                    continue
+                if tiles&used:
+                    matching=_complete_matching(rows,hint=hint)
+                    if matching is None:
+                        # Full-domain cells can always take the remaining tiles.
+                        # Minimize only a failed restricted graph for a compact
+                        # Hall witness independently checked below.
+                        cells=[c for c,row in enumerate(rows) if row!=full]
+                        for c in tuple(cells):
+                            subset=[i for i in cells if i!=c]
+                            if _complete_matching(tuple(rows[i] for i in subset)) is None:
+                                cells=subset
+                        cells=tuple(cells)
+                        union=0
+                        for c in cells:
+                            union|=rows[c]
+                        if union.bit_count()>=len(cells):
+                            raise ArithmeticError("Matching failed without a deficient tile set.")
+                        closed.append((box,cells))
+                    else:
+                        hint=matching
+                        live.append(box)
+                    break
+                used|=tiles
+            else:
+                live.append(box)
+    return live,closed
+
+
 def pack_native(engine,snapshot=None):
     payload=dict(snapshot) if snapshot is not None else engine.checkpoint();array=payload.pop('state')
     payload['shape']=list(array.shape)
@@ -126,7 +178,11 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
         from gpu_shared_round25 import COUNTERS as SHARED_COUNTERS,GAUGES as SHARED_GAUGES
         if (not isinstance(saved_sharing_stats,dict) or not set(saved_sharing_stats)<=set(SHARED_COUNTERS+SHARED_GAUGES)
                 or any(type(value)is not int or value<0 for value in saved_sharing_stats.values())):raise ValueError('Invalid saved GPU sharing telemetry.')
+    host_hall=resume.get('host_hall_closed',0) if isinstance(resume,dict) else 0
+    if type(host_hall) is not int or host_hall<0:
+        raise ValueError("Invalid host Hall closure count.")
     portable_restart=False;preparing=False;prepared_owner=None;global_unsat=False
+    parked=[];deferred_owner=None;resized=False
     queued=[scope.root];totals={key:0 for key in COUNTERS};completed=0;last_checkpoint=last_progress=started
     try:
         if resume is not None and work_frontier is not None:raise ValueError('Choose native resume or a portable frontier, not both.')
@@ -141,17 +197,28 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
             if (not isinstance(saved_totals,dict) or not set(BASE_COUNTERS)<=set(saved_totals)<=set(COUNTERS)
                     or any(type(v)is not int or v<0 for v in saved_totals.values()) or type(completed)is not int or completed<0):
                 raise ValueError('Invalid domain progress counters.')
+            if host_hall>completed:raise ValueError('Host Hall closures exceed completed lanes.')
             totals={**dict.fromkeys(COUNTERS,0),**saved_totals}
-            native=resume.get('native')
+            active_native=resume.get('native')
+            saved_parked=resume.get('native_queue',[])
+            if not isinstance(saved_parked,list) or len(saved_parked)>512:
+                raise ValueError('Invalid parked GPU checkpoint count.')
+            native=active_native or (saved_parked[0] if saved_parked else None)
             saved_balance=resume.get('lane_balance',False)
             if type(saved_balance)is not bool or saved_balance != ('lane_pool' in resume):raise ValueError('Invalid saved lane balance policy.')
             saved_forks=resume.get('propagated_forks',False);saved_preparing=resume.get('preparing',False)
-            if type(saved_forks)is not bool or type(saved_preparing)is not bool or saved_preparing and (not saved_forks or not native):
+            if type(saved_forks)is not bool or type(saved_preparing)is not bool or saved_preparing and (not saved_forks or not active_native):
                 raise ValueError('Invalid saved root preparation policy.')
             saved_owner=resume.get('prepared_owner')
             if saved_owner is not None:
-                if not saved_forks or not native:raise ValueError('Invalid prepared batch ownership.')
+                if not saved_forks or not active_native:raise ValueError('Invalid prepared batch ownership.')
                 saved_owner=tuple(int(x,16) for x in saved_owner);frontier_snapshot(scope,[saved_owner])
+            deferred=resume.get('deferred_fork_owner')
+            if deferred is not None:
+                if not saved_forks or saved_balance or saved_owner is not None or not saved_parked:
+                    raise ValueError('Invalid deferred fork ownership.')
+                deferred=tuple(int(v,16) for v in deferred)
+                frontier_snapshot(scope,[deferred])
             if not native and frontier_snapshot(scope,queued)!=resume['frontier']:raise ValueError('Queued and portable remaining work disagree.')
             if stop():
                 current={key:totals[key]+resume.get('active_stats',{}).get(key,0) for key in COUNTERS}
@@ -168,22 +235,61 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
             if any(type(value)is not bool for value in (native_support,native_watched,native_matching,native_cooperative,native_proofs)):raise ValueError('Invalid saved round26 domain policy.')
             current_tables = (not native or target != 'gold' or 'binding' not in native
                               or native['binding'].get('physical_bond_support') == 1)
-            if current_tables and native and len(native['cubes'])<=replicas and native_joint==joint_support and saved_forks==propagated_forks and native_event==event_propagation and native_precise==precise_reasons and native_support==support_reuse and native_watched==watched_clauses and native_matching==global_matching and native_cooperative==cooperative and native_proofs==proof_transport and saved_balance==lane_balance:
-                cubes=[tuple(int(x,16) for x in row) for row in native['cubes']]
-                engine=DomainCUDA(problem,cubes,target=target,max_memory_bytes=MAX_BYTES,**engine_options)
-                engine.restore(unpack_native(native,engine))
-                preparing=saved_preparing;prepared_owner=saved_owner
+            if current_tables and native and native_joint==joint_support and saved_forks==propagated_forks and native_event==event_propagation and native_precise==precise_reasons and native_support==support_reuse and native_watched==watched_clauses and native_matching==global_matching and native_cooperative==cooperative and native_proofs==proof_transport and saved_balance==lane_balance:
+                sliced=bool(saved_parked) or len(native['cubes'])>replicas
+                records=None
+                if sliced:
+                    from gpu_lane_resize_round34 import lane_cubes,restore_slices
+                    archives=([active_native] if active_native else [])+saved_parked
+                    cubes=lane_cubes(archives,MAX_BYTES)
+                    old_width=len(active_native['cubes']) if active_native else 0
+                    owner_ids=None
+                    if saved_balance:
+                        owner_data=resume['lane_pool']
+                        owner_ids=owner_data['lanes']+owner_data.get('parked',[])
+                        if len(owner_ids)!=len(cubes):
+                            raise ValueError('Native resize owner count differs.')
+                    if saved_preparing:
+                        raise ValueError('Single-lane root preparation cannot have parked children.')
+                    engine=DomainCUDA(problem,cubes[:replicas],target=target,max_memory_bytes=MAX_BYTES,**engine_options)
+                    parked,records=restore_slices(engine,archives,replicas,owner_ids,COUNTERS,pack_native,unpack_native)
+                    if 'active_stats' in resume:
+                        live=engine.stats()
+                        if any(resume['active_stats'].get(key,0)!=live.get(key,0)+sum(task['counts'].get(key,0) for task in parked)
+                               for key in COUNTERS):
+                            raise ValueError('Saved native resize counters disagree.')
+                    deferred_owner=saved_owner or deferred
+                    if deferred_owner is not None:
+                        if any(any(v&~allowed for v,allowed in zip(row,deferred_owner)) for row in cubes):
+                            raise ValueError('Parked fork child escapes its owner.')
+                        if not parked:
+                            prepared_owner,deferred_owner=deferred_owner,None
+                    resized=True
+                else:
+                    cubes=[tuple(int(x,16) for x in row) for row in native['cubes']]
+                    engine=DomainCUDA(problem,cubes,target=target,max_memory_bytes=MAX_BYTES,**engine_options)
+                    engine.restore(unpack_native(native,engine))
+                    preparing=saved_preparing;prepared_owner=saved_owner
                 if preparing and (engine.lanes!=1 or bool(engine.cp.any(engine.state[1]!=0))):raise ValueError('Preparation checkpoint contains decisions or multiple lanes.')
                 if not lane_balance and prepared_owner is not None and any(any(value&~allowed for value,allowed in zip(row,prepared_owner)) for row in engine.cubes):
                     raise ValueError('Prepared batch escapes its owner.')
                 if engine.delivered:raise ValueError('Enumeration checkpoints cannot be used as infeasibility searches.')
-                actual=frontier_snapshot(scope,(*queued,*engine.remaining_domain_cubes()))
+                parked_boxes=[box for task in parked for box in task['boxes']]
+                actual=frontier_snapshot(scope,(*queued,*engine.remaining_domain_cubes(),*parked_boxes))
                 if actual!=resume['frontier']:raise ValueError('Native state and portable remaining work disagree.')
-                if lane_balance:pool=LanePool.restore(scope,queued,engine,resume['lane_pool']);queued=pool.queue
+                if lane_balance:
+                    if sliced:
+                        pool=LanePool.restore(scope,queued,None,resume['lane_pool'],
+                                              lane_records=records[:old_width],parked_records=records[old_width:])
+                        pool.lanes=owner_ids[:engine.lanes]
+                        pool.parked=owner_ids[engine.lanes:]
+                    else:
+                        pool=LanePool.restore(scope,queued,engine,resume['lane_pool'])
+                    queued=pool.queue
             else:
                 queued=list(remaining)
                 if native:
-                    # Changing propagation policy or lane count retains the exact
+                    # Changing propagation policy retains the exact
                     # portable remainder but intentionally reconstructs scratch.
                     portable_restart=True
                     for key,value in resume['active_stats'].items():
@@ -192,7 +298,17 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
         if learning_state and options.get('shared_coverage') and learning_state.get('_coverage_path'):
             ledger=CoverageLedger(learning_state['_coverage_path'],scope)
             if pool is None and not (resume and resume.get('lane_balance') and lane_balance):queued,_=ledger.remaining(queued) # Live owner groups retire only through their complete descendant set.
-        if engine is None and not propagated_forks and not (resume and resume.get('lane_balance') and lane_balance and not portable_restart):queued=split_cubes(queued,replicas)
+        if engine is None and not propagated_forks and not (resume and resume.get('lane_balance') and lane_balance and not portable_restart):
+            queued=split_cubes(queued,replicas)
+            if global_matching:
+                queued,empty=inventory_screen(queued,problem.n)
+                completed+=len(empty)
+                host_hall+=len(empty)
+                if ledger:
+                    for box,cells in empty:
+                        ledger.record_completed(box,status='infeasible',complete=True,
+                            evidence={'kind':'physical_inventory_hall','cells':list(cells)})
+
         if lane_balance and pool is None:
             if resume and resume.get('lane_balance') and not resume.get('native') and not portable_restart:
                 pool=LanePool.restore(scope,queued,None,resume['lane_pool'])
@@ -221,9 +337,12 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
         if stop() or seconds and time.monotonic()-started>=seconds:raise SharingStopped()
     def stats():
         live=engine.stats() if engine else {}
+        for task in parked:
+            for key,value in task['counts'].items():live[key]=live.get(key,0)+value
+        waiting_lanes=sum(len(task['native']['cubes']) for task in parked)
         return {**{key:totals[key]+live.get(key,0) for key in COUNTERS},**(exchange.public_stats() if exchange else saved_sharing_stats),**(pool.public_stats() if pool else saved_balance_stats),**storage,
-            'gpu_domain_lanes':live.get('lanes',0),'gpu_domain_active':live.get('active',0),
-            'gpu_domain_queued':len(queued),'gpu_domain_completed':completed+live.get('exhausted',0)-(pool.lanes.count(None) if pool else 0),
+            'gpu_host_hall_closed':host_hall,'gpu_domain_lanes':live.get('lanes',0),'gpu_domain_active':live.get('active',0),
+            'gpu_domain_queued':len(queued)+waiting_lanes-sum(task['counts']['exhausted'] for task in parked),'gpu_domain_parked_lanes':waiting_lanes,'gpu_domain_native_resize':int(resized),'gpu_domain_completed':completed+live.get('exhausted',0)-(pool.lanes.count(None)+pool.parked.count(None) if pool else 0),
             'gpu_domain_state_bytes':live.get('state_bytes',0),'gpu_domain_portable_restart':int(portable_restart),
             'gpu_domain_preparing':int(preparing),'gpu_verified_root_unsat':int(global_unsat)}
     def checkpoint():
@@ -241,10 +360,21 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
             storage['gpu_checkpoint_reused_chunks']+=metrics['reused_chunks']
             for source,key in [('packed_bytes','gpu_checkpoint_packed_bytes'),('compressed_bytes','gpu_checkpoint_compressed_bytes'),('omitted_bytes','gpu_checkpoint_omitted_bytes')]:storage[key]=metrics[source]
         elif frozen is not None:native=pack_native(engine,frozen)
+        active_stats=(engine.stats(snapshot=frozen['state']) if frozen is not None else engine.stats()) if engine else {}
+        for task in parked:
+            for key,value in task['counts'].items():
+                active_stats[key]=active_stats.get(key,0)+value
+        active_boxes=(engine.remaining_domain_cubes(snapshot=frozen['state']) if frozen is not None else engine.remaining_domain_cubes()) if engine else ()
+        parked_boxes=[box for task in parked for box in task['boxes']]
         payload={'version':1,'scope':scope.payload(),'queue':[[hex(x) for x in row] for row in queued],
             'native':native,'totals':dict(totals),'completed_lanes':completed,
-            'active_stats':(engine.stats(snapshot=frozen['state']) if frozen is not None else engine.stats()) if engine else {},
-            'frontier':frontier_snapshot(scope,(*queued,*((engine.remaining_domain_cubes(snapshot=frozen['state']) if frozen is not None else engine.remaining_domain_cubes()) if engine else ())))}
+            'active_stats':active_stats,'frontier':frontier_snapshot(scope,(*queued,*active_boxes,*parked_boxes))}
+        if host_hall:
+            payload['host_hall_closed']=host_hall
+        if parked:
+            payload['native_queue']=[task['native'] for task in parked]
+        if deferred_owner is not None:
+            payload['deferred_fork_owner']=[hex(v) for v in deferred_owner]
         if exchange is not None:payload.update(sharing=exchange.snapshot(),sharing_stats=exchange.public_stats())
         elif dormant_sharing is not None:payload.update(sharing=deepcopy(dormant_sharing),sharing_stats=deepcopy(saved_sharing_stats))
         if pool is not None:payload.update(lane_balance=True,lane_pool=pool.snapshot(),balance_stats=pool.public_stats())
@@ -265,11 +395,14 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
         cached_revision=state_revision;cached_payload=payload
         return payload
     def finish_verified_root():
-        nonlocal engine,queued,preparing,prepared_owner,state_revision,global_unsat,pool
+        nonlocal engine,queued,preparing,prepared_owner,state_revision,global_unsat,pool,deferred_owner
         if engine is not None:
             current=engine.stats()
             for key in COUNTERS:totals[key]+=current.get(key,0)
             engine.close();engine=None
+        for task in parked:
+            for key in COUNTERS:totals[key]+=task['counts'].get(key,0)
+        parked.clear();deferred_owner=None
         queued=[];preparing=False;prepared_owner=None;global_unsat=True;state_revision+=1
         if pool is not None:pool=LanePool(scope,[],counters=pool.public_stats());queued=pool.queue
         if ledger:ledger.record_completed(scope.root,status='infeasible',complete=True,evidence={'kind':'independently_verified_original_root_conflict'})
@@ -287,6 +420,17 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
                 except SharingStopped:continue
                 last_sharing=time.monotonic()
                 if contradiction:return finish_verified_root()
+            if engine is None and parked:
+                task=parked.pop(0)
+                roots=[tuple(int(x,16) for x in row) for row in task['native']['cubes']]
+                engine=DomainCUDA(problem,roots,target=target,max_memory_bytes=MAX_BYTES,**engine_options)
+                engine.restore(unpack_native(task['native'],engine))
+                if pool is not None:
+                    pool.lanes=pool.parked[:engine.lanes]
+                    del pool.parked[:engine.lanes]
+                if not parked and deferred_owner is not None:
+                    prepared_owner,deferred_owner=deferred_owner,None
+                state_revision+=1
             if engine is None and queued:
                 count=1 if propagated_forks else replicas
                 if pool is not None:batch=pool.take_batch(count);queued=pool.queue

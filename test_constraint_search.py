@@ -454,6 +454,47 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(state['nodes_checked'], 7)
         self.assert_released()
 
+    def test_exact_source_manifest_includes_nested_gold_and_coverage_dependencies(self):
+        with patch.object(runner, 'run_solver', return_value=self.terminal('infeasible', complete=True, checkpoint=None)):
+            runner.main(self.args())
+        path = self.run/'searches/cp-sat-gold/completed-search.json'
+        recorded = json.loads(path.read_text(encoding='utf-8'))
+        snapshot = Path(self.read('run-config.json')['input_snapshot']).parent
+        for name in ('r32_gold_bonds.py', 'r34_geographic_mates.py', 'r34_coverage_index.py', 'kernels.cu'):
+            data = (runner.ROOT/name).read_bytes()
+            self.assertEqual(recorded['source_sha256'][name], hashlib.sha256(data).hexdigest())
+            self.assertEqual((snapshot/name).read_bytes(), data)
+        # A release without the physical source cannot establish this version's coverage
+        # even if its self-checksum and every other field are internally consistent.
+        del recorded['source_sha256']['r32_gold_bonds.py']
+        recorded['sha256'] = runner.terminal_digest(recorded)
+        atomic_json(path, recorded)
+        with patch.object(runner, 'run_solver') as solve, self.assertRaisesRegex(SystemExit, 'Completed search evidence'):
+            runner.main(self.args('cp-sat', '--resume'))
+        solve.assert_not_called()
+        self.assertEqual(json.loads(path.read_text(encoding='utf-8')), recorded)
+        self.assert_released()
+
+    def test_source_snapshot_tracks_indirect_changes_and_rejects_missing_engine(self):
+        source, target = self.root/'src', self.root/'snapshot'
+        source.mkdir()
+        target.mkdir()
+        (source/'entry.py').write_text('def optional():\n    import r34_optional\n')
+        module = source/'r34_optional.py'
+        module.write_text('from physical_extra import solve\n')
+        extra = source/'physical_extra.py'
+        extra.write_text('import pathlib\ndef solve(): return pathlib.Path("table.wgsl")\n')
+        kernel = source/'table.wgsl'
+        kernel.write_bytes(b'first')
+        manifest = runner.snapshot_search_sources(source, target, ['entry.py'])
+        self.assertEqual(set(manifest), {'entry.py', module.name, extra.name, kernel.name})
+        kernel.write_bytes(b'second')
+        self.assertNotEqual(runner.snapshot_search_sources(source, target, ['entry.py'])[kernel.name], manifest[kernel.name])
+        self.assertEqual((target/kernel.name).read_bytes(), b'second')
+        module.unlink()
+        with self.assertRaises(FileNotFoundError):
+            runner.snapshot_search_sources(source, target, ['entry.py'])
+
     def test_corrupted_exhaustion_marker_is_rejected_without_overwriting_it(self):
         with patch.object(runner, 'run_solver', return_value=self.terminal('infeasible', complete=True, checkpoint=None)):
             runner.main(self.args())

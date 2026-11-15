@@ -61,9 +61,8 @@
       "id": 5,
       "area": "Routes to 208 and repair on unrelated boards",
       "proposal_and_validation": "Generalize r32_route_pool.defect_cover to checked subsets of fixed donors, eligible movers and failure budgets. Compare subsumption against full-prefix rechecking, including different centers and budgets.",
-      "state": "retained mechanism; follow-up open",
-      "evidence": "docs/ROUND34_REPAIR.md",
-      "next_test": "Independently finish the nine capped comparison pairs before treating all 240 as definitive."
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_REPAIR.md"
     },
     {
       "id": 6,
@@ -76,30 +75,27 @@
       "id": 7,
       "area": "Routes to 208 and repair on unrelated boards",
       "proposal_and_validation": "Extend r31_fresh.joint_repair beyond a single contacting pair of changed cells. Try two contacts, disjoint contacting pairs, then small-treewidth interaction components. Compare identical work limits and exact small-pool optima.",
-      "state": "retained mechanism; follow-up open",
-      "evidence": "docs/ROUND34_REPAIR.md",
-      "next_test": "Compare width-aware pool selection and whole trajectories against equal budgets."
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_REPAIR.md"
     },
     {
       "id": 8,
       "area": "Routes to 208 and repair on unrelated boards",
       "proposal_and_validation": "Replace greedy packing in r31_fresh.simultaneous_swaps with exact packing on small connected conflict components and bipartite cuts when applicable. Measure pack gains, total price evaluations and rounds to threshold.",
-      "state": "retained mechanism; follow-up open",
-      "evidence": "docs/ROUND34_REPAIR.md",
-      "next_test": "Measure full trajectories and thresholds before selecting defaults."
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_REPAIR.md"
     },
     {
       "id": 9,
       "area": "Routes to 208 and repair on unrelated boards",
       "proposal_and_validation": "Explicitly price net-positive interacting pairs of cycles with neutral or negative standalone gains. Use shared-seam corrections before packing. Compare with ordinary positive-only repair on equal calls and independent seeds.",
-      "state": "retained mechanism; follow-up open",
-      "evidence": "docs/ROUND34_REPAIR.md",
-      "next_test": "Measure full trajectories and thresholds before selecting defaults."
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_REPAIR.md"
     },
     {
       "id": 10,
       "area": "Routes to 208 and repair on unrelated boards",
-      "proposal_and_validation": "Extend exact typed exchange enumeration to all five-swap families: (6), (2,5), (3,4), (2,2,4), (2,3,3), (2,2,2,3) and (2,2,2,2,2). Test lazy family-specific rank/unrank, 9Ã¢â‚¬â€œ10 mover ownership and checkpoint reopens against full permutation enumeration on finite pools.",
+      "proposal_and_validation": "Extend exact typed exchange enumeration to all five-swap families: (6), (2,5), (3,4), (2,2,4), (2,3,3), (2,2,2,3) and (2,2,2,2,2). Test lazy family-specific rank/unrank, 9\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u201c10 mover ownership and checkpoint reopens against full permutation enumeration on finite pools.",
       "state": "retained in worktree",
       "evidence": "docs/ROUND34_REPAIR.md"
     },
@@ -109,13 +105,13 @@
       "proposal_and_validation": "Test disconnected five-swap exclusions only when each needed smaller component has applicable completed coverage and the additive bound is sound. Include positive multi-component fixtures and deliberately incomplete four-swap coverage.",
       "state": "retained mechanism; follow-up open",
       "evidence": "docs/ROUND34_REPAIR.md",
-      "next_test": "Compare overlapping first exclusions with other filters and stronger touching-cycle controls."
+      "next_test": "Compare first-rejection counts in actual ranked five-swap pages and check actionable larger interacting components."
     },
     {
       "id": 12,
       "area": "Routes to 208 and repair on unrelated boards",
       "proposal_and_validation": "Build adaptive neighborhood unions from unrelated high-score starts. Select centers using available score headroom, defect overlap and unowned endpoints. When adding centers, retain verified old work. Measure distinct physical endpoints, scores and first witness.",
-      "state": "open",
+      "state": "retained in worktree",
       "evidence": "docs/ROUND34_REPAIR.md"
     },
     {
@@ -129,14 +125,14 @@
       "id": 14,
       "area": "Routes to 208 and repair on unrelated boards",
       "proposal_and_validation": "Build a soft-score 208 master over failed geographic seams for a restricted donor/swap scope. Its subsolver enforces the other seams and physical assignment. Replay infeasible seam cores independently and count accepted cuts and exact calls.",
-      "state": "open",
+      "state": "rejected for solver; benchmark only",
       "evidence": "docs/ROUND34_REPAIR.md"
     },
     {
       "id": 15,
       "area": "Routes to 208 and repair on unrelated boards",
       "proposal_and_validation": "Allocate a swap budget across independent components using boundary responses and max-plus combination. Include donor inventory; permit crossing donors through a sound relaxation. Check known positive crossing-donor cases and warm/cold equivalence.",
-      "state": "open",
+      "state": "retained in worktree",
       "evidence": "docs/ROUND34_REPAIR.md"
     },
     {
@@ -164,14 +160,14 @@
       "id": 19,
       "area": "Unrestricted Gold, geographic consistency and fresh construction",
       "proposal_and_validation": "In BondWatcher, infer forced real mates from all remaining poses of a tile before a cell becomes singleton. Index clause updates by changed owners, and test rollback, earlier unit removals and complete Gold solution sets.",
-      "state": "open",
+      "state": "retained in worktree",
       "evidence": "docs/ROUND34_PHYSICAL.md"
     },
     {
       "id": 20,
       "area": "Unrestricted Gold, geographic consistency and fresh construction",
       "proposal_and_validation": "Share compact physical-side views with SAT/CP Gold circuits so the eight mandatory and 24 forbidden mates are available in those engines. Test checked larger clauses only when useful; compare clauses, conflicts and unchanged solutions for the ordinary edges target.",
-      "state": "open",
+      "state": "retained in worktree",
       "evidence": "docs/ROUND34_PHYSICAL.md"
     },
     {
@@ -192,30 +188,28 @@
       "id": 23,
       "area": "Unrestricted Gold, geographic consistency and fresh construction",
       "proposal_and_validation": "Build disjoint phase cubes on independent basis coordinates after mandatory bonds and color-complement reduction. Use observed contraction for branching. Verify unique enumeration modulo complement, cache scopes and geographic lift calls.",
-      "state": "open",
+      "state": "retained in worktree",
       "evidence": "docs/ROUND34_PHYSICAL.md"
     },
     {
       "id": 24,
       "area": "Unrestricted Gold, geographic consistency and fresh construction",
       "proposal_and_validation": "Add earlier restricted-domain Hall checks during parity-skeleton growth. Consider carrying mandatory component pose domains as rows are fixed. Validate memo keys, safe cuts and all surviving finite skeletons.",
-      "state": "retained mechanism; follow-up open",
-      "evidence": "docs/ROUND34_PHYSICAL.md",
-      "next_test": "Propagate mandatory component pose domains during partial skeleton growth."
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_PHYSICAL.md"
     },
     {
       "id": 25,
       "area": "Unrestricted Gold, geographic consistency and fresh construction",
       "proposal_and_validation": "Sample vertex colors conditioned on exactly 103 active cells, or test local flips preserving that count. Measure independent skeleton diversity, completion rate and successful physical lifts against full coloring and rejection.",
-      "state": "retained mechanism; follow-up open",
-      "evidence": "docs/ROUND34_PHYSICAL.md",
-      "next_test": "Compare equal-budget physical lifts and count-preserving flips."
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_PHYSICAL.md"
     },
     {
       "id": 26,
       "area": "Unrestricted Gold, geographic consistency and fresh construction",
       "proposal_and_validation": "Factor signed donor repair rows into physical dart masks and local phase requirements, sharing work across rotations and different phase vectors. Check RNG, exact boards, memory and cross-seed hits against the existing triple-row cache.",
-      "state": "open",
+      "state": "retained in worktree",
       "evidence": "docs/ROUND34_PHYSICAL.md"
     },
     {
@@ -250,8 +244,8 @@
       "id": 31,
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Separate immutable CUDA topology/support tables from writable lane data for multiple engines and forks. Scope reuse to exact puzzle, target, data layout and device/context. Measure build and upload bytes and verify concurrent engines and all known placements.",
-      "state": "open",
-      "evidence": "docs/ROUND34_CHECKPOINTS.md"
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_CONTINUATION.md"
     },
     {
       "id": 32,
@@ -264,22 +258,23 @@
       "id": 33,
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Preserve native lane search history when lowering GPU replica counts, using compatible queued lane slices. Test reductions and increases, donors/forks, checkpoint interruption, and exact equivalence of remaining solutions.",
-      "state": "open",
-      "evidence": "docs/ROUND34_CHECKPOINTS.md"
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_GPU_RESIZE.md"
     },
     {
       "id": 34,
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Test the physical Gold mating requirements in classic CUDA and WebGPU DFS candidate and lookahead kernels. Preserve ordinary edge scoring and old checkpoints; benchmark available Vulkan/DX12 hardware and distinguish CI from physical Metal testing.",
       "state": "open",
-      "evidence": "docs/ROUND34_CHECKPOINTS.md"
+      "evidence": "docs/ROUND34_CHECKPOINTS.md",
+      "next_test": "Validate original prefixes on available CUDA/Vulkan/DX12 devices and audit restored prefix and dynamic-order behavior."
     },
     {
       "id": 35,
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Prevent duplicate concurrent SAT/CP residual work in defect bands and geographic query caching. Test fenced ownership, worker expiry, recovery, independently validated positives and native calls on the same residual.",
-      "state": "open",
-      "evidence": "docs/ROUND34_CHECKPOINTS.md"
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_CONTINUATION.md"
     },
     {
       "id": 36,
@@ -292,14 +287,14 @@
       "id": 37,
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Continue eligible phase-first fresh repair trajectories across increased horizons instead of repeating construction/refits. Verify identical RNG/boards on 16-to-64-round extensions and changed options.",
-      "state": "open",
-      "evidence": "docs/ROUND34_CHECKPOINTS.md"
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_CONTINUATION.md"
     },
     {
       "id": 38,
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Test disjoint fenced leases for ranked pages in Gold loss, multicenter and route pools. Move expensive compute outside SQLite writer transactions, atomically commit owned ranges and witnesses, and measure work duplication under contention or worker death. A positive prefix can contain other suffixes.",
-      "state": "open",
+      "state": "retained in worktree",
       "evidence": "docs/ROUND34_CHECKPOINTS.md"
     },
     {
@@ -320,7 +315,7 @@
       "id": 41,
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Resume partway through a costly loss prefix by recording a versioned suffix/oracle cursor. Exact continuation must preserve every eligible candidate, including another witness in the same prefix. Compare deliberately interrupted and uninterrupted candidate sets.",
-      "state": "open",
+      "state": "retained in worktree",
       "evidence": "docs/ROUND34_CHECKPOINTS.md"
     },
     {
@@ -334,22 +329,22 @@
       "id": 43,
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Measure backend allocation using independently certified progress under matched residuals, including warm/cold and transfer cost. Test proof and discovery objectives separately against existing coordinator and policy-learning controls.",
-      "state": "open",
-      "evidence": "docs/ROUND34_CHECKPOINTS.md"
+      "state": "rejected for general automatic allocation; measured profiles retained",
+      "evidence": "docs/ROUND34_ALLOCATION.md"
     },
     {
       "id": 44,
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Reuse verified geographic negatives on descendant domains and validated positives on other queries they actually satisfy. Compare sibling domains, changed physical assumptions, scope identity and native calls.",
-      "state": "open",
-      "evidence": "docs/ROUND34_CHECKPOINTS.md"
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_CONTINUATION.md"
     },
     {
       "id": 45,
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Reuse structural seam CNF, guarded cardinality constraints and independently checked regional cores across interrupted defect-band queries. Count restart construction work and compare exclusions against cold SAT.",
-      "state": "open",
-      "evidence": "docs/ROUND34_CHECKPOINTS.md"
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_CONTINUATION.md"
     },
     {
       "id": 46,
@@ -369,9 +364,9 @@
       "id": 48,
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Preserve released heuristic continuation where a newly reachable helper does not affect that algorithm. Test verified v1.14 LF/CRLF and actual release source digests, a nonempty OptimizingCrossover snapshot, distinct domains/policies and mismatching sources. Include all reachable physical/coverage dependencies in new exact-search evidence snapshots.",
-      "state": "open",
-      "evidence": "docs/ROUND34_CHECKPOINTS.md",
-      "next_test": "Wait for final reviewed helper bytes. Capture a real v1.14 partial crossover state, restore+advance released and new code on identical input, compare boards and reject changed scopes. Keep exact evidence fail-closed."
+      "state": "retained mechanism; follow-up open",
+      "evidence": "docs/ROUND34_PHYSICAL.md",
+      "next_test": "Exact search source closure now covered. Recheck after optional host matching source changes settle."
     },
     {
       "id": 49,
@@ -379,42 +374,66 @@
       "proposal_and_validation": "Stop reading negative certificates after exact subtraction exhausts the complete requested source. Compare prefix probes, empty inputs and incomplete subtractions while retaining explicit full-ledger validation.",
       "state": "retained in worktree",
       "evidence": "docs/ROUND34_CHECKPOINTS.md"
+    },
+    {
+      "id": 50,
+      "area": "Checkpoint reuse and integration follow-ups",
+      "proposal_and_validation": "Carry current phase-bound signed dart vectors through trajectory restart. Compare deterministic 16-to-64-round work, board, RNG, checkpoint size and malformed-state handling.",
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_CONTINUATION.md"
+    },
+    {
+      "id": 51,
+      "area": "Checkpoint reuse and integration follow-ups",
+      "proposal_and_validation": "Serialize construction of common immutable formula and counter streams across distinct concurrent SAT queries while each owns its native branch state. Compare compile count, busy timeout, corruption and independent witnesses.",
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_CONTINUATION.md"
+    },
+    {
+      "id": 52,
+      "area": "CPU/GPU work allocation",
+      "proposal_and_validation": "Prove all-different violations on new GPU roots with an inexpensive host Hall-count check before allocating native lanes. Replay all exclusions, compare exact scope and device bytes, preserve active native checkpoints.",
+      "state": "retained mechanism; follow-up open",
+      "evidence": "docs/ROUND34_ALLOCATION.md",
+      "next_test": "Compare unequal small unions and full physical-tile matching with the identical-domain Hall screen, including held-out boxes."
+    },
+    {
+      "id": 53,
+      "area": "Native WebGPU backends",
+      "proposal_and_validation": "Determine whether the classic DX12 shader FXC compile failure pre-dates the Gold mate change. Test a source-level fix or bounded alternate compiler path and preserve end-to-end matched results.",
+      "state": "open",
+      "evidence": "docs/ROUND34_CONTINUATION.md"
+    },
+    {
+      "id": 54,
+      "area": "Interrupted and concurrent residual searches",
+      "proposal_and_validation": "Serialize overlapping phase horizons for the same seed while retaining each horizon result. Test both arrival orders, lease recovery and measured round counts.",
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_CONTINUATION.md"
+    },
+    {
+      "id": 55,
+      "area": "Interrupted and concurrent residual searches",
+      "proposal_and_validation": "On single-call SAT restarts persist inconclusive or unusable transferred-core checks per query so the next slice can reach its actual branch. Compare every nonempty saved core to independent finite enumeration.",
+      "state": "open",
+      "evidence": "docs/ROUND34_CONTINUATION.md"
     }
   ],
   "release_gate": "All open workstreams and follow-ups, final full discovery review, migration and checkpoint compatibility, full suite, independent release CI/packages, measured settings.",
   "next_parallel_groups": [
     [
-      12,
-      14,
-      15,
-      5,
-      7,
-      8,
-      9,
-      11
+      11,
+      52
     ],
     [
-      19,
-      20,
-      23,
-      24,
-      25,
-      26
-    ],
-    [
-      38,
-      41,
-      35,
-      44,
-      45
-    ],
-    [
-      31,
-      33,
       34,
-      37,
-      43,
+      53
+    ],
+    [
       48
+    ],
+    [
+      55
     ]
   ]
 }

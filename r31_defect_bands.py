@@ -1,7 +1,7 @@
 """Exact geographical mismatch-budget search with disjoint, resumable SAT branches."""
 import argparse
 from collections import deque
-from contextlib import closing
+from contextlib import ExitStack, closing
 import hashlib
 import json
 from pathlib import Path
@@ -11,6 +11,8 @@ import time
 
 from r27_reason_maxsat import Budget, SeamFormula, checked_score, domain_rows
 from validator import reverse_mask
+from constraint_work import digest
+import r34_band_cores as shared_cores
 
 
 def bands(problem, count):
@@ -101,7 +103,18 @@ def exact_thresholds(literals, limit, formula, solver, check):
 
 def solve(problem, database, *, target=208, domains=None, group_count=3, width=8,
           seconds=0, slice_conflicts=2000, max_calls=None, split=True):
-    from pysat.card import ITotalizer
+    from r34_query_ownership import LostQueryLease
+    opts=dict(target=target,domains=domains,group_count=group_count,width=width,seconds=seconds,
+              slice_conflicts=slice_conflicts,max_calls=max_calls,split=split)
+    try:
+        return _solve(problem,database,**opts)
+    except LostQueryLease:
+        # A successor owns the authoritative stack. Return only its committed state.
+        return _solve(problem,database,**dict(opts,max_calls=0))
+
+
+def _solve(problem,database,*,target,domains,group_count,width,seconds,slice_conflicts,max_calls,split):
+    from r34_query_ownership import query_lease
     from pysat.solvers import Glucose4
     rows = domain_rows(problem, domains)
     if not 0 <= target <= len(problem.edges) or width < 1 or seconds < 0 or slice_conflicts < 1:
@@ -118,54 +131,71 @@ def solve(problem, database, *, target=208, domains=None, group_count=3, width=8
     def check():
         if time.monotonic() >= deadline:
             raise Budget
-    stats = dict(calls=0, conflicts=0, decisions=0, core_skips=0, budget_skips=0,
+    stats = dict(shared_core_checks=0, shared_core_skips=0, calls=0, conflicts=0, decisions=0, core_skips=0, budget_skips=0,
                  adaptive_splits=0, completed_branches=0, inventory_queries=0, inventory_tightened=0)
-    with closing(sqlite3.connect(database, timeout=60)) as db:
+    with closing(sqlite3.connect(database, timeout=60)) as db, ExitStack() as leases:
+        shared_cores.schema(db)
         db.execute("""CREATE TABLE IF NOT EXISTS r31_bands(scope TEXT PRIMARY KEY,
                    stack TEXT, witness TEXT, cores TEXT, generation INTEGER)""")
         with db:
             db.execute("INSERT OR IGNORE INTO r31_bands VALUES (?,?,NULL,'[]',0)",
                        (key, json.dumps([limits])))
-        stack_text, witness_text, core_text, generation = db.execute(
-            "SELECT stack,witness,cores,generation FROM r31_bands WHERE scope=?", (key,)).fetchone()
+        def read_state():
+            return db.execute("SELECT stack,witness,cores,generation FROM r31_bands WHERE scope=?", (key,)).fetchone()
+        stack_text,witness_text,core_text,generation=read_state()
+        guard=None
+        if max_calls!=0 and (witness_text is None or json.loads(witness_text) is None) and json.loads(stack_text):
+            guard=leases.enter_context(query_lease(db,database,'defect-bands:'+key,deadline))
+            stack_text,witness_text,core_text,generation=read_state()
         stack = json.loads(stack_text)
         witness = json.loads(witness_text) if witness_text else None
         cores = [frozenset(map(tuple, c)) for c in json.loads(core_text)]
         def save():
             nonlocal generation
             with db:
+                db.execute("BEGIN IMMEDIATE")
+                guard()
                 changed = db.execute("""UPDATE r31_bands SET stack=?,witness=?,cores=?,generation=generation+1
-                         WHERE scope=? AND generation=?""", (json.dumps(stack), json.dumps(witness),
+                         WHERE scope=? AND generation=?""", (json.dumps(stack), json.dumps(witness) if witness is not None else None,
                          json.dumps([sorted(c) for c in cores]), key, generation))
                 if not changed.rowcount:
                     raise RuntimeError("Another worker advanced this checkpoint. Reopen the saved state.")
             generation += 1
+        def defect_counts(codes):
+            return [sum(int(problem.masks[codes[a],sa]) != reverse_mask(int(problem.masks[codes[b],sb]))
+                        for a,sa,b,sb in (problem.edges[i] for i in group)) for group in groups]
         if witness is not None:
             score, gold = checked_score(problem, rows, witness['codes'])
-            if score != witness['score'] or gold != witness['gold'] or score < target:
+            if score != witness['score'] or gold != witness['gold'] or score < target or defect_counts(witness['codes'])!=witness['defects']:
                 raise ValueError('Saved witness failed independent validation')
         def result():
             status = 'witness' if witness is not None else ('infeasible' if not stack else 'open')
             return dict(status=status, target=target, groups=groups, pending=len(stack), witness=witness,
                         **stats, seconds=time.monotonic()-start)
-        if not stack or witness is not None or max_calls == 0:
+        if not stack or witness is not None or guard is None:
             return result()
         if any(lo > hi for lo, hi in limits) or sum(lo for lo, _ in limits)>budget:
             stack.clear()
             stats['budget_skips'] += 1
             save()
             return result()
+        from r34_seam_cnf import encoded_scope,prepare
+        structural=encoded_scope(problem,rows,split)
+        core_scope=digest([structural,groups,'regional-cores-v1'])
+        shared=shared_cores.candidates(db,core_scope,budget,key)
+        def applies(core,box):
+            return all(box[k][0]>=v if sign==1 else box[k][1]<=v for k,sign,v in core)
+        retained=[box for box in stack if not any(verified and applies(core,box) for core,verified in shared.items())]
+        if len(retained)<len(stack):
+            stats['shared_core_skips']+=len(stack)-len(retained)
+            stack=retained
+            save()
+            if not stack:return result()
         priced = {}
         with Glucose4() as sat:
             try:
-                formula = SeamFormula(problem, rows, sat, check, exact_defects=split)
-                if budget < len(formula.defects):
-                    with ITotalizer(lits=formula.defects, ubound=budget, top_id=formula.pool.top) as total:
-                        sat.append_formula(total.cnf.clauses)
-                        sat.add_clause([-total.rhs[budget]])
-                        formula.pool.occupy(formula.pool.top+1, total.top_id)
-                thresholds = [exact_thresholds([formula.defects[i] for i in group],
-                               min(len(group), budget+1), formula, sat, check) for group in groups] if split else []
+                formula,thresholds=prepare(db,database,problem,rows,split,groups,budget,sat,check,deadline,stats,
+                                           SeamFormula,exact_thresholds,structural)
                 while stack:
                     check()
                     if max_calls is not None and stats['calls'] >= max_calls:
@@ -200,20 +230,29 @@ def solve(problem, database, *, target=208, domains=None, group_count=3, width=8
                                 conditions[thresholds[k][lo-1]] = (k, 1, lo)
                             if hi < limits[k][1]:
                                 conditions[-thresholds[k][hi]] = (k, -1, hi)
-                    def applies(core):
-                        return all(box[k][0] >= v if sign == 1 else box[k][1] <= v
-                                   for k,sign,v in core)
-                    if any(applies(core) for core in cores):
+                    if any(applies(core,box) for core in cores):
                         stack.pop()
                         stats['core_skips'] += 1
                         save()
                         continue
+                    match=next((core for core in shared if applies(core,box)),None)
+                    if match is not None and shared[match]:
+                        stack.pop()
+                        stats['shared_core_skips'] += 1
+                        save()
+                        continue
+                    literals=list(conditions)
+                    if match is not None:
+                        # This new query has a fresh native solver. Verify the stored
+                        # assumption subset independently before publishing an exclusion.
+                        literals=shared_cores.assumptions(match,thresholds,budget)
+                        stats['shared_core_checks'] += 1
                     sat.conf_budget(slice_conflicts)
                     timer = Timer(max(.001, deadline-time.monotonic()), sat.interrupt) if seconds else None
                     if timer:
                         timer.start()
                     try:
-                        answer = sat.solve_limited(assumptions=list(conditions), expect_interrupt=True)
+                        answer = sat.solve_limited(assumptions=literals, expect_interrupt=True)
                     finally:
                         if timer:
                             timer.cancel()
@@ -222,11 +261,23 @@ def solve(problem, database, *, target=208, domains=None, group_count=3, width=8
                     stats['calls'] += 1
                     counters = sat.accum_stats()
                     stats.update(decisions=counters['decisions'], conflicts=counters['conflicts'])
+                    if match is not None:
+                        if answer is False:
+                            shared_cores.store(db,guard,core_scope,budget,key,match,True)
+                            shared[match]=True
+                            stack.pop()
+                            stats['completed_branches'] += 1
+                            save()
+                        else:
+                            # Never spend a later one-call slice retrying this hint.
+                            # Only a verified exclusion may remove the actual box.
+                            shared_cores.defer(db,guard,core_scope,key,match)
+                            del shared[match]
+                        continue
                     if answer is True:
                         codes = formula.board(sat.get_model())
                         score, gold = checked_score(problem, rows, codes)
-                        counts = [sum(int(problem.masks[codes[a],sa]) != reverse_mask(int(problem.masks[codes[b],sb]))
-                            for a,sa,b,sb in (problem.edges[i] for i in group)) for group in groups]
+                        counts = defect_counts(codes)
                         if score < target or any(not lo<=v<=hi for (lo,hi),v in zip(box,counts)):
                             raise RuntimeError("Decoded board violated its geographic defect budget")
                         witness = dict(codes=codes, score=score, gold=gold, defects=counts)
@@ -235,6 +286,7 @@ def solve(problem, database, *, target=208, domains=None, group_count=3, width=8
                     if answer is False:
                         core = frozenset(conditions[x] for x in sat.get_core() or [])
                         if not any(old <= core for old in cores):
+                            shared_cores.store(db,guard,core_scope,budget,key,core,False)
                             cores = [old for old in cores if not core < old] + [core]
                         stack.pop()
                         stats['completed_branches'] += 1

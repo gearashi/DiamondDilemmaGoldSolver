@@ -1,0 +1,130 @@
+{
+  "finite": [
+    {
+      "case": "branch",
+      "solutions": 6,
+      "source_width": 4,
+      "source_frame_depths": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "parked_at_one": 3,
+      "saved_decisions": 4,
+      "saved_support_checks": 32,
+      "donations": 0,
+      "portable_fallback_decisions": 4
+    },
+    {
+      "case": "donation",
+      "solutions": 0,
+      "source_width": 4,
+      "source_frame_depths": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "parked_at_one": 3,
+      "saved_decisions": 3,
+      "saved_support_checks": 237,
+      "donations": 1,
+      "portable_fallback_decisions": 3
+    },
+    {
+      "case": "fork",
+      "solutions": 2,
+      "source_width": 4,
+      "source_frame_depths": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "parked_at_one": 3,
+      "saved_decisions": 0,
+      "saved_support_checks": 32,
+      "donations": 0,
+      "portable_fallback_decisions": 0
+    },
+    {
+      "case": "factored",
+      "solutions": 6,
+      "source_width": 4,
+      "source_frame_depths": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "parked_at_one": 3,
+      "saved_decisions": 4,
+      "saved_support_checks": 32,
+      "donations": 0,
+      "portable_fallback_decisions": 4
+    }
+  ],
+  "original": {
+    "device": "NVIDIA GeForce RTX 2060",
+    "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "cases": [
+      {
+        "saved_checks": 81748,
+        "saved_removals": 0,
+        "fixed_points": [
+          {
+            "native_new_checks": 283363,
+            "portable_new_checks": 303800,
+            "frontier_digest": "67cfab25d490d664cb03ecf6347f965079693cb34aa29baf4c0de64136311147"
+          },
+          {
+            "native_new_checks": 283443,
+            "portable_new_checks": 303880,
+            "frontier_digest": "2a7c9c71a3c7f67f90b39569fb9b515fad12a19c3c2433cf59744c838d73d850"
+          },
+          {
+            "native_new_checks": 132092,
+            "portable_new_checks": 152529,
+            "frontier_digest": "08de8785ecb0b02fe3d338d778c738d7e43babe6aeb5a7286c373cea04261793"
+          },
+          {
+            "native_new_checks": 132629,
+            "portable_new_checks": 153066,
+            "frontier_digest": "ef38283457e1cc2e8d49635c6c821a9af3a46fc47433e7150184fc3ce3a92853"
+          }
+        ],
+        "remaining_gpu_lanes": 1,
+        "host_native_lanes": 3
+      },
+      {
+        "saved_checks": 343334,
+        "saved_removals": 437,
+        "fixed_points": [
+          {
+            "native_new_checks": 217967,
+            "portable_new_checks": 227720,
+            "frontier_digest": "67cfab25d490d664cb03ecf6347f965079693cb34aa29baf4c0de64136311147"
+          },
+          {
+            "native_new_checks": 218047,
+            "portable_new_checks": 227800,
+            "frontier_digest": "2a7c9c71a3c7f67f90b39569fb9b515fad12a19c3c2433cf59744c838d73d850"
+          },
+          {
+            "native_new_checks": 66695,
+            "portable_new_checks": 76209,
+            "frontier_digest": "08de8785ecb0b02fe3d338d778c738d7e43babe6aeb5a7286c373cea04261793"
+          },
+          {
+            "native_new_checks": 67232,
+            "portable_new_checks": 76506,
+            "frontier_digest": "ef38283457e1cc2e8d49635c6c821a9af3a46fc47433e7150184fc3ce3a92853"
+          }
+        ],
+        "remaining_gpu_lanes": 1,
+        "host_native_lanes": 3
+      }
+    ]
+  }
+}

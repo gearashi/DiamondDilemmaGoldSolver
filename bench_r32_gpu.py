@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from constraint_work import WorkScope,restore_frontier
-from gpu_domain_round24 import DomainCUDA
+from gpu_domain_round24 import DomainCUDA, _device_table_cache
 from gpu_domain_runner import solve,split_cubes
 from r28_exchange import read_json
 from search_problem import SearchProblem
@@ -18,6 +18,8 @@ def compare(problem,unrestricted=False):
     cubes=split_cubes([tuple(sum(1<<v for v in d) for d in problem.domains)],128)
     rows=[]
     for mode in ('old','current'):
+        # This experiment changes the support compiler itself within one process.
+        _device_table_cache.pop(problem,None)
         context=patch('r32_gold_bonds.forbidden_codes',return_value=()) if mode=='old' else nullcontext()
         with context:
             gpu=DomainCUDA(problem,cubes,target='gold',global_matching=True,support_reuse=True,cross_lane=True,

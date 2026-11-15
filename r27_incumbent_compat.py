@@ -104,6 +104,26 @@ _R32_HEURISTIC = {
     'search_problem.py': ('42514de3bc076252a2a1b3a4992bb9f4cd5b8a647f47a2e8c24f8fc62a92d3aa', 'ee3447ba79ce73aebabe6b3f9eea8c479e5333fff71af171f5e3d15c4d1ea7f1', 'a057bf686d41ce6ffa4dfba383bc86d08e1a9092fd1ccea9438bc08754c2d0d6'),
 }
 
+# In these heuristic bindings only digest() is used from constraint_work,
+# and the physical Gold filters are dormant. Each alias is pinned to its
+# reviewed current LF image and both text layouts of the v1.14.0 image.
+_R34_HEURISTIC = {
+    'constraint_work.py': ('a7804dfb62f7585ebe0ef578a86968646c0bc0ebdca093d811452832d7a8f48c',
+                           '8cbf834fc1e89d13e23522becfc7378bd870c6f12b46ee9b97450e0c08862bbf',
+                           '05f93d66eca7d55804c720de4523d7e090125795ab56de55421af9f1ecf87c88'),
+    'r27_structure_filters.py': ('a82b3c2132db0161500542b2b6a7e8de097b46bbb4fefb141955e7fa3d457e93',
+                                 '42836dae0bc4e2fa10541826a56861b2c9319c7b8cdaa9b522fd6b3cd9d8f361',
+                                 'dd287363636dc01e0e96f86b9cd41bb383446f71c1a3584de03dceb4e616a377'),
+    'r32_gold_bonds.py': ('4dea3c29ec1af1a8cd4d911c835baa583ae7e2606590b4bd7b87b4f714ec403f',
+                          '77a82d49d811d97476e8cb4a707f50804abc79a7f8907279e1eba6d7c6ff4cae',
+                          '1daaf2a03f103f2542fb149bd26769499097cc63126c72a910df33d4414c8263'),
+}
+_R34_OPTIONAL = {
+    'r34_coverage_index.py': 'a75b25eb32f5213a709da2b4a3b909a520f405c4d2751ea1fc5e906b9df51efa',
+}
+_PROFILES = ('v114-git','v114-lf','v114-crlf','lf','windows','v112-lf','v112-crlf')
+
+
 # Bind each historical text image to the exact current image reviewed here.
 # Git checkouts and release archives can use LF or CRLF for the same source.
 @lru_cache(maxsize=256)
@@ -117,9 +137,10 @@ def _variants(name,current):
     variants={sha256(data).hexdigest() for data in (raw,lf,crlf)}
     if current not in variants:
         return ()
-    heuristic = _R32_HEURISTIC.get(name)
-    if heuristic and heuristic[0] in variants:
-        variants.update(heuristic[1:])
+    for reviewed in (_R34_HEURISTIC, _R32_HEURISTIC):
+        heuristic = reviewed.get(name)
+        if heuristic and heuristic[0] in variants:
+            variants.update(heuristic[1:])
     version = _R28.get(name)
     if version and version[0] in variants:
         variants.update(version[1:])
@@ -138,11 +159,14 @@ _R32_OPTIONAL = {
 }
 
 def _old_extra(name, current):
-    return name in _R32_OPTIONAL and _R32_OPTIONAL[name] in _variants(name, current)
+    expected = _R34_OPTIONAL.get(name) or _R32_OPTIONAL.get(name)
+    return expected is not None and expected in _variants(name,current)
 
 
 def compatible_sources(saved,current):
     return (isinstance(saved,dict) and saved.keys() <= current.keys()
+            and (not (_R32_OPTIONAL.keys() & (current.keys()-saved.keys()))
+                 or not (_R32_OPTIONAL.keys() & saved.keys()))
             and all(_old_extra(name,current[name]) for name in current.keys()-saved.keys())
             and all(isinstance(saved[name],str) and
                     (saved[name]==current[name] or saved[name] in _variants(name,current[name]))
@@ -151,27 +175,35 @@ def compatible_sources(saved,current):
 def compatible_identity(saved,current,legacy):
     if not isinstance(saved,str):
         return False
-    return saved==current or any(saved==legacy(profile) for profile in ('lf','windows','v112-lf','v112-crlf'))
+    return saved==current or any(saved==legacy(profile) for profile in _PROFILES)
 
 
 def legacy_sources(current,profile):
     """Reconstruct only a checksum-verified published source manifest."""
-    if profile not in ('lf','windows','v112-lf','v112-crlf'):
+    if profile not in _PROFILES:
         raise ValueError('Unknown release source layout.')
     result={}
     for name,sha in current.items():
-        if _old_extra(name,sha):
+        if name in _R34_OPTIONAL or name in _R32_OPTIONAL and not profile.startswith('v114-'):
+            if not _old_extra(name,sha):
+                return None
             continue
-        if profile.startswith('v112-'):
+        if profile.startswith(('v112-','v114-')):
             variants = _variants(name,sha)
             if not variants:
                 return None
-            row = _R32_HEURISTIC.get(name)
-            if row and row[0] in variants:
-                result[name] = row[1 if profile=='v112-lf' else 2]
+            # The v1.14 Git source/archive has LF Python and a CRLF native C file.
+            crlf = profile.endswith('-crlf') or profile=='v114-git' and name=='constraint_native.c'
+            row = _R34_HEURISTIC.get(name)
+            if row is None and profile.startswith('v112-'):
+                row = _R32_HEURISTIC.get(name)
+            if row:
+                if row[0] not in variants:
+                    return None
+                result[name] = row[2 if crlf else 1]
             else:
                 body = (Path(__file__).parent/name).read_bytes().replace(b'\r\n',b'\n')
-                result[name] = sha256(body if profile=='v112-lf' else body.replace(b'\n',b'\r\n')).hexdigest()
+                result[name] = sha256(body.replace(b'\n',b'\r\n') if crlf else body).hexdigest()
             continue
         row=_RELEASE_TEXT.get(name)
         if row is None or row[0] not in _variants(name,sha):

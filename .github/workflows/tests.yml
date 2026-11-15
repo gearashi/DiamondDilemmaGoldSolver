@@ -70,6 +70,9 @@ jobs:
       - name: Check Gold loss lookup and checkpoint reuse
         run: python -B -m unittest discover -v -p "test_r33*.py"
 
+      - name: Check round 34 pruning, checkpoint and replay controls
+        run: python -B -m unittest discover -v -p "test_r34*.py"
+
       - name: Run CPU-only tests
         env:
           DIAMOND_REQUIRE_NATIVE: '1'

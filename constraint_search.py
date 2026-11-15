@@ -6,13 +6,16 @@ cuts/hints, but restart their internal search after a process restart.
 from __future__ import annotations
 
 import argparse
+import ast
 import datetime
+from functools import lru_cache
 import hashlib
 import json
 import math
 import os
 from pathlib import Path
 import queue
+import re
 import signal
 import threading
 import time
@@ -31,6 +34,46 @@ EVENT_CAPACITY = 128
 def terminal_digest(record):
     payload = {key: value for key, value in record.items() if key != 'sha256'}
     return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+
+
+@lru_cache(maxsize=512)
+def _source_references(name, data):
+    """Parse optional function-local imports too. Exact bytes key the cache."""
+    modules, resources = set(), set()
+    for node in ast.walk(ast.parse(data, filename=name)):
+        if isinstance(node, ast.Import):
+            modules.update(alias.name.split('.', 1)[0] for alias in node.names)
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            modules.add(node.module.split('.', 1)[0])
+        elif isinstance(node, ast.Constant) and isinstance(node.value, str):
+            if re.fullmatch(r'[A-Za-z][A-Za-z0-9_]*\.(?:c|cu|wgsl)', node.value):
+                resources.add(node.value)
+    return modules, resources
+
+
+def snapshot_search_sources(root, evidence, explicit):
+    """Copy the transitive local source inputs supporting an exact search result."""
+    files = {path.name for path in root.iterdir() if path.is_file()}
+    prefixes = ('constraint_', 'gpu_', 'domain_', 'sampling_', 'dfs_', 'r27_')
+    pending = set(explicit)
+    pending.update(name for name in files if name.startswith(prefixes)
+                   and Path(name).suffix in ('.py', '.c', '.cu', '.wgsl'))
+    hashes = {}
+    while pending:
+        name = pending.pop()
+        if name in hashes:
+            continue
+        data = (root/name).read_bytes()
+        if name.endswith('.py'):
+            modules, resources = _source_references(name, data)
+            pending.update(resources)
+            for module in modules:
+                # Fail closed for a missing project engine imported on an optional path.
+                if module + '.py' in files or module.startswith(prefixes) or re.match(r'^r[0-9]+_', module):
+                    pending.add(module + '.py')
+        hashes[name] = hashlib.sha256(data).hexdigest()
+        (evidence/name).write_bytes(data)
+    return hashes
 
 
 def run_solver(problem, algorithm, **kwargs):
@@ -568,7 +611,6 @@ def main(argv=None):
         if any(options.get(key) for key in ('durable_reasoning','semantic_witnesses','shared_sat_service','relation_certificates')):learning_state['_reasoning_cache_dir']=str(run/'reasoning-cache')
         binding = hashlib.sha256(raw+args.algorithm.encode()+b':gold:v1').hexdigest()
         (evidence/'tiles.json').write_bytes(raw)
-        source_hashes = {}
         source_names = ('constraint_search.py', 'search_problem.py', 'constraint_dfs.py', 'constraint_models.py', 'constraint_circuit.py', 'constraint_residual.py',
                      'gpu_sampling.py', 'constraint_pruning.py', 'constraint_parity.py', 'constraint_symmetry.py',
                      'constraint_lns.py', 'constraint_connectivity.py', 'constraint_advanced.py', 'constraint_parallel.py',
@@ -585,16 +627,7 @@ def main(argv=None):
                      'constraint_sat_session.py','constraint_proof.py','constraint_relations.py','constraint_algebra.py',
                      'constraint_pb.py','constraint_interface.py','constraint_region_symbolic.py','constraint_region_elimination.py',
                      'constraint_region_master.py','constraint_region_oracles.py','constraint_region_research.py')
-        # New reasoning modules must travel with each run's reproducible source snapshot.
-        source_names = set(source_names) | {p.name for p in ROOT.iterdir()
-            if p.is_file() and p.suffix in ('.py','.c','.cu','.wgsl')
-            and p.name.startswith(('constraint_','gpu_','domain_','sampling_','dfs_','r27_'))}
-        for name in sorted(source_names):
-            path = ROOT/name
-            if path.exists():
-                source = path.read_bytes()
-                source_hashes[name] = hashlib.sha256(source).hexdigest()
-                (evidence/name).write_bytes(source)
+        source_hashes = snapshot_search_sources(ROOT,evidence,source_names)
         atomic_json(run/'run-config.json', {'pid': os.getpid(), 'method': 'constraint', 'algorithm': args.algorithm,
                     'backend': state['backend'], 'replicas': state['replicas'], 'seconds': args.seconds,
                     'seed': args.seed, 'workers': state['workers'], 'search_options': options, 'run_id': run_id, 'input_sha256': input_sha, 'input_snapshot': str(evidence/'tiles.json')})

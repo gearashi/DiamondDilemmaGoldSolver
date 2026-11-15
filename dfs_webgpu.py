@@ -205,7 +205,7 @@ class WebGPUDFS(DFS):
         tables = np.concatenate((self.order, self.host_faces.ravel(), self.host_reverse.ravel(),
                                  self.neighbors.ravel(), self.neighbor_sides.ravel(),
                                  self.host_single_offsets, self.host_pair_offsets, self.host_pool,
-                                 self.host_gold_partners.ravel(), self.order_rank, self.host_policy)).astype(np.uint32)
+                                 self.host_gold_partners.ravel(), self.order_rank, self.host_policy, self.host_gold_blocked.ravel())).astype(np.uint32)
         sizes = [165 * n * 4] + [160 * n * 4] * 4 + [12 * n * 4, tables.nbytes]
         limits = self.adapter.limits
         if max(sizes) > limits['max-storage-buffer-binding-size'] or max(sizes) > limits['max-buffer-size']:
@@ -295,7 +295,7 @@ class WebGPUDFS(DFS):
     def _dispatch_step(self, nodes):
         if type(nodes) is not int or not 1 <= nodes <= 512:
             raise ValueError('Use a bounded work budget of 1..512 per launch.')
-        self.queue.write_buffer(self.parameters, 0, np.array([self.n, nodes, self.colors, self.gold_segments, self.feature_bits, 0, 0, 0], np.uint32))
+        self.queue.write_buffer(self.parameters, 0, np.array([self.n, nodes, self.colors, self.gold_segments, self.feature_bits, len(self.host_policy) if self.host_gold_blocked.ndim==2 else 0, 0, 0], np.uint32))
         encoder = self.gpu_device.create_command_encoder()
         compute = encoder.begin_compute_pass()
         compute.set_pipeline(self.pipeline)

@@ -1,0 +1,214 @@
+{
+  "phases": {
+    "dimension": 114,
+    "contraction": {
+      "numbered": {
+        "2": [
+          2,
+          3
+        ],
+        "4": [
+          4,
+          5
+        ],
+        "8": [
+          8,
+          9
+        ],
+        "16": [
+          16,
+          17
+        ],
+        "32": [
+          31,
+          35
+        ],
+        "40": [
+          39,
+          45
+        ]
+      },
+      "independent": {
+        "2": [
+          2,
+          5
+        ],
+        "4": [
+          4,
+          9
+        ],
+        "8": [
+          8,
+          16
+        ],
+        "16": [
+          16,
+          27
+        ],
+        "32": [
+          32,
+          48
+        ],
+        "40": [
+          40,
+          58
+        ]
+      }
+    },
+    "finite_lifts": [
+      {
+        "GOLD": 1,
+        "INFEASIBLE": 511
+      },
+      {
+        "GOLD": 1,
+        "INFEASIBLE": 15
+      }
+    ]
+  },
+  "mates": {
+    "restrictions": {
+      "physical_forbidden_clauses": 11520,
+      "physical_required_clauses": 7680
+    },
+    "controls": {
+      "False_sat": [
+        {
+          "status": "solved",
+          "nodes": 12
+        },
+        {
+          "status": "solved",
+          "nodes": 12
+        }
+      ],
+      "False_cp-sat": [
+        {
+          "status": "solved",
+          "nodes": 0
+        },
+        {
+          "status": "solved",
+          "nodes": 0
+        }
+      ],
+      "False_cp-sat-circuit": [
+        {
+          "status": "solved",
+          "nodes": 0
+        },
+        {
+          "status": "solved",
+          "nodes": 0
+        }
+      ],
+      "False_cp": [
+        {
+          "status": "solved",
+          "nodes": 3
+        },
+        {
+          "status": "solved",
+          "nodes": 3
+        }
+      ],
+      "True_sat": [
+        {
+          "status": "infeasible",
+          "nodes": 61
+        },
+        {
+          "status": "infeasible",
+          "nodes": 7
+        }
+      ],
+      "True_cp-sat": [
+        {
+          "status": "infeasible",
+          "nodes": 125
+        },
+        {
+          "status": "infeasible",
+          "nodes": 0
+        }
+      ],
+      "True_cp-sat-circuit": [
+        {
+          "status": "infeasible",
+          "nodes": 0
+        },
+        {
+          "status": "infeasible",
+          "nodes": 0
+        }
+      ],
+      "True_cp": [
+        {
+          "status": "infeasible",
+          "nodes": 43
+        },
+        {
+          "status": "infeasible",
+          "nodes": 4
+        }
+      ]
+    }
+  },
+  "donors": {
+    "counts": {
+      "dart_templates_built": 480,
+      "signed_dart_prices": 3832,
+      "rows_computed": 7852,
+      "assignments": 128,
+      "signed_dart_reuses": 19724,
+      "dart_templates_reused": 3352
+    },
+    "raw_vector_builds": 23556,
+    "template_bytes": 230400,
+    "final_phase_bytes": 229920
+  },
+  "contours": {
+    "root": {
+      "independent_cells": 2560,
+      "walk_cells": 340,
+      "unique": [
+        16,
+        16
+      ],
+      "score": [
+        18,
+        19
+      ],
+      "lifts": [
+        {
+          "UNKNOWN": 3
+        },
+        {
+          "UNKNOWN": 3
+        }
+      ]
+    },
+    "ring": {
+      "independent_cells": 60,
+      "walk_cells": 34,
+      "unique": [
+        5,
+        6
+      ],
+      "score": [
+        7,
+        7
+      ],
+      "lifts": [
+        {
+          "INFEASIBLE": 4,
+          "GOLD": 2
+        },
+        {
+          "INFEASIBLE": 3,
+          "GOLD": 3
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,320 @@
+{
+  "revision": "8e010cc8b716f93b1567211cf04aa0318e3fb4b4",
+  "profiles": {
+    "git": {
+      "binding": "be2baf95dc6ca69bf50ce5a36512f61efc63203be3f89c272cce43ac130a3964",
+      "digest": "23bff274c75ef18a5355c9bd3d88e5e208ee19a33d0aa62ec1b9ae2c6c985249"
+    },
+    "lf": {
+      "binding": "1a6e192cf9bafffd4acdf9e1814901d461a4e9aef3d5f45f3061e757bde1f73a",
+      "digest": "ef43a8a624e96ba54ec2a0479a532c5bfb570f4cf820db1bc0961848657d460a"
+    },
+    "crlf": {
+      "binding": "c4559ec1c1a6bb7a231673cc5efe429199f7ceffe01127a366aa6c1db9ef8949",
+      "digest": "1f1d94b39bd55542a83249cc23f8cd1f113fdbb7f6af085a7b3cdf732cc8e353"
+    }
+  },
+  "saved": {
+    "optimizing_crossover_version": 1,
+    "binding": "be2baf95dc6ca69bf50ce5a36512f61efc63203be3f89c272cce43ac130a3964",
+    "policy": {
+      "gold_aware": true,
+      "max_nodes": 1,
+      "max_models": 8,
+      "history_limit": 256,
+      "max_parents": 4
+    },
+    "state": {
+      "stats": {
+        "recombination_rounds": 1,
+        "recombination_parent_scores": 2,
+        "recombination_parent_cache_hits": 4,
+        "recombination_parent_duplicates": 0,
+        "recombination_pair_selections": 1,
+        "recombination_pair_evictions": 0,
+        "recombination_models_built": 1,
+        "recombination_model_rebuilds": 0,
+        "recombination_models_reused": 0,
+        "recombination_models_evicted": 0,
+        "recombination_model_completions": 0,
+        "recombination_rotation_models": 0,
+        "recombination_multiparent_models": 0,
+        "recombination_component_visits": 8,
+        "recombination_pattern_options": 4,
+        "recombination_nodes": 1,
+        "recombination_bound_prunes": 0,
+        "recombination_seam_factors": 6,
+        "recombination_seam_pair_checks": 13,
+        "recombination_factor_cache_hits": 0,
+        "recombination_factor_cache_evictions": 0,
+        "recombination_candidate_scores": 0,
+        "recombination_duplicate_child_hits": 1,
+        "recombination_gold_validations": 0,
+        "recombination_gold_cuts": 0,
+        "recombination_gold_cut_checks": 0,
+        "recombination_cut_factor_evaluations": 0,
+        "recombination_cut_factor_cache_hits": 0,
+        "recombination_cut_factor_cache_evictions": 0,
+        "recombination_cut_bounds": 0,
+        "recombination_improvements": 0,
+        "recombination_gold_solutions": 0,
+        "recombination_offers": 0,
+        "recombination_injections": 0,
+        "recombination_history_evictions": 0,
+        "recombination_outcome_reuses": 0,
+        "recombination_outcome_evictions": 0,
+        "recombination_offer_score_checks": 0,
+        "recombination_source_checks": 4,
+        "recombination_restores": 0,
+        "recombination_adaptive_expansions": 0
+      },
+      "pending": false,
+      "pending_offer": null,
+      "pairs": [
+        [
+          [
+            [
+              0,
+              3,
+              9,
+              6
+            ],
+            [
+              3,
+              0,
+              6,
+              9
+            ]
+          ],
+          {
+            "stage": 0,
+            "completed": 0,
+            "gain": 0,
+            "cost": 0,
+            "last": 1,
+            "pending": {
+              "parents": [
+                [
+                  0,
+                  3,
+                  9,
+                  6
+                ],
+                [
+                  3,
+                  0,
+                  6,
+                  9
+                ]
+              ],
+              "rotations": false
+            }
+          }
+        ]
+      ],
+      "history": [
+        [
+          [
+            3,
+            0,
+            6,
+            9
+          ],
+          {
+            "metrics": {
+              "matched_edges": 2,
+              "required_edges": 6,
+              "domain_violations": 0,
+              "objective": 30,
+              "closed_proper_loops": 0,
+              "gold_objective": 154
+            },
+            "gold": false,
+            "offered": false
+          }
+        ],
+        [
+          [
+            0,
+            3,
+            9,
+            6
+          ],
+          {
+            "metrics": {
+              "matched_edges": 2,
+              "required_edges": 6,
+              "domain_violations": 0,
+              "objective": 30,
+              "closed_proper_loops": 0,
+              "gold_objective": 154
+            },
+            "gold": false,
+            "offered": false
+          }
+        ]
+      ],
+      "models": [
+        {
+          "parents": [
+            [
+              0,
+              3,
+              9,
+              6
+            ],
+            [
+              3,
+              0,
+              6,
+              9
+            ]
+          ],
+          "rotations": false,
+          "state": {
+            "stack": [
+              {
+                "masks": [
+                  9,
+                  9,
+                  576,
+                  576
+                ],
+                "remaining": [
+                  0,
+                  1
+                ],
+                "phase": "branch",
+                "edge": 6,
+                "matched": 6,
+                "cut": 0,
+                "no_gold": false,
+                "branch": [
+                  "group",
+                  0
+                ],
+                "next": 1
+              },
+              {
+                "masks": [
+                  1,
+                  8,
+                  576,
+                  576
+                ],
+                "remaining": [
+                  1
+                ],
+                "phase": "bound",
+                "edge": 0,
+                "matched": 0,
+                "cut": 0,
+                "no_gold": false,
+                "branch": null,
+                "next": 0
+              }
+            ],
+            "best": {
+              "codes": [
+                0,
+                3,
+                9,
+                6
+              ],
+              "metrics": {
+                "matched_edges": 2,
+                "required_edges": 6,
+                "domain_violations": 0,
+                "objective": 30,
+                "closed_proper_loops": 0,
+                "gold_objective": 154
+              },
+              "gold": false
+            },
+            "complete": false,
+            "cuts": [],
+            "stats": {
+              "recombination_component_visits": 8,
+              "recombination_pattern_options": 4,
+              "recombination_nodes": 1,
+              "recombination_bound_prunes": 0,
+              "recombination_seam_factors": 6,
+              "recombination_seam_pair_checks": 13,
+              "recombination_factor_cache_hits": 0,
+              "recombination_factor_cache_evictions": 0,
+              "recombination_gold_cuts": 0,
+              "recombination_gold_cut_checks": 0,
+              "recombination_cut_factor_evaluations": 0,
+              "recombination_cut_factor_cache_hits": 0,
+              "recombination_cut_factor_cache_evictions": 0,
+              "recombination_cut_bounds": 0
+            },
+            "factors": [
+              [
+                0,
+                9,
+                9,
+                1
+              ],
+              [
+                1,
+                9,
+                576,
+                1
+              ],
+              [
+                2,
+                9,
+                576,
+                1
+              ],
+              [
+                3,
+                9,
+                576,
+                1
+              ],
+              [
+                4,
+                9,
+                576,
+                1
+              ],
+              [
+                5,
+                576,
+                576,
+                1
+              ]
+            ],
+            "cut_factors": []
+          }
+        }
+      ],
+      "outcomes": []
+    },
+    "digest": "23bff274c75ef18a5355c9bd3d88e5e208ee19a33d0aa62ec1b9ae2c6c985249"
+  },
+  "following": [
+    [
+      null,
+      null,
+      2
+    ],
+    [
+      [
+        0,
+        3,
+        6,
+        9
+      ],
+      [
+        0,
+        3,
+        6,
+        9
+      ],
+      3
+    ]
+  ]
+}

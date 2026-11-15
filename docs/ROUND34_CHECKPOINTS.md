@@ -17,9 +17,11 @@ Baseline is the released v1.14.0 commit 8e010cc. Original-puzzle benchmarks used
 
 Regression suite: test_r34_checkpoint_reuse.py. GPU checks can be reproduced with `python bench_r34_checkpoint_reuse.py cuda --tiles ../data/tiles.json`, then the same command with `webgpu` and `filters`. Additional route, proof and seed-distribution regressions passed. Re-run the broader checks before merging. Open IDs continue in round34-candidates.json.
 
-## Open release and migration experiment 48
+## Release and migration experiment 48, initial diagnosis
 
 The v1.14 regional compiler helper manifest contained 46 sources; the Round 34 worktree currently contains 47. Three existing source images differ (constraint_work.py, r27_structure_filters.py, r32_gold_bonds.py), and r34_coverage_index.py is newly reachable. The released OptimizingCrossover binding on the simple_tiles/double_face fixture is 48471e7da65fd334ac781e6be5080db97762c6dccb8a34fb8cee0162489bbe59; the current compatibility test rejects it. For this heuristic, constraint_work supplies digest and the physical helpers are reached through dormant imports. Generate a real nonempty v1.14 checkpoint, compare its next deterministic steps after migration, and admit only reviewed old/current byte pairs for that heuristic path. Preserve LF/CRLF support, target and configuration checks, and rejection of edited source images. In parallel complete the evidence source snapshot in constraint_search.py for reachable revisioned helper modules. Keep exact-search terminal source checks and enforce the normal portable frontier rules.
+
+The later [migration comparison](ROUND34_PHYSICAL.md) recovered the same proposals and validated end board in all three text layouts.
 
 The actual v1.14 optimizing-crossover fixture has 49 LF files and one CRLF file (constraint_native.c). Include this released mixed layout in the migration test.
 
@@ -27,4 +29,4 @@ The actual v1.14 optimizing-crossover fixture has 49 LF files and one CRLF file 
 
 The combined Python 3.12 run passed all 104 tests from test_r34_checkpoint_reuse, test_r34_gold_loss, test_r34_repair, test_r34_physical, test_r30_multicenter, test_r31_routes, test_r32_route_store, test_constraint_work and test_constraint_learning_round25. The four Round 34 test modules ran on Python 3.15 with 25 passing and eight optional-profile skips. The full release suite is still due after the remaining candidates.
 
-For ID 37, the phase-first program already saves its current board, RNG, phases, quality metrics and next round every eight steps in r32_fresh.fresh. The per-horizon job key currently includes the requested round count, and r31_sampling.run_seeds drops its pending state on completion. Preserve that native trajectory under a separate, stable configuration key and store it in the same fenced transaction as the producer checkpoint. Compare 16-to-64 with cold 64, including RNG and refit boundaries. An older result carrying only a best board lacks the information required to extend a trajectory.
+The [continuation comparison](ROUND34_CONTINUATION.md) gives the final ID 37 measurements. At the start of this experiment, the phase-first program already saved its current board, RNG, phases, quality metrics and next round every eight steps in r32_fresh.fresh. The per-horizon job key currently includes the requested round count, and r31_sampling.run_seeds drops its pending state on completion. Preserve that native trajectory under a separate, stable configuration key and store it in the same fenced transaction as the producer checkpoint. Compare 16-to-64 with cold 64, including RNG and refit boundaries. An older result carrying only a best board lacks the information required to extend a trajectory.

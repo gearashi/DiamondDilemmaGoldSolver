@@ -6,7 +6,7 @@ import sqlite3
 import threading
 import time
 import uuid
-from contextlib import closing, contextmanager
+from contextlib import closing, contextmanager, ExitStack
 from pathlib import Path
 
 import numpy as np
@@ -44,10 +44,14 @@ def _open(database):
     return sqlite3.connect(database, timeout=60)
 
 
-def _schema(conn):
+def _jobs_schema(conn):
     conn.execute("""CREATE TABLE IF NOT EXISTS r31_jobs (
         scope TEXT, seed INTEGER, owner TEXT, expires REAL, result TEXT, gold INTEGER,
         PRIMARY KEY(scope, seed))""")
+
+
+def _schema(conn):
+    _jobs_schema(conn)
     conn.execute("""CREATE TABLE IF NOT EXISTS r31_best (
         scope TEXT PRIMARY KEY, score INTEGER, components INTEGER, gold INTEGER, seed INTEGER, result TEXT)""")
     conn.execute("""CREATE TABLE IF NOT EXISTS r31_pending (
@@ -127,8 +131,10 @@ def _completed_seed_best(conn, scope, start, stop):
     return best
 
 
-def run_seeds(database, scope, seed, starts, run_one, *, ttl=120, progress=None, checkpointed=False, output=None):
+def run_seeds(database, scope, seed, starts, run_one, *, ttl=120, progress=None, checkpointed=False, output=None,
+              trajectory=None):
     """Claim whole disjoint seeds, publish fenced results, and stop dispatch on shared Gold."""
+    from r34_query_ownership import LostQueryLease,query_lease
     if starts < 0 or seed < 0 or not math.isfinite(ttl) or ttl <= 0:
         raise ValueError("Invalid range or lease")
     database = Path(database)
@@ -144,6 +150,15 @@ def run_seeds(database, scope, seed, starts, run_one, *, ttl=120, progress=None,
             best = row
     with closing(_open(database)) as conn:
         _schema(conn)
+        if trajectory is not None:
+            stream, horizon = trajectory
+            if not checkpointed or type(horizon) is not int or horizon < 0:
+                raise ValueError('A trajectory needs a checkpointed run and a nonnegative horizon.')
+            conn.execute("""CREATE TABLE IF NOT EXISTS r34_trajectories (
+                stream TEXT,seed INTEGER,cursor INTEGER,state TEXT NOT NULL,checksum TEXT NOT NULL,
+                PRIMARY KEY(stream,seed,cursor))""")
+        def trajectory_digest(cursor, raw):
+            return hashlib.sha256(json.dumps([stream,job,cursor,raw],separators=(',',':')).encode()).hexdigest()
         def publish():
             if output:
                 from io_utils import atomic_json
@@ -193,25 +208,68 @@ def run_seeds(database, scope, seed, starts, run_one, *, ttl=120, progress=None,
                 busy = True
                 continue
             try:
-                with _heartbeat(database, scope, job, owner, ttl):
+                with _heartbeat(database, scope, job, owner, ttl), ExitStack() as locks:
+                    stream_guard=None
+                    if trajectory is not None:
+                        # Different horizons have different result owners, but the
+                        # native trajectory for this seed has one writer.
+                        stream_guard=locks.enter_context(query_lease(conn,database,
+                            f'phase-trajectory:{stream}:{job}',ttl=ttl))
+                    promotable=True
                     def save(state):
                         with conn:
                             conn.execute("BEGIN IMMEDIATE")
+                            if stream_guard is not None:
+                                stream_guard()
                             active = conn.execute("SELECT 1 FROM r31_jobs WHERE scope=? AND seed=? AND owner=?",
                                                   (scope, job, owner)).fetchone()
                             gold = conn.execute("SELECT 1 FROM r31_jobs WHERE scope=? AND gold=1", (scope,)).fetchone()
                             if not active or gold:
                                 raise _ClaimClosed()
-                            conn.execute("INSERT OR REPLACE INTO r31_pending VALUES(?,?,?)",
-                                         (scope, job, json.dumps(state)))
+                            raw = json.dumps(state)
+                            pending_raw=raw
+                            if trajectory is not None and promotable:
+                                pending_raw=json.dumps(dict(state,_trajectory_stream=stream))
+                            conn.execute("INSERT OR REPLACE INTO r31_pending VALUES(?,?,?)", (scope,job,pending_raw))
+                            if trajectory is not None and promotable:
+                                cursor = state['cursor']
+                                if type(cursor) is not int or not 0 <= cursor <= horizon:
+                                    raise ValueError('Unexpected trajectory cursor.')
+                                conn.execute("INSERT OR IGNORE INTO r34_trajectories VALUES(?,?,?,?,?)",
+                                             (stream,job,cursor,raw,trajectory_digest(cursor,raw)))
                     if checkpointed:
                         pending = conn.execute("SELECT state FROM r31_pending WHERE scope=? AND seed=?",
                                                (scope, job)).fetchone()
-                        item = run_one(job, json.loads(pending[0]) if pending else None, save)
+                        state = json.loads(pending[0]) if pending else None
+                        if trajectory is not None:
+                            if state is not None:
+                                source=state.pop('_trajectory_stream',None)
+                                if source is not None and source!=stream:
+                                    state=None
+                                elif source is None:
+                                    # An old seed may finish in its original horizon. Its source
+                                    # identity is unknown, so never export this state to later runs.
+                                    promotable=False
+                            earlier = state['cursor'] if state is not None and promotable else -1
+                            saved = conn.execute("""SELECT cursor,state,checksum FROM r34_trajectories
+                                WHERE stream=? AND seed=? AND cursor>? AND cursor<=?
+                                ORDER BY cursor DESC LIMIT 1""",(stream,job,earlier,horizon)).fetchone()
+                            if saved:
+                                cursor,raw,checksum = saved
+                                if checksum != trajectory_digest(cursor,raw):
+                                    raise ValueError('Trajectory checkpoint checksum mismatch.')
+                                state = json.loads(raw)
+                                promotable=True
+                                if state['cursor'] != cursor:
+                                    raise ValueError('Trajectory state and cursor disagree.')
+                        item = run_one(job, state, save)
                     else:
                         item = run_one(job)
                     item = dict(item, seed=job)
                     with conn:
+                        if stream_guard is not None:
+                            conn.execute("BEGIN IMMEDIATE")
+                            stream_guard()
                         changed = conn.execute("""UPDATE r31_jobs SET owner=NULL,expires=NULL,result=?,gold=?
                             WHERE scope=? AND seed=? AND owner=? AND result IS NULL""",
                             (json.dumps(item), int(item['gold']), scope, job, owner))
@@ -232,7 +290,7 @@ def run_seeds(database, scope, seed, starts, run_one, *, ttl=120, progress=None,
                         progress(item)
                 else:
                     busy = True
-            except _ClaimClosed:
+            except (_ClaimClosed,LostQueryLease):
                 busy = True
             finally:
                 with conn:

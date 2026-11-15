@@ -90,7 +90,28 @@ def _apex_path(problem):
     raise ValueError('Disconnected geographic mesh.')
 
 
-def skeletons(problem, domains=None, *, max_nodes=25000, limit=1, apex=True, merge=True, early_hall=True):
+def _skeleton_pose_masks(problem, ds, patterns):
+    """Index the forbidden local parities of each complete mandatory component pose."""
+    from constraint_pruning import Pruner
+    rules = Pruner(problem,regions=[],parity=False,gold_bonds=True)
+    alive = []
+    blocked = [defaultdict(list) for _ in ds]
+    for _,_,embeddings in rules.clusters:
+        poses = [row for row in embeddings if all(ds[c] >> int(v) & 1 for c,v in row)]
+        group = len(alive)
+        alive.append((1<<len(poses))-1)
+        bad = defaultdict(int)
+        for i,row in enumerate(poses):
+            for c,v in row:
+                for pattern in (0,3,5,6):
+                    if pattern != patterns[v]:
+                        bad[c,pattern] |= 1<<i
+        for (c,pattern),mask in bad.items():
+            blocked[c][pattern].append((group,mask))
+    return tuple(alive),blocked
+
+
+def skeletons(problem, domains=None, *, max_nodes=25000, limit=1, apex=True, merge=True, early_hall=True, mandatory_poses=False):
     """Enumerate geographic odd-edge patterns. Only completely failed continuations are cached."""
     if max_nodes<1 or limit<1:
         raise ValueError('Positive skeleton budget and result limit required.')
@@ -130,9 +151,12 @@ def skeletons(problem, domains=None, *, max_nodes=25000, limit=1, apex=True, mer
         matcher = _SkeletonMatching(tile_rows)
         if not matcher.feasible:
             return dict(patterns=[],active=active,complete=True,work={'early_hall_rejections':1})
+    pose_root,blocked = _skeleton_pose_masks(problem,ds,patterns) if mandatory_poses else ((),None)
+    if any(not group for group in pose_root):
+        return dict(patterns=[],active=active,complete=True,work={'mandatory_pose_rejections':1})
     class Capped(Exception):
         pass
-    def visit(c,frontier,path,r,available):
+    def visit(c,frontier,path,r,available,poses):
         if r<0 or r>n-c:
             return False
         if c==n:
@@ -145,7 +169,7 @@ def skeletons(problem, domains=None, *, max_nodes=25000, limit=1, apex=True, mer
             answers.append(tuple(prefix))
             return True
         # Earlier regional interiors can merge if their remaining inventory obligations match.
-        key=(c,frontier,path,r,() if full else tuple(sorted(available)))
+        key=(c,frontier,path,r,() if full else tuple(sorted(available)),poses)
         if merge and key in negative:
             work['merged']+=1
             return False
@@ -166,6 +190,17 @@ def skeletons(problem, domains=None, *, max_nodes=25000, limit=1, apex=True, mer
                     closed |= 1<<j
                 else:
                     opened |= 1<<j
+            child_poses = poses
+            if poses and pattern in blocked[c]:
+                remaining = list(poses)
+                for g,mask in blocked[c][pattern]:
+                    remaining[g] &= ~mask
+                    if not remaining[g]:
+                        break
+                if not all(remaining):
+                    work['mandatory_pose_rejections'] += 1
+                    continue
+                child_poses = tuple(remaining)
             if matcher is not None:
                 work['early_hall_checks'] += 1
                 if not matcher.restrict(c,tiles):
@@ -174,7 +209,7 @@ def skeletons(problem, domains=None, *, max_nodes=25000, limit=1, apex=True, mer
                     continue
             prefix[c]=pattern
             found |= visit(c+1,(frontier & ~closed)|opened,path^((opened&path_mask).bit_count()%2),
-                           r-bool(pattern),() if full else (*available,tiles))
+                           r-bool(pattern),() if full else (*available,tiles),child_poses)
             if matcher is not None:
                 # The matching from a child also satisfies its widened parent row.
                 matcher.rows[c] = tile_rows[c]
@@ -185,7 +220,7 @@ def skeletons(problem, domains=None, *, max_nodes=25000, limit=1, apex=True, mer
         return found
     complete=True
     try:
-        visit(0,0,0,active,())
+        visit(0,0,0,active,(),pose_root)
     except Capped:
         complete=False
     return dict(patterns=answers, active=active, complete=complete, work=dict(work))

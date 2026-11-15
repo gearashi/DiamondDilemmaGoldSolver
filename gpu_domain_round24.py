@@ -10,10 +10,15 @@ import hashlib
 import json
 import math
 from pathlib import Path
+from collections import OrderedDict
+from threading import RLock
+from weakref import WeakKeyDictionary
 import numpy as np
 from validator import reverse_mask
 
 ROOT=Path(__file__).resolve().parent
+_table_cache_lock=RLock()
+_device_table_cache=WeakKeyDictionary()
 META=29
 # meta: state,depth,trail_n,scan_cell,scan_code,changed,phase,clause_scan,
 #       clauses,assign_n,union_n,nodes,removals,checks,backjumps,learned,
@@ -105,7 +110,7 @@ class DomainCUDA:
         free,_=cp.cuda.runtime.memGetInfo()
         if self.state_bytes>free*0.75:raise ValueError('Domain-trail state exceeds75% of currently free VRAM; reduce lanes.')
         data=self._initial_state();self.state=cp.asarray(data,order="F" if cooperative else "C")
-        tables=self._tables();self.tables=cp.asarray(tables)
+        self.tables=self._device_tables()
         constants={'N':n,'NC':nc,'W':w,'RW':rw,'P':16*n,'C':32,'ROWS':cursor,
                    'GOLD':int(target=='gold'),'LEARNING':int(learning),'INCREMENTAL_STRANDS':int(incremental_strands),
                    'CROSS_LANE':int(cross_lane),'TOTAL_SEGMENTS':problem.total_segments,'JOINT_SUPPORT':int(joint_support),'EVENT_PROPAGATION':int(event_propagation),'PRECISE_REASONS':int(precise_reasons),'RS':self.reason_slots,'PROOF_TRANSPORT':int(proof_transport),'COOPERATIVE':int(cooperative),'GLOBAL_MATCHING':int(global_matching),'WATCHED_CLAUSES':int(watched_clauses),'CLAUSE_METRICS':int(self.clause_metrics),'SUPPORT_REUSE':int(support_reuse),'SUPPORT_METRICS':int(self.support_metrics),'SS':self.support_slots,'TW':(n+31)//32,**{key.upper():value for key,value in self.offsets.items()}}
@@ -146,6 +151,31 @@ class DomainCUDA:
             data[3]=self.n
             for word in range((self.n+31)//32):data[self.offsets['dirty_cells']+word]=(1<<min(32,self.n-32*word))-1
         return data
+    def _device_tables(self):
+        """Share read-only tables on one CUDA context; each lane engine owns its state."""
+        from cupy_backends.cuda.api import driver
+        cp=self.cp
+        problem=self.problem
+        # The model's strand definitions are immutable. Domain restrictions and
+        # topology arrays can be replaced by restricted problems or test fixtures.
+        key=(cp.cuda.Device().id,driver.ctxGetCurrent(),self.target,self.event_propagation,
+             tuple(self.binding['original']),problem.neighbors.tobytes(),problem.sides.tobytes(),
+             problem.masks.tobytes(),problem._segment_counts,problem._segment_ports)
+        with _table_cache_lock:
+            cache=_device_table_cache.setdefault(problem,OrderedDict())
+            if key in cache:
+                tables,ready=cache[key]
+                cache.move_to_end(key)
+                cp.cuda.get_current_stream().wait_event(ready)
+                return tables
+            tables=cp.asarray(self._tables())
+            ready=cp.cuda.Event()
+            ready.record()
+            cache[key]=(tables,ready)
+            if len(cache)>4:
+                cache.popitem(last=False)
+            return tables
+
     def _tables(self):
         # Fixed offsets: neighbors[3N], sides[3N], masks[9N], reversed[9N],
         # segment counts[N], endpoint->segment[NC*33], compatibility[9*NC*W].
@@ -447,6 +477,12 @@ class DomainCUDA:
         return {'schema':self.schema,'binding':self.binding,'cubes':[[hex(v) for v in cube] for cube in self.cubes],
                 'state':data,'state_sha256':hashlib.sha256(memoryview(data).cast('B')).hexdigest(),'delivered':list(self.delivered),'rows':self.rows}
     def restore(self,checkpoint):
+        state,verified=self.validate_checkpoint(checkpoint)
+        self.state[:]=self.cp.asarray(state)
+        self.delivered=verified
+
+    def validate_checkpoint(self,checkpoint):
+        """Validate a host snapshot without allocating or writing device columns."""
         if checkpoint.get('schema')!=self.schema or checkpoint.get('binding')!=self.binding or checkpoint.get('cubes')!=[[hex(v) for v in cube] for cube in self.cubes]:raise ValueError('Domain checkpoint scope differs.')
         state=checkpoint.get('state')
         if not isinstance(state,np.ndarray) or state.dtype!=np.uint32 or state.shape!=(self.rows,self.lanes):raise ValueError('Malformed domain checkpoint arrays.')
@@ -614,5 +650,5 @@ class DomainCUDA:
             if not (report['valid'] or self.target=='edges' and report['unique_tiles'] and report['matched_edges']==len(self.problem.edges)):
                 raise ValueError('Delivered candidate failed independent validation.')
             seen.add(tuple(codes));verified.append({'lane':lane,'codes':list(codes),'validation':report})
-        self.state[:]=self.cp.asarray(state);self.delivered=verified
+        return state,verified
     def close(self):self._page_mirror=self.state=self.tables=self.kernel=self.ack_kernel=self.propagate_kernel=self.share_kernel=self.module=None

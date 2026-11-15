@@ -99,6 +99,18 @@ class SeamFormula:
         self.stats['placement_variables'] = sum(map(len, self.literals))
         self.stats['base_variables'] = self.pool.top
 
+    @classmethod
+    def from_structure(cls,rows,layout):
+        """Restore placement decoding and the next available SAT variable from checked CNF."""
+        from pysat.formula import IDPool
+        result=cls.__new__(cls)
+        result.rows=rows
+        result.literals=[dict(zip(row,ids,strict=True)) for row,ids in zip(rows,layout['literals'],strict=True)]
+        result.defects=layout['defects']
+        result.pool=IDPool(start_from=layout['top']+1)
+        result.stats=Counter(layout['stats'])
+        return result
+
     def board(self, model):
         positive = {x for x in model if x > 0}
         return [next(code for code, lit in row.items() if lit in positive) for row in self.literals]

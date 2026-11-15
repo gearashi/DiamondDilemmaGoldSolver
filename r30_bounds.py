@@ -676,7 +676,7 @@ def main():
     from r29_exchange_clusters import StarClusters
     from search_problem import SearchProblem
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('mode',choices=('cores','rotation','family','budget','responses','overlaps'))
+    p.add_argument('mode',choices=('cores','rotation','family','budget','component-budget','responses','overlaps'))
     p.add_argument('--tiles',default='data/tiles.json')
     p.add_argument('--incumbent',required=True)
     p.add_argument('--target',type=int,default=208)
@@ -686,6 +686,7 @@ def main():
     p.add_argument('--unlimited-extra',action='store_true',help='Allow any number of distant movers in family mode.')
     p.add_argument('--nodes',type=int,default=128)
     p.add_argument('--swaps',type=int,default=4)
+    p.add_argument('--min-moved',type=int,default=0,help='Minimum moved donors in component-budget mode.')
     args = p.parse_args()
     model = BoardModel(SearchProblem(read_json(args.tiles)))
     bound = ExchangeBound(model,read_json(args.incumbent)['codes'])
@@ -702,6 +703,11 @@ def main():
             p.error("Supply the available remainder via --candidates.")
         report = family_case_upper(StarClusters(bound),args.cells,args.candidates,
                                    merge_slots=args.extra,max_parts=args.nodes)
+    elif args.mode=='component-budget':
+        if args.candidates is None:
+            p.error("Supply allowed cells via --candidates.")
+        from r34_component_budget import ComponentBudget
+        report=ComponentBudget(bound,args.candidates).upper(args.swaps,max_rows=args.nodes,min_moved=args.min_moved)
     elif args.mode=='budget':
         if args.candidates is None:
             p.error("Supply allowed cells via --candidates.")

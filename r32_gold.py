@@ -1,6 +1,6 @@
 """Check Gold-specific physical facts, perform resumable loss searches and transport checked conflicts."""
 import argparse
-from contextlib import closing
+from contextlib import closing, ExitStack
 import json
 from math import comb
 from pathlib import Path
@@ -56,6 +56,26 @@ def _higher_loss_scopes(db, identity, upper, reference_size, refined):
     return tuple(found)
 
 
+def _negative_page(db, scope, errors, start, stop):
+    """Fill only gaps if a legacy writer committed overlapping proof during compute."""
+    inserted = 0
+    previous = db.execute("SELECT hi FROM r32_loss_pages WHERE scope=? AND errors=? AND lo<=? "
+                          "ORDER BY lo DESC LIMIT 1",(scope,errors,start)).fetchone()
+    if previous:
+        start = max(start,previous[0])
+    rows = list(db.execute("SELECT lo,hi FROM r32_loss_pages WHERE scope=? AND errors=? "
+                           "AND lo>=? AND lo<? ORDER BY lo",(scope,errors,start,stop)))
+    for lo,hi in rows:
+        if start < lo:
+            db.execute("INSERT INTO r32_loss_pages VALUES(?,?,?,?)",(scope,errors,start,lo))
+            inserted += 1
+        start = max(start,hi)
+    if start<stop:
+        db.execute("INSERT INTO r32_loss_pages VALUES(?,?,?,?)",(scope,errors,start,stop))
+        inserted += 1
+    return inserted
+
+
 def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False):
     """Save completed disjoint prefix ranges together with their negative result."""
     if page<1 or seconds<0:raise ValueError('Expected positive page size and nonnegative duration')
@@ -101,7 +121,8 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     work = {}
     total = solved = pages = 0
     query = None
-    with closing(sqlite3.connect(db_path, timeout=30, uri=True)) as db:
+    from r34_rank_leases import RankedLeases, LostRankLease
+    with closing(sqlite3.connect(db_path, timeout=30, uri=True, isolation_level=None)) as db, ExitStack() as renewal:
         schema = db.execute("SELECT count(*) FROM sqlite_master WHERE type='table' AND name IN ('r32_loss_pages','r32_phase_hits')").fetchone()[0]
         if schema != 2:
             with db:
@@ -122,54 +143,106 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
                 if higher:
                     read_scopes += higher
                     current = _advance_saved(db, read_scopes, errors, 0)
-            while current < count:
+            leases = None
+            busy = False
+            while current < count or busy:
+                if current>=count:
+                    current=_advance_saved(db,read_scopes,errors,0)
+                    if current>=count:
+                        break
+                    known=db.execute(hit_sql,(scope,errors)).fetchone()
+                    if known:return dict(json.loads(known[0]),reused=True,pages=pages,work=work)
+                    leases.wait(current,budget,ready=lambda:db.execute(hit_sql,(scope,errors)).fetchone())
+                    busy=False
+                    continue
                 if query is None:
                     query = OutsideSyndromes(problem, ref, groups, required, layout=layout)
                 with db:
-                    # Another worker may have finished the gap since our unlocked read.
                     db.execute('BEGIN IMMEDIATE')
                     known=db.execute(hit_sql,(scope,errors)).fetchone()
                     if known:return dict(json.loads(known[0]),reused=True,pages=pages,work=work)
-                    # Pages are disjoint by construction. Only the closest earlier
-                    # start can contain current. The index can stop after one row,
-                    # including when we have advanced beyond all committed pages.
                     covered = current
                     for source in read_scopes:
                         row = db.execute('SELECT hi FROM r32_loss_pages WHERE scope=? AND errors=? '
                                          'AND lo<=? ORDER BY lo DESC LIMIT 1', (source,errors,current)).fetchone()
                         if row:
-                            covered = max(covered, row[0])
+                            covered = max(covered,row[0])
                     if covered > current:
-                        current = _advance_saved(db, read_scopes, errors, current, covered)
+                        current = _advance_saved(db,read_scopes,errors,current,covered)
                         continue
                     remaining=budget-monotonic()
                     if remaining<=0:return dict(status='UNKNOWN',errors=errors,next_prefix=current,pages=pages,work=work)
-                    end = min(count, current+page)
+                    end = min(count,current+page)
                     for source in read_scopes:
                         other = db.execute('SELECT min(lo) FROM r32_loss_pages WHERE scope=? AND errors=? AND lo>?',
                                            (source, errors, current)).fetchone()[0]
                         if other is not None:
-                            end = min(end, other)
-                    options = {'accept_errors':accept_errors, 'reject_before_joint':reject_before_joint} if refine_integer else {}
-                    out=query.indexed(upper,errors,remaining,start=current,stop=end,**options)
-                    for k,v in out['work'].items():work[k]=work.get(k,0)+v
-                    stop=out['next_rank']
-                    if stop>current:
-                        # Caps beyond the size of the reference are equivalent
-                        # physically but their historical scope hashes differ.
-                        if upper > len(ref) and not registered_cap:
+                            end = min(end,other)
+                    if leases is None:
+                        leases = RankedLeases(db,'gold-loss',scope+'/'+str(errors),private=db_path==':memory:',lifetime=renewal)
+                        db.execute("CREATE TABLE IF NOT EXISTS r34_loss_cursors(scope TEXT,errors INTEGER,"
+                                   "prefix INTEGER,cursor TEXT,PRIMARY KEY(scope,errors,prefix))")
+                    claim,skip = leases.take(current,end)
+                    if claim is None:
+                        current=skip
+                        busy=True
+                        continue
+                    end = claim.hi
+                    previous=db.execute("SELECT cursor FROM r34_loss_cursors WHERE scope=? AND errors=? AND prefix=?",
+                                        (scope,errors,current)).fetchone()
+                    try:
+                        query.resume_cursor=json.loads(previous[0]) if previous else None
+                    except (ValueError,TypeError):
+                        query.resume_cursor=None
+                written=current
+                def publish_partial(rank,cursor):
+                    nonlocal written,pages,registered_cap
+                    if not written<=rank<=end:
+                        raise ValueError("Loss checkpoint escaped its owned interval")
+                    if rank>written:
+                        if upper>len(ref) and not registered_cap:
                             db.execute("CREATE TABLE IF NOT EXISTS r34_loss_caps(identity TEXT, cap INTEGER, "
                                        "PRIMARY KEY(identity,cap))")
                             db.execute("INSERT OR IGNORE INTO r34_loss_caps VALUES (?,?)",(digest(identity),upper))
-                            registered_cap = True
-                        db.execute('INSERT INTO r32_loss_pages VALUES(?,?,?,?)',(scope,errors,current,stop))
-                        pages+=1
-                    current=stop
-                    if out['status'] in ('PHASE_RELAXATION_FEASIBLE','INTEGER_RELAXATION_FEASIBLE'):
-                        db.execute('INSERT OR IGNORE INTO r32_phase_hits VALUES(?,?,?)',(scope,errors,json.dumps(out)))
-                        return dict(out,pages=pages,work=work)
-                    if out['status']=='UNKNOWN':return dict(out,pages=pages,work=work)
+                            registered_cap=True
+                        pages+=_negative_page(db,scope,errors,written,rank)
+                        db.execute("DELETE FROM r34_loss_cursors WHERE scope=? AND errors=? AND prefix>=? AND prefix<?",
+                                   (scope,errors,written,rank))
+                        written=rank
+                    if cursor is not None:
+                        db.execute("INSERT OR REPLACE INTO r34_loss_cursors VALUES(?,?,?,?)",
+                                   (scope,errors,rank,json.dumps(cursor)))
+                def checkpoint(rank,cursor):
+                    with db:
+                        db.execute("BEGIN IMMEDIATE")
+                        leases.fence(claim)
+                        publish_partial(rank,cursor)
+                query.checkpoint_progress=checkpoint
+                try:
+                    with leases.computing(claim):
+                        options = {'accept_errors':accept_errors, 'reject_before_joint':reject_before_joint} if refine_integer else {}
+                        out=query.indexed(upper,errors,remaining,start=current,stop=end,**options)
+                        for k,v in out['work'].items():work[k]=work.get(k,0)+v
+                        with db:
+                            db.execute("BEGIN IMMEDIATE")
+                            leases.fence(claim)
+                            publish_partial(out['next_rank'],out.get('cursor'))
+                            current=out['next_rank']
+                            if out['status'] in ('PHASE_RELAXATION_FEASIBLE','INTEGER_RELAXATION_FEASIBLE'):
+                                db.execute('INSERT OR IGNORE INTO r32_phase_hits VALUES(?,?,?)',(scope,errors,json.dumps(out)))
+                                saved=db.execute(hit_sql,(scope,errors)).fetchone()
+                                return dict(json.loads(saved[0]),pages=pages,work=work)
+                            if out['status']=='UNKNOWN':return dict(out,pages=pages,work=work)
+                except LostRankLease:
+                    busy=True
+                    current=_advance_saved(db,read_scopes,errors,0)
+                    continue
+                finally:
+                    query.checkpoint_progress=None
+                    query.resume_cursor=None
                 if emit:emit(errors,current,count)
+            if leases is not None:
+                leases.close()
             solved+=count
     return dict(status='INFEASIBLE',loss_budget=upper,checked_layers=list(indices),
                 all_outside_layers=set(indices)>=set(range(max_error+1)),

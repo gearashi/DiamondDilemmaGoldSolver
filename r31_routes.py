@@ -28,7 +28,7 @@ def rank(cells,free):
 
 
 def search(problem,board,cells,family,target,*,database=':memory:',price=True,
-           compare=False,defects=False,exterior=False):
+           compare=False,defects=False,exterior=False,component_rows=0):
     model = BoardModel(problem)
     b = ExchangeBound(model,board)
     cells = sorted(cells)
@@ -67,7 +67,16 @@ def search(problem,board,cells,family,target,*,database=':memory:',price=True,
             return dict(family=family,cells=cells,target=target,complete=True,best=None,
                         work={'whole_pool_reused':comb(len(cells),sum(family))})
         positives = []
-        for support,order in join.survivors(price=price):
+        survivors=join.survivors(price=price)
+        if component_rows:
+            from r34_component_budget import ComponentBudget
+            cap=ComponentBudget(b,cells).upper(sum(family)-len(family),max_rows=component_rows,
+                                               min_moved=sum(family))
+            count.update({'component_'+k:v for k,v in cap['work'].items()})
+            if cap['upper']<target:
+                count['component_pools_closed']+=1
+                survivors=()
+        for support,order in survivors:
             r = rank(support,model.free)
             prior = db.execute("SELECT hi,best FROM r30_pages WHERE scope=? AND lo<=? ORDER BY lo DESC LIMIT 1",(key,r)).fetchone()
             if prior and prior[0]>r and prior[1]=='null':
@@ -329,9 +338,10 @@ def main():
     p.add_argument('--compare-six',action='store_true')
     p.add_argument('--defects',action='store_true')
     p.add_argument('--exterior',action='store_true')
+    p.add_argument('--component-rows',type=int,default=0,help='Price and join regional components within this work limit.')
     a = p.parse_args()
     if a.roots:
-        if a.compare_six or a.defects or a.exterior:
+        if a.compare_six or a.defects or a.exterior or a.component_rows:
             p.error("The diagnostic endpoint options apply to support-pool mode.")
         print(json.dumps(search_roots(SearchProblem(read_json(a.tiles)),read_json(a.incumbent)['codes'],
                         tuple(map(int,a.family)),a.target,a.database,pool=a.cells,start=a.start,stop=a.stop,seconds=a.seconds,quantum=a.cursor_page,catalogue=not a.no_catalogue)))
@@ -339,7 +349,7 @@ def main():
     if not a.cells or a.start or a.stop is not None or a.seconds:
         p.error("Supply --cells for pool mode, or --roots for ranked subtrees.")
     result = search(SearchProblem(read_json(a.tiles)),read_json(a.incumbent)['codes'],a.cells,
-                    tuple(map(int,a.family)),a.target,database=a.database,compare=a.compare_six,defects=a.defects,exterior=a.exterior)
+                    tuple(map(int,a.family)),a.target,database=a.database,compare=a.compare_six,defects=a.defects,exterior=a.exterior,component_rows=a.component_rows)
     print(json.dumps(result))
 
 if __name__=='__main__':
