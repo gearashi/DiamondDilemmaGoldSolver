@@ -96,7 +96,59 @@ def _lift(problem, mesh):
     return codes, ribbon_genus(problem, sorted(mesh))
 
 
-def search(problem, reference, groups, required, phase, upper, seconds, *, switch_trials=128):
+def _checked_incumbent(problem, saved, allowed, reference, required, groups, upper):
+    if not isinstance(saved, dict):
+        return None
+    rows = saved.get("pairs")
+    if not isinstance(rows, (list, tuple)) or len(rows) != 3 * problem.n // 2:
+        return None
+    mesh = set()
+    endpoints_seen = set()
+    for row in rows:
+        if (not isinstance(row, (list, tuple)) or len(row) != 2 or
+                any(type(side) is not int for side in row)):
+            return None
+        edge = tuple(sorted(row))
+        if edge not in allowed or endpoints_seen.intersection(edge):
+            return None
+        endpoints_seen.update(edge)
+        mesh.add(edge)
+    if (not required <= mesh or any(group <= mesh for group in groups) or
+            len(reference - mesh) > upper or strand_components(problem, mesh) != [problem.total_segments]):
+        return None
+    return frozenset(mesh)
+
+
+def _replayed_loop_cores(problem, saved, allowed):
+    if not isinstance(saved, dict):
+        return set()
+    candidates = []
+    prior = saved.get("replayed_loop_cores")
+    if isinstance(prior, list):
+        candidates.extend(prior)
+    rounds = saved.get("rounds")
+    if isinstance(rounds, list):
+        for row in rounds:
+            if isinstance(row, dict) and isinstance(row.get("new_loop_cores"), list):
+                candidates.extend(row["new_loop_cores"])
+    checked = set()
+    for raw in candidates:
+        if not isinstance(raw, (list, tuple)) or not 1 <= len(raw) <= 3 * problem.n // 2:
+            continue
+        if any(not isinstance(e, (list, tuple)) or len(e) != 2 or
+               any(type(v) is not int for v in e) for e in raw):
+            continue
+        edges = frozenset(tuple(sorted(e)) for e in raw)
+        if not edges <= allowed or len({side for e in edges for side in e}) != 2 * len(edges):
+            continue
+        if edges in checked:
+            continue
+        if any(size < problem.total_segments for size in strand_components(problem, edges, complete=False)):
+            checked.add(edges)
+    return checked
+
+
+def search(problem, reference, groups, required, phase, upper, seconds, *, switch_trials=128, saved=None, publish=None):
     """Exact fixed-phase search up to the supplied loss cap; zero seconds is unlimited."""
     if (type(phase) is not int or not 0 <= phase < 1 << problem.n or
             type(upper) is not int or upper < 0 or type(switch_trials) is not int or
@@ -116,18 +168,35 @@ def search(problem, reference, groups, required, phase, upper, seconds, *, switc
     result["certified_loss_lower_bound"] = lower
     if lower > upper:
         return dict(result, status="INFEASIBLE")
+    raw = raw_sides(problem.tiles)
+    labels = [(slots, color ^ ((phase >> (i // 3)) & 1)) for i, (slots, color) in enumerate(raw)]
+    allowed = {e for e in inventory(problem).possible if reciprocal(labels[e[0]]) == labels[e[1]]}
+    if not required <= allowed:
+        return dict(result, status="INFEASIBLE", no_physical_mates=True)
+    replayed = _replayed_loop_cores(problem, saved, allowed)
+    if replayed:
+        result["replayed_loop_cores"] = [sorted(c) for c in sorted(replayed, key=lambda c: (len(c), sorted(c)))]
+    incumbent = _checked_incumbent(problem, saved, allowed, reference, required, groups, upper)
+    incumbent_loss = len(reference - incumbent) if incumbent is not None else None
+
+    def finish_saved():
+        codes, genus = _lift(problem, incumbent)
+        return dict(result, status="GOLD" if codes is not None else "CONNECTED_SEWING",
+                    loss=incumbent_loss, pairs=sorted(incumbent), codes=codes, genus=genus,
+                    saved_pairing_revalidated=True)
+
+    if incumbent is not None:
+        if incumbent_loss < lower:
+            raise ArithmeticError("Verified complete sewing contradicts the computed lower bound.")
+        if incumbent_loss == lower:
+            return finish_saved()
+        result.update(pairs=sorted(incumbent), verified_incumbent_loss=incumbent_loss)
     if monotonic() >= deadline:
         return result
 
     from pysat.card import CardEnc, EncType, ITotalizer
     from pysat.formula import IDPool
     from pysat.solvers import Solver
-
-    raw = raw_sides(problem.tiles)
-    labels = [(slots, color ^ ((phase >> (i // 3)) & 1)) for i, (slots, color) in enumerate(raw)]
-    allowed = {e for e in inventory(problem).possible if reciprocal(labels[e[0]]) == labels[e[1]]}
-    if not required <= allowed:
-        return dict(result, status="INFEASIBLE", no_physical_mates=True)
     pool = IDPool()
     ids = {e: pool.id(e) for e in sorted(allowed)}
     by_side = defaultdict(list)
@@ -145,7 +214,7 @@ def search(problem, reference, groups, required, phase, upper, seconds, *, switc
             clauses.append([-ids[e] for e in sorted(group)])
     fixed = len(reference - allowed)
     optional = [-ids[e] for e in sorted(reference & allowed)]
-    ceiling = min(upper, len(reference))
+    ceiling = min(upper, len(reference), incumbent_loss if incumbent_loss is not None else upper)
     slots = [s for s, _ in raw]
     arcs = endpoints(problem)
     upper_extra = max(0, ceiling - fixed)
@@ -158,10 +227,15 @@ def search(problem, reference, groups, required, phase, upper, seconds, *, switc
             tally = resources.enter_context(ITotalizer(lits=optional, ubound=upper_extra, top_id=pool.top))
             clauses.extend(tally.cnf.clauses)
         solver = resources.enter_context(Solver(name="g4", bootstrap_with=clauses))
-        solver.set_phases([v if e in reference else -v for e, v in ids.items()])
-        learned = set()
+        preferred = incumbent if incumbent is not None else reference
+        solver.set_phases([v if e in preferred else -v for e, v in ids.items()])
+        learned = set(replayed)
+        for cut in result.get("replayed_loop_cores", ()):
+            solver.add_clause([-ids[tuple(e)] for e in cut])
         for cap in range(lower, ceiling + 1):
             result["certified_loss_lower_bound"] = cap
+            if cap == incumbent_loss:
+                return finish_saved()
             pins = [-tally.rhs[cap-fixed]] if tally and cap-fixed < len(optional) else []
             while monotonic() < deadline:
                 before = solver.accum_stats()["decisions"]
@@ -181,6 +255,8 @@ def search(problem, reference, groups, required, phase, upper, seconds, *, switc
                 if answer is None:
                     return result
                 if answer is False:
+                    if publish is not None:
+                        publish(result)
                     break
                 model = set(solver.get_model())
                 mesh = frozenset(e for e, v in ids.items() if v in model)
@@ -211,6 +287,8 @@ def search(problem, reference, groups, required, phase, upper, seconds, *, switc
                     solver.add_clause([-ids[e] for e in sorted(cut)])
                 row["new_loop_cores"] = [sorted(cut) for cut in new]
                 learned.update(new)
+                if publish is not None:
+                    publish(result)
             else:
                 return result
     return dict(result, status="INFEASIBLE", certified_loss_lower_bound=ceiling+1)

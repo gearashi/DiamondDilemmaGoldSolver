@@ -94,3 +94,52 @@ class PhaseSewingTests(TestCase):
             for step in public['rounds']:
                 for cut in step.get('new_loop_cores',()):
                     self.assertTrue(any(0<size<problem.total_segments for size in strand_components(problem,map(tuple,cut),complete=False)))
+
+
+    def test_cached_candidate_rebuilds_phase_groups_witness_and_geographic_lift(self):
+        from r35_phase_sewing import _checked_incumbent
+        from bench_r35_loss_boundary344 import problem_scope
+        from r35_loss_witness import raw_sides, reciprocal
+        data=next((p for p in map(Path,("data/tiles.json","../data/tiles.json")) if p.is_file()),None)
+        if not data:self.skipTest("Original data unavailable")
+        problem,ref,groups,req=problem_scope(data)
+        root=Path(__file__).parent/"docs"
+        ports=json.loads((root/"R35_MATE_PORTFOLIOS.json").read_bytes())
+        base=[frozenset(map(tuple,row))-req for row in json.loads((root/ports["geographic_source"]).read_bytes())["geographic_cores"]]
+        typed=[frozenset(map(tuple,row))-req for row in json.loads((root/ports["contact_source"]).read_bytes())["edge_perfect_cores"]]
+        phase=int(ports["phase"],16)
+        prior=ports["contact_cases"][-1]["public"]
+        charges=groups[:13]+base+typed
+        forged=dict(prior,loss=0,codes=[0]*problem.n,genus=0,status="GOLD")
+        result=search(problem,ref,charges,req,phase,37,10,saved=forged)
+        self.assertEqual((result["status"],result["loss"],result["rounds"]),("CONNECTED_SEWING",37,[]))
+        self.assertTrue(result["saved_pairing_revalidated"])
+        self.assertIsNone(result["codes"])
+        complement=phase ^ ((1<<problem.n)-1)
+        self.assertTrue(search(problem,ref,charges,req,complement,37,10,saved=prior)["saved_pairing_revalidated"])
+
+        raw=raw_sides(problem.tiles)
+        labels=[(a,b^(phase>>(i//3)&1)) for i,(a,b) in enumerate(raw)]
+        allowed={edge for edge in inventory(problem).possible if labels[edge[1]]==reciprocal(labels[edge[0]])}
+        self.assertIsNone(_checked_incumbent(problem,dict(prior,pairs=prior["pairs"][:-1]),allowed,ref,req,charges,37))
+        self.assertIsNone(_checked_incumbent(problem,dict(prior,pairs=[prior["pairs"][0]]*240),allowed,ref,req,charges,37))
+        weaker=ports["portfolios"][0]["physical"]
+        self.assertIsNone(_checked_incumbent(problem,weaker,allowed,ref,req,groups[:13]+base,27))
+        self.assertIsNone(_checked_incumbent(problem,dict(prior,pairs=prior["first_pairing"]),allowed,ref,req,charges,37))
+        if find_spec("pysat"):
+            # The saved connected optimum is 27 while phase-only matching
+            # proves only 26. Reject cap 26 before reusing the saved answer.
+            old=ports["portfolios"][-1]["physical"]
+            forged_cuts=[[(-1,0)], [tuple(prior['pairs'][0])], prior['pairs'], [[True,0]]]
+            old=dict(old,replayed_loop_cores=forged_cuts)
+            from r35_phase_sewing import _replayed_loop_cores
+            expected={frozenset(map(tuple,cut)) for row in old['rounds'] for cut in row.get('new_loop_cores',())}
+            self.assertEqual(_replayed_loop_cores(problem,old,allowed),expected)
+            published=[]
+            checked=search(problem,ref,groups[:13]+base,req,phase,27,30,saved=old,
+                           publish=lambda record:published.append(len(record['rounds'])))
+            self.assertTrue(published)
+            self.assertEqual(len(checked['replayed_loop_cores']),len(expected))
+            self.assertEqual(checked["loss"],27)
+            self.assertTrue(checked["saved_pairing_revalidated"])
+            self.assertTrue(any(row["cap"]==26 and row["verdict"] is False for row in checked["rounds"]))

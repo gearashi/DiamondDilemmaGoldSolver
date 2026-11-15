@@ -388,6 +388,7 @@ def main():
     parser.add_argument('mode',choices=('inventory','loss','integer-bound','phase-sewing','dropout','master','geographic','poses','cores','loops','watch'))
     parser.add_argument('--tiles',default='data/tiles.json')
     parser.add_argument('--phase',type=lambda value:int(value,0),help='The tile-color assignment for phase-sewing, as a decimal or 0x integer.')
+    parser.add_argument('--sewing-hint',help='Recheck a saved full pairing for phase-sewing. A pre-existing output file is also checked on restart.')
     parser.add_argument('--switch-trials',type=int,default=128,help='Maximum distinct local pair exchanges per complete sewing; zero disables this witness probe.')
     parser.add_argument('--center',default='docs/R29_INCUMBENT.json')
     parser.add_argument('--backend',choices=('cpu','cuda'),default='cpu',help='Runtime for the checked placement watcher')
@@ -417,6 +418,7 @@ def main():
     if (args.phase is not None) != (args.mode=='phase-sewing'):
         parser.error('--phase is required and valid only for phase-sewing')
     if args.switch_trials<0:parser.error('Negative switch budget')
+    if args.sewing_hint and args.mode!='phase-sewing':parser.error('--sewing-hint requires phase-sewing')
     if (args.sphere_euler or args.mate_support or args.mate_cost) and not (args.mode=='integer-bound' or args.mode=='loss' and args.refine_integer):
         parser.error('Signed physical conditions require integer-bound or loss --refine-integer')
     if args.independent_native and args.mode!='integer-bound':parser.error('--independent-native requires integer-bound')
@@ -469,8 +471,17 @@ def main():
             from r35_phase_sewing import search as phase_sewing
             geo=geographic_departures(p,ref,rules.required,geographic_hints)
             contacts=contact_departures(p,ref,rules.required,contact_hints)
+            from io_utils import atomic_json
+            saved=None
+            hint_path=args.sewing_hint or args.output
+            if hint_path and Path(hint_path).is_file():
+                try:
+                    saved=read_json(hint_path)
+                except (ValueError,OSError):
+                    saved=None
             out=phase_sewing(p,ref,[*groups,*geo,*contacts],rules.required,args.phase,args.upper,args.seconds,
-                             switch_trials=args.switch_trials)
+                             switch_trials=args.switch_trials,saved=saved,
+                             publish=(lambda row:atomic_json(Path(args.output),row)) if args.output else None)
             out.update(verified_geographic_departures=len(geo),verified_contact_departures=len(contacts))
         elif args.mode=='integer-bound':
             if case.keys()-{'codes'} or args.outside is not None:
@@ -561,7 +572,11 @@ def main():
         out['signed_conditions']=dict(sphere_euler=args.sphere_euler,mate_support=args.mate_support or args.mate_cost)
         if args.mate_cost:out['signed_conditions']['mate_cost']=True
     message=json.dumps(out,indent=2)
-    if args.output:Path(args.output).write_text(message+'\n',encoding='utf-8')
+    if args.output:
+        if args.mode=='phase-sewing':
+            from io_utils import atomic_json
+            atomic_json(Path(args.output),out)
+        else:Path(args.output).write_text(message+'\n',encoding='utf-8')
     print(message)
 
 

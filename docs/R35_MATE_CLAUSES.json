@@ -2921,5 +2921,233 @@
     "partial_pin_lower_bounds": 3888,
     "broad_cases": 50,
     "additional_node_cutoffs_per_case": 3
+  },
+  "crossing_cut_transfer": {
+    "variants": [
+      {
+        "case": "13 baseline, no extra claims",
+        "limit": 0,
+        "double": false,
+        "status": "CONNECTED_SEWING",
+        "cost": 24,
+        "rounds": 5,
+        "decisions": 471
+      },
+      {
+        "case": "13 baseline, no extra claims",
+        "limit": 100000,
+        "double": false,
+        "status": "CONNECTED_SEWING",
+        "cost": 24,
+        "rounds": 5,
+        "decisions": 477
+      },
+      {
+        "case": "13 baseline, no extra claims",
+        "limit": 96,
+        "double": true,
+        "status": "CONNECTED_SEWING",
+        "cost": 24,
+        "rounds": 5,
+        "decisions": 471
+      },
+      {
+        "case": "129 ordinary",
+        "limit": 0,
+        "double": false,
+        "status": "CONNECTED_SEWING",
+        "cost": 26,
+        "rounds": 5,
+        "decisions": 984
+      },
+      {
+        "case": "129 ordinary",
+        "limit": 100000,
+        "double": false,
+        "status": "CONNECTED_SEWING",
+        "cost": 26,
+        "rounds": 5,
+        "decisions": 984
+      },
+      {
+        "case": "129 ordinary",
+        "limit": 96,
+        "double": true,
+        "status": "CONNECTED_SEWING",
+        "cost": 26,
+        "rounds": 5,
+        "decisions": 984
+      },
+      {
+        "case": "194 ordinary",
+        "limit": 0,
+        "double": false,
+        "status": "CONNECTED_SEWING",
+        "cost": 27,
+        "rounds": 4,
+        "decisions": 1400
+      },
+      {
+        "case": "194 ordinary",
+        "limit": 100000,
+        "double": false,
+        "status": "CONNECTED_SEWING",
+        "cost": 27,
+        "rounds": 4,
+        "decisions": 1400
+      },
+      {
+        "case": "194 ordinary",
+        "limit": 96,
+        "double": true,
+        "status": "CONNECTED_SEWING",
+        "cost": 27,
+        "rounds": 4,
+        "decisions": 1400
+      },
+      {
+        "case": "194 ordinary plus 19 contact",
+        "limit": 0,
+        "double": false,
+        "status": "CONNECTED_SEWING",
+        "cost": 34,
+        "rounds": 2,
+        "decisions": 4989
+      },
+      {
+        "case": "194 ordinary plus 19 contact",
+        "limit": 100000,
+        "double": false,
+        "status": "CONNECTED_SEWING",
+        "cost": 34,
+        "rounds": 2,
+        "decisions": 4989
+      },
+      {
+        "case": "194 ordinary plus 19 contact",
+        "limit": 96,
+        "double": true,
+        "status": "CONNECTED_SEWING",
+        "cost": 34,
+        "rounds": 2,
+        "decisions": 4989
+      },
+      {
+        "case": "194 ordinary plus 117 contact",
+        "limit": 0,
+        "double": false,
+        "status": "CONNECTED_SEWING",
+        "cost": 37,
+        "rounds": 4,
+        "decisions": 151151
+      },
+      {
+        "case": "194 ordinary plus 117 contact",
+        "limit": 100000,
+        "double": false,
+        "status": "CONNECTED_SEWING",
+        "cost": 37,
+        "rounds": 4,
+        "decisions": 151151
+      },
+      {
+        "case": "194 ordinary plus 117 contact",
+        "limit": 96,
+        "double": true,
+        "status": "CONNECTED_SEWING",
+        "cost": 37,
+        "rounds": 4,
+        "decisions": 151151
+      },
+      {
+        "case": "194 ordinary plus 985 contact",
+        "limit": 0,
+        "double": false,
+        "status": "CONNECTED_SEWING",
+        "cost": 37,
+        "rounds": 2,
+        "decisions": 282670
+      },
+      {
+        "case": "194 ordinary plus 985 contact",
+        "limit": 100000,
+        "double": false,
+        "status": "CONNECTED_SEWING",
+        "cost": 37,
+        "rounds": 2,
+        "decisions": 282670
+      },
+      {
+        "case": "194 ordinary plus 985 contact",
+        "limit": 96,
+        "double": true,
+        "status": "CONNECTED_SEWING",
+        "cost": 37,
+        "rounds": 2,
+        "decisions": 282670
+      }
+    ],
+    "implementation": "isolated comparator; not retained",
+    "observed_repeated_strand_sets": 3,
+    "observed_original_194_seam_cuts": 56
+  },
+  "freshly_checked_restart": {
+    "cold": {
+      "status": "CONNECTED_SEWING",
+      "loss": 27,
+      "caps": [
+        26,
+        26,
+        27,
+        27
+      ],
+      "decisions": 1400,
+      "replayed": 0,
+      "used_witness": false
+    },
+    "witness": {
+      "status": "CONNECTED_SEWING",
+      "loss": 27,
+      "caps": [
+        26,
+        26
+      ],
+      "decisions": 1215,
+      "replayed": 0,
+      "used_witness": true
+    },
+    "cuts": {
+      "status": "CONNECTED_SEWING",
+      "loss": 27,
+      "caps": [
+        26,
+        27,
+        27
+      ],
+      "decisions": 1324,
+      "replayed": 56,
+      "used_witness": false
+    },
+    "both": {
+      "status": "CONNECTED_SEWING",
+      "loss": 27,
+      "caps": [
+        26
+      ],
+      "decisions": 777,
+      "replayed": 56,
+      "used_witness": true
+    }
+  },
+  "python315_full_contact_reopen": {
+    "cap": 37,
+    "status": "CONNECTED_SEWING",
+    "certified_loss_lower_bound": 37,
+    "saved_pairing_revalidated": true,
+    "loss": 37,
+    "genus": 28,
+    "rounds": [],
+    "verified_geographic_departures": 194,
+    "verified_contact_departures": 985
   }
 }

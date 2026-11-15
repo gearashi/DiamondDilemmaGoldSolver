@@ -1379,7 +1379,8 @@
         "docs/ROUND35_INTEGER_PUBLIC.md",
         "docs/R35_INTEGER_PUBLIC_REUSE.json",
         "test_r35_integer_command.py"
-      ]
+      ],
+      "fixed_phase_extension": "Physically audited stored full sewings now reopen at zero native decisions only at independently recomputed attainment. Changed models recheck every mate/obligation/strand and rerun geography. The 194-rule connected gap still requires ruling out cap26 before consuming a 27-loss saved witness."
     },
     {
       "id": 76,
@@ -1463,7 +1464,8 @@
         "test_r35_phase_sewing.py"
       ],
       "reopen_if": "An independently checked lower-cost phase with a larger-family residual obstruction justifies expanding the existing sixteen-side ceiling.",
-      "physical_pricing_followup": "Native eight-side channels eliminated 96 of 192 original candidate returns with all 96 positives preserved. Inner decision cost mixed: thirteen-group 1625 to 1485, fifteen-group 2249 to 2838. Full-scope price clauses shrink 160 to 25 pins; complement remains live. 146-phase screen had 48 mate-supported arrivals and no extra under-cap arrival sharing its seed-specific absolute clause. Broad, twelve-side loss-pattern branching reduced 1632 to 135 search nodes on 194 ordinary geographic groups; for 194+19 contacts it certified 34 in 1124 nodes. Finite checks include 768 original/mixed endpoint costs and 3888 partial pin cases. Independent geometric and one-loop thresholds in #80/#81 are explicitly scoped. One held-out phase attains connected minima 26/26/27 on ordinary 129/155/194, and 34/37/37 with 194 ordinary plus 19/117/985 edge-perfect contacts. Every recorded witness in those cases failed the direct geographic lift. The public phase-sewing command handles graph verification, increasing caps, reusable thresholds and certified local exchanges."
+      "physical_pricing_followup": "Native eight-side channels eliminated 96 of 192 original candidate returns with all 96 positives preserved. Inner decision cost mixed: thirteen-group 1625 to 1485, fifteen-group 2249 to 2838. Full-scope price clauses shrink 160 to 25 pins; complement remains live. 146-phase screen had 48 mate-supported arrivals and no extra under-cap arrival sharing its seed-specific absolute clause. Broad, twelve-side loss-pattern branching reduced 1632 to 135 search nodes on 194 ordinary geographic groups; for 194+19 contacts it certified 34 in 1124 nodes. Finite checks include 768 original/mixed endpoint costs and 3888 partial pin cases. Independent geometric and one-loop thresholds in #80/#81 are explicitly scoped. One held-out phase attains connected minima 26/26/27 on ordinary 129/155/194, and 34/37/37 with 194 ordinary plus 19/117/985 edge-perfect contacts. Every recorded witness in those cases failed the direct geographic lift. The public phase-sewing command handles graph verification, increasing caps, reusable thresholds and certified local exchanges.",
+      "verified_sewing_restart": "Measured on the 194-rule gap: cold 1400 decisions; saved validated witness 1215; 56 independently rechecked partial loop cores 1324; both 777. On 194+985 contacts Python 3.15 returned the verified cost37 physical circuit at zero native search rounds. The alternative crossing clauses reduced no native rounds across six scopes and were rejected."
     },
     {
       "id": 80,
