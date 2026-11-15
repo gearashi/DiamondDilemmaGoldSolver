@@ -1,0 +1,39 @@
+{
+  "reference_bonds": 207,
+  "required": 8,
+  "inventory_parity_classes": 89,
+  "disjoint_groups": 10,
+  "rigid_bonds": 192,
+  "flexible_groups": [
+    1,
+    1,
+    6
+  ],
+  "compared_clauses": 431,
+  "unique_clauses": 431,
+  "puzzle_fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "assertion": "Every added clause equals an independently derived local equality-at-optimum obligation.",
+  "contract": "Equality at the certified ten-group lower bound forces every individual contribution to equal its phase minimum. Outside the groups a loss must therefore be an actual phase mismatch. Each disjoint group contributes exactly max(1, number of mismatches).",
+  "coverage": "All 431 emitted clauses were compared, including duplicate multiplicities, all four phase assignments for every physical pair and all clean-group pair exclusions. The parity matrix was reconstructed from all 161 exact unit/zero vectors and direct reciprocal counts.",
+  "command": "python verify_r35_attainment.py --tiles data/tiles.json --output attainment.json",
+  "audit_status": "completed",
+  "manifest_sha256": "8e9c0d9ebeee47a83684449d464870f11129b112906c46eb2a5f1cb6060852ec",
+  "inputs": {
+    "verify_r35_attainment.py": "6e714b880b6ae768e27f92af198c73f24f10f4a56510112ce22b8fce5d6b9c38",
+    "bench_r35_loss_tight.py": "eaf9b50815d5a46c1721fe8e4c01f60a1a71199c4cf9e2d0d66f33bb31d8693a",
+    "docs/R29_INCUMBENT.json": "ca0a089fa219f93713bf3a26ce3191d8090e2410b0072ee9146c90297049f492"
+  },
+  "limitation": "This audit checks the strengthening. The independent CNF refutation and checked cap-19 antecedent are separate artifacts.",
+  "separate_refutation": {
+    "original_groups": 13,
+    "budget": 20,
+    "variables": 9191,
+    "clauses": 19872,
+    "cnf_sha256": "a12801f95f6201d86fb70eaae3503edf0920580066128346e8e69f7477f7c962",
+    "proof_sha256": "0ac6fe1f30ad879ac8d851c8812808e2e2c4363cba9f24146f9df085be58d892",
+    "checker_log_sha256": "494e86562e6f73c6c4d0b06b4680b24edd4498ac2d4db2bc3d325955637019b6",
+    "checker_outcome": "VERIFIED",
+    "resolution_steps": 31101252,
+    "raw_phase_upper": 21
+  }
+}
