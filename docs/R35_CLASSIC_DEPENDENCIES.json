@@ -1,0 +1,62 @@
+{
+  "release_run_id": "20261115T022122247089Z",
+  "device": "NVIDIA GeForce RTX 2060",
+  "jobs": 480,
+  "original_and_independent_counters": [
+    230400,
+    0,
+    480
+  ],
+  "complete_boards": 0,
+  "reactivated_gpu_launches": 0,
+  "host_only": true,
+  "diagnostic_files": 166,
+  "active_files": 32,
+  "reviewed_class": "9ef7d713a75de279771abb29ea7253fa659a5610b49dcc969b7e90cd86ef89c4",
+  "changed_files": [
+    "constraint_work.py"
+  ],
+  "old_verifier_result": "Systematic exhaustion source evidence failed: Systematic source has changed: constraint_work.py",
+  "active_mutations_rejected": [
+    "checkpoint_writer.py",
+    "constraint_explanations.py",
+    "constraint_incremental_hall.py",
+    "constraint_native.c",
+    "constraint_native.py",
+    "constraint_native_search.c",
+    "constraint_parity.py",
+    "constraint_pruning.py",
+    "constraint_symmetry.py",
+    "dfs_counter_reduce.wgsl",
+    "dfs_gpu.py",
+    "dfs_kernels.cu",
+    "dfs_kernels.wgsl",
+    "dfs_webgpu.py",
+    "exact_frontier.py",
+    "exact_source_evidence.py",
+    "geometry.py",
+    "gpu_backends.py",
+    "gpu_cpu_assist.py",
+    "gpu_engine.py",
+    "gpu_reasoning.py",
+    "io_utils.py",
+    "kernels.cu",
+    "r27_structure_filters.py",
+    "r32_gold_bonds.py",
+    "render_board.py",
+    "search_problem.py",
+    "source_image_storage.py",
+    "systematic_evidence.py",
+    "systematic_jobs.py",
+    "systematic_search.py",
+    "validator.py"
+  ],
+  "added_dormant_dependency_accepted": "r35_dormant_probe.py",
+  "different_active_policy_rejected": [
+    "cpu_endgame",
+    "cpu_probe",
+    "proof_probes",
+    "new_unknown_policy"
+  ],
+  "working_tree_active_gold_change_rejected": "Systematic exhaustion source evidence failed: Systematic source has changed outside a reviewed dormant CPU endgame."
+}

@@ -17,21 +17,23 @@ class HeuristicMigrationTests(unittest.TestCase):
     def setUpClass(cls):
         cls.record=json.loads((Path(__file__).parent/'docs/R34_V114_CROSSOVER.json').read_text(encoding='utf-8'))
 
-    def test_v114_nonempty_native_layout_and_uniform_layouts_continue_exactly(self):
-        for layout,headers in self.record['profiles'].items():
-            with self.subTest(layout=layout):
-                p,archive,_=complementary_fixture()
-                saved={**deepcopy(self.record['saved']),**headers}
-                controller=OptimizingCrossover(p,gold_aware=True,max_nodes=1,resume=saved)
-                self.assertEqual(controller._identity('v114-'+layout),headers['binding'])
-                self.assertEqual(controller.stats['recombination_nodes'],1)
-                self.assertTrue(controller.models)
-                for candidate,solution,nodes in self.record['following']:
-                    result=controller.propose(archive)
-                    self.assertEqual(result['candidate'],candidate)
-                    self.assertEqual(result['solution'],solution)
-                    self.assertEqual(controller.stats['recombination_nodes'],nodes)
-                self.assertTrue(p.validate(result['solution'])['valid'])
+    def test_published_nonempty_native_and_uniform_layouts_continue_exactly(self):
+        recent=json.loads((Path(__file__).parent/'docs/R35_V115_CROSSOVER.json').read_bytes())
+        for release,record in (('v114',self.record),('v115',recent)):
+            for layout,headers in record['profiles'].items():
+                with self.subTest(release=release,layout=layout):
+                    p,archive,_=complementary_fixture()
+                    saved={**deepcopy(self.record['saved']),**headers}
+                    controller=OptimizingCrossover(p,gold_aware=True,max_nodes=1,resume=saved)
+                    self.assertEqual(controller._identity(release+'-'+layout),headers['binding'])
+                    self.assertEqual(controller.stats['recombination_nodes'],1)
+                    self.assertTrue(controller.models)
+                    for candidate,solution,nodes in self.record['following']:
+                        result=controller.propose(archive)
+                        self.assertEqual(result['candidate'],candidate)
+                        self.assertEqual(result['solution'],solution)
+                        self.assertEqual(controller.stats['recombination_nodes'],nodes)
+                    self.assertTrue(p.validate(result['solution'])['valid'])
 
     def test_migration_rejects_changed_policy_domain_or_source(self):
         p,_,_=complementary_fixture()

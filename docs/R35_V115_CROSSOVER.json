@@ -1,0 +1,19 @@
+{
+  "revision": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
+  "source_files": 51,
+  "same_state_and_next_steps_as": "R34_V114_CROSSOVER.json",
+  "profiles": {
+    "git": {
+      "binding": "8d4bf7537359b97a559e8b9969f017fe0159208cac2516e207bb5afc7dbb147b",
+      "digest": "2cba3cbd7ea60648b624be1710de752002565a1942fc56b26ae8b8baf47ff7b2"
+    },
+    "lf": {
+      "binding": "8d4bf7537359b97a559e8b9969f017fe0159208cac2516e207bb5afc7dbb147b",
+      "digest": "2cba3cbd7ea60648b624be1710de752002565a1942fc56b26ae8b8baf47ff7b2"
+    },
+    "crlf": {
+      "binding": "bf0f3ca74a3222be6701d4897ec0e7e5df1beeeb4731f2c191477e86264e6935",
+      "digest": "fd674639736b5fcc1ff1673221e7f3583c7adb2ebda071b5e26833c78366e6bb"
+    }
+  }
+}

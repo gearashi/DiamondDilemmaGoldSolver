@@ -1,0 +1,442 @@
+{
+  "original_hall": {
+    "records": 1,
+    "scope": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "queries": {
+      "wide": {
+        "0": {
+          "queries": 1,
+          "fetched": 1,
+          "payload_bytes": 61163,
+          "exact_overlaps": 1
+        },
+        "1": {
+          "queries": 1,
+          "fetched": 1,
+          "payload_bytes": 61163,
+          "exact_overlaps": 1
+        },
+        "2": {
+          "queries": 1,
+          "fetched": 1,
+          "payload_bytes": 61163,
+          "exact_overlaps": 1
+        },
+        "4": {
+          "queries": 1,
+          "fetched": 1,
+          "payload_bytes": 61163,
+          "exact_overlaps": 1
+        }
+      },
+      "whole_frontier": {
+        "0": {
+          "queries": 1,
+          "fetched": 1,
+          "payload_bytes": 61163,
+          "exact_overlaps": 1
+        },
+        "1": {
+          "queries": 1,
+          "fetched": 1,
+          "payload_bytes": 61163,
+          "exact_overlaps": 1
+        },
+        "2": {
+          "queries": 1,
+          "fetched": 1,
+          "payload_bytes": 61163,
+          "exact_overlaps": 1
+        },
+        "4": {
+          "queries": 1,
+          "fetched": 1,
+          "payload_bytes": 61163,
+          "exact_overlaps": 1
+        }
+      },
+      "one_live": {
+        "0": {
+          "queries": 81,
+          "fetched": 81,
+          "payload_bytes": 4954203,
+          "exact_overlaps": 0
+        },
+        "1": {
+          "queries": 81,
+          "fetched": 80,
+          "payload_bytes": 4893040,
+          "exact_overlaps": 0
+        },
+        "2": {
+          "queries": 81,
+          "fetched": 79,
+          "payload_bytes": 4831877,
+          "exact_overlaps": 0
+        },
+        "4": {
+          "queries": 81,
+          "fetched": 77,
+          "payload_bytes": 4709551,
+          "exact_overlaps": 0
+        }
+      },
+      "one_closed": {
+        "0": {
+          "queries": 47,
+          "fetched": 47,
+          "payload_bytes": 2874661,
+          "exact_overlaps": 47
+        },
+        "1": {
+          "queries": 47,
+          "fetched": 47,
+          "payload_bytes": 2874661,
+          "exact_overlaps": 47
+        },
+        "2": {
+          "queries": 47,
+          "fetched": 47,
+          "payload_bytes": 2874661,
+          "exact_overlaps": 47
+        },
+        "4": {
+          "queries": 47,
+          "fetched": 47,
+          "payload_bytes": 2874661,
+          "exact_overlaps": 47
+        }
+      }
+    }
+  },
+  "six_piece_hall": {
+    "records": 19,
+    "scope": "58fce0a7e80105458201a4c3ec1d130ff224ec2a32222aa70ff21f3486155c49",
+    "queries": {
+      "wide": {
+        "0": {
+          "queries": 1,
+          "fetched": 19,
+          "payload_bytes": 9365,
+          "exact_overlaps": 19
+        },
+        "1": {
+          "queries": 1,
+          "fetched": 19,
+          "payload_bytes": 9365,
+          "exact_overlaps": 19
+        },
+        "2": {
+          "queries": 1,
+          "fetched": 19,
+          "payload_bytes": 9365,
+          "exact_overlaps": 19
+        },
+        "4": {
+          "queries": 1,
+          "fetched": 19,
+          "payload_bytes": 9365,
+          "exact_overlaps": 19
+        }
+      },
+      "whole_frontier": {
+        "0": {
+          "queries": 1,
+          "fetched": 19,
+          "payload_bytes": 9365,
+          "exact_overlaps": 19
+        },
+        "1": {
+          "queries": 1,
+          "fetched": 19,
+          "payload_bytes": 9365,
+          "exact_overlaps": 19
+        },
+        "2": {
+          "queries": 1,
+          "fetched": 19,
+          "payload_bytes": 9365,
+          "exact_overlaps": 19
+        },
+        "4": {
+          "queries": 1,
+          "fetched": 19,
+          "payload_bytes": 9365,
+          "exact_overlaps": 19
+        }
+      },
+      "one_live": {
+        "0": {
+          "queries": 59,
+          "fetched": 1121,
+          "payload_bytes": 552535,
+          "exact_overlaps": 274
+        },
+        "1": {
+          "queries": 59,
+          "fetched": 641,
+          "payload_bytes": 316526,
+          "exact_overlaps": 274
+        },
+        "2": {
+          "queries": 59,
+          "fetched": 393,
+          "payload_bytes": 194609,
+          "exact_overlaps": 274
+        },
+        "4": {
+          "queries": 59,
+          "fetched": 274,
+          "payload_bytes": 136157,
+          "exact_overlaps": 274
+        }
+      },
+      "one_closed": {
+        "0": {
+          "queries": 69,
+          "fetched": 1311,
+          "payload_bytes": 646185,
+          "exact_overlaps": 454
+        },
+        "1": {
+          "queries": 69,
+          "fetched": 767,
+          "payload_bytes": 378642,
+          "exact_overlaps": 454
+        },
+        "2": {
+          "queries": 69,
+          "fetched": 551,
+          "payload_bytes": 272367,
+          "exact_overlaps": 454
+        },
+        "4": {
+          "queries": 69,
+          "fetched": 454,
+          "payload_bytes": 224795,
+          "exact_overlaps": 454
+        }
+      }
+    }
+  },
+  "word_boundary_hall": {
+    "records": 2,
+    "scope": "aa813fb0fb32abd577ee87c78cc000aef16d7f0dd313fc35d69de830fee3ee23",
+    "queries": {
+      "wide": {
+        "0": {
+          "queries": 1,
+          "fetched": 2,
+          "payload_bytes": 1390,
+          "exact_overlaps": 2
+        },
+        "1": {
+          "queries": 1,
+          "fetched": 2,
+          "payload_bytes": 1390,
+          "exact_overlaps": 2
+        },
+        "2": {
+          "queries": 1,
+          "fetched": 2,
+          "payload_bytes": 1390,
+          "exact_overlaps": 2
+        },
+        "4": {
+          "queries": 1,
+          "fetched": 2,
+          "payload_bytes": 1390,
+          "exact_overlaps": 2
+        }
+      },
+      "whole_frontier": {
+        "0": {
+          "queries": 1,
+          "fetched": 2,
+          "payload_bytes": 1390,
+          "exact_overlaps": 2
+        },
+        "1": {
+          "queries": 1,
+          "fetched": 2,
+          "payload_bytes": 1390,
+          "exact_overlaps": 2
+        },
+        "2": {
+          "queries": 1,
+          "fetched": 2,
+          "payload_bytes": 1390,
+          "exact_overlaps": 2
+        },
+        "4": {
+          "queries": 1,
+          "fetched": 2,
+          "payload_bytes": 1390,
+          "exact_overlaps": 2
+        }
+      },
+      "one_live": {
+        "0": {
+          "queries": 18,
+          "fetched": 36,
+          "payload_bytes": 25020,
+          "exact_overlaps": 0
+        },
+        "1": {
+          "queries": 18,
+          "fetched": 18,
+          "payload_bytes": 12510,
+          "exact_overlaps": 0
+        },
+        "2": {
+          "queries": 18,
+          "fetched": 0,
+          "payload_bytes": 0,
+          "exact_overlaps": 0
+        },
+        "4": {
+          "queries": 18,
+          "fetched": 0,
+          "payload_bytes": 0,
+          "exact_overlaps": 0
+        }
+      },
+      "one_closed": {
+        "0": {
+          "queries": 18,
+          "fetched": 36,
+          "payload_bytes": 25020,
+          "exact_overlaps": 18
+        },
+        "1": {
+          "queries": 18,
+          "fetched": 18,
+          "payload_bytes": 12510,
+          "exact_overlaps": 18
+        },
+        "2": {
+          "queries": 18,
+          "fetched": 18,
+          "payload_bytes": 12510,
+          "exact_overlaps": 18
+        },
+        "4": {
+          "queries": 18,
+          "fetched": 18,
+          "payload_bytes": 12510,
+          "exact_overlaps": 18
+        }
+      }
+    }
+  },
+  "fixed_scope": {
+    "records": 64,
+    "scope": "bb5ef52598843d1e1039fe467661959c1c221aa6f3181f8a3d9e227eb098bb54",
+    "queries": {
+      "wide": {
+        "0": {
+          "queries": 1,
+          "fetched": 64,
+          "payload_bytes": 2084870,
+          "exact_overlaps": 64
+        },
+        "1": {
+          "queries": 1,
+          "fetched": 64,
+          "payload_bytes": 2084870,
+          "exact_overlaps": 64
+        },
+        "2": {
+          "queries": 1,
+          "fetched": 64,
+          "payload_bytes": 2084870,
+          "exact_overlaps": 64
+        },
+        "4": {
+          "queries": 1,
+          "fetched": 64,
+          "payload_bytes": 2084870,
+          "exact_overlaps": 64
+        }
+      },
+      "whole_frontier": {
+        "0": {
+          "queries": 1,
+          "fetched": 64,
+          "payload_bytes": 2084870,
+          "exact_overlaps": 64
+        },
+        "1": {
+          "queries": 1,
+          "fetched": 64,
+          "payload_bytes": 2084870,
+          "exact_overlaps": 64
+        },
+        "2": {
+          "queries": 1,
+          "fetched": 64,
+          "payload_bytes": 2084870,
+          "exact_overlaps": 64
+        },
+        "4": {
+          "queries": 1,
+          "fetched": 64,
+          "payload_bytes": 2084870,
+          "exact_overlaps": 64
+        }
+      },
+      "one_box": {
+        "0": {
+          "queries": 128,
+          "fetched": 8192,
+          "payload_bytes": 266863360,
+          "exact_overlaps": 64
+        },
+        "1": {
+          "queries": 128,
+          "fetched": 2355,
+          "payload_bytes": 76730023,
+          "exact_overlaps": 64
+        },
+        "2": {
+          "queries": 128,
+          "fetched": 721,
+          "payload_bytes": 23494817,
+          "exact_overlaps": 64
+        },
+        "4": {
+          "queries": 128,
+          "fetched": 64,
+          "payload_bytes": 2084870,
+          "exact_overlaps": 64
+        }
+      },
+      "eight_box": {
+        "0": {
+          "queries": 16,
+          "fetched": 1024,
+          "payload_bytes": 33357920,
+          "exact_overlaps": 64
+        },
+        "1": {
+          "queries": 16,
+          "fetched": 911,
+          "payload_bytes": 29676097,
+          "exact_overlaps": 64
+        },
+        "2": {
+          "queries": 16,
+          "fetched": 754,
+          "payload_bytes": 24561589,
+          "exact_overlaps": 64
+        },
+        "4": {
+          "queries": 16,
+          "fetched": 603,
+          "payload_bytes": 19639231,
+          "exact_overlaps": 64
+        }
+      }
+    }
+  }
+}

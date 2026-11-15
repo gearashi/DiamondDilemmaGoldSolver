@@ -122,10 +122,16 @@ _R34_HEURISTIC = {
                           '77a82d49d811d97476e8cb4a707f50804abc79a7f8907279e1eba6d7c6ff4cae',
                           '1daaf2a03f103f2542fb149bd26769499097cc63126c72a910df33d4414c8263'),
 }
+# Only digest() from this file participates in the historical heuristic controller.
+_R35_HEURISTIC = {
+    'constraint_work.py': ('24f703932422baa555a180cc42fa1032dbb6dd2ddfbda7fe5f467c13f104eef6',
+                           'a7804dfb62f7585ebe0ef578a86968646c0bc0ebdca093d811452832d7a8f48c',
+                           'd04c92c4d207ad17f095554f3e163f105c4a31ceea716491194fe61bfbb638c5'),
+}
 _R34_OPTIONAL = {
     'r34_coverage_index.py': 'a75b25eb32f5213a709da2b4a3b909a520f405c4d2751ea1fc5e906b9df51efa',
 }
-_PROFILES = ('v114-git','v114-lf','v114-crlf','lf','windows','v112-lf','v112-crlf')
+_PROFILES = ('v115-git','v115-lf','v115-crlf','v114-git','v114-lf','v114-crlf','lf','windows','v112-lf','v112-crlf')
 
 
 # Bind each historical text image to the exact current image reviewed here.
@@ -141,7 +147,7 @@ def _variants(name,current):
     variants={sha256(data).hexdigest() for data in (raw,lf,crlf)}
     if current not in variants:
         return ()
-    for reviewed in (_R34_HEURISTIC, _R32_HEURISTIC):
+    for reviewed in (_R35_HEURISTIC, _R34_HEURISTIC, _R32_HEURISTIC):
         heuristic = reviewed.get(name)
         if heuristic and heuristic[0] in variants:
             variants.update(heuristic[1:])
@@ -188,17 +194,18 @@ def legacy_sources(current,profile):
         raise ValueError('Unknown release source layout.')
     result={}
     for name,sha in current.items():
-        if name in _R34_OPTIONAL or name in _R32_OPTIONAL and not profile.startswith('v114-'):
+        if (name in _R34_OPTIONAL and not profile.startswith('v115-')
+                or name in _R32_OPTIONAL and not profile.startswith(('v114-','v115-'))):
             if not _old_extra(name,sha):
                 return None
             continue
-        if profile.startswith(('v112-','v114-')):
+        if profile.startswith(('v112-','v114-','v115-')):
             variants = _variants(name,sha)
             if not variants:
                 return None
             # The v1.14 Git source/archive has LF Python and a CRLF native C file.
             crlf = profile.endswith('-crlf') or profile=='v114-git' and name=='constraint_native.c'
-            row = _R34_HEURISTIC.get(name)
+            row = (_R35_HEURISTIC if profile.startswith('v115-') else _R34_HEURISTIC).get(name)
             if row is None and profile.startswith('v112-'):
                 row = _R32_HEURISTIC.get(name)
             if row:

@@ -135,15 +135,17 @@ def verify_origin(run, origin, binding, current, scope):
     config = read(directory/'run-config.json')
     source = config['source_sha256']
     if (config.get('run_id') != origin or config.get('verified_coverage_origin') is not True
-            or origin_binding(source, scope) != binding or set(source) != set(current)
-            or source['tiles.json'] != current['tiles.json']):
+            or origin_binding(source, scope) != binding
+            or source.get('tiles.json') != current.get('tiles.json') or 'tiles.json' not in source):
         raise ValueError('Systematic checkpoint source or objective binding differs.')
     normalized = archived_sources(directory, source)
     if source != current:
-        for name, value in normalized.items():
-            file = Path(__file__).resolve().parent/name
-            if hashlib.sha256(file.read_bytes().replace(b'\r\n', b'\n')).hexdigest() != value:
-                raise ValueError('Systematic source has changed: '+name)
+        current_root = Path(__file__).resolve().parent
+        live = archived_sources(current_root,{k:v for k,v in current.items() if k != 'tiles.json'})
+        if live != normalized:
+            from r35_classic_sources import compatible
+            if not compatible(directory,normalized,current_root,live,scope.get('gpu_policy')):
+                raise ValueError('Systematic source has changed outside a reviewed dormant CPU endgame.')
     return source
 
 

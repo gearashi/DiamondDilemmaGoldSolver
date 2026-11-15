@@ -400,7 +400,16 @@
       "source_id": 20,
       "title": "Maintain positive swap candidate lists across small physical changes",
       "proposal_and_validation": "r31_fresh.simultaneous_swaps updates price rows, but reconstructs full gain+gain.T, legal filters and sorted positive pairs each invocation. Retain candidates, best rotations, stable tie order and chosen pack inputs. Invalidate changed donors/rotations, affected geography and changes to the active allowed cells or protection. Deliberately consider unchanged pairs losing eligibility after a nearby change. Count recomputed pair entries after sparse moves and compare every resulting gain/board to complete reconstruction. Use high-churn controls to decide where full rebuild wins.",
-      "state": "open"
+      "state": "retain transparent selective maintenance",
+      "mechanism": "REPAIR-SWAP-CATALOG",
+      "measurement": "Four original 320-round trajectories, 13,178,880 available pairs, 1,699,827 reconsidered (1,737,456 with 60% dense fallback). All 16,376 positive rows matched the complete price/rotation/tie oracle. Standard/separator/signed CP avoided 289/505/172 nontrivial exact graph packings across twelve matched sustained runs. All frozen boards and logical work receipts matched.",
+      "closure_reason": "Maintain affected rows and exact ordered graph keys automatically, bounded by 32 keys/256 KiB. Unrelated fresh boards correctly require complete repricing. Existing checkpoints rebuild the volatile state on their next call.",
+      "reopen_trigger": "Measured material cross-process recurrence beyond the current volatile catalog or a new physical dependency.",
+      "evidence": [
+        "docs/ROUND35_REPAIR.md",
+        "docs/R35_SWAP_CATALOG.json",
+        "test_r35_swap_catalog.py"
+      ]
     },
     {
       "id": 36,
@@ -749,7 +758,12 @@
       "source_id": 1,
       "title": "Index exact coverage by cells that distinguish pending work",
       "proposal_and_validation": "For shared exact coverage, compare the current scope-only SQL index with conflict filtering on highly restricted cell masks before decoding whole 160-cell records. Screen a selective axis index and cheap bound-based skip under target roots and pending frontier boxes. Include symbolic and ordinary subtraction, old ledgers, concurrent inserts, deletes, corrupt records and no-selectivity controls. Compare certified work remaining and database reads/bytes.",
-      "state": "open"
+      "state": "testing actual coverage lookups",
+      "measurement": "Original 64-proof, 128-query screen: four axes select 64/8192 rows and 2,084,870/266,863,360 bytes. Wide queries have no selectivity.",
+      "evidence": [
+        "docs/R35_COVERAGE_SELECTIVITY.json"
+      ],
+      "next_step": "Evaluate checked cache or persisted lookup, exact residuals, corruption, snapshots and ordinary/symbolic consumers."
     },
     {
       "id": 66,
@@ -878,7 +892,15 @@
       "source_id": 7,
       "title": "Bind exact completion reuse to active proof dependencies",
       "proposal_and_validation": "Scope-bound source archive compatibility: the current classic closure reaches 166 Python/shader/native sources for both backends, without benchmark/test leaves. Measure actual historical cases where a change solely to a dormant policy/backend/transitive helper prevents otherwise identical completion reuse. Only introduce narrower reviewed proof-dependency identities if outcomes are matched independently and every active prover/kernel/validator mutation still rejects; preserve all diagnostic source snapshots. Contrast with the existing reviewed heuristic-only historical aliases.",
-      "state": "open"
+      "state": "testing backend and CPU scope extensions",
+      "mechanism": "Source-bound classic terminal reuse after dormant-only changes; independent heuristic historical resume audit.",
+      "measurement": "Real released 480-job run and independent completion agree on 230400 orientation tries; host reopens with zero launches. All 32 active-file mutations rejected.",
+      "evidence": [
+        "docs/ROUND35_CLASSIC_SOURCES.md",
+        "docs/R35_CLASSIC_DEPENDENCIES.json",
+        "docs/R35_V115_CROSSOVER.json"
+      ],
+      "next_step": "Test actual backend-contribution tracking, CPU probe scope and repin only final reviewed active image."
     },
     {
       "id": 72,
