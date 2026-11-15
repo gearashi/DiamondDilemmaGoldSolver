@@ -76,7 +76,7 @@ def _negative_page(db, scope, errors, start, stop):
     return inserted
 
 
-def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False, all_groups=False):
+def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False, all_groups=False, sphere_euler=False, mate_support=False):
     """Save completed disjoint prefix ranges together with their negative result."""
     if page<1 or seconds<0:raise ValueError('Expected positive page size and nonnegative duration')
     ref = frozenset(ref)
@@ -93,6 +93,12 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     charged_groups=groups if aggregate else packed
     if aggregate:
         identity=[*identity,'all-verified-groups-v1',sorted(sorted(g) for g in groups)]
+    conditions=None
+    if sphere_euler or mate_support:
+        if not refine_integer:raise ValueError('Extra signed physical conditions require integer refinement.')
+        from r35_signed_conditions import SignedConditions
+        conditions=SignedConditions(problem,euler=sphere_euler,mates=mate_support)
+        identity=[*identity,'signed-physical-conditions-v1',sphere_euler,mate_support]
     scope = digest([*identity,upper])
     # A plain negative page excludes every integer-feasible pattern inside it.
     # A plain hit can coexist with further candidates in the same prefix.
@@ -113,9 +119,9 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     def get_filter():
         nonlocal pattern_filter, excludes
         if pattern_filter is None:
-            if aggregate:
+            if aggregate or conditions is not None:
                 from r35_overlap_loss import OverlapPattern
-                pattern_filter=OverlapPattern(problem,packed,groups,required,outside,upper,refine_integer,work)
+                pattern_filter=OverlapPattern(problem,packed,charged_groups,required,outside,upper,refine_integer,work,conditions)
             else:
                 from r33_gold_refine import IntegerCoreStore, make_integer_filter
                 pattern_filter = make_integer_filter(problem,ref,packed,required,outside,upper,
@@ -155,6 +161,7 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
                     relaxation="all_group_signed_inventory" if aggregate else "disjoint_group_signed_inventory")
     public_hits={}
     for phase in REFERENCE_PHASES:
+        if conditions is not None and not conditions.accepts(phase):continue
         positive=published_hit(problem,ref,charged_groups,required,outside,packed_identity,upper,refine_integer,phase)
         if positive is not None:
             if aggregate:
@@ -182,7 +189,7 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
                 return dict(json.loads(known[0]), reused=True, pages=pages, work=work)
             if witness_hits is None:
                 from r35_loss_witness import checked_hits
-                witness_hits = checked_hits(db,identity_key,problem,ref,charged_groups,required,outside,upper,refine_integer)
+                witness_hits = checked_hits(db,identity_key,problem,ref,charged_groups,required,outside,upper,refine_integer,conditions)
                 for layer,positive in public_hits.items():
                     witness_hits.setdefault(layer,positive)
             if errors in witness_hits:
@@ -273,7 +280,7 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
                     with leases.computing(claim):
                         options = {'accept_errors':accept_errors, 'reject_before_joint':reject_before_joint,
                                    'verified_cores':lambda: getattr(pattern_filter,'verified',())} if refine_integer else {}
-                        if aggregate:
+                        if aggregate or conditions is not None:
                             options={'accept_errors':accept_errors,
                                      'accept_status':('INTEGER_RELAXATION_FEASIBLE' if refine_integer else 'PHASE_RELAXATION_FEASIBLE')}
                         out=query.indexed(upper,errors,remaining,start=current,stop=end,**options)
@@ -325,6 +332,8 @@ def main():
     parser.add_argument('--page',type=int,default=8192)
     parser.add_argument('--refine-integer',action='store_true',help='In loss mode, check signed integer inventories before accepting a phase pattern (wide phase images use OR-Tools).')
     parser.add_argument('--independent-native',action='store_true',help='In integer-bound, rerun the native all-pattern solver even for an independently checked published result.')
+    parser.add_argument('--sphere-euler',action='store_true',help='Require the spherical one-loop Euler equation in signed integer search.')
+    parser.add_argument('--mate-support',action='store_true',help='Require signed physical mates and perfect matchings in reciprocal classes of up to sixteen sides.')
     parser.add_argument('--excess-charges',action='store_true',help='In integer-bound, subtract disjoint compulsory departures before charging the remaining losses.')
     parser.add_argument('--all-groups',action='store_true',help='In loss or integer-bound, enforce every verified physical departure group, including overlaps.')
     parser.add_argument('--stage',choices=('xor','integer','euler','mating'),default='integer')
@@ -334,6 +343,8 @@ def main():
     args=parser.parse_args()
     if args.seconds<0 or args.limit<0 or args.page<1 or args.upper<0 or (args.mode not in ('loss','integer-bound') and args.seconds==0):
         parser.error('Invalid budget')
+    if (args.sphere_euler or args.mate_support) and not (args.mode=='integer-bound' or args.mode=='loss' and args.refine_integer):
+        parser.error('Signed physical conditions require integer-bound or loss --refine-integer')
     if args.independent_native and args.mode!='integer-bound':parser.error('--independent-native requires integer-bound')
     if args.excess_charges and args.mode!='integer-bound':parser.error('--excess-charges requires integer-bound')
     if args.all_groups and args.mode not in ('loss','integer-bound'):parser.error('--all-groups requires loss or integer-bound')
@@ -373,14 +384,29 @@ def main():
             if case.keys()-{'codes'}:parser.error('loss accepts an unrestricted physical reference only')
             indices=None if args.outside is None else [args.outside]
             out=run_syndrome(p,ref,groups,args.upper,indices,args.database,args.seconds,args.page,
-                             refine_integer=args.refine_integer,all_groups=args.all_groups)
+                             refine_integer=args.refine_integer,all_groups=args.all_groups,sphere_euler=args.sphere_euler,mate_support=args.mate_support)
         elif args.mode=='integer-bound':
             if case.keys()-{'codes'} or args.outside is not None:
                 parser.error('integer-bound solves every outside pattern of one unrestricted reference')
             from r35_loss_bound import global_integer
             packed, mandatory, outside = OutsideSyndromes.layout(ref, groups, rules.required)
             extra_groups = [g for g in groups if g not in packed] if args.all_groups else []
-            out = global_integer(p,ref,packed,mandatory,outside,args.upper,args.seconds,additional_groups=extra_groups,excess=args.excess_charges,independent_native=args.independent_native)
+            from r35_geographic_replay import geographic_departures
+            geographic_groups = geographic_departures(p, ref, mandatory, geographic_hints)
+            if any(not group for group in geographic_groups):
+                out = dict(status='INFEASIBLE', cap=args.upper, all_outside_layers=True,
+                           work={'decisions': 0, 'required_geographic_conflict': 1})
+            else:
+                conditions=None
+                if args.sphere_euler or args.mate_support:
+                    from r35_signed_conditions import SignedConditions
+                    conditions=SignedConditions(p,euler=args.sphere_euler,mates=args.mate_support)
+                out = global_integer(p,ref,packed,mandatory,outside,args.upper,args.seconds,
+                                         additional_groups=[*extra_groups, *geographic_groups],
+                                         excess=args.excess_charges,independent_native=args.independent_native,conditions=conditions)
+            if geographic_groups:
+                out.update(relaxation='signed_inventory_with_geographic_departures',
+                           verified_geographic_departures=len(geographic_groups))
         elif args.mode=='master':
             out=master(p,ref,cert,args.upper,args.seconds,req,forbid,ds)
         elif args.mode=='geographic':
@@ -429,6 +455,8 @@ def main():
             cert.add(out_rows)
             out=dict(clauses=cert.clauses(),candidate_queries=visits)
     out['fingerprint']=p.fingerprint
+    if args.sphere_euler or args.mate_support:
+        out['signed_conditions']=dict(sphere_euler=args.sphere_euler,mate_support=args.mate_support)
     message=json.dumps(out,indent=2)
     if args.output:Path(args.output).write_text(message+'\n',encoding='utf-8')
     print(message)

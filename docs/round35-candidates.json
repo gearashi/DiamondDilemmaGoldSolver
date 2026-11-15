@@ -1410,6 +1410,24 @@
       "mechanism": "GPU-BOUNDED-PHYSICAL-LANE-DISPATCH",
       "state": "testing",
       "proposal_and_validation": "Actual Windows Display event 4101 during a dense 131072-lane Direct3D MRV search. Bound the width and work of each dispatch, skip idle pages by synchronized device state, and let public Stop or pending Gold save exact partially advanced cursors. Compare against single-launch physical fields on safe configurations, resume a partially completed interval, test static and dynamic original at 131072, and record device recovery and search overhead."
+    },
+    {
+      "id": 79,
+      "area": "Physical signed matching",
+      "source_id": "fresh-board follow-up to #15 and #77",
+      "title": "Reject phase-only reference-loss assignments without a complete physical mating",
+      "mechanism": "GLOBAL-PHASE-PHYSICAL-MATE-SUPPORT",
+      "state": "testing",
+      "proposal_and_validation": "Check every fixed phase for at least one legal mate per physical side and joint Hall support by signed class. Test both physically repriced low-loss phases, accepted abstract tours, positive and deficient cases, then compare ranked/global work with proper scope and independent replay."
+    },
+    {
+      "id": 80,
+      "area": "Geographic physical bond loss",
+      "source_id": "fresh geographic feedback after #73 and #76",
+      "title": "Project checked geographic obstructions into the signed loss search",
+      "mechanism": "GEOGRAPHIC-CORE-TO-SIGNED-LOSS",
+      "state": "testing",
+      "proposal_and_validation": "Propagate original target-cell poses along retained named bonds and the compulsory nonreference mate. Derive reusable loss clauses only with independent replay and exact assumptions. Test reduced obstructions, all alternative minimum losses of both near-reference phases, other near loss profiles and a positive geographic control. Compare previously allowed fixed phases and effects on unpinned signed loss work."
     }
   ],
   "priorities": [
@@ -1428,7 +1446,7 @@
   ],
   "baseline": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
   "worktree": "C:/DiamondDilemmaGoldSolver/round35",
-  "total_candidates": 78,
+  "total_candidates": 80,
   "first_parallel_groups": [
     [
       1

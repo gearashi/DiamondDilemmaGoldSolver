@@ -61,3 +61,19 @@ def replay_for(problem):
     if cache is None or cache.root!=tuple(domain_bits(problem)):
         problem._geographic_replay=GeographicReplay(problem)
     return problem._geographic_replay
+
+
+def geographic_departures(problem, reference, required, hints):
+    """A replayed obstruction loses a reference bond whenever its other bonds are required."""
+    if not hints:
+        return ()
+    replay = replay_for(problem)
+    required = frozenset(required)
+    allowed = set(reference) | required
+    candidates = []
+    for hint in hints:
+        core = replay.normalize(hint)
+        if core and core <= allowed:
+            candidates.append(core)
+    checked = replay.check(replay.root, candidates)
+    return tuple(sorted({core - required for core in checked}, key=lambda row: (len(row), sorted(row))))
