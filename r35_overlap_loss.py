@@ -30,6 +30,10 @@ class OverlapPrices:
     def _minimum(self, remaining):
         if not remaining:
             return 0
+        if remaining.bit_count()>=64:
+            from r35_cover_search import reduced_cover
+            rows=[self.options[i] for i in range(len(self.options)) if remaining>>i&1]
+            return len(reduced_cover(rows)) if all(rows) else inf
         i=min((j for j in range(len(self.options)) if remaining>>j & 1),key=lambda j:len(self.options[j]))
         return min((1+self.more(remaining & ~hit) for hit in self.options[i]),default=inf)
 

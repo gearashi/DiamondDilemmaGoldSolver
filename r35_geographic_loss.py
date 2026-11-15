@@ -23,7 +23,9 @@ def certified_reference(problem, codes=None):
     packed,required,_=OutsideSyndromes.layout(reference,groups,inventory(problem).required)
     identity=digest([3,problem.fingerprint,sorted(reference),sorted(required),[sorted(g) for g in packed]])
     if identity!=REFERENCE_SCOPE:return None
-    return frozenset(reference),len(reference)-checked_lower_bound(identity,groups)
+    from r35_contact_certificate import checked_contact_bound
+    loss=max(checked_lower_bound(identity,groups),checked_contact_bound(problem,reference,required,groups))
+    return frozenset(reference),len(reference)-loss
 
 
 def retained_bound(problem,domains,reference,limit,required=()):

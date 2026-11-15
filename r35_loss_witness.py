@@ -29,6 +29,9 @@ def cover_missing(groups, required, failed):
     unresolved = [group-required for group in groups if not group&failed]
     if not unresolved:
         return frozenset()
+    if len(unresolved)>=64:
+        from r35_cover_search import reduced_cover
+        return reduced_cover(unresolved)
     occurrences = {}
     for i, group in enumerate(unresolved):
         for bond in group:

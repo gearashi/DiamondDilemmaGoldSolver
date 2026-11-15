@@ -56,7 +56,7 @@ class GeographicLossTests(unittest.TestCase):
         path=next((p for p in map(Path,('data/tiles.json','../data/tiles.json')) if p.is_file()),None)
         if not path:self.skipTest('Original pieces unavailable.')
         p=SearchProblem(read_json(path));ref,limit=certified_reference(p)
-        self.assertEqual((len(ref),limit),(207,186))
+        self.assertEqual((len(ref),limit),(207,182))
         codes=read_json('docs/R29_INCUMBENT.json')['codes'];wrong=codes.copy()
         wrong[0],wrong[1]=wrong[1],wrong[0]
         self.assertIsNone(certified_reference(p,wrong))

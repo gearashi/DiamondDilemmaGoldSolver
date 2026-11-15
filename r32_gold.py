@@ -76,22 +76,28 @@ def _negative_page(db, scope, errors, start, stop):
     return inserted
 
 
-def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False, all_groups=False, sphere_euler=False, mate_support=False, mate_cost=False, geographic_hints=()):
+def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False, all_groups=False, sphere_euler=False, mate_support=False, mate_cost=False, geographic_hints=(), contact_hints=()):
     """Replay optional geometric evidence before handing it to the ranked loss search."""
     from r35_geographic_replay import geographic_departures
     ref=frozenset(ref)
     geo=geographic_departures(problem,ref,inventory(problem).required,geographic_hints) if geographic_hints else ()
+    from r35_induced_contacts import contact_departures
+    contact=contact_departures(problem,ref,inventory(problem).required,contact_hints) if contact_hints else ()
     result=_ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refine_integer,
-                        all_groups,sphere_euler,mate_support,mate_cost,geo)
+                        all_groups,sphere_euler,mate_support,mate_cost,tuple(dict.fromkeys((*geo,*contact))),contacts_present=bool(contact))
     if geo:
         result.update(verified_geographic_departures=len(geo),
                       relaxation=('signed_inventory_with_geographic_departures' if refine_integer
                                   else 'parity_with_geographic_departures'))
+    if contact:
+        result.update(verified_edge_perfect_departures=len(contact),
+                      relaxation=('signed_inventory_with_edge_perfect_departures' if refine_integer
+                                  else 'parity_with_edge_perfect_departures'))
     return result
 
 
 def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refine_integer,
-                 all_groups,sphere_euler,mate_support,mate_cost,geo):
+                 all_groups,sphere_euler,mate_support,mate_cost,geo,*,contacts_present=False):
     """Save completed disjoint prefix ranges together with their negative result."""
     if page<1 or seconds<0:raise ValueError('Expected positive page size and nonnegative duration')
     ref = frozenset(ref)
@@ -143,6 +149,13 @@ def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refi
         geo_plain=digest([*identity,upper])
         scope=digest([geo_plain,'integer-pattern-v1']) if refine_integer else geo_plain
         read_scopes=tuple(dict.fromkeys((scope,geo_plain,*read_scopes)))
+    if contacts_present:
+        from r35_contact_certificate import checked_contact_bound
+        contact_bound=checked_contact_bound(problem,ref,required,groups,charged=charged_groups)
+        if upper<contact_bound:
+            return dict(status='INFEASIBLE',loss_budget=upper,checked_layers=indices,
+                        all_outside_layers=all_layers_requested,certified_loss_lower_bound=contact_bound,
+                        work={'decisions':0,'contact_weight_certificate':1})
     if cheaper_price_scopes:
         if geo:
             geographic_tag=['verified-geographic-departures-v1',sorted(sorted(g) for g in geo)]
@@ -421,11 +434,12 @@ def main():
                  single_bond_loops=sorted(rules.loops))
     else:
         codes=case['codes'] if 'codes' in case else read_json(args.center)['codes']
-        extra=[];geographic_hints=[]
+        extra=[];geographic_hints=[];contact_hints=[]
         for file in args.claims:
             hints=read_json(file)
             extra.extend(hints.get('clauses',()))
             geographic_hints.extend(hints.get('geographic_cores',()))
+            contact_hints.extend(hints.get('edge_perfect_cores',()))
         ref,cert,groups=reference_groups(p,codes,extra)
         for pair in [*case.get('required',[]),*case.get('forbidden',[])]:
             if (not isinstance(pair,(list,tuple)) or len(pair)!=2 or
@@ -441,7 +455,7 @@ def main():
             indices=None if args.outside is None else [args.outside]
             out=run_syndrome(p,ref,groups,args.upper,indices,args.database,args.seconds,args.page,
                              refine_integer=args.refine_integer,all_groups=args.all_groups,sphere_euler=args.sphere_euler,
-                             mate_support=args.mate_support,mate_cost=args.mate_cost,geographic_hints=geographic_hints)
+                             mate_support=args.mate_support,mate_cost=args.mate_cost,geographic_hints=geographic_hints,contact_hints=contact_hints)
         elif args.mode=='integer-bound':
             if case.keys()-{'codes'} or args.outside is not None:
                 parser.error('integer-bound solves every outside pattern of one unrestricted reference')
@@ -450,7 +464,19 @@ def main():
             extra_groups = [g for g in groups if g not in packed] if args.all_groups else []
             from r35_geographic_replay import geographic_departures
             geographic_groups = geographic_departures(p, ref, mandatory, geographic_hints)
-            if any(not group for group in geographic_groups):
+            from r35_induced_contacts import contact_departures
+            contact_groups=contact_departures(p,ref,mandatory,contact_hints)
+            conditional_groups=tuple(dict.fromkeys((*geographic_groups,*contact_groups)))
+            contact_bound=0
+            if contact_groups and not args.independent_native:
+                from r35_contact_certificate import checked_contact_bound
+                contact_bound=checked_contact_bound(p,ref,mandatory,groups,
+                    charged=[*packed,*extra_groups,*conditional_groups])
+            if contact_bound and args.upper<contact_bound:
+                out=dict(status='INFEASIBLE',cap=args.upper,all_outside_layers=True,
+                         certified_loss_lower_bound=contact_bound,
+                         work={'decisions':0,'contact_weight_certificate':1})
+            elif any(not group for group in conditional_groups):
                 out = dict(status='INFEASIBLE', cap=args.upper, all_outside_layers=True,
                            work={'decisions': 0, 'required_geographic_conflict': 1})
             else:
@@ -459,11 +485,14 @@ def main():
                     from r35_signed_conditions import SignedConditions
                     conditions=SignedConditions(p,euler=args.sphere_euler,mates=args.mate_support,mate_cost=args.mate_cost)
                 out = global_integer(p,ref,packed,mandatory,outside,args.upper,args.seconds,
-                                         additional_groups=[*extra_groups, *geographic_groups],
+                                         additional_groups=[*extra_groups, *conditional_groups],
                                          excess=args.excess_charges,independent_native=args.independent_native,conditions=conditions)
             if geographic_groups:
                 out.update(relaxation='signed_inventory_with_geographic_departures',
                            verified_geographic_departures=len(geographic_groups))
+            if contact_groups:
+                out.update(relaxation='signed_inventory_with_edge_perfect_departures',
+                           verified_edge_perfect_departures=len(contact_groups))
         elif args.mode=='master':
             out=master(p,ref,cert,args.upper,args.seconds,req,forbid,ds)
         elif args.mode=='geographic':

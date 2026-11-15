@@ -407,7 +407,7 @@ class GoldMatching:
 
 def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=(), matching=True,
            geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=(),
-           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None, joint_poses=False, reference_bound=False, mate_correlations=False):
+           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), edge_perfect_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None, joint_poses=False, reference_bound=False, mate_correlations=False):
     if seconds<=0 or max_rounds<1 or (geography and not matching):
         raise ValueError("Invalid Gold solve budget or mode.")
     pins=None if pins is None else checked_pins(problem.n,pins)
@@ -417,19 +417,24 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             raise ValueError("Invalid physical side index.")
     started=time.monotonic()
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
-    replayed_geography=()
-    if geographic_cores and geography:
+    replayed_geography=();replayed_contacts=()
+    if edge_perfect_cores and not geography:
+        raise ValueError('Induced physical contacts require the embed search objective.')
+    if (geographic_cores or edge_perfect_cores) and geography:
         from r35_geographic_replay import replay_for
         replayed_geography=replay_for(problem).check(domains,geographic_cores)
+        from r35_induced_contacts import verified_contacts
+        replayed_contacts=verified_contacts(problem,edge_perfect_cores)
         fixed={tuple(sorted(e)) for e in bonds}
         if physical_support:
             from r32_gold_bonds import inventory
             fixed.update(inventory(problem).required)
         forbidden=list(forbidden)
-        for core in replayed_geography:
+        for core in (*replayed_geography,*replayed_contacts):
             missing=core-fixed
             if not missing:
-                return dict(status='INFEASIBLE',geographic_cores=[sorted(core)],**stats)
+                kind='geographic_cores' if core in replayed_geography else 'edge_perfect_cores'
+                return dict(status='INFEASIBLE',**{kind:[sorted(core)]},**stats)
             if len(missing)==1:forbidden.extend(missing)
     cardinality=None
     if reference_bound:
@@ -519,6 +524,10 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
                     m.add_bool_or([~check.mate[p] for p in pairs])
                 check.geo_conflicts.cores.append(pairs)
             stats['geographic_cores']=[sorted(c) for c in check.geo_conflicts.cores]
+        if replayed_contacts:
+            stats['edge_perfect_cores']=[sorted(core) for core in replayed_contacts]
+            for core in replayed_contacts:
+                if core<=check.mate.keys():check.m.add_bool_or([~check.mate[p] for p in core])
         if channel:
             from r31_geographic import channel_geographic
             stats['channel']=channel_geographic(check)
@@ -737,6 +746,7 @@ def main():
                    project_blanks=project_blanks,fraction=data.get("fractional",False),
                    bridges=[*data.get("bridges",()),*prior.get("bridge_hints",())],
                    geographic_cores=prior.get("geographic_cores",()) if args.method=="embed" else (),
+                   edge_perfect_cores=prior.get("edge_perfect_cores",()) if args.method=="embed" else (),
                    departure_rules=prior.get("cores",()),**opts)
     if args.departure_branch is not None:
         out["covered_departure_branch"]={"required":core[:index],"forbidden":core[index],"total":len(core)}
