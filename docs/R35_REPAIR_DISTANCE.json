@@ -1,0 +1,1139 @@
+{
+  "schema": 1,
+  "source": "17ca0c7",
+  "antecedent_source": "c2f4c05",
+  "old_release": "c970275",
+  "target": "gold",
+  "reference_score": 207,
+  "physical_cells": 160,
+  "lower": 93,
+  "radius_observations": [
+    {
+      "radius": 0,
+      "threshold": 128,
+      "rows": 387,
+      "single": 0,
+      "pair": 333,
+      "minimum": 69,
+      "branches": 308
+    },
+    {
+      "radius": 0,
+      "threshold": 479,
+      "rows": 409,
+      "single": 0,
+      "pair": 358,
+      "minimum": 71,
+      "branches": 306
+    },
+    {
+      "radius": 0,
+      "threshold": 480,
+      "rows": 409,
+      "single": 0,
+      "pair": 358,
+      "minimum": 71,
+      "branches": 306
+    },
+    {
+      "radius": 1,
+      "threshold": 128,
+      "rows": 507,
+      "single": 0,
+      "pair": 333,
+      "minimum": 73,
+      "branches": 1471
+    },
+    {
+      "radius": 2,
+      "threshold": 64,
+      "rows": 1223,
+      "single": 0,
+      "pair": 307,
+      "minimum": 81,
+      "branches": 20762
+    },
+    {
+      "radius": 2,
+      "threshold": 128,
+      "rows": 1341,
+      "single": 0,
+      "pair": 334,
+      "minimum": 83,
+      "branches": 10984
+    },
+    {
+      "radius": 3,
+      "threshold": 64,
+      "rows": 2419,
+      "single": 0,
+      "pair": 324,
+      "minimum": 87,
+      "branches": 42652
+    },
+    {
+      "radius": 1,
+      "threshold": 480,
+      "rows": 533,
+      "single": 0,
+      "pair": 358,
+      "minimum": 75,
+      "branches": 401
+    },
+    {
+      "radius": 2,
+      "threshold": 480,
+      "rows": 1405,
+      "single": 0,
+      "pair": 359,
+      "minimum": 83,
+      "branches": 16191
+    },
+    {
+      "radius": 3,
+      "threshold": 480,
+      "rows": 2809,
+      "single": 0,
+      "pair": 362,
+      "minimum": 88,
+      "branches": 67055
+    }
+  ],
+  "deep_pairs": [
+    {
+      "radius": 3,
+      "width": 128,
+      "minimum": 88,
+      "rows": 2679,
+      "branches": 88937
+    },
+    {
+      "radius": 4,
+      "width": 128,
+      "minimum": 88,
+      "rows": 3451,
+      "branches": 66627
+    },
+    {
+      "radius": 6,
+      "width": 128,
+      "minimum": 89,
+      "rows": 3804,
+      "branches": 110087
+    },
+    {
+      "radius": 20,
+      "width": 64,
+      "minimum": 88,
+      "rows": 3565,
+      "branches": 105852
+    },
+    {
+      "radius": 20,
+      "width": 128,
+      "minimum": 89,
+      "rows": 3834,
+      "branches": 131702
+    }
+  ],
+  "frozen_native": {
+    "antecedent": [
+      {
+        "name": "tiny-1",
+        "entry": "plain",
+        "status": "solved",
+        "target_minimum": 1,
+        "initial_bound": 0,
+        "rows": 1,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 100,
+        "earned": [],
+        "seconds": 0.985
+      },
+      {
+        "name": "tiny-3",
+        "entry": "durable",
+        "status": "solved",
+        "target_minimum": 3,
+        "initial_bound": 0,
+        "rows": 3,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 100,
+        "earned": [],
+        "seconds": 0.047,
+        "same_resumed_work": true
+      },
+      {
+        "name": "tiny-other",
+        "entry": "pool",
+        "status": "solved",
+        "target_minimum": 4,
+        "initial_bound": 0,
+        "rows": 4,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 112,
+        "earned": [],
+        "seconds": 0.125,
+        "same_resumed_work": true
+      },
+      {
+        "name": "original",
+        "entry": "durable",
+        "status": "timeout",
+        "target_minimum": null,
+        "initial_bound": 89,
+        "rows": 3804,
+        "first_master_hits": 1,
+        "master_calls": 0,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 2141,
+        "earned": [
+          14
+        ],
+        "seconds": 52.438,
+        "same_resumed_work": true
+      },
+      {
+        "name": "rotate4",
+        "entry": "plain",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 88,
+        "rows": 3734,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 70330,
+        "oracle_calls": 1,
+        "oracle_branches": 2069,
+        "earned": [
+          60
+        ],
+        "seconds": 52.281
+      },
+      {
+        "name": "rotate120",
+        "entry": "pool",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 88,
+        "rows": 3766,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 207819,
+        "oracle_calls": 1,
+        "oracle_branches": 2026,
+        "earned": [],
+        "seconds": 52.812,
+        "same_resumed_work": true
+      }
+    ],
+    "tight": [
+      {
+        "name": "tiny-1",
+        "entry": "plain",
+        "status": "solved",
+        "target_minimum": 1,
+        "initial_bound": 0,
+        "rows": 1,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 100,
+        "earned": [],
+        "seconds": 0.985
+      },
+      {
+        "name": "tiny-3",
+        "entry": "durable",
+        "status": "solved",
+        "target_minimum": 3,
+        "initial_bound": 0,
+        "rows": 3,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 100,
+        "earned": [],
+        "seconds": 0.047,
+        "same_resumed_work": true
+      },
+      {
+        "name": "tiny-other",
+        "entry": "pool",
+        "status": "solved",
+        "target_minimum": 4,
+        "initial_bound": 0,
+        "rows": 4,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 112,
+        "earned": [],
+        "seconds": 0.093,
+        "same_resumed_work": true
+      },
+      {
+        "name": "original",
+        "entry": "durable",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 93,
+        "rows": 3892,
+        "first_master_hits": 1,
+        "master_calls": 0,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 2074,
+        "earned": [
+          4
+        ],
+        "seconds": 31.406,
+        "same_resumed_work": true
+      },
+      {
+        "name": "rotate4",
+        "entry": "plain",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 92,
+        "rows": 3822,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 0,
+        "oracle_branches": 0,
+        "earned": [],
+        "seconds": 52.0
+      },
+      {
+        "name": "rotate120",
+        "entry": "pool",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 92,
+        "rows": 3831,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 0,
+        "oracle_branches": 0,
+        "earned": [],
+        "seconds": 52.203,
+        "same_resumed_work": true
+      }
+    ],
+    "refined": [
+      {
+        "name": "tiny-1",
+        "entry": "plain",
+        "status": "solved",
+        "target_minimum": 1,
+        "initial_bound": 0,
+        "rows": 1,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 100,
+        "earned": [],
+        "seconds": 1.109
+      },
+      {
+        "name": "tiny-3",
+        "entry": "durable",
+        "status": "solved",
+        "target_minimum": 3,
+        "initial_bound": 0,
+        "rows": 3,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 100,
+        "earned": [],
+        "seconds": 0.047,
+        "same_resumed_work": true
+      },
+      {
+        "name": "tiny-other",
+        "entry": "pool",
+        "status": "solved",
+        "target_minimum": 4,
+        "initial_bound": 0,
+        "rows": 4,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 112,
+        "earned": [],
+        "seconds": 0.109,
+        "same_resumed_work": true
+      },
+      {
+        "name": "original",
+        "entry": "durable",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 93,
+        "rows": 3924,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 0,
+        "oracle_branches": 0,
+        "earned": [],
+        "seconds": 52.047,
+        "same_resumed_work": true
+      },
+      {
+        "name": "rotate4",
+        "entry": "plain",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 92,
+        "rows": 3854,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 0,
+        "oracle_branches": 0,
+        "earned": [],
+        "seconds": 52.0
+      },
+      {
+        "name": "rotate120",
+        "entry": "pool",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 92,
+        "rows": 3848,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 0,
+        "oracle_branches": 0,
+        "earned": [],
+        "seconds": 52.094,
+        "same_resumed_work": true
+      }
+    ]
+  },
+  "charged": {
+    "antecedent": [
+      {
+        "name": "tiny-1",
+        "entry": "plain",
+        "status": "solved",
+        "target_minimum": 1,
+        "initial_bound": 0,
+        "rows": 1,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 100,
+        "earned": [],
+        "seconds": 0.11,
+        "all_native_calls": [
+          {
+            "status": "OPTIMAL",
+            "branches": 0,
+            "conflicts": 0,
+            "variables": 4
+          },
+          {
+            "status": "OPTIMAL",
+            "branches": 100,
+            "conflicts": 4,
+            "variables": 244
+          }
+        ]
+      },
+      {
+        "name": "tiny-3",
+        "entry": "durable",
+        "status": "solved",
+        "target_minimum": 3,
+        "initial_bound": 0,
+        "rows": 3,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 100,
+        "earned": [],
+        "seconds": 0.016,
+        "all_native_calls": [
+          {
+            "status": "OPTIMAL",
+            "branches": 0,
+            "conflicts": 0,
+            "variables": 4
+          },
+          {
+            "status": "OPTIMAL",
+            "branches": 100,
+            "conflicts": 4,
+            "variables": 244
+          }
+        ],
+        "same_resumed_work": true
+      },
+      {
+        "name": "tiny-other",
+        "entry": "pool",
+        "status": "solved",
+        "target_minimum": 4,
+        "initial_bound": 0,
+        "rows": 4,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 112,
+        "earned": [],
+        "seconds": 0.094,
+        "all_native_calls": [
+          {
+            "status": "OPTIMAL",
+            "branches": 0,
+            "conflicts": 0,
+            "variables": 4
+          },
+          {
+            "status": "OPTIMAL",
+            "branches": 112,
+            "conflicts": 4,
+            "variables": 244
+          }
+        ],
+        "same_resumed_work": true
+      },
+      {
+        "name": "original",
+        "entry": "durable",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 89,
+        "rows": 3804,
+        "first_master_hits": 1,
+        "master_calls": 0,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 2033,
+        "earned": [
+          63
+        ],
+        "seconds": 19.406,
+        "all_native_calls": [
+          {
+            "status": "INFEASIBLE",
+            "branches": 2033,
+            "conflicts": 0,
+            "variables": 268480
+          }
+        ],
+        "same_resumed_work": true
+      },
+      {
+        "name": "rotate4",
+        "entry": "plain",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 88,
+        "rows": 3734,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 0,
+        "oracle_branches": 0,
+        "earned": [],
+        "seconds": 11.922,
+        "all_native_calls": [
+          {
+            "status": "FEASIBLE",
+            "branches": 45126,
+            "conflicts": 286,
+            "variables": 160
+          }
+        ]
+      },
+      {
+        "name": "rotate120",
+        "entry": "pool",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 88,
+        "rows": 3766,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 0,
+        "oracle_branches": 0,
+        "earned": [],
+        "seconds": 3.609,
+        "all_native_calls": [
+          {
+            "status": "FEASIBLE",
+            "branches": 45522,
+            "conflicts": 225,
+            "variables": 160
+          }
+        ],
+        "same_resumed_work": true
+      }
+    ],
+    "tight": [
+      {
+        "name": "tiny-1",
+        "entry": "plain",
+        "status": "solved",
+        "target_minimum": 1,
+        "initial_bound": 0,
+        "rows": 1,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 100,
+        "earned": [],
+        "seconds": 0.109,
+        "all_native_calls": [
+          {
+            "status": "OPTIMAL",
+            "branches": 0,
+            "conflicts": 0,
+            "variables": 4
+          },
+          {
+            "status": "OPTIMAL",
+            "branches": 100,
+            "conflicts": 4,
+            "variables": 244
+          }
+        ]
+      },
+      {
+        "name": "tiny-3",
+        "entry": "durable",
+        "status": "solved",
+        "target_minimum": 3,
+        "initial_bound": 0,
+        "rows": 3,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 100,
+        "earned": [],
+        "seconds": 0.031,
+        "all_native_calls": [
+          {
+            "status": "OPTIMAL",
+            "branches": 0,
+            "conflicts": 0,
+            "variables": 4
+          },
+          {
+            "status": "OPTIMAL",
+            "branches": 100,
+            "conflicts": 4,
+            "variables": 244
+          }
+        ],
+        "same_resumed_work": true
+      },
+      {
+        "name": "tiny-other",
+        "entry": "pool",
+        "status": "solved",
+        "target_minimum": 4,
+        "initial_bound": 0,
+        "rows": 4,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 112,
+        "earned": [],
+        "seconds": 0.125,
+        "all_native_calls": [
+          {
+            "status": "OPTIMAL",
+            "branches": 0,
+            "conflicts": 0,
+            "variables": 4
+          },
+          {
+            "status": "OPTIMAL",
+            "branches": 112,
+            "conflicts": 4,
+            "variables": 244
+          }
+        ],
+        "same_resumed_work": true
+      },
+      {
+        "name": "original",
+        "entry": "durable",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 93,
+        "rows": 3892,
+        "first_master_hits": 1,
+        "master_calls": 0,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 2032,
+        "earned": [
+          38
+        ],
+        "seconds": 21.687,
+        "all_native_calls": [
+          {
+            "status": "INFEASIBLE",
+            "branches": 2032,
+            "conflicts": 0,
+            "variables": 268480
+          }
+        ],
+        "same_resumed_work": true
+      },
+      {
+        "name": "rotate4",
+        "entry": "plain",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 92,
+        "rows": 3822,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 0,
+        "oracle_branches": 0,
+        "earned": [],
+        "seconds": 12.407,
+        "all_native_calls": [
+          {
+            "status": "FEASIBLE",
+            "branches": 35948,
+            "conflicts": 161,
+            "variables": 160
+          }
+        ]
+      },
+      {
+        "name": "rotate120",
+        "entry": "pool",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 92,
+        "rows": 3831,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 0,
+        "oracle_branches": 0,
+        "earned": [],
+        "seconds": 3.75,
+        "all_native_calls": [
+          {
+            "status": "FEASIBLE",
+            "branches": 56905,
+            "conflicts": 224,
+            "variables": 160
+          }
+        ],
+        "same_resumed_work": true
+      }
+    ],
+    "refined": [
+      {
+        "name": "tiny-1",
+        "entry": "plain",
+        "status": "solved",
+        "target_minimum": 1,
+        "initial_bound": 0,
+        "rows": 1,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 100,
+        "earned": [],
+        "seconds": 0.11,
+        "all_native_calls": [
+          {
+            "status": "OPTIMAL",
+            "branches": 0,
+            "conflicts": 0,
+            "variables": 4
+          },
+          {
+            "status": "OPTIMAL",
+            "branches": 100,
+            "conflicts": 4,
+            "variables": 244
+          }
+        ]
+      },
+      {
+        "name": "tiny-3",
+        "entry": "durable",
+        "status": "solved",
+        "target_minimum": 3,
+        "initial_bound": 0,
+        "rows": 3,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 100,
+        "earned": [],
+        "seconds": 0.031,
+        "all_native_calls": [
+          {
+            "status": "OPTIMAL",
+            "branches": 0,
+            "conflicts": 0,
+            "variables": 4
+          },
+          {
+            "status": "OPTIMAL",
+            "branches": 100,
+            "conflicts": 4,
+            "variables": 244
+          }
+        ],
+        "same_resumed_work": true
+      },
+      {
+        "name": "tiny-other",
+        "entry": "pool",
+        "status": "solved",
+        "target_minimum": 4,
+        "initial_bound": 0,
+        "rows": 4,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 1,
+        "oracle_branches": 112,
+        "earned": [],
+        "seconds": 0.109,
+        "all_native_calls": [
+          {
+            "status": "OPTIMAL",
+            "branches": 0,
+            "conflicts": 0,
+            "variables": 4
+          },
+          {
+            "status": "OPTIMAL",
+            "branches": 112,
+            "conflicts": 4,
+            "variables": 244
+          }
+        ],
+        "same_resumed_work": true
+      },
+      {
+        "name": "original",
+        "entry": "durable",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 93,
+        "rows": 3924,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 0,
+        "oracle_branches": 0,
+        "earned": [],
+        "seconds": 12.219,
+        "all_native_calls": [
+          {
+            "status": "FEASIBLE",
+            "branches": 37944,
+            "conflicts": 179,
+            "variables": 160
+          }
+        ],
+        "same_resumed_work": true
+      },
+      {
+        "name": "rotate4",
+        "entry": "plain",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 92,
+        "rows": 3854,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 0,
+        "oracle_branches": 0,
+        "earned": [],
+        "seconds": 12.969,
+        "all_native_calls": [
+          {
+            "status": "FEASIBLE",
+            "branches": 29977,
+            "conflicts": 135,
+            "variables": 160
+          }
+        ]
+      },
+      {
+        "name": "rotate120",
+        "entry": "pool",
+        "status": "unknown",
+        "target_minimum": null,
+        "initial_bound": 92,
+        "rows": 3848,
+        "first_master_hits": 0,
+        "master_calls": 1,
+        "master_branches": 0,
+        "oracle_calls": 0,
+        "oracle_branches": 0,
+        "earned": [],
+        "seconds": 2.734,
+        "all_native_calls": [
+          {
+            "status": "FEASIBLE",
+            "branches": 29446,
+            "conflicts": 179,
+            "variables": 160
+          }
+        ],
+        "same_resumed_work": true
+      }
+    ]
+  },
+  "charged_limits": {
+    "max_number_of_conflicts": 128,
+    "max_deterministic_time": 3.0,
+    "workers": 1
+  },
+  "actual_original_first": {
+    "baseline": {
+      "status": "unknown",
+      "reason": "query_limit",
+      "minimum_changes": null,
+      "derived_master_hits": 0,
+      "certified_seed_distance": 0,
+      "derived_rows": 0,
+      "elapsed_seconds": 33.389999999984866,
+      "stats": {
+        "repair_resume_loads": 0,
+        "repair_model_rebuilds": 1,
+        "repair_model_build_attempts": 1,
+        "repair_master_model_rebuilds": 1,
+        "repair_native_attempts": 1,
+        "repair_native_retries": 0,
+        "repair_native_unknown": 0,
+        "repair_native_interrupted": 0,
+        "repair_completed_queries": 1,
+        "repair_master_attempts": 1,
+        "repair_master_retries": 0,
+        "repair_completed_masters": 1,
+        "repair_completed_work_reused": 0,
+        "oracle_queries": 1,
+        "oracle_branches": 2043,
+        "oracle_conflicts": 4,
+        "oracle_unknown": 0,
+        "oracle_core_cells": 3,
+        "hitting_set_solves": 1,
+        "hitting_set_branches": 0,
+        "queries": 1
+      },
+      "native_failures": [
+        3
+      ],
+      "phase": "done",
+      "pending_changes": null
+    },
+    "new": {
+      "status": "timeout",
+      "reason": null,
+      "minimum_changes": null,
+      "derived_master_hits": 1,
+      "certified_seed_distance": 89,
+      "derived_rows": 3804,
+      "elapsed_seconds": 55.280999999988126,
+      "stats": {
+        "repair_resume_loads": 0,
+        "repair_model_rebuilds": 1,
+        "repair_model_build_attempts": 1,
+        "repair_master_model_rebuilds": 0,
+        "repair_native_attempts": 1,
+        "repair_native_retries": 0,
+        "repair_native_unknown": 0,
+        "repair_native_interrupted": 0,
+        "repair_completed_queries": 1,
+        "repair_master_attempts": 1,
+        "repair_master_retries": 0,
+        "repair_completed_masters": 1,
+        "repair_completed_work_reused": 0,
+        "oracle_queries": 1,
+        "oracle_branches": 2122,
+        "oracle_conflicts": 10,
+        "oracle_unknown": 0,
+        "oracle_core_cells": 32,
+        "hitting_set_solves": 0,
+        "hitting_set_branches": 0,
+        "queries": 1
+      },
+      "native_failures": [
+        32
+      ],
+      "phase": "master",
+      "pending_changes": null
+    },
+    "plain": {
+      "status": "unknown",
+      "reason": null,
+      "minimum_changes": null,
+      "derived_master_hits": 1,
+      "certified_seed_distance": 89,
+      "derived_rows": 3804,
+      "elapsed_seconds": 55.23499999998603,
+      "stats": {
+        "hitting_set_solves": 0,
+        "hitting_set_branches": 0,
+        "queries": 1,
+        "oracle_queries": 1,
+        "oracle_branches": 2141,
+        "oracle_conflicts": 11,
+        "oracle_unknown": 0,
+        "oracle_core_cells": 14
+      },
+      "native_failures": [
+        14
+      ]
+    },
+    "retained": {
+      "status": "timeout",
+      "reason": null,
+      "minimum_changes": null,
+      "derived_master_hits": 1,
+      "certified_seed_distance": 89,
+      "derived_rows": 3804,
+      "elapsed_seconds": 55.453999999997905,
+      "stats": {
+        "repair_resume_loads": 0,
+        "repair_model_rebuilds": 1,
+        "repair_model_build_attempts": 1,
+        "repair_master_model_rebuilds": 0,
+        "repair_native_attempts": 1,
+        "repair_native_retries": 0,
+        "repair_native_unknown": 0,
+        "repair_native_interrupted": 0,
+        "repair_completed_queries": 1,
+        "repair_master_attempts": 1,
+        "repair_master_retries": 0,
+        "repair_completed_masters": 1,
+        "repair_completed_work_reused": 0,
+        "oracle_queries": 1,
+        "oracle_branches": 2103,
+        "oracle_conflicts": 8,
+        "oracle_unknown": 0,
+        "oracle_core_cells": 41,
+        "hitting_set_solves": 0,
+        "hitting_set_branches": 0,
+        "queries": 1
+      },
+      "native_failures": [
+        41
+      ],
+      "retained_masters": [],
+      "retained_restore": true,
+      "phase": "master",
+      "pending_changes": null
+    }
+  },
+  "finite_seeds": 1944,
+  "adaptive_rounds": [
+    {
+      "step": 0,
+      "cap": 90,
+      "extra_before": 24,
+      "exit": 20,
+      "seconds": 25.953
+    },
+    {
+      "step": 1,
+      "cap": 91,
+      "extra_before": 24,
+      "exit": 20,
+      "seconds": 49.891
+    },
+    {
+      "step": 2,
+      "cap": 92,
+      "extra_before": 24,
+      "exit": 10,
+      "seconds": 31.516
+    },
+    {
+      "step": 3,
+      "cap": 92,
+      "extra_before": 56,
+      "exit": 10,
+      "seconds": 18.235
+    },
+    {
+      "step": 4,
+      "cap": 92,
+      "extra_before": 88,
+      "exit": 20,
+      "seconds": 71.89
+    },
+    {
+      "step": 5,
+      "cap": 93,
+      "extra_before": 88,
+      "exit": 10,
+      "seconds": 55.203
+    }
+  ],
+  "final_screen": {
+    "cap": 93,
+    "extra": 120,
+    "outcome": "unresolved",
+    "first_slice_seconds": 72,
+    "retry_seconds": 48
+  },
+  "checkpoint_controls": {
+    "actual_release": "c970275",
+    "line_endings": [
+      "LF",
+      "CRLF"
+    ],
+    "profiles": [
+      "core solved",
+      "core infeasible",
+      "fragment solved",
+      "scoped solved",
+      "trade completed",
+      "pending query",
+      "nonempty pool hit and Gold"
+    ],
+    "repeated_terminal_reopens": 2,
+    "changed_producers_rejected": 3
+  }
+}
