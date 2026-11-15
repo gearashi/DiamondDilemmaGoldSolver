@@ -35,6 +35,12 @@ def terminal_digest(record):
 
 
 def run_solver(problem, algorithm, **kwargs):
+    pose_stats = {}
+    pose_option = getattr(problem,'reference_pose_cuts',False)
+    if type(pose_option) is not bool:raise ValueError('reference_pose_cuts must be boolean.')
+    if pose_option:
+        from r35_pose_frontiers import validate_receiver
+        validate_receiver(algorithm,kwargs.get('options') or {},kwargs.get('target','gold'),kwargs.get('resume'))
     if (kwargs.get('options', {}).get('symbolic_frontier')
             or isinstance(kwargs.get('resume'), dict) and kwargs['resume'].get('schema') == 'diamond-symbolic-coordinator-v1'):
         from constraint_coordinator_round26 import solve
@@ -48,6 +54,11 @@ def run_solver(problem, algorithm, **kwargs):
         from gpu_domain_runner import solve
         if isinstance(kwargs.get('resume'),dict) and kwargs['resume'].get('work_version')==1:
             kwargs['work_frontier']=kwargs.pop('resume')
+        if pose_option and kwargs.get('resume') is None:
+            from r35_pose_frontiers import prepare_frontier
+            frontier,pose_stats=prepare_frontier(problem,kwargs.get('work_frontier'),kwargs.get('stop'))
+            if frontier is not None:
+                kwargs['work_frontier']=frontier
     elif algorithm == 'dfs' and (kwargs.get('options',{}).get('shared_coverage') or isinstance(kwargs.get('resume'),dict) and 'parallel_version' in kwargs['resume']):
         from constraint_parallel import solve
         kwargs['workers']=1
@@ -67,7 +78,10 @@ def run_solver(problem, algorithm, **kwargs):
     if algorithm != 'hybrid':kwargs.pop('seed_board',None)
     if algorithm != 'parallel-dfs' and not (algorithm=='dfs' and (kwargs.get('options',{}).get('shared_coverage') or isinstance(kwargs.get('resume'),dict) and 'parallel_version' in kwargs['resume'])):
         kwargs.pop('workers', None)
-    return solve(problem, **kwargs)
+    outcome=solve(problem, **kwargs)
+    if pose_stats:
+        outcome.setdefault('stats',{}).update(pose_stats)
+    return outcome
 
 
 def load_seed_board(problem, paths):
@@ -112,6 +126,7 @@ def main(argv=None):
     parser.add_argument('--backend', choices=('auto', 'cuda', 'webgpu'), default='auto')
     parser.add_argument('--workers', type=int, default=4, help='Parallel DFS worker processes, 1..64.')
     parser.add_argument('--search-options', type=json.loads, default=None, help='JSON exact-search controls.')
+    parser.add_argument('--reference-pose-cuts', action='store_true', help='Use authenticated original oriented-pose conflicts in DFS or before fresh GPU domain allocation.')
     parser.add_argument('--work-frontier',type=Path,help='Import a scoped remaining-work JSON into GPU domains, parallel DFS, or persistent SAT.')
     parser.add_argument('--resume', action='store_true')
     parser.add_argument('--stop-file-initialized', action='store_true')
@@ -125,6 +140,9 @@ def main(argv=None):
         parser.error('Use finite nonnegative seconds, 128..131072 replicas, and a 32-bit seed.')
     try:
         options = normalize_options(args.search_options)
+        if args.reference_pose_cuts:
+            from r35_pose_frontiers import validate_receiver
+            validate_receiver(args.algorithm,options,'gold',None)
         validate_workers(args.workers)
         validate_runtime_selection(args.algorithm, args.backend, options)
     except ValueError as exc:
@@ -171,7 +189,7 @@ def main(argv=None):
         'run_id': run_id, 'replicas': args.replicas if args.algorithm in ('hybrid','gpu-domains') or options['coordinated_gpu'] else 0,
         'backend': args.backend if args.algorithm in ('hybrid','gpu-domains') else 'cpu',
         'gpu': LABELS[args.algorithm]+' | '+('GPU + CPU' if args.algorithm in ('hybrid','gpu-domains') else 'CPU'),
-        'time_limit_seconds': args.seconds, 'nodes_checked': 0, 'stats': {}, 'checkpoint': {},
+        'reference_pose_cuts': args.reference_pose_cuts, 'time_limit_seconds': args.seconds, 'nodes_checked': 0, 'stats': {}, 'checkpoint': {},
         'work_scope':{'kind':'original_puzzle'},
         'resume_scope': ('Durable CUDA domains, reasoning trail, and disjoint remaining cubes' if args.algorithm=='gpu-domains' else 'Disjoint CPU jobs with exact pending branches' if args.algorithm == 'parallel-dfs' else 'Warm native SAT with durable remaining cubes' if persistent_sat else 'Disjoint CPU jobs with exact pending branches' if args.algorithm=='dfs' and options['shared_coverage'] else 'GPU sampler state, completed repair work, and exact DFS branch stack' if args.algorithm=='hybrid' and options['durable_hybrid'] else 'Exact DFS branch stack' if args.algorithm in ('dfs', 'hybrid')
                          else 'Saved Gold cuts/hints; native internal search restarts'),
@@ -491,6 +509,7 @@ def main(argv=None):
         raw = args.data.read_bytes()
         data = json.loads(raw.decode('utf-8-sig'))
         problem = SearchProblem(data,physical_gold_support=True)
+        problem.reference_pose_cuts = args.reference_pose_cuts
         if options['shared_coverage'] and args.algorithm in ('dfs','parallel-dfs','sat','gpu-domains'):learning_state['_coverage_path']=str(run/'completed-coverage.sqlite3')
         if args.algorithm=='gpu-domains':learning_state['_gpu_checkpoint_dir']=str(folder/'gpu-checkpoints')
         if args.algorithm=='hybrid' and options['durable_hybrid']:learning_state['_hybrid_run_seconds']=args.seconds
@@ -591,7 +610,7 @@ def main(argv=None):
         source_hashes = snapshot_search_sources(ROOT,evidence,source_names)
         atomic_json(run/'run-config.json', {'pid': os.getpid(), 'method': 'constraint', 'algorithm': args.algorithm,
                     'backend': state['backend'], 'replicas': state['replicas'], 'seconds': args.seconds,
-                    'seed': args.seed, 'workers': state['workers'], 'search_options': options, 'run_id': run_id, 'input_sha256': input_sha, 'input_snapshot': str(evidence/'tiles.json')})
+                    'seed': args.seed, 'workers': state['workers'], 'search_options': options, 'reference_pose_cuts': args.reference_pose_cuts, 'run_id': run_id, 'input_sha256': input_sha, 'input_snapshot': str(evidence/'tiles.json')})
         if checkpoint_path.exists():
             if not args.resume:
                 raise ValueError('Saved algorithm state exists; resume it or choose a separate output directory.')

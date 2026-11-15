@@ -544,6 +544,11 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
     initial = ([sum(1 << code for code in domain) for domain in problem.domains]
                if _initial_domains is None else list(_initial_domains))
     stats = dict.fromkeys(BASE_STAT_KEYS + CHAIN_STAT_KEYS + PROPAGATION_CURSOR_STATS + RELATION_CERTIFICATE_STATS + PRUNER_STAT_KEYS + CONFLICT_STAT_KEYS + CONNECTIVITY_STAT_KEYS + NATIVE_STAT_KEYS + GUIDANCE_STAT_KEYS + ADVANCED_STAT_KEYS + EXPLANATION_STAT_KEYS + SCHEDULING_STAT_KEYS + KNOWLEDGE_STAT_KEYS + REASON_STAT_KEYS + SAT_ASSIST_STAT_KEYS + ORDERING_STAT_KEYS + SHARED_STAT_KEYS + BRANCH_STAT_KEYS + LCG_STAT_KEYS + GOLD_ORACLE_STAT_KEYS + NATIVE_SEARCH_STAT_KEYS + NATIVE_LEARNING_STAT_KEYS + GROUP_STAT_KEYS + DEEP_STAT_KEYS + POLICY_STAT_KEYS + MASK_STAT_KEYS + RESEARCH_STAT_KEYS + ROUTING_STAT_KEYS + RESIDUAL_STAT_KEYS + HIGHER_STAT_KEYS + REGION26_STATS + ARCHIVE_STATS + SERVICE_STATS + WITNESS_STATS + RELATIONAL_STATS + ('lcg_trace_budget_skips',), 0)
+    stats.update(reference_pose_closed=0,reference_pose_removed=0)
+    pose_receiver=None
+    if target=='gold' and getattr(problem,'reference_pose_cuts',False):
+        from r35_pose_frontiers import FrontierPoses
+        pose_receiver=FrontierPoses(problem)
     nodes, previous_elapsed = 0, 0.0
     if resume is not None:
         if not isinstance(resume, dict) or resume.get('version') != VERSION or resume.get('fingerprint') != problem.fingerprint or resume.get('target') != target:
@@ -1238,6 +1243,17 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                 if self.reason is not None:self.reason.failure=self.reason.causes(cells)
                 if self.lcg is not None:self.lcg.failure=cells
 
+        def reference_pose_prune(domains):
+            if pose_receiver is None:return True
+            narrowed,deduction=pose_receiver.prune(domains)
+            if deduction is None:return True
+            stats['reference_pose_removed']+=deduction['removed']
+            if deduction['over']:
+                stats['reference_pose_closed']+=1
+                return False
+            domains[:]=narrowed
+            return True
+
         def propagate(domains, changed_cell=None, *, proof=False, trace=None, basic_complete=False):
             stats['propagations'] += 1
             projections = {}
@@ -1272,6 +1288,7 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                 return True
             clause_reason=(lambda cell,value,deps:direct(cell,value,deps,'learned clause')) if trace is not None else None
             def stage_clauses(values):
+                if pose_receiver is not None and not proof and trace is None and not reference_pose_prune(domains):return False
                 bulk(lambda:store.prune(domains, stats, check,reason=clause_reason),'learned clauses')
                 if options['proof_certificates']:
                     bulk(lambda:runtime.certificates.prune(domains,check),'portable certificate')
@@ -1479,7 +1496,15 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                 if residual_input is not None and residual.contains(residual_input):
                     return failure(cells=range(n))
                 selected=frame.pop('_changed_cell',None);before_propagation=domains.copy()
-                possible=propagate(domains,selected,trace=trace,basic_complete=frame.pop('_native_basic_complete',False))
+                basic=frame.pop('_native_basic_complete',False)
+                start_cell=selected
+                possible=True
+                if pose_receiver is not None and trace is None:
+                    before_units=stats['reference_pose_removed']
+                    possible=reference_pose_prune(domains)
+                    if stats['reference_pose_removed']!=before_units:
+                        start_cell,basic=None,False
+                if possible:possible=propagate(domains,start_cell,trace=trace,basic_complete=basic)
                 if options['impact_branching'] and selected is not None:
                     runtime.impact.observe(selected,before_propagation,domains,failed=not possible);stats['impact_observations']+=1
                 if not possible:return failure(proof_input=before_propagation)
