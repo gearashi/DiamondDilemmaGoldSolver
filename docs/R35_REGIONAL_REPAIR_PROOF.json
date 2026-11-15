@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "puzzle": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "reference_score": 207,
+  "cells": 160,
+  "antecedent": {
+    "name": "DiamondDilemmaGoldSolver-R35-refined-repair-proof.zip",
+    "bytes": 18074519,
+    "sha256": "bd4d3ba6133a9ea832eed9674333b98f0259fb2d1a597d3bba12e07bbc464d07"
+  },
+  "previous_rows": 3924,
+  "additional_small": 279,
+  "additional_larger": 22,
+  "excluded_cap": 94,
+  "lower_bound": 95,
+  "upper_assignment": 95,
+  "external_result": "VERIFIED",
+  "resolution_steps": 33196790,
+  "dimacs_header": "p cnf 1344 18130",
+  "regenerator": "bench_r35_repair_crossover.py",
+  "files": {
+    "cap94.cnf": {
+      "sha256": "d0d75101caca505913d1df155f8e5c4e2cdda80cd335d459822ece6b479a8a96",
+      "bytes": 272724
+    },
+    "cap94.drat": {
+      "sha256": "318dd0036cbca3a76933371680b080834a0722d5496ab9f8fc0781b128a8c64d",
+      "bytes": 86029208
+    },
+    "solve.log": {
+      "sha256": "1406e23c686847e63f5e0215f27d9d6a82f92ff8ae17c55b6ff5910ad1d13765",
+      "bytes": 27242
+    },
+    "check.log": {
+      "sha256": "d5f8afa5bd4028b8fcbdff33f778ad4fbc86fd38bdc691ef28af2994bcfb2835",
+      "bytes": 467
+    },
+    "README.txt": {
+      "sha256": "c658832ee5a6f48a1e6dcbdc59879b4ecc4e0ddf97b110b7bb1edbce8935a3ab",
+      "bytes": 941
+    },
+    "regional.json": {
+      "sha256": "2deb7f2688d8feadb6260c3d7988c87c4114df569343a5f29be107af21df595d",
+      "bytes": 5327
+    }
+  },
+  "asset": {
+    "name": "DiamondDilemmaGoldSolver-R35-regional-repair-proof.zip",
+    "bytes": 39339237,
+    "sha256": "3a015c4f9b8c802763e9f775c45f55b9965d9a9c244d1043b594a550154e3066"
+  }
+}

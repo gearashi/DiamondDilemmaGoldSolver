@@ -216,6 +216,15 @@ def checked_catalog(problem):
     return json.loads(body)
 
 
+def regional_catalog():
+    """Return the independently replayed local refutations for the authenticated reference repair."""
+    from hashlib import sha256
+    try:body=(Path(__file__).resolve().parent/'docs/R35_REPAIR_REGIONAL.json').read_bytes().strip()
+    except OSError:return None
+    if sha256(body).hexdigest()!='5ae4ed6a4af821eb01d653e11d202aa5122ce73334f1c15114745c17768d4c61':return None
+    return json.loads(body)
+
+
 def active_catalog(problem):
     record=checked_catalog(problem)
     if record is None or record.get('puzzle')!='e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853':
@@ -225,7 +234,11 @@ def active_catalog(problem):
     except OSError:return record
     if sha256(body).hexdigest()!='3369433c96e41f6af984ba4d8fed42998d26b62538f7920395b1df7a16719397':return record
     refined=json.loads(body)
-    return dict(record,rows=record['rows']+refined['extra']+refined['additional'],hit=refined['hit'])
+    rows=record['rows']+refined['extra']+refined['additional']
+    regional=regional_catalog()
+    if regional is None:return dict(record,rows=rows,hit=refined['hit'])
+    return dict(record,rows=rows+regional['small']+regional['larger'],
+                lower_bound=regional['proved_lower'],hit=regional['hit'])
 
 
 def certified_distance(problem,codes):
@@ -234,7 +247,7 @@ def certified_distance(problem,codes):
     if record is None:return 0,None
     reference=record['codes']
     hint=set(record['hit'])
-    lower=len(hint)
+    lower=record.get('lower_bound',len(hint))
     for c,(actual,other) in enumerate(zip(codes,reference)):
         if actual==other:continue
         domain=problem.domains[c]
@@ -318,7 +331,7 @@ def proof_sources():
            'r35_contact_certificate.py','r35_loss_witness.py','r35_geographic_replay.py',
            'r35_induced_contacts.py','r32_gold_loss.py','r31_geographic.py','r28_geo_sewing.py',
            'r28_geo_color.py','r29_gold_phase.py','docs/R35_CONTACT_LOSS_CERTIFICATE.json',
-           'docs/R35_REPAIR_PLACEMENTS.json','docs/R35_REPAIR_REFINED.json')
+           'docs/R35_REPAIR_PLACEMENTS.json','docs/R35_REPAIR_REFINED.json','docs/R35_REPAIR_REGIONAL.json')
     return {name:(sha256((root/name).read_bytes()).hexdigest() if (root/name).is_file() else 'absent')
             for name in names}
 

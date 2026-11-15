@@ -72,6 +72,10 @@ class SeedProofTests(TestCase):
             other=ref.copy();other[0]=1
             p.domains[0]=[ref[0]]
             self.assertEqual(certified_distance(p,other)[0],4)
+        with patch('r35_repair_seeds.active_catalog',return_value={'codes':ref,'hit':[0,1,2],'lower_bound':2}):
+            lower,hint=certified_distance(p,ref)
+            self.assertEqual((lower,hint),(2,{0,1,2}))
+            self.assertIsNone(certified_choice(lower,hint,[],range(4)))
         self.assertIsNone(certified_choice(3,{0,1,2},[{3}],range(4)))
         self.assertIsNone(certified_choice(3,{0,1,2},[{0}],{0,1}))
         self.assertEqual(certified_choice(3,{0,1,2},[{2},{0,1}],range(4)),{0,1,2})
@@ -223,7 +227,7 @@ class SeedProofTests(TestCase):
         import hashlib
         import json
         from pathlib import Path
-        from r35_repair_seeds import active_catalog,certified_choice
+        from r35_repair_seeds import active_catalog,certified_choice,regional_catalog
         root=Path(__file__).resolve().parent/'docs'
         original=json.loads((root/'R35_REPAIR_PLACEMENTS.json').read_bytes())
         refined=json.loads((root/'R35_REPAIR_REFINED.json').read_bytes())
@@ -236,11 +240,51 @@ class SeedProofTests(TestCase):
         self.assertIsNone(certified_choice(93,hit,rows+list(map(frozenset,refined['additional'])),range(160)))
         with patch('r35_repair_seeds.checked_catalog',return_value=original):
             actual=active_catalog(None)
-            self.assertEqual(actual['rows'],effective+refined['additional'])
+            self.assertEqual(actual['rows'],effective+refined['additional']+regional_catalog()['small']+regional_catalog()['larger'])
+            self.assertEqual(actual['lower_bound'],regional_catalog()['proved_lower'])
+            self.assertTrue(all(set(actual['hit']).intersection(row) for row in actual['rows']))
+            with patch('r35_repair_seeds.regional_catalog',return_value=None):
+                weaker=active_catalog(None)
+                self.assertEqual(weaker['rows'],effective+refined['additional'])
+                self.assertEqual(weaker['hit'],refined['hit'])
             with patch.object(Path,'read_bytes',return_value=b'{}'):
                 self.assertEqual(active_catalog(None),original)
             with patch.object(Path,'read_bytes',side_effect=FileNotFoundError):
                 self.assertEqual(active_catalog(None),original)
+
+    def test_projected_path_conflicts_transfer_only_matching_placements(self):
+        import json
+        from pathlib import Path
+        from types import SimpleNamespace
+        from r35_repair_seeds import archive_rows,regional_catalog
+        root=Path(__file__).resolve().parent/'docs'
+        original=json.loads((root/'R35_REPAIR_PLACEMENTS.json').read_bytes())
+        refined=json.loads((root/'R35_REPAIR_REFINED.json').read_bytes())
+        proof=json.loads((root/'R35_REPAIR_CROSSOVER.json').read_bytes())
+        expected=proof['subsets']['undominated']
+        claims=regional_catalog();path_rows=claims['small']+claims['larger']
+        self.assertLessEqual({tuple(x['cells']) for x in expected},{tuple(x) for x in path_rows})
+        old=original['rows']+refined['extra']+refined['additional']
+        for rec in expected:
+            mask=int(rec['previous_master_hit'],16)
+            hit={c for c in range(160) if mask>>c&1}
+            self.assertTrue(all(hit.intersection(row) for row in old))
+            self.assertFalse(hit.intersection(rec['cells']))
+        def transfer(codes):
+            rows=set()
+            state=SimpleNamespace(p=None,codes=codes,check=lambda:None,
+                                  add=lambda cells,_kind:rows.add(tuple(cells)))
+            with patch('r35_repair_seeds.checked_catalog',return_value=original):
+                archive_rows(state)
+            return rows
+        reference=original['codes']
+        for changed in ((),(0,),(103,),(129,130)):
+            seed=reference.copy()
+            for c in changed:
+                seed[c]=3*(seed[c]//3)+(seed[c]%3+1)%3
+            transferred=transfer(seed)
+            for row in path_rows:
+                self.assertEqual(tuple(row) in transferred,not set(changed).intersection(row))
 
     def test_repair_cut_generation_accepts_only_independent_pose_conflicts(self):
         from bench_r35_repair_refinement import local_cuts
