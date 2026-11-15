@@ -1318,6 +1318,48 @@
         "docs/R35_ROUTE_LAYERS.json"
       ],
       "reopen_if": "A new sound projection closes a nontrivial physical target which the direct or existing band model cannot decide at comparable work."
+    },
+    {
+      "id": 73,
+      "area": "Physical Gold and geographic search",
+      "source_id": "post-R35 #13",
+      "title": "Count disjunctively unavoidable reference retentions across geographic poses",
+      "proposal_and_validation": "Use physically verified per-pose optional bond implications beyond single-bond entailment. Bound distinct forced retentions by single ownership or a duplicate-safe half charge. Compare cell/tile minima and an assignment relaxation, scope to near the 187 retention limit. Require an actual extra cut or pose exclusion; control with the unrestricted root, prior before-CP checks, a positive enumerable sibling, and a residual that would expose duplicate counting.",
+      "state": "keep for certified near-reference geographic search",
+      "mechanism": "GEO-ALTERNATIVE-REF-RETENTION",
+      "decision": "Keep independent pose implications, duplicate-safe cell and tile minima and bounded checked weighted Hall prices under the existing optional reference bound. On priced regions, apply independently checked reduced costs. The ordinary unrestricted root has no additional decision.",
+      "measurement": "292 unrestricted/reference-pinned assumption combinations had zero stronger aggregate bound; the 217 single-pose exclusions in those ordinary samples were already covered by earlier physical conflicts. 16/32 constructed original motif cases closed without an earlier conflict, eight without any oversized individual pose. Four weighted Hall cases add three certified retentions above 185; native calls fell 1 to 0. 24/40 held-out margin queries closed and twelve narrowed by 444–453 poses. Full repeated passes after those twelve had zero additional gain.",
+      "evidence": [
+        "docs/ROUND35_ALTERNATIVE_RETENTION.md",
+        "docs/R35_ALTERNATIVE_RETENTION.json",
+        "test_r35_alternative_retention.py"
+      ]
+    },
+    {
+      "id": 74,
+      "area": "Routes and fresh boards",
+      "source_id": "post-R35 #46",
+      "title": "Reuse whole disconnected numeric rotation responses with complete tied witnesses",
+      "proposal_and_validation": "Count actual structural/component overlap beyond the existing individual factor message and structural plan caches. Include every local unary and binary table, real rotation frames, cap behavior and complete directional ties. Compare first/all witnesses, numeric factor key construction and backtraces over six fresh and twelve adjacent original boards, disconnected controls and changed operands. Close generalization if extra hashing or no whole components win.",
+      "state": "testing",
+      "owner": "repair34",
+      "mechanism": "ROT-DISCONNECTED-NUMERIC-RESPONSE"
+    },
+    {
+      "id": 75,
+      "area": "Reference loss and signed phases",
+      "source_id": "post-R35 #52/#59/#60",
+      "title": "Reuse authenticated reference decisions in the public all-pattern integer-bound command",
+      "proposal_and_validation": "The ranked signed loss path reuses the checked cap-19 refutation and cap-20/21 phases, while its separate public all-pattern integer command starts SAT from scratch. Check exact packed identity, partition, actual extra groups and raw phase inventory, retaining explicit independent-native or encoding comparisons. Compare native work and unknown/foreign/more restrictive inputs.",
+      "state": "keep checked native-command shortcut",
+      "mechanism": "LOSS-PUBLIC-ALL-PATTERN-REUSE",
+      "decision": "Use the R35 checked public lower bound or a physically repriced feasible witness only for its authentic full scope. Retain the independent native mode, encoding diagnostics and previously undecided inputs.",
+      "measurement": "One-second native searches at disjoint 19/20 and all-group 21 used 20190, 22509 and 20871 decisions without a decision. Public reuse returned three checked results at zero native decisions. All-group 20 remained UNKNOWN with 20731 decisions in both arms. Python 3.15 also returned the known decisions without optional SAT.",
+      "evidence": [
+        "docs/ROUND35_INTEGER_PUBLIC.md",
+        "docs/R35_INTEGER_PUBLIC_REUSE.json",
+        "test_r35_integer_command.py"
+      ]
     }
   ],
   "priorities": [
@@ -1336,7 +1378,7 @@
   ],
   "baseline": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
   "worktree": "C:/DiamondDilemmaGoldSolver/round35",
-  "total_candidates": 72,
+  "total_candidates": 75,
   "first_parallel_groups": [
     [
       1

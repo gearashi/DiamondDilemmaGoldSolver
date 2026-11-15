@@ -142,7 +142,7 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     total = solved = pages = 0
     witness_hits = None
     identity_key = digest(identity)
-    from r35_loss_bound import CHECKED_LOWER_BOUND, REFERENCE_SCOPE, REFERENCE_PHASE, published_hit
+    from r35_loss_bound import CHECKED_LOWER_BOUND, REFERENCE_SCOPE, REFERENCE_PHASES, published_hit
     if any(type(e) is not int or not 0 <= e <= len(outside) for e in indices) or type(upper) is not int or upper < 0:
         raise ValueError('Invalid loss cap or outside-error layer')
     if refine_integer and packed_identity == REFERENCE_SCOPE and upper < CHECKED_LOWER_BOUND:
@@ -153,7 +153,7 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
                     certified_loss_lower_bound=CHECKED_LOWER_BOUND,
                     relaxation="all_group_signed_inventory" if aggregate else "disjoint_group_signed_inventory")
     public_hits={}
-    for phase in (REFERENCE_PHASE,0xce55aaa6e89109fca073547e8c580ba32e0e5fa2):
+    for phase in REFERENCE_PHASES:
         positive=published_hit(problem,ref,charged_groups,required,outside,packed_identity,upper,refine_integer,phase)
         if positive is not None:
             if aggregate:
@@ -323,6 +323,7 @@ def main():
     parser.add_argument('--outside',type=int,help='In loss, outside phase errors. In geographic, exact physical bond losses outside the packed groups.')
     parser.add_argument('--page',type=int,default=8192)
     parser.add_argument('--refine-integer',action='store_true',help='In loss mode, check signed integer inventories before accepting a phase pattern (wide phase images use OR-Tools).')
+    parser.add_argument('--independent-native',action='store_true',help='In integer-bound, rerun the native all-pattern solver even for an independently checked published result.')
     parser.add_argument('--excess-charges',action='store_true',help='In integer-bound, subtract disjoint compulsory departures before charging the remaining losses.')
     parser.add_argument('--all-groups',action='store_true',help='In loss or integer-bound, enforce every verified physical departure group, including overlaps.')
     parser.add_argument('--stage',choices=('xor','integer','euler','mating'),default='integer')
@@ -332,6 +333,7 @@ def main():
     args=parser.parse_args()
     if args.seconds<0 or args.limit<0 or args.page<1 or args.upper<0 or (args.mode not in ('loss','integer-bound') and args.seconds==0):
         parser.error('Invalid budget')
+    if args.independent_native and args.mode!='integer-bound':parser.error('--independent-native requires integer-bound')
     if args.excess_charges and args.mode!='integer-bound':parser.error('--excess-charges requires integer-bound')
     if args.all_groups and args.mode not in ('loss','integer-bound'):parser.error('--all-groups requires loss or integer-bound')
     if args.backend!='cpu' and args.mode!='watch':parser.error('CUDA applies to watch mode')
@@ -377,7 +379,7 @@ def main():
             from r35_loss_bound import global_integer
             packed, mandatory, outside = OutsideSyndromes.layout(ref, groups, rules.required)
             extra_groups = [g for g in groups if g not in packed] if args.all_groups else []
-            out = global_integer(p,ref,packed,mandatory,outside,args.upper,args.seconds,additional_groups=extra_groups,excess=args.excess_charges)
+            out = global_integer(p,ref,packed,mandatory,outside,args.upper,args.seconds,additional_groups=extra_groups,excess=args.excess_charges,independent_native=args.independent_native)
         elif args.mode=='master':
             out=master(p,ref,cert,args.upper,args.seconds,req,forbid,ds)
         elif args.mode=='geographic':

@@ -1,0 +1,111 @@
+[
+  {
+    "cap": 19,
+    "all_groups": false,
+    "independent_native": false,
+    "status": "INFEASIBLE",
+    "work": {
+      "decisions": 0,
+      "conflicts": 0,
+      "reference_loss_certificate_reused": 1
+    },
+    "cost": null,
+    "wall_with_startup": 0.9370000000053551
+  },
+  {
+    "cap": 19,
+    "all_groups": false,
+    "independent_native": true,
+    "status": "UNKNOWN",
+    "work": {
+      "restarts": 75,
+      "conflicts": 11356,
+      "decisions": 20190,
+      "propagations": 7917588
+    },
+    "cost": null,
+    "wall_with_startup": 2.0780000000086147
+  },
+  {
+    "cap": 20,
+    "all_groups": false,
+    "independent_native": false,
+    "status": "INTEGER_RELAXATION_FEASIBLE",
+    "work": {
+      "decisions": 0,
+      "conflicts": 0,
+      "reference_phase_reused": 1
+    },
+    "cost": 20,
+    "wall_with_startup": 1.3289999999979045
+  },
+  {
+    "cap": 20,
+    "all_groups": false,
+    "independent_native": true,
+    "status": "UNKNOWN",
+    "work": {
+      "restarts": 47,
+      "conflicts": 13416,
+      "decisions": 22509,
+      "propagations": 8921277
+    },
+    "cost": null,
+    "wall_with_startup": 2.1710000000020955
+  },
+  {
+    "cap": 21,
+    "all_groups": true,
+    "independent_native": false,
+    "status": "INTEGER_RELAXATION_FEASIBLE",
+    "work": {
+      "decisions": 0,
+      "conflicts": 0,
+      "reference_phase_reused": 1
+    },
+    "cost": 21,
+    "wall_with_startup": 0.9379999999946449
+  },
+  {
+    "cap": 21,
+    "all_groups": true,
+    "independent_native": true,
+    "status": "UNKNOWN",
+    "work": {
+      "restarts": 44,
+      "conflicts": 12353,
+      "decisions": 20871,
+      "propagations": 8328053
+    },
+    "cost": null,
+    "wall_with_startup": 2.1089999999967404
+  },
+  {
+    "cap": 20,
+    "all_groups": true,
+    "independent_native": false,
+    "status": "UNKNOWN",
+    "work": {
+      "restarts": 39,
+      "conflicts": 12295,
+      "decisions": 20731,
+      "propagations": 8676513
+    },
+    "cost": null,
+    "wall_with_startup": 2.360000000015134
+  },
+  {
+    "cap": 20,
+    "all_groups": true,
+    "independent_native": true,
+    "status": "UNKNOWN",
+    "work": {
+      "restarts": 39,
+      "conflicts": 12295,
+      "decisions": 20731,
+      "propagations": 8676513
+    },
+    "cost": null,
+    "wall_with_startup": 2.264999999984866
+  }
+]

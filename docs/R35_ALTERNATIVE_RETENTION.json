@@ -1,0 +1,5278 @@
+{
+  "summary": {
+    "unrestricted": {
+      "rows": 4,
+      "nontrivial": 0,
+      "extra_closures": 0,
+      "beyond_cheap": 0,
+      "poses": 0,
+      "prior_group_free_closures": 0
+    },
+    "pinned": {
+      "rows": 192,
+      "nontrivial": 0,
+      "extra_closures": 0,
+      "beyond_cheap": 0,
+      "poses": 145,
+      "prior_group_free_closures": 0
+    },
+    "cover_bad_seams": {
+      "rows": 96,
+      "nontrivial": 0,
+      "extra_closures": 0,
+      "beyond_cheap": 0,
+      "poses": 72,
+      "prior_group_free_closures": 0
+    }
+  },
+  "rows": [
+    {
+      "mode": "unrestricted",
+      "seed": 0,
+      "free": 160,
+      "requested": 0,
+      "individual": 7,
+      "prior_groups": 0,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "unrestricted",
+      "seed": 0,
+      "free": 160,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 0,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "unrestricted",
+      "seed": 0,
+      "free": 160,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 0,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "unrestricted",
+      "seed": 0,
+      "free": 160,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 0,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 10,
+      "requested": 0,
+      "individual": 199,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 10,
+      "requested": 184,
+      "individual": 199,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 10,
+      "requested": 185,
+      "individual": 199,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 10,
+      "requested": 186,
+      "individual": 199,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 12,
+      "requested": 0,
+      "individual": 195,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 12,
+      "requested": 184,
+      "individual": 195,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 12,
+      "requested": 185,
+      "individual": 195,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 12,
+      "requested": 186,
+      "individual": 195,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 16,
+      "requested": 0,
+      "individual": 184,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 16,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 16,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 2
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 16,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 6
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 20,
+      "requested": 0,
+      "individual": 177,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 20,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 20,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 20,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 6
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 24,
+      "requested": 0,
+      "individual": 171,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 24,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 24,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 24,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 5
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 32,
+      "requested": 0,
+      "individual": 148,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 32,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 32,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "pinned",
+      "seed": 0,
+      "free": 32,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 5
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 10,
+      "requested": 0,
+      "individual": 197,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 10,
+      "requested": 184,
+      "individual": 197,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 10,
+      "requested": 185,
+      "individual": 197,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 10,
+      "requested": 186,
+      "individual": 197,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 12,
+      "requested": 0,
+      "individual": 196,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 12,
+      "requested": 184,
+      "individual": 196,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 12,
+      "requested": 185,
+      "individual": 196,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 12,
+      "requested": 186,
+      "individual": 196,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 16,
+      "requested": 0,
+      "individual": 190,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 16,
+      "requested": 184,
+      "individual": 190,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 16,
+      "requested": 185,
+      "individual": 190,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 16,
+      "requested": 186,
+      "individual": 190,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 20,
+      "requested": 0,
+      "individual": 181,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 20,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 20,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 20,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 4
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 24,
+      "requested": 0,
+      "individual": 175,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 24,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 24,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 24,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 4
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 32,
+      "requested": 0,
+      "individual": 155,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 32,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 32,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 1,
+      "free": 32,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 3
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 10,
+      "requested": 0,
+      "individual": 197,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 10,
+      "requested": 184,
+      "individual": 197,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 10,
+      "requested": 185,
+      "individual": 197,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 10,
+      "requested": 186,
+      "individual": 197,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 12,
+      "requested": 0,
+      "individual": 195,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 12,
+      "requested": 184,
+      "individual": 195,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 12,
+      "requested": 185,
+      "individual": 195,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 12,
+      "requested": 186,
+      "individual": 195,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 16,
+      "requested": 0,
+      "individual": 189,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 16,
+      "requested": 184,
+      "individual": 189,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 16,
+      "requested": 185,
+      "individual": 189,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 16,
+      "requested": 186,
+      "individual": 189,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 20,
+      "requested": 0,
+      "individual": 183,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 20,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 20,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 20,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 6
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 24,
+      "requested": 0,
+      "individual": 172,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 24,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 24,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 24,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 5
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 32,
+      "requested": 0,
+      "individual": 154,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 32,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 32,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 2,
+      "free": 32,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 2
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 10,
+      "requested": 0,
+      "individual": 197,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 10,
+      "requested": 184,
+      "individual": 197,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 10,
+      "requested": 185,
+      "individual": 197,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 10,
+      "requested": 186,
+      "individual": 197,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 12,
+      "requested": 0,
+      "individual": 193,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 12,
+      "requested": 184,
+      "individual": 193,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 12,
+      "requested": 185,
+      "individual": 193,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 12,
+      "requested": 186,
+      "individual": 193,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 16,
+      "requested": 0,
+      "individual": 188,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 16,
+      "requested": 184,
+      "individual": 188,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 16,
+      "requested": 185,
+      "individual": 188,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 16,
+      "requested": 186,
+      "individual": 188,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 20,
+      "requested": 0,
+      "individual": 180,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 20,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 20,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 20,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 4
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 24,
+      "requested": 0,
+      "individual": 174,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 24,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 24,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 24,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 3
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 32,
+      "requested": 0,
+      "individual": 155,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 32,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 32,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "pinned",
+      "seed": 3,
+      "free": 32,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 4
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 10,
+      "requested": 0,
+      "individual": 199,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 10,
+      "requested": 184,
+      "individual": 199,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 10,
+      "requested": 185,
+      "individual": 199,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 10,
+      "requested": 186,
+      "individual": 199,
+      "prior_groups": 10,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 12,
+      "requested": 0,
+      "individual": 195,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 12,
+      "requested": 184,
+      "individual": 195,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 12,
+      "requested": 185,
+      "individual": 195,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 12,
+      "requested": 186,
+      "individual": 195,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 16,
+      "requested": 0,
+      "individual": 185,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 16,
+      "requested": 184,
+      "individual": 185,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 16,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 16,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 8
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 20,
+      "requested": 0,
+      "individual": 179,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 20,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 20,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 20,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 4
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 24,
+      "requested": 0,
+      "individual": 168,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 24,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 24,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 2
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 24,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 3
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 32,
+      "requested": 0,
+      "individual": 155,
+      "prior_groups": 2,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 32,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 2,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 32,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 2,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 4,
+      "free": 32,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 2,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 2
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 10,
+      "requested": 0,
+      "individual": 194,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 10,
+      "requested": 184,
+      "individual": 194,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 10,
+      "requested": 185,
+      "individual": 194,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 10,
+      "requested": 186,
+      "individual": 194,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 12,
+      "requested": 0,
+      "individual": 194,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 12,
+      "requested": 184,
+      "individual": 194,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 12,
+      "requested": 185,
+      "individual": 194,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 12,
+      "requested": 186,
+      "individual": 194,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 16,
+      "requested": 0,
+      "individual": 189,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 16,
+      "requested": 184,
+      "individual": 189,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 16,
+      "requested": 185,
+      "individual": 189,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 16,
+      "requested": 186,
+      "individual": 189,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 20,
+      "requested": 0,
+      "individual": 177,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 20,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 20,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 2
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 20,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 4
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 24,
+      "requested": 0,
+      "individual": 171,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 24,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 24,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 3
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 24,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 3
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 32,
+      "requested": 0,
+      "individual": 156,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 32,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 32,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 5,
+      "free": 32,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 4
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 10,
+      "requested": 0,
+      "individual": 198,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 10,
+      "requested": 184,
+      "individual": 198,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 10,
+      "requested": 185,
+      "individual": 198,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 10,
+      "requested": 186,
+      "individual": 198,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 12,
+      "requested": 0,
+      "individual": 194,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 12,
+      "requested": 184,
+      "individual": 194,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 12,
+      "requested": 185,
+      "individual": 194,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 12,
+      "requested": 186,
+      "individual": 194,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 16,
+      "requested": 0,
+      "individual": 184,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 16,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 16,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 16,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 5
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 20,
+      "requested": 0,
+      "individual": 179,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 20,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 20,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 20,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 4
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 24,
+      "requested": 0,
+      "individual": 171,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 24,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 24,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 24,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 3
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 32,
+      "requested": 0,
+      "individual": 155,
+      "prior_groups": 1,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 32,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 1,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 32,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 1,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 6,
+      "free": 32,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 1,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 3
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 10,
+      "requested": 0,
+      "individual": 195,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 10,
+      "requested": 184,
+      "individual": 195,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 10,
+      "requested": 185,
+      "individual": 195,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 10,
+      "requested": 186,
+      "individual": 195,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 12,
+      "requested": 0,
+      "individual": 190,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 12,
+      "requested": 184,
+      "individual": 190,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 12,
+      "requested": 185,
+      "individual": 190,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 12,
+      "requested": 186,
+      "individual": 190,
+      "prior_groups": 11,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": true,
+      "over_after": true,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 16,
+      "requested": 0,
+      "individual": 183,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 16,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 16,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 16,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 9,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 7
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 20,
+      "requested": 0,
+      "individual": 176,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 20,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 20,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 20,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 8,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 3
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 24,
+      "requested": 0,
+      "individual": 164,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 24,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 24,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 24,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 11
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 32,
+      "requested": 0,
+      "individual": 149,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 32,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 32,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "pinned",
+      "seed": 7,
+      "free": 32,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 3
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 0,
+      "free": 27,
+      "requested": 0,
+      "individual": 177,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 0,
+      "free": 27,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 0,
+      "free": 27,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 0,
+      "free": 27,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 5
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 0,
+      "free": 30,
+      "requested": 0,
+      "individual": 172,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 0,
+      "free": 30,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 0,
+      "free": 30,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 0,
+      "free": 30,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 4
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 0,
+      "free": 36,
+      "requested": 0,
+      "individual": 153,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 0,
+      "free": 36,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 0,
+      "free": 36,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 0,
+      "free": 36,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 6
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 1,
+      "free": 27,
+      "requested": 0,
+      "individual": 171,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 1,
+      "free": 27,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 1,
+      "free": 27,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 1,
+      "free": 27,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 3
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 1,
+      "free": 30,
+      "requested": 0,
+      "individual": 166,
+      "prior_groups": 2,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 1,
+      "free": 30,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 2,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 1,
+      "free": 30,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 2,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 1,
+      "free": 30,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 2,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 1,
+      "free": 35,
+      "requested": 0,
+      "individual": 158,
+      "prior_groups": 2,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 1,
+      "free": 35,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 2,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 1,
+      "free": 35,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 2,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 1,
+      "free": 35,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 2,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 2
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 2,
+      "free": 27,
+      "requested": 0,
+      "individual": 174,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 2,
+      "free": 27,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 2,
+      "free": 27,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 2,
+      "free": 27,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 3
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 2,
+      "free": 30,
+      "requested": 0,
+      "individual": 169,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 2,
+      "free": 30,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 2,
+      "free": 30,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 2,
+      "free": 30,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 3
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 2,
+      "free": 37,
+      "requested": 0,
+      "individual": 154,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 2,
+      "free": 37,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 2,
+      "free": 37,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 2,
+      "free": 37,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 2
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 3,
+      "free": 27,
+      "requested": 0,
+      "individual": 171,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 3,
+      "free": 27,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 3,
+      "free": 27,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 3,
+      "free": 27,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 2
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 3,
+      "free": 31,
+      "requested": 0,
+      "individual": 163,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 3,
+      "free": 31,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 3,
+      "free": 31,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 3,
+      "free": 31,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 5
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 3,
+      "free": 34,
+      "requested": 0,
+      "individual": 159,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 3,
+      "free": 34,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 3,
+      "free": 34,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 3,
+      "free": 34,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 2
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 4,
+      "free": 27,
+      "requested": 0,
+      "individual": 171,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 4,
+      "free": 27,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 4,
+      "free": 27,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 4,
+      "free": 27,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 4
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 4,
+      "free": 30,
+      "requested": 0,
+      "individual": 167,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 4,
+      "free": 30,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 4,
+      "free": 30,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 4,
+      "free": 30,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 4
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 4,
+      "free": 36,
+      "requested": 0,
+      "individual": 158,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 4,
+      "free": 36,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 4,
+      "free": 36,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 4,
+      "free": 36,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 2
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 5,
+      "free": 27,
+      "requested": 0,
+      "individual": 175,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 5,
+      "free": 27,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 5,
+      "free": 27,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 5,
+      "free": 27,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 4
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 5,
+      "free": 28,
+      "requested": 0,
+      "individual": 174,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 5,
+      "free": 28,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 5,
+      "free": 28,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 5,
+      "free": 28,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 5,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 5
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 5,
+      "free": 34,
+      "requested": 0,
+      "individual": 161,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 5,
+      "free": 34,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 5,
+      "free": 34,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 5,
+      "free": 34,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 6,
+      "free": 27,
+      "requested": 0,
+      "individual": 178,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 6,
+      "free": 27,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 6,
+      "free": 27,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 6,
+      "free": 27,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 7,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 5
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 6,
+      "free": 29,
+      "requested": 0,
+      "individual": 173,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 6,
+      "free": 29,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 6,
+      "free": 29,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 6,
+      "free": 29,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 6,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 2
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 6,
+      "free": 34,
+      "requested": 0,
+      "individual": 163,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 6,
+      "free": 34,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 6,
+      "free": 34,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 6,
+      "free": 34,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 3,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 7,
+      "free": 27,
+      "requested": 0,
+      "individual": 177,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 7,
+      "free": 27,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 7,
+      "free": 27,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 7,
+      "free": 27,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 3
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 7,
+      "free": 31,
+      "requested": 0,
+      "individual": 167,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 7,
+      "free": 31,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 7,
+      "free": 31,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 7,
+      "free": 31,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 1
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 7,
+      "free": 36,
+      "requested": 0,
+      "individual": 155,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 7,
+      "free": 36,
+      "requested": 184,
+      "individual": 184,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 7,
+      "free": 36,
+      "requested": 185,
+      "individual": 185,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 0
+    },
+    {
+      "mode": "cover_bad_seams",
+      "seed": 7,
+      "free": 36,
+      "requested": 186,
+      "individual": 186,
+      "prior_groups": 4,
+      "independent_twice": 0,
+      "assignment_twice": 0,
+      "over_before": false,
+      "over_after": false,
+      "extra_poses": 2
+    }
+  ],
+  "motifs": [
+    {
+      "seed": 0,
+      "shape": [
+        1
+      ],
+      "sites": [
+        [
+          98,
+          97
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 2,
+      "joint": 2,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 0,
+      "shape": [
+        1
+      ],
+      "sites": [
+        [
+          98,
+          97
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 0,
+      "local": 2,
+      "joint": 2,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 0,
+      "shape": [
+        1,
+        1
+      ],
+      "sites": [
+        [
+          98,
+          97
+        ],
+        [
+          19,
+          25
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 0,
+      "shape": [
+        1,
+        1
+      ],
+      "sites": [
+        [
+          98,
+          97
+        ],
+        [
+          19,
+          25
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 0,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0,
+      "native_new": {
+        "status": "INFEASIBLE",
+        "cp_calls": 0,
+        "branches": 0,
+        "certified_reference": {
+          "limit": 187,
+          "forced": 186,
+          "over": true,
+          "unit_poses": 0,
+          "extra_minimum": 2,
+          "assignment_rows": 0,
+          "dual_checks": 0,
+          "regional_reprices": 0
+        }
+      },
+      "native_predecessor": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "certified_reference": {
+          "limit": 187,
+          "forced": 186,
+          "over": false,
+          "unit_poses": 0
+        }
+      }
+    },
+    {
+      "seed": 0,
+      "shape": [
+        2
+      ],
+      "sites": [
+        [
+          98,
+          97,
+          99
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 0,
+      "shape": [
+        2
+      ],
+      "sites": [
+        [
+          98,
+          97,
+          99
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 2,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 0,
+      "shape": [
+        2,
+        2
+      ],
+      "sites": [
+        [
+          98,
+          97,
+          99
+        ],
+        [
+          19,
+          25,
+          20
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 8,
+      "joint": 8,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 0,
+      "shape": [
+        2,
+        2
+      ],
+      "sites": [
+        [
+          98,
+          97,
+          99
+        ],
+        [
+          19,
+          25,
+          20
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 4,
+      "local": 8,
+      "joint": 8,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 1,
+      "shape": [
+        1
+      ],
+      "sites": [
+        [
+          34,
+          33
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 2,
+      "joint": 2,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 1,
+      "shape": [
+        1
+      ],
+      "sites": [
+        [
+          34,
+          33
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 0,
+      "local": 2,
+      "joint": 2,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 1,
+      "shape": [
+        1,
+        1
+      ],
+      "sites": [
+        [
+          34,
+          33
+        ],
+        [
+          72,
+          76
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 1,
+      "shape": [
+        1,
+        1
+      ],
+      "sites": [
+        [
+          34,
+          33
+        ],
+        [
+          72,
+          76
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 0,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 1,
+      "shape": [
+        2
+      ],
+      "sites": [
+        [
+          34,
+          33,
+          35
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 1,
+      "shape": [
+        2
+      ],
+      "sites": [
+        [
+          34,
+          33,
+          35
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 2,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 1,
+      "shape": [
+        2,
+        2
+      ],
+      "sites": [
+        [
+          34,
+          33,
+          35
+        ],
+        [
+          72,
+          76,
+          73
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 8,
+      "joint": 8,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 1,
+      "shape": [
+        2,
+        2
+      ],
+      "sites": [
+        [
+          34,
+          33,
+          35
+        ],
+        [
+          72,
+          76,
+          73
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 4,
+      "local": 8,
+      "joint": 8,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 2,
+      "shape": [
+        1
+      ],
+      "sites": [
+        [
+          14,
+          13
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 2,
+      "joint": 2,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 2,
+      "shape": [
+        1
+      ],
+      "sites": [
+        [
+          14,
+          13
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 0,
+      "local": 2,
+      "joint": 2,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 2,
+      "shape": [
+        1,
+        1
+      ],
+      "sites": [
+        [
+          14,
+          13
+        ],
+        [
+          80,
+          96
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 2,
+      "shape": [
+        1,
+        1
+      ],
+      "sites": [
+        [
+          14,
+          13
+        ],
+        [
+          80,
+          96
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 0,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 2,
+      "shape": [
+        2
+      ],
+      "sites": [
+        [
+          14,
+          13,
+          91
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 2,
+      "shape": [
+        2
+      ],
+      "sites": [
+        [
+          14,
+          13,
+          91
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 2,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 2,
+      "shape": [
+        2,
+        2
+      ],
+      "sites": [
+        [
+          14,
+          13,
+          91
+        ],
+        [
+          80,
+          96,
+          81
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 8,
+      "joint": 8,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 2,
+      "shape": [
+        2,
+        2
+      ],
+      "sites": [
+        [
+          14,
+          13,
+          91
+        ],
+        [
+          80,
+          96,
+          81
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 4,
+      "local": 8,
+      "joint": 8,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 3,
+      "shape": [
+        1
+      ],
+      "sites": [
+        [
+          60,
+          36
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 2,
+      "joint": 2,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 3,
+      "shape": [
+        1
+      ],
+      "sites": [
+        [
+          60,
+          36
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 0,
+      "local": 2,
+      "joint": 2,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 3,
+      "shape": [
+        1,
+        1
+      ],
+      "sites": [
+        [
+          60,
+          36
+        ],
+        [
+          94,
+          93
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 3,
+      "shape": [
+        1,
+        1
+      ],
+      "sites": [
+        [
+          60,
+          36
+        ],
+        [
+          94,
+          93
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 0,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 3,
+      "shape": [
+        2
+      ],
+      "sites": [
+        [
+          60,
+          36,
+          61
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 3,
+      "shape": [
+        2
+      ],
+      "sites": [
+        [
+          60,
+          36,
+          61
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 2,
+      "local": 4,
+      "joint": 4,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 3,
+      "shape": [
+        2,
+        2
+      ],
+      "sites": [
+        [
+          60,
+          36,
+          61
+        ],
+        [
+          94,
+          93,
+          11
+        ]
+      ],
+      "explicit": 178,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 8,
+      "joint": 8,
+      "prior_conflicts": 0
+    },
+    {
+      "seed": 3,
+      "shape": [
+        2,
+        2
+      ],
+      "sites": [
+        [
+          60,
+          36,
+          61
+        ],
+        [
+          94,
+          93,
+          11
+        ]
+      ],
+      "explicit": 179,
+      "forced": 186,
+      "slack": 1,
+      "individual_over": 4,
+      "local": 8,
+      "joint": 8,
+      "prior_conflicts": 0
+    }
+  ],
+  "hall": [
+    {
+      "seed": 0,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 0,
+      "joint": 6,
+      "prior_conflicts": 0,
+      "checked_projected": {
+        "extra_minimum": 3,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 4,
+        "dual_checks": 20,
+        "regional_reprices": 0
+      },
+      "native_predecessor": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "certified_reference": {
+          "limit": 187,
+          "forced": 185,
+          "over": false,
+          "unit_poses": 0
+        }
+      },
+      "native_new": {
+        "status": "INFEASIBLE",
+        "cp_calls": 0,
+        "branches": 0,
+        "certified_reference": {
+          "limit": 187,
+          "forced": 185,
+          "over": true,
+          "unit_poses": 0,
+          "extra_minimum": 3,
+          "assignment_rows": 4,
+          "dual_checks": 20,
+          "regional_reprices": 0
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 0,
+      "joint": 6,
+      "prior_conflicts": 0,
+      "checked_projected": {
+        "extra_minimum": 3,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 8,
+        "dual_checks": 112,
+        "regional_reprices": 0
+      }
+    },
+    {
+      "seed": 2,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 0,
+      "joint": 6,
+      "prior_conflicts": 0,
+      "checked_projected": {
+        "extra_minimum": 3,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 8,
+        "dual_checks": 120,
+        "regional_reprices": 0
+      }
+    },
+    {
+      "seed": 3,
+      "forced": 185,
+      "slack": 2,
+      "individual_over": 0,
+      "local": 0,
+      "joint": 6,
+      "prior_conflicts": 0,
+      "checked_projected": {
+        "extra_minimum": 3,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 4,
+        "dual_checks": 20,
+        "regional_reprices": 0
+      }
+    }
+  ],
+  "boundary": [
+    {
+      "rows": 3,
+      "seed": 0,
+      "slack": 2,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 3,
+      "seed": 0,
+      "slack": 3,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 3,
+      "seed": 0,
+      "slack": 4,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 453,
+        "over": false,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": {
+        "forced": 183,
+        "over": false,
+        "unit_poses": 0
+      }
+    },
+    {
+      "rows": 3,
+      "seed": 0,
+      "slack": 5,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 453,
+        "over": false,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": {
+        "forced": 182,
+        "over": false,
+        "unit_poses": 0
+      }
+    },
+    {
+      "rows": 3,
+      "seed": 0,
+      "slack": 6,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 0,
+        "over": false,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 3,
+      "seed": 1,
+      "slack": 2,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 6,
+        "dual_checks": 84,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 3,
+      "seed": 1,
+      "slack": 3,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 6,
+        "dual_checks": 84,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 3,
+      "seed": 1,
+      "slack": 4,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 453,
+        "over": false,
+        "assignment_rows": 6,
+        "dual_checks": 84,
+        "regional_reprices": 1
+      },
+      "second_pass": {
+        "forced": 183,
+        "over": false,
+        "unit_poses": 0
+      }
+    },
+    {
+      "rows": 3,
+      "seed": 1,
+      "slack": 5,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 453,
+        "over": false,
+        "assignment_rows": 6,
+        "dual_checks": 84,
+        "regional_reprices": 1
+      },
+      "second_pass": {
+        "forced": 182,
+        "over": false,
+        "unit_poses": 0
+      }
+    },
+    {
+      "rows": 3,
+      "seed": 1,
+      "slack": 6,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 0,
+        "over": false,
+        "assignment_rows": 6,
+        "dual_checks": 84,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 3,
+      "seed": 2,
+      "slack": 2,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 3,
+      "seed": 2,
+      "slack": 3,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 3,
+      "seed": 2,
+      "slack": 4,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 453,
+        "over": false,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": {
+        "forced": 183,
+        "over": false,
+        "unit_poses": 0
+      }
+    },
+    {
+      "rows": 3,
+      "seed": 2,
+      "slack": 5,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 453,
+        "over": false,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": {
+        "forced": 182,
+        "over": false,
+        "unit_poses": 0
+      }
+    },
+    {
+      "rows": 3,
+      "seed": 2,
+      "slack": 6,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 0,
+        "over": false,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 3,
+      "seed": 3,
+      "slack": 2,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 3,
+      "seed": 3,
+      "slack": 3,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 3,
+      "seed": 3,
+      "slack": 4,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 453,
+        "over": false,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": {
+        "forced": 183,
+        "over": false,
+        "unit_poses": 0
+      }
+    },
+    {
+      "rows": 3,
+      "seed": 3,
+      "slack": 5,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 453,
+        "over": false,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": {
+        "forced": 182,
+        "over": false,
+        "unit_poses": 0
+      }
+    },
+    {
+      "rows": 3,
+      "seed": 3,
+      "slack": 6,
+      "decision": {
+        "extra_minimum": 4,
+        "unit_poses": 0,
+        "over": false,
+        "assignment_rows": 3,
+        "dual_checks": 24,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 0,
+      "slack": 2,
+      "decision": {
+        "extra_minimum": 3,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 4,
+        "dual_checks": 20,
+        "regional_reprices": 0
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 0,
+      "slack": 3,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 4,
+        "dual_checks": 40,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 0,
+      "slack": 4,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 4,
+        "dual_checks": 40,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 0,
+      "slack": 5,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 4,
+        "dual_checks": 40,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 0,
+      "slack": 6,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 444,
+        "over": false,
+        "assignment_rows": 4,
+        "dual_checks": 40,
+        "regional_reprices": 1
+      },
+      "second_pass": {
+        "forced": 181,
+        "over": false,
+        "unit_poses": 0
+      }
+    },
+    {
+      "rows": 4,
+      "seed": 1,
+      "slack": 2,
+      "decision": {
+        "extra_minimum": 3,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 8,
+        "dual_checks": 112,
+        "regional_reprices": 0
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 1,
+      "slack": 3,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 8,
+        "dual_checks": 132,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 1,
+      "slack": 4,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 8,
+        "dual_checks": 132,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 1,
+      "slack": 5,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 8,
+        "dual_checks": 132,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 1,
+      "slack": 6,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 444,
+        "over": false,
+        "assignment_rows": 8,
+        "dual_checks": 132,
+        "regional_reprices": 1
+      },
+      "second_pass": {
+        "forced": 181,
+        "over": false,
+        "unit_poses": 0
+      }
+    },
+    {
+      "rows": 4,
+      "seed": 2,
+      "slack": 2,
+      "decision": {
+        "extra_minimum": 3,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 8,
+        "dual_checks": 120,
+        "regional_reprices": 0
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 2,
+      "slack": 3,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 8,
+        "dual_checks": 140,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 2,
+      "slack": 4,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 8,
+        "dual_checks": 140,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 2,
+      "slack": 5,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 8,
+        "dual_checks": 140,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 2,
+      "slack": 6,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 444,
+        "over": false,
+        "assignment_rows": 8,
+        "dual_checks": 140,
+        "regional_reprices": 1
+      },
+      "second_pass": {
+        "forced": 181,
+        "over": false,
+        "unit_poses": 0
+      }
+    },
+    {
+      "rows": 4,
+      "seed": 3,
+      "slack": 2,
+      "decision": {
+        "extra_minimum": 3,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 4,
+        "dual_checks": 20,
+        "regional_reprices": 0
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 3,
+      "slack": 3,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 4,
+        "dual_checks": 40,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 3,
+      "slack": 4,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 4,
+        "dual_checks": 40,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 3,
+      "slack": 5,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 0,
+        "over": true,
+        "assignment_rows": 4,
+        "dual_checks": 40,
+        "regional_reprices": 1
+      },
+      "second_pass": null
+    },
+    {
+      "rows": 4,
+      "seed": 3,
+      "slack": 6,
+      "decision": {
+        "extra_minimum": 6,
+        "unit_poses": 444,
+        "over": false,
+        "assignment_rows": 4,
+        "dual_checks": 40,
+        "regional_reprices": 1
+      },
+      "second_pass": {
+        "forced": 181,
+        "over": false,
+        "unit_poses": 0
+      }
+    }
+  ],
+  "scope": {
+    "puzzle_fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "tiles_sha256": "81e5e40ab23afb135cafe913af3e9d6579d68eea4c096c60d2ddd57a1c8cfe79",
+    "reference_bonds": 207,
+    "retention_limit": 187
+  }
+}

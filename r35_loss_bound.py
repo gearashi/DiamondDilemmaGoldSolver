@@ -1,4 +1,6 @@
 """Checked public reference-loss evidence and a bounded all-pattern signed-inventory search."""
+from math import isnan
+
 from r35_loss_witness import physical_price
 
 # Digest of the fingerprint, all 207 reference bonds, 8 required bonds and ordered
@@ -6,6 +8,7 @@ from r35_loss_witness import physical_price
 REFERENCE_SCOPE = 'd639db280cbffdd887d81f336825b94e4e08d272d94fd11deaace4777e7d96b6'
 CHECKED_LOWER_BOUND = 20
 REFERENCE_PHASE = 0xd237aba7e99101e88041403e8c589902025e5326
+REFERENCE_PHASES = (REFERENCE_PHASE,0xce55aaa6e89109fca073547e8c580ba32e0e5fa2)
 
 
 def published_hit(problem, reference, groups, required, outside, identity, cap, integer, phase=REFERENCE_PHASE):
@@ -22,8 +25,27 @@ def published_hit(problem, reference, groups, required, outside, identity, cap, 
                 relaxation="disjoint_group_signed_inventory" if integer else "disjoint_group_parity")
 
 
-def global_integer(problem, reference, groups, required, outside, cap, seconds, *, additional_groups=(), excess=False):
+def global_integer(problem, reference, groups, required, outside, cap, seconds, *, additional_groups=(), excess=False, independent_native=False):
+    from r32_gold_loss import digest
     from r35_integer_sat import InventorySAT
+    if type(cap) is not int or cap<0 or isnan(seconds) or seconds<0:
+        raise ValueError('Invalid signed loss cap or time limit.')
+    if not independent_native and not excess:
+        identity=digest([3,problem.fingerprint,sorted(reference),sorted(required),[sorted(g) for g in groups]])
+        allowed=set(reference)|set(required)
+        expected=set(reference)-set().union(*groups)-set(required)
+        if (identity==REFERENCE_SCOPE and len(outside)==len(set(outside)) and set(outside)==expected
+                and all(set(g)<=allowed for g in additional_groups)):
+            kind='all_group_signed_inventory' if additional_groups else 'disjoint_group_signed_inventory'
+            if cap<CHECKED_LOWER_BOUND:
+                return dict(status='INFEASIBLE',cap=cap,all_outside_layers=True,relaxation=kind,
+                            certified_loss_lower_bound=CHECKED_LOWER_BOUND,
+                            work={'decisions':0,'conflicts':0,'reference_loss_certificate_reused':1})
+            for phase in REFERENCE_PHASES:
+                hit=published_hit(problem,reference,[*groups,*additional_groups],required,outside,identity,cap,True,phase)
+                if hit is not None:
+                    hit.update(relaxation=kind,work={'decisions':0,'conflicts':0,'reference_phase_reused':1})
+                    return hit
 
     check = InventorySAT(problem, groups, required, outside, cap, excess=excess, additional_groups=additional_groups)
     try:

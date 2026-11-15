@@ -45,4 +45,7 @@ def retained_bound(problem,domains,reference,limit,required=()):
                 if domains[cell]>>code&1:
                     domains[cell]^=1<<code
                     result['unit_poses']+=1
+    elif len(entailed)<limit:
+        from r35_alternative_retention import prune_alternatives
+        result.update(prune_alternatives(domains,optional,limit-len(entailed)))
     return result
