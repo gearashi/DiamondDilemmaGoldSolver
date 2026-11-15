@@ -1,5 +1,5 @@
 // Exact persistent DFS. One invocation owns one disjoint prefix and private stack.
-struct Parameters { n: u32, budget: u32, colors: u32, gold_total: u32, flags: u32, mate_offset: u32, future_enabled: u32, track_frames: u32 }
+struct Parameters { n: u32, budget: u32, colors: u32, gold_total: u32, flags: u32, mate_offset: u32, future_enabled: u32, page_flags: u32 }
 @group(0) @binding(0) var<storage, read_write> board_used: array<u32>;
 @group(0) @binding(1) var<storage, read_write> firsts: array<u32>;
 @group(0) @binding(2) var<storage, read_write> lengths: array<u32>;
@@ -279,7 +279,7 @@ fn merge_frame_span(prior:u32,first:u32,last:u32) -> u32 {
 }
 @compute @workgroup_size(64)
 fn dfs_search(@builtin(global_invocation_id) invocation: vec3<u32>) {
-    let lane = invocation.x; let n = parameters.n;
+    let lane = invocation.x+(parameters.page_flags>>1u); let n = parameters.n;
     if lane >= n { return; }
     let state = metadata[3u * n + lane];
     if state != 0u && !(parameters.gold_total != 0u && state == 1u && metadata[11u * n + lane] != 255u) { return; }
@@ -335,7 +335,7 @@ fn dfs_search(@builtin(global_invocation_id) invocation: vec3<u32>) {
         if depth == 160u { metadata[3u * n + lane] = 1u; break; }
         let location = depth * n + lane;
         if cursors[location] == 65535u {
-            if parameters.track_frames!=0u {first_init=min(first_init,depth+1u);last_init=max(last_init,depth+1u);}
+            if (parameters.page_flags&1u)!=0u {first_init=min(first_init,depth+1u);last_init=max(last_init,depth+1u);}
             var cell=tables[depth];var one_index=0u;var forced=0u;
             if (parameters.flags&12u)!=0u {let chosen=choose(lane);cell=chosen.x;one_index=chosen.y;forced=chosen.z;}
             let choice = bucket(cell, lane);
@@ -358,7 +358,7 @@ fn dfs_search(@builtin(global_invocation_id) invocation: vec3<u32>) {
             depth--; backed++; continue;
         }
         let code = pool((firsts[location]&4095u) + (cursor + (shifts[location]&4095u)) % length);
-        if parameters.track_frames!=0u {first_cursor=min(first_cursor,depth+1u);last_cursor=max(last_cursor,depth+1u);}
+        if (parameters.page_flags&1u)!=0u {first_cursor=min(first_cursor,depth+1u);last_cursor=max(last_cursor,depth+1u);}
         cursors[location] = cursor + 1u; tried++;
         let tile = code / 3u; let cell = selected_cell(depth,floor,lane);
         if !allowed(cell,code) || taken(tile, lane) || !matches_after_bucket(cell, code, lane) { continue; }
@@ -380,10 +380,10 @@ fn dfs_search(@builtin(global_invocation_id) invocation: vec3<u32>) {
         depth++; placed++;
         high = max(high, depth);
         if depth == 160u { metadata[3u * n + lane] = 1u; break; }
-        if parameters.track_frames!=0u {last_cursor=max(last_cursor,depth+1u);}
+        if (parameters.page_flags&1u)!=0u {last_cursor=max(last_cursor,depth+1u);}
         cursors[depth * n + lane] = 65535u;
     }
-    if parameters.track_frames!=0u && (last_cursor|last_init)!=0u {
+    if (parameters.page_flags&1u)!=0u && (last_cursor|last_init)!=0u {
         let prior=metadata[12u*n+lane];
         let init=merge_frame_span(prior&65535u,first_init,last_init);
         let cursor=merge_frame_span(prior>>16u,min(first_init,first_cursor),max(last_init,last_cursor));

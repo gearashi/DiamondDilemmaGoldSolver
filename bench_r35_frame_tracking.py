@@ -33,7 +33,11 @@ def trial(api,profile,before,n,setup,budgets,reference):
     try:
         if api=='CUDA' and profile=='previous':
             old=gpu.kernel
-            gpu.kernel=lambda grid,block,args:old(grid,block,args[:-2])
+            def old_kernel(grid,block,args):
+                if int(args[-1])!=0:
+                    raise ValueError('Previous kernel requires an unsplit comparison budget.')
+                return old(grid,block,args[:-3])
+            gpu.kernel=old_kernel
         jobs=JobLedger.empty(len(prefixes),n)
         jobs.refill(gpu,prefixes,lengths)
         observer=CheckpointRanges(gpu,jobs,trace=profile=='tracked',board_mode='ranges')
@@ -44,7 +48,12 @@ def trial(api,profile,before,n,setup,budgets,reference):
             gpu_ms=0.
             while left:
                 batch=min(512,left)
-                gpu_ms+=gpu.step(batch)
+                if profile=='previous':
+                    module='dfs_gpu' if api=='CUDA' else 'dfs_webgpu'
+                    with patch(module+'.dispatch_pages',return_value=[(0,n)]):
+                        gpu_ms+=gpu.step(batch)
+                else:
+                    gpu_ms+=gpu.step(batch)
                 left-=batch
             direct=gpu.snapshot_checkpoint()
             exact=observer.capture()

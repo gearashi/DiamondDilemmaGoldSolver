@@ -9,7 +9,7 @@ from pathlib import Path
 import time
 from types import SimpleNamespace
 import numpy as np
-from dfs_gpu import DFS
+from dfs_gpu import DFS, dispatch_pages
 
 ROOT = Path(__file__).resolve().parent
 # Two uploads and one dispatch replace a group of native writes. Small strided
@@ -503,14 +503,25 @@ class WebGPUDFS(DFS):
     def _dispatch_step(self, nodes):
         if type(nodes) is not int or not 1 <= nodes <= 512:
             raise ValueError('Use a bounded work budget of 1..512 per launch.')
-        self.queue.write_buffer(self.parameters, 0, np.array([self.n, nodes, self.colors, self.gold_segments, self.feature_bits, len(self.host_policy) if self.host_gold_blocked.ndim==2 else 0, int(bool(self.host_future_poses.size)), int(getattr(self,'_frame_mark_owner',None) is not None)], np.uint32))
-        encoder = self.gpu_device.create_command_encoder()
-        compute = encoder.begin_compute_pass()
-        compute.set_pipeline(self.pipeline)
-        compute.set_bind_group(0, self.bind_group)
-        compute.dispatch_workgroups((self.n + 63) // 64)
-        compute.end()
-        self.queue.submit([encoder.finish()])
+        pages = dispatch_pages(self,nodes)
+        interrupt = getattr(self,'_page_stop',None)
+        for page,(first,count) in enumerate(pages):
+            self.queue.write_buffer(self.parameters, 0, np.array([self.n, nodes, self.colors, self.gold_segments, self.feature_bits, len(self.host_policy) if self.host_gold_blocked.ndim==2 else 0, int(bool(self.host_future_poses.size)), (first<<1)|int(getattr(self,'_frame_mark_owner',None) is not None)], np.uint32))
+            encoder = self.gpu_device.create_command_encoder()
+            compute = encoder.begin_compute_pass()
+            compute.set_pipeline(self.pipeline)
+            compute.set_bind_group(0, self.bind_group)
+            compute.dispatch_workgroups((count + 63) // 64)
+            compute.end()
+            self.queue.submit([encoder.finish()])
+            if page+1<len(pages):
+                if interrupt is not None:
+                    flags=self.states[first:first+count].get()
+                    if interrupt() or np.any(flags==1):
+                        break
+                else:
+                    self._synchronize()
+
 
     def step(self, nodes=128):
         started = time.perf_counter()
@@ -571,12 +582,7 @@ class WebGPUDFS(DFS):
             del raw
         else:
             fields['boards'],fields['used'] = projected
-        packed = None
-        if reader is not None:
-            try:
-                packed = reader._frames([(0,160,lanes)])
-            except Exception:
-                pass  # Limited staging memory: copy the physical buffers below.
+        packed = reader._full_frames() if reader is not None else None
         for i,name in enumerate(('firsts','lengths','cursors','shifts')):
             if packed is None:
                 raw = read(1+i,160)

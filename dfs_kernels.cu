@@ -280,10 +280,10 @@ extern "C" __global__ void dfs_search(
     const int *single_offsets, const int *pair_offsets, const short *pool,
     const unsigned char *gold_partners, const short *gold_ranks, unsigned char *gold_checked,
     const unsigned int *policy, const unsigned int *blocked, int flags,
-    int gold_total, int colors, int n, int budget, unsigned *frame_marks, int track_frames
+    int gold_total, int colors, int n, int budget, unsigned *frame_marks, int track_frames, int first_lane
 ) {
     flags = REASONING_FLAGS;
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    int tid = first_lane + blockIdx.x * blockDim.x + threadIdx.x;
     if (tid >= n) return;
     if (states[tid] != 0 && !(gold_total && states[tid] == 1 && gold_checked[tid] != 255)) return;
     int depth = depths[tid], high = maximum[tid], floor = floors[tid];

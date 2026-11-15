@@ -99,6 +99,32 @@ def _physical_gold_table(topology):
     return table
 
 
+def dispatch_pages(gpu, nodes):
+    """Partition expensive work into bounded, disjoint lane ranges on the display GPU."""
+    # Long MRV, Hall and connectivity scans are expensive even when every
+    # lane takes only its first few steps. Limit both scan width and steps.
+    heavy = gpu.feature_bits & 31
+    if heavy:
+        width = min(1024,max(128,(32768//nodes//128)*128))
+    else:
+        width = max(128,(8388608//nodes//128)*128)
+    if gpu.n<=width:
+        return [(0,gpu.n)]
+    # Synchronously select from the actual native flags after CPU-owned lanes
+    # have been parked. A pending lane may still need its legacy Gold rewind.
+    active = np.flatnonzero(gpu.states.get()<=1)
+    if not len(active):
+        return []
+    page = active//width
+    boundaries = np.r_[0,np.flatnonzero(np.diff(page))+1,len(page)]
+    spans=[]
+    for a,b in zip(boundaries,boundaries[1:]):
+        first = int(active[a])//128*128
+        end = min(gpu.n,(int(active[b-1])//128+1)*128)
+        spans.append((first,end-first))
+    return spans
+
+
 class DFS:
     """Disjoint fixed-prefix DFS jobs: states0active,1pending,2exhausted,3idle.
 
@@ -348,12 +374,24 @@ class DFS:
         start, end = cp.cuda.Event(), cp.cuda.Event()
         start.record()
         try:
-            self.kernel(((self.n + 127) // 128,), (128,), (self.boards, self.used, self.depths,
-                self.maxdepths, self.floors, self.states, self.firsts, self.lengths, self.cursors, self.shifts,
-                self.rng, self.counters, self.device_order, *self.tables, self.single_offsets,
-                self.pair_offsets, self.pool, self.gold_partners, self.gold_ranks, self.gold_checked, self.device_policy, self.device_gold_blocked, np.int32(self.feature_bits),
-                np.int32(self.gold_segments), np.int32(self.colors), np.int32(self.n), np.int32(nodes),
-                getattr(self,'_frame_marks',self.rng),np.int32(getattr(self,'_frame_mark_owner',None) is not None)))
+            pages = dispatch_pages(self,nodes)
+            interrupt = getattr(self,'_page_stop',None)
+            for page,(first,count) in enumerate(pages):
+                self.kernel(((count + 127) // 128,), (128,), (self.boards, self.used, self.depths,
+                    self.maxdepths, self.floors, self.states, self.firsts, self.lengths, self.cursors, self.shifts,
+                    self.rng, self.counters, self.device_order, *self.tables, self.single_offsets,
+                    self.pair_offsets, self.pool, self.gold_partners, self.gold_ranks, self.gold_checked, self.device_policy, self.device_gold_blocked, np.int32(self.feature_bits),
+                    np.int32(self.gold_segments), np.int32(self.colors), np.int32(self.n), np.int32(nodes),
+                    getattr(self,'_frame_marks',self.rng),np.int32(getattr(self,'_frame_mark_owner',None) is not None),np.int32(first)))
+                if page+1<len(pages):
+                    # Fence each expensive page before submitting more work. The
+                    # controller can save partially advanced lanes on Stop/Gold.
+                    if interrupt is not None:
+                        flags = self.states[first:first+count].get()
+                        if interrupt() or np.any(flags==1):
+                            break
+                    else:
+                        cp.cuda.get_current_stream().synchronize()
             end.record()
             end.synchronize()
             return float(cp.cuda.get_elapsed_time(start, end))
@@ -699,9 +737,23 @@ class DFS:
 
     def snapshot_checkpoint(self):
         """Capture independent CPU arrays; the caller may add SSD-ledger metadata fields."""
+        return self._snapshot_fields()
+
+    def _snapshot_fields(self,reader=None):
         self.cp.cuda.get_current_stream().synchronize()
-        payload = {key: getattr(self, key).get() for key in self.DEVICE_FIELDS}
-        return self._checkpoint_payload(payload)
+        packed = reader._full_frames() if reader is not None else None
+        frame_names = ('firsts','lengths','cursors','shifts')
+        fields = {}
+        if packed is not None:
+            fields.update((name,field.reshape(160,self.n)) for name,field in zip(frame_names,packed))
+        for name in self.DEVICE_FIELDS:
+            if name in fields:
+                continue
+            fields[name] = getattr(self,name).get()
+            if reader is not None:
+                reader.maps += 1
+                reader.read_bytes += fields[name].nbytes
+        return self._checkpoint_payload(fields)
 
     def _checkpoint_payload(self, fields, *, fixed=None):
         """Attach the current host ownership and proof state to frozen lane arrays."""

@@ -2,6 +2,7 @@
 from r35_board_codec import PhysicalBoardCodec
 from classic_checkpoint_delta import BoardDelta
 from classic_frame_packet import FramePacket
+from classic_frame_defaults import FrameDefaults
 
 import numpy as np
 
@@ -106,6 +107,8 @@ class CheckpointRanges:
         self.ledger = ledger
         self.prior = None
         self.frame_kernel = None
+        self.frame_defaults = None
+        self.defaults_disabled = False
         self.board_mode = board_mode
         self.trace = trace
         self.trace_owner = object()
@@ -205,6 +208,30 @@ class CheckpointRanges:
         self.read_bytes += self.frame_kernel.read_bytes
         return result
 
+    def _full_frames(self):
+        gpu = self.gpu
+        if not (self.web or hasattr(gpu.cp,'RawKernel')):
+            return None
+        if not self.defaults_disabled:
+            try:
+                if self.frame_defaults is None:
+                    self.frame_defaults = FrameDefaults(gpu)
+                result = self.frame_defaults.capture()
+            except Exception:
+                self.defaults_disabled = True
+                result = None
+            if self.frame_defaults is not None:
+                self.maps += self.frame_defaults.maps
+                self.read_bytes += self.frame_defaults.read_bytes
+            if result is not None:
+                return result
+        if self.web:
+            try:
+                return self._frames([(0,160,np.arange(gpu.n,dtype=np.int32))])
+            except Exception:
+                pass
+        return None
+
     def _physical_board(self, fields, lanes):
         if (self.physical_disabled or self.board_mode=='ranges'
                 or not (self.web or self.board_mode=='physical')):
@@ -231,11 +258,12 @@ class CheckpointRanges:
         installed = self.ledger.checkpoint_installs
         if self.prior is None or np.all(installed):
             before = getattr(gpu, 'readback_bytes', 0)
-            if self.web and hasattr(gpu,'_snapshot_fields'):
+            if hasattr(gpu,'_snapshot_fields'):
                 payload = gpu._snapshot_fields(self)
             else:
                 payload = gpu.snapshot_checkpoint()
                 self.maps = 6 if self.web else len(gpu.DEVICE_FIELDS)
+                self.read_bytes = sum(payload[name].nbytes for name in gpu.DEVICE_FIELDS)
             if self._want_delta() and not self.delta_disabled:
                 try:
                     if self.board_delta is None:
@@ -244,8 +272,8 @@ class CheckpointRanges:
                 except Exception:
                     # Optional GPU workspace may exceed the available memory.
                     self._disable_delta()
-            self.read_bytes = (gpu.readback_bytes-before if self.web else
-                               sum(payload[name].nbytes for name in gpu.DEVICE_FIELDS))
+            if self.web:
+                self.read_bytes = gpu.readback_bytes-before
         else:
             # Exhausted and unassigned lanes cannot run. Include pending boards:
             # a Gold rewind or acknowledgement can change them before the next save.

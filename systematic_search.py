@@ -440,6 +440,8 @@ def main():
         last_live=last_status=last_verify=0.0
         # Larger pools did not show a stable full-iteration benefit. Use the
         # actual restored/resized engine size and retain ordinary step above it.
+        if getattr(gpu,'backend',None)=='webgpu' or hasattr(getattr(gpu,'cp',None),'RawKernel'):
+            gpu._page_stop=lambda: stopping() or (args.seconds>0 and time.monotonic()-began>=args.seconds)
         step_and_states=getattr(gpu,'step_and_states',None) if gpu.n<=4096 else None
         while (args.seconds==0 or time.monotonic()-began<args.seconds) and not stopping():
             trusted=False
