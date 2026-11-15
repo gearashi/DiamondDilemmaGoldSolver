@@ -1,0 +1,55 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "physical_tiles": 160,
+  "physical_segments": 365,
+  "catalogues": [
+    {
+      "source": "R35_GEOGRAPHIC_RESIDUALS.json",
+      "kind": "geographic_cores",
+      "count": 194,
+      "sha256": "7b3ea4ea598d318825db4ecc6d6a767cb5e9b41b63e6aced3a89a5ca3b88b687",
+      "packing_nodes": 184894,
+      "geometric_poses_or_matched_path_poses": 0
+    },
+    {
+      "source": "R35_EDGE_CONTACTS.json",
+      "kind": "edge_perfect_cores",
+      "count": 985,
+      "sha256": "928c1a810fba87bd744f580886c31e9fb1c1390e4aa68dc623489856595e05bf",
+      "packing_nodes": 0,
+      "geometric_poses_or_matched_path_poses": 358160
+    },
+    {
+      "source": "R35_PATH_CIRCUITS.json",
+      "kind": "gold_path_circuits",
+      "count": 19,
+      "sha256": "cf6c9c6ab247ae1c01fc51a5362be372a3939073ea9dec77f9792d0192288a3d",
+      "packing_nodes": 0,
+      "geometric_poses_or_matched_path_poses": 8520
+    },
+    {
+      "source": "R35_CONTACT_RESIDUALS.json",
+      "kind": "geographic_cores",
+      "count": 10,
+      "sha256": "44aa0049f68dc89dd37af41bcfac202b2aa5b21b5e8f1984e6c5f37360b08826",
+      "packing_nodes": 70,
+      "geometric_poses_or_matched_path_poses": 0
+    },
+    {
+      "source": "R35_CONTACT_RESIDUALS.json",
+      "kind": "edge_perfect_cores",
+      "count": 3,
+      "sha256": "30ab18677fac51e2aa96bfc60b4d546f6838160da5350d37e2d0295ce3d562ac",
+      "packing_nodes": 0,
+      "geometric_poses_or_matched_path_poses": 40
+    },
+    {
+      "source": "R35_MIP_DONOR_SEWINGS.json",
+      "kind": "geographic_cores",
+      "count": 1,
+      "sha256": "22232eeffc33a7aadd3028b0a177b16ded897b3bb98bf4f68dacc32f0547b367",
+      "packing_nodes": 1,
+      "geometric_poses_or_matched_path_poses": 0
+    }
+  ]
+}

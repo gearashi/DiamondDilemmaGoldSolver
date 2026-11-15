@@ -1703,8 +1703,41 @@
       "source_id": "Cold positive and negative public CLI controls after #80, #81 and #86",
       "title": "Reuse independently verified original geographic claim catalogues in a fresh process",
       "mechanism": "COLD-GEOGRAPHIC-CLAIM-CATALOGUE",
-      "state": "testing",
-      "proposal_and_validation": "A positive public 33-loss query and a negative 31-loss ranked query both make zero new native search decisions but still replay the same external geographic claim files on each fresh launch. Compare full raw verification with lookup for the published 194 geometry and 985 contact claims and the relevant proper-loop groups, binding each proof kind to its actual source. Preserve live independent checking, mixed and unknown inputs, changed raw artwork, corrupt metadata, different domain scopes, valid placements and cold/warm ownership. Retain only reductions established by fresh public calls."
+      "state": "keep typed original-mesh proof reuse across fresh signed and geographic processes",
+      "proposal_and_validation": "A positive public 33-loss query and a negative 31-loss ranked query both make zero new native search decisions but still replay the same external geographic claim files on each fresh launch. Compare full raw verification with lookup for the published 194 geometry and 985 contact claims and the relevant proper-loop groups, binding each proof kind to its actual source. Preserve live independent checking, mixed and unknown inputs, changed raw artwork, corrupt metadata, different domain scopes, valid placements and cold/warm ownership. Retain only reductions established by fresh public calls.",
+      "decision": "Reuse exact independently checked unconditional rows in normal loss, integer-bound, phase-sewing and geographic embed --reuse. Preserve independent native and direct verifier paths, scope-specific proof authority and live verification of unknown or mixed families. A stronger cached conflict under included narrow domains still wins.",
+      "measurement": {
+        "ordinary_geometry": 205,
+        "edge_perfect_contacts": 988,
+        "geographic_proper_loops": 19,
+        "independently_rechecked_contact_placements": 358200,
+        "independently_rechecked_matched_circuit_premises": 8520,
+        "cold_processes": 14,
+        "original_integer_and_ranked_material_checks": [
+          1179,
+          0
+        ],
+        "original_sewing_and_embed_material_checks": [
+          1198,
+          0
+        ],
+        "weighted_inner_terms_saved": 33,
+        "held_out_narrow_geometry": [
+          1198,
+          0
+        ],
+        "independent_native_checks": 1198,
+        "paired_canonical_solver_results_equal": true
+      },
+      "evidence": [
+        "docs/R35_CLAIM_CATALOGUE.json",
+        "docs/R35_CLAIM_COLD_RESULTS.json",
+        "docs/ROUND35_CLAIM_REUSE.md",
+        "verify_r35_claim_catalogue.py",
+        "bench_r35_claim_catalogue.py",
+        "test_r35_claim_catalogue.py"
+      ],
+      "reopen_if": "A distinct independently proved claim catalogue or physical geometry is supplied, or a measured public receiver still repeats certified group replay. Domain narrowing alone is covered, including the independently proved stronger branch-local seam."
     }
   ],
   "priorities": [

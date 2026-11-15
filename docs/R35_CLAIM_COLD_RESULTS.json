@@ -1,0 +1,215 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "fresh_processes": 14,
+  "cases": [
+    {
+      "case": "integer33",
+      "mode": "previous",
+      "seconds": 36.793,
+      "reused": {},
+      "proof_work": {
+        "geographic_batches": 1,
+        "packing_calls": 194,
+        "contact_pose_enumerations": 985
+      },
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "9da8833f4b98c42d6c8d1a87da4d39707c5185957b9e122714a227d0e9ebe2fc"
+    },
+    {
+      "case": "integer33",
+      "mode": "published",
+      "seconds": 1.839,
+      "reused": {
+        "geographic_cores": 194,
+        "edge_perfect_cores": 985
+      },
+      "proof_work": {},
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "9da8833f4b98c42d6c8d1a87da4d39707c5185957b9e122714a227d0e9ebe2fc"
+    },
+    {
+      "case": "ranked31",
+      "mode": "previous",
+      "seconds": 35.062,
+      "reused": {},
+      "proof_work": {
+        "geographic_batches": 1,
+        "packing_calls": 194,
+        "contact_pose_enumerations": 985
+      },
+      "status": "INFEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "25e5b5fa204f0701aea230755a7ba6359599a2b3d8e04aa62e2e5962f024289e"
+    },
+    {
+      "case": "ranked31",
+      "mode": "published",
+      "seconds": 0.818,
+      "reused": {
+        "geographic_cores": 194,
+        "edge_perfect_cores": 985
+      },
+      "proof_work": {},
+      "status": "INFEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "25e5b5fa204f0701aea230755a7ba6359599a2b3d8e04aa62e2e5962f024289e"
+    },
+    {
+      "case": "sewing",
+      "mode": "previous",
+      "seconds": 35.9,
+      "reused": {},
+      "proof_work": {
+        "geographic_batches": 1,
+        "packing_calls": 194,
+        "contact_pose_enumerations": 985,
+        "path_pose_enumerations": 19
+      },
+      "status": "INFEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "8e02847bbd366def37102aa8031fd77b715c8de6654b3cfa5728d4598109242c"
+    },
+    {
+      "case": "sewing",
+      "mode": "published",
+      "seconds": 0.526,
+      "reused": {
+        "geographic_cores": 194,
+        "edge_perfect_cores": 985,
+        "gold_path_circuits": 19
+      },
+      "proof_work": {},
+      "status": "INFEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "8e02847bbd366def37102aa8031fd77b715c8de6654b3cfa5728d4598109242c"
+    },
+    {
+      "case": "sewing",
+      "mode": "independent",
+      "seconds": 25.406,
+      "reused": {},
+      "proof_work": {
+        "geographic_batches": 1,
+        "packing_calls": 194,
+        "contact_pose_enumerations": 985,
+        "path_pose_enumerations": 19
+      },
+      "status": "INFEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "8e02847bbd366def37102aa8031fd77b715c8de6654b3cfa5728d4598109242c"
+    },
+    {
+      "case": "embed",
+      "mode": "previous",
+      "seconds": 26.226,
+      "reused": {},
+      "proof_work": {
+        "geographic_batches": 1,
+        "packing_calls": 194,
+        "contact_pose_enumerations": 985,
+        "path_pose_enumerations": 19
+      },
+      "status": "INFEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "c3a67affaff1f8d7c7394c094dede21aee30aaf83947ad14cd683c082c1663f7"
+    },
+    {
+      "case": "embed",
+      "mode": "published",
+      "seconds": 0.489,
+      "reused": {
+        "geographic_cores": 194,
+        "edge_perfect_cores": 985,
+        "gold_path_circuits": 19
+      },
+      "proof_work": {},
+      "status": "INFEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "c3a67affaff1f8d7c7394c094dede21aee30aaf83947ad14cd683c082c1663f7"
+    },
+    {
+      "case": "embed-narrow",
+      "mode": "previous",
+      "seconds": 20.262,
+      "reused": {},
+      "proof_work": {
+        "geographic_batches": 1,
+        "packing_calls": 194,
+        "contact_pose_enumerations": 985,
+        "path_pose_enumerations": 19
+      },
+      "status": "INFEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "c3a67affaff1f8d7c7394c094dede21aee30aaf83947ad14cd683c082c1663f7"
+    },
+    {
+      "case": "embed-narrow",
+      "mode": "published",
+      "seconds": 0.491,
+      "reused": {
+        "geographic_cores": 194,
+        "edge_perfect_cores": 985,
+        "gold_path_circuits": 19
+      },
+      "proof_work": {},
+      "status": "INFEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "c3a67affaff1f8d7c7394c094dede21aee30aaf83947ad14cd683c082c1663f7"
+    },
+    {
+      "case": "embed-narrow",
+      "mode": "independent",
+      "seconds": 20.217,
+      "reused": {},
+      "proof_work": {
+        "geographic_batches": 1,
+        "packing_calls": 194,
+        "contact_pose_enumerations": 985,
+        "path_pose_enumerations": 19
+      },
+      "status": "INFEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "c3a67affaff1f8d7c7394c094dede21aee30aaf83947ad14cd683c082c1663f7"
+    },
+    {
+      "case": "weighted30",
+      "mode": "previous",
+      "seconds": 32.334,
+      "reused": {},
+      "proof_work": {
+        "geographic_batches": 2,
+        "packing_calls": 195,
+        "contact_pose_enumerations": 985
+      },
+      "status": "INFEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "bf7753ffe6ab95a85c75fd2d3b0e3419abedf4d86084edcf5e2989715030cf98"
+    },
+    {
+      "case": "weighted30",
+      "mode": "published",
+      "seconds": 1.003,
+      "reused": {
+        "geographic_cores": 194,
+        "edge_perfect_cores": 985
+      },
+      "proof_work": {},
+      "status": "INFEASIBLE",
+      "native_decisions": 0,
+      "result_sha256": "bf7753ffe6ab95a85c75fd2d3b0e3419abedf4d86084edcf5e2989715030cf98"
+    }
+  ],
+  "weighted_outer_only": {
+    "case": "weighted30",
+    "proof_work": {
+      "geographic_batches": 1,
+      "packing_calls": 1,
+      "contact_pose_enumerations": 32
+    },
+    "seconds": 1.7816560000064783
+  },
+  "narrowed_positive_transfer": "A previously proved single missing seam is returned on the two fixed, nonadjacent root cells. The full mesh still returns the complete published obstruction.",
+  "hardware_timing": "Local wall times were obtained alongside other solver work. Discrete verification counts and full result hashes are the paired measures."
+}

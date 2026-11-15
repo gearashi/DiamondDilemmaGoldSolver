@@ -76,17 +76,17 @@ def _negative_page(db, scope, errors, start, stop):
     return inserted
 
 
-def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False, all_groups=False, sphere_euler=False, mate_support=False, mate_cost=False, geographic_hints=(), contact_hints=(), circuit_hints=()):
+def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False, all_groups=False, sphere_euler=False, mate_support=False, mate_cost=False, geographic_hints=(), contact_hints=(), circuit_hints=(), published_claims=False):
     """Replay optional geometric evidence before handing it to the ranked loss search."""
-    from r35_geographic_replay import geographic_departures
+    from r35_claim_catalogue import public_departures
     ref=frozenset(ref)
-    geo=geographic_departures(problem,ref,inventory(problem).required,geographic_hints) if geographic_hints else ()
-    from r35_induced_contacts import contact_departures
-    contact=contact_departures(problem,ref,inventory(problem).required,contact_hints) if contact_hints else ()
-    from r35_path_mates import circuit_departures
-    circuits=circuit_departures(problem,ref,inventory(problem).required,circuit_hints) if circuit_hints else ()
+    geo, contact, circuits, reused = public_departures(
+        problem,ref,inventory(problem).required,geographic_hints,contact_hints,circuit_hints,
+        published=published_claims)
     result=_ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refine_integer,
-                        all_groups,sphere_euler,mate_support,mate_cost,tuple(dict.fromkeys((*geo,*contact,*circuits))),contacts_present=bool(contact))
+                        all_groups,sphere_euler,mate_support,mate_cost,tuple(dict.fromkeys((*geo,*contact,*circuits))),contacts_present=bool(contact),published_claims=bool(reused))
+    if reused:
+        result["published_claims_reused"] = reused
     if geo:
         result.update(verified_geographic_departures=len(geo),
                       relaxation=('signed_inventory_with_geographic_departures' if refine_integer
@@ -101,7 +101,7 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
 
 
 def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refine_integer,
-                 all_groups,sphere_euler,mate_support,mate_cost,geo,*,contacts_present=False):
+                 all_groups,sphere_euler,mate_support,mate_cost,geo,*,contacts_present=False,published_claims=False):
     """Save completed disjoint prefix ranges together with their negative result."""
     if page<1 or seconds<0:raise ValueError('Expected positive page size and nonnegative duration')
     ref = frozenset(ref)
@@ -155,7 +155,7 @@ def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refi
         read_scopes=tuple(dict.fromkeys((scope,geo_plain,*read_scopes)))
     if contacts_present:
         from r35_contact_certificate import checked_contact_bound
-        contact_bound=checked_contact_bound(problem,ref,required,groups,charged=charged_groups,signed_parity=True,integer=refine_integer,sphere=sphere_euler)
+        contact_bound=checked_contact_bound(problem,ref,required,groups,charged=charged_groups,signed_parity=True,integer=refine_integer,sphere=sphere_euler,published_claims=published_claims)
         if upper<contact_bound:
             return dict(status='INFEASIBLE',loss_budget=upper,checked_layers=indices,
                         all_outside_layers=all_layers_requested,certified_loss_lower_bound=contact_bound,
@@ -408,7 +408,7 @@ def main():
     parser.add_argument('--refine-integer',action='store_true',help='In loss mode, check signed integer inventories before accepting a phase pattern (wide phase images use OR-Tools).')
     parser.add_argument('--integer-backend',choices=('sat','scip'),default='sat',help='The signed-inventory engine for integer-bound. SCIP branches on the physical variables.')
     parser.add_argument('--physical-pairing',nargs='?',const='blank',choices=('blank','flow','both'),help='In integer-bound use SCIP to choose all physical mates with variable tile signs. The default projects blank sides. flow uses bipartite flows, and both combines the projections.')
-    parser.add_argument('--independent-native',action='store_true',help='Rerun integer-bound without published decisions, or phase-sewing without bundled or saved witness hints.')
+    parser.add_argument('--independent-native',action='store_true',help='Replay every supplied claim live. Rerun integer-bound without published decisions, or phase-sewing without bundled or saved witness hints.')
     parser.add_argument('--sphere-euler',action='store_true',help='Require the spherical one-loop Euler equation in signed integer search.')
     parser.add_argument('--mate-cost',action='store_true',help='Price lost reference pairs in small reciprocal classes, extending to twelve sides for broad overlapping departures.')
     parser.add_argument('--mate-support',action='store_true',help='Require signed physical mates and perfect matchings in reciprocal classes of up to sixteen sides.')
@@ -471,17 +471,15 @@ def main():
             indices=None if args.outside is None else [args.outside]
             out=run_syndrome(p,ref,groups,args.upper,indices,args.database,args.seconds,args.page,
                              refine_integer=args.refine_integer,all_groups=args.all_groups,sphere_euler=args.sphere_euler,
-                             mate_support=args.mate_support,mate_cost=args.mate_cost,geographic_hints=geographic_hints,contact_hints=contact_hints,circuit_hints=circuit_hints)
+                             mate_support=args.mate_support,mate_cost=args.mate_cost,geographic_hints=geographic_hints,contact_hints=contact_hints,circuit_hints=circuit_hints,published_claims=True)
         elif args.mode=='phase-sewing':
             if case.keys()-{'codes'} or args.outside is not None:
                 parser.error('phase-sewing accepts an unrestricted reference and one tile-color assignment')
-            from r35_geographic_replay import geographic_departures
-            from r35_induced_contacts import contact_departures
             from r35_phase_sewing import search as phase_sewing
-            geo=geographic_departures(p,ref,rules.required,geographic_hints)
-            contacts=contact_departures(p,ref,rules.required,contact_hints)
-            from r35_path_mates import circuit_departures
-            circuits=circuit_departures(p,ref,rules.required,circuit_hints)
+            from r35_claim_catalogue import public_departures
+            geo, contacts, circuits, reused = public_departures(
+                p,ref,rules.required,geographic_hints,contact_hints,circuit_hints,
+                published=not args.independent_native)
             from io_utils import atomic_json
             saved=None
             hint_path=args.sewing_hint or args.output
@@ -493,6 +491,7 @@ def main():
             out=phase_sewing(p,ref,[*groups,*geo,*contacts,*circuits],rules.required,args.phase,args.upper,args.seconds,
                              switch_trials=args.switch_trials,saved=saved,published=not args.independent_native,
                              publish=(lambda row:atomic_json(Path(args.output),row)) if args.output else None)
+            if reused:out["published_claims_reused"]=reused
             out.update(verified_geographic_departures=len(geo),verified_contact_departures=len(contacts))
             if circuits:out['verified_gold_path_circuits']=len(circuits)
         elif args.mode=='integer-bound':
@@ -501,18 +500,17 @@ def main():
             from r35_loss_bound import global_integer
             packed, mandatory, outside = OutsideSyndromes.layout(ref, groups, rules.required)
             extra_groups = [g for g in groups if g not in packed] if args.all_groups else []
-            from r35_geographic_replay import geographic_departures
-            geographic_groups = geographic_departures(p, ref, mandatory, geographic_hints)
-            from r35_induced_contacts import contact_departures
-            contact_groups=contact_departures(p,ref,mandatory,contact_hints)
-            from r35_path_mates import circuit_departures
-            circuits=circuit_departures(p,ref,mandatory,circuit_hints)
+            from r35_claim_catalogue import public_departures
+            geographic_groups, contact_groups, circuits, reused = public_departures(
+                p,ref,mandatory,geographic_hints,contact_hints,circuit_hints,
+                published=not args.independent_native)
             conditional_groups=tuple(dict.fromkeys((*geographic_groups,*contact_groups,*circuits)))
             contact_bound=0
             if contact_groups:
                 from r35_contact_certificate import checked_contact_bound
                 contact_bound=checked_contact_bound(p,ref,mandatory,groups,
-                    charged=[*packed,*extra_groups,*conditional_groups],signed_parity=True,integer=True,sphere=args.sphere_euler)
+                    charged=[*packed,*extra_groups,*conditional_groups],signed_parity=True,integer=True,sphere=args.sphere_euler,
+                    published_claims=bool(reused))
             if contact_bound and args.upper<contact_bound and not args.independent_native:
                 out=dict(status='INFEASIBLE',cap=args.upper,all_outside_layers=True,
                          certified_loss_lower_bound=contact_bound,
@@ -536,6 +534,7 @@ def main():
                 out = global_integer(p,ref,packed,mandatory,outside,args.upper,args.seconds,
                                          additional_groups=[*extra_groups, *conditional_groups],
                                          excess=args.excess_charges,independent_native=args.independent_native,conditions=conditions,contact_budgets=budgets,integer_backend=args.integer_backend)
+            if reused:out["published_claims_reused"]=reused
             if geographic_groups:
                 out.update(relaxation='signed_inventory_with_geographic_departures',
                            verified_geographic_departures=len(geographic_groups))

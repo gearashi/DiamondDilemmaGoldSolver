@@ -407,7 +407,7 @@ class GoldMatching:
 
 def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=(), matching=True,
            geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=(),
-           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), edge_perfect_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None, joint_poses=False, reference_bound=False, mate_correlations=False, phase_anchors=None, path_mates=None, gold_path_circuits=()):
+           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), edge_perfect_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None, joint_poses=False, reference_bound=False, mate_correlations=False, phase_anchors=None, path_mates=None, gold_path_circuits=(), published_claims=False):
     if seconds<=0 or max_rounds<1 or (geography and not matching):
         raise ValueError("Invalid Gold solve budget or mode.")
     pins=None if pins is None else checked_pins(problem.n,pins)
@@ -496,13 +496,13 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
     if edge_perfect_cores and not geography:
         raise ValueError('Induced physical contacts require the embed search objective.')
     if (geographic_cores or edge_perfect_cores or gold_path_circuits) and geography:
-        from r35_geographic_replay import replay_for
-        replayed_geography=replay_for(problem).check(domains,geographic_cores)
-        from r35_induced_contacts import verified_contacts
-        replayed_contacts=verified_contacts(problem,edge_perfect_cores)
+        from r35_claim_catalogue import embedding_claims
+        replayed_geography,replayed_contacts,replayed_circuits,reused = embedding_claims(
+            problem,domains,geographic_cores,edge_perfect_cores,gold_path_circuits,
+            published=published_claims and phase_anchors != "off")
+        if reused:
+            stats["published_claims_reused"] = reused
         if gold_path_circuits:
-            from r35_path_mates import verified_circuits
-            replayed_circuits=verified_circuits(problem,gold_path_circuits)
             stats["verified_gold_path_circuits"]=len(replayed_circuits)
         fixed={tuple(sorted(e)) for e in bonds}
         if physical_support:
@@ -835,7 +835,7 @@ def main():
                    geographic_cores=prior.get("geographic_cores",()) if args.method=="embed" else (),
                    edge_perfect_cores=prior.get("edge_perfect_cores",()) if args.method=="embed" else (),
                    gold_path_circuits=prior.get("gold_path_circuits",()) if args.method=="embed" else (),
-                   departure_rules=prior.get("cores",()),**opts)
+                   published_claims=bool(args.reuse), departure_rules=prior.get("cores",()),**opts)
     if args.departure_branch is not None:
         out["covered_departure_branch"]={"required":core[:index],"forbidden":core[index],"total":len(core)}
     if args.output:

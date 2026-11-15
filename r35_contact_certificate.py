@@ -39,13 +39,16 @@ def xor_conflict(problem, pairs):
     return False
 
 
-def verify(problem, reference, required, physical_groups, evidence, *, charged=None):
+def verify(problem, reference, required, physical_groups, evidence, *, charged=None, published_claims=False):
     if not isinstance(evidence,dict) or evidence.get('fingerprint')!=problem.fingerprint:return 0
     allowed=set(reference)|set(required)
     if evidence.get('reference')!=[list(p) for p in sorted(reference)] or evidence.get('required')!=[list(p) for p in sorted(required)]:return 0
     rules=evidence.get('weighted_cores')
     if not isinstance(rules,list) or not rules:return 0
     normalizer=replay_for(problem)
+    if published_claims:
+        from r35_claim_catalogue import checked_groups, published_scope
+        published_claims = published_scope(problem)
     weight_sum=0;incidence=Counter()
     for rule in rules:
         if not isinstance(rule,dict):return 0
@@ -59,6 +62,9 @@ def verify(problem, reference, required, physical_groups, evidence, *, charged=N
         else:
             if charged is not None and not any(g<=charge for g in charged):return 0
             if kind=='physical':valid=term in physical_groups
+            elif (published_claims and kind in ('geographic','edge_perfect') and
+                  checked_groups(kind+'_cores',[term]) is not None):
+                valid=True
             elif kind=='geographic':valid=bool(geographic_departures(problem,reference,required,[term]))
             elif kind=='edge_perfect':valid=bool(contact_departures(problem,reference,required,[term]))
             else:return 0
@@ -91,7 +97,7 @@ def wide_integer_scope(required,physical_groups,charged):
     return all(g in given or any(consequence<=g for consequence in given) for g in source)
 
 
-def checked_contact_bound(problem,reference,required,groups,*,charged=None,signed_parity=False,integer=False,sphere=False):
+def checked_contact_bound(problem,reference,required,groups,*,charged=None,signed_parity=False,integer=False,sphere=False,published_claims=False):
     if sphere and signed_parity and integer:
         from r35_sphere_contact_bound import checked_sphere_bound
         bound = checked_sphere_bound(problem,reference,frozenset(required),groups,charged)
@@ -100,7 +106,7 @@ def checked_contact_bound(problem,reference,required,groups,*,charged=None,signe
     try:data=json.loads(CERTIFICATE.read_bytes())
     except (OSError,ValueError):return 0
     bound=verify(problem,frozenset(reference),frozenset(required),{frozenset(g) for g in groups},data,
-                  charged=None if charged is None else tuple(frozenset(g)-required for g in charged))
+                  charged=None if charged is None else tuple(frozenset(g)-required for g in charged),published_claims=published_claims)
     if bound==25 and signed_parity:
         # The checked cap-26 weighted DRAT proof needs the signed pair and
         # reciprocal-inventory parity equations together with exactly these terms.
