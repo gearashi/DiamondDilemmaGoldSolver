@@ -1,13 +1,14 @@
 """Loopback-only live Diamond Dilemma dashboard and solver controls."""
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
-import argparse,ctypes,datetime,hashlib,json,os,secrets,socket,subprocess,sys,threading
+import argparse,ctypes,datetime,json,os,secrets,socket,subprocess,sys,threading
 from urllib.parse import urlsplit
 from io_utils import read_json_shared
 from gpu_backends import BACKENDS
 from search_algorithms import ALGORITHMS,LABELS
 from search_options import EXACT_ALGORITHMS,normalize_options,validate_workers
 from gpu_reasoning import feature_identity, normalize_features
+from systematic_evidence import profile_name, terminal_features, terminal_profiles
 from runtime_capabilities import runtime_capabilities,validate_runtime_selection
 ROOT=Path(__file__).resolve().parent
 RUNTIME=ROOT/'runtime';RUNTIME.mkdir(exist_ok=True)
@@ -80,8 +81,23 @@ def start_solver(body):
         if replicas>512:raise ValueError('Coordinated CUDA domains use 128..512 lanes. Begin with 128.')
     gpu_features=normalize_features(body.get('gpu_features'))
     if any(gpu_features.values()) and method!='systematic':raise ValueError('GPU reasoning options apply only to GPU DFS.')
-    validate_runtime_selection(algorithm,backend,options,stochastic=method=='stochastic',
-                               capabilities=runtime_capabilities())
+    host_terminal = body.get('verify_terminal',False)
+    if type(host_terminal) is not bool:
+        raise ValueError('Invalid terminal verification request.')
+    def has_profile():
+        return (method=='systematic' and terminal_features(RUNTIME/profile_name(gpu_features)/'checkpoint.npz')
+                == tuple(sorted(k for k,v in gpu_features.items() if v)))
+    if host_terminal and not has_profile():
+        raise ValueError('No completed Gold checkpoint matches these GPU reasoning settings.')
+    try:
+        validate_runtime_selection(algorithm,backend,options,stochastic=method=='stochastic',
+                                   capabilities=runtime_capabilities())
+    except ValueError:
+        if not has_profile():
+            raise
+        from search_options import validate_algorithm_options
+        validate_algorithm_options(algorithm,options)
+        host_terminal = True
     seconds=float(seconds)
     # Only remove a lock after its recorded process has ended.
     (RUNTIME/'run.lock').unlink(missing_ok=True)
@@ -89,6 +105,7 @@ def start_solver(body):
     (RUNTIME/'stop.request').unlink(missing_ok=True)
     script='constraint_search.py' if constraint else 'systematic_search.py' if method=='systematic' else 'solve.py'
     cmd=[sys.executable,str(ROOT/script),'--resume','--stop-file-initialized','--seconds',str(seconds),'--replicas',str(replicas),'--seed',str(seed)]
+    if host_terminal:cmd.append('--host-terminal-only')
     if method!='stochastic':cmd.extend(['--backend',backend])
     if constraint:cmd.extend(['--algorithm',algorithm])
     if method=='systematic' and any(gpu_features.values()):cmd.extend(['--gpu-features',json.dumps(gpu_features,separators=(',',':'))])
@@ -156,7 +173,7 @@ def startup_status(pid):
         elif status.get('method')=='stochastic':status.setdefault('algorithm','stochastic')
         status.setdefault('target','gold' if systematic else 'edges')
         features=normalize_features(status.get('gpu_features'))
-        profile=('systematic-'+hashlib.sha256(json.dumps(feature_identity(features),sort_keys=True,separators=(',',':')).encode()).hexdigest()[:12]) if any(features.values()) else 'systematic'
+        profile=profile_name(features)
         restoring=(RUNTIME/(profile+'/checkpoint.npz' if systematic else 'checkpoint.npz')).exists()
         status['startup_phase']='restoring_checkpoint' if restoring else 'initializing_gpu'
         status['phase_message']=('Restoring disjoint branches and saved cursors.' if restoring else 'Preparing disjoint GPU search branches.') if systematic else ('Restoring saved search and validating its cache.' if restoring else 'Preparing the GPU search.')
@@ -173,7 +190,8 @@ def state_payload():
     return {'service':'diamond-dilemma','installation_root':str(ROOT.resolve()),'status':status,'display_state':display_state,
         'stop_requested':stop_requested,'best':read_json('best.json'),
         'live':read_json('live.json'),'history':read_json('history.json',[]),
-        'process_running':bool(pid),'control_token':TOKEN,'capabilities':runtime_capabilities()}
+        'process_running':bool(pid),'control_token':TOKEN,'capabilities':runtime_capabilities(),
+        'systematic_terminal_profiles':[] if pid else terminal_profiles(RUNTIME)}
 
 class Handler(BaseHTTPRequestHandler):
     def log_message(self,*_):pass

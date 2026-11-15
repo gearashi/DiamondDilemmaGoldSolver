@@ -810,6 +810,7 @@ const edited={...saved,lookahead:false,lookahead_ms:400,native:'auto',ordering_g
 for(const key of vm.runInContext('round24Keys',context))edited[key]=false;
 for(const key of vm.runInContext('round25Keys',context))edited[key]=false;
 for(const key of vm.runInContext('round26Keys',context))edited[key]=false;
+for(const key of vm.runInContext('round34Keys',context))edited[key]=false;
 edited.incumbent_polish=false;edited.easy_remainder=false;edited.sat_service_instances=1;
 assert.deepEqual(JSON.parse(storage.values['diamond.searchOptions']),edited);assert.equal(storage.values['diamond.workers'],'4');
 render("state.process_running=true;state.status.workers=1;state.status.search_options={failure_guided:true,lookahead:true,strand_connectivity:true,multi_seam_cuts:true,regional_cache:true,native:'python'}");

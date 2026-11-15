@@ -430,16 +430,17 @@
     },
     {
       "id": 58,
-      "state": "open",
+      "state": "retained in worktree",
       "area": "Classic exact GPU evidence",
       "proposal_and_validation": "Bind classic systematic exhaustion to the actual physical and GPU source closure, independently verify terminal reuse, and preserve resumable older partial stacks.",
-      "evidence": "docs/ROUND34_PHYSICAL.md"
+      "evidence": "docs/ROUND34_CLASSIC_EVIDENCE.md"
     },
     {
       "id": 59,
-      "state": "open",
+      "state": "retained on clone-capable filesystems",
       "area": "Exact-search source snapshots",
-      "proposal_and_validation": "Measure duplicate immutable-source bytes in real run evidence. Screen independent, portable per-run copies or safe filesystem-level copy-on-write reuse, checking interruption, corruption isolation and old evidence readers. Compare writes and cost before promotion."
+      "proposal_and_validation": "Measure duplicate immutable-source bytes in real run evidence. Screen independent, portable per-run copies or safe filesystem-level copy-on-write reuse, checking interruption, corruption isolation and old evidence readers. Compare writes and cost before promotion.",
+      "evidence": "docs/ROUND34_SOURCE_IMAGES.md"
     },
     {
       "id": 60,
@@ -450,23 +451,21 @@
     },
     {
       "id": 61,
-      "state": "open",
+      "state": "retained in worktree",
       "area": "Unrestricted CUDA domain partition and propagation",
-      "proposal_and_validation": "Compare newest-first splitting with breadth-first and largest-volume balanced partitions and propagation before forking. Count native work, witnessed solutions and completed finite residuals. Equal box volumes alone cannot establish a benefit."
+      "proposal_and_validation": "Compare newest-first splitting with breadth-first and largest-volume balanced partitions and propagation before forking. Count native work, witnessed solutions and completed finite residuals. Equal box volumes alone cannot establish a benefit.",
+      "evidence": "docs/ROUND34_GPU_PARTITIONS.md"
+    },
+    {
+      "id": 62,
+      "state": "retained in worktree",
+      "area": "Classic GPU terminal reuse",
+      "proposal_and_validation": "Reopen a fully verified negative classic checkpoint on the host before allocating any CUDA or WebGPU lanes. Compare native constructions and search work on identical results, keeping strict source, frontier, completion and tamper checks. Exercise positive and legacy histories.",
+      "evidence": "docs/ROUND34_CLASSIC_EVIDENCE.md"
     }
   ],
   "release_gate": "All open workstreams and follow-ups, final full discovery review, migration and checkpoint compatibility, full suite, independent release CI/packages, measured settings.",
-  "next_parallel_groups": [
-    [
-      58
-    ],
-    [
-      59
-    ],
-    [
-      61
-    ]
-  ],
+  "next_parallel_groups": [],
   "baseline_release": "v1.14.0",
   "branch": "codex/round34-search",
   "worktree": "C:/DiamondDilemmaGoldSolver/round34"

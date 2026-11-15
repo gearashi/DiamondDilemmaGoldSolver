@@ -672,12 +672,17 @@ class SystematicRunnerTests(unittest.TestCase):
         with scratch() as (root, source):
             scenario = Scenario(root / 'run', source)
             scenario.stop_after = 2
-            scenario.execute(replicas=8)
+            # Exercise a legitimately written bankless payload. Editing its archive
+            # after capture would separately invalidate the native provenance receipt.
+            write = runner.atomic_npz
+            def write_bankless(path, fields):
+                return write(path,{name:value for name,value in fields.items()
+                                   if not name.startswith(('exact_paused_', 'exact_bank_', 'exact_retired_'))})
+            with patch.object(runner,'atomic_npz',side_effect=write_bankless):
+                scenario.execute(replicas=8)
             checkpoint = scenario.output / 'systematic' / 'checkpoint.npz'
-            with np.load(checkpoint, allow_pickle=False) as saved:
-                old = {name: saved[name].copy() for name in saved.files
-                       if not name.startswith(('exact_paused_', 'exact_bank_', 'exact_retired_'))}
-            np.savez(checkpoint, **old)
+            with np.load(checkpoint,allow_pickle=False) as saved:
+                self.assertNotIn('exact_bank_version',saved.files)
             scenario.stop_after = None
             scenario.execute(resume=True, replicas=2)
             status = read(scenario.output / 'status.json')

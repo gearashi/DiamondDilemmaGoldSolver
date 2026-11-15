@@ -22,6 +22,7 @@ from dfs_gpu import DFS, fill_order, ensure_disjoint_prefixes
 from gpu_backends import choose_backend
 from gpu_reasoning import feature_identity, normalize_features
 from exact_frontier import plan_frontier
+import systematic_evidence as proof
 from systematic_jobs import JobLedger
 from checkpoint_writer import CheckpointWriter
 from io_utils import atomic_json, replace_with_retry
@@ -39,8 +40,14 @@ def atomic_npz(path, fields):
     started=time.monotonic()
     try:
         with temporary.open('wb') as stream:
-            np.savez(stream,**fields); stream.flush(); os.fsync(stream.fileno())
+            output = proof.HashedStream(stream) if 'exact_source_origin' in fields else stream
+            np.savez(output,**fields); stream.flush(); os.fsync(stream.fileno())
         size=temporary.stat().st_size
+        if isinstance(output,proof.HashedStream):
+            directory = proof.run_dir(path.parent.parent,str(fields['exact_source_origin']))
+            generation = int(fields['exact_generation'])
+            atomic_json(directory/f'checkpoint-{generation}.json',
+                        {'sha256':output.hash.hexdigest(),'bytes':size,'source_binding':str(fields['exact_source_binding'])})
         replace_with_retry(temporary,path)
     finally:
         temporary.unlink(missing_ok=True)
@@ -88,12 +95,13 @@ def main():
     parser.add_argument('--target',choices=('gold','edges'),default='gold',help='Gold requires one complete loop; edges is an explicit diagnostic search.')
     parser.add_argument('--checkpoint-seconds',type=float,default=30)
     parser.add_argument('--resume',action='store_true')
+    parser.add_argument('--host-terminal-only',action='store_true',help=argparse.SUPPRESS)
     parser.add_argument('--stop-file-initialized',action='store_true',help=argparse.SUPPRESS)
     parser.add_argument('--data',type=Path,default=ROOT/'data'/'tiles.json')
     parser.add_argument('--output',type=Path,default=ROOT/'runtime')
     args=parser.parse_args()
     try:
-        backend=choose_backend(args.backend)
+        backend=args.backend if args.resume else choose_backend(args.backend)
         gpu_features=normalize_features(args.gpu_features)
         if args.target!='gold' and any(gpu_features.values()):raise ValueError('Experimental GPU reasoning profiles require the Gold target.')
     except ValueError as exc: parser.error(str(exc))
@@ -101,7 +109,7 @@ def main():
         parser.error('Seconds must be 0 (unlimited) or positive; checkpoint interval positive, replicas 1..131072, nodes 1..512 required.')
     batches=AdaptiveBatchBudget(args.nodes,adaptive=not args.fixed_nodes)
     run=args.output.resolve(); run.mkdir(parents=True,exist_ok=True)
-    profile=('systematic-'+hashlib.sha256(json.dumps(feature_identity(gpu_features),sort_keys=True,separators=(',',':')).encode()).hexdigest()[:12]) if any(gpu_features.values()) else 'systematic'
+    profile=proof.profile_name(gpu_features)
     exact=run/profile; exact.mkdir(exist_ok=True)
     lock=run/'run.lock'
     try: fd=os.open(str(lock),os.O_CREAT|os.O_EXCL|os.O_WRONLY)
@@ -155,16 +163,8 @@ def main():
         input_snapshot=inputs/(data_sha+'.json')
         if not input_snapshot.exists(): input_snapshot.write_bytes(input_bytes)
         (evidence/'tiles.json').write_bytes(input_bytes)
-        source_names={'gpu_backends.py','systematic_search.py','systematic_jobs.py','exact_frontier.py','dfs_gpu.py','dfs_kernels.cu','gpu_reasoning.py','gpu_cpu_assist.py','gpu_engine.py','geometry.py','validator.py','io_utils.py','checkpoint_writer.py','search_problem.py','search_options.py','build_native.py'}
-        # CPU assistance and verified symmetry transitively use these rules.
-        # Snapshot their implementations as well as the top-level engine.
-        source_names.update(path.name for path in ROOT.glob('constraint_*') if path.suffix in ('.py','.c'))
-        for name in sorted(source_names):
-            body=(ROOT/name).read_bytes(); (evidence/name).write_bytes(body); hashes[name]=hashlib.sha256(body).hexdigest()
-        if backend=='webgpu':
-            for name in ('dfs_webgpu.py','dfs_kernels.wgsl','dfs_counter_reduce.wgsl'):
-                body=(ROOT/name).read_bytes(); (evidence/name).write_bytes(body); hashes[name]=hashlib.sha256(body).hexdigest()
-        hashes['tiles.json']=data_sha; status['source_sha256']=hashes
+        hashes = proof.capture(ROOT, evidence, data_sha)
+        status['source_sha256'] = hashes
         if (run/'best.json').exists():
             previous_best=json.loads((run/'best.json').read_text(encoding='utf-8-sig'))
             report=validate_arrangement(data,previous_best['codes'])
@@ -174,10 +174,13 @@ def main():
                 state='solved' if report['valid'] else 'edge_perfect'
                 publish(); return
         if stopping(): raise StartupStopped()
+        if args.host_terminal_only and proof.terminal_features(checkpoint) is None:
+            raise ValueError('A current completed Gold checkpoint is required for host verification.')
         if checkpoint.exists() and not args.resume:
             raise ValueError('A systematic checkpoint already exists. Resume it to preserve completed work.')
         frontier_binding=hashlib.sha256(masks.tobytes()+neighbors.tobytes()+neighbor_sides.tobytes()+order.tobytes()+data_sha.encode()).hexdigest()
-        if frontier_path.exists():
+        saved_frontier = frontier_path.exists()
+        if saved_frontier:
             publish('loading_frontier','Loading the saved, disjoint search branches.')
             with np.load(frontier_path,allow_pickle=False) as archive:
                 if str(archive['binding'])!=frontier_binding: raise ValueError('Saved branches belong to different puzzle data or geometry.')
@@ -221,10 +224,51 @@ def main():
                 # Saved lanes are repacked to the requested GPU population below.
         status['replicas']=replicas
         if stopping(): raise StartupStopped()
+        scope = {'frontier_sha256': frontier_hash, 'input_sha256': data_sha, 'target': args.target,
+                 'gpu_policy': feature_identity(gpu_features)}
+        source_binding = proof.origin_binding(hashes, scope)
+        origin_verified = True
+        marker = exact/'exhaustion.json'
+        def verify_partition():
+            target = frontier_metadata.get('target_jobs')
+            if type(target) is not int or not 1 <= target <= 131072:
+                raise ValueError('Invalid saved systematic partition size.')
+            plan = plan_frontier(masks, neighbors, neighbor_sides, order, target, stop_requested=stopping)
+            if stopping(): raise StartupStopped()
+            if (not plan.metadata.get('cover_complete') or not np.array_equal(plan.prefixes,prefixes)
+                    or not np.array_equal(plan.lengths,lengths)):
+                raise ValueError('Current planner refutes the coverage of the saved systematic frontier.')
+
+        if saved_frontier and not checkpoint.exists() and len(prefixes):
+            verify_partition()
         if len(prefixes)==0:
+            # An empty legacy partition has no GPU stack. Replay the deterministic planner
+            # before accepting its claim, even when its own prefix digest is self-consistent.
+            if marker.exists() and proof.read(marker).get('schema') == proof.SCHEMA:
+                old = proof.read(marker)
+                old_source = proof.verify_origin(run, old['run_id'], old.get('origin_binding'), hashes, scope)
+                if old != proof.record(old_source,scope,old['run_id'],0,0):
+                    raise ValueError('Empty frontier exhaustion evidence differs.')
+            else:
+                if saved_frontier:
+                    verify_partition()
+                atomic_json(evidence/'run-config.json', {'run_id':run_id, 'source_sha256':hashes, 'verified_coverage_origin':True})
+                atomic_json(marker, proof.record(hashes,scope,run_id,0,0))
             state='exhausted'; status.update(total_jobs=0,exhausted_jobs=0,active_jobs=0,paused_jobs=0,queued_jobs=0,unassigned_jobs=0,max_depth=0,candidates_checked=0)
-            atomic_json(exact/'exhaustion.json',{'state':state,'frontier_sha256':frontier_hash,'source_sha256':hashes,'metadata':frontier_metadata})
             publish(); return
+        if args.resume and checkpoint.exists():
+            with np.load(checkpoint,allow_pickle=False) as archive:
+                if (str(archive['exact_terminal']) == 'exhausted' and 'exact_source_origin' in archive
+                        and 'exact_source_binding' in archive and str(archive['exact_source_binding'])):
+                    status.update(proof.reopen_terminal(run,checkpoint,marker,archive,hashes,scope,len(prefixes)))
+                    state = 'exhausted'
+                    publish()
+                    return
+        if args.host_terminal_only:
+            raise ValueError('A current completed checkpoint is required for verification without a GPU backend.')
+        if args.resume:
+            backend=choose_backend(args.backend)
+            status['backend']=backend
         publish('initializing_gpu','Preparing GPU lanes for disjoint branches.')
         engine=DFS
         if backend=='webgpu':
@@ -238,6 +282,52 @@ def main():
                 ledger.validate_prefixes(gpu.prefix_codes,gpu.floors.get(),prefixes,lengths)
                 generation=int(archive['exact_generation']); maximum=int(archive['exact_max_depth']); checked=int(archive['exact_candidates'])
                 terminal=str(archive['exact_terminal'])
+                old_origin = str(archive['exact_source_origin']) if 'exact_source_origin' in archive else None
+                old_binding = str(archive['exact_source_binding']) if 'exact_source_binding' in archive else None
+                old_record = str(archive['exact_exhaustion_record']) if 'exact_exhaustion_record' in archive else ''
+            closed = ledger.completed == ledger.total
+            if terminal in ('exhausted','unverified_exhaustion') and not closed:
+                raise ValueError('Checkpoint claims exhaustion while branches remain unfinished.')
+            if old_origin is None and old_binding is None:
+                summary = {'total_jobs':ledger.total, 'exhausted_jobs':ledger.completed, 'assigned_jobs':ledger.cursor,
+                           'candidates_checked':checked, 'max_depth':maximum,
+                           'counters':[int(v) for v in ledger.counter_totals(gpu)]}
+                history = proof.legacy_origin(run, evidence, scope, gpu_features, summary,
+                                                      checkpoint.stat().st_size, generation, terminal, marker)
+                if history:
+                    verify_partition()
+                origin_verified = bool(history and closed and terminal == 'exhausted' and len(history)==1)
+                if history and not origin_verified:
+                    replay_inputs = dict(masks=masks,neighbors=board.neighbor_cells,neighbor_sides=board.neighbor_sides,
+                                         order=order,gold_data=data if args.target=='gold' else None)
+                    origin_verified = proof.verify_native_history(engine, replay_inputs, gpu_features, checkpoint,
+                                                                 history, prefixes, lengths, stopping)
+                    if stopping(): raise StartupStopped()
+                    status['historical_stack_replayed'] = origin_verified
+                # A truly untouched job ledger contains no prior GPU pruning to attest.
+                if (not closed and generation == checked == ledger.completed == 0 and not ledger.paused_count
+                        and not any(summary['counters']) and not terminal
+                        and np.array_equal(gpu.depths.get(),gpu.floors.get())
+                        and np.all(gpu.cursors.get()==65535)):
+                    verify_partition()
+                    origin_verified = True
+                if origin_verified and closed:
+                    if marker.exists():
+                        (evidence/'previous-exhaustion.json').write_bytes(marker.read_bytes())
+                    status['historical_exhaustion_verified'] = True
+            else:
+                try:
+                    proof.check_receipt(run,old_origin,generation,checkpoint,old_binding)
+                    previous_source = proof.verify_origin(run, old_origin, old_binding, hashes, scope)
+                except (KeyError, TypeError, OSError, ValueError) as exc:
+                    origin_verified = False
+                    if closed and terminal != 'unverified_exhaustion':
+                        raise ValueError('Systematic exhaustion source evidence failed: '+str(exc)) from exc
+                if closed and origin_verified:
+                    proof.check_terminal_record(run,old_origin,previous_source,scope,ledger.total,checked,old_record,marker)
+            if closed and terminal in ('', 'exhausted', 'unverified_exhaustion'):
+                terminal = 'exhausted' if origin_verified else 'unverified_exhaustion'
+
             if ledger.total!=len(prefixes): raise ValueError('Job ledger frontier size changed.')
         else:
             ledger=JobLedger.empty(len(prefixes),replicas); terminal=''
@@ -251,25 +341,34 @@ def main():
             payload.update(exact_gpu_features=np.array(json.dumps(feature_identity(gpu_features),sort_keys=True)),exact_frontier_sha256=np.array(frontier_hash),exact_data_sha256=np.array(data_sha),
                            exact_generation=np.array(generation,np.int64),exact_max_depth=np.array(maximum,np.int16),
                            exact_candidates=np.array(checked,np.int64),
-                           exact_terminal=np.array(state if state in ('solved','edge_perfect','exhausted') else ''))
+                           exact_source_origin=np.array(run_id),exact_source_target=np.array(args.target),
+                           exact_source_binding=np.array(source_binding if origin_verified else ''),
+                           exact_exhaustion_record=np.array(proof.record(hashes,scope,run_id,ledger.total,checked)['sha256']
+                                                            if state=='exhausted' else ''),
+                           exact_terminal=np.array(state if state in ('solved','edge_perfect','exhausted','unverified_exhaustion') else ''))
             return payload
         writer=CheckpointWriter(snapshot,lambda payload,gen: atomic_npz(checkpoint,payload))
         config={'method':'systematic','backend':backend,'run_id':run_id,'pid':os.getpid(),'started_at':started.isoformat(),
                 'replicas':gpu.n,'requested_replicas':args.replicas,'gpu_features':gpu_features,'search_profile':profile,'seconds':args.seconds,'seed':args.seed,
-                'source_sha256':hashes,'frontier_sha256':frontier_hash,'total_jobs':ledger.total,
+                'source_sha256':hashes,'verified_coverage_origin':origin_verified,'frontier_sha256':frontier_hash,'total_jobs':ledger.total,
                 'paused_jobs':ledger.paused_count,'checkpoint_seconds':args.checkpoint_seconds,
                 'target':args.target,'stop_on_gold_solution':args.target=='gold',
                 'adaptive_gpu_batches':batches.adaptive,'gpu_batch_target_ms':batches.target_ms,
                 'stop_on_matched_edges':240 if args.target=='edges' else None,'resumed':args.resume and checkpoint.exists()}
         atomic_json(run/'run-config.json',config); atomic_json(evidence/'run-config.json',config)
-        if terminal not in ('','solved','edge_perfect','exhausted'):
+        status['verified_coverage_origin'] = origin_verified
+        if not origin_verified:
+            status['coverage_note'] = 'Saved work is available for finding Gold. Its earlier branch exclusions have unverified source evidence.'
+        if terminal not in ('','solved','edge_perfect','exhausted','unverified_exhaustion'):
             trusted=False
             raise ValueError('Unknown terminal checkpoint state.')
-        if terminal=='exhausted':
+        if terminal in ('exhausted','unverified_exhaustion'):
             if ledger.completed!=ledger.total or np.any(ledger.ids>=0) or ledger.paused_count:
                 trusted=False
                 raise ValueError('Checkpoint claims exhaustion while branches remain unfinished.')
-            state=terminal; publish(); return
+            state=terminal
+            trusted = bool(status.get('historical_exhaustion_verified'))
+            publish(); return
         if terminal in ('solved','edge_perfect'):
             pending=np.flatnonzero(gpu.states.get()==1)
             if not len(pending):
@@ -347,7 +446,7 @@ def main():
                 ledger.refill(gpu,prefixes,lengths)
                 trusted=True
             if ledger.completed==ledger.total:
-                state='exhausted'; break
+                state='exhausted' if origin_verified else 'unverified_exhaustion'; break
             elapsed=time.monotonic()-began
             if elapsed-last_live>=1:
                 depths=gpu.depths.get(); high=gpu.maxdepths.get()
@@ -368,9 +467,6 @@ def main():
             if elapsed-last_status>=1:
                 publish(); last_status=elapsed
         if state=='running': state='stopped'
-        if state=='exhausted':
-            atomic_json(exact/'exhaustion.json',{'state':state,'frontier_sha256':frontier_hash,'source_sha256':hashes,
-                'completed_jobs':ledger.completed,'total_jobs':ledger.total,'candidates_checked':checked})
     except StartupStopped:
         state='stopped'
     except Exception as exc:
@@ -383,7 +479,10 @@ def main():
                 status['state_after_save']=terminal_state
                 state='saving_checkpoint'; publish()
                 state=terminal_state
-                try: writer.finish(generation)
+                try:
+                    writer.finish(generation)
+                    if state=='exhausted':
+                        atomic_json(marker,proof.record(hashes,scope,run_id,ledger.total,checked))
                 except Exception as exc:
                     state='error'; error=f'Checkpoint save failed: {exc}'
             if writer is not None: writer.close()

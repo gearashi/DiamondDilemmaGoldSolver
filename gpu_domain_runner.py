@@ -179,6 +179,10 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
     proof_transport=options.get('gpu_proof_transport',False)
     if type(proof_transport)is not bool:raise ValueError('gpu_proof_transport must be boolean.')
     if proof_transport:engine_options['proof_transport']=True
+    small_domain_split=options.get('gpu_small_domain_split',False)
+    if type(small_domain_split)is not bool:raise ValueError('gpu_small_domain_split must be boolean.')
+    from gpu_partitions_round34 import split_small_domains
+    partition=split_small_domains if small_domain_split else split_cubes
     propagated_forks=options.get('gpu_propagated_forks',False)
     if type(propagated_forks)is not bool:raise ValueError('gpu_propagated_forks must be boolean.')
     incremental_checkpoint=options.get('gpu_incremental_checkpoint',False)
@@ -334,7 +338,7 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
             ledger=CoverageLedger(learning_state['_coverage_path'],scope)
             if pool is None and not (resume and resume.get('lane_balance') and lane_balance):queued,_=ledger.remaining(queued) # Live owner groups retire only through their complete descendant set.
         if engine is None and not propagated_forks and not (resume and resume.get('lane_balance') and lane_balance and not portable_restart):
-            queued=split_cubes(queued,replicas)
+            queued=partition(queued,replicas)
             if global_matching:
                 queued,empty=inventory_screen(queued,problem.n)
                 completed+=len(empty)
@@ -487,7 +491,7 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
                     parent_stats=engine.stats();remaining=engine.remaining_domain_cubes()
                     totals['fork_parents']+=1;totals['fork_root_removals']+=parent_stats['domain_removals']
                     totals['fork_root_checks']+=parent_stats['support_checks']
-                    parts=split_cubes(remaining,replicas)
+                    parts=partition(remaining,replicas)
                     if len(parts)>1:
                         root_meta=engine.state[:11].get()
                         extras=queued[:max(0,replicas-len(parts))] if pool is not None else []
