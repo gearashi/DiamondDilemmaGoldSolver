@@ -4,6 +4,8 @@ from hashlib import sha256
 import json
 from pathlib import Path
 import unittest
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
 
 from r27_incumbent_compat import compatible_sources, legacy_sources
 from sampling_crossover_round26 import OptimizingCrossover, _digest
@@ -43,7 +45,7 @@ class HeuristicMigrationTests(unittest.TestCase):
         p.domains[0]=p.domains[0][:-1]
         with self.assertRaises(ValueError):
             OptimizingCrossover(p,gold_aware=True,max_nodes=1,resume=snapshot)
-        names=('constraint_work.py','r27_structure_filters.py','r32_gold_bonds.py','r34_coverage_index.py')
+        names=('constraint_work.py','r27_structure_filters.py','r32_gold_bonds.py','search_options.py','r34_coverage_index.py')
         current={name:sha256((Path(__file__).parent/name).read_bytes()).hexdigest() for name in names}
         old=legacy_sources(current,'v114-git')
         self.assertEqual(set(old),set(names[:-1]))
@@ -54,6 +56,21 @@ class HeuristicMigrationTests(unittest.TestCase):
             self.assertFalse(compatible_sources(old,modified))
         for missing in names[:-1]:
             self.assertFalse(compatible_sources({k:v for k,v in old.items() if k!=missing},current))
+
+    def test_foreign_option_edit_does_not_receive_the_reviewed_alias(self):
+        import r27_incumbent_compat as compat
+        name='search_options.py'
+        reviewed=(Path(__file__).parent/name).read_bytes()
+        changed=reviewed.replace(b'lookahead_ms', b'foreign_lookahead_ms')
+        self.assertNotEqual(changed,reviewed)
+        historical=legacy_sources({name:sha256(reviewed).hexdigest()},'v114-git')
+        self.assertIsNotNone(historical)
+        with TemporaryDirectory() as folder:
+            (Path(folder)/name).write_bytes(changed)
+            with patch.object(compat,'__file__',str(Path(folder)/'compat.py')):
+                current={name:sha256(changed).hexdigest()}
+                self.assertIsNone(legacy_sources(current,'v114-git'))
+                self.assertFalse(compatible_sources(historical,current))
 
 
 if __name__=='__main__':

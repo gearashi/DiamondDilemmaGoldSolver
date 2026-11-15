@@ -108,6 +108,10 @@ _R32_HEURISTIC = {
 # and the physical Gold filters are dormant. Each alias is pinned to its
 # reviewed current LF image and both text layouts of the v1.14.0 image.
 _R34_HEURISTIC = {
+    # The opt-in GPU-domain partition policy has no path into these heuristic controllers.
+    'search_options.py': ('9bc5ad2f1b2e2c039dd18d141b52693419f2f1118260869c32e673bac869981c',
+                          'a031ac39552a9f028191a4b62ff29a096777c7e3bbc671c0fd0ced4496b00e81',
+                          'cf8b4d9d6bea962ea4078f64cdf53662713e682bf3783abce054500cf1346d5d'),
     'constraint_work.py': ('a7804dfb62f7585ebe0ef578a86968646c0bc0ebdca093d811452832d7a8f48c',
                            '8cbf834fc1e89d13e23522becfc7378bd870c6f12b46ee9b97450e0c08862bbf',
                            '05f93d66eca7d55804c720de4523d7e090125795ab56de55421af9f1ecf87c88'),
