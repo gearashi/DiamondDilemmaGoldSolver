@@ -50,4 +50,6 @@ The #84 three-circuit 34-loss and connected 35-loss pairings share a newly teste
 
 The terminal #84/#86 portfolio supplied ten more distinct matchings. Its incoming pairings cover three phases, bringing the total to 25 complete matchings and 968 physical seams. All 480 geographic roots fail after 16,560 revisions and independently by unit propagation. The expanded membership and exact circuits are in the result record.
 
+A donor under a new 29-bond exclusion contributes seven seams. Its 975-seam union fails all 480 geographic roots in 16,850 revisions. The two combined geography and path-circuit controls then bring the portfolio to 31 complete matchings and 985 distinct seams. All roots still fail in 16,870 revisions. Glucose independently eliminates each anchor by unit propagation on the 460,480 geographic clauses. The exclusion covers arbitrary recombinations of these 985 seams. It does not bound a board using additional seams.
+
 Run `python bench_r35_mixed_sewings.py --tiles data/tiles.json --extend-union docs/R35_MIXED_MIP_DONOR.json --output expanded.json`. The [incoming pairings](R35_MIXED_MIP_DONOR.json) and [cross-checked result](R35_MIXED_SEWINGS.json) preserve the exact inputs.

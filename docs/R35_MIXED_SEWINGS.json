@@ -3529,6 +3529,353 @@
         "roots_rejected_by_unit_propagation": 480,
         "unresolved_roots": 0
       }
+    },
+    "donor_after_29_bond_rule": {
+      "phases": [
+        "0xcc57eae4e99109f8b073557e8c590b9202465766",
+        "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+        "0xd237aba7e91101e88041413e8c589902021e5126"
+      ],
+      "donors": 27,
+      "new": [
+        {
+          "key": "first_pairing",
+          "origin": "mip84-donor-sewing36",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            8,
+            68,
+            289
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-donor-sewing36",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-path-new-1-cold",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            8,
+            19,
+            40,
+            113,
+            185
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-path-new-1-cold",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-path-new-1",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            25,
+            340
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-path-new-1",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-path-old-1",
+          "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+          "cycles": [
+            18,
+            170,
+            177
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-path-old-1",
+          "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-path-second-0",
+          "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+          "cycles": [
+            5,
+            17,
+            19,
+            324
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-path-second-0",
+          "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-path-second-1",
+          "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+          "cycles": [
+            5,
+            17,
+            19,
+            21,
+            41,
+            262
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-path-second-1",
+          "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-29-new-0",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            8,
+            50,
+            307
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-29-new-0",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            365
+          ]
+        }
+      ],
+      "physical_seams": 975,
+      "propagated": {
+        "checked_roots": 480,
+        "survivors": [],
+        "cell_revisions": 16850
+      },
+      "independent_cnf": {
+        "clauses": 460480,
+        "variables": 76800,
+        "checked_roots": 480,
+        "roots_rejected_by_unit_propagation": 480,
+        "unresolved_roots": 0
+      }
+    },
+    "complete_mip84_geographic_path_portfolio": {
+      "phases": [
+        "0xcc57eae4e99109f8b073557e8c590b9202465766",
+        "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+        "0xd237aba7e91101e88041413e8c589902021e5126"
+      ],
+      "donors": 31,
+      "new": [
+        {
+          "key": "first_pairing",
+          "origin": "mip84-donor-sewing36",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            8,
+            68,
+            289
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-donor-sewing36",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-path-new-1-cold",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            8,
+            19,
+            40,
+            113,
+            185
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-path-new-1-cold",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-path-new-1",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            25,
+            340
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-path-new-1",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-path-old-1",
+          "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+          "cycles": [
+            18,
+            170,
+            177
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-path-old-1",
+          "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-path-second-0",
+          "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+          "cycles": [
+            5,
+            17,
+            19,
+            324
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-path-second-0",
+          "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-path-second-1",
+          "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+          "cycles": [
+            5,
+            17,
+            19,
+            21,
+            41,
+            262
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-path-second-1",
+          "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-29-new-0",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            8,
+            50,
+            307
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-29-new-0",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-29-combined-0",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            4,
+            8,
+            21,
+            61,
+            271
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-29-combined-0",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            365
+          ]
+        },
+        {
+          "key": "first_pairing",
+          "origin": "mip84-29-combined-19",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            4,
+            8,
+            141,
+            212
+          ]
+        },
+        {
+          "key": "pairs",
+          "origin": "mip84-29-combined-19",
+          "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+          "cycles": [
+            365
+          ]
+        }
+      ],
+      "physical_seams": 985,
+      "propagated": {
+        "checked_roots": 480,
+        "survivors": [],
+        "cell_revisions": 16870
+      },
+      "independent_cnf": {
+        "clauses": 460480,
+        "variables": 76800,
+        "checked_roots": 480,
+        "roots_rejected_by_unit_propagation": 480,
+        "unresolved_roots": 0
+      }
     }
   }
 }
