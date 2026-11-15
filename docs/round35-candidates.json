@@ -1482,6 +1482,24 @@
       "mechanism": "INDUCED-EDGE-CONTACT-CERTIFICATE",
       "state": "testing",
       "proposal_and_validation": "Compare all labelled root poses and actual raw line-endpoints; retain the physically embeddable but edge-perfect-impossible type separately. Discover alternate reference paths, phase and full matching costs, construct an integer-weight certificate, check objective scope, positive controls and global retention deployment."
+    },
+    {
+      "id": 82,
+      "area": "Exact Gold repair",
+      "source_id": "cross-consumer follow-up to #81 and Round 24/25 minimum-change master",
+      "title": "Seed the minimum-changed-cell repair master with verified geographic and physical conflicts",
+      "mechanism": "GOLD-REPAIR-SEEDED-CELL-CORES",
+      "state": "testing",
+      "proposal_and_validation": "The released public hitting-set master starts empty. A changed endpoint must hit every initially bad seam. A lost reference bond requires at least one of its two original cells to change. Project only independently confirmed physically required departures. Compare visible seams, fixed and variable seed scopes, proper loops, authenticated geometric/edge-perfect groups, and their combinations. Exhaust tiny seeds, measure representative and held-out original cases, evaluate initial and repeated native master/oracle work, and test interrupted, resumed and legacy histories."
+    },
+    {
+      "id": 83,
+      "area": "Fresh-board Gold geography",
+      "source_id": "positive surviving full-phase mate graphs after #8",
+      "title": "Refute full signed phases by probing scarce tile anchors and sharing eliminated geographic poses",
+      "mechanism": "SIGNED-PHASE-GEOGRAPHIC-ANCHOR-CLOSURE",
+      "state": "testing",
+      "proposal_and_validation": "Permit every signed mate for an entire phase, beyond the donor union. Compare tile zero with scarce anchors, independent geographic SAT, cumulative pose elimination, all-different, stable rotations and global complement. Preserve planted Gold and restricted domains, separate phase-only geographic exclusions from physical matching, and test on held-out phases and in actual Gold entry points. Measure eliminated roots, phases and downstream calls."
     }
   ],
   "priorities": [
@@ -1500,7 +1518,7 @@
   ],
   "baseline": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
   "worktree": "C:/DiamondDilemmaGoldSolver/round35",
-  "total_candidates": 81,
+  "total_candidates": 83,
   "first_parallel_groups": [
     [
       1

@@ -5,8 +5,10 @@ from r27_structure_filters import domain_bits
 from r30_gold import embedding
 
 
-def geographic_roots(problem,domains,edges):
+def geographic_roots(problem,domains,edges,*,anchor=0):
     """Exclude a root only when allowed physical mates empty a geographic cell domain."""
+    if type(anchor) is not int or not 0<=anchor<problem.n:
+        raise ValueError('Expected a physical tile ID for the anchor.')
     if len(domains)!=problem.n:
         raise ValueError('Expected one pose domain per board cell.')
     mates=[set() for _ in range(3*problem.n)]
@@ -26,11 +28,12 @@ def geographic_roots(problem,domains,edges):
     survivors=[]
     for home,d in enumerate(domains):
         for rot in range(3):
-            if not d&(1<<rot):continue
+            pinned=1<<(3*anchor+rot)
+            if not d&pinned:continue
             roots+=1
             work=deque([home])
             current=list(domains)
-            current[home]=1<<rot
+            current[home]=pinned
             viable=all(current)
             while viable and work:
                 cell=work.popleft()

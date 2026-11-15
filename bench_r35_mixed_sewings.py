@@ -86,7 +86,7 @@ def local_geography(p,edges,domains,max_tiles=45,trial_limit=None,domain_first=F
     return dict(survivors=survivors,concrete_partial_assignments=trials,depth_limit=max_tiles,capped_roots=capped)
 
 
-def union_sat(problem,edges):
+def union_sat(problem,edges,*,anchor=0):
     """Check each root in a geographic relaxation using SAT unit propagation on explicit poses."""
     from pysat.solvers import Solver
     p=problem
@@ -111,7 +111,7 @@ def union_sat(problem,edges):
             clauses+=1
         for c,poses in enumerate(domains):
             add([literal(c,v) for v in poses])
-            for root in range(3):
+            for root in range(3*anchor,3*anchor+3):
                 if root in poses:
                     for other in poses:
                         if other!=root:add([-literal(c,root),-literal(c,other)])
@@ -123,7 +123,7 @@ def union_sat(problem,edges):
                              if table[j][m] in domains[neighbor]]
                     add([-literal(c,code),*matches])
         for c,poses in enumerate(domains):
-            for root in range(3):
+            for root in range(3*anchor,3*anchor+3):
                 if root not in poses:continue
                 ok,_=solver.propagate(assumptions=[literal(c,root)])
                 checked+=1
