@@ -1,0 +1,853 @@
+[
+  {
+    "n": 0,
+    "seed": 0,
+    "options": 3035,
+    "banned": [],
+    "bundle_heads": 34,
+    "positive_implications": 42,
+    "nonincident_exclusions": 8,
+    "classes_priced": 40,
+    "class_states": 4746,
+    "unique_joint_checks": 21,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 4,
+    "seed": 0,
+    "options": 2957,
+    "banned": [],
+    "bundle_heads": 34,
+    "positive_implications": 42,
+    "nonincident_exclusions": 8,
+    "classes_priced": 44,
+    "class_states": 4151,
+    "unique_joint_checks": 21,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 4,
+    "seed": 1,
+    "options": 2972,
+    "banned": [],
+    "bundle_heads": 34,
+    "positive_implications": 42,
+    "nonincident_exclusions": 8,
+    "classes_priced": 44,
+    "class_states": 4438,
+    "unique_joint_checks": 21,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 4,
+    "seed": 2,
+    "options": 2886,
+    "banned": [],
+    "bundle_heads": 38,
+    "positive_implications": 46,
+    "nonincident_exclusions": 8,
+    "classes_priced": 44,
+    "class_states": 4743,
+    "unique_joint_checks": 23,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 4,
+    "seed": 3,
+    "options": 2985,
+    "banned": [],
+    "bundle_heads": 34,
+    "positive_implications": 46,
+    "nonincident_exclusions": 12,
+    "classes_priced": 44,
+    "class_states": 4318,
+    "unique_joint_checks": 23,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 4,
+    "seed": 4,
+    "options": 2900,
+    "banned": [],
+    "bundle_heads": 38,
+    "positive_implications": 46,
+    "nonincident_exclusions": 428,
+    "classes_priced": 44,
+    "class_states": 4370,
+    "unique_joint_checks": 23,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 4,
+    "seed": 5,
+    "options": 2909,
+    "banned": [],
+    "bundle_heads": 38,
+    "positive_implications": 46,
+    "nonincident_exclusions": 8,
+    "classes_priced": 44,
+    "class_states": 4680,
+    "unique_joint_checks": 23,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 4,
+    "seed": 6,
+    "options": 2937,
+    "banned": [],
+    "bundle_heads": 34,
+    "positive_implications": 42,
+    "nonincident_exclusions": 8,
+    "classes_priced": 44,
+    "class_states": 4581,
+    "unique_joint_checks": 21,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 4,
+    "seed": 7,
+    "options": 2913,
+    "banned": [],
+    "bundle_heads": 34,
+    "positive_implications": 38,
+    "nonincident_exclusions": 4,
+    "classes_priced": 44,
+    "class_states": 4675,
+    "unique_joint_checks": 19,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 4,
+    "seed": 8,
+    "options": 2915,
+    "banned": [],
+    "bundle_heads": 40,
+    "positive_implications": 48,
+    "nonincident_exclusions": 218,
+    "classes_priced": 43,
+    "class_states": 3849,
+    "unique_joint_checks": 24,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 4,
+    "seed": 9,
+    "options": 2918,
+    "banned": [],
+    "bundle_heads": 34,
+    "positive_implications": 42,
+    "nonincident_exclusions": 8,
+    "classes_priced": 44,
+    "class_states": 4127,
+    "unique_joint_checks": 21,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 12,
+    "seed": 0,
+    "options": 2765,
+    "banned": [],
+    "bundle_heads": 42,
+    "positive_implications": 50,
+    "nonincident_exclusions": 428,
+    "classes_priced": 52,
+    "class_states": 3457,
+    "unique_joint_checks": 25,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 12,
+    "seed": 1,
+    "options": 2835,
+    "banned": [],
+    "bundle_heads": 34,
+    "positive_implications": 38,
+    "nonincident_exclusions": 4,
+    "classes_priced": 51,
+    "class_states": 4379,
+    "unique_joint_checks": 19,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 12,
+    "seed": 2,
+    "options": 2728,
+    "banned": [],
+    "bundle_heads": 30,
+    "positive_implications": 34,
+    "nonincident_exclusions": 4,
+    "classes_priced": 53,
+    "class_states": 4278,
+    "unique_joint_checks": 17,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 12,
+    "seed": 3,
+    "options": 2842,
+    "banned": [],
+    "bundle_heads": 36,
+    "positive_implications": 48,
+    "nonincident_exclusions": 12,
+    "classes_priced": 51,
+    "class_states": 4008,
+    "unique_joint_checks": 24,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 12,
+    "seed": 4,
+    "options": 2571,
+    "banned": [],
+    "bundle_heads": 38,
+    "positive_implications": 46,
+    "nonincident_exclusions": 428,
+    "classes_priced": 52,
+    "class_states": 4147,
+    "unique_joint_checks": 23,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 12,
+    "seed": 5,
+    "options": 2763,
+    "banned": [],
+    "bundle_heads": 38,
+    "positive_implications": 42,
+    "nonincident_exclusions": 214,
+    "classes_priced": 52,
+    "class_states": 3537,
+    "unique_joint_checks": 21,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 12,
+    "seed": 6,
+    "options": 2688,
+    "banned": [],
+    "bundle_heads": 40,
+    "positive_implications": 48,
+    "nonincident_exclusions": 8,
+    "classes_priced": 52,
+    "class_states": 4416,
+    "unique_joint_checks": 24,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 12,
+    "seed": 7,
+    "options": 2836,
+    "banned": [],
+    "bundle_heads": 34,
+    "positive_implications": 34,
+    "nonincident_exclusions": 6,
+    "classes_priced": 54,
+    "class_states": 9296,
+    "unique_joint_checks": 17,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 12,
+    "seed": 8,
+    "options": 2802,
+    "banned": [],
+    "bundle_heads": 48,
+    "positive_implications": 52,
+    "nonincident_exclusions": 214,
+    "classes_priced": 52,
+    "class_states": 3790,
+    "unique_joint_checks": 26,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 12,
+    "seed": 9,
+    "options": 2672,
+    "banned": [],
+    "bundle_heads": 34,
+    "positive_implications": 42,
+    "nonincident_exclusions": 8,
+    "classes_priced": 53,
+    "class_states": 4066,
+    "unique_joint_checks": 21,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 24,
+    "seed": 0,
+    "options": 2473,
+    "banned": [],
+    "bundle_heads": 52,
+    "positive_implications": 56,
+    "nonincident_exclusions": 424,
+    "classes_priced": 66,
+    "class_states": 7558,
+    "unique_joint_checks": 28,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 24,
+    "seed": 1,
+    "options": 2581,
+    "banned": [],
+    "bundle_heads": 34,
+    "positive_implications": 38,
+    "nonincident_exclusions": 94,
+    "classes_priced": 63,
+    "class_states": 4388,
+    "unique_joint_checks": 19,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 24,
+    "seed": 2,
+    "options": 2481,
+    "banned": [],
+    "bundle_heads": 30,
+    "positive_implications": 34,
+    "nonincident_exclusions": 4,
+    "classes_priced": 65,
+    "class_states": 3693,
+    "unique_joint_checks": 17,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 24,
+    "seed": 3,
+    "options": 2478,
+    "banned": [],
+    "bundle_heads": 46,
+    "positive_implications": 58,
+    "nonincident_exclusions": 24,
+    "classes_priced": 64,
+    "class_states": 6633,
+    "unique_joint_checks": 32,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 24,
+    "seed": 4,
+    "options": 2295,
+    "banned": [],
+    "bundle_heads": 42,
+    "positive_implications": 46,
+    "nonincident_exclusions": 430,
+    "classes_priced": 65,
+    "class_states": 3457,
+    "unique_joint_checks": 23,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 24,
+    "seed": 5,
+    "options": 2475,
+    "banned": [],
+    "bundle_heads": 34,
+    "positive_implications": 38,
+    "nonincident_exclusions": 220,
+    "classes_priced": 64,
+    "class_states": 6490,
+    "unique_joint_checks": 19,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 24,
+    "seed": 6,
+    "options": 2434,
+    "banned": [],
+    "bundle_heads": 44,
+    "positive_implications": 52,
+    "nonincident_exclusions": 8,
+    "classes_priced": 64,
+    "class_states": 4326,
+    "unique_joint_checks": 26,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 24,
+    "seed": 7,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 24,
+    "seed": 8,
+    "options": 2485,
+    "banned": [],
+    "bundle_heads": 44,
+    "positive_implications": 48,
+    "nonincident_exclusions": 4,
+    "classes_priced": 64,
+    "class_states": 3033,
+    "unique_joint_checks": 24,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 24,
+    "seed": 9,
+    "options": 2364,
+    "banned": [],
+    "bundle_heads": 38,
+    "positive_implications": 42,
+    "nonincident_exclusions": 4,
+    "classes_priced": 65,
+    "class_states": 4054,
+    "unique_joint_checks": 21,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 48,
+    "seed": 0,
+    "options": 1811,
+    "banned": [],
+    "bundle_heads": 48,
+    "positive_implications": 52,
+    "nonincident_exclusions": 214,
+    "classes_priced": 91,
+    "class_states": 3989,
+    "unique_joint_checks": 26,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 48,
+    "seed": 1,
+    "prior_closed": "corner"
+  },
+  {
+    "n": 48,
+    "seed": 2,
+    "prior_closed": "corner"
+  },
+  {
+    "n": 48,
+    "seed": 3,
+    "prior_closed": "corner"
+  },
+  {
+    "n": 48,
+    "seed": 4,
+    "prior_closed": "corner"
+  },
+  {
+    "n": 48,
+    "seed": 5,
+    "options": 1972,
+    "banned": [],
+    "bundle_heads": 42,
+    "positive_implications": 50,
+    "nonincident_exclusions": 14,
+    "classes_priced": 87,
+    "class_states": 3776,
+    "unique_joint_checks": 25,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "n": 48,
+    "seed": 6,
+    "prior_closed": "corner"
+  },
+  {
+    "n": 48,
+    "seed": 7,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 48,
+    "seed": 8,
+    "prior_closed": "corner"
+  },
+  {
+    "n": 48,
+    "seed": 9,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 96,
+    "seed": 0,
+    "prior_closed": "corner"
+  },
+  {
+    "n": 96,
+    "seed": 1,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 96,
+    "seed": 2,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 96,
+    "seed": 3,
+    "prior_closed": "corner"
+  },
+  {
+    "n": 96,
+    "seed": 4,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 96,
+    "seed": 5,
+    "prior_closed": "corner"
+  },
+  {
+    "n": 96,
+    "seed": 6,
+    "prior_closed": "corner"
+  },
+  {
+    "n": 96,
+    "seed": 7,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 96,
+    "seed": 8,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 96,
+    "seed": 9,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 144,
+    "seed": 0,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 144,
+    "seed": 1,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 144,
+    "seed": 2,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 144,
+    "seed": 3,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 144,
+    "seed": 4,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 144,
+    "seed": 5,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 144,
+    "seed": 6,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 144,
+    "seed": 7,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 144,
+    "seed": 8,
+    "prior_closed": "matching"
+  },
+  {
+    "n": 144,
+    "seed": 9,
+    "prior_closed": "matching"
+  },
+  {
+    "phase_source": "raw",
+    "pins": 40,
+    "options": 2962,
+    "banned": [],
+    "native_replay": [],
+    "bundle_heads": 47,
+    "positive_implications": 63,
+    "nonincident_exclusions": 24,
+    "classes_priced": 40,
+    "class_states": 5074,
+    "unique_joint_checks": 34,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "phase_source": "raw",
+    "pins": 80,
+    "options": 2710,
+    "banned": [
+      [
+        217,
+        343
+      ],
+      [
+        252,
+        343
+      ],
+      [
+        343,
+        404
+      ]
+    ],
+    "native_replay": [
+      {
+        "head": [
+          217,
+          343
+        ],
+        "implied": [
+          [
+            23,
+            270
+          ]
+        ],
+        "native_matching_premises": 1,
+        "raw_parity_head": true,
+        "raw_parity_bundle": false
+      },
+      {
+        "head": [
+          252,
+          343
+        ],
+        "implied": [
+          [
+            23,
+            270
+          ]
+        ],
+        "native_matching_premises": 1,
+        "raw_parity_head": true,
+        "raw_parity_bundle": false
+      },
+      {
+        "head": [
+          343,
+          404
+        ],
+        "implied": [
+          [
+            23,
+            270
+          ]
+        ],
+        "native_matching_premises": 1,
+        "raw_parity_head": true,
+        "raw_parity_bundle": false
+      }
+    ],
+    "bundle_heads": 68,
+    "positive_implications": 91,
+    "nonincident_exclusions": 108,
+    "classes_priced": 45,
+    "class_states": 4659,
+    "unique_joint_checks": 55,
+    "extra_rejections": {
+      "phase": 3
+    },
+    "examples": [
+      {
+        "head": [
+          217,
+          343
+        ],
+        "implied": [
+          [
+            23,
+            270
+          ]
+        ],
+        "conflict": "phase"
+      },
+      {
+        "head": [
+          252,
+          343
+        ],
+        "implied": [
+          [
+            23,
+            270
+          ]
+        ],
+        "conflict": "phase"
+      },
+      {
+        "head": [
+          343,
+          404
+        ],
+        "implied": [
+          [
+            23,
+            270
+          ]
+        ],
+        "conflict": "phase"
+      }
+    ]
+  },
+  {
+    "phase_source": "raw",
+    "pins": 120,
+    "options": 2278,
+    "banned": [
+      [
+        222,
+        471
+      ]
+    ],
+    "native_replay": [
+      {
+        "head": [
+          222,
+          471
+        ],
+        "implied": [
+          [
+            66,
+            211
+          ]
+        ],
+        "native_matching_premises": 1,
+        "raw_parity_head": true,
+        "raw_parity_bundle": false
+      }
+    ],
+    "bundle_heads": 91,
+    "positive_implications": 108,
+    "nonincident_exclusions": 258,
+    "classes_priced": 52,
+    "class_states": 2924,
+    "unique_joint_checks": 47,
+    "extra_rejections": {
+      "phase": 1
+    },
+    "examples": [
+      {
+        "head": [
+          222,
+          471
+        ],
+        "implied": [
+          [
+            66,
+            211
+          ]
+        ],
+        "conflict": "phase"
+      }
+    ]
+  },
+  {
+    "phase_source": "raw",
+    "pins": 160,
+    "options": 1687,
+    "banned": [],
+    "native_replay": [],
+    "bundle_heads": 74,
+    "positive_implications": 78,
+    "nonincident_exclusions": 214,
+    "classes_priced": 76,
+    "class_states": 11140,
+    "unique_joint_checks": 39,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "phase_source": "contract",
+    "pins": 40,
+    "options": 2952,
+    "banned": [],
+    "native_replay": [],
+    "bundle_heads": 42,
+    "positive_implications": 58,
+    "nonincident_exclusions": 16,
+    "classes_priced": 40,
+    "class_states": 5013,
+    "unique_joint_checks": 29,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "phase_source": "contract",
+    "pins": 80,
+    "options": 2632,
+    "banned": [],
+    "native_replay": [],
+    "bundle_heads": 57,
+    "positive_implications": 86,
+    "nonincident_exclusions": 40,
+    "classes_priced": 46,
+    "class_states": 3954,
+    "unique_joint_checks": 42,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "phase_source": "contract",
+    "pins": 120,
+    "options": 2179,
+    "banned": [],
+    "native_replay": [],
+    "bundle_heads": 100,
+    "positive_implications": 129,
+    "nonincident_exclusions": 230,
+    "classes_priced": 53,
+    "class_states": 4831,
+    "unique_joint_checks": 57,
+    "extra_rejections": {},
+    "examples": []
+  },
+  {
+    "phase_source": "contract",
+    "pins": 160,
+    "options": 1587,
+    "banned": [],
+    "native_replay": [],
+    "bundle_heads": 84,
+    "positive_implications": 96,
+    "nonincident_exclusions": 222,
+    "classes_priced": 72,
+    "class_states": 12603,
+    "unique_joint_checks": 48,
+    "extra_rejections": {},
+    "examples": []
+  }
+]

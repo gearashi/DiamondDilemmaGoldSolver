@@ -1101,9 +1101,11 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             kwargs['gold_bonds'] = True
         pruner = Pruner(problem, check, native=options['native'], dirty_neighborhood=options['dirty_neighborhood'], parity_root_reuse=options['parity_root_reuse'], **kwargs)
         runtime.pruner_tables = pruner.tables
-        if target == 'gold' and getattr(problem, 'physical_conflicts', ()):
+        physical_claims=getattr(problem,'physical_conflicts',()) if target=='gold' else ()
+        geographic_claims=getattr(problem,'geographic_conflicts',())
+        if physical_claims or geographic_claims:
             from r32_gold_watch import BondWatcher
-            pruner.bond_watcher = BondWatcher(problem, problem.physical_conflicts, check)
+            pruner.bond_watcher = BondWatcher(problem,physical_claims,check,geographic=geographic_claims,domains=initial)
         advanced_options = tuple(sorted(options.items()))
         if runtime.advanced is not None and not isinstance(runtime.advanced,AdvancedPruner):
             raise ValueError('The in-memory advanced pruning cache is malformed.')

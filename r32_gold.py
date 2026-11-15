@@ -351,8 +351,11 @@ def main():
                  single_bond_loops=sorted(rules.loops))
     else:
         codes=case['codes'] if 'codes' in case else read_json(args.center)['codes']
-        extra=[]
-        for file in args.claims:extra.extend(read_json(file)['clauses'])
+        extra=[];geographic_hints=[]
+        for file in args.claims:
+            hints=read_json(file)
+            extra.extend(hints.get('clauses',()))
+            geographic_hints.extend(hints.get('geographic_cores',()))
         ref,cert,groups=reference_groups(p,codes,extra)
         for pair in [*case.get('required',[]),*case.get('forbidden',[])]:
             if (not isinstance(pair,(list,tuple)) or len(pair)!=2 or
@@ -390,6 +393,7 @@ def main():
         elif args.mode=='watch':
             from constraint_dfs import solve
             p.physical_conflicts=cert.clauses()
+            p.geographic_conflicts=geographic_hints
             if ds is not None:
                 from r27_structure_filters import bits
                 p.domains=[list(bits(row)) for row in ds]

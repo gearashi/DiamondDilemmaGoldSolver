@@ -1,0 +1,114 @@
+[
+  {
+    "reference_edge_perfect": 1,
+    "seed": 35,
+    "attempt": 0,
+    "domains": [
+      "0x1",
+      "0x8",
+      "0x40",
+      "0x200",
+      "0x1000",
+      "0x2408000",
+      "0x40000",
+      "0x3a38018",
+      "0x1000000",
+      "0x8000000"
+    ],
+    "core": [
+      [
+        7,
+        15
+      ],
+      [
+        18,
+        23
+      ]
+    ],
+    "removals": 1,
+    "reference_gold": 1
+  },
+  {
+    "reference_edge_perfect": 3,
+    "seed": 71,
+    "attempt": 0,
+    "domains": [
+      "0x38020201",
+      "0x8",
+      "0x40",
+      "0x30028200",
+      "0x1000",
+      "0x38800",
+      "0x40000",
+      "0x200000",
+      "0x1000000",
+      "0x8000601"
+    ],
+    "core": [
+      [
+        11,
+        29
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "removals": 1,
+    "reference_gold": 3
+  },
+  {
+    "reference_edge_perfect": 5,
+    "seed": 103,
+    "attempt": 0,
+    "domains": [
+      "0xa21",
+      "0x10e2f",
+      "0x40",
+      "0x600",
+      "0x1000",
+      "0x8008",
+      "0x40000",
+      "0x200000",
+      "0x1000000",
+      "0x8000000"
+    ],
+    "core": [
+      [
+        9,
+        25
+      ],
+      [
+        11,
+        12
+      ]
+    ],
+    "removals": 1,
+    "reference_gold": 5
+  },
+  {
+    "reference_edge_perfect": 1,
+    "seed": 157,
+    "attempt": 0,
+    "domains": [
+      "0x1",
+      "0x8",
+      "0x40",
+      "0x200",
+      "0x181ad000",
+      "0x148000",
+      "0x60000",
+      "0x200000",
+      "0x1000000",
+      "0x28018000"
+    ],
+    "core": [
+      [
+        0,
+        19
+      ]
+    ],
+    "removals": 1,
+    "reference_gold": 1
+  }
+]

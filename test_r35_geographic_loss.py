@@ -48,6 +48,8 @@ class GeographicLossTests(unittest.TestCase):
         codes=read_json('docs/R29_INCUMBENT.json')['codes'];wrong=codes.copy()
         wrong[0],wrong[1]=wrong[1],wrong[0]
         self.assertIsNone(certified_reference(p,wrong))
+        with patch('r35_geographic_loss.read_json',side_effect=FileNotFoundError):
+            self.assertIsNone(certified_reference(p))
         with patch('r35_geographic_loss.REFERENCE_SCOPE','unverified'):
             self.assertIsNone(certified_reference(p))
         with patch('r35_geographic_loss.OutsideSyndromes.layout',return_value=([],set(),[])):

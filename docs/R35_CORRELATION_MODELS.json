@@ -1,0 +1,401 @@
+[
+  {
+    "seed": 35,
+    "mode": "sparse",
+    "channel": false,
+    "prior": {
+      "status": "GOLD",
+      "cp_calls": 13,
+      "branches": 1198
+    },
+    "explicit": {
+      "status": "GOLD",
+      "cp_calls": 13,
+      "branches": 1198,
+      "signed_bundle_exclusions": [],
+      "equalities": 2,
+      "directional": 0,
+      "nonincident_exclusions": 0,
+      "table_states": 68
+    }
+  },
+  {
+    "seed": 35,
+    "mode": "full_channel",
+    "channel": true,
+    "prior": {
+      "status": "GOLD",
+      "cp_calls": 1,
+      "branches": 0
+    },
+    "explicit": {
+      "status": "GOLD",
+      "cp_calls": 1,
+      "branches": 0,
+      "signed_bundle_exclusions": [],
+      "equalities": 2,
+      "directional": 0,
+      "nonincident_exclusions": 0,
+      "table_states": 68
+    }
+  },
+  {
+    "seed": 35,
+    "mode": "mixed_words",
+    "channel": false,
+    "prior": {
+      "status": "GOLD",
+      "cp_calls": 4,
+      "branches": 251
+    },
+    "explicit": {
+      "status": "GOLD",
+      "cp_calls": 4,
+      "branches": 251,
+      "signed_bundle_exclusions": [],
+      "equalities": 2,
+      "directional": 0,
+      "nonincident_exclusions": 0,
+      "table_states": 68
+    }
+  },
+  {
+    "seed": 71,
+    "mode": "sparse",
+    "channel": false,
+    "prior": {
+      "status": "GOLD",
+      "cp_calls": 34,
+      "branches": 8575
+    },
+    "explicit": {
+      "status": "GOLD",
+      "cp_calls": 8,
+      "branches": 1398,
+      "signed_bundle_exclusions": [],
+      "equalities": 0,
+      "directional": 0,
+      "nonincident_exclusions": 10,
+      "table_states": 92
+    }
+  },
+  {
+    "seed": 71,
+    "mode": "full_channel",
+    "channel": true,
+    "prior": {
+      "status": "GOLD",
+      "cp_calls": 1,
+      "branches": 0
+    },
+    "explicit": {
+      "status": "GOLD",
+      "cp_calls": 1,
+      "branches": 0,
+      "signed_bundle_exclusions": [],
+      "equalities": 0,
+      "directional": 0,
+      "nonincident_exclusions": 10,
+      "table_states": 92
+    }
+  },
+  {
+    "seed": 71,
+    "mode": "mixed_words",
+    "channel": false,
+    "prior": {
+      "status": "GOLD",
+      "cp_calls": 7,
+      "branches": 126
+    },
+    "explicit": {
+      "status": "GOLD",
+      "cp_calls": 6,
+      "branches": 269,
+      "signed_bundle_exclusions": [],
+      "equalities": 0,
+      "directional": 0,
+      "nonincident_exclusions": 10,
+      "table_states": 92
+    }
+  },
+  {
+    "seed": 103,
+    "mode": "sparse",
+    "channel": false,
+    "prior": {
+      "status": "UNKNOWN",
+      "cp_calls": 48,
+      "branches": 14271
+    },
+    "explicit": {
+      "status": "GOLD",
+      "cp_calls": 26,
+      "branches": 5538,
+      "signed_bundle_exclusions": [],
+      "equalities": 0,
+      "directional": 8,
+      "nonincident_exclusions": 2,
+      "table_states": 76
+    }
+  },
+  {
+    "seed": 103,
+    "mode": "full_channel",
+    "channel": true,
+    "prior": {
+      "status": "GOLD",
+      "cp_calls": 1,
+      "branches": 0
+    },
+    "explicit": {
+      "status": "GOLD",
+      "cp_calls": 1,
+      "branches": 0,
+      "signed_bundle_exclusions": [],
+      "equalities": 0,
+      "directional": 8,
+      "nonincident_exclusions": 2,
+      "table_states": 76
+    }
+  },
+  {
+    "seed": 103,
+    "mode": "mixed_words",
+    "channel": false,
+    "prior": {
+      "status": "GOLD",
+      "cp_calls": 7,
+      "branches": 281
+    },
+    "explicit": {
+      "status": "GOLD",
+      "cp_calls": 7,
+      "branches": 281,
+      "signed_bundle_exclusions": [],
+      "equalities": 0,
+      "directional": 8,
+      "nonincident_exclusions": 2,
+      "table_states": 76
+    }
+  },
+  {
+    "seed": 157,
+    "mode": "sparse",
+    "channel": false,
+    "prior": {
+      "status": "GOLD",
+      "cp_calls": 9,
+      "branches": 180
+    },
+    "explicit": {
+      "status": "GOLD",
+      "cp_calls": 15,
+      "branches": 0,
+      "signed_bundle_exclusions": [],
+      "equalities": 2,
+      "directional": 0,
+      "nonincident_exclusions": 6,
+      "table_states": 49
+    }
+  },
+  {
+    "seed": 157,
+    "mode": "full_channel",
+    "channel": true,
+    "prior": {
+      "status": "GOLD",
+      "cp_calls": 1,
+      "branches": 0
+    },
+    "explicit": {
+      "status": "GOLD",
+      "cp_calls": 1,
+      "branches": 0,
+      "signed_bundle_exclusions": [],
+      "equalities": 2,
+      "directional": 0,
+      "nonincident_exclusions": 6,
+      "table_states": 49
+    }
+  },
+  {
+    "seed": 157,
+    "mode": "mixed_words",
+    "channel": false,
+    "prior": {
+      "status": "GOLD",
+      "cp_calls": 3,
+      "branches": 77
+    },
+    "explicit": {
+      "status": "GOLD",
+      "cp_calls": 6,
+      "branches": 77,
+      "signed_bundle_exclusions": [],
+      "equalities": 2,
+      "directional": 0,
+      "nonincident_exclusions": 6,
+      "table_states": 49
+    }
+  },
+  {
+    "original": true,
+    "pinned_phases": 0,
+    "prior": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 79008
+    },
+    "explicit": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 79029,
+      "signed_bundle_exclusions": [],
+      "equalities": 13,
+      "directional": 16,
+      "nonincident_exclusions": 4,
+      "table_states": 4746
+    }
+  },
+  {
+    "original": true,
+    "pinned_phases": 80,
+    "prior": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 28174
+    },
+    "explicit": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 28392,
+      "signed_bundle_exclusions": [],
+      "equalities": 13,
+      "directional": 76,
+      "nonincident_exclusions": 66,
+      "table_states": 4245
+    },
+    "signed_only": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 28174,
+      "signed_bundle_exclusions": [],
+      "table_states": 4245
+    }
+  },
+  {
+    "original": true,
+    "pinned_phases": 160,
+    "prior": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 9526
+    },
+    "explicit": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 9626,
+      "signed_bundle_exclusions": [],
+      "equalities": 36,
+      "directional": 24,
+      "nonincident_exclusions": 111,
+      "table_states": 12603
+    },
+    "signed_only": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 9526,
+      "signed_bundle_exclusions": [],
+      "table_states": 12603
+    }
+  },
+  {
+    "original": true,
+    "signed_callback": 80,
+    "prior": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 26142
+    },
+    "explicit": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 26497,
+      "signed_bundle_exclusions": [
+        [
+          217,
+          343
+        ],
+        [
+          252,
+          343
+        ],
+        [
+          343,
+          404
+        ]
+      ],
+      "equalities": 13,
+      "directional": 65,
+      "nonincident_exclusions": 54,
+      "table_states": 4659
+    },
+    "signed_only": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 26142,
+      "signed_bundle_exclusions": [
+        [
+          217,
+          343
+        ],
+        [
+          252,
+          343
+        ],
+        [
+          343,
+          404
+        ]
+      ],
+      "table_states": 4659
+    }
+  },
+  {
+    "original": true,
+    "signed_callback": 120,
+    "prior": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 10677
+    },
+    "explicit": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 10673,
+      "signed_bundle_exclusions": [
+        [
+          222,
+          471
+        ]
+      ],
+      "equalities": 29,
+      "directional": 50,
+      "nonincident_exclusions": 129,
+      "table_states": 2924
+    },
+    "signed_only": {
+      "status": "CONNECTED_SEWING",
+      "cp_calls": 1,
+      "branches": 10677,
+      "signed_bundle_exclusions": [
+        [
+          222,
+          471
+        ]
+      ],
+      "table_states": 2924
+    }
+  }
+]

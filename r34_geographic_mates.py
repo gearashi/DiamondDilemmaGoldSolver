@@ -6,22 +6,25 @@ from r32_gold_bonds import forbidden_codes
 from r35_physical_adjacency import geographic_inventory
 
 
-def _post(problem, domains, emit, check):
-    rules = geographic_inventory(problem)
+def _post(problem, domains, emit, check, physical=True):
     rows = [set(row) for row in domains]
     count = Counter()
-    claims = getattr(problem,'physical_conflicts',())
-    if claims:
+    claims = getattr(problem,'physical_conflicts',()) if physical else ()
+    geographic=getattr(problem,'geographic_conflicts',())
+    if claims or geographic:
         from r27_structure_filters import bits
         from r32_gold_watch import BondWatcher
         masks = [sum(1<<v for v in row) for row in rows]
         checked = masks.copy()
-        watcher = BondWatcher(problem,claims,check)
+        watcher = BondWatcher(problem,claims,check,geographic=geographic,domains=masks)
         if watcher.prune(checked):
             for c,(old,new) in enumerate(zip(masks,checked)):
                 for code in bits(old^new):
                     emit(c,code,c,None,True)
-                    count['physical_core_units'] += 1
+                    count['physical_core_units' if physical else 'geographic_core_units'] += 1
+
+    if not physical:return dict(count)
+    rules=geographic_inventory(problem)
 
     @lru_cache(maxsize=9)
     def templates(s,t):
@@ -43,17 +46,17 @@ def _post(problem, domains, emit, check):
     return dict(count)
 
 
-def post_sat(problem, variables, clause, check):
+def post_sat(problem, variables, clause, check, *, physical=True):
     def emit(a,i,b,j,required):
         row = [-variables[a][i]]
         if j is not None:
             right = variables[b][j]
             row.append(right if required else -right)
         clause(row)
-    return _post(problem,variables,emit,check)
+    return _post(problem,variables,emit,check,physical)
 
 
-def post_cpsat(problem, model, codes, domains, check, placements=None):
+def post_cpsat(problem, model, codes, domains, check, placements=None, *, physical=True):
     @lru_cache(None)
     def literal(c,v):
         if placements is not None:
@@ -71,10 +74,10 @@ def post_cpsat(problem, model, codes, domains, check, placements=None):
             model.add_implication(literal(a,i),right if required else ~right)
         else:
             model.add(codes[b]==j if required else codes[b]!=j).only_enforce_if(literal(a,i))
-    return _post(problem,domains,emit,check)
+    return _post(problem,domains,emit,check,physical)
 
 
-def post_cp(problem, solver, codes, domains, check):
+def post_cp(problem, solver, codes, domains, check, *, physical=True):
     @lru_cache(None)
     def literal(c,v):
         return solver.IsEqualCstVar(codes[c],v)
@@ -85,4 +88,4 @@ def post_cp(problem, solver, codes, domains, check):
         else:
             left,right = literal(a,i),literal(b,j)
             solver.Add(left<=right if required else left+right<=1)
-    return _post(problem,domains,emit,check)
+    return _post(problem,domains,emit,check,physical)

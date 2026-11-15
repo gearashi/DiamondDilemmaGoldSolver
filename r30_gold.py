@@ -407,7 +407,7 @@ class GoldMatching:
 
 def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=(), matching=True,
            geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=(),
-           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None, joint_poses=False, reference_bound=False):
+           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None, joint_poses=False, reference_bound=False, mate_correlations=False):
     from ortools.sat.python import cp_model
     if seconds<=0 or max_rounds<1 or (geography and not matching):
         raise ValueError("Invalid Gold solve budget or mode.")
@@ -418,6 +418,20 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             raise ValueError("Invalid physical side index.")
     started=time.monotonic()
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
+    replayed_geography=()
+    if geographic_cores and geography:
+        from r35_geographic_replay import replay_for
+        replayed_geography=replay_for(problem).check(domains,geographic_cores)
+        fixed={tuple(sorted(e)) for e in bonds}
+        if physical_support:
+            from r32_gold_bonds import inventory
+            fixed.update(inventory(problem).required)
+        forbidden=list(forbidden)
+        for core in replayed_geography:
+            missing=core-fixed
+            if not missing:
+                return dict(status='INFEASIBLE',geographic_cores=[sorted(core)],**stats)
+            if len(missing)==1:forbidden.extend(missing)
     cardinality=None
     if reference_bound:
         if not geography:
@@ -452,6 +466,10 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
         raise ValueError("Corner constraints require an embed search and a supported corner mode.")
     if type(project_blanks) is not bool:
         raise ValueError("Expected a boolean blank-side projection option.")
+    if mate_correlations not in (False,True,'full','signed'):
+        raise ValueError('Unknown physical mate correlation mode.')
+    if mate_correlations and not matching:
+        raise ValueError('Mate correlations require physical matching.')
     if project_blanks and not matching:
         raise ValueError("Blank-side projection requires a physical matching search.")
     if matching:
@@ -462,6 +480,9 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             project_blanks = False
         check=GoldMatching(problem,domains,pins,bonds,cutsets,forbidden,physical_support=physical_support,
                            project_blanks=project_blanks,corner_mode=corner_mode,neighbor_mode=neighbor_mode,turn_length=turn_length,tour_mode=tour_mode)
+        if mate_correlations:
+            from r35_mate_correlations import post_correlations
+            stats['mate_correlations']=post_correlations(check,pins,bonds,signed_only=mate_correlations=='signed')
         if cardinality is not None:
             reference,limit=cardinality
             check.m.add(sum(check.mate[p] for p in reference if p in check.mate)<=limit)
@@ -492,12 +513,11 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             from r31_geographic import GeographicConflicts
             check.geo_conflicts=GeographicConflicts(problem,domains)
             stats.update(geographic_core_sizes=[],geographic_cores=[])
-            for core in geographic_cores:
-                pairs=frozenset(tuple(sorted(row)) for row in core)
-                if pairs<=check.mate.keys() and check.geo_conflicts.impossible(pairs):
+            for pairs in replayed_geography:
+                if pairs<=check.mate.keys():
                     m=check.m
                     m.add_bool_or([~check.mate[p] for p in pairs])
-                    check.geo_conflicts.cores.append(pairs)
+                check.geo_conflicts.cores.append(pairs)
             stats['geographic_cores']=[sorted(c) for c in check.geo_conflicts.cores]
         if channel:
             from r31_geographic import channel_geographic
@@ -635,6 +655,7 @@ def main():
     cli.add_argument("--input",type=Path)
     cli.add_argument("--seconds",type=float,default=5)
     cli.add_argument("--rounds",type=int,default=32)
+    cli.add_argument("--mate-correlations",nargs="?",const="full",choices=("full","signed"),help="Post verified conditional mate implications in represented reciprocal classes.")
     cli.add_argument("--reference-bound",action="store_true",help="Apply the published certified incumbent-loss bound in geographic Gold.")
     cli.add_argument("--joint-poses",action="store_true",help="Prune unsupported simultaneous mandatory component poses before geographic search.")
     cli.add_argument("--tour-mode",choices=("raw","contract","sparse"),help="Post a circuit on mandatory physical strand paths.")
@@ -653,6 +674,9 @@ def main():
     project_blanks=args.project_blanks or data.get('project_blanks',False)
     corner_mode=args.corner_mode or data.get('corner_mode')
     neighbor_mode=args.neighbor_mode or data.get('neighbor_mode')
+    mate_correlations=args.mate_correlations or data.get('mate_correlations',False)
+    if mate_correlations and args.method not in ('matching','embed'):
+        cli.error('--mate-correlations requires matching or embed.')
     reference_bound=args.reference_bound or data.get('reference_bound',False)
     if reference_bound and args.method!='embed':
         cli.error('--reference-bound requires embed.')
@@ -709,7 +733,7 @@ def main():
                    cutsets=data.get('strand_cuts',()),type_cuts=reusable,max_rounds=args.rounds,
                    learned_geometry=args.method=="embed" and data.get("learn_geography",True),
                    channel=data.get("channel",args.method=="embed" and not project_blanks and not corner_mode and not neighbor_mode and not turn_length and not tour_mode),
-                   corner_mode=corner_mode,neighbor_mode=neighbor_mode,turn_length=turn_length,tour_mode=tour_mode,joint_poses=joint_poses,reference_bound=reference_bound,
+                   corner_mode=corner_mode,neighbor_mode=neighbor_mode,turn_length=turn_length,tour_mode=tour_mode,joint_poses=joint_poses,reference_bound=reference_bound,mate_correlations=mate_correlations,
                    project_blanks=project_blanks,fraction=data.get("fractional",False),
                    bridges=[*data.get("bridges",()),*prior.get("bridge_hints",())],
                    geographic_cores=prior.get("geographic_cores",()) if args.method=="embed" else (),

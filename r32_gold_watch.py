@@ -25,15 +25,26 @@ def verified_placement(problem, claims, placements):
 
 class BondWatcher:
     """Derive present physical mates and unit exclusions from every remaining owner pose."""
-    def __init__(self, problem, claims, check=lambda:None):
+    def __init__(self, problem, claims, check=lambda:None, *, geographic=(), domains=None):
         from collections import defaultdict
         self.problem = problem
         self.check = check
-        cert = Certificates(problem)
-        for row in claims:
-            check()
-            cert.add([row])
-        self.clauses = tuple(sorted(cert.rows,key=lambda row:(len(row),sorted(row))))
+        physical=set()
+        if claims:
+            cert=Certificates(problem)
+            for row in claims:
+                check()
+                cert.add([row])
+            physical.update(cert.rows)
+        clauses=set(physical)
+        self.geographic_scope=None
+        if geographic:
+            from r35_geographic_replay import replay_for
+            verifier=replay_for(problem)
+            self.geographic_scope=tuple(verifier.root if domains is None else domains)
+            clauses.update(verifier.check(self.geographic_scope,geographic,stop=check))
+        self.clauses = tuple(sorted(clauses,key=lambda row:(len(row),sorted(row))))
+        self.geographic_only={i for i,row in enumerate(self.clauses) if row not in physical}
         self.by_tile = defaultdict(set)
         self.by_pair = defaultdict(set)
         for i,clause in enumerate(self.clauses):
@@ -105,7 +116,10 @@ class BondWatcher:
                 self.actions[i] = missing
             else:
                 self.actions.pop(i,None)
-        for missing in self.actions.values():
+        within=(self.geographic_scope is None or
+                all(x&~root==0 for x,root in zip(original,self.geographic_scope)))
+        for i,missing in self.actions.items():
+            if not within and i in self.geographic_only:continue
             if not missing:
                 domains[0] = 0
                 self.conflicts += 1

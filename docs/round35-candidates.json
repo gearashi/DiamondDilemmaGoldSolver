@@ -221,7 +221,14 @@
       "source_id": 14,
       "title": "Replay geometric and physical matching explanations across engines",
       "proposal_and_validation": "r32_gold_loss.Certificates checks local banned pairs, conflicting incidents, proper loops and signed XOR. r31_geographic.GeographicConflicts independently rechecks ribbon genus/pose packing under a domain scope. gpu_deduction_round26._Producer.removal can produce boundary, seam, cell-tile Hall and singleton loop evidence. Screen an actual native/user trace for repeated verified geometric/mate conflicts unrepresentable as small reusable placement deductions. If present, define narrow replayable rules for a short mesh-word/vertex obstruction, independently verified unsupported physical mate, or incompatible labelled component footprints. Keep scope-specific inventories, topology, domains, required bonds and sign assumptions in the proof. First feed a checked nogood to CPU SAT/CP/DFS, then GPU-domain cross-lane and prefix checks if the same conditions recur. Retain the ordinary edges objective for geometric rules valid for it, and explicitly isolate Gold-only derivations. Compare complete projected boards, rule applicability and exact original-scope replay, including weakened domains, changed tiles/drawings, forged certificates and limits. Report repeated expensive proof checks replaced, transferred branch eliminations and checker cost. R24Ã¢â‚¬â€œ26 already transfer checked generic clause/proof data; an unchanged new transport or another general clause store has no separate merit.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "Keep checked sphere/domain-bound core transport. Five actual cross-engine cores required five initial replays for 44 repeated uses. Four previous same-hint CP presolves became zero native calls. Four finite placement units preserve all legal completions; 131,072 native lanes and 51 installed DFS frames had zero actionable future units, so exclude GPU broadcast.",
+      "evidence": [
+        "docs/ROUND35_GEOGRAPHIC_REPLAY.md",
+        "docs/R35_GEOGRAPHIC_REPLAY.json",
+        "docs/R35_GEOGRAPHIC_UNITS.json",
+        "test_r35_geographic_replay.py"
+      ]
     },
     {
       "id": 15,
@@ -229,7 +236,14 @@
       "source_id": 15,
       "title": "Propagate correlations between physical mates within one mask class",
       "proposal_and_validation": "r27_structure_filters._perfect_supports and r32_gold_bonds.gold_matching_supports decide whether each single pair belongs to some complete matching; R34 repeats the search after newly mandatory partners or a premature proper loop. For a small structured class with several perfect matchings, record co-occurrences: selecting e may necessarily select f, or exclude f, although neither is globally mandatory or forbidden. Detect forced alternating blocks through matching decompositions or memoized conditional exact matching. Combine the **whole implied set** with forced strand paths, corner chains, geometry and phase checks before exploring its alternate side mates. Translate a failed branch into a checked conditional nogood; compile compact finite options per sparse class only when actual nontrivial equivalences occur. r28_geo_sewing.sign_filter handled a two-by-two switch for parity, and r32_gold_bonds.bounded_loop_cores searches small selected tuples for direct strand closure. Neither exposes general co-selection implications from complete side matching to the other propagators. Use complete enumeration on small bipartite/nonbipartite classes and signed/restricted conditions; avoid expanding the 46-dart dense class unconditionally. Count nontrivial implications, bundled early exclusions beyond individual support and native nodes saved on actual residuals.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "Keep optional conditional matching assertions and signed-bundle exclusions. Four actual options failed only with an implied mate; native exact-one and independently reconstructed raw parity checks validated each. Sparse held-out searches improved, all four full geographic channels already solved without branching, and the original signed comparison was mixed.",
+      "evidence": [
+        "docs/ROUND35_MATE_CORRELATIONS.md",
+        "docs/R35_MATE_CORRELATIONS.json",
+        "docs/R35_CORRELATION_MODELS.json",
+        "test_r35_mate_correlations.py"
+      ]
     },
     {
       "id": 16,
@@ -308,7 +322,7 @@
       "source_id": 9,
       "title": "Incremental donor-prefix defect obligations and durable budget cores",
       "proposal_and_validation": "r32_route_pool.defect_cover rebuilds every seam/star for a typed prefix and CoverCores scans a process-local latest-1,024 deque. Recompute changed obligations only on affected stars, apply available-mover masks after the immutable inventory work, index a minimal core antichain by rare failure sets and persist proved cores under domain/semantic binding. If enough distinct budgets recur, derive verified frontier points in the (remaining movers, permitted seam failures) plane, using actual certified infeasibility or bounds. R34 already avoided 116 CP calls on the published comparison. Measure clauses/stars rebuilt, new first hits/avoided calls across prefix orders and restarts. Check both implication directions and multiple clauses for identical failed-seam sets, no shared global negatives from UNKNOWN.",
-      "state": "open"
+      "state": "in progress"
     },
     {
       "id": 25,

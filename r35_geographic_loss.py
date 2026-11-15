@@ -12,11 +12,13 @@ def certified_reference(problem, codes=None):
     """Rebuild the exact mathematical scope that the shipped DRAT proof covers."""
     if problem.fingerprint != 'e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853':
         return None
-    if codes is None:
-        codes=read_json(Path(__file__).parent/'docs/R29_INCUMBENT.json')['codes']
     try:
+        if codes is None:
+            codes=read_json(Path(__file__).parent/'docs/R29_INCUMBENT.json')['codes']
+        if len(codes)!=problem.n or any(type(c) is not int or not 0<=c<3*problem.n for c in codes):
+            return None
         reference,_,groups=reference_groups(problem,codes)
-    except ValueError:
+    except (OSError,ValueError,TypeError,KeyError):
         return None
     packed,required,_=OutsideSyndromes.layout(reference,groups,inventory(problem).required)
     identity=digest([3,problem.fingerprint,sorted(reference),sorted(required),[sorted(g) for g in packed]])
