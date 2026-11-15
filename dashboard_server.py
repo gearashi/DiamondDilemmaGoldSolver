@@ -4,6 +4,7 @@ from pathlib import Path
 import argparse,ctypes,datetime,json,os,secrets,socket,subprocess,sys,threading
 from urllib.parse import urlsplit
 from io_utils import read_json_shared
+from dashboard_snapshots import read_display_file
 from gpu_backends import BACKENDS
 from search_algorithms import ALGORITHMS,LABELS
 from search_options import EXACT_ALGORITHMS,normalize_options,validate_workers
@@ -18,7 +19,7 @@ CHILD=None
 LAUNCH_CONFIG={}
 
 def read_json(name,default=None):
-    try:return read_json_shared(RUNTIME/name)
+    try:return read_display_file(RUNTIME/name,read_json_shared)
     except (OSError,ValueError):return default
 def pid_alive(pid):
     if type(pid)is not int or pid<=0:return False
@@ -179,6 +180,9 @@ def startup_status(pid):
         status['phase_message']=('Restoring disjoint branches and saved cursors.' if restoring else 'Preparing disjoint GPU search branches.') if systematic else ('Restoring saved search and validating its cache.' if restoring else 'Preparing the GPU search.')
     return status
 
+def installation_identity():
+    return {'service':'diamond-dilemma','installation_root':str(ROOT.resolve())}
+
 def state_payload():
     pid=live_pid();status=read_json('status.json',{})
     if not isinstance(status,dict):status={}
@@ -187,10 +191,10 @@ def state_payload():
     # Preserve the runner's actual phase, including checkpoint telemetry.
     display_state=status.get('state','idle')
     if stop_requested and display_state!='saving_checkpoint':display_state='stopping'
-    return {'service':'diamond-dilemma','installation_root':str(ROOT.resolve()),'status':status,'display_state':display_state,
+    return {**installation_identity(),'status':status,'display_state':display_state,
         'stop_requested':stop_requested,'best':read_json('best.json'),
         'live':read_json('live.json'),'history':read_json('history.json',[]),
-        'process_running':bool(pid),'control_token':TOKEN,'capabilities':runtime_capabilities(),
+        'process_running':bool(pid),'control_token':TOKEN,'capabilities':runtime_capabilities(display=True),
         'systematic_terminal_profiles':[] if pid else terminal_profiles(RUNTIME)}
 
 class Handler(BaseHTTPRequestHandler):
@@ -211,6 +215,7 @@ class Handler(BaseHTTPRequestHandler):
             from geometry import build_board
             raw=json.loads((ROOT/'data'/'tiles.json').read_text(encoding='utf-8-sig'))
             return self.send(200,{'tiles':raw['tiles'],'geometry':build_board().as_dict(),'source_url':raw.get('source_url')})
+        if path=='/api/identity':return self.send(200,installation_identity())
         if path=='/api/state':
             return self.send(200,state_payload())
         if path=='/favicon.ico':return self.send(204,b'','image/x-icon')

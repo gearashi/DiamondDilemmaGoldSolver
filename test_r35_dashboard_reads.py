@@ -1,0 +1,116 @@
+"""Verify lightweight dashboard identity and immutable snapshot reuse."""
+from http.client import HTTPConnection
+import hashlib
+import json
+import os
+from pathlib import Path
+import platform
+import sys
+import tempfile
+import threading
+import unittest
+from unittest.mock import Mock, patch
+
+import dashboard_server as dashboard
+from dashboard_snapshots import read_display_file
+from io_utils import atomic_json, read_json_shared
+import platform_launcher
+import runtime_capabilities
+
+
+class DashboardReadTests(unittest.TestCase):
+    def setUp(self):
+        directory = self.enterContext(tempfile.TemporaryDirectory())
+        self.root = Path(directory)
+        self.enterContext(patch.object(dashboard, 'RUNTIME', self.root))
+        self.enterContext(patch.object(dashboard, 'CHILD', None))
+
+    def test_identity_needs_no_state_even_when_its_response_exceeds_launcher_limit(self):
+        atomic_json(self.root/'history.json', [{'score':207, 'tested':i} for i in range(42000)])
+        server = dashboard.DashboardHTTPServer(('127.0.0.1',0), dashboard.Handler)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            port = server.server_port
+            conn = HTTPConnection('127.0.0.1',port,timeout=5)
+            try:
+                conn.request('GET','/api/state')
+                response=conn.getresponse()
+                self.assertEqual(response.status,200)
+                self.assertGreater(len(response.read()),1024*1024)
+            finally:
+                conn.close()
+            with patch.object(dashboard,'state_payload',side_effect=AssertionError('Read full state')):
+                identity=platform_launcher.read_dashboard(port)
+                self.assertEqual(identity,dashboard.installation_identity())
+                self.assertEqual(set(identity),{'service','installation_root'})
+                conn=HTTPConnection('127.0.0.1',port,timeout=5)
+                try:
+                    conn.request('GET','/api/identity',headers={'Host':'unrelated.example'})
+                    self.assertEqual(conn.getresponse().status,403)
+                finally:
+                    conn.close()
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=5)
+
+    def test_snapshot_replacement_deletion_corruption_and_recovery(self):
+        path=self.root/'best.json'
+        first={'score':207}
+        atomic_json(path,first)
+        previous=path.stat()
+        reader=Mock(wraps=read_json_shared)
+        with patch.object(dashboard,'read_json_shared',reader):
+            self.assertEqual(dashboard.read_json(path.name),first)
+            self.assertEqual(dashboard.read_json(path.name),first)
+            self.assertEqual(reader.call_count,1)
+            tmp=self.root/'next'
+            atomic_json(tmp,{'score':205})
+            os.utime(tmp,ns=(previous.st_atime_ns,previous.st_mtime_ns))
+            os.replace(tmp,path)
+            self.assertEqual(dashboard.read_json(path.name),{'score':205})
+            self.assertEqual(reader.call_count,2)
+            path.unlink()
+            self.assertIsNone(dashboard.read_json(path.name))
+            path.write_text('{')
+            self.assertIsNone(dashboard.read_json(path.name))
+            atomic_json(path,{'score':202})
+            self.assertEqual(dashboard.read_json(path.name),{'score':202})
+
+    def test_replacement_during_decode_does_not_publish_under_wrong_version(self):
+        path=self.root/'live.json'
+        atomic_json(path,{'step':1})
+        def decode(target):
+            result=read_json_shared(target)
+            if result['step']==1:
+                atomic_json(target,{'step':2})
+            return result
+        self.assertEqual(read_display_file(path,decode),{'step':1})
+        self.assertEqual(read_display_file(path,decode),{'step':2})
+
+    def test_native_display_caches_digests_but_strict_validation_checks_current_bytes(self):
+        root=self.root
+        folder=root/'.native'
+        folder.mkdir()
+        native=folder/'demo.bin'
+        source=root/'constraint_native_search.c'
+        source.write_bytes(b'source')
+        native.write_bytes(b'library')
+        manifest=dict(abi=1,platform=sys.platform,machine=platform.machine(),library=native.name,
+                      source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
+                      library_sha256=hashlib.sha256(native.read_bytes()).hexdigest())
+        atomic_json(folder/'search-build.json',manifest)
+        with patch.object(runtime_capabilities,'_digest',wraps=runtime_capabilities._digest) as digest:
+            for _ in range(3):
+                self.assertTrue(runtime_capabilities._native_explanation_build(root,display=True)['available'])
+            self.assertEqual(digest.call_count,2)
+            self.assertTrue(runtime_capabilities._native_explanation_build(root)['available'])
+            self.assertEqual(digest.call_count,4)
+            replacement=folder/'update'
+            replacement.write_bytes(b'changed')
+            os.replace(replacement,native)
+            self.assertFalse(runtime_capabilities._native_explanation_build(root,display=True)['available'])
+            self.assertEqual(digest.call_count,5)
+            self.assertFalse(runtime_capabilities._native_explanation_build(root)['available'])
+            self.assertEqual(digest.call_count,7)

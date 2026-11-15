@@ -22,7 +22,11 @@ def _installed(module):
         return False
 
 
-def _native_explanation_build(root=None):
+def _digest(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _native_explanation_build(root=None, *, display=False):
     """Check the required local build without loading executable native code."""
     root=Path(root) if root is not None else Path(__file__).resolve().parent
     reason='Native explanations require a matching local compiled search library. Run python build_native.py in this installation first.'
@@ -34,13 +38,18 @@ def _native_explanation_build(root=None):
                 or metadata.get('machine')!=platform.machine()
                 or not isinstance(name,str) or not name or Path(name).name!=name):
             return {'available':False,'reason':reason,'detection':'native_build_metadata'}
-        available=(metadata.get('source_sha256')==hashlib.sha256((root/'constraint_native_search.c').read_bytes()).hexdigest()
-                   and metadata.get('library_sha256')==hashlib.sha256((folder/name).read_bytes()).hexdigest())
+        digest = _digest
+        if display:
+            from functools import partial
+            from dashboard_snapshots import read_display_file
+            digest = partial(read_display_file, reader=_digest)
+        available=(metadata.get('source_sha256')==digest(root/'constraint_native_search.c')
+                   and metadata.get('library_sha256')==digest(folder/name))
     except (OSError,ValueError,TypeError,AttributeError):available=False
     return {'available':bool(available),'reason':'' if available else reason,'detection':'native_build_metadata'}
 
 
-def runtime_capabilities():
+def runtime_capabilities(*, display=False):
     """Describe this interpreter, never another installed Python environment."""
     def feature(available, requirement):
         return {'available': bool(available), 'reason': '' if available else requirement}
@@ -68,7 +77,7 @@ def runtime_capabilities():
                        'sat': dict(sat), 'sat-propagator':dict(sat),
                        'sat-channel':dict(sat),'cp-sat-regions':dict(cp)},
         'backends': {'auto': gpu, 'cuda': cuda, 'webgpu': webgpu},
-        'options': {'retained_repair':dict(cp),'sat_assist': dict(sat), 'gold_oracle': dict(cp), 'gold_pricing':dict(cp), 'smart_learning':dict(sat), 'shared_sat_assistant':dict(sat), 'shared_sat_service':dict(sat), 'semantic_witnesses':dict(sat), 'higher_order_relations':dict(sat), 'native_sat_persistence':sat_persistence,'gpu_shared_clauses':dict(sat),'native_explanations':_native_explanation_build()},
+        'options': {'retained_repair':dict(cp),'sat_assist': dict(sat), 'gold_oracle': dict(cp), 'gold_pricing':dict(cp), 'smart_learning':dict(sat), 'shared_sat_assistant':dict(sat), 'shared_sat_service':dict(sat), 'semantic_witnesses':dict(sat), 'higher_order_relations':dict(sat), 'native_sat_persistence':sat_persistence,'gpu_shared_clauses':dict(sat),'native_explanations':_native_explanation_build(display=display)},
         'features': {'repair': dict(cp)},
     }
 

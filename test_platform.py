@@ -231,10 +231,22 @@ class PortableLauncherTests(unittest.TestCase):
         handlers = self.opener_factory.call_args.args
         self.assertEqual(handlers[0].proxies, {})
         self.assertIs(handlers[1], launcher._NoRedirect)
-        self.opener_factory.return_value.open.assert_called_once_with('http://127.0.0.1:9876/api/state', timeout=2)
+        self.opener_factory.return_value.open.assert_called_once_with('http://127.0.0.1:9876/api/identity', timeout=2)
         response.read.assert_called_once_with(1024 * 1024 + 1)
         self.socket.assert_not_called()
         self.tcp.assert_not_called()
+
+    def test_existing_older_dashboard_falls_back_after_unknown_route_only(self):
+        opener = self.opener_factory.return_value
+        original = self.response(self.payload)
+        endpoint = 'http://127.0.0.1:9876/api/identity'
+        old = urllib.error.HTTPError(endpoint, 404, 'Not found', {}, io.BytesIO())
+        opener.open.side_effect = [old, opener.open.return_value]
+        self.assertEqual(launcher.read_dashboard(9876), self.payload)
+        self.assertEqual([call.args[0] for call in opener.open.call_args_list],
+                         [endpoint, 'http://127.0.0.1:9876/api/state'])
+        original.read.assert_called_once()
+        self.spawn.assert_not_called()
 
     def test_bad_port_is_rejected_before_network(self):
         for port in (0, 65536, -1, True, 8766.0, '8766'):

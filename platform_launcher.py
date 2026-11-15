@@ -69,8 +69,16 @@ def read_dashboard(port=8766):
         raise ValueError('Port must be an integer between 1 and 65535.')
     opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), _NoRedirect)
     try:
-        with opener.open(f'http://127.0.0.1:{port}/api/state', timeout=2) as response:
-            body = response.read(1024 * 1024 + 1)
+        try:
+            response = opener.open(f'http://127.0.0.1:{port}/api/identity', timeout=2)
+        except urllib.error.HTTPError as error:
+            with error:
+                if error.code != 404:
+                    raise
+            # Older running dashboards publish their installation only in state.
+            response = opener.open(f'http://127.0.0.1:{port}/api/state', timeout=2)
+        with response as stream:
+            body = stream.read(1024 * 1024 + 1)
         if len(body) > 1024 * 1024:
             raise RuntimeError('The dashboard response is unexpectedly large.')
         payload = json.loads(body)

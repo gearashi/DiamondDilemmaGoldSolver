@@ -1738,6 +1738,15 @@
         "test_r35_claim_catalogue.py"
       ],
       "reopen_if": "A distinct independently proved claim catalogue or physical geometry is supplied, or a measured public receiver still repeats certified group replay. Domain narrowing alone is covered, including the independently proved stronger branch-local seam."
+    },
+    {
+      "id": 88,
+      "area": "Dashboard startup and telemetry",
+      "source_id": "Final release review of the bookmarked dashboard launch and 1 Hz polls",
+      "title": "Verify the listener without reading search state and reuse unchanged dashboard inputs",
+      "mechanism": "DASHBOARD-IDENTITY-AND-TELEMETRY-READS",
+      "state": "testing",
+      "proposal_and_validation": "The published launcher verifies the installation by requesting the full /api/state. This reads the saved board, status, live candidates and history, inspects checkpoints and verifies optional native source/library digests. Reproduce the launcher's one-mebibyte failure using a legitimate large dashboard state. Test a lightweight identity route, compatibility with a running older version, occupied or mismatched ports, and actual Windows startup/reopen. Compare immutable published status reads and native hash work across repeated polls with changing and atomically replaced files. Preserve fresh validation of solver starts and the live Gold search."
     }
   ],
   "priorities": [
@@ -1756,7 +1765,7 @@
   ],
   "baseline": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
   "worktree": "C:/DiamondDilemmaGoldSolver/round35",
-  "total_candidates": 87,
+  "total_candidates": 88,
   "first_parallel_groups": [
     [
       1
