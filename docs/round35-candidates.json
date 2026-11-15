@@ -137,7 +137,7 @@
         "test_r35_mixed_sewings.py",
         "docs/R35_MIXED_MIP_DONOR.json"
       ],
-      "decision": "Retain the original common-phase search plus exact child-specific XOR phases, forced alternating cycles, signed frontier caching and the all-donor geographic root check. Thirteen complete original physical counts and planted real Gold children agree with independent verification. The 25 complete donors, including the final #84/#86 conditional physical portfolio, supply 968 seams. All 480 geographic roots fail in 16,560 revisions and independent SAT unit propagation. Every iterated recombination confined to those seams is geographically exhausted. Two larger purely abstract counts remain bounded diagnostics.",
+      "decision": "Retain the original common-phase search plus exact child-specific XOR phases, forced alternating cycles, signed frontier caching and the all-donor geographic root check. Thirteen complete original physical counts and planted real Gold children agree with independent verification. The final 31 complete donors, including the #84/#86 geographic and path combinations, supply 985 seams. All 480 geographic roots fail in 16,870 revisions and independent SAT unit propagation. Every iterated recombination confined to those seams is geographically exhausted. Two larger purely abstract counts remain bounded diagnostics.",
       "reopen_if": "A new physical donor supplies seams outside the documented union and at least one root survives the combined geographic test, or a material application requires one of the two unresolved physical-only counts. The three full signed mate pools admit geographic roots and remain distinct from the named donor family."
     },
     {
@@ -1575,10 +1575,10 @@
       "source_id": "cross-consumer follow-up to #81 and Round 24/25 minimum-change master",
       "title": "Seed the minimum-changed-cell repair master with verified geographic and physical conflicts",
       "mechanism": "GOLD-REPAIR-SEEDED-CELL-CORES",
-      "state": "testing",
+      "state": "keep with exact scope",
       "proposal_and_validation": "The released public hitting-set master starts empty. A changed endpoint must hit every initially bad seam. A lost reference bond requires at least one of its two original cells to change. Project only independently confirmed physically required departures. Compare visible seams, fixed and variable seed scopes, proper loops, authenticated geometric/edge-perfect groups, and their combinations. Exhaust tiny seeds, measure representative and held-out original cases, evaluate initial and repeated native master/oracle work, and test interrupted, resumed and legacy histories.",
-      "decision": "Use the 93-change bound and all 120 independently replayed adaptive rows on the named geographic reference. Transfer necessary pose rows and the distance lower bound to compatible nearby seeds. Recheck current fixed and domain restrictions. Persist native failures separately and preserve actual v1.15 pending work before changing the next master.",
-      "measurement": "The 3,804 original geographic constraints require 89 of 160 cells to change. After 88 further verified rows the exact hitting optimum is 93; external DRAT verified cap92 in 13,977,119 resolution steps. Another 32 valid rows reject that particular 93-hit; the cap93 result is unresolved. On held-out rotations, 45,126/45,522 charged decisions fell to 29,977/29,446. Original first scope now costs 37,944 master branches versus 2,032 on a known failed 93-hit. All 1,944 finite seeds and native minimums 1/3/4 agree.",
+      "decision": "Use the externally verified 95-change bound, 301 regional pose constraints and exact source/domain-bound checks on actual returned optimal hits. Transfer only matching seed placements. Keep generated placement cores separate from genuine native failures, replay historical pending queries and resume new pending preflights.",
+      "measurement": "The 4,225-row relaxation has exact optimum 95. The cap94 external checker verified 33,196,790 resolution steps. All 279 new 3/4-cell exclusions cut concrete old master assignments, and 22 larger rows exclude 152 of 239 assignments passing those 279. All tested 95-hit geographic candidates fail on the full board. On the matched public run the next-master-plus-Gold cost fell from 28,124 to 26,106 native branches. One 42-cell native failure became an eight-cell independently replayable propagation core. Historical, interruption, forged-state and held-out controls pass.",
       "evidence": [
         "docs/ROUND35_REPAIR_DISTANCE.md",
         "docs/R35_REPAIR_DISTANCE.json",
@@ -1586,10 +1586,16 @@
         "docs/R35_REFINED_REPAIR_PROOF.json",
         "docs/R35_REPAIR_LEGACY_CONSUMERS.json",
         "bench_r35_repair_refinement.py",
-        "test_r35_repair_seeds.py"
+        "test_r35_repair_seeds.py",
+        "docs/R35_REPAIR_CROSSOVER.json",
+        "docs/R35_REPAIR_REGIONAL.json",
+        "docs/R35_REGIONAL_REPAIR_PROOF.json",
+        "docs/R35_REPAIR_PROPOSALS.json",
+        "bench_r35_repair_crossover.py",
+        "bench_r35_repair_proposals.py",
+        "test_r35_repair_proposals.py"
       ],
-      "reopen_if": "New independent geographic constraints, a new incumbent, a verifiably reusable native master frontier or a genuinely different consumer changes the decision. Further cap93 sampling alone extends ongoing search coverage.",
-      "reopened_evidence": "New geographically verified path-to-loop rule 17 from #86 produced 16 independently replayed, undominated three- and four-cell exclusions. Test the concrete 96–98-cell surviving selections, fixed/unfixed controls and legacy transfer before closing this measured extension."
+      "reopen_if": "A new independent geographic mechanism or a different scored seed changes the physical/repair model. Merely enumerating more regional UP conflicts cannot raise this 95-cell relaxation because its upper witness survives the whole donor-region UP check. Actual new full-board master hits are screened by the running solver."
     },
     {
       "id": 83,
@@ -1795,6 +1801,15 @@
         "test_dashboard_control.py"
       ],
       "reopen_if": "An actual current listener cannot be recognized or a measured regular poll rereads an unchanged tracked file. The owner's previous port message has no established cause in these experiments."
+    },
+    {
+      "id": 89,
+      "area": "Transfer between geographic Gold search and repair proofs",
+      "source_id": "Combined-tree review after the independently checked 95-cell repair lower bound",
+      "title": "Use checked original-pose exclusions and oriented-cell distance in geographic Gold queries",
+      "mechanism": "REPAIR-POSE-CLAUSES-IN-GOLD",
+      "state": "testing",
+      "proposal_and_validation": "The 4,225 original-pose clauses now certify a 95-cell distance. The repair master consumes them, while geographic Gold --reference-bound counts named physical bonds and has no oriented-cell rows. Compare fixed near-reference, held-out and broad queries against the released geographic checks. Measure novel early rejection, pose removal or real native calls, validate raw proof bindings, full-board automorphisms if useful, independence from scores and alternate artwork, and screen existing unrestricted root propagation before considering broader deployment."
     }
   ],
   "priorities": [
@@ -1813,7 +1828,7 @@
   ],
   "baseline": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
   "worktree": "C:/DiamondDilemmaGoldSolver/round35",
-  "total_candidates": 88,
+  "total_candidates": 89,
   "first_parallel_groups": [
     [
       1

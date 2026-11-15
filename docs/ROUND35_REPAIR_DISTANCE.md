@@ -17,9 +17,10 @@ The repair master chooses cells to change. Each row lists a set of original pose
 | Pairs up to two cells apart | 83 |
 | Pairs up to three cells apart | 88 |
 | Pairs up to six cells apart, domain width 128 | 89 |
-| Add 88 contradictions extracted from proposed changes | **93** |
+| Add 88 contradictions extracted from proposed changes | 93 |
+| Include the 32 later pose conflicts and 301 regional conflicts | **95** |
 
-The all-distance pair screen reached the same 89 as radius six. Checking the broad 331 signed departure groups, 194 geographic groups and 985 edge-contact groups raised the local corpus from 99 to 190 rows before the joint geographic pass and produced the same bound of 30. Generic repairs use width 64 and radius two. The verified original poses can be reused wherever the new seed agrees. Fixed or restricted cells can make a scope infeasible before an oracle query. A seed differing by one orientation from the original receives a bound of at least 92.
+The all-distance pair screen reached the same 89 as radius six. Checking the broad 331 signed departure groups, 194 geographic groups and 985 edge-contact groups raised the local corpus from 99 to 190 rows before the joint geographic pass and produced the same bound of 30. Generic repairs use width 64 and radius two. The verified original poses can be reused wherever the new seed agrees. Fixed or restricted cells can make a scope infeasible before an oracle query. A seed differing by a single orientation from the original receives a bound of at least 94.
 
 The independent geographic encoder enumerated 3,060 reciprocal dart pairs from the raw endpoints. It removed 21 pairs that seal a proper circuit and three more that prevent a perfect physical matching. It separately checked all eight compulsory mates. Its 230,080-variable, 690,240-clause geographic formula refuted 3,800 original rows by unit propagation. The independent circuit checker confirmed the remaining four. All 120 adaptive additions replayed against the geographic formula.
 
@@ -29,11 +30,21 @@ The original 3,804 rows admit an 89-cell relaxed assignment. DRAT-trim verified 
 
 The 19 path-to-loop exclusions and one independent 29-bond geographic obstruction can also constrain particular cells of the archived board. Either endpoint of a compulsory rigid domino fixes both orientations. Eighteen path projections contained an already known smaller cell conflict. The remaining direct projection produced four nine-cell candidates. Checking all 1,151 distinct subsets found sixteen new minimal contradictions.
 
-A second check allowed other conflicts to overlap the known ones. It examined every subset within the nineteen path regions, and every subset through four cells within the 29-cell donor region. The public master gained 34 three-cell and 245 four-cell contradictions. Thirty-one actual selections, each changing 96â€“107 cells and satisfying all earlier master rules, demonstrate that every new clause excludes an earlier choice. Larger subsets of the donor region refuted 152 of 239 distinct 95â€“105-cell assignments that already passed the 279 small clauses. Twenty-two further minimal rows of five to seven cells reproduce all 152 exclusions; the other 87 assignments pass the same geographic relaxation.
+A second check allowed other conflicts to overlap the known ones. It examined every subset within the nineteen path regions, and every subset through four cells within the 29-cell donor region. The public master gained 34 three-cell and 245 four-cell contradictions. Thirty-one actual selections, each changing 96–107 cells and satisfying all earlier master rules, demonstrate that every new clause excludes an earlier choice. Larger subsets of the donor region refuted 152 of 239 distinct 95–105-cell assignments that already passed the 279 small clauses. Twenty-two further minimal rows of five to seven cells reproduce all 152 exclusions; the other 87 assignments pass the same geographic relaxation.
 
 The complete master has 4,225 placement obligations. CaDiCaL refuted 93 or fewer changes, and DRAT-trim independently verified 17,342,342 resolution steps. It also checked the 94-change exclusion in 33,196,790 resolution steps. The recorded 95-cell assignment hits every obligation, so the optimum of this geographic relaxation is exactly 95. Fixing its 65 remaining poses on the full board yields a contradiction. Two one-for-one exchanges pass the first eight-cell contradiction and also fail full-board propagation. The minimum distance to a genuine Gold board remains unknown. Fixing a newly prohibited combination in the original problem gives an immediate zero-oracle result in plain and durable repair, including reopen. Rotating cell 0 preserved all 301 new exclusions. Rotating cell 103 preserved 297. The two rotations at cells 129 and 130 leave 285 additional exclusions relative to that modified seed's previous native rules.
 
-Run `python bench_r35_repair_crossover.py --tiles data/tiles.json --write-cnf regenerated.cnf --output replay.json` to validate the projections, individual deletion controls, every previous-master counterexample, all larger held-out cases and the regenerated threshold formula. Add `--exhaust-overlap` for the complete small-subset census. [Geographic controls and selections](R35_REPAIR_CROSSOVER.json) Â· [Placement rows](R35_REPAIR_REGIONAL.json) Â· [Regional proof receipt](R35_REGIONAL_REPAIR_PROOF.json)
+Run `python bench_r35_repair_crossover.py --tiles data/tiles.json --write-cnf regenerated.cnf --output replay.json` to validate the projections, individual deletion controls, every previous-master counterexample, all larger held-out cases and the regenerated threshold formula. Add `--exhaust-overlap` for the complete small-subset census. [Geographic controls and selections](R35_REPAIR_CROSSOVER.json) · [Placement rows](R35_REPAIR_REGIONAL.json) · [Regional proof receipt](R35_REGIONAL_REPAIR_PROOF.json)
+
+The 95-cell witness passes geographic unit propagation on all its unchanged cells inside the 29-cell donor region. Adding further contradictions from that same propagation inside those cells cannot raise the regional optimum. A bounded scan made 12,000 maximal-set evaluations at all widths. It identified 8,413 additional higher-width contradictions and 3,587 maximal sets that passed. The full count at those widths remains unknown.
+
+## Checking newly proposed hits
+
+A new minimum-change master choice fixes the poses of the remaining cells. The solver propagates physical partners and unique tile owners from all those poses. A complete singleton placement must pass the full Gold validator. A contradiction supplies an independently reproducible subset of unchanged cells that cannot all remain in place. Unresolved proposals go to the native Gold oracle. Four such failures on the 95-cell witness and its nearest tested alternatives are preloaded when their exact original poses still agree.
+
+In the public durable comparison, the previous path built a Gold model, spent 2,032 branches disproving the hit, received a 42-cell native core and spent 26,092 more branches in the next master. Propagation gave an eight-cell conflict and the next master spent 26,106 branches. The two matched calls therefore fell from 28,124 to 26,106 charged branches. Both later master searches remained unresolved at the same three-deterministic-second budget. Reopening consumed the stored eight-cell conflict and made zero Gold oracle calls. The native hitting-set search itself restarted at that boundary.
+
+The checkpoint distinguishes native failures, geographically proved placement conflicts and a master hit awaiting propagation. A fresh process rechecks saved geographic conflicts under the same source, seed, policy and domains. Reopening again on the identical live problem reuses this check. A native query already pending in v1.15 still runs before the next master uses new rules. New singleton solutions and locally refuted hits charge zero native Gold queries. The [public comparison](R35_REPAIR_PROPOSALS.json) can be reproduced with `python bench_r35_repair_proposals.py --tiles data/tiles.json --output proposals.json`.
 
 ## Public repair controls
 
@@ -49,17 +60,19 @@ For three held-out four-tile seeds every variant matched the true Gold distances
 
 ## Reproduction and continued search
 
-After the normal tile-data preparation, use the Python environment with OR-Tools and python-sat. The two published proof archives include the DRAT files, CNFs, manifests, and checker logs. Each invocation below should run alongside the corresponding archive's extracted proof.
+After the normal tile-data preparation, use the Python environment with OR-Tools and python-sat. The three published repair-distance proof archives include the DRAT files, CNFs, manifests, and checker logs. Each invocation below should run alongside the corresponding archive's extracted proof.
 
 ```sh
 python bench_r35_repair_seeds.py --tiles data/tiles.json --catalog --write-cap88 cap88.cnf --output base-replay.json
 drat-trim cap88.cnf cap88.drat
 python bench_r35_repair_refinement.py --tiles data/tiles.json --write-cnf cap92.cnf --output refined-replay.json
 drat-trim cap92.cnf cap92.drat
+python bench_r35_repair_crossover.py --tiles data/tiles.json --write-cnf cap94.cnf --output regional-replay.json
+drat-trim cap94.cnf cap94.drat
 ```
 
 To examine a different candidate without changing solver evidence, supply a JSON list of proposed changed cell indices to `bench_r35_repair_refinement.py --selection cells.json --output checked-cuts.json`. The default extracts up to 32 independently checked local conflicts. The original screen ended at the first unresolved cap, inside a single 510-second adaptive block. Additional candidates now belong to the ongoing search over that same mechanism.
 
-For unrestricted single-loop Gold search on Windows use `.\StartSolver.cmd -Algorithm dfs -Unlimited`. Linux and macOS use `bash StartSolver.sh --algorithm dfs --unlimited`. Use the scored-board repair mode when the specific objective is minimum change from a supplied board. The best scored geographic board in these tests remained 207/240.
+For unrestricted CPU DFS on Windows, use `.\StartSolver.cmd -Algorithm dfs -Unlimited`. The Linux and macOS CPU equivalent is `bash StartSolver.sh --algorithm dfs --unlimited`. The scored-board repair mode searches for minimum change from a supplied board. The best geographic score in these tests remained 207/240. For the measured RTX 2060 CUDA settings, see the [Round 35 settings and results](ROUND35_RESULTS.md).
 
-The measured controls and file identities are in [the result record](R35_REPAIR_DISTANCE.json), [the antecedent proof receipt](R35_REPAIR_DISTANCE_PROOF.json) and [the refined proof receipt](R35_REFINED_REPAIR_PROOF.json).
+The measured controls and file identities are in [the result record](R35_REPAIR_DISTANCE.json), [the antecedent proof receipt](R35_REPAIR_DISTANCE_PROOF.json), [the refined proof receipt](R35_REFINED_REPAIR_PROOF.json) and [the regional proof receipt](R35_REGIONAL_REPAIR_PROOF.json).

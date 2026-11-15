@@ -87,3 +87,34 @@ class RepairPropagation:
                 seen.update(ring)
             for b in sorted(seen):
                 if b>c:yield (c,b)
+
+
+class ProposedRepair:
+    """Check a newly chosen master hit against the held poses before opening a Gold oracle."""
+    def __init__(self,problem,codes):
+        from r35_repair_seeds import Repairs
+        self.problem=problem
+        self.codes=tuple(codes)
+        self.engine=RepairPropagation(problem,Repairs(problem,codes,lambda:None).mates)
+
+    def verdict(self,held):
+        ds=self.engine.narrow(self.codes,held,128,True)
+        if ds is None:return False
+        if any(d&(d-1) for d in ds):return None
+        board=[d.bit_length()-1 for d in ds]
+        return board if self.problem.validate(board)['valid'] else False
+
+    def test(self,held,check):
+        cells=list(held)
+        check()
+        result=self.verdict(cells)
+        if result is not False:return result,None
+        # Removing blocks first makes the final single-deletion sweep cheaper.
+        for width in (16,4,1):
+            i=0
+            while i<len(cells):
+                check()
+                reduced=cells[:i]+cells[i+width:]
+                if self.verdict(reduced) is False:cells=reduced
+                else:i+=width
+        return None,cells

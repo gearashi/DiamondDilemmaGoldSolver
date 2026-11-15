@@ -105,7 +105,7 @@ def _patch(problem, patch):
 
 
 def _fresh(kind, board):
-    return {'phase': 'walk' if kind == 'trade' else 'query' if kind == 'scoped' else 'master',
+    return {**({'propagated_cores':[]} if kind=='core' else {}),'phase': 'walk' if kind == 'trade' else 'query' if kind == 'scoped' else 'master',
             'status': 'unknown', 'reason': None, 'best_board': list(board),
             'pending': None, 'retry': False, 'master_retry': False,
             'failures': [], 'cores': [], 'conflicts': [], 'minimum_changes': None,
@@ -120,11 +120,25 @@ def _ints(row, low, high, *, distinct=True, ordered=False):
             and (not ordered or row == sorted(row)))
 
 
-def _validate_state(problem, kind, state, fresh, inputs, policy, trade=None, fragments=None):
+def _propagation_cache(problem,binding):
+    """Reuse only verified cores of the identical current seed, policy, source and domain snapshot."""
+    saved=getattr(problem,'_verified_repair_propagation',None)
+    if saved is None or saved[0]!=binding:
+        saved=(binding,{})
+        problem._verified_repair_propagation=saved
+    return saved[1]
+
+
+def _remember_propagation(cache,row):
+    if len(cache)>=256:cache.pop(next(iter(cache)))
+    cache[tuple(row)]=True
+
+
+def _validate_state(problem, kind, state, fresh, inputs, policy, trade=None, fragments=None, binding=None):
     """Strict shape/cursor checks for local checkpoints, not negative proof replay."""
     bad = lambda: ValueError('Invalid trusted-local repair continuation state.')
     if type(state) is not dict or set(state) != set(fresh): raise bad()
-    if state['phase'] not in ('master', 'query', 'walk', 'done'): raise bad()
+    if state['phase'] not in ('master', 'screen', 'query', 'walk', 'done'): raise bad()
     if state['status'] not in ('unknown', 'stopped', 'timeout', 'solved', 'infeasible', 'completed', 'unavailable'): raise bad()
     if state['reason'] is not None and (type(state['reason']) is not str or len(state['reason']) > 4096): raise bad()
     for key in ('retry', 'master_retry', 'complete_local_query'):
@@ -163,21 +177,36 @@ def _validate_state(problem, kind, state, fresh, inputs, policy, trade=None, fra
     pending = state['pending']
     if kind == 'core':
         movable = set(range(problem.n))-set(problem.fixed)
+        derived=state['propagated_cores']
+        if type(derived) is not list or len(derived)>min(policy['max_queries'],256):raise bad()
+        if derived:
+            from r35_repair_propagation import ProposedRepair
+            if not policy.get('seeded',True):raise bad()
+            verified=_propagation_cache(problem,binding) if binding is not None else {}
+            checker=None
+            for row in derived:
+                if not _ints(row,0,problem.n-1,ordered=True) or not set(row)<=movable:raise bad()
+                if tuple(row) not in verified:
+                    if checker is None:checker=ProposedRepair(problem,inputs['codes'])
+                    if checker.verdict(row) is not False:raise bad()
+                    _remember_propagation(verified,row)
+            if len({tuple(row) for row in derived})!=len(derived):raise bad()
         cores = state['cores']
         if type(cores) is not list or len(cores) > policy['max_queries']: raise bad()
         if any(not _ints(core, 0, problem.n-1, ordered=True) or not core or not set(core)<=movable for core in cores): raise bad()
         if len({tuple(core) for core in cores}) != len(cores): raise bad()
         if cores != [[cell for cell, code in core] for core in failures if core]: raise bad()
         if any(code != inputs['codes'][cell] or cell not in movable for core in failures for cell, code in core): raise bad()
-        if state['status']=='infeasible' and [] not in failures:
+        if state['status']=='infeasible' and [] not in failures and not (state['reason']=='propagated_master_conflict' and [] in derived):
             from r35_repair_seeds import repair_rows
             if (state['reason']!='proved_changed_cell_conflict' or not policy.get('seeded',True)
                     or frozenset() not in repair_rows(problem,inputs['codes'])):raise bad()
         if state['status'] != 'solved' and state['best_board'] != inputs['codes']: raise bad()
         if pending is not None and (not _ints(pending, 0, problem.n-1, ordered=True)
-                or not set(pending)<=movable or any(not set(pending).intersection(core) for core in cores)): raise bad()
-        if state['phase'] == 'query' and pending is None: raise bad()
-        if state['phase'] not in ('master', 'query', 'done'): raise bad()
+                or not set(pending)<=movable or any(not set(pending).intersection(core) for core in [*cores,*derived])): raise bad()
+        if state['phase'] in ('screen','query') and pending is None: raise bad()
+        if state['phase']=='screen' and not policy.get('seeded',True):raise bad()
+        if state['phase'] not in ('master','screen','query','done'):raise bad()
         if state['status'] == 'solved' and state['minimum_changes'] != sum(a != b for a, b in zip(inputs['codes'], state['best_board'])): raise bad()
     elif kind == 'fragment':
         count = len(fragments)
@@ -249,7 +278,11 @@ def _load(problem, kind, inputs, policy, resume, *, trade=None, fragments=None):
         if type(record['digest']) is not str or record['digest'] != _digest(unsigned):
             raise ValueError('Repair continuation digest mismatch.')
         state = record['state']
-        _validate_state(problem, kind, state, fresh, inputs, policy, trade=trade, fragments=fragments)
+        if kind=='core' and record['binding']!=binding:
+            if not isinstance(state,dict) or 'propagated_cores' in state or state.get('phase')=='screen':
+                raise ValueError('Unrecognized historical repair probe state.')
+            state['propagated_cores']=[]
+        _validate_state(problem, kind, state, fresh, inputs, policy, trade=trade, fragments=fragments,binding=binding)
     except (TypeError, OverflowError, RecursionError) as exc:
         raise ValueError('Invalid repair continuation JSON.') from exc
     state['stats']['repair_resume_loads'] += 1
@@ -281,7 +314,7 @@ def _output(problem, kind, state, binding, began, inputs, policy):
               'native_state_restored': False}
     if state['reason'] is not None: result['reason'] = state['reason']
     if kind == 'core':
-        result.update(cores=[list(core) for core in state['cores']], minimum_changes=state['minimum_changes'])
+        result.update(cores=[list(core) for core in state['cores']], propagated_cores=[list(core) for core in state['propagated_cores']],minimum_changes=state['minimum_changes'])
     if kind == 'fragment' and state['status'] == 'solved': result['sources'] = list(state['sources'])
     if kind == 'trade':
         result.update(validation=problem.validate(state['best_board']), complete_local_query=state['complete_local_query'])
@@ -372,7 +405,9 @@ def core_guided_repair(problem, codes, *, seconds=10, stop=None, max_queries=128
     control = _RepairControl(seconds, stop); stats = state['stats']
     if state['phase'] != 'done' and stats['repair_completed_queries'] >= max_queries:
         _done(state, reason='query_limit')
-    seeded_rows=None
+    from r35_repair_propagation import ProposedRepair
+    if retained_service is not None and retained_service.problem is not problem:raise ValueError('Retained Gold service belongs to another problem.')
+    seeded_rows=checker=None
     lower=hits=0
     hint=None
     oracle=None
@@ -390,22 +425,27 @@ def core_guided_repair(problem, codes, *, seconds=10, stop=None, max_queries=128
                     if frozenset() in seeded_rows:
                         _done(state,'infeasible','proved_changed_cell_conflict')
                         break
-                    if oracle is None:oracle=_oracle(problem,control,state,retained_service)
-                    constraints=master_rows(seeded_rows,state['cores'])
+                    constraints=master_rows(seeded_rows,[*state['cores'],*state['propagated_cores']])
                     stats['repair_master_attempts'] += 1
                     released=certified_choice(lower,hint,constraints,cells)
                     work=0
+                    if seeded and not constraints and not lower:released=set()
                     if released is None:
+                        if not seeded and oracle is None:oracle=_oracle(problem,control,state,retained_service)
+                        if oracle is None:
+                            from constraint_lns import _load_cp_model
+                            cp_model=_load_cp_model()
+                        else:cp_model=oracle.cp_model
                         options={'minimum_size':lower} if lower else {}
                         if state['master_retry']: stats['repair_master_retries'] += 1
                         if retained_service is None: stats['repair_master_model_rebuilds'] += 1
                         stats['hitting_set_solves'] += 1; state['master_retry'] = True
                         if retained_service is None:
-                            released, work = _minimum_hitting_set([frozenset(row) for row in constraints], cells, control, oracle.cp_model,**options)
+                            released, work = _minimum_hitting_set([frozenset(row) for row in constraints], cells, control, cp_model,**options)
                         else:
                             before_builds = retained_service.stats['gold_pool_master_builds']
                             try:
-                                released, work = retained_service.minimum_hitting_set(constraints, cells, control, oracle.cp_model, seed=codes,**options)
+                                released, work = retained_service.minimum_hitting_set(constraints, cells, control, cp_model, seed=codes,**options)
                             finally:
                                 stats['repair_master_model_rebuilds'] += retained_service.stats['gold_pool_master_builds']-before_builds
                     else:hits+=1
@@ -413,7 +453,24 @@ def core_guided_repair(problem, codes, *, seconds=10, stop=None, max_queries=128
                         if work == 'infeasible': _done(state, 'infeasible')
                         break
                     stats['hitting_set_branches'] += work; stats['repair_completed_masters'] += 1
-                    state.update(pending=sorted(released), phase='query', master_retry=False)
+                    screen=seeded and len(state['propagated_cores'])<min(max_queries,256)
+                    state.update(pending=sorted(released),phase='screen' if screen else 'query',master_retry=False)
+                if state['phase']=='screen':
+                    if checker is None:checker=ProposedRepair(problem,codes)
+                    verified,conflict=checker.test([c for c in cells if c not in state['pending']],control.check)
+                    if verified is not None:
+                        if sum(a!=b for a,b in zip(codes,verified))!=len(state['pending']):
+                            raise RuntimeError('Propagated Gold board violates the proved minimum change bound.')
+                        state.update(best_board=verified,minimum_changes=len(state['pending']))
+                        _done(state,'solved','propagated_singleton_solution')
+                        break
+                    if conflict is not None:
+                        state['propagated_cores'].append(conflict)
+                        _remember_propagation(_propagation_cache(problem,binding),conflict)
+                        state.update(phase='master',pending=None)
+                        if not conflict:_done(state,'infeasible','propagated_master_conflict')
+                        continue
+                    state['phase']='query'
                 assumptions = [(cell, codes[cell]) for cell in cells if cell not in state['pending']]
                 if oracle is None:oracle=_oracle(problem,control,state,retained_service)
                 answer = _query(oracle, assumptions, state); stats['queries'] += 1

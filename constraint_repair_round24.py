@@ -116,22 +116,49 @@ def core_guided_repair(problem,codes,*,seconds=10,stop=None,max_queries=128,dura
                                       'domains':[list(row) for row in problem.domains],'cores':[]},
                           elapsed_seconds=time.monotonic()-control.began)
             return result
-        oracle=GoldRepairOracle(problem,control)
+        from r35_repair_propagation import ProposedRepair
+        checker=oracle=None
         cells=[cell for cell in range(problem.n) if cell not in problem.fixed]
+        propagated=[]
+        result['propagated_cores']=[]
         cores=[]
-        for _ in range(max_queries):
+        while result['stats']['queries']<max_queries:
             control.check()
-            rows=master_rows(seeded_rows,cores)
+            rows=master_rows(seeded_rows,[*cores,*propagated])
             released=certified_choice(lower,hint,rows,cells)
             work=0
+            if seeded and not rows and not lower:released=set()
             if released is None:
+                if not seeded and oracle is None:oracle=GoldRepairOracle(problem,control)
+                if oracle is None:
+                    from constraint_lns import _load_cp_model
+                    cp_model=_load_cp_model()
+                else:cp_model=oracle.cp_model
                 options={'minimum_size':lower} if lower else {}
-                released,work=_minimum_hitting_set(rows,cells,control,oracle.cp_model,**options)
+                released,work=_minimum_hitting_set(rows,cells,control,cp_model,**options)
                 result['stats']['hitting_set_solves']+=1
             else:result['derived_master_hits']+=1
             if released is None:result['status']=work;break
             result['stats']['hitting_set_branches']+=work
-            answer=oracle.query((cell,seed[cell]) for cell in cells if cell not in released)
+            held=[c for c in cells if c not in released]
+            if seeded and len(propagated)<min(max_queries,256):
+                if checker is None:checker=ProposedRepair(problem,seed)
+                verified,conflict=checker.test(held,control.check)
+                if verified is not None:
+                    if sum(a!=b for a,b in zip(seed,verified))!=len(released):
+                        raise RuntimeError('Propagated Gold board violates the proved minimum change bound.')
+                    result.update(status='solved',best_board=verified,validation=problem.validate(verified),
+                                  minimum_changes=len(released),reason='propagated_singleton_solution')
+                    break
+                if conflict is not None:
+                    propagated.append(frozenset(conflict))
+                    result['propagated_cores'].append(conflict)
+                    if not conflict:
+                        result.update(status='infeasible',reason='propagated_master_conflict')
+                        break
+                    continue
+            if oracle is None:oracle=GoldRepairOracle(problem,control)
+            answer=oracle.query((cell,seed[cell]) for cell in held)
             result['stats']['queries']+=1
             if answer['status']=='solved':
                 actual=sum(a!=b for a,b in zip(seed,answer['codes']))
@@ -142,8 +169,12 @@ def core_guided_repair(problem,codes,*,seconds=10,stop=None,max_queries=128,dura
             if not core:result['status']='infeasible';break
             if core in cores:raise RuntimeError('Core-guided repair failed to advance its hitting set.')
             cores.append(core)
-        result['cores']=[sorted(core) for core in cores];result['exclusions']=oracle.export_exclusions()
-        result['stats'].update(oracle.stats)
+        result['cores']=[sorted(core) for core in cores]
+        result['exclusions']=(oracle.export_exclusions() if oracle is not None else
+                              {'kind':'gold_repair_assumption_cores','fingerprint':problem.fingerprint,
+                               'domains':[list(row) for row in problem.domains],'cores':[]})
+        if oracle is not None:result['stats'].update(oracle.stats)
+        else:result['stats'].update(oracle_queries=0,oracle_branches=0,oracle_conflicts=0,oracle_unknown=0,oracle_core_cells=0)
     except _Cancelled:result['status']=control.reason or 'unknown'
     except ImportError:result['status']='unavailable'
     except Exception as exc:

@@ -1,0 +1,208 @@
+{
+  "charged": [
+    {
+      "mode": "native",
+      "first": {
+        "status": "unknown",
+        "derived_master_hits": 1,
+        "propagated_cores": [],
+        "stats": {
+          "repair_resume_loads": 0,
+          "repair_model_rebuilds": 1,
+          "repair_model_build_attempts": 1,
+          "repair_master_model_rebuilds": 1,
+          "repair_native_attempts": 1,
+          "repair_native_retries": 0,
+          "repair_native_unknown": 0,
+          "repair_native_interrupted": 0,
+          "repair_completed_queries": 1,
+          "repair_master_attempts": 2,
+          "repair_master_retries": 0,
+          "repair_completed_masters": 1,
+          "repair_completed_work_reused": 0,
+          "oracle_queries": 1,
+          "oracle_branches": 2032,
+          "oracle_conflicts": 0,
+          "oracle_unknown": 0,
+          "oracle_core_cells": 42,
+          "hitting_set_solves": 1,
+          "hitting_set_branches": 0,
+          "queries": 1
+        },
+        "certified_seed_distance": 95,
+        "native_core_sizes": [
+          42
+        ]
+      },
+      "calls": [
+        {
+          "status": "INFEASIBLE",
+          "branches": 2032
+        },
+        {
+          "status": "FEASIBLE",
+          "branches": 26092
+        }
+      ]
+    },
+    {
+      "mode": "propagate",
+      "first": {
+        "status": "unknown",
+        "derived_master_hits": 1,
+        "propagated_cores": [
+          [
+            117,
+            123,
+            132,
+            134,
+            142,
+            149,
+            150,
+            153
+          ]
+        ],
+        "stats": {
+          "repair_resume_loads": 0,
+          "repair_model_rebuilds": 0,
+          "repair_model_build_attempts": 0,
+          "repair_master_model_rebuilds": 1,
+          "repair_native_attempts": 0,
+          "repair_native_retries": 0,
+          "repair_native_unknown": 0,
+          "repair_native_interrupted": 0,
+          "repair_completed_queries": 0,
+          "repair_master_attempts": 2,
+          "repair_master_retries": 0,
+          "repair_completed_masters": 1,
+          "repair_completed_work_reused": 0,
+          "oracle_queries": 0,
+          "oracle_branches": 0,
+          "oracle_conflicts": 0,
+          "oracle_unknown": 0,
+          "oracle_core_cells": 0,
+          "hitting_set_solves": 1,
+          "hitting_set_branches": 0,
+          "queries": 0
+        },
+        "certified_seed_distance": 95,
+        "native_core_sizes": []
+      },
+      "calls": [
+        {
+          "status": "FEASIBLE",
+          "branches": 26106
+        },
+        {
+          "status": "FEASIBLE",
+          "branches": 26106
+        }
+      ],
+      "reopened": {
+        "status": "unknown",
+        "derived_master_hits": 0,
+        "propagated_cores": [
+          [
+            117,
+            123,
+            132,
+            134,
+            142,
+            149,
+            150,
+            153
+          ]
+        ],
+        "stats": {
+          "hitting_set_branches": 0,
+          "hitting_set_solves": 2,
+          "oracle_branches": 0,
+          "oracle_conflicts": 0,
+          "oracle_core_cells": 0,
+          "oracle_queries": 0,
+          "oracle_unknown": 0,
+          "queries": 0,
+          "repair_completed_masters": 1,
+          "repair_completed_queries": 0,
+          "repair_completed_work_reused": 1,
+          "repair_master_attempts": 3,
+          "repair_master_model_rebuilds": 2,
+          "repair_master_retries": 1,
+          "repair_model_build_attempts": 0,
+          "repair_model_rebuilds": 0,
+          "repair_native_attempts": 0,
+          "repair_native_interrupted": 0,
+          "repair_native_retries": 0,
+          "repair_native_unknown": 0,
+          "repair_resume_loads": 1
+        },
+        "certified_seed_distance": 95
+      },
+      "reused": 1
+    }
+  ],
+  "global_cuts": [
+    [
+      117,
+      123,
+      132,
+      134,
+      142,
+      149,
+      150,
+      153
+    ],
+    [
+      117,
+      121,
+      134,
+      138,
+      139,
+      140
+    ],
+    [
+      116,
+      123,
+      132,
+      142,
+      150,
+      153
+    ],
+    [
+      117,
+      121,
+      132,
+      142,
+      143
+    ]
+  ],
+  "single_exchanges": {
+    "scored": 1,
+    "alternatives": 2,
+    "classified": 2,
+    "sample": [
+      {
+        "hit": "0x7c8f038ffdc0ff00ecbffffab978fc70597c5c78",
+        "minimal_exchange": 1,
+        "global_unit_conflict": true
+      },
+      {
+        "hit": "0x7c8f03cff7c0ff00ecbffffab878fc70597c5c78",
+        "minimal_exchange": 1,
+        "global_unit_conflict": true
+      }
+    ]
+  },
+  "two_exchanges": {
+    "scored": 2,
+    "alternatives": 1,
+    "classified": 1,
+    "sample": [
+      {
+        "hit": "0x7c8f03cffdc0ff00ecbffffab878fc70597c5c78",
+        "minimal_exchange": 2,
+        "global_unit_conflict": true
+      }
+    ]
+  }
+}

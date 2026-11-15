@@ -75,10 +75,10 @@ class RepairContinuationTests(unittest.TestCase):
     def test_core_pending_master_is_not_repeated_and_minimum_is_exact(self):
         problem, h = self.fixture(); h['unknown'] = {1}; seed = [0, 4, 6, 9]
         with self.oracle(h), patch('constraint_repair_round24._minimum_hitting_set', side_effect=finite_hitting) as master:
-            first = core_guided_repair(problem, seed, durable=True, seconds=2)
+            first = core_guided_repair(problem, seed, seeded=False, durable=True, seconds=2)
             self.assertFalse(first['continuation_complete']); self.assertEqual(first['checkpoint']['state']['phase'], 'query')
             self.assertEqual(master.call_count, 1)
-            second = core_guided_repair(problem, seed, seconds=2, resume=first['checkpoint'])
+            second = core_guided_repair(problem, seed, seeded=False, seconds=2, resume=first['checkpoint'])
             self.assertEqual(second['status'], 'solved', second)
             self.assertEqual(second['stats']['repair_native_retries'], 1)
             self.assertEqual(master.call_count, second['stats']['repair_completed_queries'])
@@ -86,7 +86,7 @@ class RepairContinuationTests(unittest.TestCase):
             self.assertEqual(second['minimum_changes'], min(sum(a != b for a, b in zip(seed, row)) for row in h['solutions']))
             self.assertGreater(second['stats']['repair_completed_work_reused'], 0)
             count = len(h['queries'])
-            again = core_guided_repair(problem, seed, resume=second['checkpoint'], seconds=0)
+            again = core_guided_repair(problem, seed, seeded=False, resume=second['checkpoint'], seconds=0)
             self.assertTrue(again['continuation_complete']); self.assertEqual(len(h['queries']), count)
 
     def test_completed_core_query_survives_stop_and_caps_are_cumulative(self):
@@ -113,10 +113,10 @@ class RepairContinuationTests(unittest.TestCase):
             if master_calls[0] == 1: return None, 'unknown'
             return finite_hitting(cores, cells, control, cp)
         with self.oracle(h), patch('constraint_repair_round24._minimum_hitting_set', side_effect=interrupted):
-            first = core_guided_repair(problem, seed, durable=True, seconds=2)
+            first = core_guided_repair(problem, seed, seeded=False, durable=True, seconds=2)
             self.assertFalse(first['continuation_complete']); self.assertEqual(h['queries'], [])
             self.assertEqual(first['stats']['repair_completed_masters'], 0)
-            last = core_guided_repair(problem, seed, resume=first['checkpoint'], seconds=2)
+            last = core_guided_repair(problem, seed, seeded=False, resume=first['checkpoint'], seconds=2)
             self.assertEqual(last['status'], 'solved'); self.assertEqual(last['stats']['repair_master_retries'], 1)
             self.assertEqual(last['stats']['repair_master_attempts'], last['stats']['repair_completed_masters']+1)
         problem, h = self.fixture(); boards = [[1, 3, 6, 9], [0, 4, 6, 9]]
@@ -198,7 +198,7 @@ class RepairContinuationTests(unittest.TestCase):
                 result = fn(problem, *args, durable=True, seconds=0)
                 self.assertEqual(result['status'], 'timeout'); self.assertFalse(result['continuation_complete'])
         with patch('constraint_repair_round24.GoldRepairOracle', side_effect=ImportError):
-            result = core_guided_repair(problem, [0, 3], durable=True, seconds=1)
+            result = core_guided_repair(problem, [0, 3], seeded=False, durable=True, seconds=1)
             self.assertEqual(result['status'], 'unavailable'); self.assertTrue(result['continuation_complete'])
 
     def test_scope_policy_semantics_and_digest_changes_rejected_before_native(self):

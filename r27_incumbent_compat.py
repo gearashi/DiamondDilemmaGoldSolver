@@ -131,10 +131,10 @@ _R35_HEURISTIC = {
 # Exact repair projections only strengthen the next hitting-set master.
 # An existing pending native query and all earned native outcomes keep their authority.
 _R35_REPAIR = {
-    'constraint_repair_round24.py': ('2752b4f473a01e6744bea8c4040def55b0f4eb552a130ac8784c65e60aac1a9d',
+    'constraint_repair_round24.py': ('532c302c79ba8a6a862a80d242eb0288bbeaec76fa4da8ba51734c9ba6e0c69b',
         'c80331d5f3ebf81536a16d574db95eebe39bdc84d3a9889915ae54d0ee9087c7',
         '4dec58bffba2f0c82527fad2d9473a2348d6660af0bd3700d85cb02c15503a72'),
-    'constraint_repair_resume_round25.py': ('032e75d948d847836155a8c949bb025dc39937e42084155f6e30c66b8b91b397',
+    'constraint_repair_resume_round25.py': ('d2a3bf83eec9e2af4c2e8d7acc088df320d9a99ab58dbb48853c6ab6c416baea',
         '6fbd361b87b861de2ccd31036637d5e66c5780e011cc3b5e61fcb8c75fb25b99',
         '93460ba4048df7cbd3fc38a9c7f379c11d0a3d2a1df84682405e06f46a0af4d3'),
     'constraint_repair_gold_round26.py': ('b067a5e07c23a26d79b600381ea1e9ca9c53a83f880ac669e096aadeb7f88dbd',

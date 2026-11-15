@@ -225,6 +225,12 @@ def regional_catalog():
     return json.loads(body)
 
 
+def known_hint_conflicts():
+    """Full-board checks on the published 95-hit and its three nearest returned alternatives."""
+    return [[117,123,132,134,142,149,150,153],[117,121,134,138,139,140],
+            [116,123,132,142,150,153],[117,121,132,142,143]]
+
+
 def active_catalog(problem):
     record=checked_catalog(problem)
     if record is None or record.get('puzzle')!='e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853':
@@ -238,7 +244,7 @@ def active_catalog(problem):
     regional=regional_catalog()
     if regional is None:return dict(record,rows=rows,hit=refined['hit'])
     return dict(record,rows=rows+regional['small']+regional['larger'],
-                lower_bound=regional['proved_lower'],hit=regional['hit'])
+                lower_bound=regional['proved_lower'],hit=regional['hit'],post_master=known_hint_conflicts())
 
 
 def certified_distance(problem,codes):
@@ -271,7 +277,7 @@ def archive_rows(state):
     record=active_catalog(state.p)
     if record is None:return
     agreement={c for c,(v,w) in enumerate(zip(state.codes,record['codes'])) if v==w}
-    for i,row in enumerate(record['rows']):
+    for i,row in enumerate([*record['rows'],*record.get('post_master',())]):
         if i%128==0:state.check()
         if agreement.issuperset(row):state.add(row,'saved_pose_conflict')
 

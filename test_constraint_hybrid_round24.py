@@ -55,7 +55,7 @@ class RepairRound24Tests(unittest.TestCase):
     def test_core_repair_minimum_distance_matches_complete_enumeration(self):
         tiles,board=tetrahedron_tiles();problem=SearchProblem(tiles,board);seed=[0,4,6,9]
         solutions=brute(problem,'gold');expected=min(sum(a!=b for a,b in zip(seed,answer)) for answer in solutions)
-        result=core_guided_repair(problem,seed,seconds=5)
+        result=core_guided_repair(problem,seed,seconds=5,seeded=False)
         self.assertEqual(result['status'],'solved',result);self.assertEqual(result['minimum_changes'],expected)
         self.assertTrue(problem.validate(result['best_board'])['valid']);self.assertGreater(len(result['cores']),0)
     def test_core_repair_rejects_seed_that_changes_fixed_cells(self):

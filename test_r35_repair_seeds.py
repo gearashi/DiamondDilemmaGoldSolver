@@ -119,7 +119,8 @@ class SeedProofTests(TestCase):
             self.assertEqual(saved['state']['stats']['repair_native_attempts'],0)
             restored=core_guided_repair(p,seed,resume=saved,seconds=5)
             self.assertEqual(restored['minimum_changes'],1)
-            self.assertEqual(restored['stats']['repair_completed_queries'],2)
+            self.assertEqual(restored['stats']['repair_completed_queries'],1)
+            self.assertEqual(restored['reason'],'propagated_singleton_solution')
             self.assertEqual(restored['stats']['repair_completed_masters'],2)
             self.assertEqual(len(restored['exclusions']['cores']),1)
             with self.assertRaisesRegex(ValueError,'scope, policy or source'):
@@ -136,7 +137,8 @@ class SeedProofTests(TestCase):
         self.assertFalse(row['cores'])
         self.assertFalse(row['exclusions']['cores'])
         self.assertGreater(row['derived_rows'],0)
-        self.assertEqual(row['stats']['repair_completed_queries'],1)
+        self.assertEqual(row['stats']['repair_completed_queries'],0)
+        self.assertEqual(row['reason'],'propagated_singleton_solution')
 
     def test_archived_v115_terminal_consumers_reopen_twice_without_native_work(self):
         import json
