@@ -271,6 +271,8 @@ def verify_native_history(engine, inputs, features, checkpoint, history, prefixe
         def _prepare_gold(self, data):
             super()._prepare_gold(data)
             self.host_gold_blocked = np.zeros(1,np.uint32)
+            self.host_future_poses = np.empty(0,np.uint32)
+            self.host_gold_rules = self.host_gold_blocked
 
     cost = launches = last_generation = 0
     for config, status in history:

@@ -300,6 +300,8 @@ def main():
                 if history and not origin_verified:
                     replay_inputs = dict(masks=masks,neighbors=board.neighbor_cells,neighbor_sides=board.neighbor_sides,
                                          order=order,gold_data=data if args.target=='gold' else None)
+                    if getattr(gpu, 'backend', None) == 'webgpu':
+                        replay_inputs['reuse_from'] = gpu
                     origin_verified = proof.verify_native_history(engine, replay_inputs, gpu_features, checkpoint,
                                                                  history, prefixes, lengths, stopping)
                     if stopping(): raise StartupStopped()

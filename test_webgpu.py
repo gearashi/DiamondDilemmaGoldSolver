@@ -127,6 +127,38 @@ class NativeTests(unittest.TestCase):
         self.addCleanup(gpu.close)
         return gpu
 
+    def test_shared_program_isolates_buffers_and_releases_after_last_owner(self):
+        live = self.new(n=8)
+        opts = dict(prefixes=[], reuse_from=live, allow_software=os.environ.get('DIAMOND_TEST_SOFTWARE_GPU') == '1')
+        child = WebGPUDFS(*arguments(), n=3, **opts)
+        self.addCleanup(child.close)
+        self.assertIs(live.pipeline, child.pipeline)
+        self.assertIsNot(live.bind_group, child.bind_group)
+        self.assertIsNot(live.parameters, child.parameters)
+        self.assertTrue(all(a is not b for a,b in zip(child.buffers,live.buffers)))
+        program = live._program
+        self.assertFalse(program.acquire(object(),32,program.source))
+        self.assertFalse(program.acquire(live.adapter,32,program.source+' '))
+        self.assertFalse(program.acquire(live.adapter,1+live.gpu_device.limits['max-buffer-size'],program.source))
+        with patch.object(WebGPUDFS,'_write_rows',side_effect=RuntimeError('injected private buffer upload')):
+            with self.assertRaisesRegex(RuntimeError,'injected private'):
+                WebGPUDFS(*arguments(),n=3,**opts)
+        self.assertEqual(program.owners,2)
+        self.assertTrue(np.all(child.states.get()==3))
+        live.load_prefixes([[0]],lanes=np.array([0],np.int32))
+        live.step(1)
+        self.assertTrue(np.all(child.states.get()==3))
+        other = WebGPUDFS(*arguments(), n=3, gpu_features={'forced':True}, **opts)
+        self.addCleanup(other.close)
+        self.assertIsNot(other.pipeline,live.pipeline)
+        self.assertIsNot(other.gpu_device,live.gpu_device)
+        live.close()
+        child.step(1)
+        child.close()
+        child.close()
+        self.assertEqual(program.owners,0)
+        self.assertFalse(program.acquire(live.adapter,32,program.source))
+
     def test_colored_two_cell_tail_matches_independent_exhaustive_scoring(self):
         def factory(*args, **kwargs):
             return WebGPUDFS(*args, **kwargs, allow_software=os.environ.get('DIAMOND_TEST_SOFTWARE_GPU') == '1')

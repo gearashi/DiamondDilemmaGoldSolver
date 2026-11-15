@@ -193,7 +193,13 @@
       "source_id": 12,
       "title": "Compile phase balances by their interaction graph and interchangeable increments",
       "proposal_and_validation": "PhaseInterface.project visits tiles roughly in input order after applying pins/boundary status, merges equal residual sums and retires a class after its final occurrence. Strip fixed offsets, group uninvolved labels with identical two-choice increments (including signed-complement orientation and Euler delta), and process a group of k interchangeable internal components as k+1 count choices. Do not merge labelled phase-request/boundary variables. Use min-frontier variable order based on actual shared live classes, project retired coordinates from keys, or split independent balance blocks and combine only their Euler totals. Try exact meet-in-the-middle across the smallest actual shared interface only if the one-pass DP still hits its state allowance. Existing R31 phase interfaces cache compiled boundary projections and R34 chooses independent phase nullspace cubes; they did not use these group-count transitions or a class-graph elimination order. Measure identical signatures and maximum live coordinates before coding wide variants. Test labelled boundary patterns/witnesses against old DP and CP, exact multiplicity when requested, complement flips, equal count in a different class, capped unknowns. Report transition counts, peak states and new completed queries under the same limit.",
-      "state": "in progress"
+      "state": "keep with exact scope",
+      "decision": "Choose grouped live-coordinate elimination for conditional labelled phase projection and balance-sum split for 20+ groups. Original fixed-cap completions improved 7/16 to 10/16, including two independently verified 60-free-variable cases. All 400 finite multiplicity controls matched brute force. The whole root at 10,000 states remains unresolved.",
+      "evidence": [
+        "docs/ROUND35_PHASE_FRONTIER.md",
+        "docs/R35_PHASE_FRONTIER.json",
+        "test_r35_phase_frontier.py"
+      ]
     },
     {
       "id": 13,
@@ -201,7 +207,13 @@
       "source_id": 13,
       "title": "Transport certified reference-loss cardinalities into geographic Gold residuals",
       "proposal_and_validation": "r31_geographic.add_departure_rules posts individual parity core clauses. r32_gold_watch.BondWatcher translates checked core membership into placement exclusions. r32_gold_loss and r32_gold_syndrome separately certify a global lower bound for the saved 207/52 set. Transfer a verified, input-bound complete coverage certificate as a cardinality bound, e.g. at most 190 of the 207 can be retained using the published 17 lower bound. A geographical domain may force a named physical mate across several possible owner poses. Count uniquely forced retained reference bonds and apply a unit if retaining one more would exceed the bound. In the physical CP model use sum(mate[p] for p in reference) directly, and measure on reference-near placements. Combine multiple proven reference cuts only after independent binding verification, without adding lower bounds over shared bonds. Proof transfer needs complete verified coverage, source and exact coordinates, or a fresh independent replay. Optional if the cost of authenticating the bound is prohibitive. Test under/at/above threshold, board moving intact bonds, interleaved releases, mixed objectives, corrupt/incomplete proof and nonreference controls. Count pure cardinality cuts not already covered by the published individual cores, then cut cells/branches. If all realistic unrestricted trajectories are far outside the retained set, close unrestricted promotion and confine testing to near-reference neighborhoods.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "Bind the published 20-loss proof to the complete physical scope and post an at-most-187 reference cardinality in optional geographic embed search. 28 of 48 original requests violated the bound without containing any of 13 individual conflicts. Fresh unrestricted tours retained only 38 or 35 reference pairs.",
+      "evidence": [
+        "docs/ROUND35_GEOGRAPHIC_LOSS.md",
+        "docs/R35_GEOGRAPHIC_LOSS.json",
+        "test_r35_geographic_loss.py"
+      ]
     },
     {
       "id": 14,
@@ -829,10 +841,12 @@
       "source_id": 14,
       "title": "Avoid phase refits that cannot improve the current board",
       "proposal_and_validation": "On a refit `fresh` computes the signed score and the set of scored physical bonds, and `fit` solves a new CP optimization. If the current score already reaches the count of permissible scored bonds, a strictly better refit is impossible. Across consecutive refits on the same pins/mandatory constraints, a certified upper bound for objective set A raises by at most the number of newly added unit-weight terms in B. Reuse that bound when it rules out a strict gain at B; account for removed terms conservatively, disconnected-inventory cuts and differing pins. R32's four seeds with unsuccessful refits are an opportunity screen, not a claim that they could all be skipped. Compare board, RNG and trajectories to the no-skip control and report native refits actually avoided.",
-      "state": "in progress",
+      "state": "keep with exact scope",
       "evidence": [
-        "docs/R35_SIGNED_REFITS.json"
-      ]
+        "docs/R35_SIGNED_REFITS.json",
+        "docs/R35_SIGNED_HIGH_EFFORT.json"
+      ],
+      "mechanism": "checked current and transferred refit ceilings, including safe restart"
     },
     {
       "id": 62,
@@ -840,11 +854,12 @@
       "source_id": 15,
       "title": "Reuse universally valid endpoint cuts across phase refits",
       "proposal_and_validation": "`fit` starts with fresh endpoint structures and an empty cut set at each board/objective. Compile the coefficient rows for a verified disconnected endpoint partition once per puzzle/mandatory model, then compare adding only previously violated endpoint cuts with rebuilding/refitting from scratch. Retain geometry-independent cuts only if their proof holds for all feasible phase vectors under the destination pins; do not transfer a bound learned from the previous objective. Compare exact feasible label sets on small models and calls, repeated cut discoveries and stricter optimum on held-out original refits. Merge accounting with the physical cut-pool proposal wherever it already provides an independently reusable proof.",
-      "state": "in progress",
+      "state": "keep with exact scope",
       "evidence": [
-        "docs/R35_SIGNED_REFITS.json",
-        "docs/R35_REFIT_CUTS.json"
-      ]
+        "docs/R35_REFIT_CUTS.json",
+        "docs/R35_SIGNED_START_CUT.json"
+      ],
+      "mechanism": "deterministic singleton on first-phase fits; reject blanket reuse across scored refits"
     },
     {
       "id": 63,
@@ -852,10 +867,13 @@
       "source_id": 16,
       "title": "Incrementally update signed prices and scores across changed phase fits",
       "proposal_and_validation": "R34 snapshots and shares a complete price image at a particular phase vector. On a genuine improved refit, the signed price of donor dart j against exterior dart i depends on the phase XOR of their physical tiles. It is unchanged if both tiles changed phase or neither did. Intersect the XOR-change rows/columns with reciprocal capability and forbidden pairs, patch just the affected entries, and compare with cold `_DartPrices.price` for every bit; if there are no improved refits, this has no opportunity there. Likewise compare updating raw/signed/forbidden seam counts only for the union of incident edges of moved cells and flipped tiles. Preserve independent validation at best-board publication. Test full global phase complement, a single flip, blank sides, adjacent changed tiles, native checkpoint reopen, exact preserved trajectories and sparse/dense crossover. Do not reopen complete-price-image deduplication.",
-      "state": "in progress",
+      "state": "keep with exact scope",
       "evidence": [
-        "docs/R35_SIGNED_REFITS.json"
-      ]
+        "docs/R35_SIGNED_REFITS.json",
+        "docs/R35_SIGNED_HIGH_EFFORT.json",
+        "docs/R35_SIGNED_DART_DELTA.json"
+      ],
+      "mechanism": "incremental edge pricing and sparse dart updates on genuine phase changes"
     },
     {
       "id": 64,
@@ -863,12 +881,13 @@
       "source_id": 17,
       "title": "Use tied signed optima to escape a demonstrably stalled trajectory",
       "proposal_and_validation": "`SignedRepair.block` optimizes a signed independent-cell assignment, while its retained incumbent also uses raw matched seams and components. Compare the existing signed-then-unchanged-pose tie break with signed-then-raw-then-unchanged-pose ordering, using an integer width/scale that remains exact up to 160 cells. Keep forbidden physical mates as hard constraints and count any newly repeated neutral moves. Only after a measured signed plateau try distinct equally scoring phase fits or equally optimal donor assignments chosen by changed effective dart relations, bounded in count and charged to the same repair budget. This changes discovery order; it cannot certify an excluded board or loss layer. Compare returns over held-out paired seeds, work/steps to a verified new best, distribution of both raw and signed scores, and distinct phases modulo the global complement. Account for already-tested general repair tie sets and slate/fork policies; test the additional signed refit/assignment interaction only.",
-      "state": "in progress",
+      "state": "keep with exact scope",
       "evidence": [
-        "docs/R35_SIGNED_REFITS.json",
+        "docs/R35_SIGNED_SETTINGS.json",
         "docs/R35_SIGNED_DELAYED_TIES.json",
         "docs/R35_SIGNED_PLATEAUS.json"
-      ]
+      ],
+      "mechanism": "opt-in signed/raw/unchanged order including a delayed variant; diverse phase fits lack accepted changes"
     },
     {
       "id": 65,
@@ -1023,7 +1042,18 @@
       "source_id": 6,
       "title": "Reuse WebGPU devices and pipelines during repeated construction",
       "proposal_and_validation": "WebGPUDFS creates an adapter device and compute pipeline per engine. Profile actual repeat constructors in classic old-history verification and multi-session comparisons. Test explicit shared device/pipeline ownership only for repeated same-adapter/same-shader/same-layout instances, retaining separate buffers/counters. Compare D3D12 FXC/DXC, Vulkan and available platform CI. If a normal search constructs one instance and no practical repeat exists, close the idea at the opportunity screen.",
-      "state": "open"
+      "state": "validated native program reuse; evaluating repeated table transfer",
+      "mechanism": "CLASSIC-REPLAY-PROGRAM",
+      "measurement": "Genuine v1.14 six-generation history matched 38 saved fields on current CUDA, Vulkan, D3D12 FXC and D3D12 DXC. A live engine plus three history constructors went from four device/pipeline builds to one. Independent buffers, failed private allocation, owner-close order, corrupt RNG, cancellation and finite CI coverage are exercised.",
+      "next_step": "Measure reuse of immutable lookup-table source and initial device upload within the same bounded replay chain, while isolating mutable policy updates. Verify unchanged and changed tables, actual normal construction and independent native replay before closing the full workstream.",
+      "evidence": [
+        "docs/ROUND35_WEBGPU_REPLAY.md",
+        "docs/R35_WEBGPU_REPLAY_VULKAN.json",
+        "docs/R35_WEBGPU_REPLAY_D3D12.json",
+        "docs/R35_WEBGPU_REPLAY_DXC.json",
+        "test_webgpu.py",
+        "test_webgpu_counters.py"
+      ]
     },
     {
       "id": 71,

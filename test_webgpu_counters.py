@@ -181,23 +181,33 @@ class CounterHostTests(unittest.TestCase):
             reducer.get()
 
     def test_engine_closes_reducer_before_metadata_and_device(self):
-        gpu = WebGPUDFS.__new__(WebGPUDFS)
-        events = []
-        gpu._synchronize = lambda: events.append('fence')
-        gpu._counter_reduction = SimpleNamespace(close=lambda: events.append('reducer'))
-        gpu.buffers = [Buffer('metadata', events)]
-        gpu.parameters = Buffer('parameters', events)
-        gpu.gpu_device = Buffer('device', events)
-        gpu.close()
-        self.assertEqual(events, ['fence', 'reducer', 'metadata', 'parameters', 'device'])
-        events.clear()
-        def failed_close():
-            events.append('reducer')
-            raise RuntimeError('reducer destroy failure')
-        gpu._counter_reduction.close = failed_close
-        with self.assertRaisesRegex(RuntimeError, 'reducer destroy failure'):
-            gpu.close()
-        self.assertEqual(events, ['fence', 'reducer', 'metadata', 'parameters', 'device'])
+        from contextlib import ExitStack
+        from dfs_webgpu import _SearchProgram
+        for fail in (False, True):
+            with self.subTest(reducer_failure=fail):
+                events = []
+                gpu = WebGPUDFS.__new__(WebGPUDFS)
+                gpu._synchronize = lambda: events.append('fence')
+                def close_reducer():
+                    events.append('reducer')
+                    if fail:
+                        raise RuntimeError('reducer destroy failure')
+                gpu._counter_reduction = SimpleNamespace(close=close_reducer)
+                program = _SearchProgram.__new__(_SearchProgram)
+                program.owners = 1
+                program.device = Buffer('device', events)
+                gpu._program = program
+                gpu._resources = ExitStack()
+                gpu._resources.callback(program.release)
+                for name in ('metadata', 'parameters'):
+                    gpu._resources.callback(Buffer(name, events).destroy)
+                if fail:
+                    with self.assertRaisesRegex(RuntimeError, 'reducer destroy failure'):
+                        gpu.close()
+                else:
+                    gpu.close()
+                gpu.close()
+                self.assertEqual(events, ['fence', 'reducer', 'parameters', 'metadata', 'device'])
 
 
 @unittest.skipUnless(os.environ.get('DIAMOND_TEST_WEBGPU') == '1', 'native WebGPU tests opt in')

@@ -4,6 +4,7 @@ All search transitions run in WGSL on a hardware GPU. NumPy initializes and
 validates states and supports checkpoint I/O; there is no CPU search fallback.
 """
 from __future__ import annotations
+from contextlib import ExitStack
 from pathlib import Path
 import time
 from types import SimpleNamespace
@@ -170,12 +171,44 @@ class DeviceField:
         self.engine._write_rows(self.buffer, physical, cols, encoded)
 
 
+class _SearchProgram:
+    """One adapter/device and exact shader specialization for sequential replay owners."""
+    def __init__(self, adapter, size, source):
+        self.adapter = adapter
+        self.source = source
+        self.device = adapter.request_device_sync(required_limits={
+            'max-storage-buffer-binding-size': size, 'max-buffer-size': size,
+            'max-storage-buffers-per-shader-stage': 7})
+        try:
+            shader = self.device.create_shader_module(code=source)
+            self.pipeline = self.device.create_compute_pipeline(layout='auto',
+                compute={'module': shader, 'entry_point': 'dfs_search'})
+        except BaseException:
+            self.device.destroy()
+            raise
+        self.owners = 1
+
+    def acquire(self, adapter, size, source):
+        if not self.owners or adapter is not self.adapter or source != self.source:
+            return False
+        limits = self.device.limits
+        if size > min(limits['max-storage-buffer-binding-size'], limits['max-buffer-size']):
+            return False
+        self.owners += 1
+        return True
+
+    def release(self):
+        self.owners -= 1
+        if not self.owners:
+            self.device.destroy()
+
+
 class WebGPUDFS(DFS):
     """Same exact DFS/checkpoint interface, backed by persistent WebGPU buffers."""
     backend = 'webgpu'
 
     def __init__(self, masks, neighbors, neighbor_sides, n=3840, seed=20261007,
-                 root_codes=None, order=None, prefixes=None, adapter=None, allow_software=False, gold_data=None, gpu_features=None):
+                 root_codes=None, order=None, prefixes=None, adapter=None, allow_software=False, gold_data=None, gpu_features=None, reuse_from=None):
         initial = self._prepare_host(masks, neighbors, neighbor_sides, n, root_codes, order, prefixes)
         self._prepare_gold(gold_data)
         from gpu_reasoning import prepare_policy
@@ -186,6 +219,8 @@ class WebGPUDFS(DFS):
         except ImportError as exc:
             raise RuntimeError('WebGPU requires wgpu==0.32.0. Run setup with the WebGPU backend.') from exc
         self.wgpu = wgpu
+        if adapter is None and reuse_from is not None:
+            adapter = reuse_from.adapter
         self.adapter = adapter or wgpu.gpu.request_adapter_sync(power_preference='high-performance', force_fallback_adapter=False)
         if self.adapter is None:
             raise RuntimeError('No WebGPU adapter found. A native Metal, Vulkan, or DX12 hardware GPU is required.')
@@ -212,44 +247,51 @@ class WebGPUDFS(DFS):
             raise ValueError('Requested replica pool exceeds this GPU storage-buffer limit; select fewer replicas.')
         if limits['max-storage-buffers-per-shader-stage'] < 7:
             raise RuntimeError('This WebGPU device exposes fewer than seven compute storage buffers.')
-        self.gpu_device = self.adapter.request_device_sync(required_limits={
-            'max-storage-buffer-binding-size': max(sizes), 'max-buffer-size': max(sizes),
-            'max-storage-buffers-per-shader-stage': 7})
-        self.queue = self.gpu_device.queue
-        self._counter_reduction = None
-        usage = wgpu.BufferUsage.STORAGE | wgpu.BufferUsage.COPY_SRC | wgpu.BufferUsage.COPY_DST
-        self.buffers = [self.gpu_device.create_buffer(label=f'DFS storage {i}', size=size, usage=usage)
-                        for i, size in enumerate(sizes)]
-        self.queue.write_buffer(self.buffers[6], 0, tables)
-        self.parameters = self.gpu_device.create_buffer(size=32, usage=wgpu.BufferUsage.UNIFORM | wgpu.BufferUsage.COPY_DST)
         source = (ROOT / 'dfs_kernels.wgsl').read_text(encoding='utf-8')
         source = 'const REASONING_FLAGS: u32 = '+str(self.feature_bits)+'u;\n'+source.replace('parameters.flags', 'REASONING_FLAGS')
-        shader = self.gpu_device.create_shader_module(code=source)
-        self.pipeline = self.gpu_device.create_compute_pipeline(layout='auto', compute={'module': shader, 'entry_point': 'dfs_search'})
-        entries = [{'binding': i, 'resource': {'buffer': buffer}} for i, buffer in enumerate(self.buffers)]
-        entries.append({'binding': 7, 'resource': {'buffer': self.parameters}})
-        self.bind_group = self.gpu_device.create_bind_group(layout=self.pipeline.get_bind_group_layout(0), entries=entries)
-        self.readback_bytes = 0
-        self.boards = DeviceField(self, self.buffers[0], 0, (160, n), np.int16)
-        self.used = DeviceField(self, self.buffers[0], 160, (5, n), np.uint32)
-        for name, buffer in zip(('firsts', 'lengths', 'cursors', 'shifts'), self.buffers[1:5]):
-            setattr(self, name, DeviceField(self, buffer, 0, (160, n), np.uint16))
-        for name, offset, dtype in [('depths', 0, np.int16), ('maxdepths', 1, np.int16),
-                                    ('floors', 2, np.int16), ('states', 3, np.uint8), ('rng', 4, np.uint32)]:
-            setattr(self, name, DeviceField(self, self.buffers[5], offset, (n,), dtype))
-        self.counters = DeviceField(self, self.buffers[5], 5, (3, n), np.uint64, counters=True)
-        self.gold_checked = DeviceField(self, self.buffers[5], 11, (n,), np.uint8)
-        self.cp = SimpleNamespace(asarray=np.asarray, maximum=np.maximum,
-                                  cuda=SimpleNamespace(get_current_stream=lambda: SimpleNamespace(synchronize=self._synchronize)))
-        self.boards.set(-1)
-        self.cursors.set(65535)
-        self.states.set(3)
-        self.rng.set(np.random.default_rng(seed).integers(1, 2**32, n, dtype=np.uint32))
-        self.prefix_codes = np.full((n, 160), -1, np.int16)
-        self.prefixes = [None] * n
-        self.roots = np.full(n, -1, np.int16)
-        if len(initial):
-            self.load_prefixes(initial, lanes=np.arange(len(initial), dtype=np.int32))
+        program = getattr(reuse_from, '_program', None)
+        if program is None or not program.acquire(self.adapter, max(sizes), source):
+            program = _SearchProgram(self.adapter, max(sizes), source)
+        self._program = program
+        self.gpu_device, self.pipeline = program.device, program.pipeline
+        self.queue = self.gpu_device.queue
+        self._counter_reduction = None
+        with ExitStack() as resources:
+            resources.callback(program.release)
+            usage = wgpu.BufferUsage.STORAGE | wgpu.BufferUsage.COPY_SRC | wgpu.BufferUsage.COPY_DST
+            self.buffers = []
+            for i, size in enumerate(sizes):
+                buffer = self.gpu_device.create_buffer(label=f'DFS storage {i}', size=size, usage=usage)
+                resources.callback(buffer.destroy)
+                self.buffers.append(buffer)
+            self.queue.write_buffer(self.buffers[6], 0, tables)
+            self.parameters = self.gpu_device.create_buffer(size=32, usage=wgpu.BufferUsage.UNIFORM | wgpu.BufferUsage.COPY_DST)
+            resources.callback(self.parameters.destroy)
+            entries = [{'binding': i, 'resource': {'buffer': buffer}} for i, buffer in enumerate(self.buffers)]
+            entries.append({'binding': 7, 'resource': {'buffer': self.parameters}})
+            self.bind_group = self.gpu_device.create_bind_group(layout=self.pipeline.get_bind_group_layout(0), entries=entries)
+            self.readback_bytes = 0
+            self.boards = DeviceField(self, self.buffers[0], 0, (160, n), np.int16)
+            self.used = DeviceField(self, self.buffers[0], 160, (5, n), np.uint32)
+            for name, buffer in zip(('firsts', 'lengths', 'cursors', 'shifts'), self.buffers[1:5]):
+                setattr(self, name, DeviceField(self, buffer, 0, (160, n), np.uint16))
+            for name, offset, dtype in [('depths', 0, np.int16), ('maxdepths', 1, np.int16),
+                                        ('floors', 2, np.int16), ('states', 3, np.uint8), ('rng', 4, np.uint32)]:
+                setattr(self, name, DeviceField(self, self.buffers[5], offset, (n,), dtype))
+            self.counters = DeviceField(self, self.buffers[5], 5, (3, n), np.uint64, counters=True)
+            self.gold_checked = DeviceField(self, self.buffers[5], 11, (n,), np.uint8)
+            self.cp = SimpleNamespace(asarray=np.asarray, maximum=np.maximum,
+                                      cuda=SimpleNamespace(get_current_stream=lambda: SimpleNamespace(synchronize=self._synchronize)))
+            self.boards.set(-1)
+            self.cursors.set(65535)
+            self.states.set(3)
+            self.rng.set(np.random.default_rng(seed).integers(1, 2**32, n, dtype=np.uint32))
+            self.prefix_codes = np.full((n, 160), -1, np.int16)
+            self.prefixes = [None] * n
+            self.roots = np.full(n, -1, np.int16)
+            if len(initial):
+                self.load_prefixes(initial, lanes=np.arange(len(initial), dtype=np.int32))
+            self._resources = resources.pop_all()
 
     def _read_rows(self, buffer, rows, cols):
         if not len(rows) or not len(cols): return np.empty((len(rows), len(cols)), np.uint32)
@@ -383,12 +425,14 @@ class WebGPUDFS(DFS):
 
     def close(self):
         """Release this engine's native allocations after its last checkpoint."""
-        self._synchronize()
+        if self._program is None:
+            return
         try:
-            reducer = getattr(self, '_counter_reduction', None)
-            if reducer is not None:
-                reducer.close()
+            self._synchronize()
         finally:
-            for buffer in self.buffers: buffer.destroy()
-            self.parameters.destroy()
-            self.gpu_device.destroy()
+            self._program = None
+            try:
+                if self._counter_reduction is not None:
+                    self._counter_reduction.close()
+            finally:
+                self._resources.close()
