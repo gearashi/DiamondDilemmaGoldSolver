@@ -86,7 +86,7 @@ def connected_pose_count(problem, bonds):
     return count
 
 
-def price_and_separate(problem, reference, groups, required, phase, cap, packing, cores):
+def price_and_separate(problem, reference, groups, required, phase, cap, packing, cores, *, disconnected=False, max_rounds=None, checkpoint=None):
     rounds = []
     while True:
         projected = [core - required for core in cores]
@@ -100,18 +100,28 @@ def price_and_separate(problem, reference, groups, required, phase, cap, packing
             raise ArithmeticError('Loss price disagrees with the explicit minimizing departures.')
         if price > cap:
             return dict(status='all losses at cap excluded', minimum=price, rounds=rounds)
+        if max_rounds is not None and len(rounds) >= max_rounds:
+            return dict(status='separation limit reached', minimum=price, rounds=rounds)
         chosen = (reference - lost) | required
         feasibility = packing.check(chosen, max_steps=2000)['feasible']
         if feasibility is not False:
             return dict(status='pose packing feasible' if feasibility else 'pose packing undecided',
                         minimum=price, witness_departures=sorted(lost), rounds=rounds)
         core = minimize_obstruction(packing, chosen)
-        if core is None or connected_pose_count(problem, core) != 0:
+        from r35_geographic_packing_check import check_packing
+        check=check_packing(problem,core) if (core is not None and disconnected) else None
+        verified=(check['feasible'] is False if check is not None
+                  else core is not None and connected_pose_count(problem,core)==0)
+        if not verified:
             return dict(status='no independently checked connected obstruction', minimum=price, rounds=rounds)
         if not core - required or core in cores:
             raise ArithmeticError('The separating cut must exclude this assignment.')
         cores.append(core)
-        rounds.append(dict(minimum=price, lost=sorted(lost), core=sorted(core)))
+        row=dict(minimum=price,lost=sorted(lost),core=sorted(core))
+        if check is not None:row['independent_packing']=check
+        rounds.append(row)
+        if checkpoint is not None:
+            checkpoint(rounds)
 
 
 def main():

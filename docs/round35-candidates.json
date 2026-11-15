@@ -1449,8 +1449,17 @@
       "source_id": "fresh geographic feedback after #73 and #76",
       "title": "Project checked geographic obstructions into the signed loss search",
       "mechanism": "GEOGRAPHIC-CORE-TO-SIGNED-LOSS",
-      "state": "testing",
-      "proposal_and_validation": "Propagate original target-cell poses along retained named bonds and the compulsory nonreference mate. Derive reusable loss clauses only with independent replay and exact assumptions. Test reduced obstructions, all alternative minimum losses of both near-reference phases, other near loss profiles and a positive geographic control. Compare previously allowed fixed phases and effects on unpinned signed loss work."
+      "state": "keep scoped signed and ranked geographic departures",
+      "proposal_and_validation": "Propagate original target-cell poses along retained named bonds and the compulsory nonreference mate. Derive reusable loss clauses only with independent replay and exact assumptions. Test reduced obstructions, all alternative minimum losses of both near-reference phases, other near loss profiles and a positive geographic control. Compare previously allowed fixed phases and effects on unpinned signed loss work.",
+      "decision": "Replay the full 194 verified conflict sets with --claims on this reference. Preserve original outside ranks, project only with compulsory outside mates, transport weaker negative coverage one way, and reprice positive phases. Retain one bounded complete read-only batch on the same root.",
+      "measurement": "104 distinct four-flip neighbors, 100 stricter signed prices (+167 total), 71 above the original two cuts. Fifteen of sixteen old-cost boundaries fully excluded. Supported fixed phase signed23 to25, full physical pairings26, connected sewing27. The 129-rule subset preserved 106 signed prices but weakened the connected optimum to26. Two actual geographic donor completions exhausted 622080 labelled full boards, maxima200 and201. Ranked weak-to-conditional layers0â€“3 avoided 121 prefixes and 12526 joint queries; a repeated 155-rule batch avoided all 155 pose replays.",
+      "evidence": [
+        "docs/ROUND35_GEOGRAPHIC_DEPLOYMENT.md",
+        "docs/R35_GEOGRAPHIC_RESIDUALS.json",
+        "docs/R35_GEOGRAPHIC_DEPLOYMENT.json",
+        "test_r35_ranked_geographic_cores.py"
+      ],
+      "reopen_if": "A materially different reference, physically attainable lower-cost donor or a new independently checkable geometric obstruction changes a surviving boundary. A new cap alone does not change existing certificates."
     }
   ],
   "priorities": [

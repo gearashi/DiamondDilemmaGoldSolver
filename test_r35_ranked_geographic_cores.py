@@ -64,6 +64,55 @@ class ConditionalGeographyTests(unittest.TestCase):
                              geographic_hints=[[actual]],**options)
         self.assertEqual(ignored,plain)
 
+    def test_large_root_batch_rechecks_changed_and_unproven_inputs(self):
+        from unittest.mock import patch
+        from r35_geographic_replay import replay_for
+        p,ref,_,req,hints=self.original()
+        actual=set(map(tuple,hints[0])) & ref
+        with patch('r35_geographic_replay._PROOF_LIMIT',1):
+            cache=replay_for(p)
+            result=geographic_departures(p,ref,req,hints)
+            self.assertEqual(len(result),2)
+            visits=cache.work['replays']
+            self.assertEqual(geographic_departures(p,ref,req,list(reversed(hints))),result)
+            self.assertEqual(cache.work['replays'],visits)
+            self.assertEqual(cache.work['complete_root_batch_reuses'],1)
+            self.assertEqual(geographic_departures(p,ref,req-{(167,456)},hints),())
+            altered=[hints[1],sorted(actual)]
+            self.assertEqual(len(geographic_departures(p,ref,req,altered)),1)
+            after=cache.work['replays']
+            geographic_departures(p,ref,req,altered)
+            self.assertGreater(cache.work['replays'],after)
+            self.assertEqual(cache.work['complete_root_batch_reuses'],1)
+
+    def test_weak_phase_cache_is_repriced_not_copied(self):
+        from r32_gold_loss import digest
+        from r32_gold_syndrome import OutsideSyndromes
+        from r35_loss_witness import save_witness
+        import sqlite3
+        from contextlib import closing
+        p,ref,groups,req,hints=self.original()
+        packed,_,outside=OutsideSyndromes.layout(ref,groups,req)
+        ident=[3,p.fingerprint,sorted(ref),sorted(req),[sorted(c) for c in packed],
+               'all-verified-groups-v1',sorted(sorted(g) for g in groups)]
+        ph=0xc655aaa6e88109fca073547e8c780ba32e1e5fa2
+        weak=physical_price(p.tiles,ref,groups,req,ph)
+        self.assertEqual((weak[0],len(set(outside)&weak[1])),(28,10))
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'phase.db'
+            with closing(sqlite3.connect(path)) as con, con:
+                save_witness(con,digest(ident),ph)
+            strong=run_syndrome(p,ref,groups,29,[10],str(path),0,all_groups=True,
+                                refine_integer=True,geographic_hints=hints)
+            self.assertEqual((strong['pages'],strong['loss_cost'],strong['phase']),(0,29,hex(ph)))
+            weak_result=run_syndrome(p,ref,groups,28,[10],str(path),0,all_groups=True,refine_integer=True)
+            self.assertEqual((weak_result['pages'],weak_result['loss_cost']),(0,28))
+            # A zero time budget means unlimited, so use a tiny finite deadline
+            # for this large layer after independently rejecting the stale hit.
+            control=run_syndrome(p,ref,groups,28,[10],str(path),1e-6,all_groups=True,
+                                 refine_integer=True,geographic_hints=hints)
+            self.assertEqual(control['status'],'UNKNOWN')
+
     def test_real_negative_pages_transfer_one_way_and_hold_original_rank_count(self):
         p,ref,groups,req,hints=self.original()
         with tempfile.TemporaryDirectory() as folder:
