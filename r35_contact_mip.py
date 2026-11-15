@@ -64,12 +64,21 @@ def checked_cycles(problem, reference, required):
     return result
 
 
-def decide(problem, reference, groups, required, outside, cap, seconds, *, conditions=None, hint=None):
+def decide(problem, reference, groups, required, outside, cap, seconds, *, conditions=None, hint=None, condition_factory=None, first_feasible=None):
     from ortools.linear_solver import pywraplp
 
     reference, required = set(reference), set(required)
     extra = checked_cycles(problem, reference, required)
     engine, phase, loss = build_model(problem, reference, groups, required, cap, extra)
+    native_conditions = None
+    if conditions is not None:
+        from r35_mip_conditions import Conditions
+        install = Conditions if condition_factory is None else condition_factory
+        native_conditions = install(conditions, engine, phase, loss)
+    if first_feasible is None:
+        first_feasible = native_conditions is not None
+    if first_feasible:
+        engine.SetSolverSpecificParametersAsString('limits/solutions = 1')
     if hint is not None and 0 <= hint < 1 << problem.n:
         checked = physical_price(problem.tiles, reference, groups, required, hint)
         if checked is not None:
@@ -95,7 +104,12 @@ def decide(problem, reference, groups, required, outside, cap, seconds, *, condi
         if price is None or price[0] > cap:
             raise ArithmeticError('Native integer witness failed raw physical inventory and loss replay.')
         cost = price[0]
-        if conditions is not None:
+        if native_conditions is not None:
+            if native_conditions.reject(witness, cost, deadline):
+                exclusions += 1
+                continue
+            cost = conditions.price(witness, cost)
+        elif conditions is not None:
             if not conditions.accepts(witness) or conditions.price(witness, cost) > cap:
                 # Only this complete phase was disproved. Other assignments keep their support.
                 engine.Add(sum(1-v if (witness>>j)&1 else v for j,v in enumerate(phase)) >= 1)
@@ -105,6 +119,8 @@ def decide(problem, reference, groups, required, outside, cap, seconds, *, condi
         break
     work = dict(backend='SCIP', nodes=nodes, lp_iterations=iterations,
                 checked_cycle_clauses=len(extra), rejected_conditional_phases=exclusions)
+    if native_conditions is not None:
+        work.update(native_conditions.work)
     if answer == pywraplp.Solver.INFEASIBLE:
         return dict(status='INFEASIBLE', cap=cap, all_outside_layers=True, work=work)
     if answer not in (pywraplp.Solver.OPTIMAL, pywraplp.Solver.FEASIBLE):

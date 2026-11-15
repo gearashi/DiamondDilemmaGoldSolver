@@ -1,0 +1,2718 @@
+{
+  "puzzle": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "scopes": {
+    "physical": [
+      13,
+      0,
+      0
+    ],
+    "wide": [
+      13,
+      194,
+      326
+    ],
+    "complete": [
+      13,
+      194,
+      985
+    ],
+    "circuits": [
+      13,
+      194,
+      985,
+      19
+    ]
+  },
+  "source": {
+    "branch": "codex/round35-search",
+    "baseline": "ecbedfb",
+    "backend": "OR-Tools SCIP, one thread, original input",
+    "date": "2026-11-15"
+  },
+  "assertion_tested": "Preserve signed-inventory, gauge, Euler and reciprocal-mate relaxations at the requested cap. Compare full-phase restarts and native rows at matched scopes and budgets. Actual geographic ownership and single-loop embedding are separate.",
+  "unrestricted": [
+    {
+      "case": "21/em/31",
+      "scope": "physical",
+      "mode": "whole",
+      "cap_seconds": 15.0,
+      "first_feasible": true,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 58,
+      "lp_iterations": 15840,
+      "restarts": 0
+    },
+    {
+      "case": "21/em/31",
+      "scope": "physical",
+      "mode": "rules",
+      "cap_seconds": 15.0,
+      "first_feasible": true,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 42,
+      "lp_iterations": 13763,
+      "restarts": 0
+    },
+    {
+      "case": "21/em/31",
+      "scope": "physical",
+      "mode": "price",
+      "cap_seconds": 15.0,
+      "first_feasible": true,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 9,
+      "lp_iterations": 16148,
+      "restarts": 0
+    },
+    {
+      "case": "23/em/37",
+      "scope": "physical",
+      "mode": "whole",
+      "cap_seconds": 15.0,
+      "first_feasible": true,
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 23,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "23/em/37",
+      "scope": "physical",
+      "mode": "rules",
+      "cap_seconds": 15.0,
+      "first_feasible": true,
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 23,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "23/em/37",
+      "scope": "physical",
+      "mode": "price",
+      "cap_seconds": 15.0,
+      "first_feasible": true,
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 23,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "23/emp/37",
+      "scope": "physical",
+      "mode": "whole",
+      "cap_seconds": 15.0,
+      "first_feasible": true,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 144,
+      "lp_iterations": 23188,
+      "restarts": 1
+    },
+    {
+      "case": "23/emp/37",
+      "scope": "physical",
+      "mode": "rules",
+      "cap_seconds": 15.0,
+      "first_feasible": true,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 37,
+      "lp_iterations": 13277,
+      "restarts": 1
+    },
+    {
+      "case": "23/emp/37",
+      "scope": "physical",
+      "mode": "price",
+      "cap_seconds": 15.0,
+      "first_feasible": true,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 22,
+      "lp_iterations": 26109,
+      "restarts": 0
+    },
+    {
+      "case": "24/emp/37",
+      "scope": "physical",
+      "mode": "whole",
+      "cap_seconds": 15.0,
+      "first_feasible": true,
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 24,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "24/emp/37",
+      "scope": "physical",
+      "mode": "rules",
+      "cap_seconds": 15.0,
+      "first_feasible": true,
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 24,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "24/emp/37",
+      "scope": "physical",
+      "mode": "price",
+      "cap_seconds": 15.0,
+      "first_feasible": true,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 21,
+      "lp_iterations": 25238,
+      "restarts": 0
+    },
+    {
+      "case": "31/em/31",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 60.0,
+      "first_feasible": false,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 702,
+      "lp_iterations": 135450,
+      "restarts": 0
+    },
+    {
+      "case": "31/em/31",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 60.0,
+      "first_feasible": false,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 552,
+      "lp_iterations": 127219,
+      "restarts": 0
+    },
+    {
+      "case": "31/em/31",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 60.0,
+      "first_feasible": false,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 508,
+      "lp_iterations": 214089,
+      "restarts": 0
+    },
+    {
+      "case": "31/em/31",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 60.0,
+      "first_feasible": false,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 1038,
+      "lp_iterations": 164522,
+      "restarts": 1
+    },
+    {
+      "case": "37/em/37",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 60.0,
+      "first_feasible": false,
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+      "cost": 33,
+      "nodes": 1693,
+      "lp_iterations": 235862,
+      "restarts": 0
+    },
+    {
+      "case": "37/em/37",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 60.0,
+      "first_feasible": false,
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xde55aba6e99109f8a071557e8c580b82024e5f26",
+      "cost": 34,
+      "nodes": 1474,
+      "lp_iterations": 254278,
+      "restarts": 0
+    },
+    {
+      "case": "37/em/37",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 60.0,
+      "first_feasible": false,
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 587,
+      "lp_iterations": 185023,
+      "restarts": 0
+    },
+    {
+      "case": "37/em/37",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 60.0,
+      "first_feasible": false,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 1105,
+      "lp_iterations": 171052,
+      "restarts": 2
+    },
+    {
+      "case": "31/em/31",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 300.0,
+      "first_feasible": true,
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1477,
+      "lp_iterations": 253696,
+      "restarts": 0
+    },
+    {
+      "case": "37/em/37",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 300.0,
+      "first_feasible": true,
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "31/em/31",
+      "scope": "complete",
+      "mode": "rules",
+      "cap_seconds": 900.0,
+      "first_feasible": true,
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1653,
+      "lp_iterations": 301322,
+      "restarts": 0
+    },
+    {
+      "case": "37/em/37",
+      "scope": "complete",
+      "mode": "rules",
+      "cap_seconds": 900.0,
+      "first_feasible": true,
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "31/e/31",
+      "scope": "complete",
+      "mode": "lazy",
+      "cap_seconds": 600.0,
+      "first_feasible": true,
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1523,
+      "lp_iterations": 278921,
+      "restarts": 0
+    },
+    {
+      "case": "32/e/31",
+      "scope": "complete",
+      "mode": "lazy",
+      "cap_seconds": 600.0,
+      "first_feasible": true,
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 4730,
+      "lp_iterations": 806984,
+      "restarts": 0
+    },
+    {
+      "case": "31/em/31",
+      "scope": "complete",
+      "mode": "whole",
+      "cap_seconds": 600.0,
+      "first_feasible": true,
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 2643,
+      "lp_iterations": 435528,
+      "restarts": 1
+    },
+    {
+      "case": "31/em/31",
+      "scope": "complete",
+      "mode": "warm",
+      "cap_seconds": 600.0,
+      "first_feasible": true,
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1257,
+      "lp_iterations": 248155,
+      "restarts": 0
+    },
+    {
+      "case": "32/em/31",
+      "scope": "complete",
+      "mode": "whole",
+      "cap_seconds": 600.0,
+      "first_feasible": true,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 6010,
+      "lp_iterations": 1022799,
+      "restarts": 10
+    },
+    {
+      "case": "32/em/31",
+      "scope": "complete",
+      "mode": "warm",
+      "cap_seconds": 600.0,
+      "first_feasible": true,
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 5167,
+      "lp_iterations": 842201,
+      "restarts": 0
+    },
+    {
+      "case": "33/em/37",
+      "scope": "complete",
+      "mode": "warm",
+      "cap_seconds": 600.0,
+      "first_feasible": true,
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+      "cost": 33,
+      "nodes": 1519,
+      "lp_iterations": 279290,
+      "restarts": 0
+    },
+    {
+      "case": "21/e/cold",
+      "scope": "physical",
+      "mode": "lazy",
+      "cap_seconds": 750.0,
+      "first_feasible": true,
+      "status": "UNKNOWN",
+      "phase": null,
+      "cost": null,
+      "nodes": 39911,
+      "lp_iterations": 2401188,
+      "restarts": 0
+    },
+    {
+      "case": "31/em/31",
+      "scope": "circuits",
+      "mode": "warm",
+      "cap_seconds": 600.0,
+      "first_feasible": true,
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 753,
+      "lp_iterations": 136863,
+      "restarts": 0
+    },
+    {
+      "case": "32/em/31",
+      "scope": "circuits",
+      "mode": "warm",
+      "cap_seconds": 600.0,
+      "first_feasible": true,
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 2199,
+      "lp_iterations": 382143,
+      "restarts": 0
+    },
+    {
+      "case": "33/em/37",
+      "scope": "circuits",
+      "mode": "warm",
+      "cap_seconds": 600.0,
+      "first_feasible": true,
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+      "cost": 33,
+      "nodes": 1052,
+      "lp_iterations": 241174,
+      "restarts": 0
+    },
+    {
+      "case": "33/e/31",
+      "scope": "circuits",
+      "mode": "lazy",
+      "cap_seconds": 600.0,
+      "first_feasible": true,
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+      "cost": 33,
+      "nodes": 1048,
+      "lp_iterations": 190391,
+      "restarts": 0
+    }
+  ],
+  "held_out": [
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 34,
+      "restarts": 1
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 45,
+      "restarts": 1
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 31,
+      "restarts": 1
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 27,
+      "restarts": 1
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 32,
+      "restarts": 1
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 28,
+      "restarts": 1
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 45,
+      "restarts": 1
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 34,
+      "restarts": 1
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 79,
+      "restarts": 1
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 75,
+      "restarts": 1
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e99101e88041403e8c589902025e5326",
+      "cost": 35,
+      "nodes": 1,
+      "lp_iterations": 100,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e99101e88041403e8c589902025e5326",
+      "cost": 35,
+      "nodes": 1,
+      "lp_iterations": 92,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e99101e88041403e8c589902025e5326",
+      "cost": 35,
+      "nodes": 1,
+      "lp_iterations": 101,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e99101e88041403e8c589902025e5326",
+      "cost": 35,
+      "nodes": 1,
+      "lp_iterations": 86,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e99101e88041403e8c589902025e5326",
+      "cost": 35,
+      "nodes": 1,
+      "lp_iterations": 86,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e99101e88041403e8c589902025e5326",
+      "cost": 35,
+      "nodes": 1,
+      "lp_iterations": 92,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e99101e88041403e8c589902025e5326",
+      "cost": 35,
+      "nodes": 1,
+      "lp_iterations": 86,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 79,
+      "restarts": 1
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 87,
+      "restarts": 1
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 100,
+      "restarts": 1
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 92,
+      "restarts": 1
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 49,
+      "restarts": 1
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 41,
+      "restarts": 1
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 41,
+      "restarts": 1
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 41,
+      "restarts": 1
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 1,
+      "lp_iterations": 49,
+      "restarts": 1
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 84,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 84,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 86,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 78,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 100,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 113,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 94,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 90,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 88,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 116,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 116,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 88,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 88,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 88,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 90,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 125,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 96,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 101,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 93,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 76,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 80,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "whole",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 81,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "lazy",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 88,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "short",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 96,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "rules",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 72,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "small",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 99,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "families",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 90,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "price",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 83,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "21",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e99101e88041403e8c589902025e5326",
+      "cost": 35,
+      "nodes": 1,
+      "lp_iterations": 92,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "22",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "31",
+      "status": "INFEASIBLE",
+      "phase": null,
+      "cost": null,
+      "nodes": 0,
+      "lp_iterations": 0,
+      "restarts": 0
+    },
+    {
+      "case": "39/m/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 86,
+      "restarts": 0
+    },
+    {
+      "case": "39/e/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 125,
+      "restarts": 0
+    },
+    {
+      "case": "39/em/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 96,
+      "restarts": 0
+    },
+    {
+      "case": "39/emp/cold",
+      "scope": "wide",
+      "mode": "warm",
+      "cap_seconds": 7.0,
+      "first_feasible": true,
+      "fixed_outside_phase": "37",
+      "status": "INTEGER_RELAXATION_FEASIBLE",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "cost": 37,
+      "nodes": 1,
+      "lp_iterations": 96,
+      "restarts": 0
+    }
+  ],
+  "held_out_oracle": {
+    "21": {
+      "images": 16,
+      "integer": 1,
+      "under39": 1,
+      "accepted": {
+        "m": [],
+        "e": [],
+        "em": [],
+        "emp": []
+      }
+    },
+    "22": {
+      "images": 16,
+      "integer": 1,
+      "under39": 1,
+      "accepted": {
+        "m": [],
+        "e": [
+          [
+            "0xd237aba7e99101e88041403e8c589902025e5326",
+            35
+          ]
+        ],
+        "em": [],
+        "emp": []
+      }
+    },
+    "31": {
+      "images": 16,
+      "integer": 1,
+      "under39": 1,
+      "accepted": {
+        "m": [],
+        "e": [],
+        "em": [],
+        "emp": []
+      }
+    },
+    "37": {
+      "images": 16,
+      "integer": 1,
+      "under39": 1,
+      "accepted": {
+        "m": [
+          [
+            "0xd237aba7e91101e88041413e8c589902021e5126",
+            37
+          ]
+        ],
+        "e": [
+          [
+            "0xd237aba7e91101e88041413e8c589902021e5126",
+            37
+          ]
+        ],
+        "em": [
+          [
+            "0xd237aba7e91101e88041413e8c589902021e5126",
+            37
+          ]
+        ],
+        "emp": [
+          [
+            "0xd237aba7e91101e88041413e8c589902021e5126",
+            37
+          ]
+        ]
+      }
+    }
+  },
+  "donors": [
+    {
+      "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+      "cost": 33,
+      "minimum_matched_class_loss": 34,
+      "euler": -5,
+      "lost": [
+        [
+          5,
+          334
+        ],
+        [
+          6,
+          50
+        ],
+        [
+          19,
+          106
+        ],
+        [
+          20,
+          249
+        ],
+        [
+          26,
+          178
+        ],
+        [
+          53,
+          444
+        ],
+        [
+          57,
+          264
+        ],
+        [
+          67,
+          140
+        ],
+        [
+          71,
+          449
+        ],
+        [
+          89,
+          409
+        ],
+        [
+          96,
+          392
+        ],
+        [
+          99,
+          263
+        ],
+        [
+          104,
+          460
+        ],
+        [
+          109,
+          162
+        ],
+        [
+          115,
+          176
+        ],
+        [
+          127,
+          412
+        ],
+        [
+          133,
+          354
+        ],
+        [
+          145,
+          208
+        ],
+        [
+          149,
+          379
+        ],
+        [
+          173,
+          374
+        ],
+        [
+          197,
+          423
+        ],
+        [
+          205,
+          216
+        ],
+        [
+          222,
+          396
+        ],
+        [
+          225,
+          472
+        ],
+        [
+          229,
+          232
+        ],
+        [
+          236,
+          459
+        ],
+        [
+          245,
+          352
+        ],
+        [
+          278,
+          335
+        ],
+        [
+          280,
+          437
+        ],
+        [
+          294,
+          427
+        ],
+        [
+          305,
+          389
+        ],
+        [
+          326,
+          406
+        ],
+        [
+          443,
+          465
+        ]
+      ]
+    },
+    {
+      "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+      "cost": 33,
+      "minimum_matched_class_loss": 37,
+      "euler": -5,
+      "lost": [
+        [
+          2,
+          168
+        ],
+        [
+          5,
+          334
+        ],
+        [
+          17,
+          262
+        ],
+        [
+          18,
+          403
+        ],
+        [
+          26,
+          178
+        ],
+        [
+          33,
+          83
+        ],
+        [
+          45,
+          367
+        ],
+        [
+          47,
+          103
+        ],
+        [
+          53,
+          444
+        ],
+        [
+          59,
+          110
+        ],
+        [
+          62,
+          447
+        ],
+        [
+          73,
+          114
+        ],
+        [
+          96,
+          392
+        ],
+        [
+          101,
+          391
+        ],
+        [
+          104,
+          460
+        ],
+        [
+          119,
+          279
+        ],
+        [
+          120,
+          234
+        ],
+        [
+          131,
+          375
+        ],
+        [
+          134,
+          147
+        ],
+        [
+          164,
+          411
+        ],
+        [
+          170,
+          182
+        ],
+        [
+          174,
+          382
+        ],
+        [
+          194,
+          266
+        ],
+        [
+          197,
+          423
+        ],
+        [
+          205,
+          216
+        ],
+        [
+          222,
+          396
+        ],
+        [
+          245,
+          352
+        ],
+        [
+          254,
+          281
+        ],
+        [
+          265,
+          350
+        ],
+        [
+          314,
+          410
+        ],
+        [
+          326,
+          406
+        ],
+        [
+          355,
+          471
+        ],
+        [
+          443,
+          465
+        ]
+      ]
+    }
+  ],
+  "public_33": {
+    "status": "INTEGER_RELAXATION_FEASIBLE",
+    "outside_errors": [
+      [
+        19,
+        106
+      ],
+      [
+        26,
+        178
+      ],
+      [
+        57,
+        264
+      ],
+      [
+        104,
+        460
+      ],
+      [
+        145,
+        208
+      ],
+      [
+        205,
+        216
+      ],
+      [
+        236,
+        459
+      ],
+      [
+        278,
+        335
+      ],
+      [
+        280,
+        437
+      ],
+      [
+        294,
+        427
+      ],
+      [
+        305,
+        389
+      ]
+    ],
+    "errors": 11,
+    "cap": 33,
+    "loss_cost": 33,
+    "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+    "witness_revalidated": true,
+    "reused": true,
+    "relaxation": "signed_inventory_with_edge_perfect_departures",
+    "work": {
+      "decisions": 0,
+      "conflicts": 0,
+      "reference_phase_reused": 1
+    },
+    "verified_geographic_departures": 194,
+    "verified_edge_perfect_departures": 985,
+    "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "signed_conditions": {
+      "sphere_euler": true,
+      "mate_support": true
+    }
+  }
+}
