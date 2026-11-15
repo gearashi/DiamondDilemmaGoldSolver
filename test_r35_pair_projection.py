@@ -76,6 +76,39 @@ class BlankFamilyTests(TestCase):
                     self.assertTrue(banned.isdisjoint(pairs))
                     self.assertEqual(sorted(v for e in pairs for v in e),list(group))
 
+    def test_original_pinned_catalog_and_complement_are_checked_before_native_search(self):
+        from pathlib import Path
+        from random import Random
+        from unittest.mock import patch
+        from bench_r35_loss_boundary344 import problem_scope
+        from verify_r35_contact_wide import read_rows
+        from r32_gold_bonds import inventory
+        from r35_mip_pairing import decide, published_witness
+        tiles=next((p for p in map(Path,('data/tiles.json','../data/tiles.json')) if p.is_file()),None)
+        if tiles is None:
+            self.skipTest('Original prepared pieces unavailable')
+        p,ref,base,req=problem_scope(tiles)
+        docs=Path(__file__).resolve().parent/'docs'
+        groups=[*base[:13],*read_rows(docs/'R35_GEOGRAPHIC_RESIDUALS.json','geographic_cores'),
+                *read_rows(docs/'R35_EDGE_CONTACTS.json','edge_perfect_cores')]
+        allowed=inventory(p).possible
+        original=0xd237aba7e91101e88041413e8c589902021e5126
+        mask=(1<<p.n)-1
+        order=list(range(1,p.n))
+        Random(35590+ord('c')).shuffle(order)
+        fixed={0,*order[112:]}
+        for chosen in (original,original^mask):
+            pins={i:chosen>>i&1 for i in fixed}
+            with patch('r35_mip_pairing.build_model',side_effect=AssertionError('Redundant physical search')):
+                result=decide(p,ref,groups,req,37,1,published=True,pins=pins,sphere=True)
+            self.assertEqual(result['phase'],hex(chosen))
+            self.assertEqual(result['loss_cost'],37)
+            self.assertEqual(result['work']['nodes'],0)
+            self.assertEqual(len(result['pairs']),240)
+        exact={i:original>>i&1 for i in range(p.n)}
+        self.assertIsNone(published_witness(p,ref,req,groups,36,allowed,True,exact))
+        self.assertIsNone(published_witness(p,ref,req,groups,37,allowed-{next(iter(req))},True,exact))
+
     def test_two_actual_blank_choices_preserve_named_losses_and_strand_cycles(self):
         import json
         from pathlib import Path

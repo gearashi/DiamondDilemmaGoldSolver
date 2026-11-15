@@ -121,9 +121,11 @@ def physical_witness(problem, value, pairs, reference, required, groups, cap, al
     result={tuple(sorted(e)) for e in pairs}
     if sorted(v for p in result for v in p)!=list(range(3*problem.n)) or not required<=result<=allowed:
         return None
-    labels=[(slots,color^((value>>(i//3))&1)) for i,(slots,color) in enumerate(raw_sides(problem.tiles))]
     lost=reference-result
-    if any(labels[a]!=reciprocal(labels[b]) for a,b in result) or len(lost)>cap or any(not g&lost for g in groups):
+    if len(lost)>cap or any(not g&lost for g in groups):
+        return None
+    labels=[(slots,color^((value>>(i//3))&1)) for i,(slots,color) in enumerate(raw_sides(problem.tiles))]
+    if any(labels[a]!=reciprocal(labels[b]) for a,b in result):
         return None
     if sphere:
         table=PhaseInterface(problem)
@@ -140,36 +142,71 @@ def physical_witness(problem, value, pairs, reference, required, groups, cap, al
     return answer
 
 
-def published_witness(problem, reference, required, groups, cap, allowed, sphere):
+def published_witness(problem, reference, required, groups, cap, allowed, sphere, pins=None):
     import json
     from pathlib import Path
-    if problem.n!=160:
+    from r35_phase_sewing import _published_sewings
+    if problem.n != 160:
         return None
     try:
-        catalog=json.loads((Path(__file__).resolve().parent/'docs/R35_MIXED_MIP_DONOR.json').read_bytes())
-        records=[catalog,*catalog.get('others',())]
-    except (OSError,ValueError,AttributeError,TypeError):
+        catalog = json.loads((Path(__file__).resolve().parent/'docs/R35_MIXED_MIP_DONOR.json').read_bytes())
+    except (OSError, ValueError):
         return None
-    for record in records:
-        if not isinstance(record,dict) or record.get('fingerprint')!=problem.fingerprint:
+    if not isinstance(catalog, dict) or not isinstance(catalog.get('others', []), list):
+        return None
+    pins = pins or {}
+    phases = {}
+    seen = set()
+
+    def check(value, record):
+        if not isinstance(record, dict):
+            return None
+        for field in ('first_pairing', 'pairs'):
+            pairs = record.get(field)
+            if not isinstance(pairs, list) or len(pairs) != 3*problem.n//2:
+                continue
+            # Historical portfolios sometimes repeat the same ordered full
+            # pairing. Only successful raw validation can answer a query.
+            key = value, json.dumps(pairs, separators=(',', ':'))
+            if key in seen:
+                continue
+            seen.add(key)
+            answer = physical_witness(problem, value, pairs, reference, required, groups, cap, allowed,
+                                      sphere=sphere)
+            if answer is not None:
+                return dict(answer, work={'nodes': 0, 'verified_physical_pairing_reused': 1})
+        return None
+
+    for record in [catalog, *catalog.get('others', [])]:
+        if not isinstance(record, dict) or record.get('fingerprint') != problem.fingerprint:
             continue
         try:
-            value=int(record['phase'],16)
-        except (KeyError,TypeError,ValueError):
+            original = int(record['phase'], 16)
+        except (KeyError, TypeError, ValueError):
             continue
-        for field in ('first_pairing','pairs'):
-            answer=physical_witness(problem,value,record.get(field),reference,required,groups,cap,allowed,sphere=sphere)
+        if not 0 <= original < 1 << problem.n:
+            continue
+        values = (original, ((1 << problem.n)-1) ^ original) if pins else (original,)
+        for value in values:
+            if any((value >> i) & 1 != bit for i, bit in pins.items()):
+                continue
+            phases[value] = None
+            answer = check(value, record)
             if answer is not None:
-                return dict(answer,work={'nodes':0,'verified_physical_pairing_reused':1})
+                return answer
+    for value in phases:
+        for record in _published_sewings(problem, value):
+            answer = check(value, record)
+            if answer is not None:
+                return answer
     return None
-
 
 def decide(problem, reference, groups, required, cap, seconds, *, sphere=False, mode='blank', hint=None, pins=None, forbidden=(), published=False, full_hint=True):
     reference, required = set(reference), set(required)
     allowed = inventory(problem).possible-set(forbidden)
     pins = checked_pins(problem.n, {} if pins is None else pins)
-    if published and not pins:
-        replay = published_witness(problem,reference,required,groups,cap,allowed,sphere)
+    if published:
+        replay = published_witness(problem,reference,required,groups,cap,allowed,sphere,pins)
         if replay is not None:
             return replay
     # The signed inventory is invariant under a global color flip. Absolute
