@@ -5,9 +5,10 @@ import numpy as np
 
 
 class SwapCatalog:
-    def __init__(self, model, rebuild_fraction=1.0):
+    def __init__(self, model, rebuild_fraction=1.0, *, physical_neighbors=False):
         self.model = model
         self.rebuild_fraction = rebuild_fraction
+        self.physical_neighbors = physical_neighbors
         self.board = None
         self.allowed = np.zeros(model.n, dtype=bool)
         self.buckets = [np.empty(0, dtype=int) for _ in range(7)]
@@ -66,7 +67,7 @@ class SwapCatalog:
         # physical identity and its current orientation matter at its own cell.
         for side in range(3):
             neighbors = self.model.problem.neighbors[:, side]
-            changed_mask = (self.model.masks[self.board, side] != self.model.masks[board, side])
+            changed_mask = changed if self.physical_neighbors else (self.model.masks[self.board, side] != self.model.masks[board, side])
             dirty[neighbors[changed_mask & (neighbors >= 0)]] = True
         return dirty & active
 

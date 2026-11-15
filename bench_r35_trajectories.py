@@ -75,6 +75,8 @@ def engine_for(problem,policy):
     engine=EarlyContacts if policy.startswith('early-') else Engine
     if policy=='singles':
         engine=RawSingles
+    if policy.startswith('mate-'):
+        return Engine(problem,bonds=True,exact_packing=True,cycle_budget=3,regional_cycle_budget=2,forbidden_repair=policy.split('-')[1])
     if policy.startswith('regional-'):
         return Engine(problem,bonds=True,exact_packing=True,cycle_budget=3,regional_cycle_budget=int(policy.split('-')[1]),
                       contact_group=1 if policy.endswith('-singles') else 0)
@@ -154,7 +156,7 @@ def main():
                                                   'early-release','early-positive','early-triples','pack-base',
                                                   'pack-neutral','pack-priced','pack-separator','pack-stable','pack-complete','pack-cp','pack-both',
                                                   'combined-base','combined-complete','combined-all','circulation-disjoint',
-                                                  'circulation-neighbors','circulation-warm','regional-1','regional-2','regional-8','regional-32','regional-128','regional-2-singles'), required=True)
+                                                  'circulation-neighbors','circulation-warm','regional-1','regional-2','regional-8','regional-32','regional-128','regional-2-singles','mate-project','mate-prices','mate-guarded'), required=True)
     parser.add_argument('--rounds', type=int, nargs='+', default=[16, 64, 320])
     parser.add_argument('--cold-seed', type=int, default=3500)
     args = parser.parse_args()

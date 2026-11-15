@@ -1,0 +1,6578 @@
+{
+  "regional": {
+    "measure": [
+      {
+        "seed": 3500,
+        "score": 180,
+        "steps": 320,
+        "work": {
+          "swaps_created_calls": 11,
+          "swaps_created_pairs": 11,
+          "block_created_calls": 15,
+          "block_created_pairs": 15,
+          "cleanups": 41,
+          "cleanup_fewer_matches": 23,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 70,
+          "circulation_created_calls": 5,
+          "circulation_created_pairs": 5,
+          "rotations_created_calls": 15,
+          "rotations_created_pairs": 15
+        },
+        "rounds_with_new_collisions": 45
+      },
+      {
+        "seed": 3501,
+        "score": 176,
+        "steps": 320,
+        "work": {
+          "swaps_created_calls": 9,
+          "swaps_created_pairs": 11,
+          "circulation_created_calls": 4,
+          "circulation_created_pairs": 4,
+          "cleanups": 14,
+          "cleanup_fewer_matches": 14,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 35,
+          "block_created_calls": 5,
+          "block_created_pairs": 5,
+          "rotations_created_calls": 6,
+          "rotations_created_pairs": 6
+        },
+        "rounds_with_new_collisions": 20
+      },
+      {
+        "seed": 3502,
+        "score": 184,
+        "steps": 320,
+        "work": {
+          "block_created_calls": 11,
+          "block_created_pairs": 11,
+          "cleanups": 235,
+          "cleanup_fewer_matches": 235,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 718,
+          "circulation_created_calls": 213,
+          "circulation_created_pairs": 217,
+          "swaps_created_calls": 20,
+          "swaps_created_pairs": 25,
+          "rotations_created_calls": 4,
+          "rotations_created_pairs": 4
+        },
+        "rounds_with_new_collisions": 236
+      },
+      {
+        "seed": 3503,
+        "score": 175,
+        "steps": 320,
+        "work": {
+          "swaps_created_calls": 192,
+          "swaps_created_pairs": 230,
+          "block_created_calls": 72,
+          "block_created_pairs": 77,
+          "cleanups": 246,
+          "cleanup_fewer_matches": 246,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 609,
+          "circulation_created_calls": 60,
+          "circulation_created_pairs": 64
+        },
+        "rounds_with_new_collisions": 255
+      }
+    ],
+    "guarded": [
+      {
+        "seed": 3500,
+        "score": 181,
+        "steps": 320,
+        "work": {
+          "rotations_created_calls": 12,
+          "rotations_created_pairs": 12
+        },
+        "rounds_with_new_collisions": 12,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 320,
+          "positive_swap_pairs": 3773,
+          "potential_pairs_priced": 3294720,
+          "full_cycle_relaxations": 405,
+          "full_cycle_complete": 286,
+          "full_cycle_cycles": 28,
+          "regional_identity_proofs": 319,
+          "regional_identity_updates": 8,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 320,
+          "joint_branches": 0,
+          "mate_orientation_projections": 12,
+          "mate_active_cycles": 15,
+          "mate_exact_cycle_subsets": 30,
+          "orientation_entries": 1139010,
+          "block_assignments": 320,
+          "round_to_150": 4,
+          "round_to_160": 7,
+          "round_to_170": 33,
+          "round_to_175": 79,
+          "round_to_180": 275,
+          "unique_repaired_boards": 270,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 3501,
+        "score": 179,
+        "steps": 320,
+        "work": {
+          "rotations_created_calls": 1,
+          "rotations_created_pairs": 1
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 320,
+          "positive_swap_pairs": 3583,
+          "potential_pairs_priced": 3294720,
+          "full_cycle_relaxations": 401,
+          "full_cycle_complete": 284,
+          "full_cycle_cycles": 29,
+          "regional_identity_proofs": 319,
+          "regional_identity_updates": 23,
+          "regional_assignment_solves": 2,
+          "joint_CIRCULATION_OPTIMAL": 319,
+          "joint_branches": 0,
+          "orientation_entries": 1190124,
+          "block_assignments": 320,
+          "round_to_150": 5,
+          "mate_orientation_projections": 1,
+          "mate_active_cycles": 1,
+          "mate_exact_cycle_subsets": 2,
+          "round_to_160": 9,
+          "round_to_170": 20,
+          "round_to_175": 103,
+          "joint_OPTIMAL": 1,
+          "unique_repaired_boards": 242,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 3502,
+        "score": 181,
+        "steps": 320,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 320,
+          "positive_swap_pairs": 3816,
+          "potential_pairs_priced": 3294720,
+          "full_cycle_relaxations": 385,
+          "full_cycle_complete": 294,
+          "full_cycle_cycles": 24,
+          "regional_identity_proofs": 319,
+          "regional_identity_updates": 17,
+          "regional_assignment_solves": 2,
+          "joint_CIRCULATION_OPTIMAL": 320,
+          "joint_branches": 0,
+          "orientation_entries": 2136510,
+          "block_assignments": 320,
+          "round_to_150": 4,
+          "round_to_160": 7,
+          "round_to_170": 50,
+          "round_to_175": 106,
+          "round_to_180": 223,
+          "unique_repaired_boards": 211,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 3503,
+        "score": 175,
+        "steps": 320,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 320,
+          "positive_swap_pairs": 3359,
+          "potential_pairs_priced": 3294720,
+          "full_cycle_relaxations": 415,
+          "full_cycle_complete": 276,
+          "full_cycle_cycles": 33,
+          "regional_identity_proofs": 319,
+          "regional_identity_updates": 18,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 320,
+          "joint_branches": 0,
+          "orientation_entries": 1270212,
+          "block_assignments": 320,
+          "round_to_150": 5,
+          "round_to_160": 15,
+          "round_to_170": 69,
+          "round_to_175": 121,
+          "unique_repaired_boards": 247,
+          "mandatory_bonds": 8
+        }
+      }
+    ]
+  },
+  "released": {
+    "measure": [
+      {
+        "seed": 3504,
+        "score": 180,
+        "steps": 320,
+        "work": {
+          "block_created_calls": 12,
+          "block_created_pairs": 12,
+          "cleanups": 15,
+          "cleanup_fewer_matches": 8,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 19,
+          "swaps_created_calls": 1,
+          "swaps_created_pairs": 2,
+          "circulation_created_calls": 1,
+          "circulation_created_pairs": 1,
+          "rotations_created_calls": 4,
+          "rotations_created_pairs": 4
+        },
+        "rounds_with_new_collisions": 18
+      },
+      {
+        "seed": 3505,
+        "score": 182,
+        "steps": 320,
+        "work": {
+          "swaps_created_calls": 5,
+          "swaps_created_pairs": 5,
+          "cleanups": 26,
+          "cleanup_fewer_matches": 26,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 57,
+          "block_created_calls": 20,
+          "block_created_pairs": 20,
+          "circulation_created_calls": 4,
+          "circulation_created_pairs": 4
+        },
+        "rounds_with_new_collisions": 28
+      },
+      {
+        "seed": 3506,
+        "score": 175,
+        "steps": 320,
+        "work": {
+          "block_created_calls": 16,
+          "block_created_pairs": 17,
+          "cleanups": 172,
+          "cleanup_fewer_matches": 171,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 478,
+          "swaps_created_calls": 58,
+          "swaps_created_pairs": 62,
+          "circulation_created_calls": 108,
+          "circulation_created_pairs": 108,
+          "rotations_created_calls": 2,
+          "rotations_created_pairs": 2
+        },
+        "rounds_with_new_collisions": 173
+      },
+      {
+        "seed": 3507,
+        "score": 181,
+        "steps": 320,
+        "work": {
+          "swaps_created_calls": 8,
+          "swaps_created_pairs": 8,
+          "block_created_calls": 17,
+          "block_created_pairs": 18,
+          "cleanups": 54,
+          "cleanup_fewer_matches": 54,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 93,
+          "circulation_created_calls": 28,
+          "circulation_created_pairs": 34,
+          "rotations_created_calls": 8,
+          "rotations_created_pairs": 8
+        },
+        "rounds_with_new_collisions": 58
+      }
+    ],
+    "guarded": [
+      {
+        "seed": 3504,
+        "score": 183,
+        "steps": 320,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 320,
+          "positive_swap_pairs": 3294,
+          "potential_pairs_priced": 3294720,
+          "full_cycle_relaxations": 454,
+          "full_cycle_complete": 268,
+          "full_cycle_cycles": 28,
+          "joint_OPTIMAL": 319,
+          "joint_branches": 17760,
+          "orientation_entries": 2475582,
+          "block_assignments": 320,
+          "round_to_150": 4,
+          "round_to_160": 8,
+          "round_to_170": 17,
+          "round_to_175": 84,
+          "round_to_180": 105,
+          "joint_UNKNOWN": 1,
+          "unique_repaired_boards": 232,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 3505,
+        "score": 174,
+        "steps": 320,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 320,
+          "positive_swap_pairs": 3658,
+          "potential_pairs_priced": 3294720,
+          "full_cycle_relaxations": 396,
+          "full_cycle_complete": 290,
+          "full_cycle_cycles": 25,
+          "joint_FEASIBLE": 1,
+          "joint_branches": 10662,
+          "orientation_entries": 1328958,
+          "block_assignments": 320,
+          "joint_OPTIMAL": 319,
+          "round_to_150": 6,
+          "round_to_160": 15,
+          "round_to_170": 125,
+          "unique_repaired_boards": 294,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 3506,
+        "score": 176,
+        "steps": 320,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 320,
+          "positive_swap_pairs": 3390,
+          "potential_pairs_priced": 3294720,
+          "full_cycle_relaxations": 362,
+          "full_cycle_complete": 303,
+          "full_cycle_cycles": 30,
+          "joint_OPTIMAL": 319,
+          "joint_branches": 14679,
+          "orientation_entries": 966708,
+          "block_assignments": 320,
+          "round_to_150": 5,
+          "round_to_160": 11,
+          "round_to_170": 23,
+          "round_to_175": 48,
+          "joint_FEASIBLE": 1,
+          "unique_repaired_boards": 158,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 3507,
+        "score": 176,
+        "steps": 320,
+        "work": {
+          "rotations_created_calls": 2,
+          "rotations_created_pairs": 2
+        },
+        "rounds_with_new_collisions": 2,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 320,
+          "positive_swap_pairs": 2912,
+          "potential_pairs_priced": 3294720,
+          "full_cycle_relaxations": 683,
+          "full_cycle_complete": 241,
+          "full_cycle_cycles": 23,
+          "joint_OPTIMAL": 319,
+          "joint_branches": 7005,
+          "orientation_entries": 1130172,
+          "block_assignments": 320,
+          "round_to_150": 5,
+          "round_to_160": 10,
+          "round_to_170": 18,
+          "mate_orientation_projections": 2,
+          "mate_active_cycles": 2,
+          "mate_exact_cycle_subsets": 4,
+          "round_to_175": 46,
+          "joint_FEASIBLE": 1,
+          "unique_repaired_boards": 271,
+          "mandatory_bonds": 8
+        }
+      }
+    ]
+  },
+  "single": {
+    "measure": [
+      {
+        "seed": 3508,
+        "score": 178,
+        "steps": 320,
+        "work": {
+          "circulation_created_calls": 125,
+          "circulation_created_pairs": 154,
+          "cleanups": 183,
+          "cleanup_fewer_matches": 181,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 419,
+          "swaps_created_calls": 37,
+          "swaps_created_pairs": 42,
+          "block_created_calls": 38,
+          "block_created_pairs": 39,
+          "rotations_created_calls": 3,
+          "rotations_created_pairs": 3
+        },
+        "rounds_with_new_collisions": 184
+      },
+      {
+        "seed": 3509,
+        "score": 183,
+        "steps": 320,
+        "work": {
+          "block_created_calls": 10,
+          "block_created_pairs": 10,
+          "cleanups": 21,
+          "cleanup_fewer_matches": 21,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 44,
+          "circulation_created_calls": 10,
+          "circulation_created_pairs": 10,
+          "swaps_created_calls": 1,
+          "swaps_created_pairs": 1
+        },
+        "rounds_with_new_collisions": 21
+      },
+      {
+        "seed": 3510,
+        "score": 179,
+        "steps": 320,
+        "work": {
+          "swaps_created_calls": 7,
+          "swaps_created_pairs": 7,
+          "cleanups": 125,
+          "cleanup_fewer_matches": 125,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 264,
+          "block_created_calls": 6,
+          "block_created_pairs": 6,
+          "circulation_created_calls": 118,
+          "circulation_created_pairs": 118
+        },
+        "rounds_with_new_collisions": 130
+      },
+      {
+        "seed": 3511,
+        "score": 175,
+        "steps": 320,
+        "work": {
+          "swaps_created_calls": 3,
+          "swaps_created_pairs": 3,
+          "block_created_calls": 5,
+          "block_created_pairs": 5,
+          "cleanups": 269,
+          "cleanup_fewer_matches": 269,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 799,
+          "circulation_created_calls": 263,
+          "circulation_created_pairs": 263
+        },
+        "rounds_with_new_collisions": 269
+      }
+    ],
+    "guarded": [
+      {
+        "seed": 3508,
+        "score": 184,
+        "steps": 320,
+        "work": {
+          "rotations_created_calls": 2,
+          "rotations_created_pairs": 2
+        },
+        "rounds_with_new_collisions": 2,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 320,
+          "positive_swap_pairs": 3405,
+          "potential_pairs_priced": 3294720,
+          "full_cycle_relaxations": 417,
+          "full_cycle_complete": 278,
+          "full_cycle_cycles": 29,
+          "single_donor_rotations": 96000,
+          "cycles_priced": 91200,
+          "separable_cycles": 85978,
+          "joint_OPTIMAL": 315,
+          "joint_branches": 15581,
+          "orientation_entries": 1368798,
+          "block_assignments": 320,
+          "single_bound_skips": 5212,
+          "mate_orientation_projections": 2,
+          "mate_active_cycles": 5,
+          "mate_exact_cycle_subsets": 10,
+          "joint_UNKNOWN": 4,
+          "round_to_150": 5,
+          "round_to_160": 11,
+          "round_to_170": 33,
+          "single_pair_tables": 12,
+          "single_joint_rotation_entries": 126,
+          "round_to_175": 60,
+          "round_to_180": 122,
+          "joint_FEASIBLE": 1,
+          "mate_local_cycles_projections": 1,
+          "unique_repaired_boards": 237,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 3509,
+        "score": 183,
+        "steps": 320,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 320,
+          "positive_swap_pairs": 3216,
+          "potential_pairs_priced": 3294720,
+          "full_cycle_relaxations": 483,
+          "full_cycle_complete": 301,
+          "full_cycle_cycles": 40,
+          "single_donor_rotations": 96000,
+          "cycles_priced": 91200,
+          "separable_cycles": 86202,
+          "single_bound_skips": 4981,
+          "single_pair_tables": 19,
+          "single_joint_rotation_entries": 189,
+          "joint_OPTIMAL": 318,
+          "joint_branches": 9894,
+          "orientation_entries": 1222440,
+          "block_assignments": 320,
+          "round_to_150": 5,
+          "round_to_160": 10,
+          "round_to_170": 17,
+          "round_to_175": 43,
+          "round_to_180": 224,
+          "joint_UNKNOWN": 1,
+          "joint_FEASIBLE": 1,
+          "unique_repaired_boards": 189,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 3510,
+        "score": 185,
+        "steps": 320,
+        "work": {
+          "rotations_created_calls": 1,
+          "rotations_created_pairs": 1
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 320,
+          "positive_swap_pairs": 3687,
+          "potential_pairs_priced": 3294720,
+          "full_cycle_relaxations": 466,
+          "full_cycle_complete": 257,
+          "full_cycle_cycles": 27,
+          "single_donor_rotations": 96000,
+          "cycles_priced": 91200,
+          "separable_cycles": 85997,
+          "joint_OPTIMAL": 317,
+          "joint_branches": 18384,
+          "orientation_entries": 1636098,
+          "block_assignments": 320,
+          "single_bound_skips": 5198,
+          "single_pair_tables": 5,
+          "single_joint_rotation_entries": 45,
+          "mate_orientation_projections": 1,
+          "mate_active_cycles": 1,
+          "mate_exact_cycle_subsets": 2,
+          "round_to_150": 5,
+          "round_to_160": 13,
+          "round_to_170": 24,
+          "round_to_175": 31,
+          "round_to_180": 69,
+          "joint_UNKNOWN": 1,
+          "joint_FEASIBLE": 2,
+          "round_to_185": 245,
+          "unique_repaired_boards": 205,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 3511,
+        "score": 178,
+        "steps": 320,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 320,
+          "positive_swap_pairs": 3471,
+          "potential_pairs_priced": 3294720,
+          "full_cycle_relaxations": 492,
+          "full_cycle_complete": 252,
+          "full_cycle_cycles": 31,
+          "single_donor_rotations": 96000,
+          "cycles_priced": 91200,
+          "separable_cycles": 86526,
+          "single_pair_tables": 15,
+          "single_joint_rotation_entries": 135,
+          "single_bound_skips": 4659,
+          "joint_OPTIMAL": 319,
+          "joint_branches": 13546,
+          "orientation_entries": 1132488,
+          "block_assignments": 320,
+          "round_to_150": 5,
+          "round_to_160": 20,
+          "round_to_170": 114,
+          "round_to_175": 211,
+          "joint_UNKNOWN": 1,
+          "unique_repaired_boards": 272,
+          "mandatory_bonds": 8
+        }
+      }
+    ]
+  },
+  "single_round_heldouts": {
+    "base": [
+      {
+        "seed": 35370,
+        "score": 106,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3779,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 4,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 10,
+          "regional_assignment_solves": 2,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1032,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35371,
+        "score": 104,
+        "steps": 1,
+        "work": {
+          "swaps_created_calls": 1,
+          "swaps_created_pairs": 1,
+          "block_created_calls": 1,
+          "block_created_pairs": 1,
+          "cleanups": 1,
+          "cleanup_fewer_matches": 1,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 2
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3645,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 5,
+          "regional_identity_proofs": 1,
+          "regional_identity_updates": 2,
+          "regional_assignment_solves": 0,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1080,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35372,
+        "score": 106,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3559,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 3,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 0,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1254,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35373,
+        "score": 100,
+        "steps": 1,
+        "work": {
+          "block_created_calls": 1,
+          "block_created_pairs": 1,
+          "cleanups": 1,
+          "cleanup_fewer_matches": 1,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 3
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3351,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 5,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 0,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1068,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35374,
+        "score": 105,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 2848,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 6,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 10,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1362,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35375,
+        "score": 107,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3355,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 3,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 0,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1170,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35376,
+        "score": 102,
+        "steps": 1,
+        "work": {
+          "swaps_created_calls": 1,
+          "swaps_created_pairs": 2,
+          "block_created_calls": 1,
+          "block_created_pairs": 1,
+          "cleanups": 1,
+          "cleanup_fewer_matches": 1,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 1
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 2708,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 4,
+          "regional_identity_proofs": 1,
+          "regional_identity_updates": 3,
+          "regional_assignment_solves": 0,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1122,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35377,
+        "score": 108,
+        "steps": 1,
+        "work": {
+          "circulation_created_calls": 1,
+          "circulation_created_pairs": 1,
+          "cleanups": 1,
+          "cleanup_fewer_matches": 1,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 2
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3244,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 6,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 10,
+          "regional_assignment_solves": 2,
+          "regional_partial_witnesses_used": 1,
+          "joint_FEASIBLE": 1,
+          "joint_branches": 1232,
+          "orientation_entries": 1194,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35378,
+        "score": 104,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3466,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 5,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 0,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1164,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35379,
+        "score": 104,
+        "steps": 1,
+        "work": {
+          "circulation_created_calls": 1,
+          "circulation_created_pairs": 1,
+          "block_created_calls": 1,
+          "block_created_pairs": 1,
+          "cleanups": 1,
+          "cleanup_fewer_matches": 1,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 3
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3154,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 4,
+          "regional_identity_proofs": 1,
+          "regional_identity_updates": 2,
+          "regional_assignment_solves": 0,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1068,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35380,
+        "score": 108,
+        "steps": 1,
+        "work": {
+          "swaps_created_calls": 1,
+          "swaps_created_pairs": 1
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3492,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 3,
+          "regional_identity_proofs": 1,
+          "regional_identity_updates": 0,
+          "regional_assignment_solves": 0,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1098,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35381,
+        "score": 107,
+        "steps": 1,
+        "work": {
+          "swaps_created_calls": 1,
+          "swaps_created_pairs": 1
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3522,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 7,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 10,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1224,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35382,
+        "score": 101,
+        "steps": 1,
+        "work": {
+          "swaps_created_calls": 1,
+          "swaps_created_pairs": 1,
+          "circulation_created_calls": 1,
+          "circulation_created_pairs": 1,
+          "cleanups": 1,
+          "cleanup_fewer_matches": 1,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 2
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3407,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 2,
+          "regional_identity_proofs": 1,
+          "regional_identity_updates": 2,
+          "regional_assignment_solves": 0,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1200,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35383,
+        "score": 109,
+        "steps": 1,
+        "work": {
+          "swaps_created_calls": 1,
+          "swaps_created_pairs": 2
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3348,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 7,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 0,
+          "regional_assignment_solves": 2,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1314,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35384,
+        "score": 110,
+        "steps": 1,
+        "work": {
+          "swaps_created_calls": 1,
+          "swaps_created_pairs": 1
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3337,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 5,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 10,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1326,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35385,
+        "score": 107,
+        "steps": 1,
+        "work": {
+          "swaps_created_calls": 1,
+          "swaps_created_pairs": 1,
+          "circulation_created_calls": 1,
+          "circulation_created_pairs": 2,
+          "cleanups": 1,
+          "cleanup_fewer_matches": 1,
+          "cleanup_gained_matches": 0,
+          "cleanup_lost_matches": 2
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3416,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 5,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 0,
+          "regional_assignment_solves": 2,
+          "joint_OPTIMAL": 1,
+          "joint_branches": 1329,
+          "orientation_entries": 1146,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      }
+    ],
+    "guarded": [
+      {
+        "seed": 35370,
+        "score": 107,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3760,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 7,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 10,
+          "regional_assignment_solves": 2,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1056,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35371,
+        "score": 111,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3627,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 1,
+          "regional_identity_proofs": 1,
+          "regional_identity_updates": 2,
+          "regional_assignment_solves": 0,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1248,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35372,
+        "score": 107,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3536,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 6,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 10,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1194,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35373,
+        "score": 100,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3329,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 4,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 0,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1026,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35374,
+        "score": 111,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 2827,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 5,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 10,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1134,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35375,
+        "score": 107,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3339,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 5,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 0,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1242,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35376,
+        "score": 102,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 2697,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 3,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 10,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1146,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35377,
+        "score": 101,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3228,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 7,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 10,
+          "regional_assignment_solves": 2,
+          "regional_partial_witnesses_used": 1,
+          "joint_FEASIBLE": 1,
+          "joint_branches": 1719,
+          "orientation_entries": 1314,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35378,
+        "score": 107,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3446,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 4,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 0,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1488,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35379,
+        "score": 108,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3136,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 3,
+          "regional_identity_proofs": 1,
+          "regional_identity_updates": 2,
+          "regional_assignment_solves": 0,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1110,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35380,
+        "score": 101,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3474,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 3,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 10,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1044,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35381,
+        "score": 107,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3499,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 6,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 0,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1116,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35382,
+        "score": 102,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3390,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 5,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 10,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1068,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35383,
+        "score": 109,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3339,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 4,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 10,
+          "regional_assignment_solves": 1,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "orientation_entries": 1056,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35384,
+        "score": 105,
+        "steps": 1,
+        "work": {},
+        "rounds_with_new_collisions": 0,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3324,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 3,
+          "regional_identity_proofs": 0,
+          "regional_identity_updates": 0,
+          "regional_assignment_solves": 2,
+          "joint_OPTIMAL": 1,
+          "joint_branches": 1604,
+          "orientation_entries": 1140,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      },
+      {
+        "seed": 35385,
+        "score": 107,
+        "steps": 1,
+        "work": {
+          "rotations_created_calls": 1,
+          "rotations_created_pairs": 1
+        },
+        "rounds_with_new_collisions": 1,
+        "search_work": {
+          "gpu_proposals": 0,
+          "new_gpu_proposals": 0,
+          "repair_steps": 1,
+          "positive_swap_pairs": 3397,
+          "potential_pairs_priced": 10296,
+          "full_cycle_relaxations": 3,
+          "full_cycle_complete": 0,
+          "full_cycle_cycles": 7,
+          "regional_identity_proofs": 1,
+          "regional_identity_updates": 1,
+          "regional_assignment_solves": 0,
+          "joint_CIRCULATION_OPTIMAL": 1,
+          "joint_branches": 0,
+          "mate_orientation_projections": 1,
+          "mate_active_cycles": 1,
+          "mate_exact_cycle_subsets": 2,
+          "orientation_entries": 1080,
+          "block_assignments": 1,
+          "unique_repaired_boards": 1,
+          "mandatory_bonds": 8
+        }
+      }
+    ]
+  },
+  "physical_rollback": {
+    "input": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "records": [
+      {
+        "seed": 3500,
+        "step": 0,
+        "stage": "swaps",
+        "digest": "55eba0ad926055825929be49811a240461576d4e63b22356d0e1464ec695e5d8",
+        "scores": {
+          "old": 12,
+          "trial": 71,
+          "projected": 69,
+          "legacy": 70
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 1,
+        "stage": "swaps",
+        "digest": "2253bbaa1a19afb66fd69fe2e4b783430cde56c1a9cbc4a28d74907e59df4525",
+        "scores": {
+          "old": 99,
+          "trial": 117,
+          "projected": 116,
+          "legacy": 116
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 4,
+        "stage": "circulation",
+        "digest": "2706413acbf874f9857626683c2c3770f4985e0b2a17d5564213cd5fc9700f71",
+        "scores": {
+          "old": 147,
+          "trial": 148,
+          "projected": 147,
+          "legacy": 146
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 11,
+        "stage": "block",
+        "digest": "237e093ec27516da2ad9ff7b4b11147558c1cd0ed4203d1a75d8b1c95ae13825",
+        "scores": {
+          "old": 159,
+          "trial": 159,
+          "projected": 159,
+          "legacy": 156
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 12,
+        "stage": "circulation",
+        "digest": "028f92c6fa78cd11b8726443c311df0d23e9cdc77c62345ff4be68e60238f65c",
+        "scores": {
+          "old": 159,
+          "trial": 161,
+          "projected": 160,
+          "legacy": 158
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 13,
+        "stage": "swaps",
+        "digest": "b37640a439150a714b6b5d02ba82223ea89142efd6ed6e00d5853c21f64f092f",
+        "scores": {
+          "old": 158,
+          "trial": 160,
+          "projected": 159,
+          "legacy": 157
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 14,
+        "stage": "circulation",
+        "digest": "1d86a31e7c9bb65388faaa9f92bea387d8be3d00f0327375e4a223cb4af33f0a",
+        "scores": {
+          "old": 160,
+          "trial": 162,
+          "projected": 160,
+          "legacy": 159
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 15,
+        "stage": "circulation",
+        "digest": "bfc08f1007f3f8a586f435e9c7835812b1725afc2fc341d84a7edda480c02082",
+        "scores": {
+          "old": 161,
+          "trial": 162,
+          "projected": 161,
+          "legacy": 159
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 128,
+        "stage": "rotations",
+        "digest": "3b365894b088ce96d20a4b81d41f3b3690e761715d0a68ad30121a06e3e4f85f",
+        "scores": {
+          "old": 178,
+          "trial": 178,
+          "projected": 178,
+          "legacy": 178
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 129,
+        "stage": "rotations",
+        "digest": "996154eb37db7104514829e183a551078972febfd2f899dc987fe1da186b01c7",
+        "scores": {
+          "old": 178,
+          "trial": 178,
+          "projected": 178,
+          "legacy": 178
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 132,
+        "stage": "rotations",
+        "digest": "9bb84a3b91e12c35075cb8877cb77e2055a28d693101381093896e5ac136f753",
+        "scores": {
+          "old": 178,
+          "trial": 178,
+          "projected": 178,
+          "legacy": 178
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 133,
+        "stage": "rotations",
+        "digest": "c0716f68066f4ba7f163ee21118a5e2c40cfecc2133d330960e760476dce5854",
+        "scores": {
+          "old": 178,
+          "trial": 178,
+          "projected": 178,
+          "legacy": 178
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 134,
+        "stage": "rotations",
+        "digest": "a415c447c1dd774f1e6823dd66cabf913d5cfb112a39328ae65f26f3689f2ca5",
+        "scores": {
+          "old": 178,
+          "trial": 178,
+          "projected": 178,
+          "legacy": 178
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 141,
+        "stage": "block",
+        "digest": "6ea34758fdc0577203e8a463fc52ab1bc236df84e966d967204a6f3cef02109b",
+        "scores": {
+          "old": 178,
+          "trial": 178,
+          "projected": 178,
+          "legacy": 178
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 142,
+        "stage": "rotations",
+        "digest": "a4da9cdefbca48467ae4bf22ef30df52020475265e6cb0ca8e6b58be7ab663ac",
+        "scores": {
+          "old": 178,
+          "trial": 178,
+          "projected": 178,
+          "legacy": 178
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 146,
+        "stage": "rotations",
+        "digest": "ccb103addcf42891d15233c024d1dbaa4440516ed820df29be76425591f74b27",
+        "scores": {
+          "old": 178,
+          "trial": 178,
+          "projected": 178,
+          "legacy": 178
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 149,
+        "stage": "block",
+        "digest": "faaa5b2f8ba982756efd391f75b1396db3e0213d2a91ab359090f489a1a498e8",
+        "scores": {
+          "old": 178,
+          "trial": 178,
+          "projected": 178,
+          "legacy": 175
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 151,
+        "stage": "swaps",
+        "digest": "d45acefe35f9008904127ac470d4a03006ad87d84acd8a7fc80f11f51c4db2de",
+        "scores": {
+          "old": 177,
+          "trial": 178,
+          "projected": 177,
+          "legacy": 175
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3500,
+        "step": 179,
+        "stage": "circulation",
+        "digest": "9c4a2fc4cddabe825b1d7430d65af51f2fcc3d242b01d447b1d22b44dc250662",
+        "scores": {
+          "old": 179,
+          "trial": 180,
+          "projected": 179,
+          "legacy": 180
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 0,
+        "stage": "swaps",
+        "digest": "7cafc316c796c0eebc27037d722ffa06ccc584aace57118b6025c213307e1c9a",
+        "scores": {
+          "old": 13,
+          "trial": 75,
+          "projected": 72,
+          "legacy": 73
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 1,
+        "stage": "swaps",
+        "digest": "0dcde6a04ccf8c0e4980fed05ed1533a37bfe2c14d1270c4f2c6047aee87c1ac",
+        "scores": {
+          "old": 97,
+          "trial": 113,
+          "projected": 110,
+          "legacy": 109
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 2,
+        "stage": "swaps",
+        "digest": "6f1e8403f9f15cc32fa230d991727dc095622c1954cadd889d189d4261f80dd1",
+        "scores": {
+          "old": 121,
+          "trial": 126,
+          "projected": 124,
+          "legacy": 124
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 3,
+        "stage": "swaps",
+        "digest": "c3bc97fa05dabb4a32a6f6c915e6bf15abfcfd913c58611d073dd9f3b2b51ce9",
+        "scores": {
+          "old": 127,
+          "trial": 133,
+          "projected": 130,
+          "legacy": 130
+        },
+        "work": {
+          "active_cycles": 2,
+          "exact_cycle_subsets": 4
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 4,
+        "stage": "swaps",
+        "digest": "b58834c362f99db9bdf95f6905bc78987b47dd46c6f8db0494653e1dce80f14d",
+        "scores": {
+          "old": 133,
+          "trial": 138,
+          "projected": 136,
+          "legacy": 136
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 11,
+        "stage": "block",
+        "digest": "2c28223d727afbcc385e4028de766f3855fadbaaff75943b3f86ef8e824b07a4",
+        "scores": {
+          "old": 159,
+          "trial": 159,
+          "projected": 159,
+          "legacy": 157
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 71,
+        "stage": "block",
+        "digest": "2a4bfcef39cf9f9196339dba6a80ef5d1f33e9064cf97edf018fbd79d167219b",
+        "scores": {
+          "old": 169,
+          "trial": 169,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 216,
+        "stage": "block",
+        "digest": "86fd037d3e1f546014a5eb9a9cc57ba62a714095b0bcd0ff35593f73dc541d90",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 174
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 220,
+        "stage": "rotations",
+        "digest": "8d292e395bb5803aa9a8d9f29551f253944debb97739e888cedda934b8db0a56",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 174
+        },
+        "work": {
+          "active_cycles": 2,
+          "exact_cycle_subsets": 4
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 222,
+        "stage": "block",
+        "digest": "7d4b76336286735501a36c61731fbb703999295c070fb564839b4133a12f1017",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 174
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 223,
+        "stage": "rotations",
+        "digest": "9cfbff4d954cb81823b5f9fc54f5a8f0c877e4b8dfb47ad501f632bdc3b7b25e",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 174
+        },
+        "work": {
+          "active_cycles": 2,
+          "exact_cycle_subsets": 4
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 225,
+        "stage": "block",
+        "digest": "40a38b91e7c765ddd55b584ac5e12d9e9c477c0a5021c7499ca2d89aa42be1b6",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 172
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 227,
+        "stage": "rotations",
+        "digest": "a8781aa0be899ccb71d0ab83e0b55fcf08334374664dee3e9596ab23839b2083",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 172
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 229,
+        "stage": "rotations",
+        "digest": "70d65ea48e7a1502d8fad54a916e56d6fc0f0141aac8bd4270619e8dce3830e8",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 172
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 230,
+        "stage": "swaps",
+        "digest": "138ee053dbeca7427a443a68088881510110bd72a160d98129edc412aaa156ba",
+        "scores": {
+          "old": 172,
+          "trial": 174,
+          "projected": 172,
+          "legacy": 172
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 231,
+        "stage": "rotations",
+        "digest": "1da6ef5110a6745cc2bca67f2220b98aaef93bc012df3574311a1f237a73663e",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 172
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 232,
+        "stage": "swaps",
+        "digest": "55b19cef53c395822d52d7d1fd809a6c45a48342af31e64f180dd9831578bdc8",
+        "scores": {
+          "old": 172,
+          "trial": 174,
+          "projected": 172,
+          "legacy": 172
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 233,
+        "stage": "swaps",
+        "digest": "f088321ce4dee052ae8542e1f6dee12f3b27693d6cfbfcd247dd31abf56cc8bb",
+        "scores": {
+          "old": 172,
+          "trial": 174,
+          "projected": 172,
+          "legacy": 172
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3501,
+        "step": 234,
+        "stage": "rotations",
+        "digest": "40715be3b186728f9e2af2980913cbcb99647bb99a445b4fef8469a187c05dd8",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 172
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 0,
+        "stage": "block",
+        "digest": "5836d08a43590facd5f1873690166a79abd47bf404bb4cce8c33249a5b6adc8c",
+        "scores": {
+          "old": 84,
+          "trial": 103,
+          "projected": 93,
+          "legacy": 102
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 1,
+        "stage": "circulation",
+        "digest": "b4fa1f922492fd9a2c6aa205a82a18a96bb440c3a64bdb900d50b07c3a408f50",
+        "scores": {
+          "old": 121,
+          "trial": 123,
+          "projected": 122,
+          "legacy": 121
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 3,
+        "stage": "circulation",
+        "digest": "1f097009b6349daf39339f928c4704f0fcab41c03e8d06adc6ed49a629d049e1",
+        "scores": {
+          "old": 140,
+          "trial": 145,
+          "projected": 140,
+          "legacy": 140
+        },
+        "work": {
+          "active_cycles": 2,
+          "exact_cycle_subsets": 4
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 4,
+        "stage": "swaps",
+        "digest": "5c4cdaaa919d6c5e61a6cbf8d6aa3dee40007ef2d5959e0e7390ba3c5874d342",
+        "scores": {
+          "old": 142,
+          "trial": 146,
+          "projected": 144,
+          "legacy": 144
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 5,
+        "stage": "swaps",
+        "digest": "1178d37b9397976ff38250cc309c4192c7454ea6d7a30742ddb9e7d4ea888514",
+        "scores": {
+          "old": 141,
+          "trial": 145,
+          "projected": 143,
+          "legacy": 144
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 6,
+        "stage": "swaps",
+        "digest": "ac96e441b25e244f1f576692f60f5d53b9025328f1f7021b08d65692096d7581",
+        "scores": {
+          "old": 144,
+          "trial": 148,
+          "projected": 145,
+          "legacy": 142
+        },
+        "work": {
+          "active_cycles": 2,
+          "exact_cycle_subsets": 4
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 7,
+        "stage": "swaps",
+        "digest": "d24bb47cb9d3e113ddfca77cf1a286d27411d6befd287ea5dbbc66f730ecc60b",
+        "scores": {
+          "old": 142,
+          "trial": 147,
+          "projected": 145,
+          "legacy": 146
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 8,
+        "stage": "swaps",
+        "digest": "46105c67d24cecf889ebfbf255127dc94ea0413da025d2a528cadeba9ac6235d",
+        "scores": {
+          "old": 147,
+          "trial": 149,
+          "projected": 147,
+          "legacy": 147
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 9,
+        "stage": "swaps",
+        "digest": "6b6245953de40b2b91d5316de7a0c34e3ab473b35a3147a1edf302198d143774",
+        "scores": {
+          "old": 148,
+          "trial": 151,
+          "projected": 149,
+          "legacy": 149
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 10,
+        "stage": "swaps",
+        "digest": "1662a40e8a6434e699a2f1a636ec407e177862f090fb14b8ada2d4310a598610",
+        "scores": {
+          "old": 151,
+          "trial": 153,
+          "projected": 151,
+          "legacy": 151
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 13,
+        "stage": "swaps",
+        "digest": "b06306a54580b46e5a73340de97fd1aa426b9f385ff8cea3e23aef6c7cabd181",
+        "scores": {
+          "old": 160,
+          "trial": 162,
+          "projected": 161,
+          "legacy": 160
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 14,
+        "stage": "block",
+        "digest": "8f1bfa6b382a92b4b5eff360093194cc73bb4ac598ff27d3266bdabcc5131b6e",
+        "scores": {
+          "old": 161,
+          "trial": 163,
+          "projected": 161,
+          "legacy": 161
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 15,
+        "stage": "circulation",
+        "digest": "b9aabee4b4162071cd8c31cdc9baf27879f9041e74ceb6bee9e2ac31136da078",
+        "scores": {
+          "old": 163,
+          "trial": 166,
+          "projected": 165,
+          "legacy": 164
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 16,
+        "stage": "circulation",
+        "digest": "c5ee25e96dc5a42dbae07ed1121b28381359154ff664e7fdf849055c02416f11",
+        "scores": {
+          "old": 165,
+          "trial": 166,
+          "projected": 165,
+          "legacy": 164
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 17,
+        "stage": "circulation",
+        "digest": "8b9e3c220c4f97f5da408276daa393a952affabe1eccbc0de9418cdb11996c4d",
+        "scores": {
+          "old": 165,
+          "trial": 166,
+          "projected": 165,
+          "legacy": 163
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 18,
+        "stage": "circulation",
+        "digest": "a21bd7f160717728b19e0d69ebdb4f87eab1c1370bbf0669e0b4b0d10332ef1f",
+        "scores": {
+          "old": 165,
+          "trial": 166,
+          "projected": 165,
+          "legacy": 163
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 19,
+        "stage": "circulation",
+        "digest": "3eea93496f2fa7ce5e026297174dba3ea8bd2619be07b0a61a52a3be2afe3213",
+        "scores": {
+          "old": 165,
+          "trial": 167,
+          "projected": 166,
+          "legacy": 164
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 20,
+        "stage": "circulation",
+        "digest": "991d30737347fbedcc511b886b4abfe39fcfb9fa736ff4948a815cad3da3ecff",
+        "scores": {
+          "old": 166,
+          "trial": 167,
+          "projected": 166,
+          "legacy": 164
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 21,
+        "stage": "circulation",
+        "digest": "eb53fb63f005b3af48cbd4e637537d708ab21f4d6f6c1f7d4c010487418e5bb7",
+        "scores": {
+          "old": 166,
+          "trial": 167,
+          "projected": 166,
+          "legacy": 164
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 22,
+        "stage": "circulation",
+        "digest": "908b4fc8ce1c986cb5919e663b472fbf2e15851ef1149efa0ed15c4d88774090",
+        "scores": {
+          "old": 166,
+          "trial": 167,
+          "projected": 166,
+          "legacy": 164
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 23,
+        "stage": "circulation",
+        "digest": "508f1a6df735df6f7d0e888173ab310116872b365396dfa32b3bad22943a52ab",
+        "scores": {
+          "old": 166,
+          "trial": 167,
+          "projected": 166,
+          "legacy": 164
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 24,
+        "stage": "circulation",
+        "digest": "b8afbb60478090c22e2b8aaeff305d149b7262452114e055894fe759e0708fa3",
+        "scores": {
+          "old": 166,
+          "trial": 167,
+          "projected": 166,
+          "legacy": 164
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3502,
+        "step": 25,
+        "stage": "circulation",
+        "digest": "57c314430fcfa6b97d4a65939c2115959727b1974dd50ce6774358c35f5baff4",
+        "scores": {
+          "old": 167,
+          "trial": 169,
+          "projected": 168,
+          "legacy": 166
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 1,
+        "stage": "swaps",
+        "digest": "b482974b84bb9e64de1beb956ebbfdfc60134775d3a6dde3d02f94a1ab853ab2",
+        "scores": {
+          "old": 105,
+          "trial": 122,
+          "projected": 121,
+          "legacy": 120
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 4,
+        "stage": "swaps",
+        "digest": "5981b70fd804b72fadc70bc617aa4378d8eca153ccd26321e56f640a5f8315e0",
+        "scores": {
+          "old": 141,
+          "trial": 145,
+          "projected": 144,
+          "legacy": 144
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 7,
+        "stage": "circulation",
+        "digest": "7246c7116649636e61fbb6909ec440f29a099bf7e44123c9c412b4f2a3db82cc",
+        "scores": {
+          "old": 152,
+          "trial": 154,
+          "projected": 152,
+          "legacy": 152
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 8,
+        "stage": "swaps",
+        "digest": "0b53b0264ac554c489835f80e520949c04b1ae5134e23ea5939b38480c30ed61",
+        "scores": {
+          "old": 152,
+          "trial": 155,
+          "projected": 153,
+          "legacy": 153
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 9,
+        "stage": "swaps",
+        "digest": "3832332a16b3d5a6905151ad8407af412984bf177b459ee61750c2badf512425",
+        "scores": {
+          "old": 154,
+          "trial": 158,
+          "projected": 156,
+          "legacy": 156
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 10,
+        "stage": "swaps",
+        "digest": "ada74973bf13dea3cd55ddf6e41723115832f0546d7af855936d746ccae53aa4",
+        "scores": {
+          "old": 158,
+          "trial": 160,
+          "projected": 158,
+          "legacy": 158
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 11,
+        "stage": "swaps",
+        "digest": "0a6cc239055ccc335926fc9eaa92de9c0f916fd3b9c6935db3b31f2a845f6942",
+        "scores": {
+          "old": 158,
+          "trial": 160,
+          "projected": 158,
+          "legacy": 158
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 12,
+        "stage": "swaps",
+        "digest": "5836182973d942c48b8f4bb6cba5a095c00acc7f75b7851e0c6a0cfe0de69dcc",
+        "scores": {
+          "old": 158,
+          "trial": 160,
+          "projected": 158,
+          "legacy": 158
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 13,
+        "stage": "swaps",
+        "digest": "f88578b491b71adbe77171f6f5691af1cbdbd6f89f39d37a088e5018c5fce192",
+        "scores": {
+          "old": 158,
+          "trial": 160,
+          "projected": 158,
+          "legacy": 158
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 14,
+        "stage": "swaps",
+        "digest": "9d7decfcc16b3ed369480399b951a2261f7bb920860381db1d0a3a8260feb60f",
+        "scores": {
+          "old": 158,
+          "trial": 160,
+          "projected": 158,
+          "legacy": 158
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 15,
+        "stage": "swaps",
+        "digest": "054aacd9501c9e22773cc0c29be0cc44c446758f2a5542e83704c1cda618e448",
+        "scores": {
+          "old": 158,
+          "trial": 160,
+          "projected": 158,
+          "legacy": 158
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 16,
+        "stage": "swaps",
+        "digest": "96ff95a2ce16890f8b2b1ab856003060b0741fa31c04279c2caffa1da2bb93f3",
+        "scores": {
+          "old": 159,
+          "trial": 161,
+          "projected": 159,
+          "legacy": 159
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 17,
+        "stage": "swaps",
+        "digest": "277e04ad43aff2c149bb793589fbd5dda8511342a82a11881348fe6e81470cdb",
+        "scores": {
+          "old": 159,
+          "trial": 161,
+          "projected": 159,
+          "legacy": 159
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 18,
+        "stage": "swaps",
+        "digest": "dedbefbfb4b77996725253b15c2d180ed1d74d943e4d9c8717086d69bb6f550f",
+        "scores": {
+          "old": 159,
+          "trial": 161,
+          "projected": 159,
+          "legacy": 159
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 19,
+        "stage": "swaps",
+        "digest": "1ce7ddd981018dc3e6aa5064971968f240ad3e92d2c5775286edfb2e8e313b78",
+        "scores": {
+          "old": 159,
+          "trial": 161,
+          "projected": 159,
+          "legacy": 159
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 20,
+        "stage": "swaps",
+        "digest": "6650c1d9c44c32f1ac706117f13cbe87048cf33d206eddd712ef87126d07519e",
+        "scores": {
+          "old": 159,
+          "trial": 161,
+          "projected": 159,
+          "legacy": 159
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3503,
+        "step": 21,
+        "stage": "swaps",
+        "digest": "11a9e0b95738fd1d0d651f66339f9aae9b21d5b55f743097a70c67d08fc00fbe",
+        "scores": {
+          "old": 159,
+          "trial": 161,
+          "projected": 159,
+          "legacy": 159
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 0,
+        "stage": "block",
+        "digest": "4e0997989fba303e7964c5de3b66b7b23b2d26a84a28963c70cfb0085f1ccdfc",
+        "scores": {
+          "old": 83,
+          "trial": 106,
+          "projected": 92,
+          "legacy": 104
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 1,
+        "stage": "swaps",
+        "digest": "7bbc24ea5763b7584fd9e8c0ca28d2c92d054c3a8a6d14f35d35864c0f9f2f10",
+        "scores": {
+          "old": 106,
+          "trial": 123,
+          "projected": 121,
+          "legacy": 118
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 2,
+        "stage": "circulation",
+        "digest": "9a576f0badf9260bc16c86e0999ab297426d814628898c0c6e8ea6fac7649f7c",
+        "scores": {
+          "old": 132,
+          "trial": 136,
+          "projected": 134,
+          "legacy": 134
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 6,
+        "stage": "block",
+        "digest": "8cd42649e8c821c19dd8b232ca6ca68e2e87d6fcf7f870503419f41fc2d8104a",
+        "scores": {
+          "old": 157,
+          "trial": 157,
+          "projected": 157,
+          "legacy": 154
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 8,
+        "stage": "block",
+        "digest": "6138aafe2c33463b65bd67148f362131eb13dac56300bfe920972c98355fd896",
+        "scores": {
+          "old": 160,
+          "trial": 161,
+          "projected": 160,
+          "legacy": 159
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 10,
+        "stage": "block",
+        "digest": "288ae0d71b2e1132a81e82337b9c38fec315c9eb3abfd41a3958dc9571908e47",
+        "scores": {
+          "old": 161,
+          "trial": 161,
+          "projected": 161,
+          "legacy": 159
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 99,
+        "stage": "block",
+        "digest": "7419a03359a4123c99f06f9cf8976fa178c18f8761ec8510b8a87d5c7408da23",
+        "scores": {
+          "old": 173,
+          "trial": 173,
+          "projected": 173,
+          "legacy": 173
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 109,
+        "stage": "block",
+        "digest": "4f859bed68441e92970ab3837b957482ee070f706d5d91a51384c30162bffb2a",
+        "scores": {
+          "old": 174,
+          "trial": 174,
+          "projected": 174,
+          "legacy": 174
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 110,
+        "stage": "block",
+        "digest": "9b0441826f7c8ffe9e0e15244f262329e84e296e263af9fd6b59cf654a15b62c",
+        "scores": {
+          "old": 174,
+          "trial": 174,
+          "projected": 174,
+          "legacy": 174
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 114,
+        "stage": "block",
+        "digest": "1c3da00cce3af26d6c8e93ebb6a191a0ac389c6840936b7621218fa982547ca9",
+        "scores": {
+          "old": 174,
+          "trial": 174,
+          "projected": 174,
+          "legacy": 174
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 115,
+        "stage": "rotations",
+        "digest": "eabf2475a70f438e28d8ccb8b3a387074c3111199dc5751a920a5c550c5aae4e",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 175
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 117,
+        "stage": "rotations",
+        "digest": "ca62ffee0eb3a8bfb65d1d982acf8019570a479e9898f092ed3600090c0aabf3",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 175
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 118,
+        "stage": "rotations",
+        "digest": "2c60cd33882087cd3d08c5b0cd1b32f55707324d37910d0b1bea078032291756",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 175
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 224,
+        "stage": "block",
+        "digest": "1f6c49e95602e4f1931e2cb44104402d2d3b1e8fbb41fe82904f79586d873e27",
+        "scores": {
+          "old": 178,
+          "trial": 178,
+          "projected": 178,
+          "legacy": 177
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3504,
+        "step": 229,
+        "stage": "block",
+        "digest": "c460955503d42cfee70e11b09427c71d7f227cf39f8f3860fdef095ca110de78",
+        "scores": {
+          "old": 178,
+          "trial": 178,
+          "projected": 178,
+          "legacy": 176
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 2,
+        "stage": "swaps",
+        "digest": "4ab8efb4e3c056cbe6367a991a984c058839a984306202d64a85b7e6caf43461",
+        "scores": {
+          "old": 132,
+          "trial": 138,
+          "projected": 137,
+          "legacy": 135
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 7,
+        "stage": "block",
+        "digest": "682877af7a3493e750d5263f3e849e21c3088fc52617741a2f9f9a31af4e3dc8",
+        "scores": {
+          "old": 157,
+          "trial": 157,
+          "projected": 157,
+          "legacy": 154
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 8,
+        "stage": "circulation",
+        "digest": "436ffc7848407118dd30650309bac9b8fb3ae54cba32dea6f49d6659e0c29149",
+        "scores": {
+          "old": 157,
+          "trial": 158,
+          "projected": 157,
+          "legacy": 155
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 9,
+        "stage": "circulation",
+        "digest": "c3905ac9a112e0334648bc1cd8f55e986197f05d65fac193d35f567b9bf4af82",
+        "scores": {
+          "old": 157,
+          "trial": 158,
+          "projected": 157,
+          "legacy": 155
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 11,
+        "stage": "block",
+        "digest": "c86e3279f5e922f66edc613a55a4481ff1371fd7e1841b2f21f923ab36680ed7",
+        "scores": {
+          "old": 162,
+          "trial": 162,
+          "projected": 162,
+          "legacy": 160
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 16,
+        "stage": "circulation",
+        "digest": "65067e4724913089077e70544988101037f892f285ca15e7dc18b7610534425c",
+        "scores": {
+          "old": 164,
+          "trial": 165,
+          "projected": 164,
+          "legacy": 163
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 22,
+        "stage": "block",
+        "digest": "34702bd10b14e10b0430de61dcd571e7fc695fe9399e512c86c5c18493919709",
+        "scores": {
+          "old": 166,
+          "trial": 166,
+          "projected": 166,
+          "legacy": 164
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 24,
+        "stage": "block",
+        "digest": "5797f5dd4f51ce3743ba037f3a764579a6b08a3bee90b02892b67e42792714a6",
+        "scores": {
+          "old": 167,
+          "trial": 167,
+          "projected": 167,
+          "legacy": 165
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 26,
+        "stage": "block",
+        "digest": "0c45dde7641e74db246e2f938637b63c2772c85725e6c6923a427d76f1ca18e6",
+        "scores": {
+          "old": 167,
+          "trial": 167,
+          "projected": 167,
+          "legacy": 165
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 30,
+        "stage": "block",
+        "digest": "6857464611c6190d0f1ace2852d7c17feedf5dac46f29cb33608a0f4fc205e59",
+        "scores": {
+          "old": 167,
+          "trial": 167,
+          "projected": 167,
+          "legacy": 165
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 64,
+        "stage": "block",
+        "digest": "9d62d8d8ef9cd41a5a519d05be9dc0435c9ed45c4a8cdfa41c97a3dd1ebe9914",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 173
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 65,
+        "stage": "block",
+        "digest": "6e81317130ed07d09703f1f52342fa185107dd81ab42e01c5b394536331da7f9",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 173
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 69,
+        "stage": "block",
+        "digest": "2f236cd536f1a6638ab7d6498cbcf458585d291ed38a73bf8dc6c26a61c04e7d",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 173
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 73,
+        "stage": "block",
+        "digest": "44719b2b9c7cd21934e316de4c3f169e676eb87406e101bac7e0b22bc865a381",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 173
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 82,
+        "stage": "block",
+        "digest": "b4fe787e016b08130e7cb15c83752554f2ce019b7f97402a83f9c84922408d65",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 173
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 83,
+        "stage": "block",
+        "digest": "e389f15409a3066a4f387c17b0271c1576d402ebfe27a112a86ed29402e605ab",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 173
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 95,
+        "stage": "block",
+        "digest": "546cc2d1ec37290f817234cd063a6b7f5149233b6bf55c3df05087adf089c8a4",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 173
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 96,
+        "stage": "block",
+        "digest": "44d3b6204bb12bd26b2d47a74c5f29218f1c310a238603ef7ba9416a9b11c8dc",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 173
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 98,
+        "stage": "block",
+        "digest": "57e89977225914d5d861486e250ae62ba0535a5f69919f9e46159df0d0ee0b61",
+        "scores": {
+          "old": 175,
+          "trial": 175,
+          "projected": 175,
+          "legacy": 173
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 107,
+        "stage": "block",
+        "digest": "ab6fef65e88ce1e70e5b380eaf89c3c92f064536660893f60763de0e58eb291d",
+        "scores": {
+          "old": 176,
+          "trial": 176,
+          "projected": 176,
+          "legacy": 174
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 112,
+        "stage": "block",
+        "digest": "dda2a4a9b551b46ff6d32545c54d50dc1092927469aa9c72bcfb31d83edc7a4b",
+        "scores": {
+          "old": 176,
+          "trial": 176,
+          "projected": 176,
+          "legacy": 174
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 129,
+        "stage": "block",
+        "digest": "fa5db38eb4734c421b97c25736fc88c0e49447dea0b648d5bfa7e351ce7e88f0",
+        "scores": {
+          "old": 177,
+          "trial": 177,
+          "projected": 177,
+          "legacy": 175
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 131,
+        "stage": "block",
+        "digest": "ba5f4bfe8e354eb29fc4027fe05db109fc10e5b5b0c834c20558577ffad93acc",
+        "scores": {
+          "old": 177,
+          "trial": 177,
+          "projected": 177,
+          "legacy": 175
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3505,
+        "step": 138,
+        "stage": "block",
+        "digest": "23c72d74b7208ecec0f49403f5f1dae005afab4e276a3aa8096b4cac9146e32b",
+        "scores": {
+          "old": 177,
+          "trial": 177,
+          "projected": 177,
+          "legacy": 175
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 0,
+        "stage": "block",
+        "digest": "704933e715afb6d33ddbd22377f06f038f0e34758624690e2629069383107216",
+        "scores": {
+          "old": 74,
+          "trial": 102,
+          "projected": 100,
+          "legacy": 101
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 1,
+        "stage": "swaps",
+        "digest": "214a7b117872fa0bc47425d1c7300be2ce8085942ea9ff3c274456ff15fbe79c",
+        "scores": {
+          "old": 105,
+          "trial": 122,
+          "projected": 121,
+          "legacy": 121
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 2,
+        "stage": "swaps",
+        "digest": "48a996a2abaa36e00b09209b0dc96096dc5c40cb97410856a1dfe5dc933a1919",
+        "scores": {
+          "old": 132,
+          "trial": 138,
+          "projected": 136,
+          "legacy": 136
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 3,
+        "stage": "swaps",
+        "digest": "3673e10527a8a37894a3568c17b341fbf7f4517ff9e83f2118398500a42de3f6",
+        "scores": {
+          "old": 138,
+          "trial": 142,
+          "projected": 140,
+          "legacy": 140
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 4,
+        "stage": "swaps",
+        "digest": "5f8341ec61bffc2452b43511bc807b7cde83974aaab362d3a941ddbb9e9c0a89",
+        "scores": {
+          "old": 139,
+          "trial": 145,
+          "projected": 143,
+          "legacy": 143
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 5,
+        "stage": "circulation",
+        "digest": "0ac71afeaa33716aefe9c919b06d84b844e9d03eaa1ae0e47fdf9b79570780f8",
+        "scores": {
+          "old": 151,
+          "trial": 152,
+          "projected": 151,
+          "legacy": 149
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 7,
+        "stage": "swaps",
+        "digest": "af9bfb7edb4819d81d2df4721fc7eb1fa564e1df8f36a908d785635533931880",
+        "scores": {
+          "old": 151,
+          "trial": 152,
+          "projected": 151,
+          "legacy": 149
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 8,
+        "stage": "swaps",
+        "digest": "5f74ceda58a778f2235b12dd4638afcbf8af3f86606036b6af19fd87ff871d32",
+        "scores": {
+          "old": 149,
+          "trial": 151,
+          "projected": 149,
+          "legacy": 149
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 9,
+        "stage": "swaps",
+        "digest": "0844f91d492a974e95cb74fb0982d674d543a48f5569d51ed68a227a9b30f631",
+        "scores": {
+          "old": 151,
+          "trial": 153,
+          "projected": 151,
+          "legacy": 151
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 10,
+        "stage": "swaps",
+        "digest": "e6c416270e29a1f998ef9fee2401b417a4bbf5aca2060bdf5b3d02b8d633448b",
+        "scores": {
+          "old": 151,
+          "trial": 153,
+          "projected": 151,
+          "legacy": 151
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 11,
+        "stage": "swaps",
+        "digest": "19ec12acf97efd6901b3c424c1dca13498e07a81e2d1abb2cd9baa61b8b088ac",
+        "scores": {
+          "old": 152,
+          "trial": 154,
+          "projected": 152,
+          "legacy": 152
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 12,
+        "stage": "swaps",
+        "digest": "95275d5b5e3e26e6e18ed637fd1a393d77af294e661e3cfe8c466facd5cb9e87",
+        "scores": {
+          "old": 153,
+          "trial": 155,
+          "projected": 153,
+          "legacy": 153
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 13,
+        "stage": "swaps",
+        "digest": "90ae4bcdbafbec5b5f89ea84952f88a97a7e855ba83e0189f9dac0f762c13b92",
+        "scores": {
+          "old": 156,
+          "trial": 159,
+          "projected": 157,
+          "legacy": 157
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 14,
+        "stage": "swaps",
+        "digest": "cce0f63aa1a2d1bd643fd3e689b1c5291782c322f79010f9ce72a70544d62a55",
+        "scores": {
+          "old": 157,
+          "trial": 159,
+          "projected": 157,
+          "legacy": 157
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 15,
+        "stage": "swaps",
+        "digest": "5d9c29d543c31d59f53aafe16a5d18fabd341a2bc563a11a1a6f2233bd090b6a",
+        "scores": {
+          "old": 159,
+          "trial": 162,
+          "projected": 160,
+          "legacy": 160
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 16,
+        "stage": "swaps",
+        "digest": "a9cf5f66faad29ece5be71e03254702163773583eccfd1ead5d93c40d9ba6843",
+        "scores": {
+          "old": 160,
+          "trial": 163,
+          "projected": 161,
+          "legacy": 161
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3506,
+        "step": 17,
+        "stage": "swaps",
+        "digest": "93bd0b8b5e97bd7101b60de5ce10a0bca68d52e96fd4bba3aa13af38ac9d84eb",
+        "scores": {
+          "old": 161,
+          "trial": 163,
+          "projected": 161,
+          "legacy": 161
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 0,
+        "stage": "swaps",
+        "digest": "5577e3bcb5c18cc83e50e2fe1ec13621760947a178ee7f76d530823ff94ce6be",
+        "scores": {
+          "old": 21,
+          "trial": 82,
+          "projected": 79,
+          "legacy": 81
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 1,
+        "stage": "circulation",
+        "digest": "ffaf720175dcff6abf6b626929ce1d7605c8e01ea4a40e45ecf64dde0e1a0e8d",
+        "scores": {
+          "old": 124,
+          "trial": 125,
+          "projected": 124,
+          "legacy": 121
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 2,
+        "stage": "circulation",
+        "digest": "ab7d50717e6b4f98ee537a33c5ae191ddc0f25bc55e06391d58b8cb2f6ac0949",
+        "scores": {
+          "old": 136,
+          "trial": 140,
+          "projected": 138,
+          "legacy": 136
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 3,
+        "stage": "circulation",
+        "digest": "b66bb01374219a22a43438fb73364ecebef847eabe655e79254373e7ca96bac0",
+        "scores": {
+          "old": 142,
+          "trial": 145,
+          "projected": 142,
+          "legacy": 140
+        },
+        "work": {
+          "active_cycles": 2,
+          "exact_cycle_subsets": 4
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 4,
+        "stage": "circulation",
+        "digest": "71d18a7f01bf3f75eb1b9bad7f8d3c06953f2d5075941dc6c5fa372885216da3",
+        "scores": {
+          "old": 145,
+          "trial": 148,
+          "projected": 146,
+          "legacy": 144
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 5,
+        "stage": "circulation",
+        "digest": "79109f81dedaa07f057d34bfa74437bf0f82ef44a76a3b5cf495fe32220b76a8",
+        "scores": {
+          "old": 148,
+          "trial": 152,
+          "projected": 150,
+          "legacy": 148
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 6,
+        "stage": "circulation",
+        "digest": "f596f6933b72c60a95eaf0f8fd3d69091e7312a69c6db196bd549477b18918dd",
+        "scores": {
+          "old": 153,
+          "trial": 155,
+          "projected": 153,
+          "legacy": 153
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 10,
+        "stage": "block",
+        "digest": "afe2664fbc981801a47736936245efe3dece517531aad2375956f8672a72e148",
+        "scores": {
+          "old": 162,
+          "trial": 162,
+          "projected": 162,
+          "legacy": 160
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 12,
+        "stage": "circulation",
+        "digest": "0281394f9c45ff318223764a9945ef598c3db09bb01517877714e3fb048ebbe8",
+        "scores": {
+          "old": 167,
+          "trial": 169,
+          "projected": 167,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 14,
+        "stage": "swaps",
+        "digest": "39143a63855be2e64ca147d8989d524f14f3b2660f0d607e10f741b87532dc34",
+        "scores": {
+          "old": 168,
+          "trial": 169,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 15,
+        "stage": "circulation",
+        "digest": "862b242d14f161f54c600c1ed53a1e74e3857ff1d828d57da53ebd6ef747457e",
+        "scores": {
+          "old": 168,
+          "trial": 169,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 17,
+        "stage": "swaps",
+        "digest": "c13b00219db34a1f59d0637b3d0d4c7843e0e30028dad866fd7114320f00d0cd",
+        "scores": {
+          "old": 168,
+          "trial": 169,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 18,
+        "stage": "circulation",
+        "digest": "82db96b4771df918e7caad345b840e1262d8f6438af7b05a36a086ecd5298bc7",
+        "scores": {
+          "old": 168,
+          "trial": 169,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 20,
+        "stage": "swaps",
+        "digest": "53e0c88b38709ba65fd033c18f9a02afdfbe06f21b5a25c3b0200e3d94991433",
+        "scores": {
+          "old": 168,
+          "trial": 169,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 22,
+        "stage": "swaps",
+        "digest": "59687eb97fc445cbd99ff085c1c878aa5072c3be2695936ed5274c09dbe2526c",
+        "scores": {
+          "old": 169,
+          "trial": 170,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 23,
+        "stage": "circulation",
+        "digest": "41cfdc47acb0993711d3c5beb99b75387e752570be5353818667b10fb65d765c",
+        "scores": {
+          "old": 169,
+          "trial": 170,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 24,
+        "stage": "block",
+        "digest": "1f01dfa0a5dfaecc09716a872a69f4986d1f1f17ec3cd3798414dd34c4918467",
+        "scores": {
+          "old": 169,
+          "trial": 170,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 26,
+        "stage": "swaps",
+        "digest": "b56beec4c78d98d6ce8c2ecbba93978ffca5fe6484f43c23af544ae84352c9a3",
+        "scores": {
+          "old": 169,
+          "trial": 170,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 28,
+        "stage": "swaps",
+        "digest": "5ae24bf9c051193b7fe9ff1081e9ae980cf76e419d2e32ed741ceaefa61e25f0",
+        "scores": {
+          "old": 169,
+          "trial": 170,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 32,
+        "stage": "block",
+        "digest": "d6f4aeb6c84e958e853b8c90b3535a798cc1b7db0d8857c7c16740694bceb6ca",
+        "scores": {
+          "old": 170,
+          "trial": 170,
+          "projected": 170,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3507,
+        "step": 33,
+        "stage": "circulation",
+        "digest": "1bc117cbd86dc9d1babfc2239001f2a45bf306a8bd827c04c1929ed5af498ed0",
+        "scores": {
+          "old": 169,
+          "trial": 170,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 0,
+        "stage": "circulation",
+        "digest": "c728b1f45cc3e25e95e665bd7eb7e77754b76dd5cb3e2ad88cbccc9033d381ae",
+        "scores": {
+          "old": 74,
+          "trial": 81,
+          "projected": 75,
+          "legacy": 80
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 1,
+        "stage": "swaps",
+        "digest": "144d56c50aa7dec0d7096d713e3711aa4d7b4beaf4fa8173d09c4b55ad6864d9",
+        "scores": {
+          "old": 98,
+          "trial": 112,
+          "projected": 109,
+          "legacy": 109
+        },
+        "work": {
+          "active_cycles": 2,
+          "exact_cycle_subsets": 4
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 2,
+        "stage": "swaps",
+        "digest": "10c3d3fa528cadd78fa55d35d86abb04f5e872a1832de4197781167369ce722a",
+        "scores": {
+          "old": 118,
+          "trial": 130,
+          "projected": 127,
+          "legacy": 128
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 3,
+        "stage": "swaps",
+        "digest": "523d7d191cc4cbe0939416ff3f067e410b324b0c71cd2d422c2095a08870a28d",
+        "scores": {
+          "old": 132,
+          "trial": 136,
+          "projected": 134,
+          "legacy": 133
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 4,
+        "stage": "circulation",
+        "digest": "1d10de5eaa5222d54068476ec5b6c57e9b14bb6ffd541ccfcad0e61424d6f45f",
+        "scores": {
+          "old": 139,
+          "trial": 142,
+          "projected": 139,
+          "legacy": 140
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 5,
+        "stage": "swaps",
+        "digest": "541f60cbc92181e8190d9a934d4f6415c50a4ddd4d88c38bdc4d4baa6c7b32d7",
+        "scores": {
+          "old": 142,
+          "trial": 146,
+          "projected": 144,
+          "legacy": 143
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 6,
+        "stage": "circulation",
+        "digest": "2ca2b93773c1425cf2066e45710a205e0d820871c487c1759436d594ff4cb2cb",
+        "scores": {
+          "old": 149,
+          "trial": 150,
+          "projected": 149,
+          "legacy": 148
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 11,
+        "stage": "block",
+        "digest": "607fd1b029e56694321851f813b6368b30ef82bbcc2468de3ff8e70d152d1d86",
+        "scores": {
+          "old": 158,
+          "trial": 159,
+          "projected": 159,
+          "legacy": 157
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 19,
+        "stage": "block",
+        "digest": "1ea898687e656669a8392726a6c0801940664cb746ef14dd78d89bfa38c625dc",
+        "scores": {
+          "old": 163,
+          "trial": 163,
+          "projected": 163,
+          "legacy": 161
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 20,
+        "stage": "block",
+        "digest": "e81acc7e76ad2e3d1b07ef709389518d4d1dbba08ec3ceab4a60b5fef56c0608",
+        "scores": {
+          "old": 164,
+          "trial": 164,
+          "projected": 164,
+          "legacy": 162
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 36,
+        "stage": "circulation",
+        "digest": "d35a87ca4eba842bffa9d20bdce8dcf4c99769e77f53f5dc2835f69424e4d920",
+        "scores": {
+          "old": 167,
+          "trial": 168,
+          "projected": 167,
+          "legacy": 166
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 37,
+        "stage": "circulation",
+        "digest": "9af3545e5a65ec3989139342ddf28ffa2cfcd62124c582eb809d306cc548984c",
+        "scores": {
+          "old": 168,
+          "trial": 169,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 38,
+        "stage": "circulation",
+        "digest": "1f118abe60a9c6dc2e93119ab3b6107dc8ea9c0e28c5fae707d36e76c0fdf6c3",
+        "scores": {
+          "old": 168,
+          "trial": 169,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 39,
+        "stage": "circulation",
+        "digest": "29afb619ea20f320ad52a2cdf73a79d8922b293c1a6d85bd05b7bae953488294",
+        "scores": {
+          "old": 167,
+          "trial": 170,
+          "projected": 167,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 40,
+        "stage": "circulation",
+        "digest": "e3ca8fb2306064dc80625121eca6322fcf305f01bd811ab3eb601bb7b30d8876",
+        "scores": {
+          "old": 168,
+          "trial": 170,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 41,
+        "stage": "circulation",
+        "digest": "cebbd80e9ea0621eb67556b4df3b50cd1716ace01cd36f2256cb648f2e0fb1f3",
+        "scores": {
+          "old": 168,
+          "trial": 170,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 42,
+        "stage": "circulation",
+        "digest": "f9e35bab72c58dfc90d03c6bc22a1e4c3bb903d33ee50a770e2c054a77cc99be",
+        "scores": {
+          "old": 168,
+          "trial": 170,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 43,
+        "stage": "circulation",
+        "digest": "f5d809793c0bee1d633c44b7aca17d01e62ae38d0bd1178b7e57af4a09bbb92f",
+        "scores": {
+          "old": 168,
+          "trial": 170,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 45,
+        "stage": "swaps",
+        "digest": "2cf616ed4f88046a9e452fa48ebe2440856e6a034ef9ab447d7ba32433cb5aad",
+        "scores": {
+          "old": 169,
+          "trial": 170,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 48,
+        "stage": "circulation",
+        "digest": "d6feb255b2fc1fdab93deba2e702e01324a53b0426ffd6727fd1692701a10c25",
+        "scores": {
+          "old": 171,
+          "trial": 173,
+          "projected": 171,
+          "legacy": 171
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3508,
+        "step": 49,
+        "stage": "circulation",
+        "digest": "ead980553f09bd0722fbf7c35e408e6e74ed085c21bfbfb76f0d6d462883c803",
+        "scores": {
+          "old": 172,
+          "trial": 173,
+          "projected": 172,
+          "legacy": 171
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 9,
+        "stage": "block",
+        "digest": "149fed4c6d43b500e2531ef61bc09ac3956db663af4ca2573940a7e887f03e51",
+        "scores": {
+          "old": 157,
+          "trial": 157,
+          "projected": 157,
+          "legacy": 156
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 10,
+        "stage": "circulation",
+        "digest": "c5ba91046fe9cf7b1e6ff3a82d522c65748a727ebf4d11bc6680896435c3526d",
+        "scores": {
+          "old": 156,
+          "trial": 157,
+          "projected": 156,
+          "legacy": 156
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 16,
+        "stage": "circulation",
+        "digest": "23e41790942b3d0a4645e15cdac82eaf68faebab76be68a0541f9f9b426319d7",
+        "scores": {
+          "old": 162,
+          "trial": 164,
+          "projected": 163,
+          "legacy": 163
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 22,
+        "stage": "block",
+        "digest": "01966e7a0a74939907d89b50c3eae9835f423268016fd7230e0c5a74ad865712",
+        "scores": {
+          "old": 167,
+          "trial": 167,
+          "projected": 167,
+          "legacy": 164
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 23,
+        "stage": "block",
+        "digest": "f6c382576a1e7c3d268b57bcb04bbc055c2621ad29eaf9e408b91021dd0e52b8",
+        "scores": {
+          "old": 166,
+          "trial": 168,
+          "projected": 166,
+          "legacy": 165
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 25,
+        "stage": "swaps",
+        "digest": "491eb177aa3fb3413f0e193391277fdd2d8b91addc1863c7c223791f01db075a",
+        "scores": {
+          "old": 166,
+          "trial": 167,
+          "projected": 166,
+          "legacy": 165
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 31,
+        "stage": "block",
+        "digest": "68ce610bb36f18bf74a099dacaca4073393ebd360b15ecb22e1f47ce68704961",
+        "scores": {
+          "old": 170,
+          "trial": 170,
+          "projected": 170,
+          "legacy": 169
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 136,
+        "stage": "block",
+        "digest": "2c399c974414a5156e5490058bbf2b9dc6d937e6abaf9402df4352c6c7cb4cd1",
+        "scores": {
+          "old": 178,
+          "trial": 178,
+          "projected": 178,
+          "legacy": 176
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 137,
+        "stage": "circulation",
+        "digest": "511233654bc13958c07112c85b954995c02ec30b3f1c289f10912a93f20285f8",
+        "scores": {
+          "old": 177,
+          "trial": 178,
+          "projected": 177,
+          "legacy": 176
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 138,
+        "stage": "circulation",
+        "digest": "795985c59214c8407826c2f37316a8bc6667e8777d160aff30b30c7991bcda46",
+        "scores": {
+          "old": 177,
+          "trial": 178,
+          "projected": 177,
+          "legacy": 176
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 139,
+        "stage": "circulation",
+        "digest": "4ec2d148338e33e1ba64d8dfb8f72bd163c1deb951a71a4bdcfa8d37b3672022",
+        "scores": {
+          "old": 177,
+          "trial": 178,
+          "projected": 177,
+          "legacy": 176
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 140,
+        "stage": "circulation",
+        "digest": "c0945be121cc345217fd891c830a2ab3de52dcf51e0f13e61acfc9e4f24a4332",
+        "scores": {
+          "old": 177,
+          "trial": 178,
+          "projected": 177,
+          "legacy": 176
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 141,
+        "stage": "circulation",
+        "digest": "2df952094bcc62e5a9e9266be526747cb094787dae420f18999992fb58a4efe6",
+        "scores": {
+          "old": 177,
+          "trial": 178,
+          "projected": 177,
+          "legacy": 176
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 142,
+        "stage": "circulation",
+        "digest": "4b9469edd141475a12f1bee6c20e0ba6967491c5c1f1ac01a953fdfa5a9904f4",
+        "scores": {
+          "old": 177,
+          "trial": 178,
+          "projected": 177,
+          "legacy": 176
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 143,
+        "stage": "circulation",
+        "digest": "ab73d252010b87495420dd72b1985993d09e84c6bea39641292f4f8c581f9632",
+        "scores": {
+          "old": 177,
+          "trial": 178,
+          "projected": 177,
+          "legacy": 176
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 144,
+        "stage": "circulation",
+        "digest": "32d8bc9f3e840a1fc6f776e2043b5e90a9356ae242541ab3022be59a0c077021",
+        "scores": {
+          "old": 177,
+          "trial": 178,
+          "projected": 177,
+          "legacy": 176
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 200,
+        "stage": "block",
+        "digest": "0e77f24eb8e763afa1e305a7b37108742230da02f734665adcbffe3e6f57f354",
+        "scores": {
+          "old": 182,
+          "trial": 182,
+          "projected": 182,
+          "legacy": 181
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 219,
+        "stage": "block",
+        "digest": "5e77d2421b767e8f014a5ef2a7cc09585f01860dbeeec7e2636894c0dbd78e85",
+        "scores": {
+          "old": 183,
+          "trial": 183,
+          "projected": 183,
+          "legacy": 180
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 223,
+        "stage": "block",
+        "digest": "e884db0824e4c898423ef32fc426cd67e1d68b8f0cb8ac29137dc8672af51c83",
+        "scores": {
+          "old": 183,
+          "trial": 183,
+          "projected": 183,
+          "legacy": 180
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 226,
+        "stage": "block",
+        "digest": "2928c33f79c2d26ee0063744b0180960e61b73ac0160f796047682bf8e1eed9e",
+        "scores": {
+          "old": 183,
+          "trial": 183,
+          "projected": 183,
+          "legacy": 180
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3509,
+        "step": 242,
+        "stage": "block",
+        "digest": "33ed849d558f8b4d0c7266f13cbfbc19a3f245ef343c8da66ad40b16b9de8af7",
+        "scores": {
+          "old": 183,
+          "trial": 183,
+          "projected": 183,
+          "legacy": 180
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 0,
+        "stage": "swaps",
+        "digest": "1b1ede0f990e414e5785a7c8847f80f491eafeb5a25c8c75e20e63be40be2e81",
+        "scores": {
+          "old": 13,
+          "trial": 75,
+          "projected": 73,
+          "legacy": 73
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 1,
+        "stage": "swaps",
+        "digest": "504c820e1a68254fa23febb36129fa081ced0bf3d67514963527c5f1df046eeb",
+        "scores": {
+          "old": 95,
+          "trial": 118,
+          "projected": 116,
+          "legacy": 116
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 6,
+        "stage": "block",
+        "digest": "1c0ba5b655c038ca5fbeeb79284521546e02061b8d1eb2ff81bb1460c48cee64",
+        "scores": {
+          "old": 150,
+          "trial": 151,
+          "projected": 151,
+          "legacy": 149
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 11,
+        "stage": "block",
+        "digest": "d7851a78a5876afec2a0b0ab60a546221b17f9970950fd0ed64533043f147eab",
+        "scores": {
+          "old": 158,
+          "trial": 158,
+          "projected": 158,
+          "legacy": 157
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 13,
+        "stage": "block",
+        "digest": "49ffb4e32ba3d31868ba6945c28a83a89935d65a8ee43eee96c80ec6f2c6d852",
+        "scores": {
+          "old": 160,
+          "trial": 160,
+          "projected": 160,
+          "legacy": 159
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 16,
+        "stage": "circulation",
+        "digest": "c2f67e2628a63bae4f25fde7f0375bfd031335be42df8f43b9d9404518eabc98",
+        "scores": {
+          "old": 164,
+          "trial": 166,
+          "projected": 165,
+          "legacy": 163
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 17,
+        "stage": "swaps",
+        "digest": "3b4e4c5fd501e1291037b782ae1678f2d2afe4031ac3a637e280cf192b7e6946",
+        "scores": {
+          "old": 163,
+          "trial": 165,
+          "projected": 163,
+          "legacy": 162
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 19,
+        "stage": "swaps",
+        "digest": "6de1d170b438ca00c9037ceb1c01d93ed8acfb56d669721f41c10f3df621eafa",
+        "scores": {
+          "old": 167,
+          "trial": 168,
+          "projected": 167,
+          "legacy": 166
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 21,
+        "stage": "swaps",
+        "digest": "d1dce38427123708b2720f511d04c315d855de770ae07ac59ff665bb809e3c47",
+        "scores": {
+          "old": 168,
+          "trial": 169,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 23,
+        "stage": "swaps",
+        "digest": "cd5bba513ad2e1635e53350e20cc984454800512e1d2ac352a3211beac4dbf62",
+        "scores": {
+          "old": 168,
+          "trial": 169,
+          "projected": 168,
+          "legacy": 166
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 24,
+        "stage": "circulation",
+        "digest": "f57e0408febf992c1ec9049b7a62d6fdcb4fb177c5fe3ad7570f6f80161f3559",
+        "scores": {
+          "old": 168,
+          "trial": 170,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 25,
+        "stage": "circulation",
+        "digest": "69256234530a225cfab786bed6f2d18d668a301bafb4f8d4fbcdb3dcda04ee54",
+        "scores": {
+          "old": 168,
+          "trial": 170,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 26,
+        "stage": "circulation",
+        "digest": "26bd642f19858164ce0fed75c0a4ff14d74a519d7cc5d67e09d57c6b5d30daa4",
+        "scores": {
+          "old": 168,
+          "trial": 170,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 27,
+        "stage": "circulation",
+        "digest": "3a385f5caa59dcc9fed340d63574a6030a861847167377057194ded0d30fa373",
+        "scores": {
+          "old": 168,
+          "trial": 170,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 28,
+        "stage": "circulation",
+        "digest": "dca202ace53b248fad8f18363e4d91968ae885adfa64864aabc7b0ef3e18c17d",
+        "scores": {
+          "old": 168,
+          "trial": 170,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 29,
+        "stage": "circulation",
+        "digest": "69a79ac685b0f49892a6645b43b8e256b15e8dac001c201e9cc7dce8a942896a",
+        "scores": {
+          "old": 169,
+          "trial": 171,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 30,
+        "stage": "circulation",
+        "digest": "12d33acec50202ab88aad84a1025e948c956817a2aeac714812a242f07c576e9",
+        "scores": {
+          "old": 169,
+          "trial": 171,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 31,
+        "stage": "circulation",
+        "digest": "7d9e7e54b0abd821098edc45d682f45b7ddec42dde0958564b3a96e05c66a614",
+        "scores": {
+          "old": 169,
+          "trial": 171,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 32,
+        "stage": "circulation",
+        "digest": "4617e6fc116ab42d747b0a7e6cae9643bb6928aedda8d45cf83485424906adfb",
+        "scores": {
+          "old": 169,
+          "trial": 171,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 33,
+        "stage": "circulation",
+        "digest": "373806315edf51c0a1913fb60425ea635d88b8f1f59310df7b4c83b2744cd54d",
+        "scores": {
+          "old": 169,
+          "trial": 171,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 34,
+        "stage": "circulation",
+        "digest": "3e00f97a61d05cc88b97ee16a1193edc201242c8bbff46c403d6ee35208d31dd",
+        "scores": {
+          "old": 169,
+          "trial": 171,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 35,
+        "stage": "circulation",
+        "digest": "87d0777817c1004b6bebc86d9a97872a14df1865a027f5c23faa41fd23fd79cc",
+        "scores": {
+          "old": 169,
+          "trial": 171,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3510,
+        "step": 36,
+        "stage": "circulation",
+        "digest": "22fff2a5f47ef330463b028552aa22d08f083817314e69f3acaad29a25f6ba70",
+        "scores": {
+          "old": 169,
+          "trial": 171,
+          "projected": 169,
+          "legacy": 168
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 0,
+        "stage": "swaps",
+        "digest": "be467a19c2e3fb577f3bc945ee347da16f723451731f204a72e829a0a8c43d82",
+        "scores": {
+          "old": 16,
+          "trial": 72,
+          "projected": 70,
+          "legacy": 70
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 1,
+        "stage": "block",
+        "digest": "455b91e0668d1371595872f0cd09758077ffce2bb11f71003f9d26348b66556e",
+        "scores": {
+          "old": 120,
+          "trial": 124,
+          "projected": 124,
+          "legacy": 123
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 11,
+        "stage": "circulation",
+        "digest": "e95d07d558a150c6ab84e1981c06d09c7d6e446c21204444148e27db9f065996",
+        "scores": {
+          "old": 164,
+          "trial": 165,
+          "projected": 164,
+          "legacy": 163
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 12,
+        "stage": "swaps",
+        "digest": "4655c05df09d37858f04f6560a934c6ef1b2faa7ff754066756658391f2ce740",
+        "scores": {
+          "old": 164,
+          "trial": 166,
+          "projected": 165,
+          "legacy": 165
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 13,
+        "stage": "swaps",
+        "digest": "d1575f5de3294fa7bb5ecd6155ebabcd1da74bc1c304d358539a4252d15f1a2a",
+        "scores": {
+          "old": 165,
+          "trial": 167,
+          "projected": 165,
+          "legacy": 165
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 21,
+        "stage": "circulation",
+        "digest": "28392f7f3c84b8aa50037221bd8c29a1c65529ce31c92a795e92e20318e779ae",
+        "scores": {
+          "old": 169,
+          "trial": 170,
+          "projected": 169,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 22,
+        "stage": "circulation",
+        "digest": "f1b3ad942d77a69f5d0a831e9afe4d96c9f4db7202c84061e1ee0d183fdc33e1",
+        "scores": {
+          "old": 168,
+          "trial": 170,
+          "projected": 168,
+          "legacy": 167
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 42,
+        "stage": "block",
+        "digest": "658870100c5d2c484b7285c33680876edaaa1dfbd91ea191dd60cfab7cdbaa45",
+        "scores": {
+          "old": 173,
+          "trial": 173,
+          "projected": 173,
+          "legacy": 172
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 51,
+        "stage": "block",
+        "digest": "61b04dcb37444477f6cdfdf41903216e9341c29145f59ff0295bd6882db0785d",
+        "scores": {
+          "old": 173,
+          "trial": 173,
+          "projected": 173,
+          "legacy": 170
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 58,
+        "stage": "circulation",
+        "digest": "96807ecb1d916566fc3a5f68c5ea56b5edd079383d2753091c0934777393838f",
+        "scores": {
+          "old": 173,
+          "trial": 174,
+          "projected": 173,
+          "legacy": 171
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 60,
+        "stage": "circulation",
+        "digest": "429fa818da59635177439d16beaa11e7d360bc16244438e9ae312da85d88c086",
+        "scores": {
+          "old": 173,
+          "trial": 174,
+          "projected": 173,
+          "legacy": 171
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 61,
+        "stage": "circulation",
+        "digest": "33f2ae0552c3b980733651e7bbd7a9069482682ea5eda44407cecbb3e984591c",
+        "scores": {
+          "old": 171,
+          "trial": 174,
+          "projected": 171,
+          "legacy": 171
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 62,
+        "stage": "circulation",
+        "digest": "567cd64006bf4b75a8da31ac247e9e44216274ad4dc2d519b2366cbeebe18bc8",
+        "scores": {
+          "old": 171,
+          "trial": 174,
+          "projected": 171,
+          "legacy": 171
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 63,
+        "stage": "circulation",
+        "digest": "9aa723f93a2c4cb18b1d250665c8eb738b91fbe93c577e269250f02639b6b502",
+        "scores": {
+          "old": 171,
+          "trial": 174,
+          "projected": 171,
+          "legacy": 171
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 64,
+        "stage": "circulation",
+        "digest": "8ee2baf87c088f48f4ae233a27e8a1c4340e1f7be7242c1e4f818eced81bf5f5",
+        "scores": {
+          "old": 171,
+          "trial": 174,
+          "projected": 171,
+          "legacy": 171
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 65,
+        "stage": "circulation",
+        "digest": "acd5c1c81392dce23f1363e60fa17ebcfe4ffe28b53ad91d042e715be2173cd7",
+        "scores": {
+          "old": 171,
+          "trial": 175,
+          "projected": 172,
+          "legacy": 172
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 66,
+        "stage": "circulation",
+        "digest": "d3ec4d49116e83fc4e50785db28de3a3725bc07b5f287b2d64a829ee73cd1855",
+        "scores": {
+          "old": 172,
+          "trial": 175,
+          "projected": 172,
+          "legacy": 172
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 67,
+        "stage": "circulation",
+        "digest": "125fdef5703e5c0c2ab1d8e55d34614c7593d1dc16ab57ed2b71538b219a0f38",
+        "scores": {
+          "old": 173,
+          "trial": 176,
+          "projected": 173,
+          "legacy": 173
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 68,
+        "stage": "circulation",
+        "digest": "09e0506dab29b228a63576fbd2e122bbcd25669c891a8595934cfcac28a9e0e7",
+        "scores": {
+          "old": 174,
+          "trial": 176,
+          "projected": 174,
+          "legacy": 173
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      },
+      {
+        "seed": 3511,
+        "step": 69,
+        "stage": "circulation",
+        "digest": "2ae260ac5f75acebe1cf10fabf9ac377836ac84e694e0d3b9c01857daafe2a6c",
+        "scores": {
+          "old": 174,
+          "trial": 176,
+          "projected": 174,
+          "legacy": 173
+        },
+        "work": {
+          "active_cycles": 1,
+          "exact_cycle_subsets": 2
+        }
+      }
+    ]
+  },
+  "trajectories": {
+    "mate-project": {
+      "3500": {
+        "16": {
+          "score": 166,
+          "components": 114,
+          "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+          "final_hash": "9411c4e9801a4e04b51a2c69fb34831d56318e041a8fc364cd742e9e813b6adb",
+          "resumed_round": 0,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 16,
+            "positive_swap_pairs": 3832,
+            "potential_pairs_priced": 164736,
+            "full_cycle_relaxations": 44,
+            "full_cycle_complete": 2,
+            "full_cycle_cycles": 15,
+            "regional_identity_proofs": 15,
+            "regional_identity_updates": 0,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 16,
+            "joint_branches": 0,
+            "mate_final_projections": 2,
+            "mate_active_cycles": 3,
+            "mate_exact_cycle_subsets": 6,
+            "orientation_entries": 33378,
+            "block_assignments": 16,
+            "round_to_150": 6,
+            "mate_final_witness_kept": 1,
+            "round_to_160": 13,
+            "unique_repaired_boards": 16,
+            "mandatory_bonds": 8
+          }
+        },
+        "64": {
+          "score": 170,
+          "components": 100,
+          "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+          "final_hash": "8b4f2bd1184a656699e61b6afd3c52a5c5067f5c4e1a82553100f565650e2fd2",
+          "resumed_round": 16,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 64,
+            "positive_swap_pairs": 3866,
+            "potential_pairs_priced": 658944,
+            "full_cycle_relaxations": 102,
+            "full_cycle_complete": 46,
+            "full_cycle_cycles": 17,
+            "regional_identity_proofs": 63,
+            "regional_identity_updates": 0,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 64,
+            "joint_branches": 0,
+            "mate_final_projections": 34,
+            "mate_active_cycles": 35,
+            "mate_exact_cycle_subsets": 70,
+            "orientation_entries": 188142,
+            "block_assignments": 64,
+            "round_to_150": 6,
+            "mate_final_witness_kept": 33,
+            "round_to_160": 13,
+            "round_to_170": 24,
+            "unique_repaired_boards": 50,
+            "mandatory_bonds": 8
+          }
+        },
+        "cold64": {
+          "score": 170,
+          "work_equal": true,
+          "codes_equal": true
+        },
+        "320": {
+          "score": 178,
+          "components": 95,
+          "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+          "final_hash": "8f750c04678fce738c8e1bf022fde73b13450293c285ccec112e3cb483114058",
+          "resumed_round": 64,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 320,
+            "positive_swap_pairs": 3918,
+            "potential_pairs_priced": 3294720,
+            "full_cycle_relaxations": 514,
+            "full_cycle_complete": 247,
+            "full_cycle_cycles": 203,
+            "regional_identity_proofs": 319,
+            "regional_identity_updates": 8,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 320,
+            "joint_branches": 0,
+            "mate_final_projections": 204,
+            "mate_active_cycles": 208,
+            "mate_exact_cycle_subsets": 416,
+            "orientation_entries": 1051896,
+            "block_assignments": 320,
+            "round_to_150": 6,
+            "mate_final_witness_kept": 120,
+            "round_to_160": 13,
+            "round_to_170": 24,
+            "round_to_175": 189,
+            "unique_repaired_boards": 206,
+            "mandatory_bonds": 8
+          }
+        }
+      },
+      "3501": {
+        "16": {
+          "score": 164,
+          "components": 118,
+          "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+          "final_hash": "4d50a176dbe822adeb5e2528d8cd6aa3a818c3d722e44e5039ad6ee01b523b9e",
+          "resumed_round": 0,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 16,
+            "positive_swap_pairs": 3715,
+            "potential_pairs_priced": 164736,
+            "full_cycle_relaxations": 40,
+            "full_cycle_complete": 7,
+            "full_cycle_cycles": 17,
+            "regional_identity_proofs": 15,
+            "regional_identity_updates": 2,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 16,
+            "joint_branches": 0,
+            "mate_final_projections": 6,
+            "mate_active_cycles": 10,
+            "mate_exact_cycle_subsets": 22,
+            "orientation_entries": 32772,
+            "block_assignments": 16,
+            "round_to_150": 7,
+            "mate_final_witness_kept": 1,
+            "round_to_160": 13,
+            "unique_repaired_boards": 16,
+            "mandatory_bonds": 8
+          }
+        },
+        "64": {
+          "score": 169,
+          "components": 109,
+          "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+          "final_hash": "ecb25adbda62ddc52468204497715ae1855f0e7e4f2f00504f91306ecc1078f9",
+          "resumed_round": 16,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 64,
+            "positive_swap_pairs": 3718,
+            "potential_pairs_priced": 658944,
+            "full_cycle_relaxations": 108,
+            "full_cycle_complete": 46,
+            "full_cycle_cycles": 19,
+            "regional_identity_proofs": 63,
+            "regional_identity_updates": 7,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 64,
+            "joint_branches": 0,
+            "mate_final_projections": 6,
+            "mate_active_cycles": 10,
+            "mate_exact_cycle_subsets": 22,
+            "orientation_entries": 181356,
+            "block_assignments": 64,
+            "round_to_150": 7,
+            "mate_final_witness_kept": 1,
+            "round_to_160": 13,
+            "unique_repaired_boards": 62,
+            "mandatory_bonds": 8
+          }
+        },
+        "320": {
+          "score": 175,
+          "components": 99,
+          "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+          "final_hash": "e1d442c0cda21e52d9d198a280e2f3e6264742950a17cf9696068778b43f9059",
+          "resumed_round": 64,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 320,
+            "positive_swap_pairs": 3720,
+            "potential_pairs_priced": 3294720,
+            "full_cycle_relaxations": 370,
+            "full_cycle_complete": 302,
+            "full_cycle_cycles": 37,
+            "regional_identity_proofs": 319,
+            "regional_identity_updates": 9,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 320,
+            "joint_branches": 0,
+            "mate_final_projections": 20,
+            "mate_active_cycles": 24,
+            "mate_exact_cycle_subsets": 50,
+            "orientation_entries": 1560972,
+            "block_assignments": 320,
+            "round_to_150": 7,
+            "mate_final_witness_kept": 3,
+            "round_to_160": 13,
+            "round_to_170": 79,
+            "round_to_175": 307,
+            "unique_repaired_boards": 249,
+            "mandatory_bonds": 8
+          }
+        }
+      },
+      "3502": {
+        "16": {
+          "score": 165,
+          "components": 121,
+          "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+          "final_hash": "56ae756f0d985703cd4951d15b43d542845077cdff505963be248fdb9c54f21a",
+          "resumed_round": 0,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 16,
+            "positive_swap_pairs": 3882,
+            "potential_pairs_priced": 164736,
+            "full_cycle_relaxations": 48,
+            "full_cycle_complete": 1,
+            "full_cycle_cycles": 19,
+            "regional_identity_proofs": 15,
+            "regional_identity_updates": 11,
+            "regional_assignment_solves": 2,
+            "joint_CIRCULATION_OPTIMAL": 16,
+            "joint_branches": 0,
+            "mate_final_projections": 5,
+            "mate_active_cycles": 7,
+            "mate_exact_cycle_subsets": 14,
+            "orientation_entries": 33636,
+            "block_assignments": 16,
+            "mate_final_witness_kept": 2,
+            "round_to_150": 7,
+            "round_to_160": 11,
+            "unique_repaired_boards": 16,
+            "mandatory_bonds": 8
+          }
+        },
+        "64": {
+          "score": 171,
+          "components": 101,
+          "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+          "final_hash": "87c034b50a892d76727b2ad6c3b0aec0172943f8f5789129c6d374fa94506eeb",
+          "resumed_round": 16,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 64,
+            "positive_swap_pairs": 3886,
+            "potential_pairs_priced": 658944,
+            "full_cycle_relaxations": 102,
+            "full_cycle_complete": 47,
+            "full_cycle_cycles": 21,
+            "regional_identity_proofs": 63,
+            "regional_identity_updates": 13,
+            "regional_assignment_solves": 2,
+            "joint_CIRCULATION_OPTIMAL": 64,
+            "joint_branches": 0,
+            "mate_final_projections": 6,
+            "mate_active_cycles": 8,
+            "mate_exact_cycle_subsets": 16,
+            "orientation_entries": 228420,
+            "block_assignments": 64,
+            "mate_final_witness_kept": 3,
+            "round_to_150": 7,
+            "round_to_160": 11,
+            "round_to_170": 32,
+            "unique_repaired_boards": 58,
+            "mandatory_bonds": 8
+          }
+        },
+        "320": {
+          "score": 180,
+          "components": 86,
+          "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+          "final_hash": "24243cbe1184d05684831ee717d9ee52b9d6f2811bde987185ccd51f5fe02cbb",
+          "resumed_round": 64,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 320,
+            "positive_swap_pairs": 3889,
+            "potential_pairs_priced": 3294720,
+            "full_cycle_relaxations": 422,
+            "full_cycle_complete": 286,
+            "full_cycle_cycles": 26,
+            "regional_identity_proofs": 319,
+            "regional_identity_updates": 20,
+            "regional_assignment_solves": 2,
+            "joint_CIRCULATION_OPTIMAL": 320,
+            "joint_branches": 0,
+            "mate_final_projections": 10,
+            "mate_active_cycles": 12,
+            "mate_exact_cycle_subsets": 24,
+            "orientation_entries": 1243386,
+            "block_assignments": 320,
+            "mate_final_witness_kept": 7,
+            "round_to_150": 7,
+            "round_to_160": 11,
+            "round_to_170": 32,
+            "round_to_175": 205,
+            "round_to_180": 259,
+            "unique_repaired_boards": 281,
+            "mandatory_bonds": 8
+          }
+        }
+      },
+      "3503": {
+        "16": {
+          "score": 159,
+          "components": 117,
+          "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+          "final_hash": "f6ec2aa316d357f158547aa93751c9264b630b62179e05ccaa8f37fae4e9788f",
+          "resumed_round": 0,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 16,
+            "positive_swap_pairs": 3499,
+            "potential_pairs_priced": 164736,
+            "full_cycle_relaxations": 35,
+            "full_cycle_complete": 8,
+            "full_cycle_cycles": 23,
+            "regional_identity_proofs": 15,
+            "regional_identity_updates": 3,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 16,
+            "joint_branches": 0,
+            "orientation_entries": 37824,
+            "block_assignments": 16,
+            "mate_final_projections": 10,
+            "mate_active_cycles": 10,
+            "mate_exact_cycle_subsets": 20,
+            "round_to_150": 6,
+            "unique_repaired_boards": 16,
+            "mandatory_bonds": 8
+          }
+        },
+        "64": {
+          "score": 174,
+          "components": 103,
+          "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+          "final_hash": "105d075b5b349286a3f8655fb48238b321fee8a50fbe26843c62df85702531af",
+          "resumed_round": 16,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 64,
+            "positive_swap_pairs": 3680,
+            "potential_pairs_priced": 658944,
+            "full_cycle_relaxations": 130,
+            "full_cycle_complete": 38,
+            "full_cycle_cycles": 32,
+            "regional_identity_proofs": 63,
+            "regional_identity_updates": 4,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 64,
+            "joint_branches": 0,
+            "orientation_entries": 215922,
+            "block_assignments": 64,
+            "mate_final_projections": 36,
+            "mate_active_cycles": 37,
+            "mate_exact_cycle_subsets": 74,
+            "round_to_150": 6,
+            "mate_final_witness_kept": 5,
+            "round_to_160": 32,
+            "round_to_170": 61,
+            "unique_repaired_boards": 62,
+            "mandatory_bonds": 8
+          }
+        },
+        "320": {
+          "score": 178,
+          "components": 92,
+          "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+          "final_hash": "63bd4590cd26ba071f98fd96ce9afe5181ac07e246bc6de73e646ffb90fc5bf8",
+          "resumed_round": 64,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 320,
+            "positive_swap_pairs": 3681,
+            "potential_pairs_priced": 3294720,
+            "full_cycle_relaxations": 406,
+            "full_cycle_complete": 292,
+            "full_cycle_cycles": 35,
+            "regional_identity_proofs": 319,
+            "regional_identity_updates": 11,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 320,
+            "joint_branches": 0,
+            "orientation_entries": 1530024,
+            "block_assignments": 320,
+            "mate_final_projections": 73,
+            "mate_active_cycles": 75,
+            "mate_exact_cycle_subsets": 150,
+            "round_to_150": 6,
+            "mate_final_witness_kept": 42,
+            "round_to_160": 32,
+            "round_to_170": 61,
+            "round_to_175": 91,
+            "unique_repaired_boards": 187,
+            "mandatory_bonds": 8
+          }
+        }
+      }
+    },
+    "mate-prices": {
+      "3500": {
+        "16": {
+          "score": 159,
+          "components": 117,
+          "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+          "final_hash": "4dbf32c6003a4558cd05efd29d9784a0949bff41a8498c48e8ae4aa23b78e528",
+          "resumed_round": 0,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 16,
+            "positive_swap_pairs": 3794,
+            "potential_pairs_priced": 164736,
+            "full_cycle_relaxations": 42,
+            "full_cycle_complete": 3,
+            "full_cycle_cycles": 15,
+            "regional_identity_proofs": 15,
+            "regional_identity_updates": 4,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 16,
+            "joint_branches": 0,
+            "orientation_entries": 27348,
+            "block_assignments": 16,
+            "round_to_150": 5,
+            "unique_repaired_boards": 15,
+            "mandatory_bonds": 8
+          }
+        },
+        "64": {
+          "score": 171,
+          "components": 95,
+          "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+          "final_hash": "b9671bd52eeaeb0a78260366ab42dfa0daa4e9ea2a8e369d5edafb4c39a8811e",
+          "resumed_round": 16,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 64,
+            "positive_swap_pairs": 3803,
+            "potential_pairs_priced": 658944,
+            "full_cycle_relaxations": 114,
+            "full_cycle_complete": 41,
+            "full_cycle_cycles": 19,
+            "regional_identity_proofs": 63,
+            "regional_identity_updates": 8,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 64,
+            "joint_branches": 0,
+            "orientation_entries": 188496,
+            "block_assignments": 64,
+            "round_to_150": 5,
+            "round_to_160": 17,
+            "round_to_170": 50,
+            "unique_repaired_boards": 60,
+            "mandatory_bonds": 8
+          }
+        },
+        "cold64": {
+          "score": 171,
+          "work_equal": true,
+          "codes_equal": true
+        },
+        "320": {
+          "score": 176,
+          "components": 89,
+          "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+          "final_hash": "62390bdf077719b8814d7c83331e00ea3639da739f02bf138c2af79c610db62a",
+          "resumed_round": 64,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 320,
+            "positive_swap_pairs": 3806,
+            "potential_pairs_priced": 3294720,
+            "full_cycle_relaxations": 386,
+            "full_cycle_complete": 291,
+            "full_cycle_cycles": 21,
+            "regional_identity_proofs": 319,
+            "regional_identity_updates": 20,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 320,
+            "joint_branches": 0,
+            "orientation_entries": 1030158,
+            "block_assignments": 320,
+            "round_to_150": 5,
+            "round_to_160": 17,
+            "round_to_170": 50,
+            "round_to_175": 187,
+            "unique_repaired_boards": 263,
+            "mandatory_bonds": 8
+          }
+        }
+      },
+      "3501": {
+        "16": {
+          "score": 166,
+          "components": 104,
+          "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+          "final_hash": "67ce2123125dcfbe0b32c5dafac3ee510a6cab6d7d602e644ad716a233b54482",
+          "resumed_round": 0,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 16,
+            "positive_swap_pairs": 3594,
+            "potential_pairs_priced": 164736,
+            "full_cycle_relaxations": 46,
+            "full_cycle_complete": 2,
+            "full_cycle_cycles": 21,
+            "regional_identity_proofs": 16,
+            "regional_identity_updates": 2,
+            "regional_assignment_solves": 0,
+            "joint_CIRCULATION_OPTIMAL": 16,
+            "joint_branches": 0,
+            "orientation_entries": 34530,
+            "block_assignments": 16,
+            "round_to_150": 5,
+            "round_to_160": 9,
+            "unique_repaired_boards": 15,
+            "mandatory_bonds": 8
+          }
+        },
+        "64": {
+          "score": 171,
+          "components": 94,
+          "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+          "final_hash": "e78cb84d9d87e9ad3d5ded3890a56d0fe0db86183df88ffd50da3eb0c53df98e",
+          "resumed_round": 16,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 64,
+            "positive_swap_pairs": 3597,
+            "potential_pairs_priced": 658944,
+            "full_cycle_relaxations": 102,
+            "full_cycle_complete": 47,
+            "full_cycle_cycles": 22,
+            "regional_identity_proofs": 64,
+            "regional_identity_updates": 3,
+            "regional_assignment_solves": 0,
+            "joint_CIRCULATION_OPTIMAL": 64,
+            "joint_branches": 0,
+            "orientation_entries": 213942,
+            "block_assignments": 64,
+            "round_to_150": 5,
+            "round_to_160": 9,
+            "round_to_170": 38,
+            "unique_repaired_boards": 53,
+            "mandatory_bonds": 8
+          }
+        },
+        "320": {
+          "score": 181,
+          "components": 88,
+          "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+          "final_hash": "bd14f4a2cb798e71b078fc4daf18410fd72c4d18899f7c138bd4f8e9a776c9e2",
+          "resumed_round": 64,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 320,
+            "positive_swap_pairs": 3600,
+            "potential_pairs_priced": 3294720,
+            "full_cycle_relaxations": 478,
+            "full_cycle_complete": 256,
+            "full_cycle_cycles": 29,
+            "regional_identity_proofs": 320,
+            "regional_identity_updates": 10,
+            "regional_assignment_solves": 0,
+            "joint_CIRCULATION_OPTIMAL": 320,
+            "joint_branches": 0,
+            "orientation_entries": 1549362,
+            "block_assignments": 320,
+            "round_to_150": 5,
+            "round_to_160": 9,
+            "round_to_170": 38,
+            "round_to_175": 153,
+            "round_to_180": 250,
+            "unique_repaired_boards": 255,
+            "mandatory_bonds": 8
+          }
+        }
+      },
+      "3502": {
+        "16": {
+          "score": 168,
+          "components": 109,
+          "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+          "final_hash": "44206b9fca1278dc8c47efd58ff30adf1f2888cec0d065a55046bb629554cb4f",
+          "resumed_round": 0,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 16,
+            "positive_swap_pairs": 3813,
+            "potential_pairs_priced": 164736,
+            "full_cycle_relaxations": 44,
+            "full_cycle_complete": 4,
+            "full_cycle_cycles": 16,
+            "regional_identity_proofs": 15,
+            "regional_identity_updates": 12,
+            "regional_assignment_solves": 2,
+            "joint_CIRCULATION_OPTIMAL": 16,
+            "joint_branches": 0,
+            "orientation_entries": 31188,
+            "block_assignments": 16,
+            "round_to_150": 4,
+            "round_to_160": 7,
+            "unique_repaired_boards": 15,
+            "mandatory_bonds": 8
+          }
+        },
+        "64": {
+          "score": 171,
+          "components": 102,
+          "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+          "final_hash": "ce3a9585614594311960f22f6065b2200edf31b6a7ed3b9278364349ee4feb13",
+          "resumed_round": 16,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 64,
+            "positive_swap_pairs": 3813,
+            "potential_pairs_priced": 658944,
+            "full_cycle_relaxations": 98,
+            "full_cycle_complete": 50,
+            "full_cycle_cycles": 19,
+            "regional_identity_proofs": 63,
+            "regional_identity_updates": 12,
+            "regional_assignment_solves": 2,
+            "joint_CIRCULATION_OPTIMAL": 64,
+            "joint_branches": 0,
+            "orientation_entries": 150690,
+            "block_assignments": 64,
+            "round_to_150": 4,
+            "round_to_160": 7,
+            "round_to_170": 50,
+            "unique_repaired_boards": 57,
+            "mandatory_bonds": 8
+          }
+        },
+        "320": {
+          "score": 181,
+          "components": 83,
+          "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+          "final_hash": "7b2ea23203ebba8cb72453a6777efc4968ae7f5aa9a6c3cb555671d8d3cd96da",
+          "resumed_round": 64,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 320,
+            "positive_swap_pairs": 3816,
+            "potential_pairs_priced": 3294720,
+            "full_cycle_relaxations": 385,
+            "full_cycle_complete": 294,
+            "full_cycle_cycles": 24,
+            "regional_identity_proofs": 319,
+            "regional_identity_updates": 18,
+            "regional_assignment_solves": 2,
+            "joint_CIRCULATION_OPTIMAL": 320,
+            "joint_branches": 0,
+            "orientation_entries": 2136510,
+            "block_assignments": 320,
+            "round_to_150": 4,
+            "round_to_160": 7,
+            "round_to_170": 50,
+            "round_to_175": 106,
+            "round_to_180": 223,
+            "unique_repaired_boards": 211,
+            "mandatory_bonds": 8
+          }
+        }
+      },
+      "3503": {
+        "16": {
+          "score": 160,
+          "components": 120,
+          "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+          "final_hash": "b808713e826d2b70019ef8e08be1ca4d7baf39c01ff179fc1c04e661d2fa961f",
+          "resumed_round": 0,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 16,
+            "positive_swap_pairs": 3356,
+            "potential_pairs_priced": 164736,
+            "full_cycle_relaxations": 46,
+            "full_cycle_complete": 1,
+            "full_cycle_cycles": 19,
+            "regional_identity_proofs": 15,
+            "regional_identity_updates": 10,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 16,
+            "joint_branches": 0,
+            "orientation_entries": 32070,
+            "block_assignments": 16,
+            "round_to_150": 5,
+            "round_to_160": 15,
+            "unique_repaired_boards": 16,
+            "mandatory_bonds": 8
+          }
+        },
+        "64": {
+          "score": 168,
+          "components": 101,
+          "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+          "final_hash": "f1ebd5803d4c9e1a97264b565c28e7c1958099317b140224e619a7c023cc9894",
+          "resumed_round": 16,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 64,
+            "positive_swap_pairs": 3358,
+            "potential_pairs_priced": 658944,
+            "full_cycle_relaxations": 120,
+            "full_cycle_complete": 37,
+            "full_cycle_cycles": 26,
+            "regional_identity_proofs": 63,
+            "regional_identity_updates": 11,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 64,
+            "joint_branches": 0,
+            "orientation_entries": 156174,
+            "block_assignments": 64,
+            "round_to_150": 5,
+            "round_to_160": 15,
+            "unique_repaired_boards": 63,
+            "mandatory_bonds": 8
+          }
+        },
+        "320": {
+          "score": 175,
+          "components": 91,
+          "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+          "final_hash": "78d573b0aef2026c02b5d4cdaba0dff4612f8b82686aab63772c7573c705503c",
+          "resumed_round": 64,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 320,
+            "positive_swap_pairs": 3359,
+            "potential_pairs_priced": 3294720,
+            "full_cycle_relaxations": 415,
+            "full_cycle_complete": 276,
+            "full_cycle_cycles": 33,
+            "regional_identity_proofs": 319,
+            "regional_identity_updates": 18,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 320,
+            "joint_branches": 0,
+            "orientation_entries": 1270212,
+            "block_assignments": 320,
+            "round_to_150": 5,
+            "round_to_160": 15,
+            "round_to_170": 69,
+            "round_to_175": 121,
+            "unique_repaired_boards": 247,
+            "mandatory_bonds": 8
+          }
+        }
+      }
+    },
+    "mate-guarded": {
+      "3500": {
+        "16": {
+          "score": 164,
+          "components": 107,
+          "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+          "final_hash": "587113382d0590e37e9c81b18f1af510261571fcfacc7b0f9204021381fb87e8",
+          "resumed_round": 0,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 16,
+            "positive_swap_pairs": 3767,
+            "potential_pairs_priced": 164736,
+            "full_cycle_relaxations": 45,
+            "full_cycle_complete": 3,
+            "full_cycle_cycles": 16,
+            "regional_identity_proofs": 15,
+            "regional_identity_updates": 1,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 16,
+            "joint_branches": 0,
+            "mate_orientation_projections": 9,
+            "mate_active_cycles": 12,
+            "mate_exact_cycle_subsets": 24,
+            "orientation_entries": 30150,
+            "block_assignments": 16,
+            "round_to_150": 4,
+            "round_to_160": 7,
+            "unique_repaired_boards": 16,
+            "mandatory_bonds": 8
+          }
+        },
+        "64": {
+          "score": 173,
+          "components": 105,
+          "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+          "final_hash": "760505939f11da5aae780436b04270e758523084d2958081e6bbf4712d38361c",
+          "resumed_round": 16,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 64,
+            "positive_swap_pairs": 3771,
+            "potential_pairs_priced": 658944,
+            "full_cycle_relaxations": 127,
+            "full_cycle_complete": 36,
+            "full_cycle_cycles": 24,
+            "regional_identity_proofs": 63,
+            "regional_identity_updates": 1,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 64,
+            "joint_branches": 0,
+            "mate_orientation_projections": 12,
+            "mate_active_cycles": 15,
+            "mate_exact_cycle_subsets": 30,
+            "orientation_entries": 147198,
+            "block_assignments": 64,
+            "round_to_150": 4,
+            "round_to_160": 7,
+            "round_to_170": 33,
+            "unique_repaired_boards": 60,
+            "mandatory_bonds": 8
+          }
+        },
+        "cold64": {
+          "score": 173,
+          "work_equal": true,
+          "codes_equal": true
+        },
+        "320": {
+          "score": 181,
+          "components": 89,
+          "start_hash": "ee7271f92e6d90ac1ea222db2fde9635737cd84fe199a6a6fbe92f3cea65058a",
+          "final_hash": "65023e4d618bedda36ca313502035a6c70b12d08e1342e475b54bc78de71e02a",
+          "resumed_round": 64,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 320,
+            "positive_swap_pairs": 3773,
+            "potential_pairs_priced": 3294720,
+            "full_cycle_relaxations": 405,
+            "full_cycle_complete": 286,
+            "full_cycle_cycles": 28,
+            "regional_identity_proofs": 319,
+            "regional_identity_updates": 8,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 320,
+            "joint_branches": 0,
+            "mate_orientation_projections": 12,
+            "mate_active_cycles": 15,
+            "mate_exact_cycle_subsets": 30,
+            "orientation_entries": 1139010,
+            "block_assignments": 320,
+            "round_to_150": 4,
+            "round_to_160": 7,
+            "round_to_170": 33,
+            "round_to_175": 79,
+            "round_to_180": 275,
+            "unique_repaired_boards": 270,
+            "mandatory_bonds": 8
+          }
+        }
+      },
+      "3501": {
+        "16": {
+          "score": 168,
+          "components": 102,
+          "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+          "final_hash": "274fc95544654cfa01779cf86838c8f67ea8af438be419c3d09434627b4b7d41",
+          "resumed_round": 0,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 16,
+            "positive_swap_pairs": 3578,
+            "potential_pairs_priced": 164736,
+            "full_cycle_relaxations": 45,
+            "full_cycle_complete": 3,
+            "full_cycle_cycles": 21,
+            "regional_identity_proofs": 16,
+            "regional_identity_updates": 2,
+            "regional_assignment_solves": 0,
+            "joint_CIRCULATION_OPTIMAL": 16,
+            "joint_branches": 0,
+            "orientation_entries": 33318,
+            "block_assignments": 16,
+            "round_to_150": 5,
+            "mate_orientation_projections": 1,
+            "mate_active_cycles": 1,
+            "mate_exact_cycle_subsets": 2,
+            "round_to_160": 9,
+            "unique_repaired_boards": 16,
+            "mandatory_bonds": 8
+          }
+        },
+        "64": {
+          "score": 172,
+          "components": 95,
+          "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+          "final_hash": "8516b7d1eff938793fbd835469111b7bb88d6730fab7f6dcab694343481fc22b",
+          "resumed_round": 16,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 64,
+            "positive_swap_pairs": 3582,
+            "potential_pairs_priced": 658944,
+            "full_cycle_relaxations": 101,
+            "full_cycle_complete": 48,
+            "full_cycle_cycles": 23,
+            "regional_identity_proofs": 64,
+            "regional_identity_updates": 3,
+            "regional_assignment_solves": 0,
+            "joint_CIRCULATION_OPTIMAL": 64,
+            "joint_branches": 0,
+            "orientation_entries": 157140,
+            "block_assignments": 64,
+            "round_to_150": 5,
+            "mate_orientation_projections": 1,
+            "mate_active_cycles": 1,
+            "mate_exact_cycle_subsets": 2,
+            "round_to_160": 9,
+            "round_to_170": 20,
+            "unique_repaired_boards": 57,
+            "mandatory_bonds": 8
+          }
+        },
+        "320": {
+          "score": 179,
+          "components": 91,
+          "start_hash": "a9e527a62840bf4a7b269b1bf431eed492ea6e13f5be54b95eb2e1c184a0b273",
+          "final_hash": "6f08afb74e6c7d7e0925f00b8f421438aa561befa66c585668317cb73cdf4066",
+          "resumed_round": 64,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 320,
+            "positive_swap_pairs": 3583,
+            "potential_pairs_priced": 3294720,
+            "full_cycle_relaxations": 401,
+            "full_cycle_complete": 284,
+            "full_cycle_cycles": 29,
+            "regional_identity_proofs": 319,
+            "regional_identity_updates": 23,
+            "regional_assignment_solves": 2,
+            "joint_CIRCULATION_OPTIMAL": 319,
+            "joint_branches": 0,
+            "orientation_entries": 1190124,
+            "block_assignments": 320,
+            "round_to_150": 5,
+            "mate_orientation_projections": 1,
+            "mate_active_cycles": 1,
+            "mate_exact_cycle_subsets": 2,
+            "round_to_160": 9,
+            "round_to_170": 20,
+            "round_to_175": 103,
+            "joint_OPTIMAL": 1,
+            "unique_repaired_boards": 242,
+            "mandatory_bonds": 8
+          }
+        }
+      },
+      "3502": {
+        "16": {
+          "score": 168,
+          "components": 109,
+          "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+          "final_hash": "44206b9fca1278dc8c47efd58ff30adf1f2888cec0d065a55046bb629554cb4f",
+          "resumed_round": 0,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 16,
+            "positive_swap_pairs": 3813,
+            "potential_pairs_priced": 164736,
+            "full_cycle_relaxations": 44,
+            "full_cycle_complete": 4,
+            "full_cycle_cycles": 16,
+            "regional_identity_proofs": 15,
+            "regional_identity_updates": 11,
+            "regional_assignment_solves": 2,
+            "joint_CIRCULATION_OPTIMAL": 16,
+            "joint_branches": 0,
+            "orientation_entries": 31188,
+            "block_assignments": 16,
+            "round_to_150": 4,
+            "round_to_160": 7,
+            "unique_repaired_boards": 15,
+            "mandatory_bonds": 8
+          }
+        },
+        "64": {
+          "score": 171,
+          "components": 102,
+          "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+          "final_hash": "ce3a9585614594311960f22f6065b2200edf31b6a7ed3b9278364349ee4feb13",
+          "resumed_round": 16,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 64,
+            "positive_swap_pairs": 3813,
+            "potential_pairs_priced": 658944,
+            "full_cycle_relaxations": 98,
+            "full_cycle_complete": 50,
+            "full_cycle_cycles": 19,
+            "regional_identity_proofs": 63,
+            "regional_identity_updates": 11,
+            "regional_assignment_solves": 2,
+            "joint_CIRCULATION_OPTIMAL": 64,
+            "joint_branches": 0,
+            "orientation_entries": 150690,
+            "block_assignments": 64,
+            "round_to_150": 4,
+            "round_to_160": 7,
+            "round_to_170": 50,
+            "unique_repaired_boards": 57,
+            "mandatory_bonds": 8
+          }
+        },
+        "320": {
+          "score": 181,
+          "components": 83,
+          "start_hash": "4545d59727c31040fafbe6839e44f4588eac0aeac8db386c311db648c96084cb",
+          "final_hash": "7b2ea23203ebba8cb72453a6777efc4968ae7f5aa9a6c3cb555671d8d3cd96da",
+          "resumed_round": 64,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 320,
+            "positive_swap_pairs": 3816,
+            "potential_pairs_priced": 3294720,
+            "full_cycle_relaxations": 385,
+            "full_cycle_complete": 294,
+            "full_cycle_cycles": 24,
+            "regional_identity_proofs": 319,
+            "regional_identity_updates": 17,
+            "regional_assignment_solves": 2,
+            "joint_CIRCULATION_OPTIMAL": 320,
+            "joint_branches": 0,
+            "orientation_entries": 2136510,
+            "block_assignments": 320,
+            "round_to_150": 4,
+            "round_to_160": 7,
+            "round_to_170": 50,
+            "round_to_175": 106,
+            "round_to_180": 223,
+            "unique_repaired_boards": 211,
+            "mandatory_bonds": 8
+          }
+        }
+      },
+      "3503": {
+        "16": {
+          "score": 160,
+          "components": 120,
+          "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+          "final_hash": "b808713e826d2b70019ef8e08be1ca4d7baf39c01ff179fc1c04e661d2fa961f",
+          "resumed_round": 0,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 16,
+            "positive_swap_pairs": 3356,
+            "potential_pairs_priced": 164736,
+            "full_cycle_relaxations": 46,
+            "full_cycle_complete": 1,
+            "full_cycle_cycles": 19,
+            "regional_identity_proofs": 15,
+            "regional_identity_updates": 10,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 16,
+            "joint_branches": 0,
+            "orientation_entries": 32070,
+            "block_assignments": 16,
+            "round_to_150": 5,
+            "round_to_160": 15,
+            "unique_repaired_boards": 16,
+            "mandatory_bonds": 8
+          }
+        },
+        "64": {
+          "score": 168,
+          "components": 101,
+          "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+          "final_hash": "f1ebd5803d4c9e1a97264b565c28e7c1958099317b140224e619a7c023cc9894",
+          "resumed_round": 16,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 64,
+            "positive_swap_pairs": 3358,
+            "potential_pairs_priced": 658944,
+            "full_cycle_relaxations": 120,
+            "full_cycle_complete": 37,
+            "full_cycle_cycles": 26,
+            "regional_identity_proofs": 63,
+            "regional_identity_updates": 11,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 64,
+            "joint_branches": 0,
+            "orientation_entries": 156174,
+            "block_assignments": 64,
+            "round_to_150": 5,
+            "round_to_160": 15,
+            "unique_repaired_boards": 63,
+            "mandatory_bonds": 8
+          }
+        },
+        "320": {
+          "score": 175,
+          "components": 91,
+          "start_hash": "adef45aa1f98850a6a827369ce52cefacbe0f3eb57388adf34bdc1b381282f07",
+          "final_hash": "78d573b0aef2026c02b5d4cdaba0dff4612f8b82686aab63772c7573c705503c",
+          "resumed_round": 64,
+          "work": {
+            "gpu_proposals": 0,
+            "new_gpu_proposals": 0,
+            "repair_steps": 320,
+            "positive_swap_pairs": 3359,
+            "potential_pairs_priced": 3294720,
+            "full_cycle_relaxations": 415,
+            "full_cycle_complete": 276,
+            "full_cycle_cycles": 33,
+            "regional_identity_proofs": 319,
+            "regional_identity_updates": 18,
+            "regional_assignment_solves": 1,
+            "joint_CIRCULATION_OPTIMAL": 320,
+            "joint_branches": 0,
+            "orientation_entries": 1270212,
+            "block_assignments": 320,
+            "round_to_150": 5,
+            "round_to_160": 15,
+            "round_to_170": 69,
+            "round_to_175": 121,
+            "unique_repaired_boards": 247,
+            "mandatory_bonds": 8
+          }
+        }
+      }
+    }
+  }
+}

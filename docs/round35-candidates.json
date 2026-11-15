@@ -457,7 +457,16 @@
       "source_id": 22,
       "title": "Keep mandatory Gold mate rules inside ordinary repair",
       "proposal_and_validation": "r31_fresh.Engine.repair runs several stages before clear_forbidden; unsuccessful cleanup can reset the whole board. Measure rejection and also the score gained then lost by successful cleanup. Enforce forbidden internal/exterior physical pairs during joint repair and separable assignment/rotation stages when their environment permits, or maintain incident dirtiness for a local rollback. r32 fresh signed repair already respects its own inventory; target the ordinary eight-bond builder only. Compare returned score, work/steps to threshold and retained starts; verify exact bond set/physical score, a case where removing one collision creates another, and a no-conflict held-out group.",
-      "state": "open"
+      "state": "retain physical restrictions and whole-cycle rollback with scope",
+      "mechanism": "REPAIR-FORBIDDEN-MATES",
+      "measurement": "Twelve 320-round physical starts produced 1,401 successful released cleanups costing 3,605 matched seams cumulatively. Guarded mode invoked zero final cleanups on the same twelve seeds and reached 185 on the individual-cycle group. On 240 distinct original transitions, whole-cycle rollback beat/tied/lost to released cleanup on 150/78/12; preserving the better legal witness gained 242 summed seams.",
+      "closure_reason": "Retain physical donor/exterior/internal mate restrictions, identity-aware prices, and coupled rollback. Full held-out and no-conflict comparisons are seed-dependent. A 240-edge physical Gold claim requires one complete loop.",
+      "reopen_trigger": "A new physical mate inventory or verified different distribution reveals a recurring conflict or optimum excluded by these scopes.",
+      "evidence": [
+        "docs/ROUND35_BONDED_REPAIR.md",
+        "docs/R35_FORBIDDEN_REPAIR.json",
+        "test_r35_forbidden_mates.py"
+      ]
     },
     {
       "id": 38,

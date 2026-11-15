@@ -176,7 +176,7 @@ class Assemblies:
 
 
 def joint_repair(model, values, cells, *, adjacent=False, effort=0.05, contacts=None,
-                 disjoint=False):
+                 disjoint=False,forbidden=None):
     """Choose donor cycles, their support and rotations in one bounded CP model."""
     from ortools.sat.python import cp_model
     limit = (-1 if disjoint else int(adjacent)) if contacts is None else contacts
@@ -198,8 +198,18 @@ def joint_repair(model, values, cells, *, adjacent=False, effort=0.05, contacts=
     labels={}
     changed={}
     terms=[]
+    barred={}
+    pair_labels={}
+    if forbidden is not None:
+        by_code=np.full(3*model.n,-1,dtype=int)
+        by_code[flat]=np.arange(len(flat))
+        for c,code,neighbor in forbidden.blocked_codes(board):
+            if c in local and neighbor not in local:
+                barred.setdefault(c,set()).add(code)
     for i,c in enumerate(cells):
         options=np.flatnonzero(model.legal[c,flat]).tolist()
+        if c in barred:
+            options=[v for v in options if flat[v] not in barred[c]]
         old=3*i+int(board[c]%3)
         label=cp.new_int_var_from_domain(cp_model.Domain.from_values(options),'')
         donor=cp.new_int_var(0,len(cells)-1,'')
@@ -230,6 +240,11 @@ def joint_repair(model, values, cells, *, adjacent=False, effort=0.05, contacts=
     for a,s,b,t in model.problem.edges:
         if a not in local or b not in local:
             continue
+        if forbidden is not None:
+            if (s,t) not in pair_labels:
+                pair_labels[s,t]=forbidden.local_pairs(by_code,s,t)
+            if pair_labels[s,t]:
+                cp.add_forbidden_assignments([labels[a],labels[b]],pair_labels[s,t])
         if not allow_contacts:
             cp.add_at_most_one(changed[a],changed[b])
             continue
@@ -355,7 +370,7 @@ def simultaneous_swaps(model, board, allowed, prices, *, exact=False, touch=None
     prices.update(board)
     catalog=getattr(prices,'swap_catalog',None)
     if catalog is None or catalog.model is not model:
-        catalog=prices.swap_catalog=SwapCatalog(model)
+        catalog=prices.swap_catalog=SwapCatalog(model,physical_neighbors=getattr(prices,'physical_neighbor_prices',False))
     ranked=catalog.rank(prices,board,cells)
     left,right,new_left,new_right,weights=ranked
     count=len(weights)
@@ -582,11 +597,18 @@ def forest_pool(model,board,available,size,rng):
 class Engine:
     def __init__(self,problem,*,bonds=False,joint=False,adjacent=False,ties=0,fork=False,
                  relink=False,slate=1,pool=10,tie_slack=0,cycle_budget=0,contacts=None,disjoint=False,exact_packing=False,pair_cycles=0,forest=False,contact_group=0,
-                 touch_packing=None,separator_packing=False,cycle_partition=None,regional_cycle_budget=0,regional_only=False):
+                 touch_packing=None,separator_packing=False,cycle_partition=None,regional_cycle_budget=0,regional_only=False,forbidden_repair=None):
         if min(slate,pool)<1 or min(ties,cycle_budget)<0 or tie_slack not in (0,1,2):
             raise ValueError("Invalid candidate or repair limits.")
         self.model=BoardModel(problem)
-        self.assemblies=Assemblies(self.model) if bonds else None
+        if forbidden_repair not in (None,'project','prices','guarded'):
+            raise ValueError("Unknown physical mate repair option.")
+        self.assemblies=Assemblies(self.model) if bonds or forbidden_repair else None
+        self.forbidden_repair=forbidden_repair
+        self.mate_rules=None
+        if forbidden_repair:
+            from r35_forbidden_mates import ForbiddenMates
+            self.mate_rules=ForbiddenMates(self.model,self.assemblies.forbidden)
         if contacts is not None and (type(contacts) is not int or contacts < -1):
             raise ValueError("Invalid joint-repair contact limit.")
         if pair_cycles not in (0,2,3):
@@ -627,19 +649,38 @@ class Engine:
         self.pool=pool
         self.tie_slack=tie_slack
 
+    def repair_prices(self):
+        if self.forbidden_repair in ('prices','guarded'):
+            from r35_forbidden_mates import GuardedPrices
+            return GuardedPrices(self.model,self.mate_rules)
+        return AssignmentPrices(self.model)
+
+    def protect_stage(self,previous,proposed,stats,stage):
+        projected,work=self.mate_rules.project(previous,proposed)
+        if work:
+            stats['mate_'+stage+'_projections']+=1
+            stats.update({'mate_'+k:v for k,v in work.items()})
+        return projected
+
     def repair(self, board, rng, step, stats, prices):
         model=self.model
         initial_board=board
+        guarded=self.forbidden_repair=='guarded'
+        legal_block=self.mate_rules.block if self.forbidden_repair in ('prices','guarded') else model.block
         if self.assemblies:
             board=self.assemblies.relocate(board,rng)
             protected=self.assemblies.protected(board)
         else:
             protected=[]
+        relocated_board=board
         available=np.setdiff1d(model.free,protected)
         if self.joint and len(available):
+            before_swaps=board
             board,n=simultaneous_swaps(model,board,available,prices,exact=self.exact_packing,
                                        touch=self.touch_packing,packing_work=stats,
                                        separator_depth=3 if self.separator_packing else 0)
+            if guarded and self.touch_packing:
+                board=self.protect_stage(before_swaps,board,stats,'swaps')
             stats['positive_swap_pairs']+=n
             stats['potential_pairs_priced']+=len(available)*(len(available)-1)//2
             if self.cycle_budget:
@@ -654,12 +695,18 @@ class Engine:
                 chosen=rng.choice(available,min(len(available),self.pool),replace=False)
             if self.pair_cycles:
                 from r34_pair_cycles import pair_repair
+                before_pairs=board
                 board,pair_work=pair_repair(model,board,chosen,self.pair_cycles,contact_group=self.contact_group)
                 stats.update(pair_work)
+                if guarded:
+                    board=self.protect_stage(before_pairs,board,stats,'local_cycles')
             contact_limit=(-1 if self.disjoint else int(self.adjacent)) if self.contacts is None else self.contacts
             regional=None
             if self.regional_cycle_budget and contact_limit==0 and len(chosen):
-                regional,decision=pack_cycles(model,board,chosen,prices,relaxations=self.regional_cycle_budget,
+                # The prices-only comparison leaves the normal local CP query
+                # unrestricted. Its regional proof must use that same scope.
+                regional_prices=AssignmentPrices(model) if self.forbidden_repair=='prices' else prices
+                regional,decision=pack_cycles(model,board,chosen,regional_prices,relaxations=self.regional_cycle_budget,
                                               partition='neighbors',identity_check=True)
                 stats['regional_identity_proofs']+=decision.get('identity_proofs',0)
                 stats['regional_identity_updates']+=decision.get('identity_updates',0)
@@ -669,7 +716,8 @@ class Engine:
                 board,info=regional,dict(status=status,branches=0)
             else:
                 board,info=joint_repair(model,board,chosen,adjacent=self.adjacent,
-                                       contacts=self.contacts,disjoint=self.disjoint)
+                                       contacts=self.contacts,disjoint=self.disjoint,
+                                       forbidden=self.mate_rules if guarded else None)
                 if regional is not None and model.matches(regional).sum()>model.matches(board).sum():
                     board=regional
                     stats['regional_partial_witnesses_used']+=1
@@ -679,14 +727,26 @@ class Engine:
         if self.ties and len(cells):
             chosen=rng.choice(cells,min(self.pool,len(cells)),replace=False)
             other=np.setdiff1d(cells,chosen)
-            board=model.block(board,other,rng)
+            board=legal_block(board,other,rng)
+            before_ties=board
             board,count=tie_repair(model,board,chosen,slack=self.tie_slack,cap=self.ties)
             stats['ties_validated']+=count
+            if guarded:
+                board=self.protect_stage(before_ties,board,stats,'ties')
         else:
-            board=model.block(board,cells,rng)
+            board=legal_block(board,cells,rng)
+        before_orient=board
         board,rotation=model.orientations(board,rng=rng,movable=set(map(int,available)))
+        if guarded:
+            board=self.protect_stage(before_orient,board,stats,'orientation')
         if self.assemblies and self.assemblies.forbidden:
+            projected=None
+            if self.forbidden_repair=='project' and self.mate_rules.violations(board).any():
+                projected=self.protect_stage(relocated_board,board,stats,'final')
             board=self.assemblies.clear_forbidden(board,rng)
+            if projected is not None and (board is None or model.matches(projected).sum()>model.matches(board).sum()):
+                board=projected
+                stats['mate_final_witness_kept']+=1
             if board is None:
                 board=initial_board
                 stats['forbidden_rejections']+=1
@@ -740,6 +800,8 @@ class Engine:
         if reusable:
             config=dict(bonds=self.assemblies is not None,joint=self.joint,adjacent=self.adjacent,
                         cycle_budget=self.cycle_budget,pool=self.pool,ties=self.ties,tie_slack=self.tie_slack)
+            if self.forbidden_repair:
+                config['forbidden_repair']=self.forbidden_repair
             if self.cycle_partition:
                 config['cycle_partition']=self.cycle_partition
             if self.regional_cycle_budget:
@@ -800,7 +862,7 @@ class Engine:
                     candidate=self.assemblies.seed(start['codes'],rng)
                     start=result(model,candidate)
                 states.append(dict(current=start,best=start,rng=np.random.default_rng(rng.integers(2**63)),
-                                   prices=AssignmentPrices(model)))
+                                   prices=self.repair_prices()))
                 if best is None or quality(start)>quality(best):
                     best=start
             relinked=False
@@ -818,7 +880,7 @@ class Engine:
             for row in saved['states']:
                 child=np.random.default_rng()
                 child.bit_generator.state=row['rng']
-                states.append(dict(current=row['current'],best=row['best'],rng=child,prices=AssignmentPrices(model)))
+                states.append(dict(current=row['current'],best=row['best'],rng=child,prices=self.repair_prices()))
             trial_rounds=saved['trial_rounds']
             relinked=saved.get('relinked',False)
         def checkpoint(cursor):
@@ -844,7 +906,7 @@ class Engine:
                 if paths:
                     mid=max((result(model,x) for x in paths),key=quality)
                     states.append(dict(current=mid,best=mid,rng=np.random.default_rng(rng.integers(2**63)),
-                                       prices=AssignmentPrices(model)))
+                                       prices=self.repair_prices()))
                     best=max((best,mid),key=quality)
                     index=len(states)-1
                 else:
@@ -854,7 +916,7 @@ class Engine:
                 forked=True
                 if parent['best']['codes']!=parent['current']['codes']:
                     states.append(dict(current=parent['best'],best=parent['best'],
-                                       rng=np.random.default_rng(rng.integers(2**63)),prices=AssignmentPrices(model)))
+                                       rng=np.random.default_rng(rng.integers(2**63)),prices=self.repair_prices()))
                     stats['forks']+=1
                     index=len(states)-1
                 else:
@@ -900,6 +962,8 @@ def main():
     parser.add_argument('--slate',type=int,default=1)
     parser.add_argument('--pool',type=int,default=10)
     parser.add_argument('--cycle-budget',type=int,default=0,help='Full-board assignment relaxations per repair.')
+    parser.add_argument('--forbidden-repair',choices=('project','prices','guarded'),
+                        help='Use the mandatory Gold mate inventory during fresh repair. Implies --bonds.')
     parser.add_argument('--regional-only',action='store_true',
                         help='Keep the physically checked regional witness if the no-contact budget ends. '
                              'Skips local CP and supports the NumPy-only profile.')
@@ -940,6 +1004,8 @@ def main():
         config['regional_cycle_budget']=args.regional_cycle_budget
     if args.regional_only:
         config['regional_only']=True
+    if args.forbidden_repair:
+        config.update(bonds=True,forbidden_repair=args.forbidden_repair)
     if args.forest:
         config['forest']=True
     if args.pair_cycles:
