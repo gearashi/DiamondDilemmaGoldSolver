@@ -73,3 +73,44 @@ class ParkedArchivesTests(TestCase):
             self.assertEqual(completed['stats']['gpu_domain_completed'],4)
             if balanced:
                 self.assertEqual(completed['stats']['gpu_lane_owners_completed'],1)
+
+    def test_decoded_cache_uses_only_owned_arrays_and_honors_its_byte_cap(self):
+        from gpu_lane_resize_round34 import ParkedStateCache
+        import numpy as np
+        problem, old = setup_saved()
+        native = old['native']
+        roots = [tuple(int(x,16) for x in row) for row in native['cubes']]
+        view = new_engine(problem,roots)
+        state = unpack_native(native,view)['state']
+        cache = ParkedStateCache(state.nbytes)
+        cache.remember(native,state)
+        extra = deepcopy(native)
+        cache.remember(extra,state.copy())
+        self.assertEqual(cache.bytes,state.nbytes)
+        with patch('gpu_domain_runner.unpack_native',side_effect=AssertionError) as cold:
+            snapshot = cache.take(native,view,cold)
+        view.validate_checkpoint(snapshot)
+        self.assertFalse(snapshot['state'].flags.writeable)
+        self.assertEqual(cache.bytes,0)
+        cache.remember(extra,np.asarray(state).view())
+        self.assertEqual(cache.bytes,0)
+
+    def test_decoded_cache_does_not_hide_changed_bytes_or_bindings(self):
+        from gpu_lane_resize_round34 import ParkedStateCache
+        problem, old = setup_saved()
+        roots = [tuple(int(x,16) for x in row) for row in old['native']['cubes']]
+        view = new_engine(problem,roots)
+        for field in ('compressed_state','binding','state_sha256'):
+            native = deepcopy(old['native'])
+            state = unpack_native(native,view)['state']
+            cache = ParkedStateCache(state.nbytes)
+            cache.remember(native,state)
+            if field == 'binding':
+                native[field]['fingerprint'] = 'changed'
+            elif field == 'compressed_state':
+                native[field] = 'bad base64'
+            else:
+                native[field] = 'wrong'
+            with self.assertRaises(ValueError):
+                view.restore(cache.take(native,view,unpack_native))
+            self.assertEqual(cache.bytes,0)

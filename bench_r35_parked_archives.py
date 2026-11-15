@@ -36,7 +36,7 @@ def prior_slicer(commit):
 
 def measured(implementation, problem, target, saved, width):
     counts = dict(archive_decodes=0,parked_reencodes=0,parked_reencoded_raw_bytes=0)
-    def track(engine, archives, replicas, owner_ids, names, pack, unpack):
+    def track(engine, archives, replicas, owner_ids, names, pack, unpack, **kwargs):
         def compress(view,snapshot):
             counts['parked_reencodes'] += 1
             counts['parked_reencoded_raw_bytes'] += snapshot['state'].nbytes
@@ -130,7 +130,9 @@ def dispatch_control(target, width):
             engine = DomainCUDA(*args,**kwargs)
             allocations.append(engine.lanes)
             return engine
-        with patch('gpu_lane_resize_round34.restore_slices',side_effect=slicer):
+        def without_cache(*args,**kwargs):
+            return slicer(*args)
+        with patch('gpu_lane_resize_round34.restore_slices',side_effect=without_cache):
             first,_ = resize(problem,target,saved,archive_width)
             second,_ = resize(problem,target,first,width)
             with patch('gpu_domain_round24.DomainCUDA',side_effect=tracked), patch('gpu_domain_runner.pack_native',side_effect=encoded), patch('gpu_domain_runner.unpack_native',side_effect=decoded):

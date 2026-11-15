@@ -19,6 +19,7 @@ COUNTERS=BASE_COUNTERS+('joint_support_checks','joint_subset_checks','joint_excl
 from gpu_reasoning_round26 import SUPPORT_COUNTERS,CLAUSE_COUNTERS,MATCHING_COUNTERS
 COUNTERS+=SUPPORT_COUNTERS+CLAUSE_COUNTERS+MATCHING_COUNTERS
 MAX_BYTES=512*1024*1024
+PARKED_CACHE_BYTES=128*1024*1024
 
 def split_cubes(cubes,count):
     """Disjoint partitions; inspect each created row once, not every live row."""
@@ -222,6 +223,7 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
         raise ValueError("Invalid host Hall closure count.")
     portable_restart=False;preparing=False;prepared_owner=None;global_unsat=False
     parked=[];deferred_owner=None;resized=False
+    parked_cache=None
     queued=[scope.root];totals={key:0 for key in COUNTERS};completed=0;last_checkpoint=last_progress=started
     try:
         if resume is not None and work_frontier is not None:raise ValueError('Choose native resume or a portable frontier, not both.')
@@ -278,7 +280,7 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
                 sliced=bool(saved_parked) or len(native['cubes'])>replicas
                 records=None
                 if sliced:
-                    from gpu_lane_resize_round34 import lane_cubes,restore_slices
+                    from gpu_lane_resize_round34 import ParkedStateCache,lane_cubes,restore_slices
                     archives=([active_native] if active_native else [])+saved_parked
                     cubes=lane_cubes(archives,MAX_BYTES)
                     old_width=len(active_native['cubes']) if active_native else 0
@@ -291,7 +293,8 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
                     if saved_preparing:
                         raise ValueError('Single-lane root preparation cannot have parked children.')
                     engine=DomainCUDA(problem,cubes[:replicas],target=target,max_memory_bytes=MAX_BYTES,**engine_options)
-                    parked,records=restore_slices(engine,archives,replicas,owner_ids,COUNTERS,pack_native,unpack_native)
+                    parked_cache=ParkedStateCache(PARKED_CACHE_BYTES)
+                    parked,records=restore_slices(engine,archives,replicas,owner_ids,COUNTERS,pack_native,unpack_native,remember=parked_cache.remember)
                     if 'active_stats' in resume:
                         live=engine.stats()
                         if any(resume['active_stats'].get(key,0)!=live.get(key,0)+sum(task['counts'].get(key,0) for task in parked)
@@ -471,12 +474,14 @@ def solve(problem,seconds=0,seed=0,target='gold',resume=None,stop=None,progress=
                     if len(roots) >= replicas:
                         break
                 engine=DomainCUDA(problem,roots[:replicas],target=target,max_memory_bytes=MAX_BYTES,**engine_options)
+                def unpack_parked(archive, view):
+                    return parked_cache.take(archive,view,unpack_native)
                 if len(archives) == 1 and len(roots) <= replicas:
-                    engine.restore(unpack_native(archives[0],engine))
+                    engine.restore(unpack_parked(archives[0],engine))
                     del parked[0]
                 else:
                     from gpu_lane_resize_round34 import restore_slices
-                    tail, _ = restore_slices(engine,archives,replicas,None,COUNTERS,pack_native,unpack_native)
+                    tail, _ = restore_slices(engine,archives,replicas,None,COUNTERS,pack_native,unpack_parked,remember=parked_cache.remember)
                     parked[:len(archives)] = tail
                 if pool is not None:
                     pool.lanes=pool.parked[:engine.lanes]

@@ -1,0 +1,985 @@
+{
+  "unavoidable_fixed_seam": {
+    "cell_a": 6,
+    "side_a": 2,
+    "cell_b": 31,
+    "side_b": 0,
+    "points_a": [
+      6
+    ],
+    "reversed_points_b": [
+      7
+    ]
+  },
+  "cases": [
+    {
+      "scope": "b0353aea8df0bda0c4f1877c3a7da8dfd9421b35fe0584d9ec83c4ddb208c3e7",
+      "source_lanes": 8,
+      "source_width": 2,
+      "active_width": 1,
+      "lane_bytes": 2996,
+      "arms": [
+        {
+          "early_pause": true,
+          "answer": {
+            "status": "stopped",
+            "nodes": 0,
+            "completed_lanes": 0,
+            "support_checks": 0,
+            "codes": null,
+            "frontier_digest": "9986a908153bdea68f70467a50086536c7eacd14c3a77247181aaf7c0a957a9c",
+            "checkpoint_digest": "e59edb304400b8ad5da97d2bafcd1b5471c154625688f6d6ba157aa39f761a93"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 4,
+              "decoded_bytes": 23968,
+              "limit": 0,
+              "seconds": 0.00609
+            },
+            {
+              "peak_cached_bytes": 2996,
+              "retained_frames": 1,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 4,
+              "decoded_bytes": 23968,
+              "limit": 4000,
+              "seconds": 0.00579
+            },
+            {
+              "peak_cached_bytes": 14980,
+              "retained_frames": 3,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 4,
+              "decoded_bytes": 23968,
+              "limit": 16000,
+              "seconds": 0.00556
+            },
+            {
+              "peak_cached_bytes": 20972,
+              "retained_frames": 4,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 4,
+              "decoded_bytes": 23968,
+              "limit": 65536,
+              "seconds": 0.0056
+            }
+          ]
+        },
+        {
+          "early_pause": false,
+          "answer": {
+            "status": "edge_perfect",
+            "nodes": 3,
+            "completed_lanes": 2,
+            "support_checks": 36,
+            "codes": [
+              3,
+              6,
+              9,
+              0
+            ],
+            "frontier_digest": "4bc7efec614fd2d37cca8d6631fd973082f05ebb1a7cf8893cf83e2f627c778f",
+            "checkpoint_digest": "f52a3d95e3b8034bf038a217e18c04eaaac794a666567b7e4960dff11b1cf61e"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 6,
+              "decoded_bytes": 32956,
+              "limit": 0,
+              "seconds": 0.01026
+            },
+            {
+              "peak_cached_bytes": 2996,
+              "retained_frames": 2,
+              "hits": 1,
+              "hit_bytes": 2996,
+              "decodes": 5,
+              "decoded_bytes": 29960,
+              "limit": 4000,
+              "seconds": 0.00948
+            },
+            {
+              "peak_cached_bytes": 14980,
+              "retained_frames": 4,
+              "hits": 2,
+              "hit_bytes": 8988,
+              "decodes": 4,
+              "decoded_bytes": 23968,
+              "limit": 16000,
+              "seconds": 0.01086
+            },
+            {
+              "peak_cached_bytes": 20972,
+              "retained_frames": 5,
+              "hits": 2,
+              "hit_bytes": 8988,
+              "decodes": 4,
+              "decoded_bytes": 23968,
+              "limit": 65536,
+              "seconds": 0.01031
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "b0353aea8df0bda0c4f1877c3a7da8dfd9421b35fe0584d9ec83c4ddb208c3e7",
+      "source_lanes": 8,
+      "source_width": 1,
+      "active_width": 2,
+      "lane_bytes": 2996,
+      "arms": [
+        {
+          "early_pause": true,
+          "answer": {
+            "status": "stopped",
+            "nodes": 0,
+            "completed_lanes": 0,
+            "support_checks": 0,
+            "codes": null,
+            "frontier_digest": "9986a908153bdea68f70467a50086536c7eacd14c3a77247181aaf7c0a957a9c",
+            "checkpoint_digest": "0f5f921c24d4bea591c4a0f7c348da745e5bd0ddf1f41e6aea15e89ac79b1eab"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 23968,
+              "limit": 0,
+              "seconds": 0.00698
+            },
+            {
+              "peak_cached_bytes": 2996,
+              "retained_frames": 1,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 23968,
+              "limit": 4000,
+              "seconds": 0.00639
+            },
+            {
+              "peak_cached_bytes": 14980,
+              "retained_frames": 5,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 23968,
+              "limit": 16000,
+              "seconds": 0.00597
+            },
+            {
+              "peak_cached_bytes": 17976,
+              "retained_frames": 6,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 23968,
+              "limit": 65536,
+              "seconds": 0.00623
+            }
+          ]
+        },
+        {
+          "early_pause": false,
+          "answer": {
+            "status": "edge_perfect",
+            "nodes": 6,
+            "completed_lanes": 2,
+            "support_checks": 64,
+            "codes": [
+              3,
+              6,
+              9,
+              0
+            ],
+            "frontier_digest": "0d0ba8ef08fe0fc0ca5458f8036a635fc74f1659f67155b37015a3e37fead547",
+            "checkpoint_digest": "3a7e11f8e1f0462a5d47cedd49e1361fb498dd8a53a2d3358436050f5e735d2d"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 10,
+              "decoded_bytes": 29960,
+              "limit": 0,
+              "seconds": 0.00991
+            },
+            {
+              "peak_cached_bytes": 2996,
+              "retained_frames": 1,
+              "hits": 1,
+              "hit_bytes": 2996,
+              "decodes": 9,
+              "decoded_bytes": 26964,
+              "limit": 4000,
+              "seconds": 0.00881
+            },
+            {
+              "peak_cached_bytes": 14980,
+              "retained_frames": 5,
+              "hits": 2,
+              "hit_bytes": 5992,
+              "decodes": 8,
+              "decoded_bytes": 23968,
+              "limit": 16000,
+              "seconds": 0.00854
+            },
+            {
+              "peak_cached_bytes": 17976,
+              "retained_frames": 6,
+              "hits": 2,
+              "hit_bytes": 5992,
+              "decodes": 8,
+              "decoded_bytes": 23968,
+              "limit": 65536,
+              "seconds": 0.02026
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "b0353aea8df0bda0c4f1877c3a7da8dfd9421b35fe0584d9ec83c4ddb208c3e7",
+      "source_lanes": 8,
+      "source_width": 2,
+      "active_width": 1,
+      "lane_bytes": 2996,
+      "arms": [
+        {
+          "early_pause": true,
+          "answer": {
+            "status": "stopped",
+            "nodes": 0,
+            "completed_lanes": 0,
+            "support_checks": 0,
+            "codes": null,
+            "frontier_digest": "a2a99743c66bc4383cf7f79e4bc396fdb3f0ede289415a5e43c116fef453e3e1",
+            "checkpoint_digest": "b4de0a8a31e2548417d8cbafa8aef52ee5f51a4d39902100cd4ca0c98a9a3e23"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 4,
+              "decoded_bytes": 23968,
+              "limit": 0,
+              "seconds": 0.00505
+            },
+            {
+              "peak_cached_bytes": 2996,
+              "retained_frames": 1,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 4,
+              "decoded_bytes": 23968,
+              "limit": 4000,
+              "seconds": 0.00531
+            },
+            {
+              "peak_cached_bytes": 14980,
+              "retained_frames": 3,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 4,
+              "decoded_bytes": 23968,
+              "limit": 16000,
+              "seconds": 0.00499
+            },
+            {
+              "peak_cached_bytes": 20972,
+              "retained_frames": 4,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 4,
+              "decoded_bytes": 23968,
+              "limit": 65536,
+              "seconds": 0.00509
+            }
+          ]
+        },
+        {
+          "early_pause": false,
+          "answer": {
+            "status": "infeasible",
+            "nodes": 0,
+            "completed_lanes": 8,
+            "support_checks": 16,
+            "codes": null,
+            "frontier_digest": "e5633413fac195c36aabb3073c9fc6b8846d7fc453548029bea85d80a6e2a83b",
+            "checkpoint_digest": "acdabc2fb2897152d4e64cc3b1da4fd2875aee0e04840be0f4754a9765635749"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 11,
+              "decoded_bytes": 53928,
+              "limit": 0,
+              "seconds": 0.01586
+            },
+            {
+              "peak_cached_bytes": 2996,
+              "retained_frames": 4,
+              "hits": 4,
+              "hit_bytes": 11984,
+              "decodes": 7,
+              "decoded_bytes": 41944,
+              "limit": 4000,
+              "seconds": 0.0185
+            },
+            {
+              "peak_cached_bytes": 14980,
+              "retained_frames": 6,
+              "hits": 6,
+              "hit_bytes": 23968,
+              "decodes": 5,
+              "decoded_bytes": 29960,
+              "limit": 16000,
+              "seconds": 0.01787
+            },
+            {
+              "peak_cached_bytes": 20972,
+              "retained_frames": 7,
+              "hits": 7,
+              "hit_bytes": 29960,
+              "decodes": 4,
+              "decoded_bytes": 23968,
+              "limit": 65536,
+              "seconds": 0.01691
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "b0353aea8df0bda0c4f1877c3a7da8dfd9421b35fe0584d9ec83c4ddb208c3e7",
+      "source_lanes": 8,
+      "source_width": 1,
+      "active_width": 2,
+      "lane_bytes": 2996,
+      "arms": [
+        {
+          "early_pause": true,
+          "answer": {
+            "status": "stopped",
+            "nodes": 0,
+            "completed_lanes": 0,
+            "support_checks": 0,
+            "codes": null,
+            "frontier_digest": "a2a99743c66bc4383cf7f79e4bc396fdb3f0ede289415a5e43c116fef453e3e1",
+            "checkpoint_digest": "f52a976534fc964feac91d9759020847319f1049516ebcecbf270ab484f7c32e"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 23968,
+              "limit": 0,
+              "seconds": 0.0061
+            },
+            {
+              "peak_cached_bytes": 2996,
+              "retained_frames": 1,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 23968,
+              "limit": 4000,
+              "seconds": 0.00585
+            },
+            {
+              "peak_cached_bytes": 14980,
+              "retained_frames": 5,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 23968,
+              "limit": 16000,
+              "seconds": 0.0058
+            },
+            {
+              "peak_cached_bytes": 17976,
+              "retained_frames": 6,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 23968,
+              "limit": 65536,
+              "seconds": 0.00595
+            }
+          ]
+        },
+        {
+          "early_pause": false,
+          "answer": {
+            "status": "infeasible",
+            "nodes": 0,
+            "completed_lanes": 8,
+            "support_checks": 16,
+            "codes": null,
+            "frontier_digest": "e5633413fac195c36aabb3073c9fc6b8846d7fc453548029bea85d80a6e2a83b",
+            "checkpoint_digest": "acdabc2fb2897152d4e64cc3b1da4fd2875aee0e04840be0f4754a9765635749"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 14,
+              "decoded_bytes": 41944,
+              "limit": 0,
+              "seconds": 0.0112
+            },
+            {
+              "peak_cached_bytes": 2996,
+              "retained_frames": 1,
+              "hits": 1,
+              "hit_bytes": 2996,
+              "decodes": 13,
+              "decoded_bytes": 38948,
+              "limit": 4000,
+              "seconds": 0.01158
+            },
+            {
+              "peak_cached_bytes": 14980,
+              "retained_frames": 5,
+              "hits": 5,
+              "hit_bytes": 14980,
+              "decodes": 9,
+              "decoded_bytes": 26964,
+              "limit": 16000,
+              "seconds": 0.01109
+            },
+            {
+              "peak_cached_bytes": 17976,
+              "retained_frames": 6,
+              "hits": 6,
+              "hit_bytes": 17976,
+              "decodes": 8,
+              "decoded_bytes": 23968,
+              "limit": 65536,
+              "seconds": 0.01156
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "bb5ef52598843d1e1039fe467661959c1c221aa6f3181f8a3d9e227eb098bb54",
+      "source_lanes": 48,
+      "source_width": 4,
+      "active_width": 8,
+      "lane_bytes": 942324,
+      "arms": [
+        {
+          "early_pause": true,
+          "answer": {
+            "status": "stopped",
+            "nodes": 0,
+            "completed_lanes": 0,
+            "support_checks": 0,
+            "codes": null,
+            "frontier_digest": "db05f9e6cce1e4497c7f68d8364da7d27265dfdd9221a9a30d0484d5373d1e68",
+            "checkpoint_digest": "87250d53d1a53c680ac9c30f39f25ea20facb07c7348ba70464b7ddaa7bb69fe"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 12,
+              "decoded_bytes": 45231552,
+              "limit": 0,
+              "seconds": 0.48008
+            },
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 12,
+              "decoded_bytes": 45231552,
+              "limit": 1048576,
+              "seconds": 0.48211
+            },
+            {
+              "peak_cached_bytes": 3769296,
+              "retained_frames": 1,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 12,
+              "decoded_bytes": 45231552,
+              "limit": 4194304,
+              "seconds": 0.4787
+            },
+            {
+              "peak_cached_bytes": 7538592,
+              "retained_frames": 2,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 12,
+              "decoded_bytes": 45231552,
+              "limit": 8388608,
+              "seconds": 0.48181
+            },
+            {
+              "peak_cached_bytes": 15077184,
+              "retained_frames": 4,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 12,
+              "decoded_bytes": 45231552,
+              "limit": 16777216,
+              "seconds": 0.5501
+            },
+            {
+              "peak_cached_bytes": 30154368,
+              "retained_frames": 8,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 12,
+              "decoded_bytes": 45231552,
+              "limit": 33554432,
+              "seconds": 0.53312
+            },
+            {
+              "peak_cached_bytes": 37692960,
+              "retained_frames": 10,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 12,
+              "decoded_bytes": 45231552,
+              "limit": 67108864,
+              "seconds": 0.47879
+            }
+          ]
+        },
+        {
+          "early_pause": false,
+          "answer": {
+            "status": "infeasible",
+            "nodes": 0,
+            "completed_lanes": 48,
+            "support_checks": 245,
+            "codes": null,
+            "frontier_digest": "f12094bc3588c3ef87444fcd3c00559c56fe35435dca388e8c56ae9a32e76551",
+            "checkpoint_digest": "a873e5f2a1f6f7979b3cccdc44bd090022899303f357ec2d0aa72fb7dcec9ed1"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 22,
+              "decoded_bytes": 82924512,
+              "limit": 0,
+              "seconds": 0.98941
+            },
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 22,
+              "decoded_bytes": 82924512,
+              "limit": 1048576,
+              "seconds": 0.98032
+            },
+            {
+              "peak_cached_bytes": 3769296,
+              "retained_frames": 1,
+              "hits": 1,
+              "hit_bytes": 3769296,
+              "decodes": 21,
+              "decoded_bytes": 79155216,
+              "limit": 4194304,
+              "seconds": 1.45797
+            },
+            {
+              "peak_cached_bytes": 7538592,
+              "retained_frames": 2,
+              "hits": 2,
+              "hit_bytes": 7538592,
+              "decodes": 20,
+              "decoded_bytes": 75385920,
+              "limit": 8388608,
+              "seconds": 1.17859
+            },
+            {
+              "peak_cached_bytes": 15077184,
+              "retained_frames": 4,
+              "hits": 4,
+              "hit_bytes": 15077184,
+              "decodes": 18,
+              "decoded_bytes": 67847328,
+              "limit": 16777216,
+              "seconds": 0.96692
+            },
+            {
+              "peak_cached_bytes": 30154368,
+              "retained_frames": 8,
+              "hits": 8,
+              "hit_bytes": 30154368,
+              "decodes": 14,
+              "decoded_bytes": 52770144,
+              "limit": 33554432,
+              "seconds": 0.95156
+            },
+            {
+              "peak_cached_bytes": 37692960,
+              "retained_frames": 10,
+              "hits": 10,
+              "hit_bytes": 37692960,
+              "decodes": 12,
+              "decoded_bytes": 45231552,
+              "limit": 67108864,
+              "seconds": 0.94939
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "bb5ef52598843d1e1039fe467661959c1c221aa6f3181f8a3d9e227eb098bb54",
+      "source_lanes": 128,
+      "source_width": 16,
+      "active_width": 8,
+      "lane_bytes": 942324,
+      "arms": [
+        {
+          "early_pause": true,
+          "answer": {
+            "status": "stopped",
+            "nodes": 0,
+            "completed_lanes": 0,
+            "support_checks": 0,
+            "codes": null,
+            "frontier_digest": "41c5200d6b0ba9685b4c09bb8f7cc8210b55b1a4374ceb44c20e3559adc78346",
+            "checkpoint_digest": "92b5b87ecc10b8e76d88a5a370b69bb4af230fcc08961ba0331700dbf18f5b68"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 120617472,
+              "limit": 0,
+              "seconds": 1.12394
+            },
+            {
+              "peak_cached_bytes": 7538592,
+              "retained_frames": 1,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 120617472,
+              "limit": 8388608,
+              "seconds": 1.1609
+            },
+            {
+              "peak_cached_bytes": 7538592,
+              "retained_frames": 1,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 120617472,
+              "limit": 16777216,
+              "seconds": 1.14514
+            },
+            {
+              "peak_cached_bytes": 22615776,
+              "retained_frames": 2,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 120617472,
+              "limit": 33554432,
+              "seconds": 1.13218
+            },
+            {
+              "peak_cached_bytes": 52770144,
+              "retained_frames": 4,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 120617472,
+              "limit": 67108864,
+              "seconds": 1.47594
+            },
+            {
+              "peak_cached_bytes": 113078880,
+              "retained_frames": 8,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 120617472,
+              "limit": 134217728,
+              "seconds": 2.09815
+            },
+            {
+              "peak_cached_bytes": 113078880,
+              "retained_frames": 8,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 8,
+              "decoded_bytes": 120617472,
+              "limit": 536870912,
+              "seconds": 1.12756
+            }
+          ]
+        },
+        {
+          "early_pause": false,
+          "answer": {
+            "status": "infeasible",
+            "nodes": 0,
+            "completed_lanes": 128,
+            "support_checks": 473,
+            "codes": null,
+            "frontier_digest": "f12094bc3588c3ef87444fcd3c00559c56fe35435dca388e8c56ae9a32e76551",
+            "checkpoint_digest": "6e82ae64c8b2318aed4c0f19030ac3fc90638bf1f488fd175ac2f822566e06d2"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 23,
+              "decoded_bytes": 286466496,
+              "limit": 0,
+              "seconds": 3.31314
+            },
+            {
+              "peak_cached_bytes": 7538592,
+              "retained_frames": 8,
+              "hits": 8,
+              "hit_bytes": 60308736,
+              "decodes": 15,
+              "decoded_bytes": 226157760,
+              "limit": 8388608,
+              "seconds": 3.66685
+            },
+            {
+              "peak_cached_bytes": 7538592,
+              "retained_frames": 8,
+              "hits": 8,
+              "hit_bytes": 60308736,
+              "decodes": 15,
+              "decoded_bytes": 226157760,
+              "limit": 16777216,
+              "seconds": 3.69026
+            },
+            {
+              "peak_cached_bytes": 22615776,
+              "retained_frames": 9,
+              "hits": 9,
+              "hit_bytes": 75385920,
+              "decodes": 14,
+              "decoded_bytes": 211080576,
+              "limit": 33554432,
+              "seconds": 4.14032
+            },
+            {
+              "peak_cached_bytes": 52770144,
+              "retained_frames": 11,
+              "hits": 11,
+              "hit_bytes": 105540288,
+              "decodes": 12,
+              "decoded_bytes": 180926208,
+              "limit": 67108864,
+              "seconds": 3.50388
+            },
+            {
+              "peak_cached_bytes": 113078880,
+              "retained_frames": 15,
+              "hits": 15,
+              "hit_bytes": 165849024,
+              "decodes": 8,
+              "decoded_bytes": 120617472,
+              "limit": 134217728,
+              "seconds": 4.06081
+            },
+            {
+              "peak_cached_bytes": 113078880,
+              "retained_frames": 15,
+              "hits": 15,
+              "hit_bytes": 165849024,
+              "decodes": 8,
+              "decoded_bytes": 120617472,
+              "limit": 536870912,
+              "seconds": 3.20453
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "bb5ef52598843d1e1039fe467661959c1c221aa6f3181f8a3d9e227eb098bb54",
+      "source_lanes": 256,
+      "source_width": 8,
+      "active_width": 16,
+      "lane_bytes": 942324,
+      "arms": [
+        {
+          "early_pause": true,
+          "answer": {
+            "status": "stopped",
+            "nodes": 0,
+            "completed_lanes": 0,
+            "support_checks": 0,
+            "codes": null,
+            "frontier_digest": "80a2373d5de89ed856183e816d69e2b3d2afb312fc40cb4b6bfcd1dcd5193f4e",
+            "checkpoint_digest": "f4c8d1e0edc61c3e3fadfdfe3ee1fc52abd40bc807db6b01f92ed61a62cdb073"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 32,
+              "decoded_bytes": 241234944,
+              "limit": 0,
+              "seconds": 2.75813
+            },
+            {
+              "peak_cached_bytes": 60308736,
+              "retained_frames": 8,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 32,
+              "decoded_bytes": 241234944,
+              "limit": 67108864,
+              "seconds": 2.90672
+            },
+            {
+              "peak_cached_bytes": 128156064,
+              "retained_frames": 17,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 32,
+              "decoded_bytes": 241234944,
+              "limit": 134217728,
+              "seconds": 2.83597
+            },
+            {
+              "peak_cached_bytes": 226157760,
+              "retained_frames": 30,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 32,
+              "decoded_bytes": 241234944,
+              "limit": 268435456,
+              "seconds": 2.79781
+            },
+            {
+              "peak_cached_bytes": 226157760,
+              "retained_frames": 30,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 32,
+              "decoded_bytes": 241234944,
+              "limit": 536870912,
+              "seconds": 2.58705
+            }
+          ]
+        },
+        {
+          "early_pause": false,
+          "answer": {
+            "status": "infeasible",
+            "nodes": 0,
+            "completed_lanes": 256,
+            "support_checks": 836,
+            "codes": null,
+            "frontier_digest": "f12094bc3588c3ef87444fcd3c00559c56fe35435dca388e8c56ae9a32e76551",
+            "checkpoint_digest": "3697bc7d794371a029e60c681fc951a8645d8ea44fe3ce9df9ac0a95a27ec3d9"
+          },
+          "budgets": [
+            {
+              "peak_cached_bytes": 0,
+              "retained_frames": 0,
+              "hits": 0,
+              "hit_bytes": 0,
+              "decodes": 62,
+              "decoded_bytes": 467392704,
+              "limit": 0,
+              "seconds": 6.43455
+            },
+            {
+              "peak_cached_bytes": 60308736,
+              "retained_frames": 8,
+              "hits": 8,
+              "hit_bytes": 60308736,
+              "decodes": 54,
+              "decoded_bytes": 407083968,
+              "limit": 67108864,
+              "seconds": 7.38594
+            },
+            {
+              "peak_cached_bytes": 128156064,
+              "retained_frames": 17,
+              "hits": 17,
+              "hit_bytes": 128156064,
+              "decodes": 45,
+              "decoded_bytes": 339236640,
+              "limit": 134217728,
+              "seconds": 8.41265
+            },
+            {
+              "peak_cached_bytes": 226157760,
+              "retained_frames": 30,
+              "hits": 30,
+              "hit_bytes": 226157760,
+              "decodes": 32,
+              "decoded_bytes": 241234944,
+              "limit": 268435456,
+              "seconds": 8.32473
+            },
+            {
+              "peak_cached_bytes": 226157760,
+              "retained_frames": 30,
+              "hits": 30,
+              "hit_bytes": 226157760,
+              "decodes": 32,
+              "decoded_bytes": 241234944,
+              "limit": 536870912,
+              "seconds": 10.1967
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

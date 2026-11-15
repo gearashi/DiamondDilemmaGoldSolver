@@ -27,7 +27,39 @@ def lane_cubes(archives, max_bytes):
     return cubes
 
 
-def restore_slices(engine, archives, replicas, owner_ids, counter_names, pack, unpack):
+class ParkedStateCache:
+    """Retain a bounded prefix of already decoded, private native state until dispatch."""
+    def __init__(self, limit):
+        self.limit = limit
+        self.bytes = 0
+        self.entries = {}
+
+    def remember(self, native, state):
+        if id(native) in self.entries or state.nbytes > self.limit - self.bytes or not state.flags.owndata:
+            return
+        state.setflags(write=False)
+        self.entries[id(native)] = (native, native["compressed_state"], state)
+        self.bytes += state.nbytes
+
+    def take(self, native, engine, unpack):
+        entry = self.entries.pop(id(native), None)
+        if entry is not None:
+            original, encoded, state = entry
+            self.bytes -= state.nbytes
+            # Progress callbacks may have seen the archive. A modified frame
+            # must still go through its normal decoder. A cache hit is followed
+            # by the same binding, hash and mechanical checks as a cold restore.
+            if (native is original and native.get("compressed_state") is encoded
+                    and "factored_native_version" not in native
+                    and native.get("shape") == list(state.shape) == [engine.rows,engine.lanes]):
+                snapshot = dict(native)
+                del snapshot["shape"], snapshot["compressed_state"]
+                snapshot["state"] = state
+                return snapshot
+        return unpack(native, engine)
+
+
+def restore_slices(engine, archives, replicas, owner_ids, counter_names, pack, unpack, *, remember=None):
     """Fill the active group and retain validated sleeping archives in lane order."""
     pending=[]
     group=[]
@@ -39,6 +71,8 @@ def restore_slices(engine, archives, replicas, owner_ids, counter_names, pack, u
 
     def park(view, state, native):
         counts = view.stats(snapshot=state)
+        if remember is not None:
+            remember(native,state)
         pending.append({"native": native, "boxes": view.remaining_domain_cubes(snapshot=state),
                         "counts": {key: counts.get(key, 0) for key in (*counter_names, "exhausted")}})
 
