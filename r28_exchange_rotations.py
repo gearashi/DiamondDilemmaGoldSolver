@@ -1,7 +1,9 @@
 """Exact rotation elimination, strict dominance, and factor reuse between physical exchanges."""
 from collections import OrderedDict
 import itertools
-import math
+import sys
+
+from r35_rotation_graph import RotationThreshold, elimination_plan
 
 import numpy as np
 
@@ -19,7 +21,16 @@ class RotationOracle:
         self.age = 0.
         self.cache = OrderedDict()
         self.edge_cache = {}
-        self.work = dict(dominated=0, messages=0, avoided=0, hits=0, threshold_removed=0, threshold_rejected=0)
+        self.rotation_supports = {}
+        self.plans = OrderedDict()
+        self.plan_bytes = 0
+        # Numeric factors take priority within a user-supplied byte budget.
+        # A cold oracle retains neither numeric answers nor structural plans.
+        self.plan_limit = min(512*1024, cache_bytes) if cache_bytes is not None else (512*1024 if capacity else 0)
+        self.work = dict(dominated=0, messages=0, avoided=0, hits=0, threshold_removed=0, threshold_rejected=0,
+                         threshold_stars=0, threshold_supports=0, threshold_argmax_checks=0,
+                         threshold_remote_events=0, threshold_condition_hits=0,
+                         plan_hits=0, plan_builds=0, plan_extensions=0, plan_neighbor_products=0)
 
     def _edge(self, left, ls, right, rs):
         key = (left, ls, right, rs)
@@ -62,79 +73,19 @@ class RotationOracle:
         return tiles, [tuple(sorted(d)) for d in domains], edges
 
     def threshold_reduce(self, tiles, domains, edges, floor):
-        """An unsupported rotation cannot attain the requested seam threshold.
-
-        Fixing one rotation affects only the center and at most three neighbors.
-        A second sweep uses removals from the previous one. Group same-neighbor
-        seams when evaluating the upper bound (separate support is safe).
-        """
-        incident = [[] for _ in domains]
-        for a,b,table in edges:
-            incident[a].append((b,table))
-            incident[b].append((a,table.T))
-        masks = [sum(1<<r for r in d) for d in domains]
-        lookup = {}
-        tables = [[] for _ in domains]
-        for c,neighbors in enumerate(incident):
-            for nb,table in neighbors:
-                key = table.tobytes()
-                if key not in lookup:
-                    lookup[key] = [[int(any(table[r,t] for t in range(3) if m>>t&1)) for r in range(3)]
-                                   for m in range(8)]
-                tables[c].append((nb,lookup[key]))
-        def star(c):
-            price = [0,0,0]
-            for nb,support in tables[c]:
-                a,b,d = support[masks[nb]]
-                price[0] += a
-                price[1] += b
-                price[2] += d
-            return max(price[r] for r in range(3) if masks[c]>>r&1)
-        stars = [star(c) for c in range(len(masks))]
-        total = sum(stars)
-        if total < 2*floor:
-            return None
-        changed = True
-        while changed:
-            changed = False
-            for c,mask in enumerate(masks):
-                if mask.bit_count()<2:
-                    continue
-                touched = sorted({c,*(nb for nb,_ in tables[c])})
-                without = total-sum(stars[i] for i in touched)
-                keep = mask
-                for r in range(3):
-                    if mask>>r&1:
-                        masks[c] = 1<<r
-                        if without+sum(star(i) for i in touched) < 2*floor:
-                            keep ^= 1<<r
-                masks[c] = keep
-                if not keep:
-                    return None
-                if keep!=mask:
-                    changed = True
-                    self.work["threshold_removed"] += mask.bit_count()-keep.bit_count()
-                    for i in touched:
-                        stars[i] = star(i)
-                    total = without+sum(stars[i] for i in touched)
-                    if total < 2*floor:
-                        return None
-        return [tuple(r for r in range(3) if mask>>r&1) for mask in masks]
+        """Remove rotations that cannot attain the requested score."""
+        return RotationThreshold(domains, edges, self.rotation_supports, self.work).reduce(floor)
 
     def optimum(self, values, *, max_entries=59049, ties=False, limit=1):
         """All tied optima up to limit; None means the next factor exceeds budget."""
         tiles, domains, edges = self.reduced(values)
         # Start at an admissible upper bound. Reject thresholds without expanding
         # the entire large rotation graph. Strict dominance preserves all optima.
-        local = [[] for _ in domains]
-        for a,b,table in edges:
-            local[a].append((b,table))
-            local[b].append((a,table.T))
-        upper = sum(max(sum(any(tab[r,t] for t in domains[b]) for b,tab in local[c]) for r in ds)
-                    for c,ds in enumerate(domains))//2
+        threshold = RotationThreshold(domains, edges, self.rotation_supports, self.work)
+        upper = threshold.total // 2
         lower = int(self.model.matches(np.asarray(values)).sum())
         for target in range(upper,lower-1,-1):
-            restricted = self.threshold_reduce(tiles,domains,edges,target)
+            restricted = threshold.reduce(target)
             if restricted is None:
                 self.work["threshold_rejected"] += 1
                 continue
@@ -146,6 +97,43 @@ class RotationOracle:
                 return result
             self.work["threshold_rejected"] += 1
         raise RuntimeError("Rotation threshold reduction lost its feasible input.")
+
+    def _trim_plans(self, budget):
+        while self.plans and self.plan_bytes > budget:
+            _, (_, _, removed) = self.plans.popitem(last=False)
+            self.plan_bytes -= removed
+
+    def _plan(self, widths, pairs, cap):
+        key = tuple(widths), tuple(sorted(set(pairs)))
+        prefix, residual = (), None
+        found = self.plans.get(key)
+        if found is not None:
+            prefix,residual,size = found
+            if residual is None or prefix[-1][2] > cap:
+                self.work['plan_hits'] += 1
+                self.plans.move_to_end(key)
+                return prefix
+            self.work['plan_extensions'] += 1
+            self.plan_bytes -= size
+            del self.plans[key]
+        else:
+            self.work['plan_builds'] += 1
+        steps,remainder = elimination_plan(*key,self.work,cap,prefix,residual,retain=bool(self.plan_limit))
+        if self.plan_limit:
+            # Include record and scope containers, integer products and the
+            # suspended structural state. Physical cell integers are shared.
+            size = (sys.getsizeof(key) + sum(sys.getsizeof(part) for part in key)
+                    + sum(sys.getsizeof(pair) for pair in key[1]) + sys.getsizeof(steps)
+                    + sum(sys.getsizeof(step) + sys.getsizeof(step[1]) + sys.getsizeof(step[2]) for step in steps))
+            if remainder is not None:
+                size += sys.getsizeof(remainder) + sum(sys.getsizeof(row) + sys.getsizeof(row[1])
+                                                       + sys.getsizeof(row[2]) for row in remainder)
+            budget = self.plan_limit if self.cache_bytes is None else min(self.plan_limit, self.cache_bytes-self.cache_size)
+            if size <= budget:
+                self._trim_plans(budget-size)
+                self.plans[key] = steps,remainder,size
+                self.plan_bytes += size
+        return steps
 
     def _eliminate(self, tiles, domains, edges, max_entries, ties, limit):
         n = len(tiles)
@@ -161,18 +149,11 @@ class RotationOracle:
             remainder = grid-grid[:,0,None]-grid[0,:]+grid[0,0]
             if np.any(remainder):
                 factors.append(((a,b),remainder) if a<b else ((b,a),remainder.T))
+        plan = self._plan(widths, [scope for scope,_ in factors], max_entries)
         factors.extend(((c,),u) for c,u in enumerate(unary))
         trace = []
-        active = set(range(n))
         score = 0
-        while active:
-            adj = {c:{c} for c in active}
-            for scope,_ in factors:
-                for c in scope:
-                    adj[c].update(scope)
-            cell = min(active, key=lambda c:(math.prod(widths[v] for v in adj[c]), c))
-            scope = tuple(sorted(adj[cell]))
-            product = math.prod(widths[v] for v in scope)
+        for cell,scope,product in plan:
             if product > max_entries:
                 return None
             local = [(s,v) for s,v in factors if cell in s]
@@ -197,6 +178,7 @@ class RotationOracle:
                     # and numeric answers. Python object headers are additional.
                     size = len(repr(key).encode("ascii")) + best.nbytes + alternatives.nbytes
                     if size <= self.cache_bytes:
+                        self._trim_plans(self.cache_bytes-self.cache_size-size)
                         while self.cache_size + size > self.cache_bytes:
                             victim = min(self.priority, key=lambda k: self.priority[k][0])
                             self.age, removed = self.priority.pop(victim)
@@ -225,7 +207,6 @@ class RotationOracle:
                 factors.append((rest,best))
             else:
                 score += int(best)
-            active.remove(cell)
         def reconstruct(index):
             if index < 0:
                 yield (3*tiles+np.array([domains[c][index_by_cell[c]] for c in range(n)])).tolist()

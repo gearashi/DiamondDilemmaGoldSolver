@@ -753,8 +753,15 @@
       "source_id": 30,
       "title": "Event-driven rotation threshold propagation",
       "proposal_and_validation": "r28_exchange_rotations.RotationOracle.threshold_reduce scans cells in full passes and rebuilds immutable binary edge-support lookup templates for each candidate target. Update local test margins after neighboring domains change; schedule remote checks at proven global slack decreases so a globally reduced star sum does not leave distant rotations untested. Reuse immutable lookups across thresholds; removed masks at a stricter target cannot simply carry over to a looser target. Measure star/support calls, intermediate domains, exact optima and all tied witnesses. Compare tiny brute force, past oracle tests and a distant rotation eliminated only by a global slack change.",
-      "state": "testing",
-      "next_step": "Compare threshold events and structural plans against cold full sweeps on the incumbent, adjacent exchanges, fresh placements and exhaustive finite controls."
+      "state": "keep in the exact physical rotation oracle",
+      "evidence": [
+        "docs/R35_ROTATION_GRAPH.json",
+        "docs/ROUND35_ROTATION_GRAPH.md",
+        "test_r35_rotation_graph.py"
+      ],
+      "mechanism": "Two-hop conditioned losses, remote slack events, shared binary support templates and incremental neighbor maximizing rotations.",
+      "measurement": "Twelve nearby boards: 55932→10916 star maxima and 167796→51591 support lookups. Six fresh boards: 72504→1916 and 217512→25386. Scores, capped results, witnesses and numeric messages all match; 256 exhaustive two-rotation path table pairs plus varied graph fixtures.",
+      "reopen_if": "A materially different degree, local score, or domain representation introduces another support interaction."
     },
     {
       "id": 46,
@@ -762,8 +769,15 @@
       "source_id": 31,
       "title": "Reuse structural rotation-elimination plans",
       "proposal_and_validation": "RotationOracle._eliminate rebuilds adjacency for all active scopes to choose the next variable at every step even on a numeric factor-cache hit. Screen whether adjacent physical boards have equal scopes and widths after additive decomposition. Cache a deterministic elimination plan/trace skeleton or maintain a local priority update, evaluating only changed scopes while preserving all operand bytes for numeric cache entries and directional witness maps. Include disconnected residual components, changed widths, cap crossings and tied optima. Compare scope/neighbor rebuilds, numeric messages, resident bytes and resulting witnesses against exact cold plans. R31 common rotation frames and R34 exterior messages capture other repeat units.",
-      "state": "testing",
-      "next_step": "Compare threshold events and structural plans against cold full sweeps on the incumbent, adjacent exchanges, fresh placements and exhaustive finite controls."
+      "state": "keep in the exact physical rotation oracle",
+      "evidence": [
+        "docs/R35_ROTATION_GRAPH.json",
+        "docs/ROUND35_ROTATION_GRAPH.md",
+        "test_r35_rotation_graph.py"
+      ],
+      "mechanism": "Incremental exact minimum-product ordering, capped residual-plan extension and byte-bounded structural cache.",
+      "measurement": "Twelve adjacent boards: 169401→2635 neighbor products, zero full-plan hits. Six fresh boards: 326000→2719, 12 hits. Four caps across two placements: 194887→572, 11 hits and 2 extensions. All block sizes, numeric work and witness order agree with the released oracle. Peak charged structural state observed 372776 bytes.",
+      "reopen_if": "A materially different residual graph or repeated ordering workload exceeds the bounded plan capacity."
     },
     {
       "id": 47,

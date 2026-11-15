@@ -1,0 +1,376 @@
+{
+  "predecessor": "fb67a56",
+  "predecessor_file_sha256": "0f3aa5994aef0e6c52e3ca475b03eb4a4a4198d016af50120352d6aae36f1943",
+  "input_sha256": "81e5e40ab23afb135cafe913af3e9d6579d68eea4c096c60d2ddd57a1c8cfe79",
+  "incumbent_sha256": "6a68b515e420112e4c82546b40f25fb66c9144fadffeba8baf4f1c8ca29208fc",
+  "groups": {
+    "incumbent": {
+      "queries": 1,
+      "results": [
+        [
+          207,
+          "71059dcdad8f094c608ec0bf1b895c651b5df2ac3891183b566eafc422cba929",
+          1
+        ]
+      ],
+      "before": {
+        "dominated": 0,
+        "messages": 4,
+        "avoided": 156,
+        "hits": 156,
+        "threshold_removed": 320,
+        "threshold_rejected": 0,
+        "threshold_stars": 2880,
+        "threshold_supports": 8640,
+        "built_templates": 40,
+        "plan_builds": 1,
+        "plan_neighbor_products": 13040,
+        "ordered_factor_trace_sha256": "0622316399e20bb11f9c75e349267fe3fc59137cbbaf3f5e18f8a1e21d36cbcc"
+      },
+      "after": {
+        "dominated": 0,
+        "messages": 4,
+        "avoided": 156,
+        "hits": 156,
+        "threshold_removed": 320,
+        "threshold_rejected": 0,
+        "threshold_stars": 800,
+        "threshold_supports": 3360,
+        "threshold_argmax_checks": 1440,
+        "threshold_remote_events": 0,
+        "threshold_condition_hits": 0,
+        "plan_hits": 0,
+        "plan_builds": 1,
+        "plan_extensions": 0,
+        "plan_neighbor_products": 160,
+        "built_templates": 40,
+        "ordered_factor_trace_sha256": "0622316399e20bb11f9c75e349267fe3fc59137cbbaf3f5e18f8a1e21d36cbcc",
+        "retained_plans": 1,
+        "retained_plan_bytes": 25136,
+        "plan_budget": 524288
+      }
+    },
+    "twelve_independent_exchanges": {
+      "queries": 12,
+      "results": [
+        [
+          203,
+          "9b94852334a42db549147caf9de086d3f019c5866e5923652006ae1938022c47",
+          4
+        ],
+        [
+          196,
+          "23ad28f9cea493e34ea7e0ac7dc3d29d48322f64feab171ae4da11db5dd351fe",
+          4
+        ],
+        [
+          191,
+          "e2de74dbe9f9d5b867c52510153e2896c5362cd668eb06ff646f277ad08515ba",
+          4
+        ],
+        [
+          189,
+          "e817ab2c368768eb112a072c6e2d81f295b2de3131a1ecffc3276a8558d5b2e1",
+          4
+        ],
+        [
+          203,
+          "6ea1579abf6b9ce12580549aa6b0a5e26480ea417c31f8ed1c49384cf4e35893",
+          2
+        ],
+        [
+          200,
+          "675a275ae2632b60a50446108df09f6660425ca1bb6465f07c4352e5d861f389",
+          3
+        ],
+        null,
+        [
+          194,
+          "69d74487ef5e627d42f07af30c1f8cf372236715533796149c63be1b2b02f785",
+          4
+        ],
+        [
+          201,
+          "d8f630fd7e1cb30c408bb53dd3fd152778ed8681608f55b86572f676c3e3fb08",
+          4
+        ],
+        [
+          196,
+          "b4b7f6b5b55583c2f673d7068da3e8601248ad8b7b6729d441e19f77353b991d",
+          4
+        ],
+        [
+          192,
+          "aaba317635d7d90e0a6c3e9d4d4136646a2d314efaf28cdafa5dbd1bdcb8cd49",
+          4
+        ],
+        [
+          193,
+          "1c4216577ee7101b3e24645766464859b8cf78435e9da48e150243eaebf76e13",
+          4
+        ]
+      ],
+      "before": {
+        "dominated": 0,
+        "messages": 221189,
+        "avoided": 2946,
+        "hits": 1804,
+        "threshold_removed": 4455,
+        "threshold_rejected": 14,
+        "threshold_stars": 55932,
+        "threshold_supports": 167796,
+        "built_templates": 1017,
+        "plan_builds": 13,
+        "plan_neighbor_products": 169401,
+        "ordered_factor_trace_sha256": "b96ebc1f24b37250c6552d0d4169e852c41f76f93e8514e4d45f478c721beee1"
+      },
+      "after": {
+        "dominated": 0,
+        "messages": 221189,
+        "avoided": 2946,
+        "hits": 1804,
+        "threshold_removed": 4455,
+        "threshold_rejected": 14,
+        "threshold_stars": 10916,
+        "threshold_supports": 51591,
+        "threshold_argmax_checks": 24228,
+        "threshold_remote_events": 1,
+        "threshold_condition_hits": 328,
+        "plan_hits": 0,
+        "plan_builds": 13,
+        "plan_extensions": 0,
+        "plan_neighbor_products": 2635,
+        "built_templates": 40,
+        "ordered_factor_trace_sha256": "b96ebc1f24b37250c6552d0d4169e852c41f76f93e8514e4d45f478c721beee1",
+        "retained_plans": 13,
+        "retained_plan_bytes": 353784,
+        "plan_budget": 524288
+      }
+    },
+    "six_fresh_permutations": {
+      "queries": 6,
+      "results": [
+        [
+          35,
+          "7d7b73a8c84af4c458dc8671f801b3cccf316a2f326ae1645f0c7ac96456a3c7",
+          4
+        ],
+        [
+          40,
+          "95a3da248fb0713a5b7f11606b9e7307b6e9a4e85ae69dacbf346e975bbdac77",
+          4
+        ],
+        [
+          39,
+          "f30d72f309699fcf221cd4ae751fdf38b9b82ee3a46f283b0a95f7a9e949ed3d",
+          4
+        ],
+        [
+          45,
+          "4e5b4e0ef89611e340ebc4fd91d0bc7927bf5a70730eb18769c90e940500028a",
+          4
+        ],
+        [
+          38,
+          "901345128272b8cffb9140d87c55784a8279fdfee93d5eed94b1646ce39c9c64",
+          4
+        ],
+        [
+          46,
+          "fd3c4f7038d1037828dbc05df0d495a9a2315039de0205876cc4f226a02c2a55",
+          4
+        ]
+      ],
+      "before": {
+        "dominated": 0,
+        "messages": 1639,
+        "avoided": 17684,
+        "hits": 3751,
+        "threshold_removed": 412,
+        "threshold_rejected": 24,
+        "threshold_stars": 72504,
+        "threshold_supports": 217512,
+        "built_templates": 566,
+        "plan_builds": 25,
+        "plan_neighbor_products": 326000,
+        "ordered_factor_trace_sha256": "cca9663a21ddf613739c54a7096682527aa621d53db9d936176e9d9f21836b0e"
+      },
+      "after": {
+        "dominated": 0,
+        "messages": 1639,
+        "avoided": 17684,
+        "hits": 3751,
+        "threshold_removed": 412,
+        "threshold_rejected": 24,
+        "threshold_stars": 1916,
+        "threshold_supports": 25386,
+        "threshold_argmax_checks": 15771,
+        "threshold_remote_events": 4,
+        "threshold_condition_hits": 911,
+        "plan_hits": 12,
+        "plan_builds": 13,
+        "plan_extensions": 0,
+        "plan_neighbor_products": 2719,
+        "built_templates": 43,
+        "ordered_factor_trace_sha256": "cca9663a21ddf613739c54a7096682527aa621d53db9d936176e9d9f21836b0e",
+        "retained_plans": 13,
+        "retained_plan_bytes": 372776,
+        "plan_budget": 524288
+      }
+    },
+    "reused_physical_order_changed_input_rotations": {
+      "queries": 3,
+      "results": [
+        [
+          207,
+          "71059dcdad8f094c608ec0bf1b895c651b5df2ac3891183b566eafc422cba929",
+          1
+        ],
+        [
+          207,
+          "71059dcdad8f094c608ec0bf1b895c651b5df2ac3891183b566eafc422cba929",
+          1
+        ],
+        [
+          207,
+          "71059dcdad8f094c608ec0bf1b895c651b5df2ac3891183b566eafc422cba929",
+          1
+        ]
+      ],
+      "before": {
+        "dominated": 0,
+        "messages": 4,
+        "avoided": 476,
+        "hits": 476,
+        "threshold_removed": 960,
+        "threshold_rejected": 0,
+        "threshold_stars": 8640,
+        "threshold_supports": 25920,
+        "built_templates": 120,
+        "plan_builds": 3,
+        "plan_neighbor_products": 39120,
+        "ordered_factor_trace_sha256": "dac3409cd190c3ec207f617c2a2db8fb9c4ee1077f2ec8fcdd8eceee9efc9b85"
+      },
+      "after": {
+        "dominated": 0,
+        "messages": 4,
+        "avoided": 476,
+        "hits": 476,
+        "threshold_removed": 960,
+        "threshold_rejected": 0,
+        "threshold_stars": 2400,
+        "threshold_supports": 10080,
+        "threshold_argmax_checks": 4320,
+        "threshold_remote_events": 0,
+        "threshold_condition_hits": 0,
+        "plan_hits": 2,
+        "plan_builds": 1,
+        "plan_extensions": 0,
+        "plan_neighbor_products": 160,
+        "built_templates": 40,
+        "ordered_factor_trace_sha256": "dac3409cd190c3ec207f617c2a2db8fb9c4ee1077f2ec8fcdd8eceee9efc9b85",
+        "retained_plans": 1,
+        "retained_plan_bytes": 25136,
+        "plan_budget": 524288
+      }
+    },
+    "cap_crossings": {
+      "queries": 8,
+      "results": [
+        [
+          207,
+          "71059dcdad8f094c608ec0bf1b895c651b5df2ac3891183b566eafc422cba929",
+          1
+        ],
+        [
+          207,
+          "71059dcdad8f094c608ec0bf1b895c651b5df2ac3891183b566eafc422cba929",
+          1
+        ],
+        [
+          207,
+          "71059dcdad8f094c608ec0bf1b895c651b5df2ac3891183b566eafc422cba929",
+          1
+        ],
+        [
+          207,
+          "71059dcdad8f094c608ec0bf1b895c651b5df2ac3891183b566eafc422cba929",
+          1
+        ],
+        null,
+        null,
+        [
+          35,
+          "7d7b73a8c84af4c458dc8671f801b3cccf316a2f326ae1645f0c7ac96456a3c7",
+          4
+        ],
+        [
+          35,
+          "7d7b73a8c84af4c458dc8671f801b3cccf316a2f326ae1645f0c7ac96456a3c7",
+          4
+        ]
+      ],
+      "before": {
+        "dominated": 0,
+        "messages": 384,
+        "avoided": 8129,
+        "hits": 2292,
+        "threshold_removed": 1536,
+        "threshold_rejected": 12,
+        "threshold_stars": 48656,
+        "threshold_supports": 145968,
+        "built_templates": 464,
+        "plan_builds": 16,
+        "plan_neighbor_products": 194887,
+        "ordered_factor_trace_sha256": "98715aadd4c593f36454c00e9527caa3ffd20114c9951572523901e2b3090c5a"
+      },
+      "after": {
+        "dominated": 0,
+        "messages": 384,
+        "avoided": 8129,
+        "hits": 2292,
+        "threshold_removed": 1536,
+        "threshold_rejected": 12,
+        "threshold_stars": 4432,
+        "threshold_supports": 29496,
+        "threshold_argmax_checks": 15666,
+        "threshold_remote_events": 0,
+        "threshold_condition_hits": 290,
+        "plan_hits": 11,
+        "plan_builds": 3,
+        "plan_extensions": 2,
+        "plan_neighbor_products": 572,
+        "built_templates": 43,
+        "ordered_factor_trace_sha256": "98715aadd4c593f36454c00e9527caa3ffd20114c9951572523901e2b3090c5a",
+        "retained_plans": 3,
+        "retained_plan_bytes": 82032,
+        "plan_budget": 524288
+      }
+    }
+  },
+  "classic_reuse": {
+    "source_run": "20261115T045819987671Z",
+    "history": [
+      "cuda",
+      "webgpu"
+    ],
+    "previous_files": 194,
+    "current_files": 195,
+    "changed_diagnostics": {
+      "r28_exchange_rotations.py": [
+        "0f3aa5994aef0e6c52e3ca475b03eb4a4a4198d016af50120352d6aae36f1943",
+        "a6a4a28c1859be1be6b15d04306842be2fcd3a777903c52e3a0a97fa375d4823"
+      ],
+      "r35_rotation_graph.py": [
+        null,
+        "6a47e64b0dfca70d30019a554115f701894b77296e5570532eacfa4313b1563c"
+      ]
+    },
+    "reopened_on_host": true,
+    "counters": [
+      230400,
+      0,
+      480
+    ]
+  }
+}
