@@ -1,0 +1,554 @@
+{
+  "planted": [
+    {
+      "seed": 35,
+      "negative": false,
+      "exhaustive": {
+        "blank_completions": 6584,
+        "geographic_completions": 1
+      },
+      "full": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4151,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 0
+      },
+      "legacy_channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 0
+      },
+      "full_learned": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4388,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected_learned": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 0
+      }
+    },
+    {
+      "seed": 35,
+      "negative": true,
+      "exhaustive": {
+        "blank_completions": 6584
+      },
+      "full": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4151,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 1
+      },
+      "legacy_channel": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 0
+      },
+      "full_learned": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4384,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected_learned": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 1
+      }
+    },
+    {
+      "seed": 71,
+      "negative": false,
+      "exhaustive": {
+        "blank_completions": 6584,
+        "geographic_completions": 1
+      },
+      "full": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4151,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 0
+      },
+      "legacy_channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 0
+      },
+      "full_learned": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4043,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected_learned": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 0
+      }
+    },
+    {
+      "seed": 71,
+      "negative": true,
+      "exhaustive": {
+        "blank_completions": 6584
+      },
+      "full": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4151,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 1
+      },
+      "legacy_channel": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 0
+      },
+      "full_learned": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4042,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected_learned": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 1
+      }
+    },
+    {
+      "seed": 103,
+      "negative": false,
+      "exhaustive": {
+        "blank_completions": 6584,
+        "geographic_completions": 1
+      },
+      "full": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4151,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 0
+      },
+      "legacy_channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 0
+      },
+      "full_learned": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4132,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected_learned": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 0
+      }
+    },
+    {
+      "seed": 103,
+      "negative": true,
+      "exhaustive": {
+        "blank_completions": 6584
+      },
+      "full": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4151,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 1
+      },
+      "legacy_channel": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 0
+      },
+      "full_learned": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4132,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected_learned": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 1
+      }
+    },
+    {
+      "seed": 157,
+      "negative": false,
+      "exhaustive": {
+        "blank_completions": 6584,
+        "geographic_completions": 1
+      },
+      "full": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4151,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 0
+      },
+      "legacy_channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 0
+      },
+      "full_learned": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4388,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected_learned": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 0
+      }
+    },
+    {
+      "seed": 157,
+      "negative": true,
+      "exhaustive": {
+        "blank_completions": 6584
+      },
+      "full": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4151,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 1
+      },
+      "legacy_channel": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 0
+      },
+      "full_learned": {
+        "status": "UNKNOWN",
+        "cp_calls": 8,
+        "branches": 4384,
+        "strand_cuts": 0,
+        "partner_variables": 70,
+        "failed_embeddings": 8
+      },
+      "projected_learned": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0,
+        "strand_cuts": 0,
+        "partner_variables": 9,
+        "blank_pairs_deferred": 61,
+        "nonblank_witnesses_checked": 1,
+        "blank_matching_states": 0,
+        "blank_root_trials": 1,
+        "failed_embeddings": 1
+      }
+    }
+  ],
+  "original": {
+    "nonblank_bonds": 217,
+    "blank_darts": 46,
+    "signed_blank_options": 530,
+    "signed_classes": [
+      {
+        "darts": 28,
+        "missing": [
+          [
+            268,
+            269
+          ]
+        ],
+        "completions": 205552193096250
+      },
+      {
+        "darts": 18,
+        "missing": [],
+        "completions": 34459425
+      }
+    ],
+    "complete_blank_matchings": 7083210381585744656250,
+    "independent_circuit_lengths": [
+      365
+    ],
+    "nonblank_ribbon_genus": 27,
+    "nonblank_pose_packing": {
+      "feasible": false,
+      "independent": false,
+      "nodes": 0
+    },
+    "geographic_board": null,
+    "exhaustive_pose_scan": {
+      "blank_root_trials": 480
+    },
+    "full": {
+      "status": "UNKNOWN",
+      "cp_calls": 6,
+      "branches": 25212,
+      "strand_cuts": 0,
+      "partner_variables": 1251,
+      "failed_embeddings": 6
+    },
+    "projected": {
+      "status": "INFEASIBLE",
+      "cp_calls": 1,
+      "branches": 0,
+      "strand_cuts": 0,
+      "partner_variables": 217,
+      "blank_pairs_deferred": 1034,
+      "nonblank_witnesses_checked": 1,
+      "blank_matching_states": 0,
+      "blank_root_trials": 480,
+      "failed_embeddings": 1
+    },
+    "full_learned": {
+      "status": "INFEASIBLE",
+      "cp_calls": 6,
+      "branches": 44971,
+      "strand_cuts": 0,
+      "partner_variables": 1251,
+      "failed_embeddings": 5
+    },
+    "projected_learned": {
+      "status": "INFEASIBLE",
+      "cp_calls": 1,
+      "branches": 0,
+      "strand_cuts": 0,
+      "partner_variables": 217,
+      "blank_pairs_deferred": 1034,
+      "nonblank_witnesses_checked": 1,
+      "blank_matching_states": 0,
+      "blank_root_trials": 480,
+      "failed_embeddings": 1
+    },
+    "legacy_channel": {
+      "status": "INFEASIBLE",
+      "cp_calls": 1,
+      "branches": 34592,
+      "strand_cuts": 0,
+      "partner_variables": 1251,
+      "failed_embeddings": 0
+    }
+  },
+  "unrestricted": {
+    "full": {
+      "status": "UNKNOWN",
+      "cp_calls": 4,
+      "branches": 195404,
+      "strand_cuts": 31,
+      "partner_variables": 3036,
+      "failed_embeddings": 0
+    },
+    "projected": {
+      "status": "UNKNOWN",
+      "cp_calls": 4,
+      "branches": 123369,
+      "strand_cuts": 27,
+      "partner_variables": 2002,
+      "blank_pairs_deferred": 1034,
+      "nonblank_witnesses_checked": 0,
+      "blank_matching_states": 0,
+      "blank_root_trials": 0,
+      "failed_embeddings": 0
+    }
+  }
+}

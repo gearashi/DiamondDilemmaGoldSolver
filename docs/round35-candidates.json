@@ -10,7 +10,16 @@
       "source_id": 1,
       "title": "Defer blank-side pairings and infer them when lifting a tour",
       "proposal_and_validation": "In r30_gold.GoldMatching, a blank-side pair has zero entries in transitions but gets its own physical_seam Boolean, participates in exactly-one, sign and geographic restrictions, and goes into a complete embedding or blocking clause. Different blank pairings can describe precisely the same strand circuit. Generate a connected sewing on nonblank sides first. Every original tile has a segment, so a cycle visiting all segments makes the graph of tiles joined by nonblank sides connected. Assigning one tile to one face with one rotation determines every other tile pose by traversing those sides. Try at most 480 root poses before root-domain or symmetry filtering. Each complete pose dictates all 23 blank pairs; verify all blank-domain, fixed, forbidden, signed phase, reciprocal and geographic conditions and the physical board. Change r30_gold.embedding or add a partial-pairing lift with this explicit contract. In a physical-only query with no geographic witness, use exact signed residual matching on the blank class when a full sewing is requested. For other inputs with genuinely empty tiles, use residual pose packing or the old engine. Keep blank-only obligations in explanations. An unembeddable arbitrary blank completion cannot exclude a nonblank sewing. Compare exhaustive completions on tiny meshes, several blank completions of one nonblank cycle, incomplete root-pose scans, restricted blank choices, and single-loop positive/multiple-loop negatives. Count distinct nonblank projections, repeated strand trials, failed embeddings, signed blank checks and actual geographic lifts against the all-side model. R34's sparse blank matching supports are the oracle for one stage; they did not project blank choices from Gold search.",
-      "state": "in progress"
+      "state": "keep with exact scope",
+      "mechanism": "PH-PROJECT",
+      "evidence": [
+        "docs/ROUND35_BLANK_PROJECTION.md",
+        "docs/R35_BLANK_PROJECTION.json",
+        "docs/R35_NONBLANK_SEWING.json",
+        "test_r35_blank_projection.py"
+      ],
+      "decision": "Retain explicit --project-blanks for physical matching and geographic lift. The original 217-pair connected sewing excludes all 7,083,210,381,585,744,656,250 signed blank completions with one call and zero branches (released geographic channel: 34,592 branches). Four paired held-out seeds each exhaust 6,584 blank completions and both profiles decide all eight restricted scopes in one call/zero branches. Unrestricted time to Gold is open. Retain the coupled geographic default and full-side fallback for optional constraints that refer to blank choices.",
+      "reopen_if": "A new accepted input structure permits strand-free tiles, or a representative completed unrestricted comparison changes the choice of default."
     },
     {
       "id": 2,
@@ -18,7 +27,7 @@
       "source_id": 2,
       "title": "Propagate physical corner cycles while assigning mates",
       "proposal_and_validation": "A mate (a,b) fixes both directed corner successors, using next(b) for a and next(a) for b, with next advancing one side on its triangle. Maintain rollback chains with corner count and tile membership. Reject a proper closure of unavailable vertex degree, extending a path past the maximum degree, using a tile twice at one vertex, or exceeding any count of completed vertex rings. Pack remaining free chain lengths against the remaining degree slots and try bounded successor/distance encodings in CP. Derive the inventory from the active mesh. The original has five degree-four vertices, two degree-five and 75 degree-six. R28 ring_census generates complete columns, R31 price_rings reached 100,001 successors on the original, and r31_geographic.ribbon_genus checks partial ribbon genus. These tests do not maintain live corner-chain lengths and degree budgets across optional mate decisions. Compare their closures against the three baselines on identical partial sewings. Directly enumerate small spherical maps and test complete realizable orientations, rollback/reordered assignments, interval packing false positives and a mesh with different degree inventory. Count mate removals before a completed map and complete ring columns avoided.",
-      "state": "open"
+      "state": "in progress"
     },
     {
       "id": 3,

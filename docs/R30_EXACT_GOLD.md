@@ -42,6 +42,8 @@ Use `r30_gold.py matching --input residual.json` to find a connected side sewing
 
 A request may contain `bonds` and `forbidden` arrays of zero-based physical side pairs, with a side numbered `3*tile + side`. `domains` contains one list of legal placement codes per board cell. For `capacity`, supply `strand_cuts` containing proper sets of physical strand IDs, in tile and local segment order. The solver maximizes attainable crossings on each cut under all preceding two-crossing requirements. In the four-matching fixture the successive maxima were 4, 2, 4, 2 and 0. Every cut had at least two possible crossings if considered alone. The combined model rejects the scope. `core --output runtime/matching-core.json` tests weakened restrictions and confirms the final core before recording it. `matching --reuse runtime/matching-core.json` can skip a covered query on the same puzzle and cell domains.
 
+For sewings with blank physical sides, the optional [deferred blank-side search](ROUND35_BLANK_PROJECTION.md) can infer the remaining joins from a connected nonblank tour using `r30_gold.py embed --project-blanks`.
+
 ## Reproduction
 
 ```powershell

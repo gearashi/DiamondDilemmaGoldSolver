@@ -172,7 +172,7 @@ def embedding(problem, domains, mates):
 
 
 class GoldMatching:
-    def __init__(self,problem,domains,pins,bonds,cutsets=(),forbidden=(),*,physical_support=True):
+    def __init__(self,problem,domains,pins,bonds,cutsets=(),forbidden=(),*,physical_support=True,project_blanks=False):
         self.problem=problem
         self.domains=domains
         self.inputs=EndpointCuts(problem)
@@ -209,9 +209,16 @@ class GoldMatching:
                     supported = rows
                 options = [] if supported is None else [
                     (a,b) for a,b in options if b in supported[a]]
+        self.blank_projection = None
+        if project_blanks and any(not mask for mask,_ in self.inputs.sides):
+            from r35_blank_projection import BlankProjection
+            self.blank_projection = BlankProjection(self.inputs.sides,
+                                                   (pair for pair in options if pair not in banned), wanted)
+            if not self.blank_projection.possible:
+                self.m.add_bool_or([])
         by_side=defaultdict(list)
         for a,b in options:
-            if (a,b) in banned:
+            if (a,b) in banned or (self.blank_projection is not None and not self.inputs.sides[a][0]):
                 continue
             bit=self.m.new_bool_var("physical_seam")
             self.mate[a,b]=bit
@@ -229,12 +236,17 @@ class GoldMatching:
                     links.append((offsets[t]+i, offsets[u]+j))
             self.transitions[a,b]=links
         for a in range(3*problem.n):
-            self.m.add_exactly_one(by_side[a])
+            if self.blank_projection is None or self.inputs.sides[a][0]:
+                self.m.add_exactly_one(by_side[a])
         for pair in wanted:
+            if self.blank_projection is not None and pair in self.blank_projection.required:
+                continue
             if pair in self.mate:
                 self.m.add(self.mate[pair]==1)
             else:
                 self.m.add_bool_or([])
+        if self.blank_projection is not None:
+            self.required_nonblank = wanted.intersection(self.mate)
         for group in cutsets:
             self.strand_cut(group)
 
@@ -261,6 +273,8 @@ class GoldMatching:
         import math
         from ortools.sat.python import cp_model
         group=frozenset(group)
+        if self.blank_projection is not None:
+            raise ValueError("Exact physical crossing capacity requires the full side model.")
         if seconds<=0 or any(type(i) is not int or not 0<=i<self.strands for i in group) or not 0<len(group)<self.strands:
             raise ValueError("Invalid physical cut or capacity budget.")
         m=self.m.clone()
@@ -276,7 +290,7 @@ class GoldMatching:
             out.update(value=round(solver.objective_value),upper=math.ceil(solver.best_objective_bound))
         return out
 
-    def process(self, solver, geography, lazy_types, stats, charge_cut):
+    def process(self, solver, geography, lazy_types, stats, charge_cut, deadline=float("inf")):
         values=[solver.value(x) for x in self.phase]
         type_groups=_groups(ab for t,v in enumerate(values) for ab in self.inputs.strands[t][v])
         if lazy_types and len(type_groups)>1:
@@ -304,6 +318,50 @@ class GoldMatching:
                 self.strand_cut(g)
             stats['strand_cuts']=len(self.strand_seen)
             return None
+        if self.blank_projection is not None:
+            from r35_blank_projection import lift
+            from r31_geographic import physical_bonds
+            blank = self.blank_projection
+            signed = blank.signed(values)
+            phase_block = [~self.phase[t] if values[t] else self.phase[t] for t in blank.owners]
+            stats['nonblank_witnesses_checked'] += 1
+            # If every nonblank join was fixed or is the only remaining option,
+            # this circuit and its relative tile phases are the entire scoped search.
+            sole_sewing = len(active) == len(self.mate) or self.required_nonblank.issuperset(active)
+            if not geography:
+                completion = blank.matching(signed,deadline,stats)
+                if completion is not None:
+                    return dict(status="CONNECTED_SEWING",pairs=sorted([*active,*completion]),phases=values)
+                # Blank compatibility depends only on its owners' phases and fixed inputs.
+                stats['blank_phase_failures'] += 1
+                if sole_sewing:
+                    return dict(status="INFEASIBLE",physical_cutsets=[sorted(g) for g in self.strand_seen])
+                self.m.add_bool_or(phase_block)
+                return None
+            codes = lift(self.problem,self.domains,active,blank,signed,deadline,stats)
+            if codes is not None:
+                if not self.problem.validate(codes)['valid']:
+                    raise ArithmeticError("Projected sewing failed independent Gold verification.")
+                pairs = physical_bonds(self.problem,codes)
+                return dict(status="GOLD",codes=codes,phases=values,pairs=pairs)
+            if sole_sewing:
+                stats['failed_embeddings'] += 1
+                return dict(status="INFEASIBLE",physical_cutsets=[sorted(g) for g in self.strand_seen])
+            if getattr(self, "geo_conflicts", None) is not None:
+                from r35_blank_projection import check_time
+                check_time(deadline)
+                core = self.geo_conflicts.learn(active)
+                if core is not None:
+                    self.m.add_bool_or([~self.mate[p] for p in core])
+                    stats["geographic_core_sizes"].append(len(core))
+                    stats["geographic_cores"] = [sorted(c) for c in self.geo_conflicts.cores]
+                    stats['failed_embeddings'] += 1
+                    return None
+            # normalize_tiles requires a strand on every tile. Its connected
+            # nonblank graph therefore fixes all phases up to global complement.
+            self.m.add_bool_or([~self.mate[p] for p in active])
+            stats['failed_embeddings'] += 1
+            return None
         if not geography:
             return dict(status="CONNECTED_SEWING",pairs=active,phases=values)
         mates=[-1]*(3*self.problem.n)
@@ -326,7 +384,7 @@ class GoldMatching:
 
 def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=(), matching=True,
            geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=(),
-           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None):
+           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False):
     from ortools.sat.python import cp_model
     if seconds<=0 or max_rounds<1 or (geography and not matching):
         raise ValueError("Invalid Gold solve budget or mode.")
@@ -337,8 +395,21 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             raise ValueError("Invalid physical side index.")
     started=time.monotonic()
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
+    if type(project_blanks) is not bool:
+        raise ValueError("Expected a boolean blank-side projection option.")
+    if project_blanks and not matching:
+        raise ValueError("Blank-side projection requires a physical matching search.")
     if matching:
-        check=GoldMatching(problem,domains,pins,bonds,cutsets,forbidden,physical_support=physical_support)
+        # These optional full-side formulas refer directly to individual blank literals.
+        # Preserve their constraints whenever one of them is requested.
+        if project_blanks and (channel or fraction or bridges or physical_loss is not None):
+            stats['blank_projection_fallback'] = 'full-side channel, pricing, bridge, or loss model'
+            project_blanks = False
+        check=GoldMatching(problem,domains,pins,bonds,cutsets,forbidden,physical_support=physical_support,
+                           project_blanks=project_blanks)
+        if check.blank_projection is not None:
+            stats.update(blank_pairs_deferred=len(check.blank_projection.allowed), nonblank_witnesses_checked=0,
+                         blank_phase_failures=0, blank_matching_states=0, blank_root_trials=0)
         if physical_loss is not None:
             from r32_gold_loss import add_loss_budget
             reference, spec, cores = physical_loss
@@ -425,7 +496,11 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
         if status not in (cp_model.OPTIMAL,cp_model.FEASIBLE):
             break
         if matching:
-            result=check.process(s,geography,lazy_types,stats,charge_cut)
+            from r35_blank_projection import ProjectionTimeout
+            try:
+                result=check.process(s,geography,lazy_types,stats,charge_cut,started+seconds)
+            except ProjectionTimeout:
+                break
             if result:
                 return dict(result,**stats)
         else:
@@ -494,11 +569,16 @@ def main():
     cli.add_argument("--input",type=Path)
     cli.add_argument("--seconds",type=float,default=5)
     cli.add_argument("--rounds",type=int,default=32)
+    cli.add_argument("--project-blanks",action="store_true",
+                     help="Defer blank-side choices in matching or embed; infer geographic blank joins from the mesh.")
     cli.add_argument("--output",type=Path,help="Save a result and its reusable cuts.")
     cli.add_argument("--reuse",type=Path,help="Reuse a checked physical core or endpoint cut sets.")
     cli.add_argument("--departure-branch",type=int,help="Check one disjoint first-broken-bond branch from a departure result.")
     args=cli.parse_args()
     data=read_json(args.input) if args.input else {}
+    project_blanks=args.project_blanks or data.get('project_blanks',False)
+    if project_blanks and args.method not in ('embed','matching'):
+        cli.error('--project-blanks requires matching or embed.')
     problem=SearchProblem(read_json(args.tiles))
     opts=dict(domains=None if 'domains' not in data else
               tuple(sum(1<<v for v in set(row)) for row in data['domains']),
@@ -536,7 +616,8 @@ def main():
         out=search(problem,matching=args.method!='types',geography=args.method=='embed',
                    cutsets=data.get('strand_cuts',()),type_cuts=reusable,max_rounds=args.rounds,
                    learned_geometry=args.method=="embed" and data.get("learn_geography",True),
-                   channel=data.get("channel",args.method=="embed"),fraction=data.get("fractional",False),
+                   channel=data.get("channel",args.method=="embed" and not project_blanks),
+                   project_blanks=project_blanks,fraction=data.get("fractional",False),
                    bridges=[*data.get("bridges",()),*prior.get("bridge_hints",())],
                    geographic_cores=prior.get("geographic_cores",()) if args.method=="embed" else (),
                    departure_rules=prior.get("cores",()),**opts)
