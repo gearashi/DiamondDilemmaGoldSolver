@@ -1,0 +1,72 @@
+{
+  "1": [
+    {
+      "cap": 1048576,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 749244
+    },
+    {
+      "cap": 4194304,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 749244
+    }
+  ],
+  "4": [
+    {
+      "cap": 1048576,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 657808
+    },
+    {
+      "cap": 4194304,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 657808
+    }
+  ],
+  "8": [
+    {
+      "cap": 1048576,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 870712
+    },
+    {
+      "cap": 4194304,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 870712
+    }
+  ],
+  "16": [
+    {
+      "cap": 1048576,
+      "checked": 1242,
+      "payload": 52089329,
+      "estimated_bytes": 1047404
+    },
+    {
+      "cap": 4194304,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 1455460
+    }
+  ],
+  "32": [
+    {
+      "cap": 1048576,
+      "checked": 2141,
+      "payload": 89810107,
+      "estimated_bytes": 1045964
+    },
+    {
+      "cap": 4194304,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 2676832
+    }
+  ]
+}

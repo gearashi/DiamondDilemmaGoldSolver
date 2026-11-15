@@ -30,7 +30,7 @@ def budget_matrix(tiles,folder):
     return out
 
 
-def dense_proofs(tiles, folder):
+def dense_proofs(tiles, folder, *, engine=MeasuredLedger, budgets=(0,65536,1048576,4194304,16777216,33554432)):
     """Many closures share 156 fixed cells, read from the unrestricted original root."""
     from search_problem import SearchProblem
     original = SearchProblem(tiles)
@@ -48,8 +48,8 @@ def dense_proofs(tiles, folder):
     reports = []
     # Check both a covered query and an uncovered sibling at the beginning,
     # middle and end of a large proof stream, then reopen for each budget.
-    for cap in (0,65536,1048576,4194304,16777216,33554432):
-        with MeasuredLedger(path,scope) as db:
+    for cap in budgets:
+        with engine(path,scope) as db:
             db._coverage_cache_limit=cap
             for i in (1,0,2,3,512,513,1022,1023,1):
                 expected = () if i%2==0 else (boxes[i],)

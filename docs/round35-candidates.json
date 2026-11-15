@@ -793,15 +793,17 @@
       "title": "Index exact coverage by cells that distinguish pending work",
       "proposal_and_validation": "For shared exact coverage, compare the current scope-only SQL index with conflict filtering on highly restricted cell masks before decoding whole 160-cell records. Screen a selective axis index and cheap bound-based skip under target roots and pending frontier boxes. Include symbolic and ordinary subtraction, old ledgers, concurrent inserts, deletes, corrupt records and no-selectivity controls. Compare certified work remaining and database reads/bytes.",
       "state": "testing dense shared-root memory extension",
-      "measurement": "Original 128-query control: 6176 actual payloads in released stream, 127 with four checked axes, 64 using the complete checked row cache, 64 symbolic. Eight true SAT slices: 60 to 11 checks at identical 8 calls and outcomes. Dense outer scope 3332 to 2285 at 4 MiB, to 512 at 16 MiB.",
+      "measurement": "Original 128-query control: 6176 actual payloads in released stream, 127 with four checked axes, 64 using the complete checked row cache, 64 symbolic. Eight true SAT slices: 60 to 11 checks at identical 8 calls and outcomes. Dense outer scope 3332 to 2285 at 4 MiB, to 512 at 16 MiB. Four-cell interned blocks held the 512-proof dense stream in 657808 bytes vs 12329704. All 8- and 32-family queries matched; 128 unrelated roots use more bytes with blocks.",
       "evidence": [
         "docs/ROUND35_COVERAGE.md",
         "docs/R35_COVERAGE_SELECTIVITY.json",
         "docs/R35_COVERAGE_READS.json",
         "docs/R35_COVERAGE_CONSUMERS.json",
-        "docs/R35_DENSE_COVERAGE.json"
+        "docs/R35_DENSE_COVERAGE.json",
+        "docs/R35_COVERAGE_BLOCKS.json",
+        "docs/R35_MIXED_COVERAGE_BLOCKS.json"
       ],
-      "next_step": "Compare verified shared roots or interned blocks against 512 dense restrictions and interleaved heterogeneous/no-reuse controls, choose a cap using true matched payload counts. Exercise normal CPU coordinator and cold reopened GPU and SAT consumers; maintain cold corruption rejection."
+      "next_step": "Integrate and compare four-cell block sharing or compact source-root reuse with a sparse/low-reuse fallback. Verify budget/admission order, rollback and no-selectivity cases on all real consumers. Select or reject the extension in this round."
     },
     {
       "id": 66,
