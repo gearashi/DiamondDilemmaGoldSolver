@@ -17,11 +17,22 @@ REVIEWED = frozenset({
 # New producer images record a source-bound union of every backend entrusted
 # with the native stack. A pre-tracking marker always requires both shaders.
 GUARDED = {
-    ('cuda',): ('76fcae6286598558d042bbb1c4ea1e692da7df245f14dd6fd295086a1ce6d94c',),
-    ('webgpu',): ('447b23fdb60459bc776c7a5e7b5070ff0a20b5eafed49dba74608484d4f014e7',),
-    ('cuda', 'webgpu'): ('2e4da22c5f4b32326a45ab2bd075f7e4b62d2131a7c80181aeafc1c920e84c47',),
+    ('cuda',): ('76fcae6286598558d042bbb1c4ea1e692da7df245f14dd6fd295086a1ce6d94c', '29205e050b8e7c852aa95c968c5d691bdc48780d5cd059dc796245f0104dea67'),
+    ('webgpu',): ('447b23fdb60459bc776c7a5e7b5070ff0a20b5eafed49dba74608484d4f014e7', 'b57e4ca0ac4a17000ba114b9d51a733be8946ff6626618b5befb87cb6869eb74'),
+    ('cuda', 'webgpu'): ('2e4da22c5f4b32326a45ab2bd075f7e4b62d2131a7c80181aeafc1c920e84c47', '887997b0d022d130c97f31b24d578487f72c51bdbce999f8b0c28505aac1e32d'),
 }
 BACKENDS = ('cuda','webgpu')
+CUDA_RESOURCES = frozenset({
+    'dfs_kernels.cu', 'dfs_checkpoint_frames.cu', 'dfs_checkpoint_packet.cu',
+    'dfs_checkpoint_delta.cu', 'dfs_checkpoint_frame_defaults.cu',
+    'r35_board_codec.cu', 'r35_frame_spans.cu',
+})
+WEBGPU_RESOURCES = frozenset({
+    'dfs_kernels.wgsl', 'dfs_counter_reduce.wgsl', 'dfs_column_copies.wgsl',
+    'dfs_checkpoint_packet.wgsl', 'dfs_checkpoint_delta.wgsl',
+    'dfs_checkpoint_frame_defaults.wgsl', 'r35_board_codec.wgsl', 'r35_frame_spans.wgsl',
+})
+
 
 
 def history(value):
@@ -42,9 +53,9 @@ def active_image(root, normalized, *, include_endgame=False, known=(), backends=
     while pending:
         name = pending.pop()
         if not include_endgame:
-            if 'cuda' not in backends and name in ('dfs_kernels.cu','dfs_checkpoint_frames.cu'):
+            if 'cuda' not in backends and name in CUDA_RESOURCES:
                 continue
-            if 'webgpu' not in backends and name in ('dfs_kernels.wgsl','dfs_counter_reduce.wgsl','dfs_column_copies.wgsl'):
+            if 'webgpu' not in backends and name in WEBGPU_RESOURCES:
                 continue
         if name in visited:
             continue

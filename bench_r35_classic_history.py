@@ -70,7 +70,8 @@ def paired(root,features):
     raw=proof.read(root/'status.json')
     assert raw['verified_coverage_origin'] and raw['exhausted_jobs']==480
     trials=[]
-    for name in ('dfs_kernels.cu','dfs_checkpoint_frames.cu','dfs_kernels.wgsl','dfs_counter_reduce.wgsl','dfs_column_copies.wgsl','constraint_work.py','gpu_cpu_assist.py'):
+    shared={'dfs_checkpoint_decode.c','r35_board_codec_decode.c','constraint_work.py','gpu_cpu_assist.py'}
+    for name in sorted((policy.CUDA_RESOURCES|policy.WEBGPU_RESOURCES|shared)&source.keys()):
         with tempfile.TemporaryDirectory(dir=root.parent) as folder:
             changed=Path(folder)
             for key in source:
