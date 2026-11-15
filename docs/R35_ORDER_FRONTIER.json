@@ -1,0 +1,92 @@
+{
+  "original_forced_endpoint_comparison": {
+    "0": {
+      "pre_stop": 587,
+      "post_stop": 2520,
+      "total_checks": 3107,
+      "reused": 0,
+      "aggregate_cuts": {
+        "first_rank_interval": 0,
+        "first_predecessor": 2513,
+        "first_endpoint": 7,
+        "raw_center_endpoints": 2520
+      },
+      "partial": [],
+      "typed_dependency_rows": 0,
+      "witness_score": null
+    },
+    "128": {
+      "pre_stop": 587,
+      "post_stop": 2008,
+      "total_checks": 2595,
+      "reused": 512,
+      "aggregate_cuts": {
+        "first_rank_interval": 0,
+        "first_predecessor": 2513,
+        "first_endpoint": 7,
+        "raw_center_endpoints": 2520
+      },
+      "partial": [
+        [
+          512,
+          75
+        ]
+      ],
+      "typed_dependency_rows": 0,
+      "witness_score": null
+    }
+  },
+  "original_default": {
+    "classified_orders": 0,
+    "work": {
+      "first_rank_interval": 0,
+      "support_assignments": 1,
+      "local_term_misses": 10,
+      "first_support": 2520,
+      "raw_center_endpoints": 2520
+    }
+  },
+  "heldout_two_centers": {
+    "0": {
+      "pre_stop": 3301,
+      "post_stop": 5040,
+      "total_checks": 8341,
+      "reused": 0,
+      "aggregate_cuts": {
+        "first_rank_interval": 0,
+        "first_endpoint": 4614,
+        "first_owned": 425,
+        "hits": 1,
+        "raw_center_endpoints": 5040
+      },
+      "partial": [],
+      "typed_dependency_rows": 4,
+      "witness_score": 15
+    },
+    "128": {
+      "pre_stop": 3301,
+      "post_stop": 1752,
+      "total_checks": 5053,
+      "reused": 3288,
+      "aggregate_cuts": {
+        "first_rank_interval": 0,
+        "first_endpoint": 4614,
+        "hits": 1,
+        "first_owned": 425,
+        "raw_center_endpoints": 5040
+      },
+      "partial": [
+        [
+          2520,
+          151
+        ],
+        [
+          768,
+          198
+        ]
+      ],
+      "typed_dependency_rows": 4,
+      "witness_score": 15
+    }
+  }
+}

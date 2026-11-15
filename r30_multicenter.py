@@ -199,7 +199,7 @@ def _covered_prefix(db, key, start, stop):
 
 
 def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop=None,
-        page=64,seconds=0,max_pages=None,filters=('contact','core','connected','star','family','ranges'),share=True,triage=False,backend='cpu',reuse_release=True,progress=None):
+        page=64,seconds=0,max_pages=None,filters=('contact','core','connected','star','family','ranges'),share=True,triage=False,backend='cpu',reuse_release=True,progress=None,order_quantum=128):
     """Negative coverage applies to the union of listed families and centers.
 
     Pages are colex support ranks. Concurrent workers may submit overlapping ranges:
@@ -212,6 +212,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
         raise ValueError("Expected a supported four- or five-swap cycle partition.")
     sizes = {sum(f) for f in families}
     if (len(sizes)!=1 or len(filters)!=len(set(filters)) or set(filters)-{'contact','core','connected','star','family','diagram','ranges','orderprice','shapes'}
+            or type(order_quantum) is not int or order_quantum<0
             or not 0<=target<=len(problem.edges) or seconds<0 or page<1 or max_pages is not None and max_pages<0):
         raise ValueError("Invalid multi-center search scope or page settings.")
     k, = sizes
@@ -363,6 +364,8 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
         device_filters = None
         from r34_rank_leases import RankedLeases, LostRankLease
         leases = RankedLeases(db,'support',key,private=database==':memory:',lifetime=renewal)
+        from r35_order_frontier import OrderFrontier,OrderSliceExpired
+        frontier=OrderFrontier(db,key,order_quantum)
         busy=False
         while (current<stop or busy) and (max_pages is None or new_pages<max_pages) and (not seconds or time.monotonic()-t0<seconds):
             if current>=stop:
@@ -416,6 +419,7 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                     links=Dependencies()
                     page_best = None
                     scores = {}
+                    reused_work=Counter()
                     use_cores = 'core' in filters
                     use_contacts = any(required)
                     allowed = pairs = None
@@ -437,9 +441,71 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                         discard = pairs<min(required)
                         counters['first_contact'] += int(discard.sum())*len(required)*multiplicity
                         indices = indices[~discard]
+                    def scan_orders(ix,f,cells,candidates,counters,on_defer,survivors):
+                        b=graph.bounds[ix]
+                        for order in candidates:
+                            if ix not in previous_shells:
+                                previous_shells[ix] = list(owner_copies(model,closed_centers,b.tiles,k,transforms=graph.transforms) if closed_centers else ())
+                            rc = root_coverage[ix,f]
+                            if rc.covered(cells,order,graph.clusters[ix].close):
+                                counters['first_root'] += 1
+                                continue
+                            if is_owned(previous_shells[ix],cells,order):
+                                counters['first_owned'] += 1
+                                continue
+                            previous = graph.earlier_location(ix, cells, order)
+                            if previous is not None:
+                                earlier, rank, transformed = previous
+                                on_defer(earlier,rank,transformed)
+                                counters['first_owned'] += 1
+                                continue
+                            group = canonical_cycles(cells,order)
+                            if f in FIVE_FAMILIES:
+                                if ix not in undo_checks:
+                                    undo_checks[ix] = make_undo(ix)
+                                reason = undo_checks[ix].rejects(group)
+                            else:
+                                if ix not in predecessor:
+                                    predecessor[ix] = Predecessors(b,target)
+                                reason = predecessor[ix].reject(group)
+                            if reason:
+                                counters['first_predecessor'] += 1
+                                continue
+                            upper = graph.clusters[ix].price(cells,order)
+                            if upper < 2*target:
+                                counters['first_endpoint'] += 1
+                            else:
+                                survivors.append((upper,ix,order))
+                    def score_orders(cells,survivors,counters):
+                        if triage:
+                            survivors.sort(key=lambda x:-x[0])
+                        for _,ix,order in survivors:
+                            b = graph.bounds[ix]
+                            seed = b.witness_seed(cells,order)
+                            if seed is None:
+                                counters['illegal'] += 1
+                                continue
+                            perm = binding+':'+','.join(map(str,seed//3))
+                            prior = db.execute('SELECT result FROM optima WHERE key=?',(perm,)).fetchone()
+                            if prior:
+                                item = json.loads(prior[0])
+                                counters['exact_reused'] += 1
+                            else:
+                                item = rotation_optimum(b,oracle,seed)
+                                db.execute('INSERT OR IGNORE INTO optima VALUES(?,?)',(perm,json.dumps(item)))
+                                counters['exact_solved'] += 1
+                            if item['score']>=target:
+                                counters['hits'] += 1
+                                yield ix,cycles(order),item
+                    def observe(ix,f,item):
+                        nonlocal page_best
+                        scores[ix,f]=max(item['score'],scores.get((ix,f),-1))
+                        if page_best is None or item['score']>page_best['score']:page_best=item
+                    from r32_route_store import colex
                     for row_index in indices:
                         row = cells_batch[row_index]
                         cells = tuple(map(int,row))
+                        support_rank=colex(cells,graph.indices)
                         local = CountingTerms(counters)
                         geometry_orders = {}
                         upper_by_center = {}
@@ -517,64 +583,39 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                                 if not left:
                                     break
                             for f in left:
-                                for order in active_orders[f]:
-                                    if ix not in previous_shells:
-                                        previous_shells[ix] = list(owner_copies(model,closed_centers,b.tiles,k,transforms=graph.transforms) if closed_centers else ())
-                                    rc = root_coverage[ix,f]
-                                    if rc.covered(cells,order,graph.clusters[ix].close):
-                                        counters['first_root'] += 1
-                                        continue
-                                    if is_owned(previous_shells[ix],cells,order):
-                                        counters['first_owned'] += 1
-                                        continue
-                                    previous = graph.earlier_location(ix, cells, order)
-                                    if previous is not None:
-                                        earlier, rank, transformed = previous
-                                        from r32_route_store import colex
-                                        links.add(owners[ix],f,colex(cells,graph.indices),owners[earlier],rank,transformed)
-                                        deferred[owners[ix]].add((owners[earlier], rank))
-                                        counters['first_owned'] += 1
-                                        continue
-                                    group = canonical_cycles(cells,order)
-                                    if f in FIVE_FAMILIES:
-                                        if ix not in undo_checks:
-                                            undo_checks[ix] = make_undo(ix)
-                                        reason = undo_checks[ix].rejects(group)
-                                    else:
-                                        if ix not in predecessor:
-                                            predecessor[ix] = Predecessors(b,target)
-                                        reason = predecessor[ix].reject(group)
-                                    if reason:
-                                        counters['first_predecessor'] += 1
-                                        continue
-                                    upper = graph.clusters[ix].price(cells,order)
-                                    if upper < 2*target:
-                                        counters['first_endpoint'] += 1
-                                    else:
-                                        survivors.append((upper,ix,order))
-                        if triage:
-                            survivors.sort(key=lambda x:-x[0])
-                        for _,ix,order in survivors:
-                            b = graph.bounds[ix]
-                            seed = b.witness_seed(cells,order)
-                            if seed is None:
-                                counters['illegal'] += 1
-                                continue
-                            perm = binding+':'+','.join(map(str,seed//3))
-                            prior = db.execute('SELECT result FROM optima WHERE key=?',(perm,)).fetchone()
-                            if prior:
-                                item = json.loads(prior[0])
-                                counters['exact_reused'] += 1
-                            else:
-                                item = rotation_optimum(b,oracle,seed)
-                                db.execute('INSERT OR IGNORE INTO optima VALUES(?,?)',(perm,json.dumps(item)))
-                                counters['exact_solved'] += 1
-                            if item['score']>=target:
-                                section = (ix, cycles(order))
-                                scores[section] = max(item['score'], scores.get(section,-1))
-                                counters['hits'] += 1
-                                if page_best is None or item['score']>page_best['score']:
-                                    page_best = item
+                                candidates=active_orders[f]
+                                catalogue=frontier.catalogue(f,candidates,orders_by_family[f])
+                                def add_link(earlier,rank,transformed):
+                                    links.add(owners[ix],f,support_rank,owners[earlier],rank,transformed)
+                                    deferred[owners[ix]].add((owners[earlier],rank))
+                                if catalogue is None:
+                                    scan_orders(ix,f,cells,candidates,counters,add_link,survivors)
+                                    continue
+                                done,counts,dependencies,local_best=frontier.load(support_rank,owners[ix],catalogue,len(candidates))
+                                if done:
+                                    reused_work.update(counts)
+                                    counters['order_rows_reused']+=done
+                                width=order_quantum
+                                while done<len(candidates):
+                                    if seconds and time.monotonic()-t0>=seconds:raise OrderSliceExpired()
+                                    slice_start=time.monotonic()
+                                    stop_order=min(done+width,len(candidates))
+                                    batch=(candidates[n] for n in range(done,stop_order))
+                                    pending=[]
+                                    scan_orders(ix,f,cells,batch,counts,lambda a,r,t:dependencies.add((a,r,t)),pending)
+                                    for _,_,item in score_orders(cells,pending,counts):
+                                        if local_best is None or item['score']>local_best['score']:local_best=item
+                                    work['order_rows_written']+=stop_order-done
+                                    done=stop_order
+                                    frontier.save(support_rank,owners[ix],catalogue,done,counts,dependencies,local_best,leases,claim)
+                                    work['order_slices_written']+=1
+                                    elapsed=time.monotonic()-slice_start
+                                    if elapsed<.050:width=min(4*order_quantum,width*2)
+                                    elif elapsed>.5:width=max(min(16,order_quantum),width//2)
+                                for earlier,rank,transformed in dependencies:add_link(earlier,rank,transformed)
+                                counters.update(counts)
+                                if local_best:observe(ix,f,local_best)
+                        for ix,f,item in score_orders(cells,survivors,counters):observe(ix,f,item)
                     endpoints = multiplicity*len(graph.bounds)*(end-current)
                     if sum(counters[s] for s in ('first_budget','first_shapes','first_orderprice','first_rank_interval','first_typed','first_contact','first_core','first_connected','first_support','first_diagram','first_owned',
                                                  'first_root','first_predecessor','first_endpoint','illegal','exact_reused','exact_solved'))!=endpoints:
@@ -591,9 +632,13 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                             links.publish(db,key,current,owners,families)
                         if detailed_scores:
                             publish_scores(db,key,current,owners,families,scores)
+                        frontier.promoted(current,end)
                     work.update(counters)
+                    work.subtract(reused_work)
                     current = end
                     new_pages += 1
+            except OrderSliceExpired:
+                break
             except LostRankLease:
                 busy=True
                 continue
@@ -603,7 +648,12 @@ def run(problem,boards,database,*,families=((2,4),(3,3)),target=208,start=0,stop
                               raw_endpoints_this_run=work['raw_center_endpoints'],exact_solves_this_run=work['exact_solved']))
                 previous_report = time.monotonic()
         finished = _covered_prefix(db,key,start,stop)>=stop if busy else current>=stop
-        return _page_result(db, key, limit, finished, new_pages, work)
+        result=_page_result(db,key,limit,finished,new_pages,work)
+        if not finished:
+            partial=frontier.best()
+            if partial and (result['best'] is None or partial['score']>result['best']['score']):
+                result['best']=partial
+        return result
     finally:
         renewal.close()
         db.close()
@@ -619,6 +669,7 @@ def main():
     p.add_argument('--start',type=int,default=0)
     p.add_argument('--stop',type=int)
     p.add_argument('--page',type=int,default=64)
+    p.add_argument('--order-quantum',type=int,default=128,help='Checkpoint this many expensive surviving orders at a time (0 disables).')
     p.add_argument('--seconds',type=float,default=0)
     p.add_argument('--filters',default='contact,core,connected,star,family,ranges')
     p.add_argument('--recheck',action='store_true',help='Ignore the shipped six-cell proof; use a fresh database to reproduce it.')
@@ -635,7 +686,7 @@ def main():
         boards = [[3*t for t in r['pieces']] for r in record['centers']]
     families = [tuple(map(int,f.split(','))) for f in (args.family or ('2,4','3,3'))]
     print(json.dumps(run(problem,boards,args.database,families=families,target=args.target,
-                         start=args.start,stop=args.stop,page=args.page,seconds=args.seconds,
+                         start=args.start,stop=args.stop,page=args.page,seconds=args.seconds,order_quantum=args.order_quantum,
                          filters=tuple(filter(None,args.filters.split(','))),triage=args.triage,backend=args.backend,reuse_release=not args.recheck,
                          progress=lambda row: print(json.dumps(row),flush=True))))
 

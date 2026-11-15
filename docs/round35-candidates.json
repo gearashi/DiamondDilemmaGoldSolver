@@ -428,7 +428,13 @@
       "source_id": 13,
       "title": "Durable sub-support order ranges on expensive ranked pages",
       "proposal_and_validation": "r30_multicenter.run commits by combinations of cells, even with up to 2,520 orders per owner in a five-swap family. Use r34_cycle_orders.CycleOrders mixed-radix seek to checkpoint completed order subranges, optionally split stragglers across workers or group orders by a certified common digit prefix. Use bounded adaptive quantums only when measured endpoint work/restart exposure warrants it. Avoid full sparse bitmaps for cheap supports. Carry max witness, first cuts and transformed dependencies through to promotion of a completed support. Compare exact ranked coverage to full traversal, actual order repeats/bytes on forced stops and fences, and warm opening of legacy full pages.",
-      "state": "open"
+      "state": "keep with exact scope",
+      "decision": "Fenced contiguous order slices eliminated 512 repeated classifications in the forced original comparison and 3,288 on the held-out two-center 15-edge Gold case. Default earlier pruning correctly wrote no partial cursor on the tested original support.",
+      "evidence": [
+        "docs/ROUND35_ORDER_FRONTIER.md",
+        "docs/R35_ORDER_FRONTIER.json",
+        "test_r35_order_frontier.py"
+      ]
     },
     {
       "id": 29,
