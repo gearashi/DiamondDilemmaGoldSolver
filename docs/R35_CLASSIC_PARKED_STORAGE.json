@@ -1,0 +1,648 @@
+{
+  "2048-to-1": {
+    "flat": {
+      "0": [
+        {
+          "file_bytes": 4047608,
+          "write_bytes": 4049450,
+          "seconds": 0.03589
+        },
+        {
+          "file_bytes": 4047608,
+          "write_bytes": 4049450,
+          "seconds": 0.0454
+        },
+        {
+          "file_bytes": 4047608,
+          "write_bytes": 4049450,
+          "seconds": 0.03511
+        },
+        {
+          "file_bytes": 4047608,
+          "write_bytes": 4049450,
+          "seconds": 0.04359
+        },
+        {
+          "file_bytes": 4047608,
+          "write_bytes": 4049450,
+          "seconds": 0.03508
+        }
+      ],
+      "1": [
+        {
+          "file_bytes": 207881,
+          "write_bytes": 209723,
+          "seconds": 0.05243
+        },
+        {
+          "file_bytes": 207882,
+          "write_bytes": 209724,
+          "seconds": 0.04536
+        },
+        {
+          "file_bytes": 207882,
+          "write_bytes": 209724,
+          "seconds": 0.0508
+        },
+        {
+          "file_bytes": 208008,
+          "write_bytes": 209850,
+          "seconds": 0.04374
+        },
+        {
+          "file_bytes": 208002,
+          "write_bytes": 209844,
+          "seconds": 0.04908
+        }
+      ],
+      "6": [
+        {
+          "file_bytes": 184791,
+          "write_bytes": 186633,
+          "seconds": 0.13591
+        },
+        {
+          "file_bytes": 184792,
+          "write_bytes": 186634,
+          "seconds": 0.10384
+        },
+        {
+          "file_bytes": 184792,
+          "write_bytes": 186634,
+          "seconds": 0.10824
+        },
+        {
+          "file_bytes": 184915,
+          "write_bytes": 186757,
+          "seconds": 0.10806
+        },
+        {
+          "file_bytes": 184909,
+          "write_bytes": 186751,
+          "seconds": 0.13646
+        }
+      ]
+    },
+    "chunks": {
+      "4096": [
+        {
+          "unique_chunks": 349,
+          "chunks": 1022,
+          "new_raw_bytes": 1310724,
+          "new_compressed_bytes": 195854,
+          "manifest": 15842,
+          "wal_bytes": 457352,
+          "file_bytes": 454656,
+          "write_bytes": 912008,
+          "seconds": 0.09183
+        },
+        {
+          "unique_chunks": 1,
+          "chunks": 1022,
+          "new_raw_bytes": 136,
+          "new_compressed_bytes": 76,
+          "manifest": 15844,
+          "wal_bytes": 32992,
+          "file_bytes": 475136,
+          "write_bytes": 65760,
+          "seconds": 0.09513
+        },
+        {
+          "unique_chunks": 1,
+          "chunks": 1022,
+          "new_raw_bytes": 136,
+          "new_compressed_bytes": 76,
+          "manifest": 15839,
+          "wal_bytes": 28872,
+          "file_bytes": 491520,
+          "write_bytes": 57544,
+          "seconds": 0.10548
+        },
+        {
+          "unique_chunks": 10,
+          "chunks": 1022,
+          "new_raw_bytes": 2938,
+          "new_compressed_bytes": 1126,
+          "manifest": 15850,
+          "wal_bytes": 78312,
+          "file_bytes": 507904,
+          "write_bytes": 156136,
+          "seconds": 0.07889
+        },
+        {
+          "unique_chunks": 9,
+          "chunks": 1022,
+          "new_raw_bytes": 2490,
+          "new_compressed_bytes": 990,
+          "manifest": 15812,
+          "wal_bytes": 70072,
+          "file_bytes": 524288,
+          "write_bytes": 139704,
+          "seconds": 0.05424
+        }
+      ],
+      "16384": [
+        {
+          "unique_chunks": 117,
+          "chunks": 278,
+          "new_raw_bytes": 1450052,
+          "new_compressed_bytes": 189275,
+          "manifest": 5489,
+          "wal_bytes": 276072,
+          "file_bytes": 274432,
+          "write_bytes": 550504,
+          "seconds": 0.08669
+        },
+        {
+          "unique_chunks": 1,
+          "chunks": 278,
+          "new_raw_bytes": 136,
+          "new_compressed_bytes": 76,
+          "manifest": 5489,
+          "wal_bytes": 16512,
+          "file_bytes": 278528,
+          "write_bytes": 32896,
+          "seconds": 0.05607
+        },
+        {
+          "unique_chunks": 1,
+          "chunks": 278,
+          "new_raw_bytes": 136,
+          "new_compressed_bytes": 76,
+          "manifest": 5487,
+          "wal_bytes": 24752,
+          "file_bytes": 290816,
+          "write_bytes": 49328,
+          "seconds": 0.05751
+        },
+        {
+          "unique_chunks": 10,
+          "chunks": 278,
+          "new_raw_bytes": 2938,
+          "new_compressed_bytes": 1126,
+          "manifest": 5493,
+          "wal_bytes": 49472,
+          "file_bytes": 299008,
+          "write_bytes": 98624,
+          "seconds": 0.05861
+        },
+        {
+          "unique_chunks": 9,
+          "chunks": 278,
+          "new_raw_bytes": 2490,
+          "new_compressed_bytes": 990,
+          "manifest": 5525,
+          "wal_bytes": 53592,
+          "file_bytes": 307200,
+          "write_bytes": 106840,
+          "seconds": 0.04574
+        }
+      ],
+      "65536": [
+        {
+          "unique_chunks": 57,
+          "chunks": 93,
+          "new_raw_bytes": 1826884,
+          "new_compressed_bytes": 189174,
+          "manifest": 2736,
+          "wal_bytes": 234872,
+          "file_bytes": 233472,
+          "write_bytes": 468344,
+          "seconds": 0.06676
+        },
+        {
+          "unique_chunks": 1,
+          "chunks": 93,
+          "new_raw_bytes": 136,
+          "new_compressed_bytes": 76,
+          "manifest": 2738,
+          "wal_bytes": 20632,
+          "file_bytes": 241664,
+          "write_bytes": 41112,
+          "seconds": 0.05594
+        },
+        {
+          "unique_chunks": 1,
+          "chunks": 93,
+          "new_raw_bytes": 136,
+          "new_compressed_bytes": 76,
+          "manifest": 2738,
+          "wal_bytes": 16512,
+          "file_bytes": 245760,
+          "write_bytes": 32896,
+          "seconds": 0.03929
+        },
+        {
+          "unique_chunks": 10,
+          "chunks": 93,
+          "new_raw_bytes": 2938,
+          "new_compressed_bytes": 1126,
+          "manifest": 2733,
+          "wal_bytes": 45352,
+          "file_bytes": 253952,
+          "write_bytes": 90408,
+          "seconds": 0.03529
+        },
+        {
+          "unique_chunks": 9,
+          "chunks": 93,
+          "new_raw_bytes": 2490,
+          "new_compressed_bytes": 990,
+          "manifest": 2766,
+          "wal_bytes": 32992,
+          "file_bytes": 258048,
+          "write_bytes": 65760,
+          "seconds": 0.03365
+        }
+      ],
+      "262144": [
+        {
+          "unique_chunks": 44,
+          "chunks": 51,
+          "new_raw_bytes": 3137604,
+          "new_compressed_bytes": 196713,
+          "manifest": 2147,
+          "wal_bytes": 251352,
+          "file_bytes": 249856,
+          "write_bytes": 501208,
+          "seconds": 0.06351
+        },
+        {
+          "unique_chunks": 1,
+          "chunks": 51,
+          "new_raw_bytes": 136,
+          "new_compressed_bytes": 76,
+          "manifest": 2146,
+          "wal_bytes": 32992,
+          "file_bytes": 258048,
+          "write_bytes": 65760,
+          "seconds": 0.03546
+        },
+        {
+          "unique_chunks": 1,
+          "chunks": 51,
+          "new_raw_bytes": 136,
+          "new_compressed_bytes": 76,
+          "manifest": 2149,
+          "wal_bytes": 16512,
+          "file_bytes": 262144,
+          "write_bytes": 32896,
+          "seconds": 0.03736
+        },
+        {
+          "unique_chunks": 10,
+          "chunks": 51,
+          "new_raw_bytes": 2938,
+          "new_compressed_bytes": 1126,
+          "manifest": 2139,
+          "wal_bytes": 32992,
+          "file_bytes": 266240,
+          "write_bytes": 65760,
+          "seconds": 0.03777
+        },
+        {
+          "unique_chunks": 9,
+          "chunks": 51,
+          "new_raw_bytes": 2490,
+          "new_compressed_bytes": 990,
+          "manifest": 2174,
+          "wal_bytes": 37112,
+          "file_bytes": 274432,
+          "write_bytes": 73976,
+          "seconds": 0.0398
+        }
+      ]
+    },
+    "input_bytes": [
+      4048388,
+      4048388,
+      4048388,
+      4048388,
+      4048388
+    ],
+    "paused": 2035
+  },
+  "8192-to-128": {
+    "flat": {
+      "0": [
+        {
+          "file_bytes": 16130281,
+          "write_bytes": 16132123,
+          "seconds": 0.13845
+        },
+        {
+          "file_bytes": 16130281,
+          "write_bytes": 16132123,
+          "seconds": 0.12451
+        },
+        {
+          "file_bytes": 16130281,
+          "write_bytes": 16132123,
+          "seconds": 0.1156
+        },
+        {
+          "file_bytes": 16130281,
+          "write_bytes": 16132123,
+          "seconds": 0.12614
+        },
+        {
+          "file_bytes": 16130281,
+          "write_bytes": 16132123,
+          "seconds": 0.11227
+        }
+      ],
+      "1": [
+        {
+          "file_bytes": 747074,
+          "write_bytes": 748916,
+          "seconds": 0.17818
+        },
+        {
+          "file_bytes": 747075,
+          "write_bytes": 748917,
+          "seconds": 0.15373
+        },
+        {
+          "file_bytes": 747064,
+          "write_bytes": 748906,
+          "seconds": 0.15635
+        },
+        {
+          "file_bytes": 752220,
+          "write_bytes": 754062,
+          "seconds": 0.20053
+        },
+        {
+          "file_bytes": 756882,
+          "write_bytes": 758724,
+          "seconds": 0.23005
+        }
+      ],
+      "6": [
+        {
+          "file_bytes": 656111,
+          "write_bytes": 657953,
+          "seconds": 0.44213
+        },
+        {
+          "file_bytes": 656112,
+          "write_bytes": 657954,
+          "seconds": 0.46249
+        },
+        {
+          "file_bytes": 656110,
+          "write_bytes": 657952,
+          "seconds": 0.40975
+        },
+        {
+          "file_bytes": 661078,
+          "write_bytes": 662920,
+          "seconds": 0.39547
+        },
+        {
+          "file_bytes": 665307,
+          "write_bytes": 667149,
+          "seconds": 0.39304
+        }
+      ]
+    },
+    "chunks": {
+      "4096": [
+        {
+          "unique_chunks": 1283,
+          "chunks": 3966,
+          "new_raw_bytes": 5167159,
+          "new_compressed_bytes": 748861,
+          "manifest": 54273,
+          "wal_bytes": 1713952,
+          "file_bytes": 1703936,
+          "write_bytes": 3417888,
+          "seconds": 0.33206
+        },
+        {
+          "unique_chunks": 1,
+          "chunks": 3966,
+          "new_raw_bytes": 136,
+          "new_compressed_bytes": 76,
+          "manifest": 54260,
+          "wal_bytes": 65952,
+          "file_bytes": 1757184,
+          "write_bytes": 131488,
+          "seconds": 0.43273
+        },
+        {
+          "unique_chunks": 10,
+          "chunks": 3966,
+          "new_raw_bytes": 27528,
+          "new_compressed_bytes": 11075,
+          "manifest": 54285,
+          "wal_bytes": 189552,
+          "file_bytes": 1835008,
+          "write_bytes": 377968,
+          "seconds": 0.20272
+        },
+        {
+          "unique_chunks": 26,
+          "chunks": 3966,
+          "new_raw_bytes": 85384,
+          "new_compressed_bytes": 18846,
+          "manifest": 54685,
+          "wal_bytes": 309032,
+          "file_bytes": 1970176,
+          "write_bytes": 616232,
+          "seconds": 0.32646
+        },
+        {
+          "unique_chunks": 31,
+          "chunks": 3966,
+          "new_raw_bytes": 105864,
+          "new_compressed_bytes": 23818,
+          "manifest": 54856,
+          "wal_bytes": 362592,
+          "file_bytes": 2072576,
+          "write_bytes": 723040,
+          "seconds": 0.28664
+        }
+      ],
+      "16384": [
+        {
+          "unique_chunks": 357,
+          "chunks": 1011,
+          "new_raw_bytes": 5486775,
+          "new_compressed_bytes": 706055,
+          "manifest": 16105,
+          "wal_bytes": 1013552,
+          "file_bytes": 1007616,
+          "write_bytes": 2021168,
+          "seconds": 0.24891
+        },
+        {
+          "unique_chunks": 1,
+          "chunks": 1011,
+          "new_raw_bytes": 136,
+          "new_compressed_bytes": 76,
+          "manifest": 16107,
+          "wal_bytes": 32992,
+          "file_bytes": 1028096,
+          "write_bytes": 65760,
+          "seconds": 0.20908
+        },
+        {
+          "unique_chunks": 10,
+          "chunks": 1011,
+          "new_raw_bytes": 88968,
+          "new_compressed_bytes": 13343,
+          "manifest": 16091,
+          "wal_bytes": 140112,
+          "file_bytes": 1085440,
+          "write_bytes": 279376,
+          "seconds": 0.15578
+        },
+        {
+          "unique_chunks": 13,
+          "chunks": 1011,
+          "new_raw_bytes": 114056,
+          "new_compressed_bytes": 18789,
+          "manifest": 16196,
+          "wal_bytes": 168952,
+          "file_bytes": 1134592,
+          "write_bytes": 336888,
+          "seconds": 0.20813
+        },
+        {
+          "unique_chunks": 13,
+          "chunks": 1011,
+          "new_raw_bytes": 114056,
+          "new_compressed_bytes": 23393,
+          "manifest": 16197,
+          "wal_bytes": 168952,
+          "file_bytes": 1191936,
+          "write_bytes": 336888,
+          "seconds": 0.20487
+        }
+      ],
+      "65536": [
+        {
+          "unique_chunks": 120,
+          "chunks": 277,
+          "new_raw_bytes": 6085175,
+          "new_compressed_bytes": 697359,
+          "manifest": 5639,
+          "wal_bytes": 914672,
+          "file_bytes": 909312,
+          "write_bytes": 1823984,
+          "seconds": 0.26172
+        },
+        {
+          "unique_chunks": 1,
+          "chunks": 277,
+          "new_raw_bytes": 136,
+          "new_compressed_bytes": 76,
+          "manifest": 5635,
+          "wal_bytes": 16512,
+          "file_bytes": 913408,
+          "write_bytes": 32896,
+          "seconds": 0.17114
+        },
+        {
+          "unique_chunks": 10,
+          "chunks": 277,
+          "new_raw_bytes": 212488,
+          "new_compressed_bytes": 14160,
+          "manifest": 5633,
+          "wal_bytes": 119512,
+          "file_bytes": 962560,
+          "write_bytes": 238296,
+          "seconds": 0.14695
+        },
+        {
+          "unique_chunks": 11,
+          "chunks": 277,
+          "new_raw_bytes": 212872,
+          "new_compressed_bytes": 19522,
+          "manifest": 5642,
+          "wal_bytes": 111272,
+          "file_bytes": 991232,
+          "write_bytes": 221864,
+          "seconds": 0.13304
+        },
+        {
+          "unique_chunks": 11,
+          "chunks": 277,
+          "new_raw_bytes": 212872,
+          "new_compressed_bytes": 24184,
+          "manifest": 5632,
+          "wal_bytes": 115392,
+          "file_bytes": 1036288,
+          "write_bytes": 230080,
+          "seconds": 0.13375
+        }
+      ],
+      "262144": [
+        {
+          "unique_chunks": 58,
+          "chunks": 93,
+          "new_raw_bytes": 7395895,
+          "new_compressed_bytes": 701258,
+          "manifest": 2791,
+          "wal_bytes": 791072,
+          "file_bytes": 786432,
+          "write_bytes": 1577504,
+          "seconds": 0.20988
+        },
+        {
+          "unique_chunks": 1,
+          "chunks": 93,
+          "new_raw_bytes": 136,
+          "new_compressed_bytes": 76,
+          "manifest": 2793,
+          "wal_bytes": 32992,
+          "file_bytes": 794624,
+          "write_bytes": 65760,
+          "seconds": 0.14408
+        },
+        {
+          "unique_chunks": 10,
+          "chunks": 93,
+          "new_raw_bytes": 212488,
+          "new_compressed_bytes": 14160,
+          "manifest": 2799,
+          "wal_bytes": 70072,
+          "file_bytes": 827392,
+          "write_bytes": 139704,
+          "seconds": 0.12795
+        },
+        {
+          "unique_chunks": 11,
+          "chunks": 93,
+          "new_raw_bytes": 212872,
+          "new_compressed_bytes": 19522,
+          "manifest": 2798,
+          "wal_bytes": 86552,
+          "file_bytes": 868352,
+          "write_bytes": 172568,
+          "seconds": 0.14118
+        },
+        {
+          "unique_chunks": 11,
+          "chunks": 93,
+          "new_raw_bytes": 212872,
+          "new_compressed_bytes": 24184,
+          "manifest": 2790,
+          "wal_bytes": 98912,
+          "file_bytes": 913408,
+          "write_bytes": 197216,
+          "seconds": 0.12213
+        }
+      ]
+    },
+    "input_bytes": [
+      16131061,
+      16131061,
+      16131061,
+      16131061,
+      16131061
+    ],
+    "paused": 8001
+  }
+}

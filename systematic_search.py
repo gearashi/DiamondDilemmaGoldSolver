@@ -15,6 +15,7 @@ from pathlib import Path
 import signal
 import sys
 import time
+import zipfile
 import numpy as np
 from geometry import build_board
 from validator import orientation_masks, validate_arrangement
@@ -40,8 +41,17 @@ def atomic_npz(path, fields):
     started=time.monotonic()
     try:
         with temporary.open('wb') as stream:
-            output = proof.HashedStream(stream) if 'exact_source_origin' in fields else stream
-            np.savez(output,**fields); stream.flush(); os.fsync(stream.fileno())
+            compressed = 'exact_source_origin' in fields
+            output = proof.HashedStream(stream) if compressed else stream
+            if compressed:
+                with zipfile.ZipFile(output, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=1) as archive:
+                    for name, value in fields.items():
+                        with archive.open(name + '.npy', 'w', force_zip64=True) as member:
+                            np.lib.format.write_array(member, np.asanyarray(value), allow_pickle=False)
+            else:
+                np.savez(output, **fields)
+            stream.flush()
+            os.fsync(stream.fileno())
         size=temporary.stat().st_size
         if isinstance(output,proof.HashedStream):
             directory = proof.run_dir(path.parent.parent,str(fields['exact_source_origin']))
@@ -51,7 +61,7 @@ def atomic_npz(path, fields):
         replace_with_retry(temporary,path)
     finally:
         temporary.unlink(missing_ok=True)
-    return {'compressed':False,'file_bytes':size,'write_seconds':time.monotonic()-started}
+    return {'compressed':compressed,'file_bytes':size,'write_seconds':time.monotonic()-started}
 
 class AdaptiveBatchBudget:
     """Tune work per synchronized launch without altering per-lane DFS order."""

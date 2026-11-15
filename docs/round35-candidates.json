@@ -990,13 +990,19 @@
       "source_id": 4,
       "title": "Checkpoint only changed classic GPU fields and frame chunks",
       "proposal_and_validation": "The classic (non-domain) GPU checkpoint is still an uncompressed whole NPZ. The installed native sample has 43 members and 260,190,250 bytes, including six arrays of 41,943,168 bytes each. Screen constant prefix data, idle lanes, and dirty frame/column chunks across real consecutive saves. Compare reusing the existing incremental checkpoint store with chunked certified native payloads, preserve old NPZ imports, cheap host-only exhaustion checks, crash-safe publication, checksums, independent witnesses and exact restart ownership. Count device readbacks, writes and unchanged payloads; cover Windows and Vulkan and disk-full fallback.",
-      "state": "testing classic checkpoint storage after native field/chunk screen",
+      "state": "validated flat compressed checkpoints; testing immutable paused bank and device readback",
       "evidence": [
         "bench_r35_native_chunks.py",
-        "docs/R35_NATIVE_CHUNKS.json"
+        "docs/R35_NATIVE_CHUNKS.json",
+        "docs/ROUND35_CLASSIC_STORAGE.md",
+        "docs/R35_CLASSIC_PARKED_STORAGE.json",
+        "docs/R35_CLASSIC_SPLIT_BANK.json",
+        "docs/R35_CLASSIC_INSTALLED_STORAGE.json",
+        "docs/R35_CLASSIC_WRITES.json",
+        "test_r35_classic_storage.py"
       ],
-      "measurement": "2048 occupied lanes: isolated native fields 4049732 bytes; 256-step transition changed 156527 bytes, 3383296 bytes in changed fields, or 1105920 in 4 KiB chunks. Unchanged saves had zero differing chunks. Independent cold restores had matching next native state.",
-      "next_step": "Compare actual sparse/chunk storage and optional device readbacks with full NPZ, including receipts, stopped and mixed ownership, cold revalidation, crash/corruption, disk-full and migration; ensure durable captures and terminal verification before adoption."
+      "measurement": "Authentic installed 260,190,250-byte checkpoint: stored/fast/high compression wrote 260191435/42362829/39157703 Windows process bytes; 1.40/3.35/13.52 seconds. Five active-pool histories favored fast flat over SQLite chunks. True 2035- and 8001-parked histories reversed that comparison. Detached frozen bank plus full portable final cut matched writes from 1056665 to 446739 and 3767325 to 1582430. All source members/arrays independently recovered.",
+      "next_step": "Integrate and test a crash-safe immutable parked-bank interval format, with actual consumption/rotation, standalone portable final stop even at an already-saved generation, receipts, corrupted banks, garbage collection and low-space behavior. Test a separately scoped device readback opportunity with CPU/GPU differential controls."
     },
     {
       "id": 69,

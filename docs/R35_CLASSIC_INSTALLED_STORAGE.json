@@ -1,0 +1,71 @@
+{
+  "installed": {
+    "flat": {
+      "0": [
+        {
+          "file_bytes": 260189390,
+          "write_bytes": 260191435,
+          "seconds": 1.39958
+        }
+      ],
+      "1": [
+        {
+          "file_bytes": 42360784,
+          "write_bytes": 42362829,
+          "seconds": 3.3496
+        }
+      ],
+      "6": [
+        {
+          "file_bytes": 39155658,
+          "write_bytes": 39157703,
+          "seconds": 13.52464
+        }
+      ]
+    },
+    "chunks": {
+      "16384": [
+        {
+          "unique_chunks": 10818,
+          "chunks": 15923,
+          "new_raw_bytes": 176820614,
+          "new_compressed_bytes": 43033583,
+          "manifest": 432092,
+          "wal_bytes": 59682352,
+          "file_bytes": 59334656,
+          "write_bytes": 174905776,
+          "seconds": 7.82165
+        }
+      ],
+      "65536": [
+        {
+          "unique_chunks": 2769,
+          "chunks": 4013,
+          "new_raw_bytes": 179769734,
+          "new_compressed_bytes": 42082292,
+          "manifest": 113200,
+          "wal_bytes": 48335872,
+          "file_bytes": 48054272,
+          "write_bytes": 105383592,
+          "seconds": 7.00425
+        }
+      ],
+      "262144": [
+        {
+          "unique_chunks": 726,
+          "chunks": 1035,
+          "new_raw_bytes": 183636358,
+          "new_compressed_bytes": 41774792,
+          "manifest": 30598,
+          "wal_bytes": 43206472,
+          "file_bytes": 42954752,
+          "write_bytes": 87865872,
+          "seconds": 6.76982
+        }
+      ]
+    },
+    "input_bytes": [
+      260190250
+    ]
+  }
+}

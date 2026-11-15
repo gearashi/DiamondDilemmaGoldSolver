@@ -1,0 +1,344 @@
+{
+  "2048-to-1/portable-final-False": [
+    {
+      "ordinal": 0,
+      "flat_write": 211283,
+      "split_write": 211929,
+      "active_size": 6038,
+      "new_bank_bytes": 203139,
+      "reused": false,
+      "offset": 0,
+      "paused": 2035,
+      "standalone": false
+    },
+    {
+      "ordinal": 1,
+      "flat_write": 211284,
+      "split_write": 7760,
+      "active_size": 6039,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 2035,
+      "standalone": false
+    },
+    {
+      "ordinal": 2,
+      "flat_write": 211284,
+      "split_write": 7760,
+      "active_size": 6039,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 2035,
+      "standalone": false
+    },
+    {
+      "ordinal": 3,
+      "flat_write": 211410,
+      "split_write": 7886,
+      "active_size": 6165,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 2035,
+      "standalone": false
+    },
+    {
+      "ordinal": 4,
+      "flat_write": 211404,
+      "split_write": 7880,
+      "active_size": 6159,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 2035,
+      "standalone": false
+    }
+  ],
+  "2048-to-1/portable-final-True": [
+    {
+      "ordinal": 0,
+      "flat_write": 211283,
+      "split_write": 211929,
+      "active_size": 6038,
+      "new_bank_bytes": 203139,
+      "reused": false,
+      "offset": 0,
+      "paused": 2035,
+      "standalone": false
+    },
+    {
+      "ordinal": 1,
+      "flat_write": 211284,
+      "split_write": 7760,
+      "active_size": 6039,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 2035,
+      "standalone": false
+    },
+    {
+      "ordinal": 2,
+      "flat_write": 211284,
+      "split_write": 7760,
+      "active_size": 6039,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 2035,
+      "standalone": false
+    },
+    {
+      "ordinal": 3,
+      "flat_write": 211410,
+      "split_write": 7886,
+      "active_size": 6165,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 2035,
+      "standalone": false
+    },
+    {
+      "ordinal": 4,
+      "flat_write": 211404,
+      "split_write": 211404,
+      "active_size": 208782,
+      "new_bank_bytes": 0,
+      "reused": false,
+      "offset": 0,
+      "paused": 2035,
+      "standalone": true
+    }
+  ],
+  "8192-to-128/portable-final-False": [
+    {
+      "ordinal": 0,
+      "flat_write": 750476,
+      "split_write": 751123,
+      "active_size": 20241,
+      "new_bank_bytes": 728130,
+      "reused": false,
+      "offset": 0,
+      "paused": 8001,
+      "standalone": false
+    },
+    {
+      "ordinal": 1,
+      "flat_write": 750477,
+      "split_write": 21963,
+      "active_size": 20242,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 8001,
+      "standalone": false
+    },
+    {
+      "ordinal": 2,
+      "flat_write": 750466,
+      "split_write": 21952,
+      "active_size": 20231,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 8001,
+      "standalone": false
+    },
+    {
+      "ordinal": 3,
+      "flat_write": 755622,
+      "split_write": 27108,
+      "active_size": 25387,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 8001,
+      "standalone": false
+    },
+    {
+      "ordinal": 4,
+      "flat_write": 760284,
+      "split_write": 31770,
+      "active_size": 30049,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 8001,
+      "standalone": false
+    }
+  ],
+  "8192-to-128/portable-final-True": [
+    {
+      "ordinal": 0,
+      "flat_write": 750476,
+      "split_write": 751123,
+      "active_size": 20241,
+      "new_bank_bytes": 728130,
+      "reused": false,
+      "offset": 0,
+      "paused": 8001,
+      "standalone": false
+    },
+    {
+      "ordinal": 1,
+      "flat_write": 750477,
+      "split_write": 21963,
+      "active_size": 20242,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 8001,
+      "standalone": false
+    },
+    {
+      "ordinal": 2,
+      "flat_write": 750466,
+      "split_write": 21952,
+      "active_size": 20231,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 8001,
+      "standalone": false
+    },
+    {
+      "ordinal": 3,
+      "flat_write": 755622,
+      "split_write": 27108,
+      "active_size": 25387,
+      "new_bank_bytes": 0,
+      "reused": true,
+      "offset": 0,
+      "paused": 8001,
+      "standalone": false
+    },
+    {
+      "ordinal": 4,
+      "flat_write": 760284,
+      "split_write": 760284,
+      "active_size": 757662,
+      "new_bank_bytes": 0,
+      "reused": false,
+      "offset": 0,
+      "paused": 8001,
+      "standalone": true
+    }
+  ],
+  "128-to-128/portable-final-False": [
+    {
+      "ordinal": 0,
+      "flat_write": 13804,
+      "split_write": 13804,
+      "active_size": 11182,
+      "new_bank_bytes": 0,
+      "reused": false,
+      "offset": 0,
+      "paused": 0,
+      "standalone": true
+    },
+    {
+      "ordinal": 1,
+      "flat_write": 13805,
+      "split_write": 13805,
+      "active_size": 11183,
+      "new_bank_bytes": 0,
+      "reused": false,
+      "offset": 0,
+      "paused": 0,
+      "standalone": true
+    },
+    {
+      "ordinal": 2,
+      "flat_write": 19953,
+      "split_write": 19953,
+      "active_size": 17331,
+      "new_bank_bytes": 0,
+      "reused": false,
+      "offset": 0,
+      "paused": 0,
+      "standalone": true
+    },
+    {
+      "ordinal": 3,
+      "flat_write": 29982,
+      "split_write": 29982,
+      "active_size": 27360,
+      "new_bank_bytes": 0,
+      "reused": false,
+      "offset": 0,
+      "paused": 0,
+      "standalone": true
+    },
+    {
+      "ordinal": 4,
+      "flat_write": 36452,
+      "split_write": 36452,
+      "active_size": 33830,
+      "new_bank_bytes": 0,
+      "reused": false,
+      "offset": 0,
+      "paused": 0,
+      "standalone": true
+    }
+  ],
+  "128-to-128/portable-final-True": [
+    {
+      "ordinal": 0,
+      "flat_write": 13804,
+      "split_write": 13804,
+      "active_size": 11182,
+      "new_bank_bytes": 0,
+      "reused": false,
+      "offset": 0,
+      "paused": 0,
+      "standalone": true
+    },
+    {
+      "ordinal": 1,
+      "flat_write": 13805,
+      "split_write": 13805,
+      "active_size": 11183,
+      "new_bank_bytes": 0,
+      "reused": false,
+      "offset": 0,
+      "paused": 0,
+      "standalone": true
+    },
+    {
+      "ordinal": 2,
+      "flat_write": 19953,
+      "split_write": 19953,
+      "active_size": 17331,
+      "new_bank_bytes": 0,
+      "reused": false,
+      "offset": 0,
+      "paused": 0,
+      "standalone": true
+    },
+    {
+      "ordinal": 3,
+      "flat_write": 29982,
+      "split_write": 29982,
+      "active_size": 27360,
+      "new_bank_bytes": 0,
+      "reused": false,
+      "offset": 0,
+      "paused": 0,
+      "standalone": true
+    },
+    {
+      "ordinal": 4,
+      "flat_write": 36452,
+      "split_write": 36452,
+      "active_size": 33830,
+      "new_bank_bytes": 0,
+      "reused": false,
+      "offset": 0,
+      "paused": 0,
+      "standalone": true
+    }
+  ]
+}
