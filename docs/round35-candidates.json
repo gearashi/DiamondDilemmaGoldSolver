@@ -498,7 +498,9 @@
         "Resolve the retained three-cycle short-horizon policy before promoting its extensions. Use matched incumbent-free starts and held-out seeds through 64 and 320 repair rounds, cold and resumed within the correct profile. Compare steps to score, final incumbent, unique endpoints, work, and seeds where it loses. Earlier R31 rankings reversed by 320. Carry the result through positive touching cycles and sparse packing variants only when evidence changes deployment."
       ],
       "mechanism": "Exact independent donor-cycle scoring and conditional two- and three-cycle rotation prices",
-      "evidence": "docs/ROUND35_REPAIR.md",
+      "evidence": [
+        "docs/ROUND35_REPAIR.md"
+      ],
       "measurement": {
         "held_out_seeds": [
           3500,
@@ -536,7 +538,8 @@
         ]
       },
       "closure_reason": "All best boards and milestones from released length-three paired cycles matched the much cheaper individually priced cycles on four sustained independent trajectories. Actual local pools gained from two and three contacting cycles. Late forest trajectories tied across the three policies and moving the stage earlier had mixed outcomes.",
-      "reopen_trigger": "New physical workloads where signed contacting-cycle corrections repeatedly survive downstream repair or a counterexample to the labeled rotation/packing calculation."
+      "reopen_trigger": "New physical workloads where signed contacting-cycle corrections repeatedly survive downstream repair or a counterexample to the labeled rotation/packing calculation.",
+      "decision": "All best boards and milestones from released length-three paired cycles matched the much cheaper individually priced cycles on four sustained independent trajectories. Actual local pools gained from two and three contacting cycles. Late forest trajectories tied across the three policies and moving the stage earlier had mixed outcomes."
     },
     {
       "id": 33,
@@ -553,7 +556,8 @@
         "docs/ROUND35_REPAIR.md",
         "docs/R35_SWAP_PACKING.json",
         "test_r35_swap_packing.py"
-      ]
+      ],
+      "decision": "Retain --touch-packing priced/complete/cp for verified local gains. A connected triple reconstructs a planted single-loop Gold. Preserve the incumbent on UNKNOWN/ties. Distinct coefficient lists and sums do not confer whole-board optimality. Reject unconditional CP and general sustained promotion; released exact packing alone reached 180 on three of four versus one for each standalone expanded mode."
     },
     {
       "id": 34,
@@ -570,7 +574,8 @@
         "docs/ROUND35_REPAIR.md",
         "docs/R35_SWAP_PACKING.json",
         "test_r35_swap_packing.py"
-      ]
+      ],
+      "decision": "Retain --separator-packing as a scoped certificate for the noncontacting fixed-move list, depth three and up to 64 candidates. The single local gain did not extend signed augmentation on these data. Keep existing witnesses on ties, existing fallback on budget exhaustion and released ordinary sustained settings."
     },
     {
       "id": 35,
@@ -587,7 +592,8 @@
         "docs/ROUND35_REPAIR.md",
         "docs/R35_SWAP_CATALOG.json",
         "test_r35_swap_catalog.py"
-      ]
+      ],
+      "decision": "Maintain affected rows and exact ordered graph keys automatically, bounded by 32 keys/256 KiB. Unrelated fresh boards correctly require complete repricing. Existing checkpoints rebuild the volatile state on their next call."
     },
     {
       "id": 36,
@@ -604,7 +610,8 @@
         "docs/ROUND35_REPAIR.md",
         "docs/R35_CIRCULATION.json",
         "test_r35_cycle_branches.py"
-      ]
+      ],
+      "decision": "Use --regional-cycle-budget 2 for work-efficient fresh discovery. Keep whole-board disjoint, forced-neighbor and warm assignments optional: early primal results differed, and whole-board work in the 3/24-node controls remained open. A positive-contact query never receives a noncontacting completion. --regional-only labels a budget-ended witness feasible and separates its execution backend."
     },
     {
       "id": 37,
@@ -621,7 +628,8 @@
         "docs/ROUND35_BONDED_REPAIR.md",
         "docs/R35_FORBIDDEN_REPAIR.json",
         "test_r35_forbidden_mates.py"
-      ]
+      ],
+      "decision": "Retain physical donor/exterior/internal mate restrictions, identity-aware prices, and coupled rollback. Full held-out and no-conflict comparisons are seed-dependent. A 240-edge physical Gold claim requires one complete loop."
     },
     {
       "id": 38,
@@ -638,7 +646,8 @@
         "docs/ROUND35_BONDED_REPAIR.md",
         "docs/R35_ASSEMBLY_RELOCATION.json",
         "test_r35_assembly_relocation.py"
-      ]
+      ],
+      "decision": "Keep local physical moves and validated bounded caches. Whole-run score gains depend on seed; partial-overlap trajectories tied the cheaper reciprocal profile on the guarded four."
     },
     {
       "id": 39,
@@ -659,7 +668,8 @@
         "docs/R35_POSE_CONSTRUCTOR.json",
         "docs/R35_JOINT_POSES.json",
         "test_r35_pose_constructor.py"
-      ]
+      ],
+      "decision": "All forward, cheap, full-matching and compact policies were compared on paired original and restricted starts. Sparse assignment and contour-conditioned resource checks have direct finite-enumeration controls; bounded constructor failures remain unknown for Gold."
     },
     {
       "id": 40,
@@ -676,7 +686,8 @@
         "docs/ROUND35_BONDED_REPAIR.md",
         "docs/R35_SPECULATIVE_JOINS.json",
         "test_r35_speculative_poses.py"
-      ]
+      ],
+      "decision": "Keep joined legal poses, direct singleton anchors and checked replay. A planted incompatible packing removes its earlier implicated edge and preserves the independent later choice. No original rollback occurred in these 48 runs. Bounded attempts never prove a negative."
     },
     {
       "id": 41,
@@ -694,7 +705,8 @@
         "docs/R35_JOINT_REPAIR.json",
         "test_r35_joint_residual.py",
         "test_r35_contact_bound.py"
-      ]
+      ],
+      "decision": "Retain full checked CP replay when outside the exact local contact scope, donor-price and changed-support bounds, and exact optimum recovery for separated changed contacts. Retain threshold-aware subproblem reuse on larger one-contact pools and ordinary pruned subsets on small forests. Random raw CP pools rarely repeat, and sustained fresh score effects are seed-dependent."
     },
     {
       "id": 42,
@@ -712,7 +724,8 @@
         "docs/R35_PLATEAU.json",
         "test_r35_plateau_pages.py",
         "test_r35_plateau_floors.py"
-      ]
+      ],
+      "decision": "Retain atomic candidate and star pages, delayed floor closure, monotonic tied-witness publication and checked cold-root cancellation. Retain serial FIFO scheduling. A SQLite key lookup, one numeric factor or native solver call can run across a soft deadline."
     },
     {
       "id": 43,
@@ -733,7 +746,8 @@
         "docs/R35_PLATEAU.json",
         "test_r35_plateau_pages.py",
         "test_r35_plateau_floors.py"
-      ]
+      ],
+      "decision": "Store each new vector as one compressed signed-byte delta per physical pair plus its doubled baseline. Keep a cold path for expired, unrelated or old floor-only donors. The existing R30 in-memory same-support calculation remains the comparison."
     },
     {
       "id": 44,
@@ -751,7 +765,8 @@
         "docs/R35_PLATEAU.json",
         "test_r35_plateau_pages.py",
         "test_r35_plateau_floors.py"
-      ]
+      ],
+      "decision": "Retain indexed score bands, exact bounded-distance repair and path witnesses on --incremental-floors. The existing fixed-floor and released widest queue paths continue supporting active archives."
     },
     {
       "id": 45,
@@ -767,7 +782,8 @@
       ],
       "mechanism": "Two-hop conditioned losses, remote slack events, shared binary support templates and incremental neighbor maximizing rotations.",
       "measurement": "Twelve nearby boards: 55932â†’10916 star maxima and 167796â†’51591 support lookups. Six fresh boards: 72504â†’1916 and 217512â†’25386. Scores, capped results, witnesses and numeric messages all match; 256 exhaustive two-rotation path table pairs plus varied graph fixtures.",
-      "reopen_if": "A materially different degree, local score, or domain representation introduces another support interaction."
+      "reopen_if": "A materially different degree, local score, or domain representation introduces another support interaction.",
+      "decision": "keep in the exact physical rotation oracle"
     },
     {
       "id": 46,
@@ -783,7 +799,8 @@
       ],
       "mechanism": "Incremental exact minimum-product ordering, capped residual-plan extension and byte-bounded structural cache.",
       "measurement": "Twelve adjacent boards: 169401â†’2635 neighbor products, zero full-plan hits. Six fresh boards: 326000â†’2719, 12 hits. Four caps across two placements: 194887â†’572, 11 hits and 2 extensions. All block sizes, numeric work and witness order agree with the released oracle. Peak charged structural state observed 372776 bytes.",
-      "reopen_if": "A materially different residual graph or repeated ordering workload exceeds the bounded plan capacity."
+      "reopen_if": "A materially different residual graph or repeated ordering workload exceeds the bounded plan capacity.",
+      "decision": "keep in the exact physical rotation oracle"
     },
     {
       "id": 47,
@@ -799,7 +816,8 @@
       "evidence": [
         "docs/R35_TILE_CLASSES.json",
         "bench_r35_tile_classes.py"
-      ]
+      ],
+      "decision": "There are no original physical label exchanges to quotient for the seam objective. The planted positive confirms cyclic offset handling and the pin control breaks the otherwise valid exchange. No production quotient is warranted."
     },
     {
       "id": 48,
@@ -835,7 +853,8 @@
       "decision_changing_followups": "Compare actual retained integer core rejection before ordinal iteration against the checked per-tail filter.",
       "evidence": [
         "docs/R35_SUFFIX_CORES.json"
-      ]
+      ],
+      "decision": "keep with exact scope"
     },
     {
       "id": 50,
@@ -848,7 +867,8 @@
         "docs/R35_PAIR_ANCHORS.json",
         "docs/R35_GROUP_WIDTHS.json",
         "docs/R35_SUFFIX_CORES.json"
-      ]
+      ],
+      "decision": "keep with exact scope"
     },
     {
       "id": 51,
@@ -860,7 +880,8 @@
       "evidence": [
         "docs/R35_LOSS_REACH.json",
         "docs/R35_WEIGHTED_PREFIXES.json"
-      ]
+      ],
+      "decision": "keep with exact scope"
     },
     {
       "id": 52,
@@ -873,7 +894,8 @@
         "docs/R35_INTEGER_LOSS.json",
         "docs/R35_LOSS_PROOF.json"
       ],
-      "mechanism": "complete signed phase images on compact residuals and a separately certificate-checked global SAT relaxation"
+      "mechanism": "complete signed phase images on compact residuals and a separately certificate-checked global SAT relaxation",
+      "decision": "keep with exact scope"
     },
     {
       "id": 53,
@@ -887,7 +909,8 @@
         "docs/R35_LOSS_TRANSFER_STREAMS.json",
         "docs/R35_PHYSICAL_LOSS_CORES.json"
       ],
-      "mechanism": "project sparse physical hints and independently replay at the destination before pruning"
+      "mechanism": "project sparse physical hints and independently replay at the destination before pruning",
+      "decision": "keep with exact scope"
     },
     {
       "id": 54,
@@ -1026,7 +1049,8 @@
       "evidence": [
         "docs/R35_LOSS_PROOF.json",
         "test_r35_loss_frontiers.py"
-      ]
+      ],
+      "decision": "keep with exact scope"
     },
     {
       "id": 60,
@@ -1056,7 +1080,8 @@
         "docs/R35_SIGNED_REFITS.json",
         "docs/R35_SIGNED_HIGH_EFFORT.json"
       ],
-      "mechanism": "checked current and transferred refit ceilings, including safe restart"
+      "mechanism": "checked current and transferred refit ceilings, including safe restart",
+      "decision": "keep with exact scope"
     },
     {
       "id": 62,
@@ -1069,7 +1094,8 @@
         "docs/R35_REFIT_CUTS.json",
         "docs/R35_SIGNED_START_CUT.json"
       ],
-      "mechanism": "deterministic singleton on first-phase fits; reject blanket reuse across scored refits"
+      "mechanism": "deterministic singleton on first-phase fits; reject blanket reuse across scored refits",
+      "decision": "keep with exact scope"
     },
     {
       "id": 63,
@@ -1083,7 +1109,8 @@
         "docs/R35_SIGNED_HIGH_EFFORT.json",
         "docs/R35_SIGNED_DART_DELTA.json"
       ],
-      "mechanism": "incremental edge pricing and sparse dart updates on genuine phase changes"
+      "mechanism": "incremental edge pricing and sparse dart updates on genuine phase changes",
+      "decision": "keep with exact scope"
     },
     {
       "id": 64,
@@ -1097,7 +1124,8 @@
         "docs/R35_SIGNED_DELAYED_TIES.json",
         "docs/R35_SIGNED_PLATEAUS.json"
       ],
-      "mechanism": "opt-in signed/raw/unchanged order including a delayed variant; diverse phase fits lack accepted changes"
+      "mechanism": "opt-in signed/raw/unchanged order including a delayed variant; diverse phase fits lack accepted changes",
+      "decision": "keep with exact scope"
     },
     {
       "id": 65,
@@ -1135,7 +1163,9 @@
       "proposal_and_validation": "The symbolic ledger uses one invalidation epoch over all puzzle scopes. Quantify duplicate reconstruction when a different scope is updated or deleted; try a per-scope epoch/target-root reuse only if this occurs. Include replacements changing both scopes, concurrent transactions and exact replay.",
       "state": "rejected for current solver workload",
       "mechanism": "Symbolic coverage invalidation by scope on destructive writes",
-      "evidence": "docs/ROUND35_COVERAGE.md",
+      "evidence": [
+        "docs/ROUND35_COVERAGE.md"
+      ],
       "measurement": {
         "cells": 10,
         "assignments": 1024,
@@ -1152,7 +1182,8 @@
         "after_foreign_delete_builds": 2
       },
       "closure_reason": "Normal writes are append or ignore; all eight cross-scope opens already reused the diagram. Only out-of-band deletion caused a rebuild.",
-      "reopen_trigger": "A supported compactor/editor begins destructive changes to unrelated scopes during live searches, or an ordinary counterexample is observed."
+      "reopen_trigger": "A supported compactor/editor begins destructive changes to unrelated scopes during live searches, or an ordinary counterexample is observed.",
+      "decision": "Normal writes are append or ignore; all eight cross-scope opens already reused the diagram. Only out-of-band deletion caused a rebuild."
     },
     {
       "id": 67,
@@ -1162,7 +1193,9 @@
       "proposal_and_validation": "Evaluate lossless sibling coalescing specifically for exported portable remainders. It already exists as a box-algebra helper and symbolic diagrams cover some cases. Screen actual compressed/archive sizes and avoid partitioning the same siblings immediately after reopening. Native owner groups and native history must remain distinguishable.",
       "state": "retained for explicit portable v1 transfers",
       "mechanism": "Lossless coalescing of disjoint Cartesian domain boxes at transfer",
-      "evidence": "docs/ROUND35_COVERAGE.md",
+      "evidence": [
+        "docs/ROUND35_COVERAGE.md"
+      ],
       "measurement": {
         "reproducible_inputs": 19,
         "matched_cpu_and_sat_completions_per_arm": 7,
@@ -1192,7 +1225,8 @@
         ]
       },
       "closure_reason": "Exact cover and ownership tests passed; fewer CPU roots and DFS nodes in all changed controls. SAT decisions can rise. Native and implicit GPU exports keep their original cursors and rows.",
-      "reopen_trigger": "A new compatible transfer consumer with different partition requirements, or a counterexample to exact coverage or restart ownership."
+      "reopen_trigger": "A new compatible transfer consumer with different partition requirements, or a counterexample to exact coverage or restart ownership.",
+      "decision": "Exact cover and ownership tests passed; fewer CPU roots and DFS nodes in all changed controls. SAT decisions can rise. Native and implicit GPU exports keep their original cursors and rows."
     },
     {
       "id": 68,
@@ -1246,7 +1280,9 @@
       "proposal_and_validation": "Native lane resize validates and re-encodes every parked batch in gpu_lane_resize_round34.restore_slices. For a multi-stage resize and partially retired backlog, measure exact verified slices that could be carried through without recompression or remain lazily decoded until activated. Compare equivalent lane ownership, sums of counters, identical continuation, early-stop, tamper/deferred-error handling and CPU memory peak; never certify a negative before every contributing native state was validated.",
       "state": "keep with exact scope",
       "mechanism": "Carry verified parked native GPU archive slices through repeated resizes",
-      "evidence": "docs/ROUND35_COVERAGE.md",
+      "evidence": [
+        "docs/ROUND35_COVERAGE.md"
+      ],
       "measurement": {
         "original_parked_raw_bytes_reencoded": [
           41462256,
@@ -1274,7 +1310,8 @@
         "original_256_minimum_with_larger_cache": 241234944
       },
       "closure_reason": "Verified intact batches remain portable through resizes. Full, interrupted, mixed-width, donated, forked, factored, over-cap and corrupt inputs settled the archive and memory choices. All inputs were validated before coverage acceptance.",
-      "reopen_trigger": "A new wire codec, owner protocol, host-memory target, or a reproducible changed frontier or material decode cost outside the tested scope."
+      "reopen_trigger": "A new wire codec, owner protocol, host-memory target, or a reproducible changed frontier or material decode cost outside the tested scope.",
+      "decision": "Verified intact batches remain portable through resizes. Full, interrupted, mixed-width, donated, forked, factored, over-cap and corrupt inputs settled the archive and memory choices. All inputs were validated before coverage acceptance."
     },
     {
       "id": 70,
@@ -1385,7 +1422,8 @@
         "docs/ROUND35_ROTATION_COMPONENTS.md",
         "docs/R35_ROTATION_COMPONENTS.json",
         "test_r35_rotation_components.py"
-      ]
+      ],
+      "decision": "Retain singleton answers, exact offset-normalized component traces, and deferred optimal-tuple transport under stable rank and vertex ordering through three cells. Preserve the full individual-factor observer and cap path. Broader exhaustive rank/vertex permutations cost more proof work, and four-cell aliasing saved eight keys and 15 grid entries for 61 extra canonicalizations. Five through eight brought no additional gains."
     },
     {
       "id": 75,
