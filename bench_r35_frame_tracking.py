@@ -1,5 +1,6 @@
 """Paired native search overhead and full checkpoint equality for per-lane write tracking."""
 import argparse
+from contextlib import nullcontext
 from hashlib import sha256
 import json
 from pathlib import Path
@@ -90,6 +91,7 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--api',required=True,choices=('CUDA','Vulkan','D3D12','Metal'))
     parser.add_argument('--previous',type=Path,help='Archived kernel for the predecessor comparison')
+    parser.add_argument('--portable',action='store_true',help='Measure the pure Python frame decoders without a compiled host library.')
     parser.add_argument('--current-only',action='store_true',help='Compare tracked and untracked bounded current kernels.')
     parser.add_argument('--dynamic',action='store_true',help='Use forced moves and dynamic MRV on the bounded current kernels.')
     parser.add_argument('--active',type=int,help='Number of active prefixes; sparse cases spread them across the pool.')
@@ -113,6 +115,8 @@ if __name__=='__main__':
     result=[]
     for cycle in range(args.rounds):
         for profile in profiles if cycle%2==0 else profiles[::-1]:
-            rows=trial(args.api,profile,args.previous.resolve() if args.previous else None,args.lanes,setup,args.budgets,ref,p,args.output)
+            codec=patch('r35_board_codec.verified_library',return_value=None) if args.portable else nullcontext()
+            with codec:
+                rows=trial(args.api,profile,args.previous.resolve() if args.previous else None,args.lanes,setup,args.budgets,ref,p,args.output)
             result.append(dict(cycle=cycle,profile=profile,observations=rows))
             args.output.write_text(json.dumps(result,indent=2)+'\n',encoding='utf8')
