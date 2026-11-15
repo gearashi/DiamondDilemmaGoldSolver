@@ -33,3 +33,18 @@ def add_compiled_cut(model, phases, coefficients):
         return
     total = sum(base+delta*phases[t] for t,(base,delta) in enumerate(crossings))
     model.add(total>=2).only_enforce_if([x for x in occupied if type(x) is not bool])
+
+
+def pinned_start_pool(problem):
+    """Seed the recurrent singleton partition and recompile it on this physical drawing."""
+    from r29_gold_phase import EndpointCuts
+    if problem.fingerprint != 'e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853':
+        return None
+    group = frozenset([(20,1,5)])
+    cached = getattr(problem,'_r35_start_cut',None)
+    if cached is None:
+        data = EndpointCuts(problem)
+        cached = data, compile_endpoint_cut(data,group)
+        problem._r35_start_cut = cached
+    data, row = cached
+    return dict(data=data,partitions={group},coefficients={group:row})

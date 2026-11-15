@@ -1,0 +1,1226 @@
+[
+  {
+    "width": 0,
+    "seed": 4,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 707,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 707,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 734,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 0,
+    "seed": 5,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1496,
+      "cuts": 2,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1496,
+      "cuts": 2,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 733,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 0,
+    "seed": 6,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 726,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1613,
+      "cuts": 2,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 753,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 0,
+    "seed": 7,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1695,
+      "cuts": 2,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 821,
+      "cuts": 0,
+      "reused_cuts": 4,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 727,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 0,
+    "seed": 11,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 703,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 860,
+      "cuts": 0,
+      "reused_cuts": 4,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 730,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 0,
+    "seed": 19,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 707,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 843,
+      "cuts": 0,
+      "reused_cuts": 4,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 734,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 0,
+    "seed": 31,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 708,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 1377,
+      "cuts": 0,
+      "reused_cuts": 4,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 735,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 0,
+    "seed": 51,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 705,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 838,
+      "cuts": 0,
+      "reused_cuts": 4,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 735,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 0,
+    "seed": 71,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 699,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 827,
+      "cuts": 0,
+      "reused_cuts": 4,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 726,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 0,
+    "seed": 81,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 714,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 833,
+      "cuts": 0,
+      "reused_cuts": 4,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 741,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 0,
+    "seed": 91,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 709,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 841,
+      "cuts": 0,
+      "reused_cuts": 4,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 736,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 0,
+    "seed": 101,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 708,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 834,
+      "cuts": 0,
+      "reused_cuts": 4,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 747,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 2,
+    "seed": 4,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1482,
+      "cuts": 2,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1482,
+      "cuts": 2,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 727,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 2,
+    "seed": 5,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 689,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 748,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 717,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 2,
+    "seed": 6,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1454,
+      "cuts": 2,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 765,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 734,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 2,
+    "seed": 7,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 702,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 760,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 729,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 2,
+    "seed": 11,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 695,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 754,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 723,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 2,
+    "seed": 19,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 735,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 779,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 748,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 2,
+    "seed": 31,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 698,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 757,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 726,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 2,
+    "seed": 51,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 1137,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 755,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 724,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 2,
+    "seed": 71,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 716,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 756,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 725,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 2,
+    "seed": 81,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 713,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 772,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 741,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 2,
+    "seed": 91,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 700,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 792,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 761,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 2,
+    "seed": 101,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 699,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 758,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 727,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 4,
+    "seed": 4,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 678,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 678,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 706,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 4,
+    "seed": 5,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 693,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 693,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 721,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 4,
+    "seed": 6,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 680,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 680,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 708,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 4,
+    "seed": 7,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 690,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 690,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 718,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 4,
+    "seed": 11,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1491,
+      "cuts": 2,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1491,
+      "cuts": 2,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 755,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 4,
+    "seed": 19,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1452,
+      "cuts": 2,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 820,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 725,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 4,
+    "seed": 31,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 683,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 807,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 711,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 4,
+    "seed": 51,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1477,
+      "cuts": 2,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 818,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1471,
+      "cuts": 2,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 4,
+    "seed": 71,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 708,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 811,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 736,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 4,
+    "seed": 81,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 690,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 804,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 718,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 4,
+    "seed": 91,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 684,
+      "cuts": 0,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 805,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 712,
+      "cuts": 0,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  },
+  {
+    "width": 4,
+    "seed": 101,
+    "cold": {
+      "arm": "cold",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1405,
+      "cuts": 2,
+      "reused_cuts": 0,
+      "ceiling": 0
+    },
+    "shared": {
+      "arm": "shared",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 1,
+      "branches": 816,
+      "cuts": 0,
+      "reused_cuts": 2,
+      "ceiling": 0
+    },
+    "fixed": {
+      "arm": "fixed-singleton",
+      "status": "OPTIMAL",
+      "kept": 0,
+      "calls": 2,
+      "branches": 1459,
+      "cuts": 2,
+      "reused_cuts": 1,
+      "ceiling": 0
+    }
+  }
+]

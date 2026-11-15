@@ -59,7 +59,7 @@ def _poses(model, members, bonds):
     return rows
 
 
-def speculate(model, assemblies, hint, phases, rng, merges=3):
+def speculate(model, assemblies, hint, phases, rng, merges=3, *, incremental=False):
     """Grow speculative assemblies with legal poses. Back out optional joins if packing stalls."""
     from r29_gold_phase import EndpointCuts
     inv=inventory(model.problem)
@@ -81,6 +81,12 @@ def speculate(model, assemblies, hint, phases, rng, merges=3):
     rows=[poses for _,poses in assemblies.groups]
     extra=[]
     history=[]
+    joins=None
+    joined_groups=[]
+    if incremental:
+        from r35_speculative_poses import PoseJoins,rollback_index
+        joins=PoseJoins(assemblies)
+        joined_groups=list(joins.base)
     tries=0
     for a,b in order:
         if len(extra)>=merges:
@@ -93,14 +99,22 @@ def speculate(model, assemblies, hint, phases, rng, merges=3):
         if len(members)>9 or any({ta,tb}<=groups[i] for i in selected):
             continue
         tries+=1
-        poses=_poses(model,members,required|set(extra)|{(a,b)})
-        if not poses:
-            continue
-        history.append((list(groups),list(rows)))
-        for i in reversed(selected):
-            del groups[i],rows[i]
-        groups.append(members)
-        rows.append(poses)
+        if joins is not None:
+            proposed=joins.append(joined_groups,(a,b))
+            if proposed is None:
+                continue
+            joined_groups=proposed
+            groups=[g for g,poses,history_edges in proposed]
+            rows=[poses for g,poses,history_edges in proposed]
+        else:
+            poses=_poses(model,members,required|set(extra)|{(a,b)})
+            if not poses:
+                continue
+            history.append((list(groups),list(rows)))
+            for i in reversed(selected):
+                del groups[i],rows[i]
+            groups.append(members)
+            rows.append(poses)
         extra.append((a,b))
         partners.update((a,b))
     attempts=len(extra)
@@ -112,17 +126,32 @@ def speculate(model, assemblies, hint, phases, rng, merges=3):
         guessed.groups=sorted(zip(groups,rows),key=lambda row:len(row[1]))
         guessed.tiles=set.union(set(),*groups)
         try:
-            return guessed.seed(hint,rng,work=5000),dict(tried=tries,retained=len(extra),backed_out=attempts-len(extra))
-        except ValueError:
-            groups,rows=history.pop()
-            extra.pop()
-    return assemblies.seed(hint,rng),dict(tried=tries,retained=0,backed_out=attempts)
+            board=guessed.seed(hint,rng,work=5000)
+            return board,dict(tried=tries,retained=len(extra),backed_out=attempts-len(extra),
+                              **(joins.work if joins is not None else {}))
+        except ValueError as error:
+            if str(error)!='No legal mandatory-bond start found within the pose budget.':
+                raise
+            if joins is not None:
+                del extra[rollback_index(extra,joined_groups,5000,joins.work)]
+                joined_groups=joins.replay(extra)
+                groups=[g for g,poses,edges in joined_groups]
+                rows=[poses for g,poses,edges in joined_groups]
+            else:
+                groups,rows=history.pop()
+                extra.pop()
+    return assemblies.seed(hint,rng),dict(tried=tries,retained=0,backed_out=attempts,
+                                          **(joins.work if joins is not None else {}))
 
 
 def fresh(problem, seed, *, rounds=32, cube_bits=2, refit=0, merges=0, cache=None, backend='cpu',
-          replicas=512, dispatches=64, sampler_cache=None, effort=.15, contour=False, saved=None, save=None, independent_cubes=False):
+          replicas=512, dispatches=64, sampler_cache=None, effort=.15, contour=False, saved=None, save=None, independent_cubes=False, refit_bounds=True, endpoint_reuse=False, delta_prices=True, raw_ties=False, diverse_ties=False, phase_start_cut=False, incremental_merges=False):
     if min(seed,rounds,refit,merges)<0 or effort<=0:
         raise ValueError('Invalid seed or repair configuration.')
+    from r35_signed_refit import RefitBounds, changed_score
+    refit_limits=RefitBounds()
+    pool={} if endpoint_reuse else None
+    fit_options={'endpoint_pool':pool} if endpoint_reuse else {}
     model=BoardModel(problem)
     assemblies=Assemblies(model)
     inv=inventory(problem)
@@ -135,6 +164,8 @@ def fresh(problem, seed, *, rounds=32, cube_bits=2, refit=0, merges=0, cache=Non
         best=saved['best']
         stats=Counter(saved['stats'])
         first=saved['cursor']
+        if refit_bounds:
+            refit_limits.restore(saved.get('refit_ceilings'),problem.fingerprint,assemblies.bonds)
         if not assemblies.bonds <= physical_bonds(model,board):
             raise ValueError('Checkpoint violates mandatory Gold bonds.')
     else:
@@ -155,11 +186,15 @@ def fresh(problem, seed, *, rounds=32, cube_bits=2, refit=0, merges=0, cache=Non
         start=result(model,board)
         if start['gold']:
             return dict(**start,seed=seed,work=dict(stats))
-        f=fit(problem,assemblies.bonds,pins,seed=seed,effort=effort)
+        start_options=fit_options
+        if phase_start_cut:
+            from r35_endpoint_partitions import pinned_start_pool
+            start_options={'endpoint_pool':pinned_start_pool(problem)}
+        f=fit(problem,assemblies.bonds,pins,seed=seed,effort=effort,**start_options)
         stats['phase_calls']+=f['calls']
         # Stalled fresh seeds can use the unrestricted fit. Only lift_cube publishes proved exclusions.
         if 'phases' not in f and cube_bits:
-            f=fit(problem,assemblies.bonds,{0:0},seed=seed,effort=effort)
+            f=fit(problem,assemblies.bonds,{0:0},seed=seed,effort=effort,**start_options)
             stats['released_cube']+=1
             stats['phase_calls']+=f['calls']
         if 'phases' not in f:
@@ -167,41 +202,70 @@ def fresh(problem, seed, *, rounds=32, cube_bits=2, refit=0, merges=0, cache=Non
             return dict(**result(model,board),seed=seed,phase_status=f['status'],work=dict(stats))
         phases=f['phases']
         if merges:
-            board,info=speculate(model,assemblies,board,phases,rng,merges)
+            board,info=speculate(model,assemblies,board,phases,rng,merges,incremental=incremental_merges)
             stats.update({'speculative_'+k:v for k,v in info.items()})
         else:
             board=assemblies.seed(board,rng)
         best=result(model,board)
         first=0
-    signed=SignedRepair(model,phases,forbidden=inv.forbidden,database=cache)
+    signed=SignedRepair(model,phases,forbidden=inv.forbidden,database=cache,raw_ties=raw_ties is True)
     if saved and saved.get('dart_prices'):
         from r34_signed_snapshot import restore
         restore(signed,saved['dart_prices'])
+    score=signed.score(board)
     if first==0:
-        best['signed'],best['forbidden_bonds']=signed.score(board)
+        best['signed'],best['forbidden_bonds']=score
         best['phases']=list(phases)
     if best['gold']:
         return dict(**best,seed=seed,work=dict(stats))
     protected=assemblies.protected(board)
     for step in range(first,rounds):
         if step and refit and step%refit==0:
-            old,_=signed.score(board)
-            # Always remove the seed's optional phase pins during refitting.
+            old,_=score
+            # Every refit uses the same unrestricted tile-0 gauge and mandatory bonds.
             good=physical_bonds(model,board)-inv.forbidden
-            f=fit(problem,assemblies.bonds,{0:0},good,seed=seed+step,effort=effort,hint=phases)
-            stats['refit_calls']+=f['calls']
-            if f.get('kept',-1)>old:
-                stats.update(signed.stats)
-                phases=f['phases']
-                signed=SignedRepair(model,phases,forbidden=inv.forbidden,database=cache)
-                stats['improved_refits']+=1
+            plateau = (diverse_ties and stats['diverse_refit_attempts']<2 and
+                       step-stats['last_signed_gain_round']>=2*refit)
+            if refit_bounds and refit_limits.upper(good)<=old and not plateau:
+                stats['refits_skipped_by_ceiling']+=1
+            else:
+                options=fit_options
+                if plateau:
+                    options=dict(fit_options,diversify=phases)
+                    stats['diverse_refit_attempts']+=1
+                f=fit(problem,assemblies.bonds,{0:0},good,seed=seed+step,effort=effort,hint=phases,**options)
+                stats['refit_calls']+=f['calls']
+                stats['refit_branches']+=f['branches']
+                stats['refit_cuts']+=f['cuts']
+                stats['reused_refit_cuts']+=f.get('reused_cuts',0)
+                refit_limits.record(good,f['ceiling'])
+                strict=f.get('kept',-1)>old
+                tied=False
+                if plateau and f.get('kept',-1)==old:
+                    changed=[x!=y for x,y in zip(phases,f['phases'])]
+                    tied=any(changed[a//3]!=changed[b//3] for a,b in inv.possible)
+                if strict or tied:
+                    stats.update(signed.stats)
+                    phases=f['phases']
+                    signed.previous=None
+                    signed=SignedRepair(model,phases,forbidden=inv.forbidden,database=cache,
+                                        previous=signed if delta_prices else None,raw_ties=raw_ties is True)
+                    score=(changed_score(signed,board,board,score,signed.previous)
+                           if signed.previous is not None else signed.score(board))
+                    stats['improved_refits' if strict else 'diverse_tied_refits']+=1
         cells=np.setdiff1d(model.independent_set(board,rng),protected)
+        if raw_ties=="plateau":
+            signed.raw_ties=step-stats["last_signed_gain_round"]>=8
+        last_board=board
         board=signed.block(board,cells)
         item=result(model,board)
-        item['signed'],item['forbidden_bonds']=signed.score(board)
+        score=changed_score(signed,board,last_board,score) if delta_prices else signed.score(board)
+        item['signed'],item['forbidden_bonds']=score
         item['phases']=list(phases)
         key=lambda r:(r['gold'],r['signed'],-r['forbidden_bonds'],r['score'],-r['components'])
         if key(item)>key(best):
+            if (diverse_ties or raw_ties=='plateau') and item['signed']>best['signed']:
+                stats['last_signed_gain_round']=step+1
             best=item
         stats['rounds']+=1
         for threshold in (100,110,120,130,140,150,160):
@@ -209,7 +273,8 @@ def fresh(problem, seed, *, rounds=32, cube_bits=2, refit=0, merges=0, cache=Non
                 stats.setdefault('round_to_signed_'+str(threshold),step+1)
         if save and ((step+1)%8==0 or step+1==rounds or best['gold']):
             from r34_signed_snapshot import snapshot
-            save(dict(dart_prices=snapshot(signed),current=board.tolist(),rng=rng.bit_generator.state,phases=phases,best=best,
+            ceiling_state={'refit_ceilings':refit_limits.snapshot(problem.fingerprint,assemblies.bonds)} if refit_limits.history else {}
+            save(dict(**ceiling_state,dart_prices=snapshot(signed),current=board.tolist(),rng=rng.bit_generator.state,phases=phases,best=best,
                       stats=dict(stats+signed.stats),cursor=step+1))
         if best['gold']:
             break
@@ -232,7 +297,7 @@ def run_fresh_seeds(problem, database, seed, starts, opts, *, row_cache=None, sa
     scope=hashlib.sha256(json.dumps(['r32-fresh-v2',binding,opts],sort_keys=True).encode()).hexdigest()
     policy={key:value for key,value in opts.items() if key!='rounds'}
     sources={name:hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
-             for name in ('r32_fresh.py','r32_fresh_phases.py','r32_fresh_skeleton.py','r31_fresh.py',
+             for name in ('r32_fresh.py','r32_fresh_phases.py','r35_signed_refit.py','r35_endpoint_partitions.py','r32_fresh_skeleton.py','r31_fresh.py',
                           'r27_incumbent.py','r32_gold_bonds.py','r28_geo_color.py','r29_gold_phase.py',
                           'r32_fresh_geometry.py','r34_contour_walk.py','r31_sampling.py','r34_signed_snapshot.py',
                           'r27_structure_filters.py','search_problem.py','validator.py','geometry.py')}
@@ -260,8 +325,11 @@ def main():
     cli.add_argument('--rounds',type=int,default=32)
     cli.add_argument('--cube-bits',type=int,default=2)
     cli.add_argument('--independent-cubes',action='store_true',help='Branch on independent physical tile phases after forced mates.')
+    cli.add_argument('--phase-start-cut',action='store_true',help='Seed initial signed phases with the independently recompiled recurring endpoint partition.')
+    cli.add_argument('--raw-ties',choices=('always','plateau'),help='Prefer more raw matches among signed-optimal donor assignments, either immediately or after eight stalled rounds.')
     cli.add_argument('--refit',type=int,default=0)
     cli.add_argument('--merges',type=int,default=0)
+    cli.add_argument('--incremental-merges',action='store_true',help='Join rigid pose tables on each optional physical mate and preserve later choices outside a proved packing conflict.')
     cli.add_argument('--backend',choices=['cpu','cuda','webgpu'],default='cpu')
     cli.add_argument('--replicas',type=int,default=512)
     cli.add_argument('--dispatches',type=int,default=64)
@@ -292,6 +360,12 @@ def main():
         if domains is not None:
             cli.error('use cube, slots or skeleton for restricted domains')
         opts={k:getattr(args,k) for k in ('rounds','cube_bits','refit','merges','backend','replicas','dispatches','effort','contour')}
+        if args.incremental_merges:
+            opts['incremental_merges']=True
+        if args.phase_start_cut:
+            opts['phase_start_cut']=True
+        if args.raw_ties:
+            opts['raw_ties']=True if args.raw_ties=='always' else 'plateau'
         if args.independent_cubes:
             opts['independent_cubes']=True
         def progress(row):

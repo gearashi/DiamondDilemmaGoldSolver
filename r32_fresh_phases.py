@@ -75,12 +75,17 @@ def phase_cube(problem, width, index, *, independent=False):
     return {0: 0, **{tile: index >> i & 1 for i,tile in enumerate(coordinates[:width])}}
 
 
-def fit(problem, required, pins, bonds=(), *, seed=0, effort=.15, hint=None):
+def fit(problem, required, pins, bonds=(), *, seed=0, effort=.15, hint=None, endpoint_pool=None, diversify=None):
     """Return only integer-inventory feasible, connected endpoint types. The ceiling is relaxed."""
     from ortools.sat.python import cp_model
     if effort <= 0:
         raise ValueError('Expected a positive deterministic phase budget.')
-    data = EndpointCuts(problem)
+    data = EndpointCuts(problem) if endpoint_pool is None else endpoint_pool.setdefault('data',None)
+    if data is None:
+        data = EndpointCuts(problem)
+        endpoint_pool['data'] = data
+    if data.problem is not problem:
+        raise ValueError('Endpoint-cut pool belongs to a different puzzle instance.')
     m, phases = signed_phase_model(problem, pins=checked_pins(problem.n, pins), bonds=sorted(required))
     terms = []
     for a, b in sorted(bonds):
@@ -99,38 +104,62 @@ def fit(problem, required, pins, bonds=(), *, seed=0, effort=.15, hint=None):
             raise ValueError('Invalid phase hint.')
         for var, value in zip(phases,hint):
             m.add_hint(var,value)
+    scale = 1
     if terms:
-        m.maximize(sum(terms))
+        if diversify is None:
+            m.maximize(sum(terms))
+        else:
+            if len(diversify)!=problem.n or pins.get(0)!=0 or diversify[0]!=0:
+                raise ValueError('Diverse fits require complete phases in the tile-zero gauge.')
+            scale=problem.n+1
+            m.maximize(scale*sum(terms)+sum((1-x if old else x) for x,old in zip(phases,diversify)))
     solver = cp_model.CpSolver()
     solver.parameters.random_seed = int(seed % 2147483647)
     solver.parameters.num_search_workers = 1
     remaining = effort
     calls = branches = 0
     ceiling = len(terms)
-    seen = set()
+    def add_partition(group):
+        if endpoint_pool is None:
+            endpoint_constraint(m,phases,data,group)
+            return
+        from r35_endpoint_partitions import add_compiled_cut,compile_endpoint_cut
+        compiled=endpoint_pool.setdefault('coefficients',{})
+        row=compiled.get(group)
+        if row is None:
+            row=compile_endpoint_cut(data,group)
+            if len(compiled)<128:
+                compiled[group]=row
+        add_compiled_cut(m,phases,row)
+    seen = set() if endpoint_pool is None else set(endpoint_pool.get('partitions',()))
+    for group in sorted(seen,key=lambda row:(len(row),sorted(row))):
+        add_partition(group)
+    reused = len(seen)
     while remaining > 0 and calls < 16:
         solver.parameters.max_deterministic_time = remaining
         status = solver.solve(m)
         calls += 1
         branches += solver.num_branches
         remaining -= max(.000001, solver.response_proto.deterministic_time)
-        info = dict(calls=calls, branches=branches, cuts=len(seen), ceiling=ceiling)
+        info = dict(calls=calls, branches=branches, cuts=len(seen)-reused, reused_cuts=reused, ceiling=ceiling)
         if status not in (cp_model.FEASIBLE, cp_model.OPTIMAL):
             return dict(status=solver.status_name(status), **info)
         if terms:
             # Integer optimum cannot exceed the rounded-up relaxation upper bound.
-            ceiling = min(ceiling, int(np.ceil(solver.best_objective_bound)))
+            ceiling = min(ceiling, int(np.ceil(solver.best_objective_bound))//scale)
         values = [int(solver.value(v)) for v in phases]
         groups = _groups(edge for t,p in enumerate(values) for edge in data.strands[t][p])
         if len(groups) == 1:
             return dict(status=solver.status_name(status), phases=values, kept=sum(solver.value(v) for v in terms),
-                        calls=calls, branches=branches, cuts=len(seen), ceiling=ceiling)
+                        calls=calls, branches=branches, cuts=len(seen)-reused, reused_cuts=reused, ceiling=ceiling)
         for g in groups:
             if g in seen:
                 raise ArithmeticError('Phase cut repeated.')
-            endpoint_constraint(m, phases, data, g)
+            add_partition(g)
             seen.add(g)
-    return dict(status='UNKNOWN', calls=calls, branches=branches, cuts=len(seen), ceiling=ceiling)
+            if endpoint_pool is not None and len(seen)<=128:
+                endpoint_pool.setdefault("partitions",set()).add(g)
+    return dict(status='UNKNOWN', calls=calls, branches=branches, cuts=len(seen)-reused, reused_cuts=reused, ceiling=ceiling)
 
 
 def lift_cube(problem, required, pins, domains=None, seconds=1, cache=None):
@@ -210,8 +239,10 @@ class _DartPrices:
 
 class SignedRepair:
     """Optimize the count of signed-compatible seams on nonadjacent cells with distinct donors."""
-    def __init__(self, model, phases, forbidden=(), database=None):
+    def __init__(self, model, phases, forbidden=(), database=None, *, previous=None, raw_ties=False):
         self.model = model
+        self.previous = previous
+        self.raw_ties = raw_ties
         p = model.problem
         if len(phases) != p.n or any(v not in (0,1) for v in phases):
             raise ValueError('Expected one phase bit per physical tile.')
@@ -292,7 +323,12 @@ class SignedRepair:
                         if dart < 0:
                             continue
                         if dart not in self.prices:
-                            self.prices[dart] = self.geometry.price(dart,self.dart_phases,self.stats)
+                            replacement = None
+                            if self.previous is not None:
+                                from r35_signed_refit import changed_dart_prices
+                                replacement = changed_dart_prices(self.previous,self,dart)
+                            self.prices[dart] = (replacement if replacement is not None else
+                                                 self.geometry.price(dart,self.dart_phases,self.stats))
                         else:
                             self.stats['signed_dart_reuses'] += 1
                         row += self.prices[dart][self.sides[:,s]]
@@ -308,6 +344,14 @@ class SignedRepair:
         else:
             compute(None)
         # Prefer the current pose on equal prices so neutral cycles cannot recreate work.
+        if self.raw_ties:
+            raw=np.zeros_like(prices,dtype=np.int32)
+            for i,cell in enumerate(cells):
+                for side,(neighbor,other) in enumerate(zip(m.problem.neighbors[cell],m.problem.sides[cell])):
+                    if neighbor>=0:
+                        raw[i] += m.masks[codes,side] == m.reverse[m.masks[board[neighbor],other]]
+            # Integer lexicographic weights dominate the maximum possible whole-block tie sums.
+            prices=prices.astype(np.int32)*(3*len(cells)+1)+raw
         weight = prices * (len(cells)+1) + (codes[None,:,:]==board[cells,None,None])
         weight = np.where(ds,weight,-1)
         rot = weight.argmax(axis=2)

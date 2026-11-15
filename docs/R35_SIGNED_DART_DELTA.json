@@ -1,0 +1,47 @@
+[
+  {
+    "name": "identical",
+    "flips": 0,
+    "cold_bits": 230400,
+    "shared_unchanged_rows": 480,
+    "rows": 480,
+    "work": {
+      "whole_dart_rows_shared": 480
+    }
+  },
+  {
+    "name": "global-complement",
+    "flips": 160,
+    "cold_bits": 230400,
+    "shared_unchanged_rows": 480,
+    "rows": 480,
+    "work": {
+      "whole_dart_rows_shared": 480
+    }
+  },
+  {
+    "name": "one-flip",
+    "flips": 1,
+    "cold_bits": 230400,
+    "shared_unchanged_rows": 463,
+    "rows": 480,
+    "work": {
+      "delta_mask_index_rows": 480,
+      "delta_dart_rows": 480,
+      "delta_price_bits_examined": 6168,
+      "delta_price_bits_changed": 28
+    }
+  },
+  {
+    "name": "other-verified-tour",
+    "flips": 86,
+    "cold_bits": 230400,
+    "shared_unchanged_rows": 36,
+    "rows": 480,
+    "work": {
+      "delta_dart_rows": 480,
+      "delta_price_bits_examined": 6168,
+      "delta_price_bits_changed": 2972
+    }
+  }
+]

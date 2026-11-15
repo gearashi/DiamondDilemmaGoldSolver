@@ -1,0 +1,709 @@
+{
+  "rounds": 64,
+  "rows": [
+    {
+      "seed": 4,
+      "arm": "diverse-plateau",
+      "raw": 132,
+      "signed": 129,
+      "gold": false,
+      "board": "afbc12d4eeb647a720c9c1c9b7b510594d1661c61e1a5264bc160d2b180edc14",
+      "states": [
+        {
+          "cursor": 8,
+          "current": "95c4889af90990e5caa518b88d17a7cd99f9d758a5d8463817ff23c83f398b6b",
+          "phases": "59b575c1ccb141121549505de849448a4895512369017508415858120d03c996",
+          "raw": 117,
+          "signed": 115
+        },
+        {
+          "cursor": 16,
+          "current": "c7aae260339bad236a992b4ac032a47f6a0cbae4d7e816061177543f69eaaa2f",
+          "phases": "59b575c1ccb141121549505de849448a4895512369017508415858120d03c996",
+          "raw": 119,
+          "signed": 118
+        },
+        {
+          "cursor": 24,
+          "current": "f4d1d66f7fc15dacb24bba0f0fc03f130b991ce74f36389903cdf7be81090593",
+          "phases": "59b575c1ccb141121549505de849448a4895512369017508415858120d03c996",
+          "raw": 126,
+          "signed": 124
+        },
+        {
+          "cursor": 32,
+          "current": "db069437e4163cc37ed1332f9d87b9a926b76c5c7612bde4b32daab709966001",
+          "phases": "59b575c1ccb141121549505de849448a4895512369017508415858120d03c996",
+          "raw": 127,
+          "signed": 125
+        },
+        {
+          "cursor": 40,
+          "current": "db069437e4163cc37ed1332f9d87b9a926b76c5c7612bde4b32daab709966001",
+          "phases": "59b575c1ccb141121549505de849448a4895512369017508415858120d03c996",
+          "raw": 127,
+          "signed": 125
+        },
+        {
+          "cursor": 48,
+          "current": "db069437e4163cc37ed1332f9d87b9a926b76c5c7612bde4b32daab709966001",
+          "phases": "59b575c1ccb141121549505de849448a4895512369017508415858120d03c996",
+          "raw": 127,
+          "signed": 125
+        },
+        {
+          "cursor": 56,
+          "current": "51f00c73e88a88e02d2f64030a337057f827083753d47a9baf0959cbca779a28",
+          "phases": "59b575c1ccb141121549505de849448a4895512369017508415858120d03c996",
+          "raw": 129,
+          "signed": 127
+        },
+        {
+          "cursor": 64,
+          "current": "afbc12d4eeb647a720c9c1c9b7b510594d1661c61e1a5264bc160d2b180edc14",
+          "phases": "59b575c1ccb141121549505de849448a4895512369017508415858120d03c996",
+          "raw": 132,
+          "signed": 129
+        }
+      ],
+      "work": {
+        "phase_calls": 2,
+        "last_signed_gain_round": 60,
+        "rounds": 64,
+        "round_to_signed_100": 4,
+        "round_to_signed_110": 6,
+        "refit_calls": 7,
+        "refit_branches": 126295,
+        "refit_cuts": 0,
+        "reused_refit_cuts": 0,
+        "round_to_signed_120": 18,
+        "diverse_refit_attempts": 1,
+        "dart_templates_built": 448,
+        "signed_dart_prices": 448,
+        "rows_computed": 3524,
+        "assignments": 64,
+        "full_score_edges": 240,
+        "signed_dart_reuses": 10124,
+        "delta_score_edges": 339,
+        "mandatory_bonds": 8
+      }
+    },
+    {
+      "seed": 5,
+      "arm": "diverse-plateau",
+      "raw": 135,
+      "signed": 135,
+      "gold": false,
+      "board": "204822cddaf6fd61eb4ee1ecdbeb664b4ecf9d48ea233fafee3a7d1499a0248f",
+      "states": [
+        {
+          "cursor": 8,
+          "current": "352177bc4f7fb1a80acf3d7d21ea1e5f1dbe998d98330e2715729c05eb2088cb",
+          "phases": "6797154825261079baca8670269688aa1034dfc9dc383a9dba7cd9cd334d6547",
+          "raw": 127,
+          "signed": 127
+        },
+        {
+          "cursor": 16,
+          "current": "13c1dd2aed029bf3dc184f25499a70c9ec1b3a4bdfe61aa934f4240d31324ab4",
+          "phases": "6797154825261079baca8670269688aa1034dfc9dc383a9dba7cd9cd334d6547",
+          "raw": 135,
+          "signed": 134
+        },
+        {
+          "cursor": 24,
+          "current": "13c1dd2aed029bf3dc184f25499a70c9ec1b3a4bdfe61aa934f4240d31324ab4",
+          "phases": "6797154825261079baca8670269688aa1034dfc9dc383a9dba7cd9cd334d6547",
+          "raw": 135,
+          "signed": 134
+        },
+        {
+          "cursor": 32,
+          "current": "204822cddaf6fd61eb4ee1ecdbeb664b4ecf9d48ea233fafee3a7d1499a0248f",
+          "phases": "6797154825261079baca8670269688aa1034dfc9dc383a9dba7cd9cd334d6547",
+          "raw": 135,
+          "signed": 135
+        },
+        {
+          "cursor": 40,
+          "current": "204822cddaf6fd61eb4ee1ecdbeb664b4ecf9d48ea233fafee3a7d1499a0248f",
+          "phases": "6797154825261079baca8670269688aa1034dfc9dc383a9dba7cd9cd334d6547",
+          "raw": 135,
+          "signed": 135
+        },
+        {
+          "cursor": 48,
+          "current": "204822cddaf6fd61eb4ee1ecdbeb664b4ecf9d48ea233fafee3a7d1499a0248f",
+          "phases": "6797154825261079baca8670269688aa1034dfc9dc383a9dba7cd9cd334d6547",
+          "raw": 135,
+          "signed": 135
+        },
+        {
+          "cursor": 56,
+          "current": "204822cddaf6fd61eb4ee1ecdbeb664b4ecf9d48ea233fafee3a7d1499a0248f",
+          "phases": "6797154825261079baca8670269688aa1034dfc9dc383a9dba7cd9cd334d6547",
+          "raw": 135,
+          "signed": 135
+        },
+        {
+          "cursor": 64,
+          "current": "204822cddaf6fd61eb4ee1ecdbeb664b4ecf9d48ea233fafee3a7d1499a0248f",
+          "phases": "6797154825261079baca8670269688aa1034dfc9dc383a9dba7cd9cd334d6547",
+          "raw": 135,
+          "signed": 135
+        }
+      ],
+      "work": {
+        "phase_calls": 1,
+        "last_signed_gain_round": 27,
+        "rounds": 64,
+        "round_to_signed_100": 3,
+        "round_to_signed_110": 5,
+        "round_to_signed_120": 7,
+        "refits_skipped_by_ceiling": 3,
+        "round_to_signed_130": 12,
+        "refit_calls": 4,
+        "refit_branches": 36805,
+        "refit_cuts": 0,
+        "reused_refit_cuts": 0,
+        "diverse_refit_attempts": 2,
+        "dart_templates_built": 444,
+        "signed_dart_prices": 444,
+        "rows_computed": 3540,
+        "assignments": 64,
+        "full_score_edges": 240,
+        "signed_dart_reuses": 10176,
+        "delta_score_edges": 363,
+        "mandatory_bonds": 8
+      }
+    },
+    {
+      "seed": 6,
+      "arm": "diverse-plateau",
+      "raw": 127,
+      "signed": 125,
+      "gold": false,
+      "board": "7ff54f8c6030455ecaa28455091a47d7042b4e979c8fa360dcc3e71e6cc9a5cf",
+      "states": [
+        {
+          "cursor": 8,
+          "current": "03f2474d0e6ce1daf5f3e08863fad5e5fea11194b0488524da63d6a349a4574b",
+          "phases": "df3861527a6a4919534bdedf8b07c53d3a4023e1bf5139b8e99880f559c13c74",
+          "raw": 116,
+          "signed": 115
+        },
+        {
+          "cursor": 16,
+          "current": "7ff54f8c6030455ecaa28455091a47d7042b4e979c8fa360dcc3e71e6cc9a5cf",
+          "phases": "df3861527a6a4919534bdedf8b07c53d3a4023e1bf5139b8e99880f559c13c74",
+          "raw": 127,
+          "signed": 125
+        },
+        {
+          "cursor": 24,
+          "current": "7ff54f8c6030455ecaa28455091a47d7042b4e979c8fa360dcc3e71e6cc9a5cf",
+          "phases": "df3861527a6a4919534bdedf8b07c53d3a4023e1bf5139b8e99880f559c13c74",
+          "raw": 127,
+          "signed": 125
+        },
+        {
+          "cursor": 32,
+          "current": "7ff54f8c6030455ecaa28455091a47d7042b4e979c8fa360dcc3e71e6cc9a5cf",
+          "phases": "df3861527a6a4919534bdedf8b07c53d3a4023e1bf5139b8e99880f559c13c74",
+          "raw": 127,
+          "signed": 125
+        },
+        {
+          "cursor": 40,
+          "current": "7ff54f8c6030455ecaa28455091a47d7042b4e979c8fa360dcc3e71e6cc9a5cf",
+          "phases": "df3861527a6a4919534bdedf8b07c53d3a4023e1bf5139b8e99880f559c13c74",
+          "raw": 127,
+          "signed": 125
+        },
+        {
+          "cursor": 48,
+          "current": "7ff54f8c6030455ecaa28455091a47d7042b4e979c8fa360dcc3e71e6cc9a5cf",
+          "phases": "df3861527a6a4919534bdedf8b07c53d3a4023e1bf5139b8e99880f559c13c74",
+          "raw": 127,
+          "signed": 125
+        },
+        {
+          "cursor": 56,
+          "current": "7ff54f8c6030455ecaa28455091a47d7042b4e979c8fa360dcc3e71e6cc9a5cf",
+          "phases": "df3861527a6a4919534bdedf8b07c53d3a4023e1bf5139b8e99880f559c13c74",
+          "raw": 127,
+          "signed": 125
+        },
+        {
+          "cursor": 64,
+          "current": "7ff54f8c6030455ecaa28455091a47d7042b4e979c8fa360dcc3e71e6cc9a5cf",
+          "phases": "df3861527a6a4919534bdedf8b07c53d3a4023e1bf5139b8e99880f559c13c74",
+          "raw": 127,
+          "signed": 125
+        }
+      ],
+      "work": {
+        "phase_calls": 2,
+        "last_signed_gain_round": 15,
+        "rounds": 64,
+        "round_to_signed_100": 4,
+        "round_to_signed_110": 7,
+        "refit_calls": 7,
+        "refit_branches": 86996,
+        "refit_cuts": 0,
+        "reused_refit_cuts": 0,
+        "round_to_signed_120": 10,
+        "diverse_refit_attempts": 2,
+        "dart_templates_built": 447,
+        "signed_dart_prices": 447,
+        "rows_computed": 3556,
+        "assignments": 64,
+        "full_score_edges": 240,
+        "signed_dart_reuses": 10221,
+        "delta_score_edges": 309,
+        "mandatory_bonds": 8
+      }
+    },
+    {
+      "seed": 7,
+      "arm": "diverse-plateau",
+      "raw": 143,
+      "signed": 142,
+      "gold": false,
+      "board": "ef6ae716acf072742300ed0ca2739efd5dbc771b71a2de2e92a0084b2c69c51a",
+      "states": [
+        {
+          "cursor": 8,
+          "current": "050de99c8277ba28d8a77e470747c9a42f143395ec53c1adad2e5d3e2c57681c",
+          "phases": "16d63a33d0bf9fa319a38fe0ef160b3e61feb6b1bb711872b762e248d735e4c6",
+          "raw": 114,
+          "signed": 112
+        },
+        {
+          "cursor": 16,
+          "current": "c8506525c9a2bba2745f5c99054865be45b5f9d1495a7c332fd325875ed14805",
+          "phases": "16d63a33d0bf9fa319a38fe0ef160b3e61feb6b1bb711872b762e248d735e4c6",
+          "raw": 128,
+          "signed": 127
+        },
+        {
+          "cursor": 24,
+          "current": "ee5100c55c112fd287c9d2aae4a2692febbb171bd5bfa993d4728f6ed859566f",
+          "phases": "16d63a33d0bf9fa319a38fe0ef160b3e61feb6b1bb711872b762e248d735e4c6",
+          "raw": 132,
+          "signed": 131
+        },
+        {
+          "cursor": 32,
+          "current": "b69e0617843ff76e5c50f01df60d95057cae8a4c601263f2a3ba9e29f14c77ff",
+          "phases": "16d63a33d0bf9fa319a38fe0ef160b3e61feb6b1bb711872b762e248d735e4c6",
+          "raw": 134,
+          "signed": 133
+        },
+        {
+          "cursor": 40,
+          "current": "e79bbd467c06fd0eccb8f9cff16eb350a1528e89dd1ad29b9ffc16cd3af8e367",
+          "phases": "16d63a33d0bf9fa319a38fe0ef160b3e61feb6b1bb711872b762e248d735e4c6",
+          "raw": 137,
+          "signed": 136
+        },
+        {
+          "cursor": 48,
+          "current": "e79bbd467c06fd0eccb8f9cff16eb350a1528e89dd1ad29b9ffc16cd3af8e367",
+          "phases": "16d63a33d0bf9fa319a38fe0ef160b3e61feb6b1bb711872b762e248d735e4c6",
+          "raw": 137,
+          "signed": 136
+        },
+        {
+          "cursor": 56,
+          "current": "b20e47aae8ce311a28b2071b27e8af1523f5bb0e7ac7d292b82350103b0d5025",
+          "phases": "16d63a33d0bf9fa319a38fe0ef160b3e61feb6b1bb711872b762e248d735e4c6",
+          "raw": 140,
+          "signed": 139
+        },
+        {
+          "cursor": 64,
+          "current": "ef6ae716acf072742300ed0ca2739efd5dbc771b71a2de2e92a0084b2c69c51a",
+          "phases": "16d63a33d0bf9fa319a38fe0ef160b3e61feb6b1bb711872b762e248d735e4c6",
+          "raw": 143,
+          "signed": 142
+        }
+      ],
+      "work": {
+        "phase_calls": 1,
+        "last_signed_gain_round": 59,
+        "rounds": 64,
+        "round_to_signed_100": 5,
+        "round_to_signed_110": 7,
+        "refit_calls": 7,
+        "refit_branches": 143695,
+        "refit_cuts": 0,
+        "reused_refit_cuts": 0,
+        "round_to_signed_120": 11,
+        "round_to_signed_130": 20,
+        "round_to_signed_140": 57,
+        "dart_templates_built": 454,
+        "signed_dart_prices": 454,
+        "rows_computed": 3540,
+        "assignments": 64,
+        "full_score_edges": 240,
+        "signed_dart_reuses": 10166,
+        "delta_score_edges": 567,
+        "mandatory_bonds": 8
+      }
+    },
+    {
+      "seed": 11,
+      "arm": "diverse-plateau",
+      "raw": 133,
+      "signed": 132,
+      "gold": false,
+      "board": "feb6e722579aaede77c9f61e747a950cc7647be6c327142377382ce5411c4b70",
+      "states": [
+        {
+          "cursor": 8,
+          "current": "e85d832251d60058e7fb4db4ee1d2dbe7ab75b60e72c6ec7ac791c47a0d11614",
+          "phases": "9eb38b91be76ad3b49746b30d3f5d65305ffebdabc11e38d5c89145974f1a313",
+          "raw": 121,
+          "signed": 119
+        },
+        {
+          "cursor": 16,
+          "current": "40ce3d22dabfb138be4e8f629f694aca7c0c41ccada12564e123cf5c788e7a2d",
+          "phases": "9eb38b91be76ad3b49746b30d3f5d65305ffebdabc11e38d5c89145974f1a313",
+          "raw": 126,
+          "signed": 124
+        },
+        {
+          "cursor": 24,
+          "current": "6cea6da0fae603da24adee8338f94a8c875d98b47d6d1ddc184722edb937347a",
+          "phases": "9eb38b91be76ad3b49746b30d3f5d65305ffebdabc11e38d5c89145974f1a313",
+          "raw": 129,
+          "signed": 128
+        },
+        {
+          "cursor": 32,
+          "current": "088a1b9fedd22d36ec43fb689f8328fef630230dab7eb43f26516e93f1db990c",
+          "phases": "9eb38b91be76ad3b49746b30d3f5d65305ffebdabc11e38d5c89145974f1a313",
+          "raw": 132,
+          "signed": 131
+        },
+        {
+          "cursor": 40,
+          "current": "feb6e722579aaede77c9f61e747a950cc7647be6c327142377382ce5411c4b70",
+          "phases": "9eb38b91be76ad3b49746b30d3f5d65305ffebdabc11e38d5c89145974f1a313",
+          "raw": 133,
+          "signed": 132
+        },
+        {
+          "cursor": 48,
+          "current": "feb6e722579aaede77c9f61e747a950cc7647be6c327142377382ce5411c4b70",
+          "phases": "9eb38b91be76ad3b49746b30d3f5d65305ffebdabc11e38d5c89145974f1a313",
+          "raw": 133,
+          "signed": 132
+        },
+        {
+          "cursor": 56,
+          "current": "feb6e722579aaede77c9f61e747a950cc7647be6c327142377382ce5411c4b70",
+          "phases": "9eb38b91be76ad3b49746b30d3f5d65305ffebdabc11e38d5c89145974f1a313",
+          "raw": 133,
+          "signed": 132
+        },
+        {
+          "cursor": 64,
+          "current": "feb6e722579aaede77c9f61e747a950cc7647be6c327142377382ce5411c4b70",
+          "phases": "9eb38b91be76ad3b49746b30d3f5d65305ffebdabc11e38d5c89145974f1a313",
+          "raw": 133,
+          "signed": 132
+        }
+      ],
+      "work": {
+        "phase_calls": 1,
+        "last_signed_gain_round": 34,
+        "rounds": 64,
+        "round_to_signed_100": 4,
+        "round_to_signed_110": 5,
+        "refit_calls": 7,
+        "refit_branches": 102113,
+        "refit_cuts": 0,
+        "reused_refit_cuts": 0,
+        "round_to_signed_120": 10,
+        "round_to_signed_130": 25,
+        "diverse_refit_attempts": 1,
+        "dart_templates_built": 450,
+        "signed_dart_prices": 450,
+        "rows_computed": 3509,
+        "assignments": 64,
+        "full_score_edges": 240,
+        "signed_dart_reuses": 10077,
+        "delta_score_edges": 411,
+        "mandatory_bonds": 8
+      }
+    },
+    {
+      "seed": 19,
+      "arm": "diverse-plateau",
+      "raw": 136,
+      "signed": 134,
+      "gold": false,
+      "board": "d48ae268d2b57dc829713c26007a7fda46d7c4a59749b31a0bd0f1c124528a7a",
+      "states": [
+        {
+          "cursor": 8,
+          "current": "0357f51ea45eeaf8d695eb59aa931b461f6775e0e8cd04b1c70f07438a86ef2d",
+          "phases": "3bf6dfd2c9c4220aef69b2ef4aaacbb6574f8e6db5969211523333ef22cebec4",
+          "raw": 118,
+          "signed": 117
+        },
+        {
+          "cursor": 16,
+          "current": "db86691a150e99a80caa074e01a1a06ceaf50c6e42720f90435d436bff75d85b",
+          "phases": "3bf6dfd2c9c4220aef69b2ef4aaacbb6574f8e6db5969211523333ef22cebec4",
+          "raw": 130,
+          "signed": 129
+        },
+        {
+          "cursor": 24,
+          "current": "3b4f8a867b287c405abf67e98029d054e89d4252fb0f8cfb5264ede9053063f5",
+          "phases": "3bf6dfd2c9c4220aef69b2ef4aaacbb6574f8e6db5969211523333ef22cebec4",
+          "raw": 132,
+          "signed": 131
+        },
+        {
+          "cursor": 32,
+          "current": "29e2e4e64b700aa75a09d11ccffa996b316451c203d2d7530e4329ad12fd282f",
+          "phases": "3bf6dfd2c9c4220aef69b2ef4aaacbb6574f8e6db5969211523333ef22cebec4",
+          "raw": 135,
+          "signed": 133
+        },
+        {
+          "cursor": 40,
+          "current": "d48ae268d2b57dc829713c26007a7fda46d7c4a59749b31a0bd0f1c124528a7a",
+          "phases": "3bf6dfd2c9c4220aef69b2ef4aaacbb6574f8e6db5969211523333ef22cebec4",
+          "raw": 136,
+          "signed": 134
+        },
+        {
+          "cursor": 48,
+          "current": "d48ae268d2b57dc829713c26007a7fda46d7c4a59749b31a0bd0f1c124528a7a",
+          "phases": "3bf6dfd2c9c4220aef69b2ef4aaacbb6574f8e6db5969211523333ef22cebec4",
+          "raw": 136,
+          "signed": 134
+        },
+        {
+          "cursor": 56,
+          "current": "d48ae268d2b57dc829713c26007a7fda46d7c4a59749b31a0bd0f1c124528a7a",
+          "phases": "3bf6dfd2c9c4220aef69b2ef4aaacbb6574f8e6db5969211523333ef22cebec4",
+          "raw": 136,
+          "signed": 134
+        },
+        {
+          "cursor": 64,
+          "current": "d48ae268d2b57dc829713c26007a7fda46d7c4a59749b31a0bd0f1c124528a7a",
+          "phases": "3bf6dfd2c9c4220aef69b2ef4aaacbb6574f8e6db5969211523333ef22cebec4",
+          "raw": 136,
+          "signed": 134
+        }
+      ],
+      "work": {
+        "phase_calls": 1,
+        "last_signed_gain_round": 38,
+        "rounds": 64,
+        "round_to_signed_100": 4,
+        "round_to_signed_110": 5,
+        "refit_calls": 7,
+        "refit_branches": 103219,
+        "refit_cuts": 0,
+        "reused_refit_cuts": 0,
+        "round_to_signed_120": 9,
+        "round_to_signed_130": 17,
+        "diverse_refit_attempts": 1,
+        "dart_templates_built": 451,
+        "signed_dart_prices": 451,
+        "rows_computed": 3524,
+        "assignments": 64,
+        "full_score_edges": 240,
+        "signed_dart_reuses": 10121,
+        "delta_score_edges": 429,
+        "mandatory_bonds": 8
+      }
+    },
+    {
+      "seed": 31,
+      "arm": "diverse-plateau",
+      "raw": 139,
+      "signed": 138,
+      "gold": false,
+      "board": "5d5ef0f7eb521dd5f7f1bae5c33f0408980ee9a6d7f764bdacdd6f272de70bdf",
+      "states": [
+        {
+          "cursor": 8,
+          "current": "64e459d7b81e47e9ecf24dd66df0b93c0d82adcee519f9527cdae096ea577967",
+          "phases": "c8284839113189d418a55dcd57e4674d472e7017a1e20edb4085bfbb00455786",
+          "raw": 121,
+          "signed": 121
+        },
+        {
+          "cursor": 16,
+          "current": "d4cb481d25577334db44804a365ae9362ce5247ee28230fbaf267ded776822f4",
+          "phases": "c8284839113189d418a55dcd57e4674d472e7017a1e20edb4085bfbb00455786",
+          "raw": 137,
+          "signed": 136
+        },
+        {
+          "cursor": 24,
+          "current": "5d5ef0f7eb521dd5f7f1bae5c33f0408980ee9a6d7f764bdacdd6f272de70bdf",
+          "phases": "c8284839113189d418a55dcd57e4674d472e7017a1e20edb4085bfbb00455786",
+          "raw": 139,
+          "signed": 138
+        },
+        {
+          "cursor": 32,
+          "current": "5d5ef0f7eb521dd5f7f1bae5c33f0408980ee9a6d7f764bdacdd6f272de70bdf",
+          "phases": "c8284839113189d418a55dcd57e4674d472e7017a1e20edb4085bfbb00455786",
+          "raw": 139,
+          "signed": 138
+        },
+        {
+          "cursor": 40,
+          "current": "5d5ef0f7eb521dd5f7f1bae5c33f0408980ee9a6d7f764bdacdd6f272de70bdf",
+          "phases": "c8284839113189d418a55dcd57e4674d472e7017a1e20edb4085bfbb00455786",
+          "raw": 139,
+          "signed": 138
+        },
+        {
+          "cursor": 48,
+          "current": "5d5ef0f7eb521dd5f7f1bae5c33f0408980ee9a6d7f764bdacdd6f272de70bdf",
+          "phases": "c8284839113189d418a55dcd57e4674d472e7017a1e20edb4085bfbb00455786",
+          "raw": 139,
+          "signed": 138
+        },
+        {
+          "cursor": 56,
+          "current": "5d5ef0f7eb521dd5f7f1bae5c33f0408980ee9a6d7f764bdacdd6f272de70bdf",
+          "phases": "c8284839113189d418a55dcd57e4674d472e7017a1e20edb4085bfbb00455786",
+          "raw": 139,
+          "signed": 138
+        },
+        {
+          "cursor": 64,
+          "current": "5d5ef0f7eb521dd5f7f1bae5c33f0408980ee9a6d7f764bdacdd6f272de70bdf",
+          "phases": "c8284839113189d418a55dcd57e4674d472e7017a1e20edb4085bfbb00455786",
+          "raw": 139,
+          "signed": 138
+        }
+      ],
+      "work": {
+        "phase_calls": 1,
+        "last_signed_gain_round": 23,
+        "rounds": 64,
+        "round_to_signed_100": 3,
+        "round_to_signed_110": 6,
+        "round_to_signed_120": 8,
+        "refits_skipped_by_ceiling": 2,
+        "round_to_signed_130": 11,
+        "refit_calls": 5,
+        "refit_branches": 52123,
+        "refit_cuts": 0,
+        "reused_refit_cuts": 0,
+        "diverse_refit_attempts": 2,
+        "dart_templates_built": 451,
+        "signed_dart_prices": 451,
+        "rows_computed": 3479,
+        "assignments": 64,
+        "full_score_edges": 240,
+        "signed_dart_reuses": 9986,
+        "delta_score_edges": 429,
+        "mandatory_bonds": 8
+      }
+    },
+    {
+      "seed": 51,
+      "arm": "diverse-plateau",
+      "raw": 137,
+      "signed": 136,
+      "gold": false,
+      "board": "59ac06fcc4f12a67d7c674d40c8c4555bfa2ca7008b43a6a46a70d828d9319bf",
+      "states": [
+        {
+          "cursor": 8,
+          "current": "caa592c6260353f9b9ac80853613bc283b34fb6c7ad8b997fcafe6f4ecb8af89",
+          "phases": "81e0668f380a2ff123f3af9f33a42d3a275fd60ba0dac912fd722ff1453e1201",
+          "raw": 124,
+          "signed": 123
+        },
+        {
+          "cursor": 16,
+          "current": "bff5e18b750c323e8e4c459f8a28ee3f48df88969c3cf86655d52d99a30fa2a0",
+          "phases": "81e0668f380a2ff123f3af9f33a42d3a275fd60ba0dac912fd722ff1453e1201",
+          "raw": 132,
+          "signed": 131
+        },
+        {
+          "cursor": 24,
+          "current": "78726a748a376fd11a3c36ca7af7c5736ceab087adaa812569d7ac6958768b42",
+          "phases": "81e0668f380a2ff123f3af9f33a42d3a275fd60ba0dac912fd722ff1453e1201",
+          "raw": 135,
+          "signed": 134
+        },
+        {
+          "cursor": 32,
+          "current": "59ac06fcc4f12a67d7c674d40c8c4555bfa2ca7008b43a6a46a70d828d9319bf",
+          "phases": "81e0668f380a2ff123f3af9f33a42d3a275fd60ba0dac912fd722ff1453e1201",
+          "raw": 137,
+          "signed": 136
+        },
+        {
+          "cursor": 40,
+          "current": "59ac06fcc4f12a67d7c674d40c8c4555bfa2ca7008b43a6a46a70d828d9319bf",
+          "phases": "81e0668f380a2ff123f3af9f33a42d3a275fd60ba0dac912fd722ff1453e1201",
+          "raw": 137,
+          "signed": 136
+        },
+        {
+          "cursor": 48,
+          "current": "59ac06fcc4f12a67d7c674d40c8c4555bfa2ca7008b43a6a46a70d828d9319bf",
+          "phases": "81e0668f380a2ff123f3af9f33a42d3a275fd60ba0dac912fd722ff1453e1201",
+          "raw": 137,
+          "signed": 136
+        },
+        {
+          "cursor": 56,
+          "current": "59ac06fcc4f12a67d7c674d40c8c4555bfa2ca7008b43a6a46a70d828d9319bf",
+          "phases": "81e0668f380a2ff123f3af9f33a42d3a275fd60ba0dac912fd722ff1453e1201",
+          "raw": 137,
+          "signed": 136
+        },
+        {
+          "cursor": 64,
+          "current": "59ac06fcc4f12a67d7c674d40c8c4555bfa2ca7008b43a6a46a70d828d9319bf",
+          "phases": "81e0668f380a2ff123f3af9f33a42d3a275fd60ba0dac912fd722ff1453e1201",
+          "raw": 137,
+          "signed": 136
+        }
+      ],
+      "work": {
+        "phase_calls": 1,
+        "last_signed_gain_round": 30,
+        "rounds": 64,
+        "round_to_signed_100": 3,
+        "round_to_signed_110": 5,
+        "round_to_signed_120": 7,
+        "refit_calls": 7,
+        "refit_branches": 72693,
+        "refit_cuts": 0,
+        "reused_refit_cuts": 0,
+        "round_to_signed_130": 14,
+        "diverse_refit_attempts": 2,
+        "dart_templates_built": 450,
+        "signed_dart_prices": 450,
+        "rows_computed": 3534,
+        "assignments": 64,
+        "full_score_edges": 240,
+        "signed_dart_reuses": 10152,
+        "delta_score_edges": 366,
+        "mandatory_bonds": 8
+      }
+    }
+  ]
+}
