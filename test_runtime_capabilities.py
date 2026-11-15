@@ -164,7 +164,7 @@ class RuntimeCapabilityTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which('node'), 'Node verifies the dashboard availability controls')
     def test_frontend_preserves_saved_choices_and_allows_clearing_unavailable_flags(self):
         source = (ROOT / 'Dashboard.html').read_text(encoding='utf-8')
-        function = source[source.index('function renderRuntimeAvailability('):source.index('function renderAlgorithmControls(')]
+        function = source[source.index('function canVerifyTerminal('):source.index('function renderAlgorithmControls(')]
         harness = r"""
 const assert=require('assert');
 const controls={};
