@@ -1,0 +1,271 @@
+{
+  "word_classes": [
+    {
+      "length": 3,
+      "mixed_classes": 1,
+      "feasible": 0,
+      "impossible": 1
+    },
+    {
+      "length": 4,
+      "mixed_classes": 3,
+      "feasible": 0,
+      "impossible": 3
+    },
+    {
+      "length": 5,
+      "mixed_classes": 3,
+      "feasible": 0,
+      "impossible": 3
+    },
+    {
+      "length": 6,
+      "mixed_classes": 8,
+      "feasible": 0,
+      "impossible": 8
+    },
+    {
+      "length": 7,
+      "mixed_classes": 9,
+      "feasible": 0,
+      "impossible": 9
+    },
+    {
+      "length": 8,
+      "mixed_classes": 21,
+      "feasible": 1,
+      "impossible": 20
+    },
+    {
+      "length": 9,
+      "mixed_classes": 29,
+      "feasible": 1,
+      "impossible": 28
+    },
+    {
+      "length": 10,
+      "mixed_classes": 61,
+      "feasible": 2,
+      "impossible": 59
+    }
+  ],
+  "original_residuals": {
+    "scopes": [
+      {
+        "bonds": 4,
+        "removed": 2,
+        "removed_beyond_corners": 0,
+        "tested_scopes": 10
+      },
+      {
+        "bonds": 12,
+        "removed": 6,
+        "removed_beyond_corners": 0,
+        "tested_scopes": 10
+      },
+      {
+        "bonds": 24,
+        "removed": 9,
+        "removed_beyond_corners": 0,
+        "tested_scopes": 9,
+        "prior_matching_closed": 1
+      },
+      {
+        "bonds": 48,
+        "removed": 18,
+        "removed_beyond_corners": 1,
+        "tested_scopes": 8,
+        "prior_matching_closed": 2
+      },
+      {
+        "bonds": 96,
+        "all_closed": 1,
+        "closed_beyond_corners": 0,
+        "tested_scopes": 4,
+        "prior_matching_closed": 6,
+        "removed": 46,
+        "removed_beyond_corners": 0
+      },
+      {
+        "bonds": 144,
+        "prior_matching_closed": 10
+      }
+    ],
+    "work": {
+      "conditional_polygons": 84,
+      "distinct_words": 26,
+      "root_walks": 12480,
+      "conditional_exclusions": 81,
+      "word_reuses": 59,
+      "mixed_polygons": 1,
+      "conflicts": 1,
+      "required_conflicts": 1
+    },
+    "distinct_geographic_cores": [
+      {
+        "pins": 48,
+        "seed": 5,
+        "mate": [
+          45,
+          365
+        ],
+        "cycle": [
+          [
+            45,
+            365
+          ],
+          [
+            47,
+            103
+          ],
+          [
+            63,
+            102
+          ],
+          [
+            65,
+            320
+          ],
+          [
+            318,
+            364
+          ]
+        ]
+      }
+    ]
+  },
+  "original_nonblank_sewing": [
+    {
+      "length": 5,
+      "work": {},
+      "unique_proven": 0,
+      "poses_without_word_cache": 0
+    },
+    {
+      "length": 7,
+      "work": {
+        "mixed_polygons": 11,
+        "distinct_words": 7,
+        "root_walks": 3360,
+        "conflicts": 11,
+        "word_reuses": 4
+      },
+      "unique_proven": 11,
+      "poses_without_word_cache": 5280
+    },
+    {
+      "length": 10,
+      "work": {
+        "mixed_polygons": 43,
+        "distinct_words": 35,
+        "root_walks": 16800,
+        "conflicts": 41,
+        "word_reuses": 8
+      },
+      "unique_proven": 41,
+      "poses_without_word_cache": 19680
+    }
+  ],
+  "held_out": [
+    {
+      "seed": 35,
+      "prior": {
+        "status": "GOLD",
+        "cp_calls": 13,
+        "branches": 1198
+      },
+      "words": {
+        "status": "GOLD",
+        "cp_calls": 4,
+        "branches": 251,
+        "turn_word_work": {
+          "mixed_polygons": 71,
+          "distinct_words": 24,
+          "root_walks": 720,
+          "conflicts": 24,
+          "word_reuses": 47
+        }
+      },
+      "channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      }
+    },
+    {
+      "seed": 71,
+      "prior": {
+        "status": "GOLD",
+        "cp_calls": 34,
+        "branches": 8575
+      },
+      "words": {
+        "status": "GOLD",
+        "cp_calls": 7,
+        "branches": 126,
+        "turn_word_work": {
+          "mixed_polygons": 103,
+          "distinct_words": 37,
+          "root_walks": 1110,
+          "conflicts": 48,
+          "word_reuses": 66
+        }
+      },
+      "channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      }
+    },
+    {
+      "seed": 103,
+      "prior": {
+        "status": "UNKNOWN",
+        "cp_calls": 40,
+        "branches": 10805
+      },
+      "words": {
+        "status": "GOLD",
+        "cp_calls": 7,
+        "branches": 281,
+        "turn_word_work": {
+          "mixed_polygons": 98,
+          "distinct_words": 35,
+          "root_walks": 1050,
+          "conflicts": 48,
+          "word_reuses": 63
+        }
+      },
+      "channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      }
+    },
+    {
+      "seed": 157,
+      "prior": {
+        "status": "GOLD",
+        "cp_calls": 9,
+        "branches": 180
+      },
+      "words": {
+        "status": "GOLD",
+        "cp_calls": 3,
+        "branches": 77,
+        "turn_word_work": {
+          "mixed_polygons": 61,
+          "distinct_words": 19,
+          "root_walks": 570,
+          "conflicts": 16,
+          "word_reuses": 42
+        }
+      },
+      "channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      }
+    }
+  ]
+}

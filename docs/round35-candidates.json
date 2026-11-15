@@ -58,7 +58,14 @@
       "source_id": 4,
       "title": "Price short physical tile-adjacency words against the mesh",
       "proposal_and_validation": "When following non-backtracking physical tile bonds, the two sides used at every intermediate tile specify a left/right turn. Precompute the walk of each short turn word from every oriented cell of the target mesh. A closed polygon of distinct physical tiles requires a return to the initial pose with the prescribed headings and no internal duplicate cells. For witnessed impossible words learn explicitly scoped co-selection nogoods over just the participating side pairs, including two distinct physical paths between the same named tiles that imply incompatible relative poses. Use anchored domains as an optional finer table. r28_geo_sewing.PosePacking and the R27 partial component embedder already discover contradictions by enumerating root poses for each named component. The proposed reusable object is shared across different physical identities with the same oriented mesh word, and can be applied before a complete sewing. Constant-turn words overlap item 2; restrict the comparison here to mixed-turn words. Use short-word registry cardinalities as a stop gate. Compare all flags to direct traversal including reversed roots/words on small target meshes. Count reused nonconstant word obstructions, earlier exclusions and saved component root trials.",
-      "state": "in progress"
+      "state": "keep with exact scope",
+      "evidence": [
+        "docs/ROUND35_TURN_WORDS.md",
+        "docs/R35_TURN_WORDS.json",
+        "test_r35_turn_words.py"
+      ],
+      "decision": "Retain explicit mixed-turn polygon cuts. At 60 real residuals the 26-word cache reused 59 prices, removed 81 mates and closed one scope. One checked 48-pin mate survived #2. All four finite planted scopes recovered verified Gold within seven calls. The existing fully channeled model needed one call/zero branches on each.",
+      "reopen_if": "A further representative population has reusable longer polygons beyond the supported diagnostic length or shows additive gain in the full geographic engine."
     },
     {
       "id": 5,
@@ -66,7 +73,7 @@
       "source_id": 5,
       "title": "Test factor-criticality of the odd optimistic strand graph",
       "proposal_and_validation": "A Hamiltonian cycle of odd length loses one vertex to become an even path with a perfect matching. Hence each vertex of an odd optimistic segment graph must be exposable by a maximum matching. An even Hamiltonian graph has a perfect matching. The same necessity applies after contracting already selected disjoint open strand paths, using actual remaining free endpoints for adjacencies. Handle trivial one/two-component cases and completed circuits separately; a simple collapsed two-vertex graph does not encode two distinct required joins. Start with r27_structure_filters.strand_graph, r32_gold_bonds._open_paths and r30_gold.GoldMatching.transitions. Extend to exposing all vertices in one matching decomposition and independently check any negative witness using an unmatched residual or an odd-component obstruction. Sparse conditional mate tests can use the same graph after selecting that whole seam bundle. R27 tested removing every single and pair of strand vertices for excessive component count. R34 tested matching on physical *side* classes. Neither supplies this strand matching condition. Enumerate small Hamiltonian positives and synthetic factor-critical obstructions that pass the existing checks; compare real post-matching residuals by independent cuts and added mate deletions.",
-      "state": "open"
+      "state": "in progress"
     },
     {
       "id": 6,
@@ -818,10 +825,10 @@
       "source_id": 5,
       "title": "Carry verified parked lane slices through repeated resizes",
       "proposal_and_validation": "Native lane resize validates and re-encodes every parked batch in gpu_lane_resize_round34.restore_slices. For a multi-stage resize and partially retired backlog, measure exact verified slices that could be carried through without recompression or remain lazily decoded until activated. Compare equivalent lane ownership, sums of counters, identical continuation, early-stop, tamper/deferred-error handling and CPU memory peak; never certify a negative before every contributing native state was validated.",
-      "state": "in progress",
+      "state": "keep with exact scope",
       "mechanism": "Carry verified parked native GPU archive slices through repeated resizes",
       "evidence": "docs/ROUND35_COVERAGE.md",
-      "interim_measured": {
+      "measurement": {
         "original_parked_raw_bytes_reencoded": [
           41462256,
           18846480,
@@ -834,11 +841,21 @@
         ],
         "stages": 9,
         "validated_archive_decodes_per_arm": 35,
-        "real_dispatch_comparisons": 4
+        "real_dispatch_comparisons": 4,
+        "cache_cases": 70,
+        "selected_limit_bytes": 134217728,
+        "original_128_decoded_bytes": [
+          286466496,
+          120617472
+        ],
+        "original_256_decoded_bytes": [
+          467392704,
+          339236640
+        ],
+        "original_256_minimum_with_larger_cache": 241234944
       },
-      "decision_changing_followups": [
-        "Measure bounded verified decoded-state reuse through completed dispatch and early pause on the original and finite boards. Include RAM cap, partially retired queues, corrupt archives, independently verified answers, and the measured extra decode work at width one. Close or reject for supported scopes in this workstream."
-      ]
+      "closure_reason": "Verified intact batches remain portable through resizes. Full, interrupted, mixed-width, donated, forked, factored, over-cap and corrupt inputs settled the archive and memory choices. All inputs were validated before coverage acceptance.",
+      "reopen_trigger": "A new wire codec, owner protocol, host-memory target, or a reproducible changed frontier or material decode cost outside the tested scope."
     },
     {
       "id": 70,
