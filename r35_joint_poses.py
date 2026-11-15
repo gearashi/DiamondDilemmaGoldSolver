@@ -6,12 +6,20 @@ from constraint_pruning import _tile_choices
 from r27_structure_filters import Work,WorkLimit,bits
 
 
-def narrowed_poses(domains,clusters,*,residual=True,work_limit=200000,free_support=True,problem=None,contact_options=None,bonds=()):
+def narrowed_poses(domains,clusters,*,residual=True,work_limit=200000,free_support=True,problem=None,contact_options=None,bonds=(),pins=None):
     n=len(domains)
     join_stats={}
+    options=dict(contact_options or {})
+    if problem is not None and pins:
+        from r32_gold_bonds import inventory
+        from r35_pose_contacts import PhaseRelations
+        phases=PhaseRelations(problem,[*inventory(problem).required,*bonds],pins)
+        if not phases.valid:
+            return dict(domains=(0,)*n,poses=(),complete=True,stats={'incompatible_named_phases':1})
+        options['phases']=phases
     if bonds and problem is not None:
         from r35_pose_contacts import conditioned_components
-        clusters,join_stats=conditioned_components(problem,domains,clusters,bonds)
+        clusters,join_stats=conditioned_components(problem,domains,clusters,bonds,options.get('phases'))
     groups=[]
     masks=[]
     for members,member_codes,embeddings in clusters:
@@ -30,7 +38,7 @@ def narrowed_poses(domains,clusters,*,residual=True,work_limit=200000,free_suppo
     complete=True
     if problem is not None:
         from r35_pose_contacts import compatible_poses
-        groups,contact_stats,complete=compatible_poses(problem,groups,work,**(contact_options or {}))
+        groups,contact_stats,complete=compatible_poses(problem,groups,work,**options)
         stats.update(contact_stats)
     free_mask=(1<<(3*n))-1
     for mask in masks:free_mask&=~mask

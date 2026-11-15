@@ -95,4 +95,32 @@ class ContactTests(unittest.TestCase):
             self.assertEqual(answer['status'],'GOLD')
             self.assertTrue(p.validate(answer['codes'])['valid'])
 
+    def test_signed_named_poses_preserve_each_compatible_gold_and_its_complement(self):
+        from bench_r35_mixed_sewings import labels
+        from r27_structure_fixtures import planted,independent
+        from r29_gold_phase import EndpointCuts
+        from constraint_pruning import Pruner
+        from r30_gold import search
+        from r35_pose_contacts import PhaseRelations
+        p,ds=planted(1,4,85);solutions=independent(p,ds)
+        self.assertTrue(solutions)
+        groups=Pruner(p,regions=[],parity=False,gold_bonds=True).clusters
+        for goal in solutions:
+            pairs=[]
+            for c,s,d,t in p.edges:
+                v,w=goal[c],goal[d]
+                pairs.append(tuple(sorted((3*(v//3)+(s-v%3)%3,3*(w//3)+(t-w%3)%3))))
+            phase=labels(p,pairs,EndpointCuts(p).sides)
+            self.assertIsNotNone(phase)
+            for complement in (0,1):
+                for stride in (1,2,4):
+                    pins={i:phase[i]^complement for i in range(0,p.n,stride)}
+                    state=narrowed_poses(ds,groups,problem=p,pins=pins,bonds=pairs[:2])
+                    self.assertTrue(all(state['domains'][i]>>v&1 for i,v in enumerate(goal)))
+            a,b=pairs[0];wrong={a//3:phase[a//3],b//3:phase[b//3]^1}
+            self.assertFalse(PhaseRelations(p,[pairs[0]],wrong).valid)
+            refuted=search(p,domains=ds,bonds=pairs[:1],pins=wrong,geography=True,joint_poses=True,phase_anchors='off')
+            self.assertEqual(refuted['status'],'INFEASIBLE')
+            self.assertEqual(refuted['cp_calls'],0)
+
 if __name__=='__main__':unittest.main()

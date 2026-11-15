@@ -1,0 +1,8628 @@
+{
+  "schema": 1,
+  "original": {
+    "input": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "root": {
+      "metrics": {
+        "internally_incompatible": 0,
+        "separate_area_supports": 26880
+      },
+      "cost": {},
+      "done": true,
+      "labelled": 3840
+    },
+    "cases": [
+      {
+        "kind": "released_restricted",
+        "seed": 35,
+        "runs": {
+          "footprint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "disjoint_pool_witnesses": 1390,
+              "support_witnesses": 1390,
+              "unsupported_footprints": 37,
+              "pose_pack_nodes": 11170,
+              "pose_overlap_tests": 42772,
+              "removed_codes": 1010,
+              "remaining_labelled": 2811
+            },
+            "codes": 73878,
+            "children": 2,
+            "possible": true
+          },
+          "edge_masks": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27807,
+              "pairwise_unsupported": 208,
+              "disjoint_pool_witnesses": 1321,
+              "support_witnesses": 1321,
+              "contact_family_queries": 10976,
+              "pose_pack_nodes": 10574,
+              "pose_overlap_tests": 40573,
+              "removed_codes": 1280,
+              "remaining_labelled": 2676
+            },
+            "codes": 73608,
+            "children": 2,
+            "possible": true
+          },
+          "physical_pairs": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27807,
+              "pairwise_unsupported": 208,
+              "disjoint_pool_witnesses": 1321,
+              "support_witnesses": 1321,
+              "contact_family_queries": 10976,
+              "pose_pack_nodes": 10574,
+              "pose_overlap_tests": 40573,
+              "removed_codes": 1280,
+              "remaining_labelled": 2676
+            },
+            "codes": 73608,
+            "children": 2,
+            "possible": true
+          },
+          "all_queries": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 0,
+              "pairwise_unsupported": 208,
+              "disjoint_pool_witnesses": 1321,
+              "support_witnesses": 1321,
+              "contact_family_queries": 37742,
+              "pose_pack_nodes": 10574,
+              "pose_overlap_tests": 40573,
+              "removed_codes": 1280,
+              "remaining_labelled": 2676
+            },
+            "codes": 73608,
+            "children": 2,
+            "possible": true
+          },
+          "joint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27807,
+              "pairwise_unsupported": 208,
+              "disjoint_pool_witnesses": 1321,
+              "support_witnesses": 1321,
+              "contact_family_queries": 10976,
+              "pose_pack_nodes": 10574,
+              "pose_overlap_tests": 40573,
+              "removed_codes": 1280,
+              "remaining_labelled": 2676
+            },
+            "codes": 73608,
+            "children": 2,
+            "possible": true
+          }
+        }
+      },
+      {
+        "kind": "released_restricted",
+        "seed": 71,
+        "runs": {
+          "footprint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "disjoint_pool_witnesses": 1390,
+              "support_witnesses": 1390,
+              "unsupported_footprints": 37,
+              "pose_pack_nodes": 11170,
+              "pose_overlap_tests": 42772,
+              "removed_codes": 1010,
+              "remaining_labelled": 2811
+            },
+            "codes": 73878,
+            "children": 2,
+            "possible": true
+          },
+          "edge_masks": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27697,
+              "pairwise_unsupported": 230,
+              "disjoint_pool_witnesses": 1313,
+              "support_witnesses": 1313,
+              "contact_family_queries": 10921,
+              "pose_pack_nodes": 10510,
+              "pose_overlap_tests": 40352,
+              "removed_codes": 1324,
+              "remaining_labelled": 2654
+            },
+            "codes": 73564,
+            "children": 2,
+            "possible": true
+          },
+          "physical_pairs": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27697,
+              "pairwise_unsupported": 230,
+              "disjoint_pool_witnesses": 1313,
+              "support_witnesses": 1313,
+              "contact_family_queries": 10921,
+              "pose_pack_nodes": 10510,
+              "pose_overlap_tests": 40352,
+              "removed_codes": 1324,
+              "remaining_labelled": 2654
+            },
+            "codes": 73564,
+            "children": 2,
+            "possible": true
+          },
+          "all_queries": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 0,
+              "pairwise_unsupported": 230,
+              "disjoint_pool_witnesses": 1313,
+              "support_witnesses": 1313,
+              "contact_family_queries": 37467,
+              "pose_pack_nodes": 10510,
+              "pose_overlap_tests": 40352,
+              "removed_codes": 1324,
+              "remaining_labelled": 2654
+            },
+            "codes": 73564,
+            "children": 2,
+            "possible": true
+          },
+          "joint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27697,
+              "pairwise_unsupported": 230,
+              "disjoint_pool_witnesses": 1313,
+              "support_witnesses": 1313,
+              "contact_family_queries": 10921,
+              "pose_pack_nodes": 10510,
+              "pose_overlap_tests": 40352,
+              "removed_codes": 1324,
+              "remaining_labelled": 2654
+            },
+            "codes": 73564,
+            "children": 2,
+            "possible": true
+          }
+        }
+      },
+      {
+        "kind": "released_restricted",
+        "seed": 103,
+        "runs": {
+          "footprint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "disjoint_pool_witnesses": 1390,
+              "support_witnesses": 1390,
+              "unsupported_footprints": 37,
+              "pose_pack_nodes": 11169,
+              "pose_overlap_tests": 42769,
+              "removed_codes": 1010,
+              "remaining_labelled": 2811
+            },
+            "codes": 73878,
+            "children": 2,
+            "possible": true
+          },
+          "edge_masks": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27802,
+              "pairwise_unsupported": 209,
+              "disjoint_pool_witnesses": 1322,
+              "support_witnesses": 1322,
+              "contact_family_queries": 10963,
+              "pose_pack_nodes": 10582,
+              "pose_overlap_tests": 40619,
+              "removed_codes": 1282,
+              "remaining_labelled": 2675
+            },
+            "codes": 73606,
+            "children": 2,
+            "possible": true
+          },
+          "physical_pairs": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27802,
+              "pairwise_unsupported": 209,
+              "disjoint_pool_witnesses": 1322,
+              "support_witnesses": 1322,
+              "contact_family_queries": 10963,
+              "pose_pack_nodes": 10582,
+              "pose_overlap_tests": 40619,
+              "removed_codes": 1282,
+              "remaining_labelled": 2675
+            },
+            "codes": 73606,
+            "children": 2,
+            "possible": true
+          },
+          "all_queries": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 0,
+              "pairwise_unsupported": 209,
+              "disjoint_pool_witnesses": 1322,
+              "support_witnesses": 1322,
+              "contact_family_queries": 37719,
+              "pose_pack_nodes": 10582,
+              "pose_overlap_tests": 40619,
+              "removed_codes": 1282,
+              "remaining_labelled": 2675
+            },
+            "codes": 73606,
+            "children": 2,
+            "possible": true
+          },
+          "joint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27802,
+              "pairwise_unsupported": 209,
+              "disjoint_pool_witnesses": 1322,
+              "support_witnesses": 1322,
+              "contact_family_queries": 10963,
+              "pose_pack_nodes": 10582,
+              "pose_overlap_tests": 40619,
+              "removed_codes": 1282,
+              "remaining_labelled": 2675
+            },
+            "codes": 73606,
+            "children": 2,
+            "possible": true
+          }
+        }
+      },
+      {
+        "kind": "released_restricted",
+        "seed": 157,
+        "runs": {
+          "footprint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "disjoint_pool_witnesses": 1390,
+              "support_witnesses": 1390,
+              "unsupported_footprints": 37,
+              "pose_pack_nodes": 11169,
+              "pose_overlap_tests": 42769,
+              "removed_codes": 1010,
+              "remaining_labelled": 2811
+            },
+            "codes": 73878,
+            "children": 2,
+            "possible": true
+          },
+          "edge_masks": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27381,
+              "pairwise_unsupported": 293,
+              "disjoint_pool_witnesses": 1280,
+              "support_witnesses": 1280,
+              "contact_family_queries": 10796,
+              "pose_pack_nodes": 10246,
+              "pose_overlap_tests": 39346,
+              "removed_codes": 2314,
+              "remaining_labelled": 2591
+            },
+            "codes": 72574,
+            "children": 430,
+            "possible": true
+          },
+          "physical_pairs": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27381,
+              "pairwise_unsupported": 293,
+              "disjoint_pool_witnesses": 1280,
+              "support_witnesses": 1280,
+              "contact_family_queries": 10796,
+              "pose_pack_nodes": 10246,
+              "pose_overlap_tests": 39346,
+              "removed_codes": 2314,
+              "remaining_labelled": 2591
+            },
+            "codes": 72574,
+            "children": 430,
+            "possible": true
+          },
+          "all_queries": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 0,
+              "pairwise_unsupported": 293,
+              "disjoint_pool_witnesses": 1280,
+              "support_witnesses": 1280,
+              "contact_family_queries": 36710,
+              "pose_pack_nodes": 10246,
+              "pose_overlap_tests": 39346,
+              "removed_codes": 2314,
+              "remaining_labelled": 2591
+            },
+            "codes": 72574,
+            "children": 430,
+            "possible": true
+          },
+          "joint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27381,
+              "pairwise_unsupported": 293,
+              "disjoint_pool_witnesses": 1280,
+              "support_witnesses": 1280,
+              "contact_family_queries": 10796,
+              "pose_pack_nodes": 10246,
+              "pose_overlap_tests": 39346,
+              "removed_codes": 2314,
+              "remaining_labelled": 2591
+            },
+            "codes": 72574,
+            "children": 430,
+            "possible": true
+          }
+        }
+      },
+      {
+        "kind": "four_local_dominoes",
+        "seed": 85,
+        "runs": {
+          "footprint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 975,
+              "disjoint_pool_witnesses": 911,
+              "support_witnesses": 911,
+              "unsupported_footprints": 48,
+              "unsupported_free_owners": 576,
+              "pose_pack_nodes": 15860,
+              "pose_overlap_tests": 50328,
+              "removed_codes": 1920,
+              "remaining_labelled": 1840
+            },
+            "codes": 71072,
+            "children": 4,
+            "possible": true
+          },
+          "edge_masks": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 975,
+              "separate_area_supports": 11598,
+              "pairwise_unsupported": 16,
+              "joint_contact_unsupported": 14,
+              "contact_family_queries": 15373,
+              "contact_joint_nodes": 9,
+              "impossible": 1
+            },
+            "codes": 0,
+            "children": 0,
+            "possible": false
+          },
+          "physical_pairs": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 975,
+              "internally_incompatible": 0,
+              "separate_area_supports": 11598,
+              "pairwise_unsupported": 16,
+              "disjoint_pool_witnesses": 897,
+              "support_witnesses": 897,
+              "unsupported_footprints": 49,
+              "unsupported_free_owners": 720,
+              "contact_family_queries": 15373,
+              "pose_pack_nodes": 14064,
+              "pose_overlap_tests": 37254,
+              "removed_codes": 2386,
+              "remaining_labelled": 1823
+            },
+            "codes": 70606,
+            "children": 2,
+            "possible": true
+          },
+          "all_queries": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 975,
+              "pairwise_unsupported": 16,
+              "joint_contact_unsupported": 14,
+              "contact_family_queries": 26921,
+              "contact_joint_nodes": 9,
+              "impossible": 1
+            },
+            "codes": 0,
+            "children": 0,
+            "possible": false
+          },
+          "joint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 975,
+              "separate_area_supports": 11598,
+              "pairwise_unsupported": 16,
+              "joint_contact_unsupported": 14,
+              "contact_family_queries": 15373,
+              "contact_joint_nodes": 9,
+              "impossible": 1
+            },
+            "codes": 0,
+            "children": 0,
+            "possible": false
+          }
+        }
+      },
+      {
+        "kind": "four_local_dominoes",
+        "seed": 850,
+        "runs": {
+          "footprint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "disjoint_pool_witnesses": 962,
+              "support_witnesses": 962,
+              "pose_pack_nodes": 7700,
+              "pose_overlap_tests": 12953,
+              "removed_codes": 0,
+              "remaining_labelled": 1936
+            },
+            "codes": 72992,
+            "children": 4,
+            "possible": true
+          },
+          "edge_masks": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "internally_incompatible": 0,
+              "separate_area_supports": 17194,
+              "pairwise_unsupported": 46,
+              "joint_contact_unsupported": 3,
+              "disjoint_pool_witnesses": 912,
+              "support_witnesses": 912,
+              "unsupported_footprints": 20,
+              "contact_family_queries": 22758,
+              "contact_joint_nodes": 29,
+              "pose_pack_nodes": 7320,
+              "pose_overlap_tests": 12225,
+              "removed_codes": 1042,
+              "remaining_labelled": 1847
+            },
+            "codes": 71950,
+            "children": 3,
+            "possible": true
+          },
+          "physical_pairs": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "internally_incompatible": 0,
+              "separate_area_supports": 17194,
+              "pairwise_unsupported": 46,
+              "disjoint_pool_witnesses": 937,
+              "support_witnesses": 937,
+              "contact_family_queries": 22758,
+              "pose_pack_nodes": 7500,
+              "pose_overlap_tests": 12584,
+              "removed_codes": 92,
+              "remaining_labelled": 1890
+            },
+            "codes": 72900,
+            "children": 2,
+            "possible": true
+          },
+          "all_queries": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "internally_incompatible": 0,
+              "separate_area_supports": 0,
+              "pairwise_unsupported": 46,
+              "joint_contact_unsupported": 3,
+              "disjoint_pool_witnesses": 912,
+              "support_witnesses": 912,
+              "unsupported_footprints": 20,
+              "contact_family_queries": 39811,
+              "contact_joint_nodes": 29,
+              "pose_pack_nodes": 7320,
+              "pose_overlap_tests": 12225,
+              "removed_codes": 1042,
+              "remaining_labelled": 1847
+            },
+            "codes": 71950,
+            "children": 3,
+            "possible": true
+          },
+          "joint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "internally_incompatible": 0,
+              "separate_area_supports": 17194,
+              "pairwise_unsupported": 46,
+              "joint_contact_unsupported": 3,
+              "disjoint_pool_witnesses": 912,
+              "support_witnesses": 912,
+              "unsupported_footprints": 20,
+              "contact_family_queries": 22758,
+              "contact_joint_nodes": 29,
+              "pose_pack_nodes": 7320,
+              "pose_overlap_tests": 12225,
+              "removed_codes": 1042,
+              "remaining_labelled": 1847
+            },
+            "codes": 71950,
+            "children": 3,
+            "possible": true
+          }
+        }
+      },
+      {
+        "kind": "four_local_dominoes",
+        "seed": 851,
+        "runs": {
+          "footprint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1912,
+              "initial_footprints": 962,
+              "disjoint_pool_witnesses": 941,
+              "support_witnesses": 941,
+              "unsupported_footprints": 5,
+              "pose_pack_nodes": 7537,
+              "pose_overlap_tests": 13535,
+              "removed_codes": 18,
+              "remaining_labelled": 1903
+            },
+            "codes": 72494,
+            "children": 3,
+            "possible": true
+          },
+          "edge_masks": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1912,
+              "initial_footprints": 962,
+              "separate_area_supports": 2908,
+              "pairwise_unsupported": 1909,
+              "contact_family_queries": 5492,
+              "impossible": 1
+            },
+            "codes": 0,
+            "children": 0,
+            "possible": false
+          },
+          "physical_pairs": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1912,
+              "initial_footprints": 962,
+              "separate_area_supports": 2908,
+              "pairwise_unsupported": 1909,
+              "contact_family_queries": 5492,
+              "impossible": 1
+            },
+            "codes": 0,
+            "children": 0,
+            "possible": false
+          },
+          "all_queries": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1912,
+              "initial_footprints": 962,
+              "pairwise_unsupported": 1909,
+              "contact_family_queries": 5504,
+              "impossible": 1
+            },
+            "codes": 0,
+            "children": 0,
+            "possible": false
+          },
+          "joint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1912,
+              "initial_footprints": 962,
+              "separate_area_supports": 2908,
+              "pairwise_unsupported": 1909,
+              "contact_family_queries": 5492,
+              "impossible": 1
+            },
+            "codes": 0,
+            "children": 0,
+            "possible": false
+          }
+        }
+      },
+      {
+        "kind": "four_local_dominoes",
+        "seed": 852,
+        "runs": {
+          "footprint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "disjoint_pool_witnesses": 962,
+              "support_witnesses": 962,
+              "pose_pack_nodes": 7705,
+              "pose_overlap_tests": 14842,
+              "removed_codes": 0,
+              "remaining_labelled": 1936
+            },
+            "codes": 72992,
+            "children": 4,
+            "possible": true
+          },
+          "edge_masks": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "internally_incompatible": 0,
+              "separate_area_supports": 11508,
+              "pairwise_unsupported": 46,
+              "joint_contact_unsupported": 5,
+              "disjoint_pool_witnesses": 933,
+              "support_witnesses": 933,
+              "contact_family_queries": 15254,
+              "contact_joint_nodes": 18,
+              "pose_pack_nodes": 7502,
+              "pose_overlap_tests": 13457,
+              "removed_codes": 102,
+              "remaining_labelled": 1885
+            },
+            "codes": 72890,
+            "children": 2,
+            "possible": true
+          },
+          "physical_pairs": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "internally_incompatible": 0,
+              "separate_area_supports": 11508,
+              "pairwise_unsupported": 46,
+              "disjoint_pool_witnesses": 937,
+              "support_witnesses": 937,
+              "contact_family_queries": 15254,
+              "pose_pack_nodes": 7505,
+              "pose_overlap_tests": 14409,
+              "removed_codes": 92,
+              "remaining_labelled": 1890
+            },
+            "codes": 72900,
+            "children": 3,
+            "possible": true
+          },
+          "all_queries": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "internally_incompatible": 0,
+              "separate_area_supports": 0,
+              "pairwise_unsupported": 46,
+              "joint_contact_unsupported": 5,
+              "disjoint_pool_witnesses": 933,
+              "support_witnesses": 933,
+              "contact_family_queries": 26622,
+              "contact_joint_nodes": 18,
+              "pose_pack_nodes": 7502,
+              "pose_overlap_tests": 13457,
+              "removed_codes": 102,
+              "remaining_labelled": 1885
+            },
+            "codes": 72890,
+            "children": 2,
+            "possible": true
+          },
+          "joint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "internally_incompatible": 0,
+              "separate_area_supports": 11508,
+              "pairwise_unsupported": 46,
+              "joint_contact_unsupported": 5,
+              "disjoint_pool_witnesses": 933,
+              "support_witnesses": 933,
+              "contact_family_queries": 15254,
+              "contact_joint_nodes": 18,
+              "pose_pack_nodes": 7502,
+              "pose_overlap_tests": 13457,
+              "removed_codes": 102,
+              "remaining_labelled": 1885
+            },
+            "codes": 72890,
+            "children": 2,
+            "possible": true
+          }
+        }
+      },
+      {
+        "kind": "four_local_dominoes",
+        "seed": 853,
+        "runs": {
+          "footprint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 975,
+              "disjoint_pool_witnesses": 956,
+              "support_witnesses": 956,
+              "unsupported_footprints": 4,
+              "pose_pack_nodes": 7948,
+              "pose_overlap_tests": 15914,
+              "removed_codes": 16,
+              "remaining_labelled": 1928
+            },
+            "codes": 72976,
+            "children": 4,
+            "possible": true
+          },
+          "edge_masks": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 975,
+              "internally_incompatible": 0,
+              "separate_area_supports": 16931,
+              "pairwise_unsupported": 105,
+              "disjoint_pool_witnesses": 913,
+              "support_witnesses": 913,
+              "contact_family_queries": 22324,
+              "contact_joint_nodes": 28,
+              "pose_pack_nodes": 7308,
+              "pose_overlap_tests": 13129,
+              "removed_codes": 210,
+              "remaining_labelled": 1831
+            },
+            "codes": 72782,
+            "children": 2,
+            "possible": true
+          },
+          "physical_pairs": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 975,
+              "internally_incompatible": 0,
+              "separate_area_supports": 16931,
+              "pairwise_unsupported": 105,
+              "disjoint_pool_witnesses": 913,
+              "support_witnesses": 913,
+              "contact_family_queries": 22324,
+              "pose_pack_nodes": 7308,
+              "pose_overlap_tests": 13129,
+              "removed_codes": 210,
+              "remaining_labelled": 1831
+            },
+            "codes": 72782,
+            "children": 2,
+            "possible": true
+          },
+          "all_queries": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 975,
+              "internally_incompatible": 0,
+              "separate_area_supports": 0,
+              "pairwise_unsupported": 105,
+              "disjoint_pool_witnesses": 913,
+              "support_witnesses": 913,
+              "contact_family_queries": 38937,
+              "contact_joint_nodes": 28,
+              "pose_pack_nodes": 7308,
+              "pose_overlap_tests": 13129,
+              "removed_codes": 210,
+              "remaining_labelled": 1831
+            },
+            "codes": 72782,
+            "children": 2,
+            "possible": true
+          },
+          "joint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 975,
+              "internally_incompatible": 0,
+              "separate_area_supports": 16931,
+              "pairwise_unsupported": 105,
+              "disjoint_pool_witnesses": 913,
+              "support_witnesses": 913,
+              "contact_family_queries": 22324,
+              "contact_joint_nodes": 28,
+              "pose_pack_nodes": 7308,
+              "pose_overlap_tests": 13129,
+              "removed_codes": 210,
+              "remaining_labelled": 1831
+            },
+            "codes": 72782,
+            "children": 2,
+            "possible": true
+          }
+        }
+      },
+      {
+        "kind": "four_local_dominoes",
+        "seed": 854,
+        "runs": {
+          "footprint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "disjoint_pool_witnesses": 956,
+              "support_witnesses": 956,
+              "unsupported_footprints": 4,
+              "pose_pack_nodes": 7909,
+              "pose_overlap_tests": 15804,
+              "removed_codes": 16,
+              "remaining_labelled": 1928
+            },
+            "codes": 72976,
+            "children": 4,
+            "possible": true
+          },
+          "edge_masks": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "internally_incompatible": 0,
+              "separate_area_supports": 11620,
+              "pairwise_unsupported": 9,
+              "joint_contact_unsupported": 3,
+              "disjoint_pool_witnesses": 930,
+              "support_witnesses": 930,
+              "unsupported_footprints": 24,
+              "contact_family_queries": 15403,
+              "contact_joint_nodes": 36,
+              "pose_pack_nodes": 7541,
+              "pose_overlap_tests": 13719,
+              "removed_codes": 984,
+              "remaining_labelled": 1876
+            },
+            "codes": 72008,
+            "children": 3,
+            "possible": true
+          },
+          "physical_pairs": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "internally_incompatible": 0,
+              "separate_area_supports": 11620,
+              "pairwise_unsupported": 9,
+              "disjoint_pool_witnesses": 951,
+              "support_witnesses": 951,
+              "unsupported_footprints": 4,
+              "contact_family_queries": 15403,
+              "pose_pack_nodes": 7869,
+              "pose_overlap_tests": 15719,
+              "removed_codes": 34,
+              "remaining_labelled": 1919
+            },
+            "codes": 72958,
+            "children": 3,
+            "possible": true
+          },
+          "all_queries": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "internally_incompatible": 0,
+              "separate_area_supports": 0,
+              "pairwise_unsupported": 9,
+              "joint_contact_unsupported": 3,
+              "disjoint_pool_witnesses": 930,
+              "support_witnesses": 930,
+              "unsupported_footprints": 24,
+              "contact_family_queries": 26995,
+              "contact_joint_nodes": 36,
+              "pose_pack_nodes": 7541,
+              "pose_overlap_tests": 13719,
+              "removed_codes": 984,
+              "remaining_labelled": 1876
+            },
+            "codes": 72008,
+            "children": 3,
+            "possible": true
+          },
+          "joint": {
+            "complete": true,
+            "work": {
+              "initial_labelled": 1936,
+              "initial_footprints": 976,
+              "internally_incompatible": 0,
+              "separate_area_supports": 11620,
+              "pairwise_unsupported": 9,
+              "joint_contact_unsupported": 3,
+              "disjoint_pool_witnesses": 930,
+              "support_witnesses": 930,
+              "unsupported_footprints": 24,
+              "contact_family_queries": 15403,
+              "contact_joint_nodes": 36,
+              "pose_pack_nodes": 7541,
+              "pose_overlap_tests": 13719,
+              "removed_codes": 984,
+              "remaining_labelled": 1876
+            },
+            "codes": 72008,
+            "children": 3,
+            "possible": true
+          }
+        }
+      }
+    ],
+    "conditional_banned": {
+      "sealed_loop": [
+        {
+          "bond": [
+            47,
+            433
+          ],
+          "poses": [
+            [
+              [
+                0,
+                45
+              ],
+              [
+                64,
+                29
+              ]
+            ],
+            [
+              [
+                16,
+                434
+              ],
+              [
+                32,
+                7
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            61,
+            143
+          ],
+          "poses": [
+            [
+              [
+                0,
+                60
+              ],
+              [
+                64,
+                57
+              ]
+            ],
+            [
+              [
+                1,
+                141
+              ],
+              [
+                7,
+                451
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            96,
+            392
+          ],
+          "poses": [
+            [
+              [
+                0,
+                96
+              ],
+              [
+                1,
+                14
+              ]
+            ],
+            [
+              [
+                64,
+                390
+              ],
+              [
+                48,
+                29
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            114,
+            433
+          ],
+          "poses": [
+            [
+              [
+                0,
+                114
+              ],
+              [
+                1,
+                15
+              ]
+            ],
+            [
+              [
+                64,
+                433
+              ],
+              [
+                65,
+                6
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            133,
+            223
+          ],
+          "poses": [
+            [
+              [
+                0,
+                132
+              ],
+              [
+                64,
+                323
+              ]
+            ],
+            [
+              [
+                1,
+                223
+              ],
+              [
+                2,
+                68
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            133,
+            400
+          ],
+          "poses": [
+            [
+              [
+                0,
+                132
+              ],
+              [
+                64,
+                323
+              ]
+            ],
+            [
+              [
+                1,
+                400
+              ],
+              [
+                2,
+                12
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            243,
+            270
+          ],
+          "poses": [
+            [
+              [
+                0,
+                243
+              ],
+              [
+                1,
+                29
+              ]
+            ],
+            [
+              [
+                64,
+                272
+              ],
+              [
+                48,
+                147
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            245,
+            294
+          ],
+          "poses": [
+            [
+              [
+                0,
+                243
+              ],
+              [
+                64,
+                217
+              ]
+            ],
+            [
+              [
+                16,
+                294
+              ],
+              [
+                17,
+                22
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            245,
+            352
+          ],
+          "poses": [
+            [
+              [
+                0,
+                243
+              ],
+              [
+                64,
+                217
+              ]
+            ],
+            [
+              [
+                16,
+                353
+              ],
+              [
+                32,
+                27
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            245,
+            391
+          ],
+          "poses": [
+            [
+              [
+                0,
+                243
+              ],
+              [
+                64,
+                217
+              ]
+            ],
+            [
+              [
+                16,
+                392
+              ],
+              [
+                32,
+                27
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            245,
+            463
+          ],
+          "poses": [
+            [
+              [
+                0,
+                243
+              ],
+              [
+                64,
+                217
+              ]
+            ],
+            [
+              [
+                16,
+                464
+              ],
+              [
+                32,
+                3
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            250,
+            433
+          ],
+          "poses": [
+            [
+              [
+                0,
+                249
+              ],
+              [
+                64,
+                19
+              ]
+            ],
+            [
+              [
+                1,
+                433
+              ],
+              [
+                2,
+                7
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            267,
+            271
+          ],
+          "poses": [
+            [
+              [
+                0,
+                267
+              ],
+              [
+                1,
+                29
+              ]
+            ],
+            [
+              [
+                64,
+                271
+              ],
+              [
+                65,
+                21
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            294,
+            352
+          ],
+          "poses": [
+            [
+              [
+                0,
+                294
+              ],
+              [
+                1,
+                22
+              ]
+            ],
+            [
+              [
+                64,
+                352
+              ],
+              [
+                65,
+                29
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            294,
+            391
+          ],
+          "poses": [
+            [
+              [
+                0,
+                294
+              ],
+              [
+                1,
+                22
+              ]
+            ],
+            [
+              [
+                64,
+                391
+              ],
+              [
+                65,
+                29
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            294,
+            463
+          ],
+          "poses": [
+            [
+              [
+                0,
+                294
+              ],
+              [
+                1,
+                22
+              ]
+            ],
+            [
+              [
+                64,
+                463
+              ],
+              [
+                65,
+                5
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            308,
+            472
+          ],
+          "poses": [
+            [
+              [
+                0,
+                306
+              ],
+              [
+                64,
+                19
+              ]
+            ],
+            [
+              [
+                16,
+                473
+              ],
+              [
+                32,
+                66
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            352,
+            391
+          ],
+          "poses": [
+            [
+              [
+                0,
+                351
+              ],
+              [
+                64,
+                29
+              ]
+            ],
+            [
+              [
+                1,
+                391
+              ],
+              [
+                2,
+                32
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            352,
+            463
+          ],
+          "poses": [
+            [
+              [
+                0,
+                351
+              ],
+              [
+                64,
+                29
+              ]
+            ],
+            [
+              [
+                1,
+                463
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            391,
+            463
+          ],
+          "poses": [
+            [
+              [
+                0,
+                390
+              ],
+              [
+                64,
+                29
+              ]
+            ],
+            [
+              [
+                1,
+                463
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            420,
+            469
+          ],
+          "poses": [
+            [
+              [
+                0,
+                420
+              ],
+              [
+                1,
+                51
+              ]
+            ],
+            [
+              [
+                64,
+                469
+              ],
+              [
+                65,
+                60
+              ]
+            ]
+          ]
+        }
+      ],
+      "matching_only": [
+        {
+          "bond": [
+            54,
+            73
+          ],
+          "poses": [
+            [
+              [
+                0,
+                54
+              ],
+              [
+                1,
+                51
+              ]
+            ],
+            [
+              [
+                64,
+                73
+              ],
+              [
+                65,
+                19
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            54,
+            103
+          ],
+          "poses": [
+            [
+              [
+                0,
+                54
+              ],
+              [
+                1,
+                51
+              ]
+            ],
+            [
+              [
+                64,
+                103
+              ],
+              [
+                65,
+                65
+              ]
+            ]
+          ]
+        },
+        {
+          "bond": [
+            54,
+            122
+          ],
+          "poses": [
+            [
+              [
+                0,
+                54
+              ],
+              [
+                1,
+                51
+              ]
+            ],
+            [
+              [
+                64,
+                120
+              ],
+              [
+                48,
+                29
+              ]
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "all_nine_trees": [
+    {
+      "seed": 8500,
+      "edges": [
+        [
+          70,
+          135
+        ],
+        [
+          136,
+          462
+        ],
+        [
+          450,
+          464
+        ],
+        [
+          143,
+          166
+        ],
+        [
+          280,
+          458
+        ]
+      ],
+      "members": [
+        23,
+        25,
+        45,
+        47,
+        55,
+        93,
+        150,
+        152,
+        154
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 460,
+        "1": 20
+      },
+      "gold_incidental": {
+        "0": 460,
+        "1": 20
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 460,
+        "9": 20
+      }
+    },
+    {
+      "seed": 8501,
+      "edges": [
+        [
+          300,
+          452
+        ],
+        [
+          159,
+          301
+        ],
+        [
+          161,
+          226
+        ],
+        [
+          227,
+          280
+        ],
+        [
+          225,
+          260
+        ],
+        [
+          45,
+          450
+        ]
+      ],
+      "members": [
+        15,
+        47,
+        53,
+        75,
+        86,
+        93,
+        100,
+        139,
+        150
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "gold_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 420,
+        "9": 60
+      }
+    },
+    {
+      "seed": 8502,
+      "edges": [
+        [
+          227,
+          418
+        ],
+        [
+          83,
+          226
+        ],
+        [
+          81,
+          272
+        ],
+        [
+          306,
+          419
+        ],
+        [
+          82,
+          442
+        ],
+        [
+          287,
+          443
+        ],
+        [
+          286,
+          350
+        ]
+      ],
+      "members": [
+        27,
+        75,
+        86,
+        90,
+        95,
+        102,
+        116,
+        139,
+        147
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "gold_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 430,
+        "9": 30
+      }
+    },
+    {
+      "seed": 8503,
+      "edges": [
+        [
+          81,
+          319
+        ],
+        [
+          365,
+          393
+        ],
+        [
+          83,
+          432
+        ],
+        [
+          320,
+          407
+        ],
+        [
+          56,
+          303
+        ],
+        [
+          255,
+          305
+        ]
+      ],
+      "members": [
+        18,
+        27,
+        85,
+        101,
+        106,
+        121,
+        131,
+        135,
+        144
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "gold_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 420,
+        "9": 60
+      }
+    },
+    {
+      "seed": 8504,
+      "edges": [
+        [
+          121,
+          323
+        ],
+        [
+          322,
+          368
+        ],
+        [
+          81,
+          367
+        ],
+        [
+          83,
+          418
+        ],
+        [
+          52,
+          419
+        ],
+        [
+          62,
+          82
+        ]
+      ],
+      "members": [
+        17,
+        20,
+        27,
+        40,
+        44,
+        86,
+        107,
+        122,
+        139
+      ],
+      "labelled": 450,
+      "raw_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "gold_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "frozen_forbidden": {
+        "0": 450
+      },
+      "interior_contacts": {
+        "9": 430,
+        "10": 20
+      }
+    },
+    {
+      "seed": 8505,
+      "edges": [
+        [
+          432,
+          437
+        ],
+        [
+          70,
+          435
+        ],
+        [
+          75,
+          477
+        ],
+        [
+          42,
+          478
+        ],
+        [
+          44,
+          246
+        ],
+        [
+          247,
+          345
+        ]
+      ],
+      "members": [
+        14,
+        18,
+        23,
+        25,
+        82,
+        115,
+        144,
+        145,
+        159
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 460,
+        "2": 20
+      },
+      "gold_incidental": {
+        "0": 460,
+        "2": 20
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 460,
+        "10": 20
+      }
+    },
+    {
+      "seed": 8506,
+      "edges": [
+        [
+          240,
+          256
+        ],
+        [
+          112,
+          257
+        ],
+        [
+          205,
+          424
+        ],
+        [
+          241,
+          419
+        ],
+        [
+          323,
+          418
+        ]
+      ],
+      "members": [
+        37,
+        44,
+        68,
+        80,
+        85,
+        86,
+        107,
+        139,
+        141
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 390,
+        "1": 70
+      },
+      "gold_incidental": {
+        "0": 390,
+        "1": 70
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 390,
+        "9": 70
+      }
+    },
+    {
+      "seed": 8507,
+      "edges": [
+        [
+          216,
+          432
+        ],
+        [
+          218,
+          263
+        ],
+        [
+          261,
+          287
+        ],
+        [
+          286,
+          468
+        ],
+        [
+          99,
+          470
+        ],
+        [
+          98,
+          100
+        ],
+        [
+          55,
+          219
+        ]
+      ],
+      "members": [
+        18,
+        32,
+        33,
+        72,
+        73,
+        87,
+        95,
+        144,
+        156
+      ],
+      "labelled": 440,
+      "raw_incidental": {
+        "0": 430,
+        "1": 10
+      },
+      "gold_incidental": {
+        "0": 430,
+        "1": 10
+      },
+      "frozen_forbidden": {
+        "0": 440
+      },
+      "interior_contacts": {
+        "8": 430,
+        "9": 10
+      }
+    },
+    {
+      "seed": 8508,
+      "edges": [
+        [
+          226,
+          424
+        ],
+        [
+          206,
+          227
+        ],
+        [
+          79,
+          241
+        ],
+        [
+          78,
+          405
+        ],
+        [
+          240,
+          263
+        ],
+        [
+          261,
+          301
+        ],
+        [
+          214,
+          423
+        ]
+      ],
+      "members": [
+        26,
+        68,
+        71,
+        75,
+        80,
+        87,
+        100,
+        135,
+        141
+      ],
+      "labelled": 440,
+      "raw_incidental": {
+        "0": 400,
+        "1": 40
+      },
+      "gold_incidental": {
+        "0": 400,
+        "1": 40
+      },
+      "frozen_forbidden": {
+        "0": 440
+      },
+      "interior_contacts": {
+        "8": 400,
+        "9": 40
+      }
+    },
+    {
+      "seed": 8509,
+      "edges": [
+        [
+          133,
+          345
+        ],
+        [
+          323,
+          446
+        ],
+        [
+          214,
+          445
+        ],
+        [
+          43,
+          213
+        ],
+        [
+          25,
+          347
+        ],
+        [
+          24,
+          157
+        ],
+        [
+          158,
+          443
+        ]
+      ],
+      "members": [
+        8,
+        14,
+        44,
+        52,
+        71,
+        107,
+        115,
+        147,
+        148
+      ],
+      "labelled": 450,
+      "raw_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "gold_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "frozen_forbidden": {
+        "0": 450
+      },
+      "interior_contacts": {
+        "9": 430,
+        "10": 20
+      }
+    },
+    {
+      "seed": 8510,
+      "edges": [
+        [
+          93,
+          424
+        ],
+        [
+          205,
+          423
+        ],
+        [
+          206,
+          207
+        ],
+        [
+          109,
+          241
+        ],
+        [
+          77,
+          240
+        ],
+        [
+          75,
+          89
+        ]
+      ],
+      "members": [
+        23,
+        25,
+        29,
+        31,
+        36,
+        68,
+        69,
+        80,
+        141
+      ],
+      "labelled": 440,
+      "raw_incidental": {
+        "0": 400,
+        "1": 40
+      },
+      "gold_incidental": {
+        "0": 400,
+        "1": 40
+      },
+      "frozen_forbidden": {
+        "0": 440
+      },
+      "interior_contacts": {
+        "8": 400,
+        "9": 40
+      }
+    },
+    {
+      "seed": 8511,
+      "edges": [
+        [
+          13,
+          432
+        ],
+        [
+          12,
+          97
+        ],
+        [
+          56,
+          161
+        ],
+        [
+          98,
+          104
+        ],
+        [
+          14,
+          309
+        ],
+        [
+          31,
+          311
+        ],
+        [
+          30,
+          392
+        ]
+      ],
+      "members": [
+        4,
+        10,
+        18,
+        32,
+        34,
+        53,
+        103,
+        130,
+        144
+      ],
+      "labelled": 450,
+      "raw_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "gold_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "frozen_forbidden": {
+        "0": 450
+      },
+      "interior_contacts": {
+        "9": 430,
+        "10": 20
+      }
+    },
+    {
+      "seed": 8512,
+      "edges": [
+        [
+          197,
+          458
+        ],
+        [
+          154,
+          196
+        ],
+        [
+          155,
+          189
+        ],
+        [
+          129,
+          153
+        ],
+        [
+          27,
+          131
+        ],
+        [
+          87,
+          195
+        ],
+        [
+          265,
+          457
+        ]
+      ],
+      "members": [
+        9,
+        29,
+        43,
+        51,
+        55,
+        63,
+        65,
+        88,
+        152
+      ],
+      "labelled": 450,
+      "raw_incidental": {
+        "1": 410,
+        "2": 40
+      },
+      "gold_incidental": {
+        "1": 410,
+        "2": 40
+      },
+      "frozen_forbidden": {
+        "0": 450
+      },
+      "interior_contacts": {
+        "9": 410,
+        "10": 40
+      }
+    },
+    {
+      "seed": 8513,
+      "edges": [
+        [
+          280,
+          423
+        ],
+        [
+          276,
+          279
+        ],
+        [
+          241,
+          334
+        ],
+        [
+          108,
+          335
+        ],
+        [
+          240,
+          300
+        ],
+        [
+          297,
+          301
+        ],
+        [
+          298,
+          398
+        ]
+      ],
+      "members": [
+        36,
+        80,
+        92,
+        93,
+        99,
+        100,
+        111,
+        132,
+        141
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 410,
+        "1": 50
+      },
+      "gold_incidental": {
+        "0": 410,
+        "1": 50
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 410,
+        "9": 50
+      }
+    },
+    {
+      "seed": 8514,
+      "edges": [
+        [
+          418,
+          458
+        ],
+        [
+          457,
+          460
+        ],
+        [
+          259,
+          438
+        ],
+        [
+          330,
+          439
+        ],
+        [
+          25,
+          332
+        ],
+        [
+          300,
+          440
+        ]
+      ],
+      "members": [
+        8,
+        55,
+        86,
+        100,
+        110,
+        139,
+        146,
+        152,
+        153
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "gold_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 420,
+        "9": 60
+      }
+    },
+    {
+      "seed": 8515,
+      "edges": [
+        [
+          319,
+          450
+        ],
+        [
+          131,
+          365
+        ],
+        [
+          143,
+          337
+        ],
+        [
+          336,
+          416
+        ],
+        [
+          62,
+          142
+        ],
+        [
+          60,
+          362
+        ]
+      ],
+      "members": [
+        20,
+        43,
+        47,
+        106,
+        112,
+        120,
+        121,
+        138,
+        150
+      ],
+      "labelled": 450,
+      "raw_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "gold_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "frozen_forbidden": {
+        "0": 450
+      },
+      "interior_contacts": {
+        "9": 430,
+        "10": 20
+      }
+    },
+    {
+      "seed": 8516,
+      "edges": [
+        [
+          134,
+          453
+        ],
+        [
+          454,
+          457
+        ],
+        [
+          446,
+          458
+        ],
+        [
+          327,
+          445
+        ],
+        [
+          165,
+          395
+        ],
+        [
+          390,
+          393
+        ]
+      ],
+      "members": [
+        44,
+        55,
+        107,
+        109,
+        130,
+        131,
+        148,
+        151,
+        152
+      ],
+      "labelled": 450,
+      "raw_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "gold_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "frozen_forbidden": {
+        "0": 450
+      },
+      "interior_contacts": {
+        "9": 430,
+        "10": 20
+      }
+    },
+    {
+      "seed": 8517,
+      "edges": [
+        [
+          241,
+          419
+        ],
+        [
+          260,
+          308
+        ],
+        [
+          277,
+          306
+        ],
+        [
+          276,
+          324
+        ],
+        [
+          278,
+          464
+        ],
+        [
+          93,
+          424
+        ]
+      ],
+      "members": [
+        31,
+        80,
+        86,
+        92,
+        102,
+        108,
+        139,
+        141,
+        154
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 460,
+        "1": 20
+      },
+      "gold_incidental": {
+        "0": 460,
+        "1": 20
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 460,
+        "9": 20
+      }
+    },
+    {
+      "seed": 8518,
+      "edges": [
+        [
+          90,
+          260
+        ],
+        [
+          92,
+          269
+        ],
+        [
+          221,
+          268
+        ],
+        [
+          249,
+          419
+        ],
+        [
+          251,
+          422
+        ],
+        [
+          418,
+          437
+        ],
+        [
+          119,
+          436
+        ]
+      ],
+      "members": [
+        30,
+        39,
+        73,
+        83,
+        86,
+        89,
+        139,
+        140,
+        145
+      ],
+      "labelled": 450,
+      "raw_incidental": {
+        "1": 410,
+        "2": 40
+      },
+      "gold_incidental": {
+        "1": 410,
+        "2": 40
+      },
+      "frozen_forbidden": {
+        "0": 450
+      },
+      "interior_contacts": {
+        "9": 410,
+        "10": 40
+      }
+    },
+    {
+      "seed": 8519,
+      "edges": [
+        [
+          259,
+          266
+        ],
+        [
+          241,
+          264
+        ],
+        [
+          388,
+          424
+        ],
+        [
+          104,
+          265
+        ],
+        [
+          227,
+          418
+        ],
+        [
+          226,
+          411
+        ]
+      ],
+      "members": [
+        34,
+        75,
+        80,
+        86,
+        88,
+        129,
+        137,
+        139,
+        141
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 450,
+        "1": 10
+      },
+      "gold_incidental": {
+        "0": 450,
+        "1": 10
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 450,
+        "9": 10
+      }
+    },
+    {
+      "seed": 8520,
+      "edges": [
+        [
+          134,
+          154
+        ],
+        [
+          104,
+          155
+        ],
+        [
+          47,
+          103
+        ],
+        [
+          45,
+          251
+        ],
+        [
+          147,
+          249
+        ],
+        [
+          148,
+          158
+        ],
+        [
+          157,
+          306
+        ]
+      ],
+      "members": [
+        15,
+        34,
+        44,
+        49,
+        51,
+        52,
+        83,
+        102,
+        107
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "1": 10,
+        "0": 450
+      },
+      "gold_incidental": {
+        "1": 10,
+        "0": 450
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "9": 10,
+        "8": 450
+      }
+    },
+    {
+      "seed": 8521,
+      "edges": [
+        [
+          319,
+          375
+        ],
+        [
+          313,
+          365
+        ],
+        [
+          314,
+          388
+        ],
+        [
+          332,
+          387
+        ],
+        [
+          15,
+          330
+        ],
+        [
+          7,
+          377
+        ],
+        [
+          8,
+          410
+        ]
+      ],
+      "members": [
+        2,
+        5,
+        104,
+        106,
+        110,
+        121,
+        125,
+        129,
+        136
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 460,
+        "2": 20
+      },
+      "gold_incidental": {
+        "0": 460,
+        "2": 20
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 460,
+        "10": 20
+      }
+    },
+    {
+      "seed": 8522,
+      "edges": [
+        [
+          241,
+          277
+        ],
+        [
+          138,
+          278
+        ],
+        [
+          33,
+          424
+        ],
+        [
+          240,
+          257
+        ],
+        [
+          99,
+          256
+        ],
+        [
+          100,
+          405
+        ],
+        [
+          304,
+          406
+        ]
+      ],
+      "members": [
+        11,
+        33,
+        46,
+        80,
+        85,
+        92,
+        101,
+        135,
+        141
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "gold_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 410,
+        "9": 50
+      }
+    },
+    {
+      "seed": 8523,
+      "edges": [
+        [
+          56,
+          303
+        ],
+        [
+          305,
+          389
+        ],
+        [
+          347,
+          387
+        ],
+        [
+          247,
+          345
+        ],
+        [
+          323,
+          432
+        ],
+        [
+          112,
+          134
+        ]
+      ],
+      "members": [
+        18,
+        37,
+        44,
+        82,
+        101,
+        107,
+        115,
+        129,
+        144
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 440,
+        "1": 40
+      },
+      "gold_incidental": {
+        "0": 440,
+        "1": 40
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 440,
+        "9": 40
+      }
+    },
+    {
+      "seed": 8524,
+      "edges": [
+        [
+          165,
+          371
+        ],
+        [
+          71,
+          369
+        ],
+        [
+          77,
+          147
+        ],
+        [
+          405,
+          457
+        ],
+        [
+          75,
+          428
+        ],
+        [
+          391,
+          427
+        ]
+      ],
+      "members": [
+        23,
+        25,
+        49,
+        55,
+        123,
+        130,
+        135,
+        142,
+        152
+      ],
+      "labelled": 450,
+      "raw_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "gold_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "frozen_forbidden": {
+        "0": 450
+      },
+      "interior_contacts": {
+        "9": 430,
+        "10": 20
+      }
+    },
+    {
+      "seed": 8525,
+      "edges": [
+        [
+          77,
+          218
+        ],
+        [
+          25,
+          71
+        ],
+        [
+          24,
+          264
+        ],
+        [
+          139,
+          266
+        ],
+        [
+          67,
+          140
+        ],
+        [
+          265,
+          457
+        ]
+      ],
+      "members": [
+        8,
+        22,
+        23,
+        25,
+        46,
+        55,
+        72,
+        88,
+        152
+      ],
+      "labelled": 430,
+      "raw_incidental": {
+        "1": 420,
+        "2": 10
+      },
+      "gold_incidental": {
+        "1": 420,
+        "2": 10
+      },
+      "frozen_forbidden": {
+        "0": 430
+      },
+      "interior_contacts": {
+        "9": 420,
+        "10": 10
+      }
+    },
+    {
+      "seed": 8526,
+      "edges": [
+        [
+          300,
+          452
+        ],
+        [
+          142,
+          286
+        ],
+        [
+          301,
+          387
+        ],
+        [
+          340,
+          450
+        ],
+        [
+          213,
+          339
+        ],
+        [
+          214,
+          323
+        ]
+      ],
+      "members": [
+        44,
+        47,
+        71,
+        95,
+        100,
+        107,
+        113,
+        129,
+        150
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 410,
+        "1": 50
+      },
+      "gold_incidental": {
+        "0": 410,
+        "1": 50
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 410,
+        "9": 50
+      }
+    },
+    {
+      "seed": 8527,
+      "edges": [
+        [
+          442,
+          457
+        ],
+        [
+          443,
+          465
+        ],
+        [
+          418,
+          458
+        ],
+        [
+          259,
+          266
+        ],
+        [
+          265,
+          468
+        ],
+        [
+          218,
+          470
+        ]
+      ],
+      "members": [
+        55,
+        72,
+        86,
+        88,
+        139,
+        147,
+        152,
+        155,
+        156
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "gold_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 420,
+        "9": 60
+      }
+    },
+    {
+      "seed": 8528,
+      "edges": [
+        [
+          272,
+          365
+        ],
+        [
+          23,
+          270
+        ],
+        [
+          84,
+          319
+        ],
+        [
+          320,
+          407
+        ],
+        [
+          82,
+          405
+        ],
+        [
+          81,
+          351
+        ],
+        [
+          83,
+          280
+        ]
+      ],
+      "members": [
+        7,
+        27,
+        28,
+        90,
+        93,
+        106,
+        117,
+        121,
+        135
+      ],
+      "labelled": 440,
+      "raw_incidental": {
+        "1": 20,
+        "0": 420
+      },
+      "gold_incidental": {
+        "1": 20,
+        "0": 420
+      },
+      "frozen_forbidden": {
+        "0": 440
+      },
+      "interior_contacts": {
+        "9": 20,
+        "8": 420
+      }
+    },
+    {
+      "seed": 8529,
+      "edges": [
+        [
+          241,
+          419
+        ],
+        [
+          260,
+          308
+        ],
+        [
+          424,
+          432
+        ],
+        [
+          56,
+          323
+        ]
+      ],
+      "members": [
+        18,
+        44,
+        80,
+        86,
+        102,
+        107,
+        139,
+        141,
+        144
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 480
+      },
+      "gold_incidental": {
+        "0": 480
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 480
+      }
+    },
+    {
+      "seed": 8530,
+      "edges": [
+        [
+          365,
+          393
+        ],
+        [
+          313,
+          319
+        ],
+        [
+          320,
+          385
+        ],
+        [
+          384,
+          449
+        ],
+        [
+          98,
+          447
+        ],
+        [
+          386,
+          459
+        ],
+        [
+          97,
+          159
+        ]
+      ],
+      "members": [
+        32,
+        53,
+        104,
+        106,
+        121,
+        128,
+        131,
+        149,
+        153
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 410,
+        "1": 50
+      },
+      "gold_incidental": {
+        "0": 410,
+        "1": 50
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 410,
+        "9": 50
+      }
+    },
+    {
+      "seed": 8531,
+      "edges": [
+        [
+          320,
+          407
+        ],
+        [
+          244,
+          319
+        ],
+        [
+          46,
+          406
+        ],
+        [
+          45,
+          138
+        ],
+        [
+          365,
+          375
+        ],
+        [
+          7,
+          377
+        ],
+        [
+          6,
+          253
+        ]
+      ],
+      "members": [
+        2,
+        15,
+        46,
+        81,
+        84,
+        106,
+        121,
+        125,
+        135
+      ],
+      "labelled": 450,
+      "raw_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "gold_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "frozen_forbidden": {
+        "0": 450
+      },
+      "interior_contacts": {
+        "9": 430,
+        "10": 20
+      }
+    },
+    {
+      "seed": 8532,
+      "edges": [
+        [
+          259,
+          366
+        ],
+        [
+          290,
+          367
+        ],
+        [
+          289,
+          377
+        ],
+        [
+          365,
+          375
+        ],
+        [
+          144,
+          319
+        ],
+        [
+          59,
+          376
+        ]
+      ],
+      "members": [
+        19,
+        48,
+        86,
+        96,
+        106,
+        121,
+        122,
+        125,
+        139
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "gold_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 420,
+        "9": 60
+      }
+    },
+    {
+      "seed": 8533,
+      "edges": [
+        [
+          130,
+          259
+        ],
+        [
+          131,
+          292
+        ],
+        [
+          129,
+          182
+        ],
+        [
+          314,
+          418
+        ],
+        [
+          313,
+          464
+        ],
+        [
+          312,
+          324
+        ],
+        [
+          74,
+          463
+        ]
+      ],
+      "members": [
+        24,
+        43,
+        60,
+        86,
+        97,
+        104,
+        108,
+        139,
+        154
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "gold_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 420,
+        "9": 60
+      }
+    },
+    {
+      "seed": 8534,
+      "edges": [
+        [
+          62,
+          457
+        ],
+        [
+          418,
+          458
+        ],
+        [
+          263,
+          419
+        ],
+        [
+          176,
+          262
+        ],
+        [
+          110,
+          175
+        ],
+        [
+          108,
+          375
+        ]
+      ],
+      "members": [
+        20,
+        36,
+        55,
+        58,
+        86,
+        87,
+        125,
+        139,
+        152
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 410,
+        "1": 50
+      },
+      "gold_incidental": {
+        "0": 410,
+        "1": 50
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 410,
+        "9": 50
+      }
+    },
+    {
+      "seed": 8535,
+      "edges": [
+        [
+          272,
+          365
+        ],
+        [
+          319,
+          464
+        ],
+        [
+          136,
+          462
+        ],
+        [
+          74,
+          463
+        ],
+        [
+          72,
+          154
+        ],
+        [
+          65,
+          320
+        ],
+        [
+          64,
+          90
+        ]
+      ],
+      "members": [
+        21,
+        24,
+        30,
+        45,
+        51,
+        90,
+        106,
+        121,
+        154
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 390,
+        "1": 70
+      },
+      "gold_incidental": {
+        "0": 390,
+        "1": 70
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 390,
+        "9": 70
+      }
+    },
+    {
+      "seed": 8536,
+      "edges": [
+        [
+          142,
+          265
+        ],
+        [
+          313,
+          450
+        ],
+        [
+          33,
+          314
+        ],
+        [
+          312,
+          436
+        ],
+        [
+          410,
+          437
+        ],
+        [
+          287,
+          408
+        ],
+        [
+          43,
+          266
+        ]
+      ],
+      "members": [
+        11,
+        14,
+        47,
+        88,
+        95,
+        104,
+        136,
+        145,
+        150
+      ],
+      "labelled": 430,
+      "raw_incidental": {
+        "2": 10,
+        "1": 420
+      },
+      "gold_incidental": {
+        "2": 10,
+        "1": 420
+      },
+      "frozen_forbidden": {
+        "0": 430
+      },
+      "interior_contacts": {
+        "10": 10,
+        "9": 420
+      }
+    },
+    {
+      "seed": 8537,
+      "edges": [
+        [
+          56,
+          411
+        ],
+        [
+          53,
+          55
+        ],
+        [
+          52,
+          154
+        ],
+        [
+          155,
+          299
+        ],
+        [
+          129,
+          153
+        ],
+        [
+          131,
+          390
+        ],
+        [
+          192,
+          391
+        ]
+      ],
+      "members": [
+        17,
+        18,
+        43,
+        51,
+        64,
+        99,
+        130,
+        137,
+        144
+      ],
+      "labelled": 450,
+      "raw_incidental": {
+        "1": 450
+      },
+      "gold_incidental": {
+        "1": 450
+      },
+      "frozen_forbidden": {
+        "0": 450
+      },
+      "interior_contacts": {
+        "9": 450
+      }
+    },
+    {
+      "seed": 8538,
+      "edges": [
+        [
+          313,
+          365
+        ],
+        [
+          296,
+          319
+        ],
+        [
+          314,
+          388
+        ],
+        [
+          305,
+          389
+        ],
+        [
+          74,
+          294
+        ],
+        [
+          29,
+          72
+        ],
+        [
+          27,
+          464
+        ]
+      ],
+      "members": [
+        9,
+        24,
+        98,
+        101,
+        104,
+        106,
+        121,
+        129,
+        154
+      ],
+      "labelled": 430,
+      "raw_incidental": {
+        "1": 420,
+        "2": 10
+      },
+      "gold_incidental": {
+        "1": 420,
+        "2": 10
+      },
+      "frozen_forbidden": {
+        "0": 430
+      },
+      "interior_contacts": {
+        "9": 420,
+        "10": 10
+      }
+    },
+    {
+      "seed": 8539,
+      "edges": [
+        [
+          319,
+          351
+        ],
+        [
+          231,
+          353
+        ],
+        [
+          320,
+          392
+        ],
+        [
+          390,
+          422
+        ],
+        [
+          53,
+          421
+        ],
+        [
+          52,
+          112
+        ],
+        [
+          232,
+          295
+        ]
+      ],
+      "members": [
+        17,
+        37,
+        77,
+        98,
+        106,
+        117,
+        121,
+        130,
+        140
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "gold_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 430,
+        "9": 30
+      }
+    },
+    {
+      "seed": 8540,
+      "edges": [
+        [
+          98,
+          457
+        ],
+        [
+          97,
+          449
+        ],
+        [
+          328,
+          447
+        ],
+        [
+          96,
+          385
+        ],
+        [
+          297,
+          384
+        ],
+        [
+          265,
+          299
+        ],
+        [
+          266,
+          339
+        ]
+      ],
+      "members": [
+        32,
+        55,
+        88,
+        99,
+        109,
+        113,
+        128,
+        149,
+        152
+      ],
+      "labelled": 450,
+      "raw_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "gold_incidental": {
+        "1": 430,
+        "2": 20
+      },
+      "frozen_forbidden": {
+        "0": 450
+      },
+      "interior_contacts": {
+        "9": 430,
+        "10": 20
+      }
+    },
+    {
+      "seed": 8541,
+      "edges": [
+        [
+          259,
+          366
+        ],
+        [
+          200,
+          367
+        ],
+        [
+          314,
+          418
+        ],
+        [
+          48,
+          313
+        ],
+        [
+          106,
+          419
+        ],
+        [
+          60,
+          105
+        ],
+        [
+          50,
+          210
+        ]
+      ],
+      "members": [
+        16,
+        20,
+        35,
+        66,
+        70,
+        86,
+        104,
+        122,
+        139
+      ],
+      "labelled": 430,
+      "raw_incidental": {
+        "2": 10,
+        "1": 420
+      },
+      "gold_incidental": {
+        "2": 10,
+        "1": 420
+      },
+      "frozen_forbidden": {
+        "0": 430
+      },
+      "interior_contacts": {
+        "10": 10,
+        "9": 420
+      }
+    },
+    {
+      "seed": 8542,
+      "edges": [
+        [
+          205,
+          323
+        ],
+        [
+          206,
+          227
+        ],
+        [
+          216,
+          226
+        ],
+        [
+          23,
+          217
+        ],
+        [
+          22,
+          441
+        ],
+        [
+          21,
+          80
+        ],
+        [
+          183,
+          443
+        ]
+      ],
+      "members": [
+        7,
+        26,
+        44,
+        61,
+        68,
+        72,
+        75,
+        107,
+        147
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 440,
+        "1": 40
+      },
+      "gold_incidental": {
+        "0": 440,
+        "1": 40
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 440,
+        "9": 40
+      }
+    },
+    {
+      "seed": 8543,
+      "edges": [
+        [
+          442,
+          457
+        ],
+        [
+          301,
+          443
+        ],
+        [
+          143,
+          166
+        ],
+        [
+          142,
+          401
+        ],
+        [
+          256,
+          452
+        ],
+        [
+          387,
+          399
+        ]
+      ],
+      "members": [
+        47,
+        55,
+        85,
+        100,
+        129,
+        133,
+        147,
+        150,
+        152
+      ],
+      "labelled": 450,
+      "raw_incidental": {
+        "1": 410,
+        "2": 40
+      },
+      "gold_incidental": {
+        "1": 410,
+        "2": 40
+      },
+      "frozen_forbidden": {
+        "0": 450
+      },
+      "interior_contacts": {
+        "9": 410,
+        "10": 40
+      }
+    },
+    {
+      "seed": 8544,
+      "edges": [
+        [
+          71,
+          288
+        ],
+        [
+          59,
+          289
+        ],
+        [
+          58,
+          85
+        ],
+        [
+          84,
+          450
+        ],
+        [
+          86,
+          344
+        ],
+        [
+          200,
+          342
+        ]
+      ],
+      "members": [
+        19,
+        23,
+        25,
+        28,
+        47,
+        66,
+        96,
+        114,
+        150
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "gold_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 420,
+        "9": 60
+      }
+    },
+    {
+      "seed": 8545,
+      "edges": [
+        [
+          56,
+          323
+        ],
+        [
+          55,
+          356
+        ],
+        [
+          134,
+          218
+        ],
+        [
+          216,
+          388
+        ],
+        [
+          11,
+          387
+        ],
+        [
+          9,
+          316
+        ]
+      ],
+      "members": [
+        3,
+        18,
+        44,
+        72,
+        105,
+        107,
+        118,
+        129,
+        144
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 460,
+        "1": 20
+      },
+      "gold_incidental": {
+        "0": 460,
+        "1": 20
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 460,
+        "9": 20
+      }
+    },
+    {
+      "seed": 8546,
+      "edges": [
+        [
+          55,
+          356
+        ],
+        [
+          56,
+          445
+        ],
+        [
+          424,
+          446
+        ],
+        [
+          241,
+          453
+        ],
+        [
+          177,
+          454
+        ],
+        [
+          179,
+          287
+        ]
+      ],
+      "members": [
+        18,
+        59,
+        80,
+        95,
+        118,
+        141,
+        144,
+        148,
+        151
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 450,
+        "1": 10
+      },
+      "gold_incidental": {
+        "0": 450,
+        "1": 10
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 450,
+        "9": 10
+      }
+    },
+    {
+      "seed": 8547,
+      "edges": [
+        [
+          196,
+          419
+        ],
+        [
+          180,
+          197
+        ],
+        [
+          138,
+          195
+        ],
+        [
+          216,
+          418
+        ],
+        [
+          182,
+          429
+        ],
+        [
+          184,
+          431
+        ],
+        [
+          179,
+          183
+        ]
+      ],
+      "members": [
+        46,
+        59,
+        60,
+        61,
+        65,
+        72,
+        86,
+        139,
+        143
+      ],
+      "labelled": 450,
+      "raw_incidental": {
+        "1": 410,
+        "2": 40
+      },
+      "gold_incidental": {
+        "1": 410,
+        "2": 40
+      },
+      "frozen_forbidden": {
+        "0": 450
+      },
+      "interior_contacts": {
+        "9": 410,
+        "10": 40
+      }
+    },
+    {
+      "seed": 8548,
+      "edges": [
+        [
+          221,
+          450
+        ],
+        [
+          256,
+          452
+        ],
+        [
+          99,
+          257
+        ],
+        [
+          70,
+          255
+        ],
+        [
+          77,
+          419
+        ]
+      ],
+      "members": [
+        23,
+        25,
+        33,
+        47,
+        73,
+        85,
+        86,
+        139,
+        150
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 410,
+        "1": 50
+      },
+      "gold_incidental": {
+        "0": 410,
+        "1": 50
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 410,
+        "9": 50
+      }
+    },
+    {
+      "seed": 8549,
+      "edges": [
+        [
+          99,
+          134
+        ],
+        [
+          197,
+          323
+        ],
+        [
+          196,
+          277
+        ],
+        [
+          278,
+          290
+        ],
+        [
+          195,
+          335
+        ],
+        [
+          263,
+          334
+        ],
+        [
+          124,
+          261
+        ]
+      ],
+      "members": [
+        33,
+        41,
+        44,
+        65,
+        87,
+        92,
+        96,
+        107,
+        111
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "gold_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 430,
+        "9": 30
+      }
+    },
+    {
+      "seed": 8550,
+      "edges": [
+        [
+          170,
+          434
+        ],
+        [
+          168,
+          238
+        ],
+        [
+          221,
+          237
+        ],
+        [
+          220,
+          295
+        ],
+        [
+          296,
+          365
+        ],
+        [
+          108,
+          319
+        ]
+      ],
+      "members": [
+        18,
+        36,
+        56,
+        73,
+        79,
+        98,
+        106,
+        121,
+        144
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 440,
+        "1": 40
+      },
+      "gold_incidental": {
+        "0": 440,
+        "1": 40
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 440,
+        "9": 40
+      }
+    },
+    {
+      "seed": 8551,
+      "edges": [
+        [
+          138,
+          450
+        ],
+        [
+          241,
+          452
+        ],
+        [
+          327,
+          424
+        ],
+        [
+          82,
+          328
+        ],
+        [
+          142,
+          405
+        ],
+        [
+          30,
+          407
+        ]
+      ],
+      "members": [
+        10,
+        27,
+        46,
+        47,
+        80,
+        109,
+        135,
+        141,
+        150
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 440,
+        "1": 20,
+        "2": 20
+      },
+      "gold_incidental": {
+        "0": 440,
+        "1": 20,
+        "2": 20
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 440,
+        "9": 20,
+        "10": 20
+      }
+    },
+    {
+      "seed": 8552,
+      "edges": [
+        [
+          70,
+          435
+        ],
+        [
+          327,
+          437
+        ],
+        [
+          71,
+          369
+        ],
+        [
+          28,
+          370
+        ],
+        [
+          27,
+          340
+        ],
+        [
+          232,
+          341
+        ],
+        [
+          339,
+          438
+        ]
+      ],
+      "members": [
+        9,
+        23,
+        25,
+        77,
+        109,
+        113,
+        123,
+        145,
+        146
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "gold_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 430,
+        "9": 30
+      }
+    },
+    {
+      "seed": 8553,
+      "edges": [
+        [
+          358,
+          418
+        ],
+        [
+          300,
+          419
+        ],
+        [
+          301,
+          436
+        ],
+        [
+          357,
+          375
+        ],
+        [
+          370,
+          376
+        ],
+        [
+          130,
+          259
+        ],
+        [
+          129,
+          182
+        ]
+      ],
+      "members": [
+        43,
+        60,
+        86,
+        100,
+        119,
+        123,
+        125,
+        139,
+        145
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "gold_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 430,
+        "9": 30
+      }
+    },
+    {
+      "seed": 8554,
+      "edges": [
+        [
+          70,
+          255
+        ],
+        [
+          112,
+          257
+        ],
+        [
+          111,
+          121
+        ],
+        [
+          120,
+          367
+        ],
+        [
+          256,
+          419
+        ],
+        [
+          161,
+          418
+        ]
+      ],
+      "members": [
+        23,
+        25,
+        37,
+        40,
+        53,
+        85,
+        86,
+        122,
+        139
+      ],
+      "labelled": 440,
+      "raw_incidental": {
+        "0": 400,
+        "1": 40
+      },
+      "gold_incidental": {
+        "0": 400,
+        "1": 40
+      },
+      "frozen_forbidden": {
+        "0": 440
+      },
+      "interior_contacts": {
+        "8": 400,
+        "9": 40
+      }
+    },
+    {
+      "seed": 8555,
+      "edges": [
+        [
+          256,
+          419
+        ],
+        [
+          260,
+          308
+        ],
+        [
+          112,
+          257
+        ],
+        [
+          8,
+          418
+        ],
+        [
+          7,
+          362
+        ],
+        [
+          228,
+          360
+        ],
+        [
+          128,
+          229
+        ]
+      ],
+      "members": [
+        2,
+        37,
+        42,
+        76,
+        85,
+        86,
+        102,
+        120,
+        139
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 410,
+        "1": 50
+      },
+      "gold_incidental": {
+        "0": 410,
+        "1": 50
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 410,
+        "9": 50
+      }
+    },
+    {
+      "seed": 8556,
+      "edges": [
+        [
+          29,
+          134
+        ],
+        [
+          27,
+          450
+        ],
+        [
+          257,
+          452
+        ],
+        [
+          256,
+          419
+        ],
+        [
+          83,
+          418
+        ]
+      ],
+      "members": [
+        9,
+        27,
+        44,
+        47,
+        85,
+        86,
+        107,
+        139,
+        150
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "gold_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 430,
+        "9": 30
+      }
+    },
+    {
+      "seed": 8557,
+      "edges": [
+        [
+          77,
+          218
+        ],
+        [
+          216,
+          432
+        ],
+        [
+          56,
+          437
+        ],
+        [
+          354,
+          435
+        ],
+        [
+          75,
+          89
+        ],
+        [
+          45,
+          87
+        ]
+      ],
+      "members": [
+        15,
+        18,
+        23,
+        25,
+        29,
+        72,
+        118,
+        144,
+        145
+      ],
+      "labelled": 460,
+      "raw_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "gold_incidental": {
+        "0": 430,
+        "1": 30
+      },
+      "frozen_forbidden": {
+        "0": 460
+      },
+      "interior_contacts": {
+        "8": 430,
+        "9": 30
+      }
+    },
+    {
+      "seed": 8558,
+      "edges": [
+        [
+          125,
+          142
+        ],
+        [
+          251,
+          450
+        ],
+        [
+          134,
+          452
+        ],
+        [
+          197,
+          323
+        ],
+        [
+          195,
+          464
+        ],
+        [
+          373,
+          463
+        ]
+      ],
+      "members": [
+        41,
+        44,
+        47,
+        65,
+        83,
+        107,
+        124,
+        150,
+        154
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 440,
+        "1": 40
+      },
+      "gold_incidental": {
+        "0": 440,
+        "1": 40
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 440,
+        "9": 40
+      }
+    },
+    {
+      "seed": 8559,
+      "edges": [
+        [
+          62,
+          142
+        ],
+        [
+          77,
+          452
+        ],
+        [
+          75,
+          89
+        ],
+        [
+          70,
+          255
+        ],
+        [
+          257,
+          440
+        ],
+        [
+          59,
+          60
+        ]
+      ],
+      "members": [
+        19,
+        20,
+        23,
+        25,
+        29,
+        47,
+        85,
+        146,
+        150
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "gold_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 420,
+        "9": 60
+      }
+    },
+    {
+      "seed": 8560,
+      "edges": [
+        [
+          71,
+          279
+        ],
+        [
+          216,
+          280
+        ],
+        [
+          5,
+          218
+        ],
+        [
+          3,
+          353
+        ],
+        [
+          101,
+          352
+        ],
+        [
+          100,
+          460
+        ],
+        [
+          195,
+          351
+        ]
+      ],
+      "members": [
+        1,
+        23,
+        25,
+        33,
+        65,
+        72,
+        93,
+        117,
+        153
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 440,
+        "1": 40
+      },
+      "gold_incidental": {
+        "0": 440,
+        "1": 40
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 440,
+        "9": 40
+      }
+    },
+    {
+      "seed": 8561,
+      "edges": [
+        [
+          237,
+          450
+        ],
+        [
+          188,
+          238
+        ],
+        [
+          142,
+          328
+        ],
+        [
+          216,
+          327
+        ],
+        [
+          134,
+          218
+        ],
+        [
+          323,
+          388
+        ]
+      ],
+      "members": [
+        44,
+        47,
+        62,
+        72,
+        79,
+        107,
+        109,
+        129,
+        150
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 440,
+        "1": 40
+      },
+      "gold_incidental": {
+        "0": 440,
+        "1": 40
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 440,
+        "9": 40
+      }
+    },
+    {
+      "seed": 8562,
+      "edges": [
+        [
+          244,
+          319
+        ],
+        [
+          311,
+          365
+        ],
+        [
+          363,
+          473
+        ],
+        [
+          90,
+          472
+        ],
+        [
+          222,
+          471
+        ],
+        [
+          87,
+          224
+        ],
+        [
+          223,
+          255
+        ]
+      ],
+      "members": [
+        29,
+        30,
+        74,
+        81,
+        85,
+        103,
+        106,
+        121,
+        157
+      ],
+      "labelled": 440,
+      "raw_incidental": {
+        "0": 400,
+        "1": 40
+      },
+      "gold_incidental": {
+        "0": 400,
+        "1": 40
+      },
+      "frozen_forbidden": {
+        "0": 440
+      },
+      "interior_contacts": {
+        "8": 400,
+        "9": 40
+      }
+    },
+    {
+      "seed": 8563,
+      "edges": [
+        [
+          319,
+          390
+        ],
+        [
+          192,
+          391
+        ],
+        [
+          269,
+          365
+        ],
+        [
+          268,
+          335
+        ],
+        [
+          333,
+          447
+        ],
+        [
+          5,
+          334
+        ],
+        [
+          119,
+          449
+        ]
+      ],
+      "members": [
+        1,
+        39,
+        64,
+        89,
+        106,
+        111,
+        121,
+        130,
+        149
+      ],
+      "labelled": 480,
+      "raw_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "gold_incidental": {
+        "0": 420,
+        "1": 60
+      },
+      "frozen_forbidden": {
+        "0": 480
+      },
+      "interior_contacts": {
+        "8": 420,
+        "9": 60
+      }
+    }
+  ],
+  "native_geographic": [
+    {
+      "seed": 8504,
+      "joint": false,
+      "status": "UNKNOWN",
+      "cp_calls": 0,
+      "branches": 0,
+      "joint_pose_support": null
+    },
+    {
+      "seed": 8504,
+      "joint": true,
+      "status": "INFEASIBLE",
+      "cp_calls": 0,
+      "branches": 0,
+      "joint_pose_support": {
+        "initial_labelled": 2880,
+        "initial_footprints": 1440,
+        "join_probes": 2880,
+        "joined_tables_built": 6,
+        "right_poses_indexed": 920,
+        "joined_rows_emitted": 2360,
+        "incompatible_incidental_rows": 470,
+        "impossible": 1,
+        "complete": true
+      }
+    },
+    {
+      "seed": 8511,
+      "joint": false,
+      "status": "UNKNOWN",
+      "cp_calls": 1,
+      "branches": 45830,
+      "joint_pose_support": null
+    },
+    {
+      "seed": 8511,
+      "joint": true,
+      "status": "INFEASIBLE",
+      "cp_calls": 0,
+      "branches": 0,
+      "joint_pose_support": {
+        "initial_labelled": 3360,
+        "initial_footprints": 1680,
+        "join_probes": 3240,
+        "joined_tables_built": 7,
+        "right_poses_indexed": 940,
+        "joined_rows_emitted": 2740,
+        "incompatible_incidental_rows": 460,
+        "impossible": 1,
+        "complete": true
+      }
+    }
+  ],
+  "complete_domino_pair_scan": {
+    "pairings": 6451200,
+    "physically_banned_but_edge_matching": 0,
+    "first": null
+  },
+  "soft": [
+    {
+      "seed": 8500,
+      "plain": {
+        "score": 17,
+        "rows": 9,
+        "nodes": 6,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 17,
+        "rows": 9,
+        "nodes": 6,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 16,
+        "rows": 7,
+        "nodes": 6,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 17,
+        "rows": 9,
+        "nodes": 6,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8501,
+      "plain": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 22,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8502,
+      "plain": {
+        "score": 24,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 24,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 22,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 24,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8503,
+      "plain": {
+        "score": 24,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 24,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 23,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 24,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8504,
+      "plain": {
+        "score": 16,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 16,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 16,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8505,
+      "plain": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 20,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8506,
+      "plain": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 6,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 6,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 6,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 6,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8507,
+      "plain": {
+        "score": 23,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 23,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 27,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 23,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8508,
+      "plain": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8509,
+      "plain": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8510,
+      "plain": {
+        "score": 21,
+        "rows": 10,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 21,
+        "rows": 10,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 24,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 21,
+        "rows": 10,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8511,
+      "plain": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 20,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8512,
+      "plain": {
+        "score": 20,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 20,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 18,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 20,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8513,
+      "plain": {
+        "score": 19,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 23,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8514,
+      "plain": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 23,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8515,
+      "plain": {
+        "score": 21,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 21,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 20,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 21,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8516,
+      "plain": {
+        "score": 17,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 17,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 17,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 17,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8517,
+      "plain": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8518,
+      "plain": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8519,
+      "plain": {
+        "score": 18,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 18,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 18,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8520,
+      "plain": {
+        "score": 19,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 21,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8521,
+      "plain": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8522,
+      "plain": {
+        "score": 24,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 24,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 18,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 24,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8523,
+      "plain": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 21,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8524,
+      "plain": {
+        "score": 23,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 23,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 23,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8525,
+      "plain": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8526,
+      "plain": {
+        "score": 22,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 22,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 22,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8527,
+      "plain": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8528,
+      "plain": {
+        "score": 18,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 18,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 18,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8529,
+      "plain": {
+        "score": 18,
+        "rows": 5,
+        "nodes": 5,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 18,
+        "rows": 5,
+        "nodes": 5,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 18,
+        "rows": 5,
+        "nodes": 5,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 18,
+        "rows": 5,
+        "nodes": 5,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8530,
+      "plain": {
+        "score": 20,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 20,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 21,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 20,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8531,
+      "plain": {
+        "score": 21,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 21,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 21,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8532,
+      "plain": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 22,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8533,
+      "plain": {
+        "score": 17,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 17,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 17,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8534,
+      "plain": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 18,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8535,
+      "plain": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8536,
+      "plain": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8537,
+      "plain": {
+        "score": 22,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 22,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 22,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 22,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8538,
+      "plain": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8539,
+      "plain": {
+        "score": 22,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 22,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 22,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8540,
+      "plain": {
+        "score": 24,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 24,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 26,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 24,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8541,
+      "plain": {
+        "score": 24,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 24,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 24,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 24,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8542,
+      "plain": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 25,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8543,
+      "plain": {
+        "score": 16,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 16,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 18,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 16,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8544,
+      "plain": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 20,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8545,
+      "plain": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8546,
+      "plain": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8547,
+      "plain": {
+        "score": 17,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 17,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 17,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 17,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8548,
+      "plain": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 6,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 6,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 18,
+        "rows": 6,
+        "nodes": 6,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 6,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8549,
+      "plain": {
+        "score": 24,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 24,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 23,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 24,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8550,
+      "plain": {
+        "score": 18,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 18,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 18,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 18,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8551,
+      "plain": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8552,
+      "plain": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 29,
+        "rows": 9,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 24,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8553,
+      "plain": {
+        "score": 22,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 22,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 21,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 22,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8554,
+      "plain": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 19,
+        "rows": 9,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8555,
+      "plain": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 24,
+        "rows": 11,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8556,
+      "plain": {
+        "score": 21,
+        "rows": 6,
+        "nodes": 6,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 21,
+        "rows": 6,
+        "nodes": 6,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 19,
+        "rows": 6,
+        "nodes": 6,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 21,
+        "rows": 6,
+        "nodes": 6,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8557,
+      "plain": {
+        "score": 25,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 25,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 23,
+        "rows": 8,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 25,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8558,
+      "plain": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 23,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8559,
+      "plain": {
+        "score": 22,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 22,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 23,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 22,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8560,
+      "plain": {
+        "score": 22,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 22,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 21,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 22,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8561,
+      "plain": {
+        "score": 18,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 18,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 21,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 18,
+        "rows": 7,
+        "nodes": 7,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8562,
+      "plain": {
+        "score": 20,
+        "rows": 11,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 20,
+        "rows": 11,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 23,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 20,
+        "rows": 11,
+        "nodes": 8,
+        "leaves": 1
+      }
+    },
+    {
+      "seed": 8563,
+      "plain": {
+        "score": 19,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "soft": {
+        "score": 19,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_min_loss": {
+        "score": 20,
+        "rows": 8,
+        "nodes": 8,
+        "leaves": 1
+      },
+      "first_max_score": {
+        "score": 19,
+        "rows": 10,
+        "nodes": 8,
+        "leaves": 1
+      }
+    }
+  ],
+  "trajectories": [
+    {
+      "seed": 8540,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 4
+        },
+        "horizons": {
+          "16": {
+            "score": 113,
+            "signed": 112,
+            "components": 156,
+            "gold": false
+          },
+          "64": {
+            "score": 118,
+            "signed": 116,
+            "components": 152,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 4,
+          "lower_priority": 20
+        },
+        "horizons": {
+          "16": {
+            "score": 131,
+            "signed": 128,
+            "components": 143,
+            "gold": false
+          },
+          "64": {
+            "score": 137,
+            "signed": 136,
+            "components": 134,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8541,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 5
+        },
+        "horizons": {
+          "16": {
+            "score": 130,
+            "signed": 126,
+            "components": 147,
+            "gold": false
+          },
+          "64": {
+            "score": 133,
+            "signed": 130,
+            "components": 140,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 5,
+          "lower_priority": 20
+        },
+        "horizons": {
+          "16": {
+            "score": 130,
+            "signed": 130,
+            "components": 149,
+            "gold": false
+          },
+          "64": {
+            "score": 134,
+            "signed": 134,
+            "components": 145,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8542,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 6
+        },
+        "horizons": {
+          "16": {
+            "score": 135,
+            "signed": 132,
+            "components": 134,
+            "gold": false
+          },
+          "64": {
+            "score": 135,
+            "signed": 133,
+            "components": 138,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 6,
+          "lower_priority": 20
+        },
+        "horizons": {
+          "16": {
+            "score": 127,
+            "signed": 125,
+            "components": 152,
+            "gold": false
+          },
+          "64": {
+            "score": 136,
+            "signed": 135,
+            "components": 140,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8543,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 6
+        },
+        "horizons": {
+          "16": {
+            "score": 130,
+            "signed": 129,
+            "components": 144,
+            "gold": false
+          },
+          "64": {
+            "score": 133,
+            "signed": 132,
+            "components": 146,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15340,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 6,
+          "lower_priority": 30
+        },
+        "horizons": {
+          "16": {
+            "score": 129,
+            "signed": 128,
+            "components": 152,
+            "gold": false
+          },
+          "64": {
+            "score": 136,
+            "signed": 136,
+            "components": 141,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15340,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8544,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 5
+        },
+        "horizons": {
+          "16": {
+            "score": 130,
+            "signed": 128,
+            "components": 151,
+            "gold": false
+          },
+          "64": {
+            "score": 142,
+            "signed": 141,
+            "components": 140,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 5,
+          "lower_priority": 70
+        },
+        "horizons": {
+          "16": {
+            "score": 123,
+            "signed": 121,
+            "components": 151,
+            "gold": false
+          },
+          "64": {
+            "score": 130,
+            "signed": 129,
+            "components": 146,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8545,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 5
+        },
+        "horizons": {
+          "16": {
+            "score": 127,
+            "signed": 126,
+            "components": 149,
+            "gold": false
+          },
+          "64": {
+            "score": 129,
+            "signed": 128,
+            "components": 149,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 5,
+          "lower_priority": 20
+        },
+        "horizons": {
+          "16": {
+            "score": 136,
+            "signed": 136,
+            "components": 143,
+            "gold": false
+          },
+          "64": {
+            "score": 138,
+            "signed": 137,
+            "components": 137,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8546,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 7
+        },
+        "horizons": {
+          "16": {
+            "score": 133,
+            "signed": 132,
+            "components": 139,
+            "gold": false
+          },
+          "64": {
+            "score": 145,
+            "signed": 144,
+            "components": 124,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 7,
+          "lower_priority": 100
+        },
+        "horizons": {
+          "16": {
+            "score": 138,
+            "signed": 137,
+            "components": 132,
+            "gold": false
+          },
+          "64": {
+            "score": 144,
+            "signed": 143,
+            "components": 129,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8547,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 4
+        },
+        "horizons": {
+          "16": {
+            "score": 131,
+            "signed": 128,
+            "components": 154,
+            "gold": false
+          },
+          "64": {
+            "score": 140,
+            "signed": 136,
+            "components": 145,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 4,
+          "lower_priority": 40
+        },
+        "horizons": {
+          "16": {
+            "score": 132,
+            "signed": 129,
+            "components": 145,
+            "gold": false
+          },
+          "64": {
+            "score": 135,
+            "signed": 132,
+            "components": 149,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8548,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 5
+        },
+        "horizons": {
+          "16": {
+            "score": 138,
+            "signed": 135,
+            "components": 129,
+            "gold": false
+          },
+          "64": {
+            "score": 144,
+            "signed": 141,
+            "components": 125,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 5,
+          "lower_priority": 10
+        },
+        "horizons": {
+          "16": {
+            "score": 133,
+            "signed": 133,
+            "components": 141,
+            "gold": false
+          },
+          "64": {
+            "score": 133,
+            "signed": 133,
+            "components": 141,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8549,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 5
+        },
+        "horizons": {
+          "16": {
+            "score": 139,
+            "signed": 139,
+            "components": 138,
+            "gold": false
+          },
+          "64": {
+            "score": 141,
+            "signed": 141,
+            "components": 137,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 5,
+          "lower_priority": 20
+        },
+        "horizons": {
+          "16": {
+            "score": 133,
+            "signed": 132,
+            "components": 154,
+            "gold": false
+          },
+          "64": {
+            "score": 144,
+            "signed": 143,
+            "components": 136,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8550,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 4
+        },
+        "horizons": {
+          "16": {
+            "score": 126,
+            "signed": 125,
+            "components": 147,
+            "gold": false
+          },
+          "64": {
+            "score": 126,
+            "signed": 126,
+            "components": 148,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 4,
+          "lower_priority": 40
+        },
+        "horizons": {
+          "16": {
+            "score": 135,
+            "signed": 135,
+            "components": 145,
+            "gold": false
+          },
+          "64": {
+            "score": 137,
+            "signed": 137,
+            "components": 145,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8551,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 7
+        },
+        "horizons": {
+          "16": {
+            "score": 133,
+            "signed": 131,
+            "components": 148,
+            "gold": false
+          },
+          "64": {
+            "score": 136,
+            "signed": 134,
+            "components": 149,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15340,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 7,
+          "lower_priority": 10
+        },
+        "horizons": {
+          "16": {
+            "score": 128,
+            "signed": 127,
+            "components": 149,
+            "gold": false
+          },
+          "64": {
+            "score": 134,
+            "signed": 133,
+            "components": 143,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15340,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8552,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 6
+        },
+        "horizons": {
+          "16": {
+            "score": 137,
+            "signed": 137,
+            "components": 129,
+            "gold": false
+          },
+          "64": {
+            "score": 152,
+            "signed": 151,
+            "components": 117,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 6,
+          "lower_priority": 80
+        },
+        "horizons": {
+          "16": {
+            "score": 130,
+            "signed": 130,
+            "components": 146,
+            "gold": false
+          },
+          "64": {
+            "score": 134,
+            "signed": 134,
+            "components": 144,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8553,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 6
+        },
+        "horizons": {
+          "16": {
+            "score": 139,
+            "signed": 138,
+            "components": 134,
+            "gold": false
+          },
+          "64": {
+            "score": 143,
+            "signed": 142,
+            "components": 130,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 6,
+          "lower_priority": 40
+        },
+        "horizons": {
+          "16": {
+            "score": 136,
+            "signed": 135,
+            "components": 140,
+            "gold": false
+          },
+          "64": {
+            "score": 136,
+            "signed": 135,
+            "components": 140,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8554,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 9
+        },
+        "horizons": {
+          "16": {
+            "score": 122,
+            "signed": 121,
+            "components": 153,
+            "gold": false
+          },
+          "64": {
+            "score": 135,
+            "signed": 135,
+            "components": 144,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15340,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 9,
+          "lower_priority": 50
+        },
+        "horizons": {
+          "16": {
+            "score": 127,
+            "signed": 126,
+            "components": 150,
+            "gold": false
+          },
+          "64": {
+            "score": 141,
+            "signed": 140,
+            "components": 132,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15340,
+          "rounds": 64
+        }
+      }
+    },
+    {
+      "seed": 8555,
+      "plain": {
+        "diagnostics": {
+          "largest_group": 6
+        },
+        "horizons": {
+          "16": {
+            "score": 133,
+            "signed": 133,
+            "components": 142,
+            "gold": false
+          },
+          "64": {
+            "score": 145,
+            "signed": 144,
+            "components": 126,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      },
+      "soft": {
+        "diagnostics": {
+          "largest_group": 6,
+          "lower_priority": 30
+        },
+        "horizons": {
+          "16": {
+            "score": 134,
+            "signed": 133,
+            "components": 143,
+            "gold": false
+          },
+          "64": {
+            "score": 143,
+            "signed": 142,
+            "components": 129,
+            "gold": false
+          }
+        },
+        "work": {
+          "speculative_join_probes": 15360,
+          "rounds": 64
+        }
+      }
+    }
+  ],
+  "signed": {
+    "relative_pairs": {
+      "checked": 6451200,
+      "relative_sign_exclusions": 0
+    },
+    "restricted": [
+      {
+        "seed": 35,
+        "cases": {
+          "free": {
+            "codes": 73608,
+            "labels": 2676,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27807,
+              "pairwise_unsupported": 208,
+              "disjoint_pool_witnesses": 1321,
+              "support_witnesses": 1321,
+              "contact_family_queries": 10976,
+              "pose_pack_nodes": 10574,
+              "pose_overlap_tests": 40573,
+              "removed_codes": 1280,
+              "remaining_labelled": 2676
+            }
+          },
+          "quarter": {
+            "codes": 73600,
+            "labels": 2672,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27787,
+              "pairwise_unsupported": 212,
+              "disjoint_pool_witnesses": 1315,
+              "support_witnesses": 1315,
+              "contact_family_queries": 10964,
+              "pose_pack_nodes": 10526,
+              "pose_overlap_tests": 40381,
+              "removed_codes": 1288,
+              "remaining_labelled": 2672
+            }
+          },
+          "half": {
+            "codes": 73600,
+            "labels": 2672,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27787,
+              "pairwise_unsupported": 212,
+              "disjoint_pool_witnesses": 1315,
+              "support_witnesses": 1315,
+              "contact_family_queries": 10964,
+              "pose_pack_nodes": 10526,
+              "pose_overlap_tests": 40381,
+              "removed_codes": 1288,
+              "remaining_labelled": 2672
+            }
+          },
+          "full": {
+            "codes": 73598,
+            "labels": 2671,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27782,
+              "pairwise_unsupported": 213,
+              "disjoint_pool_witnesses": 1314,
+              "support_witnesses": 1314,
+              "contact_family_queries": 10962,
+              "pose_pack_nodes": 10518,
+              "pose_overlap_tests": 40351,
+              "removed_codes": 1290,
+              "remaining_labelled": 2671
+            }
+          }
+        }
+      },
+      {
+        "seed": 71,
+        "cases": {
+          "free": {
+            "codes": 73564,
+            "labels": 2654,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27697,
+              "pairwise_unsupported": 230,
+              "disjoint_pool_witnesses": 1313,
+              "support_witnesses": 1313,
+              "contact_family_queries": 10921,
+              "pose_pack_nodes": 10510,
+              "pose_overlap_tests": 40352,
+              "removed_codes": 1324,
+              "remaining_labelled": 2654
+            }
+          },
+          "quarter": {
+            "codes": 73556,
+            "labels": 2650,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27677,
+              "pairwise_unsupported": 234,
+              "disjoint_pool_witnesses": 1309,
+              "support_witnesses": 1309,
+              "contact_family_queries": 10909,
+              "pose_pack_nodes": 10478,
+              "pose_overlap_tests": 40232,
+              "removed_codes": 1332,
+              "remaining_labelled": 2650
+            }
+          },
+          "half": {
+            "codes": 73556,
+            "labels": 2650,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27677,
+              "pairwise_unsupported": 234,
+              "disjoint_pool_witnesses": 1309,
+              "support_witnesses": 1309,
+              "contact_family_queries": 10909,
+              "pose_pack_nodes": 10478,
+              "pose_overlap_tests": 40232,
+              "removed_codes": 1332,
+              "remaining_labelled": 2650
+            }
+          },
+          "full": {
+            "codes": 73554,
+            "labels": 2649,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27672,
+              "pairwise_unsupported": 235,
+              "disjoint_pool_witnesses": 1306,
+              "support_witnesses": 1306,
+              "contact_family_queries": 10907,
+              "pose_pack_nodes": 10454,
+              "pose_overlap_tests": 40117,
+              "removed_codes": 1334,
+              "remaining_labelled": 2649
+            }
+          }
+        }
+      },
+      {
+        "seed": 103,
+        "cases": {
+          "free": {
+            "codes": 73606,
+            "labels": 2675,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27802,
+              "pairwise_unsupported": 209,
+              "disjoint_pool_witnesses": 1322,
+              "support_witnesses": 1322,
+              "contact_family_queries": 10963,
+              "pose_pack_nodes": 10582,
+              "pose_overlap_tests": 40619,
+              "removed_codes": 1282,
+              "remaining_labelled": 2675
+            }
+          },
+          "quarter": {
+            "codes": 73598,
+            "labels": 2671,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27782,
+              "pairwise_unsupported": 213,
+              "disjoint_pool_witnesses": 1318,
+              "support_witnesses": 1318,
+              "contact_family_queries": 10951,
+              "pose_pack_nodes": 10550,
+              "pose_overlap_tests": 40499,
+              "removed_codes": 1290,
+              "remaining_labelled": 2671
+            }
+          },
+          "half": {
+            "codes": 73598,
+            "labels": 2671,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27782,
+              "pairwise_unsupported": 213,
+              "disjoint_pool_witnesses": 1318,
+              "support_witnesses": 1318,
+              "contact_family_queries": 10951,
+              "pose_pack_nodes": 10550,
+              "pose_overlap_tests": 40499,
+              "removed_codes": 1290,
+              "remaining_labelled": 2671
+            }
+          },
+          "full": {
+            "codes": 73598,
+            "labels": 2671,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27782,
+              "pairwise_unsupported": 213,
+              "disjoint_pool_witnesses": 1318,
+              "support_witnesses": 1318,
+              "contact_family_queries": 10951,
+              "pose_pack_nodes": 10550,
+              "pose_overlap_tests": 40499,
+              "removed_codes": 1290,
+              "remaining_labelled": 2671
+            }
+          }
+        }
+      },
+      {
+        "seed": 157,
+        "cases": {
+          "free": {
+            "codes": 72574,
+            "labels": 2591,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27381,
+              "pairwise_unsupported": 293,
+              "disjoint_pool_witnesses": 1280,
+              "support_witnesses": 1280,
+              "contact_family_queries": 10796,
+              "pose_pack_nodes": 10246,
+              "pose_overlap_tests": 39346,
+              "removed_codes": 2314,
+              "remaining_labelled": 2591
+            }
+          },
+          "quarter": {
+            "codes": 72568,
+            "labels": 2588,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27366,
+              "pairwise_unsupported": 296,
+              "disjoint_pool_witnesses": 1279,
+              "support_witnesses": 1279,
+              "contact_family_queries": 10786,
+              "pose_pack_nodes": 10238,
+              "pose_overlap_tests": 39353,
+              "removed_codes": 2320,
+              "remaining_labelled": 2588
+            }
+          },
+          "half": {
+            "codes": 72568,
+            "labels": 2588,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27366,
+              "pairwise_unsupported": 296,
+              "disjoint_pool_witnesses": 1279,
+              "support_witnesses": 1279,
+              "contact_family_queries": 10786,
+              "pose_pack_nodes": 10238,
+              "pose_overlap_tests": 39353,
+              "removed_codes": 2320,
+              "remaining_labelled": 2588
+            }
+          },
+          "full": {
+            "codes": 72564,
+            "labels": 2586,
+            "stats": {
+              "initial_labelled": 2884,
+              "initial_footprints": 1444,
+              "internally_incompatible": 0,
+              "separate_area_supports": 27356,
+              "pairwise_unsupported": 298,
+              "disjoint_pool_witnesses": 1275,
+              "support_witnesses": 1275,
+              "contact_family_queries": 10782,
+              "pose_pack_nodes": 10206,
+              "pose_overlap_tests": 39183,
+              "removed_codes": 2324,
+              "remaining_labelled": 2586
+            }
+          }
+        }
+      }
+    ],
+    "nine": [
+      {
+        "seed": 8500,
+        "raw": 460,
+        "relative": 460
+      },
+      {
+        "seed": 8501,
+        "raw": 420,
+        "relative": 420
+      },
+      {
+        "seed": 8502,
+        "raw": 430,
+        "relative": 430
+      },
+      {
+        "seed": 8503,
+        "raw": 420,
+        "relative": 420
+      },
+      {
+        "seed": 8504,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8505,
+        "raw": 460,
+        "relative": 460
+      },
+      {
+        "seed": 8506,
+        "raw": 390,
+        "relative": 390
+      },
+      {
+        "seed": 8507,
+        "raw": 430,
+        "relative": 430
+      },
+      {
+        "seed": 8508,
+        "raw": 400,
+        "relative": 400
+      },
+      {
+        "seed": 8509,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8510,
+        "raw": 400,
+        "relative": 400
+      },
+      {
+        "seed": 8511,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8512,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8513,
+        "raw": 410,
+        "relative": 410
+      },
+      {
+        "seed": 8514,
+        "raw": 420,
+        "relative": 420
+      },
+      {
+        "seed": 8515,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8516,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8517,
+        "raw": 460,
+        "relative": 460
+      },
+      {
+        "seed": 8518,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8519,
+        "raw": 450,
+        "relative": 450
+      },
+      {
+        "seed": 8520,
+        "raw": 450,
+        "relative": 450
+      },
+      {
+        "seed": 8521,
+        "raw": 460,
+        "relative": 460
+      },
+      {
+        "seed": 8522,
+        "raw": 430,
+        "relative": 430
+      },
+      {
+        "seed": 8523,
+        "raw": 440,
+        "relative": 440
+      },
+      {
+        "seed": 8524,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8525,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8526,
+        "raw": 410,
+        "relative": 410
+      },
+      {
+        "seed": 8527,
+        "raw": 420,
+        "relative": 420
+      },
+      {
+        "seed": 8528,
+        "raw": 420,
+        "relative": 420
+      },
+      {
+        "seed": 8529,
+        "raw": 480,
+        "relative": 480
+      },
+      {
+        "seed": 8530,
+        "raw": 410,
+        "relative": 410
+      },
+      {
+        "seed": 8531,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8532,
+        "raw": 420,
+        "relative": 420
+      },
+      {
+        "seed": 8533,
+        "raw": 420,
+        "relative": 420
+      },
+      {
+        "seed": 8534,
+        "raw": 410,
+        "relative": 410
+      },
+      {
+        "seed": 8535,
+        "raw": 390,
+        "relative": 390
+      },
+      {
+        "seed": 8536,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8537,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8538,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8539,
+        "raw": 430,
+        "relative": 430
+      },
+      {
+        "seed": 8540,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8541,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8542,
+        "raw": 440,
+        "relative": 440
+      },
+      {
+        "seed": 8543,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8544,
+        "raw": 420,
+        "relative": 420
+      },
+      {
+        "seed": 8545,
+        "raw": 460,
+        "relative": 460
+      },
+      {
+        "seed": 8546,
+        "raw": 450,
+        "relative": 450
+      },
+      {
+        "seed": 8547,
+        "raw": 0,
+        "relative": 0
+      },
+      {
+        "seed": 8548,
+        "raw": 410,
+        "relative": 410
+      },
+      {
+        "seed": 8549,
+        "raw": 430,
+        "relative": 430
+      },
+      {
+        "seed": 8550,
+        "raw": 440,
+        "relative": 440
+      },
+      {
+        "seed": 8551,
+        "raw": 440,
+        "relative": 440
+      },
+      {
+        "seed": 8552,
+        "raw": 430,
+        "relative": 430
+      },
+      {
+        "seed": 8553,
+        "raw": 430,
+        "relative": 430
+      },
+      {
+        "seed": 8554,
+        "raw": 400,
+        "relative": 400
+      },
+      {
+        "seed": 8555,
+        "raw": 410,
+        "relative": 410
+      },
+      {
+        "seed": 8556,
+        "raw": 430,
+        "relative": 430
+      },
+      {
+        "seed": 8557,
+        "raw": 430,
+        "relative": 430
+      },
+      {
+        "seed": 8558,
+        "raw": 440,
+        "relative": 440
+      },
+      {
+        "seed": 8559,
+        "raw": 420,
+        "relative": 420
+      },
+      {
+        "seed": 8560,
+        "raw": 440,
+        "relative": 440
+      },
+      {
+        "seed": 8561,
+        "raw": 440,
+        "relative": 440
+      },
+      {
+        "seed": 8562,
+        "raw": 400,
+        "relative": 400
+      },
+      {
+        "seed": 8563,
+        "raw": 420,
+        "relative": 420
+      }
+    ]
+  }
+}

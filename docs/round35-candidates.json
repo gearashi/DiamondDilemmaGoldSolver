@@ -134,9 +134,10 @@
         "docs/R35_MIXED_SEWINGS.json",
         "docs/R35_NEAR_TOUR_EXCHANGES.json",
         "docs/R35_MIXED_CONTACT_DONOR.json",
-        "test_r35_mixed_sewings.py"
+        "test_r35_mixed_sewings.py",
+        "docs/R35_MIXED_MIP_DONOR.json"
       ],
-      "decision": "Retain the original common-phase search plus exact child-specific XOR phases, forced alternating cycles, signed frontier caching and the all-donor geographic root check. Thirteen complete original physical counts and planted real Gold children agree with independent verification. The expanded 852-seam union, including the connected contact-priced repair and later 117/985-contact portfolio pairings, exclude all 480 geographic roots by independent SAT unit propagation. Every iterated recombination confined to those seams is geographically exhausted. Two larger purely abstract counts remain bounded diagnostics.",
+      "decision": "Retain the original common-phase search plus exact child-specific XOR phases, forced alternating cycles, signed frontier caching and the all-donor geographic root check. Thirteen complete original physical counts and planted real Gold children agree with independent verification. The 25 complete donors, including the final #84/#86 conditional physical portfolio, supply 968 seams. All 480 geographic roots fail in 16,560 revisions and independent SAT unit propagation. Every iterated recombination confined to those seams is geographically exhausted. Two larger purely abstract counts remain bounded diagnostics.",
       "reopen_if": "A new physical donor supplies seams outside the documented union and at least one root survives the combined geographic test, or a material application requires one of the two unresolved physical-only counts. The three full signed mate pools admit geographic roots and remain distinct from the named donor family."
     },
     {
@@ -1575,8 +1576,21 @@
       "source_id": "#9 joint footprints, #40 speculative joins, #81 incidental contacts",
       "title": "Check boundary seams between oriented component placements",
       "mechanism": "INTERCOMPONENT-POSE-SEAMS",
-      "state": "testing",
-      "proposal_and_validation": "Compare occupancy-only joint support and speculative merges to actual signed/unsigned oriented seam compatibility where different components touch. Preserve all Gold on tiny exact boards, test restricted original domino packings and nine-tile construction joins. Test soft scoring separately for incomplete-edge objectives before retaining any non-Gold ordering."
+      "state": "keep geographic boundary support; reject scored-start ranking",
+      "proposal_and_validation": "Compare occupancy-only joint support and speculative merges to actual signed/unsigned oriented seam compatibility where different components touch. Preserve all Gold on tiny exact boards, test restricted original domino packings and nine-tile construction joins. Test soft scoring separately for incomplete-edge objectives before retaining any non-Gold ordering.",
+      "decision": "Resolve oriented physical and pinned XOR seam compatibility across disjoint compulsory poses and explicit joins of up to nine tiles. Keep budgeted exact support for small jointly interacting families, the non-touching count and ordinary scored-search eligibility. Reject both simple tie ordering and a minimum-loss first tier for 208.",
+      "measurement": "Four real restrictions lost 270, 314, 272 and 1304 additional codes. Two of six independent restricted local packings became impossible, including one requiring simultaneous labels. Of 29,510 fresh nine-piece poses 9,390 forced a seam mismatch and 17/64 entire named conditions failed. A prior native call spent 45,319 branches and remained unresolved. The new geographic check proved the same assumption infeasible with zero native branches. Full phase pins removed 8â€“10 more codes and unpinned relative tests across 6,451,200 paired dominoes added zero. Scored first-tier trials lost five matched edges over sixteen 64-round trajectories.",
+      "evidence": [
+        "docs/ROUND35_POSE_CONTACTS.md",
+        "docs/R35_POSE_CONTACTS.json",
+        "bench_r35_pose_contacts.py",
+        "bench_r35_signed_pose_contacts.py",
+        "bench_r35_incidental_joins.py",
+        "bench_r35_pose_contact_outcomes.py",
+        "bench_r35_pose_contact_starts.py",
+        "test_r35_pose_contacts.py"
+      ],
+      "reopen_if": "A measured differently shaped component or partial phase leaves incompatible cycles outside these closures; new scored-start evidence must improve completed repair trajectories across held-out inputs."
     },
     {
       "id": 86,

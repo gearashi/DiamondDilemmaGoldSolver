@@ -3,7 +3,7 @@ from collections import Counter
 
 
 class PoseJoins:
-    def __init__(self,assemblies,*,gold=False):
+    def __init__(self,assemblies,*,gold=False,phases=None):
         self.model=assemblies.model
         self.neighbors=getattr(self.model.problem.board,'neighbors',None)
         if self.neighbors is None:
@@ -12,7 +12,7 @@ class PoseJoins:
         self.geometry=None
         if gold:
             from r35_pose_contacts import Boundaries
-            self.geometry=Boundaries(self.model.problem)
+            self.geometry=Boundaries(self.model.problem,phases=phases)
         self.base=[(frozenset(group),rows,()) for group,rows in assemblies.groups]
         self.cache={}
         self.singletons={}

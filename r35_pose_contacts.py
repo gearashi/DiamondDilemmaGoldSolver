@@ -7,11 +7,37 @@ from r32_gold_bonds import inventory
 from validator import reverse_mask
 
 
+
+class PhaseRelations:
+    """Necessary relative tile phases from specified physical mates and explicitly pinned signs."""
+    def __init__(self,problem,bonds=(),pins=None):
+        from r29_logic_binary import Parity
+        from r29_gold_phase import checked_pins
+        from r35_signed_mate_support import reciprocal_classes
+        self.sides,_=reciprocal_classes(problem.tiles)
+        union=Parity(problem.n+1)
+        self.valid=True
+        for t,phase in checked_pins(problem.n,pins or {}).items():
+            self.valid &= union.bind(t,problem.n,phase)
+        for a,b in bonds:
+            self.valid &= union.bind(a//3,b//3,self.required(a,b))
+        self.parts=[union.find(i) for i in range(problem.n)]
+
+    def required(self,a,b):
+        slots,phase=self.sides[a]
+        return phase^self.sides[b][1]^(len(slots)%2)
+
+    def accepts(self,a,b):
+        (root,left),(other,right)=self.parts[a//3],self.parts[b//3]
+        return root!=other or left^right==self.required(a,b)
+
+
 class Boundaries:
     """For a specified pose, price all its internal physical contacts from actual geographic neighbors."""
-    def __init__(self,problem,physical=True):
+    def __init__(self,problem,physical=True,phases=None):
         self.neighbors=[tuple((int(b),int(j)) for b,j in zip(row,sides))
                         for row,sides in zip(problem.neighbors,problem.sides)]
+        self.phases=phases
         self.mates=None
         if physical:
             mates=[set() for _ in range(3*problem.n)]
@@ -21,6 +47,7 @@ class Boundaries:
         self.sides=[int(x) for row in problem.masks[::3] for x in row]
 
     def accepts(self,a,b):
+        if self.phases is not None and not self.phases.accepts(a,b):return False
         if self.mates is not None:return b in self.mates[a]
         return self.sides[b]==reverse_mask(self.sides[a])
 
@@ -65,16 +92,22 @@ class PoseIndex:
         return visible
 
 
-def compatible_poses(problem,groups,work,*,physical=True,joint=True,restricted=True):
+def compatible_poses(problem,groups,work,*,physical=True,joint=True,restricted=True,cover_test=True,phases=None):
     """Exclude only independently impossible labelled poses, preserving undecided alternatives at a work limit."""
     poses=[tuple(p for rows in family.values() for p in rows) for family in groups]
     stats=Counter()
+    if any(not family for family in poses):return groups,stats,True
     if not poses or restricted and min(map(len,poses))>64:
         stats['broad_contact_pass_skipped']=1
         return groups,stats,True
-    geometry=Boundaries(problem,physical)
+    geometry=Boundaries(problem,physical,phases)
     descriptions=[[geometry.describe(p) for p in family] for family in poses]
     indices=[PoseIndex(sig,geometry) for sig in descriptions]
+    # If the target family has more surviving labels than can touch the entire
+    # neighboring area of a pose, at least one placement is disjoint and separate.
+    areas=[max((len(set(cells)|{b for b,_,_ in boundary}) for cells,boundary,_,_ in family),default=0)
+           for family in descriptions]
+    occupancy=[max((row.bit_count() for row in index.occupied.values()),default=0) for index in indices]
     visible=[]
     for family in descriptions:
         mask=sum(1<<i for i,sig in enumerate(family) if sig[3]==0)
@@ -88,9 +121,12 @@ def compatible_poses(problem,groups,work,*,physical=True,joint=True,restricted=T
         while True:
             changed=False
             for g,mask in enumerate(visible):
+                possible=[other for other,support in enumerate(visible) if other!=g and
+                          (not cover_test or support.bit_count()<=areas[g]*occupancy[other])]
+                stats['separate_area_supports']+=(len(visible)-1-len(possible))*mask.bit_count()
                 for i in bits(mask):
-                    for other,support in enumerate(visible):
-                        if other==g:continue
+                    for other in possible:
+                        support=visible[other]
                         work.tick('contact_family_queries')
                         if not links(g,i,other)&support:
                             visible[g]&=~(1<<i);stats['pairwise_unsupported']+=1
@@ -131,7 +167,7 @@ def compatible_poses(problem,groups,work,*,physical=True,joint=True,restricted=T
         result.append(choices)
     return result,stats,complete
 
-def conditioned_components(problem,domains,clusters,bonds):
+def conditioned_components(problem,domains,clusters,bonds,phases=None):
     """Join explicit geographic bond assumptions, keeping the other required component poses."""
     from types import SimpleNamespace
     from r35_speculative_poses import PoseJoins
@@ -141,7 +177,7 @@ def conditioned_components(problem,domains,clusters,bonds):
             return bool(domains[c]>>v&1)
     model=SimpleNamespace(problem=problem,n=problem.n,legal=Legal())
     initial=[(members,[p for p in poses if all(domains[c]>>v&1 for c,v in p)]) for members,_,poses in clusters]
-    joins=PoseJoins(SimpleNamespace(model=model,groups=initial),gold=True)
+    joins=PoseJoins(SimpleNamespace(model=model,groups=initial),gold=True,phases=phases)
     groups=list(joins.base)
     for a,b in sorted({tuple(sorted(e)) for e in bonds}):
         if a//3==b//3:continue

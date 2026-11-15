@@ -43,3 +43,11 @@ On ten-triangle planted Gold instances, direct enumeration at seeds 103, 224, 31
 Run `python r35_alternating_sewings.py --parents parents.json --union-roots` to screen any number of complete donors together. Use `python r35_alternating_sewings.py --parents parents.json --geography` for a new pair of complete physical sewings. On the documented six donors, another physical count cannot improve the geographic decision. A new donor with a seam outside the extended union can be screened by adding its seams and checking the geographic roots before opening a new physical count. The unrestricted Gold puzzle and board scores above 207 remain open.
 
 With prepared original tile data and the optional Python SAT and CP packages installed, `python bench_r35_mixed_sewings.py --tiles data/tiles.json --output replay.json` reproduces the full original matrix and both independent union checks. The planted phase and Gold regressions also run on the Python 3.15 NumPy-only profile. The independent SAT test is optional there.
+
+## The final conditional physical portfolio
+
+The #84 three-circuit 34-loss and connected 35-loss pairings share a newly tested signed phase. They expand the recorded source union from 852 to 896 physical seams across fifteen complete pairings. The union allows every combination of those seams, including repeated crossovers and child phases different from every parent. All 480 possible geographic anchor poses fail after 12,320 domain revisions. An independent 76,800-variable CNF with 460,480 clauses refutes every anchor by unit propagation. Geographic Gold using additional seams remains outside this closure. The connected parent's 365-strand loop has genus 26.
+
+The terminal #84/#86 portfolio supplied ten more distinct matchings. Its incoming pairings cover three phases, bringing the total to 25 complete matchings and 968 physical seams. All 480 geographic roots fail after 16,560 revisions and independently by unit propagation. The expanded membership and exact circuits are in the result record.
+
+Run `python bench_r35_mixed_sewings.py --tiles data/tiles.json --extend-union docs/R35_MIXED_MIP_DONOR.json --output expanded.json`. The [incoming pairings](R35_MIXED_MIP_DONOR.json) and [cross-checked result](R35_MIXED_SEWINGS.json) preserve the exact inputs.

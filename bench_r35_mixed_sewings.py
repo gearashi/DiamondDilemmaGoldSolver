@@ -282,7 +282,7 @@ def measure(tiles,limit=8):
     return dict(original_pairs=result,combined_unions=union_controls(p,donors))
 
 
-def union_controls(p,donors):
+def union_controls(p,donors,additional=None):
     from r29_gold_phase import EndpointCuts
     from r35_mixed_sewings import donor_geography,geographic_roots
     from validator import reverse_mask
@@ -328,6 +328,24 @@ def union_controls(p,donors):
     assert extended['geographic_status']=='INFEASIBLE' and not independent['unresolved_roots']
     unions['later_contact_portfolios']=dict(added_donors=new_names,physical_seams=len(all_seams),
                                             propagated=extended['roots'],independent_cnf=independent)
+    if additional is not None:
+        extra=[]
+        for source in [additional,*additional.get('others',[])]:
+            phase=[int(source['phase'],0)>>t&1 for t in range(p.n)]
+            for key in ('first_pairing','pairs'):
+                mesh=source[key]
+                candidate=frozenset(map(tuple,mesh))
+                if candidate in known:continue
+                known.add(candidate)
+                expanded.append(dict(pairs=mesh,phases=phase))
+                extra.append(dict(key=key,origin=source.get('name'),phase=source['phase'],cycles=raw_cycles(p,mesh)))
+        cutoff=donor_geography(p,expanded)
+        all_seams=set().union(*known)
+        replay=union_sat(p,all_seams)
+        if bool(cutoff['roots']['survivors'])!=bool(replay['unresolved_roots']):
+            raise ValueError('Independent geographic donor-root checks disagree.')
+        unions['incoming_phase_donors']=dict(phases=sorted({item['phase'] for item in extra}),donors=len(known),new=extra,
+                 physical_seams=len(all_seams),propagated=cutoff['roots'],independent_cnf=replay)
     phases={tuple(rec['phases']) for rec in all_donors.values()}
     sides=EndpointCuts(p).sides
     unrestricted={}
@@ -350,5 +368,7 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--tiles',type=Path,default=Path('data/tiles.json'))
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--extend-union',type=Path,help='Replay only geographic source unions, adding a new complete physical donor file.')
     args=parser.parse_args()
-    args.output.write_text(json.dumps(measure(args.tiles),indent=2)+'\n',encoding='utf8')
+    result=(union_controls(SearchProblem(read_json(args.tiles)),original_sources(),read_json(args.extend_union)) if args.extend_union else measure(args.tiles))
+    args.output.write_text(json.dumps(result,indent=2)+'\n',encoding='utf8')
