@@ -1,0 +1,760 @@
+{
+  "source_commit": "2888329bf1d9cc891eda1d0fea5250385137698c",
+  "source_tree": "d2957fa213d363fff2307524019ca3361a486b80",
+  "canonical_archive_sha256": "d95c1aa670a054e0fef43b792daa3fcd663e91b9f3aa1b4016190fa3bf18e22e",
+  "profiles": {
+    "CUDA": {
+      "baseline_commit": "9a3403b7f940d09f4780437e16dc0aabdaf668f2",
+      "backend": "CUDA",
+      "width": 131072,
+      "observations": {
+        "single": {
+          "field_hashes": [
+            "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+            "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+            "ca2fd00fa001190744c15c317643ab092e7048ce086a243e2be9437c898de1bb",
+            "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.00044350000098347664,
+                "maps": 4,
+                "read_bytes": 8
+              },
+              {
+                "seconds": 0.0003480000013951212,
+                "maps": 4,
+                "read_bytes": 8
+              },
+              {
+                "seconds": 0.00029739999445155263,
+                "maps": 4,
+                "read_bytes": 8
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.0012172000133432448,
+                "maps": 1,
+                "read_bytes": 8
+              },
+              {
+                "seconds": 0.0009759999811649323,
+                "maps": 1,
+                "read_bytes": 8
+              },
+              {
+                "seconds": 0.0009384999866597354,
+                "maps": 1,
+                "read_bytes": 8
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.0003480000013951212,
+            "new": 0.0009759999811649323
+          }
+        },
+        "scattered": {
+          "field_hashes": [
+            "b748caf7531dd6931d18b6c035ef600f04b8aa64675e77198e6b749b8fb34b58",
+            "b748caf7531dd6931d18b6c035ef600f04b8aa64675e77198e6b749b8fb34b58",
+            "1549bcb7d8010a718ab35ea7cb0861cac2ff043f0ac05f303d3b61ca9a944795",
+            "b748caf7531dd6931d18b6c035ef600f04b8aa64675e77198e6b749b8fb34b58"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.0016008999955374748,
+                "maps": 4,
+                "read_bytes": 69360
+              },
+              {
+                "seconds": 0.001579100004164502,
+                "maps": 4,
+                "read_bytes": 69360
+              },
+              {
+                "seconds": 0.0190963999775704,
+                "maps": 4,
+                "read_bytes": 69360
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.0010612999903969467,
+                "maps": 1,
+                "read_bytes": 69360
+              },
+              {
+                "seconds": 0.0009661999938543886,
+                "maps": 1,
+                "read_bytes": 69360
+              },
+              {
+                "seconds": 0.0014785999956075102,
+                "maps": 1,
+                "read_bytes": 69360
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.0016008999955374748,
+            "new": 0.0010612999903969467
+          }
+        },
+        "contiguous": {
+          "field_hashes": [
+            "7971f869259aee9bd631bba70e10a49cf66fea3ac7fd16126a064111f87da460",
+            "7971f869259aee9bd631bba70e10a49cf66fea3ac7fd16126a064111f87da460",
+            "c9bd2aa628c888e2eb30ca79390f4eb910f3cf93453d20d5df2e09455575f801",
+            "7971f869259aee9bd631bba70e10a49cf66fea3ac7fd16126a064111f87da460"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.013642200006870553,
+                "maps": 4,
+                "read_bytes": 18874368
+              },
+              {
+                "seconds": 0.0122306999983266,
+                "maps": 4,
+                "read_bytes": 18874368
+              },
+              {
+                "seconds": 0.012961899978108704,
+                "maps": 4,
+                "read_bytes": 18874368
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.01344559999415651,
+                "maps": 1,
+                "read_bytes": 18874368
+              },
+              {
+                "seconds": 0.013744399999268353,
+                "maps": 1,
+                "read_bytes": 18874368
+              },
+              {
+                "seconds": 0.01294770001550205,
+                "maps": 1,
+                "read_bytes": 18874368
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.012961899978108704,
+            "new": 0.01344559999415651
+          }
+        },
+        "mixed": {
+          "field_hashes": [
+            "b33f0e748433d30671edda423e3e31e34ec8ae3af4994613009b6f26a25bd848",
+            "b33f0e748433d30671edda423e3e31e34ec8ae3af4994613009b6f26a25bd848",
+            "e77baf588228c81f6ef603fc160f4ef016a71fda9ec5418238622bae7d585f9e",
+            "b33f0e748433d30671edda423e3e31e34ec8ae3af4994613009b6f26a25bd848"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.011240399995585904,
+                "maps": 4,
+                "read_bytes": 13157664
+              },
+              {
+                "seconds": 0.028726399992592633,
+                "maps": 4,
+                "read_bytes": 13157664
+              },
+              {
+                "seconds": 0.016056499996921048,
+                "maps": 4,
+                "read_bytes": 13157664
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.01411379998899065,
+                "maps": 1,
+                "read_bytes": 13157664
+              },
+              {
+                "seconds": 0.019098599994322285,
+                "maps": 1,
+                "read_bytes": 13157664
+              },
+              {
+                "seconds": 0.008879400003934279,
+                "maps": 1,
+                "read_bytes": 13157664
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.016056499996921048,
+            "new": 0.01411379998899065
+          }
+        },
+        "complete": {
+          "field_hashes": [
+            "80a3721188e40218b08b26776bc53bdae81e4784fff71d71450a197319cba113",
+            "80a3721188e40218b08b26776bc53bdae81e4784fff71d71450a197319cba113",
+            "a37a157b20b4b01a61c868b0b31f3dac27e90ea45ab4c4e3b9a324554fb86181",
+            "80a3721188e40218b08b26776bc53bdae81e4784fff71d71450a197319cba113"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.11506010001176037,
+                "maps": 4,
+                "read_bytes": 167772160
+              },
+              {
+                "seconds": 0.10386480001034215,
+                "maps": 4,
+                "read_bytes": 167772160
+              },
+              {
+                "seconds": 0.12397509999573231,
+                "maps": 4,
+                "read_bytes": 167772160
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.08656730002257973,
+                "maps": 1,
+                "read_bytes": 167772160
+              },
+              {
+                "seconds": 0.101985200017225,
+                "maps": 1,
+                "read_bytes": 167772160
+              },
+              {
+                "seconds": 0.09420750002027489,
+                "maps": 1,
+                "read_bytes": 167772160
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.11506010001176037,
+            "new": 0.09420750002027489
+          }
+        }
+      },
+      "test_output": [
+        "Ran 5 tests in 12.458s",
+        "OK"
+      ]
+    },
+    "Vulkan": {
+      "baseline_commit": "9a3403b7f940d09f4780437e16dc0aabdaf668f2",
+      "backend": "Vulkan",
+      "width": 131072,
+      "observations": {
+        "single": {
+          "field_hashes": [
+            "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+            "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+            "ca2fd00fa001190744c15c317643ab092e7048ce086a243e2be9437c898de1bb",
+            "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.004071000003023073,
+                "maps": 4,
+                "read_bytes": 16
+              },
+              {
+                "seconds": 0.0031196000054478645,
+                "maps": 4,
+                "read_bytes": 16
+              },
+              {
+                "seconds": 0.0031168999848887324,
+                "maps": 4,
+                "read_bytes": 16
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.0024831000191625208,
+                "maps": 1,
+                "read_bytes": 8
+              },
+              {
+                "seconds": 0.0025372999953106046,
+                "maps": 1,
+                "read_bytes": 8
+              },
+              {
+                "seconds": 0.002272400015499443,
+                "maps": 1,
+                "read_bytes": 8
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.0031196000054478645,
+            "new": 0.0024831000191625208
+          }
+        },
+        "scattered": {
+          "field_hashes": [
+            "b748caf7531dd6931d18b6c035ef600f04b8aa64675e77198e6b749b8fb34b58",
+            "b748caf7531dd6931d18b6c035ef600f04b8aa64675e77198e6b749b8fb34b58",
+            "1549bcb7d8010a718ab35ea7cb0861cac2ff043f0ac05f303d3b61ca9a944795",
+            "b748caf7531dd6931d18b6c035ef600f04b8aa64675e77198e6b749b8fb34b58"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.0055782000126782805,
+                "maps": 4,
+                "read_bytes": 138720
+              },
+              {
+                "seconds": 0.0052859999996144325,
+                "maps": 4,
+                "read_bytes": 138720
+              },
+              {
+                "seconds": 0.01124990000971593,
+                "maps": 4,
+                "read_bytes": 138720
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.002337400015676394,
+                "maps": 1,
+                "read_bytes": 69360
+              },
+              {
+                "seconds": 0.0023062000109348446,
+                "maps": 1,
+                "read_bytes": 69360
+              },
+              {
+                "seconds": 0.00224760000128299,
+                "maps": 1,
+                "read_bytes": 69360
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.0055782000126782805,
+            "new": 0.0023062000109348446
+          }
+        },
+        "contiguous": {
+          "field_hashes": [
+            "7971f869259aee9bd631bba70e10a49cf66fea3ac7fd16126a064111f87da460",
+            "7971f869259aee9bd631bba70e10a49cf66fea3ac7fd16126a064111f87da460",
+            "c9bd2aa628c888e2eb30ca79390f4eb910f3cf93453d20d5df2e09455575f801",
+            "7971f869259aee9bd631bba70e10a49cf66fea3ac7fd16126a064111f87da460"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.08279749998473562,
+                "maps": 4,
+                "read_bytes": 37748736
+              },
+              {
+                "seconds": 0.06456290002097376,
+                "maps": 4,
+                "read_bytes": 37748736
+              },
+              {
+                "seconds": 0.07030150000355206,
+                "maps": 4,
+                "read_bytes": 37748736
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.012660899985348806,
+                "maps": 1,
+                "read_bytes": 18874368
+              },
+              {
+                "seconds": 0.03146030000061728,
+                "maps": 1,
+                "read_bytes": 18874368
+              },
+              {
+                "seconds": 0.014746200002264231,
+                "maps": 1,
+                "read_bytes": 18874368
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.07030150000355206,
+            "new": 0.014746200002264231
+          }
+        },
+        "mixed": {
+          "field_hashes": [
+            "b33f0e748433d30671edda423e3e31e34ec8ae3af4994613009b6f26a25bd848",
+            "b33f0e748433d30671edda423e3e31e34ec8ae3af4994613009b6f26a25bd848",
+            "e77baf588228c81f6ef603fc160f4ef016a71fda9ec5418238622bae7d585f9e",
+            "b33f0e748433d30671edda423e3e31e34ec8ae3af4994613009b6f26a25bd848"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.035101199988275766,
+                "maps": 4,
+                "read_bytes": 26315328
+              },
+              {
+                "seconds": 0.03522470002644695,
+                "maps": 4,
+                "read_bytes": 26315328
+              },
+              {
+                "seconds": 0.03375099998083897,
+                "maps": 4,
+                "read_bytes": 26315328
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.01022760002524592,
+                "maps": 1,
+                "read_bytes": 13157664
+              },
+              {
+                "seconds": 0.009878499986371025,
+                "maps": 1,
+                "read_bytes": 13157664
+              },
+              {
+                "seconds": 0.00944380002329126,
+                "maps": 1,
+                "read_bytes": 13157664
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.035101199988275766,
+            "new": 0.009878499986371025
+          }
+        },
+        "complete": {
+          "field_hashes": [
+            "80a3721188e40218b08b26776bc53bdae81e4784fff71d71450a197319cba113",
+            "80a3721188e40218b08b26776bc53bdae81e4784fff71d71450a197319cba113",
+            "a37a157b20b4b01a61c868b0b31f3dac27e90ea45ab4c4e3b9a324554fb86181",
+            "80a3721188e40218b08b26776bc53bdae81e4784fff71d71450a197319cba113"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.8912973000260536,
+                "maps": 4,
+                "read_bytes": 335544320
+              },
+              {
+                "seconds": 0.7404127000190783,
+                "maps": 4,
+                "read_bytes": 335544320
+              },
+              {
+                "seconds": 0.7315510000044014,
+                "maps": 4,
+                "read_bytes": 335544320
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.23905900001409464,
+                "maps": 2,
+                "read_bytes": 167772160
+              },
+              {
+                "seconds": 0.2398912999778986,
+                "maps": 2,
+                "read_bytes": 167772160
+              },
+              {
+                "seconds": 0.20958080000127666,
+                "maps": 2,
+                "read_bytes": 167772160
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.7404127000190783,
+            "new": 0.23905900001409464
+          }
+        }
+      },
+      "test_output": [
+        "Ran 5 tests in 75.705s",
+        "OK"
+      ]
+    },
+    "D3D12": {
+      "baseline_commit": "9a3403b7f940d09f4780437e16dc0aabdaf668f2",
+      "backend": "D3D12",
+      "width": 131072,
+      "observations": {
+        "single": {
+          "field_hashes": [
+            "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+            "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+            "ca2fd00fa001190744c15c317643ab092e7048ce086a243e2be9437c898de1bb",
+            "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.0024960000009741634,
+                "maps": 4,
+                "read_bytes": 16
+              },
+              {
+                "seconds": 0.002024599991273135,
+                "maps": 4,
+                "read_bytes": 16
+              },
+              {
+                "seconds": 0.0018774000054690987,
+                "maps": 4,
+                "read_bytes": 16
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.0017225999908987433,
+                "maps": 1,
+                "read_bytes": 8
+              },
+              {
+                "seconds": 0.0014465000131167471,
+                "maps": 1,
+                "read_bytes": 8
+              },
+              {
+                "seconds": 0.001586500002304092,
+                "maps": 1,
+                "read_bytes": 8
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.002024599991273135,
+            "new": 0.001586500002304092
+          }
+        },
+        "scattered": {
+          "field_hashes": [
+            "b748caf7531dd6931d18b6c035ef600f04b8aa64675e77198e6b749b8fb34b58",
+            "b748caf7531dd6931d18b6c035ef600f04b8aa64675e77198e6b749b8fb34b58",
+            "1549bcb7d8010a718ab35ea7cb0861cac2ff043f0ac05f303d3b61ca9a944795",
+            "b748caf7531dd6931d18b6c035ef600f04b8aa64675e77198e6b749b8fb34b58"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.003673699975479394,
+                "maps": 4,
+                "read_bytes": 138720
+              },
+              {
+                "seconds": 0.00370110000949353,
+                "maps": 4,
+                "read_bytes": 138720
+              },
+              {
+                "seconds": 0.0038711999950464815,
+                "maps": 4,
+                "read_bytes": 138720
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.0016450999828521162,
+                "maps": 1,
+                "read_bytes": 69360
+              },
+              {
+                "seconds": 0.0015484000032301992,
+                "maps": 1,
+                "read_bytes": 69360
+              },
+              {
+                "seconds": 0.0016194999916478992,
+                "maps": 1,
+                "read_bytes": 69360
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.00370110000949353,
+            "new": 0.0016194999916478992
+          }
+        },
+        "contiguous": {
+          "field_hashes": [
+            "7971f869259aee9bd631bba70e10a49cf66fea3ac7fd16126a064111f87da460",
+            "7971f869259aee9bd631bba70e10a49cf66fea3ac7fd16126a064111f87da460",
+            "c9bd2aa628c888e2eb30ca79390f4eb910f3cf93453d20d5df2e09455575f801",
+            "7971f869259aee9bd631bba70e10a49cf66fea3ac7fd16126a064111f87da460"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.04332649998832494,
+                "maps": 4,
+                "read_bytes": 37748736
+              },
+              {
+                "seconds": 0.052707499999087304,
+                "maps": 4,
+                "read_bytes": 37748736
+              },
+              {
+                "seconds": 0.04295510001247749,
+                "maps": 4,
+                "read_bytes": 37748736
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.010543800017330796,
+                "maps": 1,
+                "read_bytes": 18874368
+              },
+              {
+                "seconds": 0.009238300001015887,
+                "maps": 1,
+                "read_bytes": 18874368
+              },
+              {
+                "seconds": 0.009537800011457875,
+                "maps": 1,
+                "read_bytes": 18874368
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.04332649998832494,
+            "new": 0.009537800011457875
+          }
+        },
+        "mixed": {
+          "field_hashes": [
+            "b33f0e748433d30671edda423e3e31e34ec8ae3af4994613009b6f26a25bd848",
+            "b33f0e748433d30671edda423e3e31e34ec8ae3af4994613009b6f26a25bd848",
+            "e77baf588228c81f6ef603fc160f4ef016a71fda9ec5418238622bae7d585f9e",
+            "b33f0e748433d30671edda423e3e31e34ec8ae3af4994613009b6f26a25bd848"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.02072890000999905,
+                "maps": 4,
+                "read_bytes": 26315328
+              },
+              {
+                "seconds": 0.022005899983923882,
+                "maps": 4,
+                "read_bytes": 26315328
+              },
+              {
+                "seconds": 0.021599500003503636,
+                "maps": 4,
+                "read_bytes": 26315328
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.006925299996510148,
+                "maps": 1,
+                "read_bytes": 13157664
+              },
+              {
+                "seconds": 0.007326799997827038,
+                "maps": 1,
+                "read_bytes": 13157664
+              },
+              {
+                "seconds": 0.006722199992509559,
+                "maps": 1,
+                "read_bytes": 13157664
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.021599500003503636,
+            "new": 0.006925299996510148
+          }
+        },
+        "complete": {
+          "field_hashes": [
+            "80a3721188e40218b08b26776bc53bdae81e4784fff71d71450a197319cba113",
+            "80a3721188e40218b08b26776bc53bdae81e4784fff71d71450a197319cba113",
+            "a37a157b20b4b01a61c868b0b31f3dac27e90ea45ab4c4e3b9a324554fb86181",
+            "80a3721188e40218b08b26776bc53bdae81e4784fff71d71450a197319cba113"
+          ],
+          "samples": {
+            "old": [
+              {
+                "seconds": 0.4388067000254523,
+                "maps": 4,
+                "read_bytes": 335544320
+              },
+              {
+                "seconds": 0.4173587999830488,
+                "maps": 4,
+                "read_bytes": 335544320
+              },
+              {
+                "seconds": 0.41463779998593964,
+                "maps": 4,
+                "read_bytes": 335544320
+              }
+            ],
+            "new": [
+              {
+                "seconds": 0.1480479000019841,
+                "maps": 2,
+                "read_bytes": 167772160
+              },
+              {
+                "seconds": 0.1408506000007037,
+                "maps": 2,
+                "read_bytes": 167772160
+              },
+              {
+                "seconds": 0.14368919999105856,
+                "maps": 2,
+                "read_bytes": 167772160
+              }
+            ]
+          },
+          "median_seconds": {
+            "old": 0.4173587999830488,
+            "new": 0.14368919999105856
+          }
+        }
+      },
+      "test_output": [
+        "Ran 5 tests in 52.762s",
+        "OK"
+      ]
+    }
+  }
+}
