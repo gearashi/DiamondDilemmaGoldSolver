@@ -1028,7 +1028,7 @@
       "source_id": 4,
       "title": "Checkpoint only changed classic GPU fields and frame chunks",
       "proposal_and_validation": "The classic (non-domain) GPU checkpoint is still an uncompressed whole NPZ. The installed native sample has 43 members and 260,190,250 bytes, including six arrays of 41,943,168 bytes each. Screen constant prefix data, idle lanes, and dirty frame/column chunks across real consecutive saves. Compare reusing the existing incremental checkpoint store with chunked certified native payloads, preserve old NPZ imports, cheap host-only exhaustion checks, crash-safe publication, checksums, independent witnesses and exact restart ownership. Count device readbacks, writes and unchanged payloads; cover Windows and Vulkan and disk-full fallback.",
-      "state": "validated flat compressed checkpoints; testing immutable paused bank and device readback",
+      "state": "validated portable and parked checkpoint formats; testing native readback ranges",
       "evidence": [
         "bench_r35_native_chunks.py",
         "docs/R35_NATIVE_CHUNKS.json",
@@ -1037,10 +1037,15 @@
         "docs/R35_CLASSIC_SPLIT_BANK.json",
         "docs/R35_CLASSIC_INSTALLED_STORAGE.json",
         "docs/R35_CLASSIC_WRITES.json",
-        "test_r35_classic_storage.py"
+        "test_r35_classic_storage.py",
+        "docs/R35_PARKED_CRASH.json",
+        "docs/R35_PARKED_PUBLIC_FINAL.json",
+        "docs/R35_PARKED_ADMISSION.json",
+        "docs/R35_PARKED_LONG_FINAL.json",
+        "docs/R35_CUDA_READBACK.json"
       ],
-      "measurement": "Authentic installed 260,190,250-byte checkpoint: stored/fast/high compression wrote 260191435/42362829/39157703 Windows process bytes; 1.40/3.35/13.52 seconds. Five active-pool histories favored fast flat over SQLite chunks. True 2035- and 8001-parked histories reversed that comparison. Detached frozen bank plus full portable final cut matched writes from 1056665 to 446739 and 3767325 to 1582430. All source members/arrays independently recovered.",
-      "next_step": "Integrate and test a crash-safe immutable parked-bank interval format, with actual consumption/rotation, standalone portable final stop even at an already-saved generation, receipts, corrupted banks, garbage collection and low-space behavior. Test a separately scoped device readback opportunity with CPU/GPU differential controls."
+      "measurement": "Original real crash at generation 298 with 1911 parked jobs resumed and saved portable generation 1456 with verified origin. True suffix consuming 512 jobs across checkpoints reproduced all 38 native fields after cold resize and steps on CUDA, Vulkan, D3D12. 8001 parked jobs: 3766695 to 1616309 Windows write bytes with a standalone final. 33-generation adverse 512/480 ties standalone after gating. CUDA exact-difference widths compared on actual 128–32768 lanes and 0–32768 steps.",
+      "next_step": "Choose and integrate the validated native readback path using ownership/range vs device comparison or full capture. Test old noncanonical tail frames, terminal lanes, Gold rewinds, private snapshots, static/dynamic/CPU assistance and realistic long intervals on CUDA/Vulkan/D3D12. Reconfirm normal stopped portable materialization on final image."
     },
     {
       "id": 69,
@@ -1086,18 +1091,24 @@
       "source_id": 6,
       "title": "Reuse WebGPU devices and pipelines during repeated construction",
       "proposal_and_validation": "WebGPUDFS creates an adapter device and compute pipeline per engine. Profile actual repeat constructors in classic old-history verification and multi-session comparisons. Test explicit shared device/pipeline ownership only for repeated same-adapter/same-shader/same-layout instances, retaining separate buffers/counters. Compare D3D12 FXC/DXC, Vulkan and available platform CI. If a normal search constructs one instance and no practical repeat exists, close the idea at the opportunity screen.",
-      "state": "validated native program reuse; evaluating repeated table transfer",
+      "state": "keep with exact scope",
       "mechanism": "CLASSIC-REPLAY-PROGRAM",
       "measurement": "Genuine v1.14 six-generation history matched 38 saved fields on current CUDA, Vulkan, D3D12 FXC and D3D12 DXC. A live engine plus three history constructors went from four device/pipeline builds to one. Independent buffers, failed private allocation, owner-close order, corrupt RNG, cancellation and finite CI coverage are exercised.",
-      "next_step": "Measure reuse of immutable lookup-table source and initial device upload within the same bounded replay chain, while isolating mutable policy updates. Verify unchanged and changed tables, actual normal construction and independent native replay before closing the full workstream.",
       "evidence": [
         "docs/ROUND35_WEBGPU_REPLAY.md",
         "docs/R35_WEBGPU_REPLAY_VULKAN.json",
         "docs/R35_WEBGPU_REPLAY_D3D12.json",
         "docs/R35_WEBGPU_REPLAY_DXC.json",
         "test_webgpu.py",
-        "test_webgpu_counters.py"
-      ]
+        "test_webgpu_counters.py",
+        "docs/R35_REPLAY_TABLE_VULKAN.json",
+        "docs/R35_REPLAY_TABLE_FXC.json",
+        "docs/R35_REPLAY_TABLE_DXC.json",
+        "docs/R35_REPLAY_WIDE_VULKAN.json",
+        "docs/R35_REPLAY_WIDE_DXC.json"
+      ],
+      "decision": "Keep bounded classic replay program, device-limit reservation, independently built CPU lookup arrays and sequentially leased tables. Genuine narrow and wide historical stacks match; device/program builds four to one (three to one on the wide-limit control); native lookup bytes 935632 to 497936. A general single-engine search has no repeated construction to eliminate.",
+      "reopen_if": "A genuine new repeated constructor, new table mutation path, failing native adapter, or changed historical work limit."
     },
     {
       "id": 71,

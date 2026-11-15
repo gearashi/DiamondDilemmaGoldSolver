@@ -203,12 +203,55 @@ class _SearchProgram:
             self.device.destroy()
 
 
+class _ReplayTables:
+    """Lease one table buffer to successive historical engines in one verification."""
+    def __init__(self, program):
+        self.program = program
+        self.buffer = None
+        self.data = None
+        self.busy = self.dirty = self.closed = False
+
+    def acquire(self, program, data, usage):
+        if self.closed or self.busy or program is not self.program:
+            return None
+        if self.buffer is None:
+            buffer = program.device.create_buffer(label='DFS replay lookup',size=data.nbytes,usage=usage)
+            try:
+                program.device.queue.write_buffer(buffer,0,data)
+            except BaseException:
+                buffer.destroy()
+                raise
+            self.buffer, self.data = buffer, data
+            program.owners += 1
+        elif not np.array_equal(data,self.data):
+            return None
+        elif self.dirty:
+            program.device.queue.write_buffer(self.buffer,0,data)
+            self.dirty = False
+        self.busy = True
+        return self.buffer
+
+    def release(self):
+        self.busy = False
+        if self.closed and self.buffer is not None:
+            try:
+                self.buffer.destroy()
+            finally:
+                self.buffer = self.data = None
+                self.program.release()
+
+    def close(self):
+        self.closed = True
+        if not self.busy:
+            self.release()
+
+
 class WebGPUDFS(DFS):
     """Same exact DFS/checkpoint interface, backed by persistent WebGPU buffers."""
     backend = 'webgpu'
 
     def __init__(self, masks, neighbors, neighbor_sides, n=3840, seed=20261007,
-                 root_codes=None, order=None, prefixes=None, adapter=None, allow_software=False, gold_data=None, gpu_features=None, reuse_from=None):
+                 root_codes=None, order=None, prefixes=None, adapter=None, allow_software=False, gold_data=None, gpu_features=None, reuse_from=None, replay_tables=None, reserve_replay=False):
         initial = self._prepare_host(masks, neighbors, neighbor_sides, n, root_codes, order, prefixes)
         self._prepare_gold(gold_data)
         from gpu_reasoning import prepare_policy
@@ -251,7 +294,12 @@ class WebGPUDFS(DFS):
         source = 'const REASONING_FLAGS: u32 = '+str(self.feature_bits)+'u;\n'+source.replace('parameters.flags', 'REASONING_FLAGS')
         program = getattr(reuse_from, '_program', None)
         if program is None or not program.acquire(self.adapter, max(sizes), source):
-            program = _SearchProgram(self.adapter, max(sizes), source)
+            grant = max(sizes)
+            if reserve_replay:
+                # Historical verification accepts up to 1,024 lanes. Request the
+                # limit up front; actual private buffers still use this engine's n.
+                grant = max(grant,min(165*1024*4,limits['max-storage-buffer-binding-size'],limits['max-buffer-size']))
+            program = _SearchProgram(self.adapter, grant, source)
         self._program = program
         self.gpu_device, self.pipeline = program.device, program.pipeline
         self.queue = self.gpu_device.queue
@@ -260,11 +308,18 @@ class WebGPUDFS(DFS):
             resources.callback(program.release)
             usage = wgpu.BufferUsage.STORAGE | wgpu.BufferUsage.COPY_SRC | wgpu.BufferUsage.COPY_DST
             self.buffers = []
+            self._replay_tables = None
             for i, size in enumerate(sizes):
-                buffer = self.gpu_device.create_buffer(label=f'DFS storage {i}', size=size, usage=usage)
-                resources.callback(buffer.destroy)
+                buffer = replay_tables.acquire(program,tables,usage) if i==6 and replay_tables is not None else None
+                if buffer is None:
+                    buffer = self.gpu_device.create_buffer(label=f'DFS storage {i}', size=size, usage=usage)
+                    resources.callback(buffer.destroy)
+                    if i==6:
+                        self.queue.write_buffer(buffer,0,tables)
+                else:
+                    self._replay_tables = replay_tables
+                    resources.callback(replay_tables.release)
                 self.buffers.append(buffer)
-            self.queue.write_buffer(self.buffers[6], 0, tables)
             self.parameters = self.gpu_device.create_buffer(size=32, usage=wgpu.BufferUsage.UNIFORM | wgpu.BufferUsage.COPY_DST)
             resources.callback(self.parameters.destroy)
             entries = [{'binding': i, 'resource': {'buffer': buffer}} for i, buffer in enumerate(self.buffers)]
@@ -330,7 +385,12 @@ class WebGPUDFS(DFS):
         self.queue.read_buffer(self.buffers[5], 0, 4)
         self.readback_bytes += 4
 
+    def replay_tables(self):
+        return _ReplayTables(self._program)
+
     def _upload_policy(self):
+        if getattr(self,'_replay_tables',None) is not None:
+            self._replay_tables.dirty = True
         offset = (4000 + 3*self.colors + 1 + 3*self.colors*self.colors + 1 + 3360 + 15840 + 160)*4
         self.queue.write_buffer(self.buffers[6], offset, self.host_policy)
 

@@ -1,0 +1,490 @@
+{
+  "2-to-1/consume-False": {
+    "generations": [
+      {
+        "gen": 0,
+        "paused": 1,
+        "offset": 0,
+        "external": false,
+        "full_write": 11082,
+        "actual_write": 11082,
+        "full_size": 10945,
+        "active_size": 10945,
+        "bank_compressed": 1140
+      },
+      {
+        "gen": 1,
+        "paused": 1,
+        "offset": 0,
+        "external": false,
+        "full_write": 11083,
+        "actual_write": 11083,
+        "full_size": 10946,
+        "active_size": 10946,
+        "bank_compressed": 1140
+      },
+      {
+        "gen": 2,
+        "paused": 1,
+        "offset": 0,
+        "external": false,
+        "full_write": 11083,
+        "actual_write": 11083,
+        "full_size": 10946,
+        "active_size": 10946,
+        "bank_compressed": 1140
+      },
+      {
+        "gen": 3,
+        "paused": 1,
+        "offset": 0,
+        "external": false,
+        "full_write": 11098,
+        "actual_write": 11098,
+        "full_size": 10961,
+        "active_size": 10961,
+        "bank_compressed": 1140
+      },
+      {
+        "gen": 4,
+        "paused": 1,
+        "offset": 0,
+        "external": false,
+        "full_write": 11103,
+        "actual_write": 11103,
+        "full_size": 10966,
+        "active_size": 10966,
+        "bank_compressed": 1140
+      }
+    ],
+    "portable_same_gen_write": 0,
+    "cold_resizes": {}
+  },
+  "4-to-1/consume-False": {
+    "generations": [
+      {
+        "gen": 0,
+        "paused": 3,
+        "offset": 0,
+        "external": false,
+        "full_write": 11319,
+        "actual_write": 11319,
+        "full_size": 11182,
+        "active_size": 11182,
+        "bank_compressed": 1379
+      },
+      {
+        "gen": 1,
+        "paused": 3,
+        "offset": 0,
+        "external": false,
+        "full_write": 11320,
+        "actual_write": 11320,
+        "full_size": 11183,
+        "active_size": 11183,
+        "bank_compressed": 1379
+      },
+      {
+        "gen": 2,
+        "paused": 3,
+        "offset": 0,
+        "external": false,
+        "full_write": 11320,
+        "actual_write": 11320,
+        "full_size": 11183,
+        "active_size": 11183,
+        "bank_compressed": 1379
+      },
+      {
+        "gen": 3,
+        "paused": 3,
+        "offset": 0,
+        "external": false,
+        "full_write": 11335,
+        "actual_write": 11335,
+        "full_size": 11198,
+        "active_size": 11198,
+        "bank_compressed": 1379
+      },
+      {
+        "gen": 4,
+        "paused": 3,
+        "offset": 0,
+        "external": false,
+        "full_write": 11340,
+        "actual_write": 11340,
+        "full_size": 11203,
+        "active_size": 11203,
+        "bank_compressed": 1379
+      }
+    ],
+    "portable_same_gen_write": 0,
+    "cold_resizes": {}
+  },
+  "8-to-4/consume-False": {
+    "generations": [
+      {
+        "gen": 0,
+        "paused": 4,
+        "offset": 0,
+        "external": false,
+        "full_write": 11979,
+        "actual_write": 11979,
+        "full_size": 11842,
+        "active_size": 11842,
+        "bank_compressed": 1671
+      },
+      {
+        "gen": 1,
+        "paused": 4,
+        "offset": 0,
+        "external": false,
+        "full_write": 11980,
+        "actual_write": 11980,
+        "full_size": 11843,
+        "active_size": 11843,
+        "bank_compressed": 1671
+      },
+      {
+        "gen": 2,
+        "paused": 4,
+        "offset": 0,
+        "external": false,
+        "full_write": 11990,
+        "actual_write": 11990,
+        "full_size": 11853,
+        "active_size": 11853,
+        "bank_compressed": 1671
+      },
+      {
+        "gen": 3,
+        "paused": 4,
+        "offset": 0,
+        "external": false,
+        "full_write": 12168,
+        "actual_write": 12168,
+        "full_size": 12031,
+        "active_size": 12031,
+        "bank_compressed": 1671
+      },
+      {
+        "gen": 4,
+        "paused": 4,
+        "offset": 0,
+        "external": false,
+        "full_write": 12203,
+        "actual_write": 12203,
+        "full_size": 12066,
+        "active_size": 12066,
+        "bank_compressed": 1671
+      }
+    ],
+    "portable_same_gen_write": 0,
+    "cold_resizes": {}
+  },
+  "32-to-28/consume-False": {
+    "generations": [
+      {
+        "gen": 0,
+        "paused": 4,
+        "offset": 0,
+        "external": false,
+        "full_write": 15087,
+        "actual_write": 15087,
+        "full_size": 14950,
+        "active_size": 14950,
+        "bank_compressed": 1741
+      },
+      {
+        "gen": 1,
+        "paused": 4,
+        "offset": 0,
+        "external": false,
+        "full_write": 15088,
+        "actual_write": 15088,
+        "full_size": 14951,
+        "active_size": 14951,
+        "bank_compressed": 1741
+      },
+      {
+        "gen": 2,
+        "paused": 4,
+        "offset": 0,
+        "external": false,
+        "full_write": 15091,
+        "actual_write": 15091,
+        "full_size": 14954,
+        "active_size": 14954,
+        "bank_compressed": 1741
+      },
+      {
+        "gen": 3,
+        "paused": 4,
+        "offset": 0,
+        "external": false,
+        "full_write": 16121,
+        "actual_write": 16121,
+        "full_size": 15984,
+        "active_size": 15984,
+        "bank_compressed": 1741
+      },
+      {
+        "gen": 4,
+        "paused": 4,
+        "offset": 0,
+        "external": false,
+        "full_write": 17487,
+        "actual_write": 17487,
+        "full_size": 17350,
+        "active_size": 17350,
+        "bank_compressed": 1741
+      }
+    ],
+    "portable_same_gen_write": 0,
+    "cold_resizes": {}
+  },
+  "128-to-96/consume-False": {
+    "generations": [
+      {
+        "gen": 0,
+        "paused": 32,
+        "offset": 0,
+        "external": false,
+        "full_write": 26299,
+        "actual_write": 26299,
+        "full_size": 26162,
+        "active_size": 26162,
+        "bank_compressed": 5159
+      },
+      {
+        "gen": 1,
+        "paused": 32,
+        "offset": 0,
+        "external": false,
+        "full_write": 26300,
+        "actual_write": 26300,
+        "full_size": 26163,
+        "active_size": 26163,
+        "bank_compressed": 5159
+      },
+      {
+        "gen": 2,
+        "paused": 32,
+        "offset": 0,
+        "external": false,
+        "full_write": 26292,
+        "actual_write": 26292,
+        "full_size": 26155,
+        "active_size": 26155,
+        "bank_compressed": 5159
+      },
+      {
+        "gen": 3,
+        "paused": 32,
+        "offset": 0,
+        "external": false,
+        "full_write": 29798,
+        "actual_write": 29798,
+        "full_size": 29661,
+        "active_size": 29661,
+        "bank_compressed": 5159
+      },
+      {
+        "gen": 4,
+        "paused": 32,
+        "offset": 0,
+        "external": false,
+        "full_write": 34201,
+        "actual_write": 34201,
+        "full_size": 34064,
+        "active_size": 34064,
+        "bank_compressed": 5159
+      }
+    ],
+    "portable_same_gen_write": 0,
+    "cold_resizes": {}
+  },
+  "512-to-480/consume-False": {
+    "generations": [
+      {
+        "gen": 0,
+        "paused": 32,
+        "offset": 0,
+        "external": false,
+        "full_write": 67052,
+        "actual_write": 67052,
+        "full_size": 66915,
+        "active_size": 66915,
+        "bank_compressed": 4843
+      },
+      {
+        "gen": 1,
+        "paused": 32,
+        "offset": 0,
+        "external": false,
+        "full_write": 67053,
+        "actual_write": 67053,
+        "full_size": 66916,
+        "active_size": 66916,
+        "bank_compressed": 4843
+      },
+      {
+        "gen": 2,
+        "paused": 32,
+        "offset": 0,
+        "external": false,
+        "full_write": 67050,
+        "actual_write": 67050,
+        "full_size": 66913,
+        "active_size": 66913,
+        "bank_compressed": 4843
+      },
+      {
+        "gen": 3,
+        "paused": 32,
+        "offset": 0,
+        "external": false,
+        "full_write": 84661,
+        "actual_write": 84661,
+        "full_size": 84524,
+        "active_size": 84524,
+        "bank_compressed": 4843
+      },
+      {
+        "gen": 4,
+        "paused": 32,
+        "offset": 0,
+        "external": false,
+        "full_write": 102186,
+        "actual_write": 102186,
+        "full_size": 102048,
+        "active_size": 102048,
+        "bank_compressed": 4843
+      }
+    ],
+    "portable_same_gen_write": 0,
+    "cold_resizes": {}
+  },
+  "2048-to-1500/consume-False": {
+    "generations": [
+      {
+        "gen": 0,
+        "paused": 536,
+        "offset": 0,
+        "external": false,
+        "full_write": 215717,
+        "actual_write": 215717,
+        "full_size": 215579,
+        "active_size": 215579,
+        "bank_compressed": 55149
+      },
+      {
+        "gen": 1,
+        "paused": 536,
+        "offset": 0,
+        "external": false,
+        "full_write": 215718,
+        "actual_write": 215718,
+        "full_size": 215580,
+        "active_size": 215580,
+        "bank_compressed": 55149
+      },
+      {
+        "gen": 2,
+        "paused": 536,
+        "offset": 0,
+        "external": false,
+        "full_write": 215770,
+        "actual_write": 215770,
+        "full_size": 215632,
+        "active_size": 215632,
+        "bank_compressed": 55149
+      },
+      {
+        "gen": 3,
+        "paused": 536,
+        "offset": 0,
+        "external": false,
+        "full_write": 270381,
+        "actual_write": 270381,
+        "full_size": 270243,
+        "active_size": 270243,
+        "bank_compressed": 55149
+      },
+      {
+        "gen": 4,
+        "paused": 536,
+        "offset": 0,
+        "external": false,
+        "full_write": 319256,
+        "actual_write": 319256,
+        "full_size": 319118,
+        "active_size": 319118,
+        "bank_compressed": 55149
+      }
+    ],
+    "portable_same_gen_write": 0,
+    "cold_resizes": {}
+  },
+  "4096-to-2560/consume-False": {
+    "generations": [
+      {
+        "gen": 0,
+        "paused": 1508,
+        "offset": 0,
+        "external": false,
+        "full_write": 400380,
+        "actual_write": 400380,
+        "full_size": 400242,
+        "active_size": 400242,
+        "bank_compressed": 145469
+      },
+      {
+        "gen": 1,
+        "paused": 1508,
+        "offset": 0,
+        "external": true,
+        "full_write": 400381,
+        "actual_write": 253380,
+        "full_size": 400243,
+        "active_size": 253242,
+        "bank_compressed": 145469
+      },
+      {
+        "gen": 2,
+        "paused": 1508,
+        "offset": 0,
+        "external": true,
+        "full_write": 400391,
+        "actual_write": 253390,
+        "full_size": 400253,
+        "active_size": 253252,
+        "bank_compressed": 145469
+      },
+      {
+        "gen": 3,
+        "paused": 1508,
+        "offset": 0,
+        "external": true,
+        "full_write": 489151,
+        "actual_write": 342150,
+        "full_size": 489013,
+        "active_size": 342012,
+        "bank_compressed": 145469
+      },
+      {
+        "gen": 4,
+        "paused": 1508,
+        "offset": 0,
+        "external": true,
+        "full_write": 578754,
+        "actual_write": 431753,
+        "full_size": 578616,
+        "active_size": 431615,
+        "bank_compressed": 145469
+      }
+    ],
+    "portable_same_gen_write": 578754,
+    "cold_resizes": {}
+  }
+}

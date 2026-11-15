@@ -25,6 +25,7 @@ from gpu_reasoning import feature_identity, normalize_features
 from exact_frontier import plan_frontier
 import systematic_evidence as proof
 from systematic_jobs import JobLedger
+from classic_parked_storage import ParkedCheckpointWriter, REFERENCE, restore_parked
 from checkpoint_writer import CheckpointWriter
 from io_utils import atomic_json, replace_with_retry
 from render_board import render
@@ -48,6 +49,8 @@ def atomic_npz(path, fields):
                     for name, value in fields.items():
                         with archive.open(name + '.npy', 'w', force_zip64=True) as member:
                             np.lib.format.write_array(member, np.asanyarray(value), allow_pickle=False)
+                    parked_bytes = sum(item.compress_size for item in archive.infolist()
+                                       if item.filename.startswith('exact_paused_'))
             else:
                 np.savez(output, **fields)
             stream.flush()
@@ -56,12 +59,16 @@ def atomic_npz(path, fields):
         if isinstance(output,proof.HashedStream):
             directory = proof.run_dir(path.parent.parent,str(fields['exact_source_origin']))
             generation = int(fields['exact_generation'])
-            atomic_json(directory/f'checkpoint-{generation}.json',
+            suffix = '-parked' if REFERENCE in fields else ''
+            atomic_json(directory/f'checkpoint-{generation}{suffix}.json',
                         {'sha256':output.hash.hexdigest(),'bytes':size,'source_binding':str(fields['exact_source_binding'])})
         replace_with_retry(temporary,path)
     finally:
         temporary.unlink(missing_ok=True)
-    return {'compressed':compressed,'file_bytes':size,'write_seconds':time.monotonic()-started}
+    result = {'compressed':compressed,'file_bytes':size,'write_seconds':time.monotonic()-started}
+    if compressed:
+        result.update(sha256=output.hash.hexdigest(), parked_member_bytes=parked_bytes)
+    return result
 
 class AdaptiveBatchBudget:
     """Tune work per synchronized launch without altering per-lane DFS order."""
@@ -227,10 +234,12 @@ def main():
         status['frontier_metadata']=frontier_metadata
         status.pop('frontier_progress',None)
         replicas=args.replicas
+        legacy_stack=False
         if args.resume and checkpoint.exists():
             with np.load(checkpoint,allow_pickle=False) as archive:
                 if str(archive['exact_frontier_sha256'])!=frontier_hash or str(archive['exact_data_sha256'])!=data_sha:
                     raise ValueError('Systematic checkpoint does not match its saved frontier and puzzle.')
+                legacy_stack = 'exact_source_origin' not in archive.files and 'exact_source_binding' not in archive.files
                 # Saved lanes are repacked to the requested GPU population below.
         status['replicas']=replicas
         if stopping(): raise StartupStopped()
@@ -284,11 +293,17 @@ def main():
         if backend=='webgpu':
             from dfs_webgpu import WebGPUDFS
             engine=WebGPUDFS
-        gpu=engine(masks,board.neighbor_cells,board.neighbor_sides,n=replicas,seed=args.seed,order=order,prefixes=[],gold_data=data if args.target=='gold' else None,**({'gpu_features':gpu_features} if any(gpu_features.values()) else {}))
+        engine_options={'gpu_features':gpu_features} if any(gpu_features.values()) else {}
+        if backend=='webgpu' and legacy_stack:
+            engine_options['reserve_replay']=True
+        gpu=engine(masks,board.neighbor_cells,board.neighbor_sides,n=replicas,seed=args.seed,order=order,
+                   prefixes=[],gold_data=data if args.target=='gold' else None,**engine_options)
         if args.resume and checkpoint.exists():
             publish('restoring_checkpoint','Restoring saved branches; excess branches will pause with their progress preserved.')
             with np.load(checkpoint,allow_pickle=False) as archive:
-                ledger=JobLedger.resume(gpu,archive,prefixes,lengths)
+                with restore_parked(checkpoint,archive) as stack:
+                    ledger=JobLedger.resume(gpu,stack,prefixes,lengths)
+                external_bank = REFERENCE in archive.files
                 ledger.validate_prefixes(gpu.prefix_codes,gpu.floors.get(),prefixes,lengths)
                 generation=int(archive['exact_generation']); maximum=int(archive['exact_max_depth']); checked=int(archive['exact_candidates'])
                 terminal=str(archive['exact_terminal'])
@@ -329,7 +344,7 @@ def main():
                     status['historical_exhaustion_verified'] = True
             else:
                 try:
-                    proof.check_receipt(run,old_origin,generation,checkpoint,old_binding)
+                    proof.check_receipt(run,old_origin,generation,checkpoint,old_binding,parked=external_bank)
                     previous_source = proof.verify_origin(run, old_origin, old_binding, hashes, scope)
                 except (KeyError, TypeError, OSError, ValueError) as exc:
                     origin_verified = False
@@ -347,9 +362,10 @@ def main():
             ledger.refill(gpu,prefixes,lengths)
         trusted=True
         def snapshot():
-            ledger.validate(gpu.states.get())
-            ledger.validate_prefixes(gpu.prefix_codes,gpu.floors.get(),prefixes,lengths)
-            payload=gpu.snapshot_checkpoint(); payload.update(ledger.fields())
+            payload=gpu.snapshot_checkpoint()
+            ledger.validate(payload['states'])
+            ledger.validate_prefixes(payload['prefix_codes'],payload['floors'],prefixes,lengths)
+            payload.update(ledger.fields())
             payload.update(exact_gpu_features=np.array(json.dumps(feature_identity(gpu_features),sort_keys=True)),exact_frontier_sha256=np.array(frontier_hash),exact_data_sha256=np.array(data_sha),
                            exact_generation=np.array(generation,np.int64),exact_max_depth=np.array(maximum,np.int16),
                            exact_candidates=np.array(checked,np.int64),
@@ -358,8 +374,9 @@ def main():
                            exact_exhaustion_record=np.array(proof.record(hashes,scope,run_id,ledger.total,checked)['sha256']
                                                             if state=='exhausted' else ''),
                            exact_terminal=np.array(state if state in ('solved','edge_perfect','exhausted','unverified_exhaustion') else ''))
-            return payload
-        writer=CheckpointWriter(snapshot,lambda payload,gen: atomic_npz(checkpoint,payload))
+            return payload, ledger.paused, ledger.paused.offset, state=='running'
+        parked_writer=ParkedCheckpointWriter(checkpoint,atomic_npz)
+        writer=CheckpointWriter(snapshot,lambda packet,gen: parked_writer.write(packet))
         config={'method':'systematic','backend':backend,'run_id':run_id,'pid':os.getpid(),'started_at':started.isoformat(),
                 'replicas':gpu.n,'requested_replicas':args.replicas,'gpu_features':gpu_features,'search_profile':profile,'seconds':args.seconds,'seed':args.seed,
                 'source_sha256':hashes,'verified_coverage_origin':origin_verified,'frontier_sha256':frontier_hash,'total_jobs':ledger.total,
@@ -493,6 +510,8 @@ def main():
                 state=terminal_state
                 try:
                     writer.finish(generation)
+                    if writer.info.get('parked_bank_external'):
+                        writer.info.update(parked_writer.portable())
                     if state=='exhausted':
                         atomic_json(marker,proof.record(hashes,scope,run_id,ledger.total,checked))
                 except Exception as exc:

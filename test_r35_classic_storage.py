@@ -63,3 +63,94 @@ class ClassicStorageTests(unittest.TestCase):
             with np.load(path,allow_pickle=False) as z:
                 for name,value in fields.items():
                     np.testing.assert_array_equal(z[name],value)
+
+    def test_detached_suffix_portability_and_failed_final_receipt_preserve_exact_progress(self):
+        from classic_parked_storage import ParkedCheckpointWriter, restore_parked, REFERENCE
+        from types import SimpleNamespace
+        with TemporaryDirectory() as tmp, patch('classic_parked_storage.MIN_PAUSED',2), patch('classic_parked_storage.MIN_BANK_BYTES',0):
+            root=Path(tmp)
+            path=root/'systematic/checkpoint.npz'
+            origin='20261115T000000000000Z'
+            (root/'runs'/origin).mkdir(parents=True)
+            owner=SimpleNamespace(ids=np.arange(12,dtype=np.int64))
+            def packet(gen,offset=0,bank=owner):
+                n=len(bank.ids)
+                fields=dict(exact_source_origin=np.array(origin),exact_source_binding=np.array('scope'),
+                    exact_terminal=np.array(''),exact_frontier_sha256=np.array('front'),exact_data_sha256=np.array('tiles'),
+                    exact_generation=np.int64(gen),boards=np.zeros((160,3),np.int16),
+                    exact_paused_job_ids=bank.ids[offset:],
+                    exact_paused_prefix_codes=np.arange(n*160,dtype=np.int16).reshape(n,160)[offset:],
+                    exact_paused_boards=np.arange(n*160,dtype=np.int16).reshape(160,n)[:,offset:])
+                fields['exact_paused_shifts']=np.random.default_rng(35068).integers(0,65535,(160,n),dtype=np.uint16)[:,offset:]
+                return fields,bank,offset,True
+            def compare(gen,offset,external):
+                expected=packet(gen,offset)[0]
+                with np.load(path,allow_pickle=False) as head:
+                    self.assertEqual(REFERENCE in head.files,external)
+                    proof.check_receipt(root,origin,gen,path,'scope',parked=external)
+                    with restore_parked(path,head) as restored:
+                        for k,v in expected.items():
+                            np.testing.assert_array_equal(restored[k],v)
+            ledger=ParkedCheckpointWriter(path,runner.atomic_npz)
+            self.assertFalse(ledger.write(packet(3))['parked_bank_external'])
+            self.assertTrue(ledger.write(packet(4,2))['parked_bank_external'])
+            compare(4,2,True)
+            sidecar,=path.parent.glob('parked-bank-*.npz')
+            self.assertTrue(ledger.write(packet(5,6))['parked_bank_external'])
+            compare(5,6,True)
+            readonly=ParkedCheckpointWriter(path,runner.atomic_npz)
+            self.assertIsNone(readonly.base)
+            old_bytes=path.read_bytes()
+            with patch('systematic_search.replace_with_retry',side_effect=OSError(errno.ENOSPC,'full')):
+                with self.assertRaises(OSError):
+                    ledger.portable()
+            self.assertEqual(path.read_bytes(),old_bytes)
+            compare(5,6,True)
+            before=sidecar.read_bytes()
+            with sidecar.open('ab') as f:
+                f.write(b'damage')
+            with self.assertRaisesRegex(ValueError,'digest'):
+                readonly.portable()
+            self.assertEqual(path.read_bytes(),old_bytes)
+            sidecar.write_bytes(before)
+            readonly.portable()
+            self.assertFalse(sidecar.exists())
+            compare(5,6,False)
+            newcomer=SimpleNamespace(ids=np.arange(12,dtype=np.int64))
+            self.assertFalse(readonly.write(packet(6,3,newcomer))['parked_bank_external'])
+            self.assertTrue(readonly.write(packet(7,5,newcomer))['parked_bank_external'])
+            compare(7,5,True)
+            # A near-empty bank goes straight back to a self-contained checkpoint.
+            self.assertFalse(readonly.write(packet(8,11,newcomer))['parked_bank_external'])
+            compare(8,11,False)
+            self.assertFalse(list(path.parent.glob('parked-bank-*.npz')))
+
+    def test_hard_link_unavailable_falls_back_to_standalone_and_rejects_invalid_pointer(self):
+        from classic_parked_storage import ParkedCheckpointWriter, restore_parked, REFERENCE, COUNT, OFFSET
+        from types import SimpleNamespace
+        with TemporaryDirectory() as tmp, patch('classic_parked_storage.MIN_PAUSED',1), patch('classic_parked_storage.MIN_BANK_BYTES',0):
+            root=Path(tmp)
+            path=root/'systematic/checkpoint.npz'
+            origin='20261115T000000000000Z'
+            (root/'runs'/origin).mkdir(parents=True)
+            owner=SimpleNamespace(ids=np.array([1],np.int64))
+            fields=dict(exact_generation=np.int64(1),exact_terminal=np.array(''),
+                exact_source_origin=np.array(origin),exact_source_binding=np.array('scope'),
+                exact_frontier_sha256=np.array('front'),exact_data_sha256=np.array('tiles'),exact_paused_job_ids=owner.ids)
+            fields['exact_paused_prefix_codes']=np.random.default_rng(7).integers(0,32767,(1,4096),dtype=np.int16)
+            writer=ParkedCheckpointWriter(path,runner.atomic_npz)
+            writer.write((fields,owner,0,True))
+            fields={**fields,'exact_generation':np.int64(2)}
+            with patch('classic_parked_storage.os.link',side_effect=OSError('unsupported')) as link:
+                writer.write((fields,owner,0,True))
+                writer.write(({**fields,'exact_generation':np.int64(3)},owner,0,True))
+            self.assertEqual(link.call_count,1)
+            with np.load(path,allow_pickle=False) as f:
+                self.assertNotIn(REFERENCE,f.files)
+            del fields['exact_paused_job_ids'],fields['exact_paused_prefix_codes']
+            for pointer,count,offset in (('../outside',1,0),('e'*64,0,0),('e'*64,1,-1),('e'*64,1,1.5)):
+                with self.subTest(pointer=pointer,count=count,offset=offset):
+                    np.savez(path,**fields,**{REFERENCE:np.array(pointer),COUNT:np.array(count),OFFSET:np.array(offset)})
+                    with np.load(path,allow_pickle=False) as saved, self.assertRaises(ValueError):
+                        with restore_parked(path,saved):
+                            self.fail('invalid parked checkpoint accepted')

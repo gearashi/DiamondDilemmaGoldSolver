@@ -1,0 +1,41 @@
+{
+  "v114_fields": 38,
+  "jobs": 32,
+  "generations": 6,
+  "cuda_valid": true,
+  "D3D12": [
+    {
+      "mode": "separate",
+      "shared": false,
+      "devices": 4,
+      "programs": 4,
+      "host_lookup_builds": 4,
+      "device_lookup_uploads": 4,
+      "lookup_bytes": 935632,
+      "native_histories": 3,
+      "seconds": 68.4311
+    },
+    {
+      "mode": "program",
+      "shared": true,
+      "devices": 1,
+      "programs": 1,
+      "host_lookup_builds": 4,
+      "device_lookup_uploads": 4,
+      "lookup_bytes": 935632,
+      "native_histories": 3,
+      "seconds": 18.2281
+    },
+    {
+      "mode": "tables",
+      "shared": true,
+      "devices": 1,
+      "programs": 1,
+      "host_lookup_builds": 2,
+      "device_lookup_uploads": 2,
+      "lookup_bytes": 497936,
+      "native_histories": 3,
+      "seconds": 19.6184
+    }
+  ]
+}

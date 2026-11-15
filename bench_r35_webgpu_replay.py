@@ -12,7 +12,7 @@ from unittest.mock import patch
 import numpy as np
 
 
-def capture(tiles, work):
+def capture(tiles, work, wide=False):
     # The caller puts a clean released checkout first on sys.path before any project import.
     from dfs_gpu import DFS
     from search_problem import SearchProblem
@@ -21,7 +21,8 @@ def capture(tiles, work):
     with np.load(work/'front.npz') as f:
         order, prefixes, lengths = f['order'],f['prefixes'],f['lengths']
     carry, history = None, []
-    for i,(lanes, budget) in enumerate(((16,4),(4,7),(8,3))):
+    schedule=((512,4),(4,7),(1024,3)) if wide else ((16,4),(4,7),(8,3))
+    for i,(lanes, budget) in enumerate(schedule):
         gpu=DFS(p.masks,p.neighbors,p.sides,n=lanes,seed=35070+i,order=order,prefixes=[],gold_data=tiles)
         if carry is None:
             ledger=JobLedger.empty(len(prefixes),lanes)
@@ -49,6 +50,12 @@ def experiment(tiles, args, work):
     from dfs_webgpu import WebGPUDFS, _SearchProgram
     from search_problem import SearchProblem
     from systematic_evidence import verify_native_history
+    prior_verify=verify_native_history
+    if args.table_comparison:
+        prior={}
+        body=subprocess.check_output(['git','show','7f39a1c:systematic_evidence.py'],cwd=Path(__file__).parent)
+        exec(compile(body,'7f39a1c/systematic_evidence.py','exec'),prior)
+        prior_verify=prior['verify_native_history']
     from gpu_reasoning import normalize_features
     p=SearchProblem(tiles)
     (home,target,outside),cases=controls(p)
@@ -59,7 +66,7 @@ def experiment(tiles, args, work):
     lengths=np.full(len(rows),2,np.int16)
     np.savez(work/'front.npz',prefixes=prefixes,lengths=lengths,order=order)
     subprocess.run([sys.executable,'-B',str(Path(__file__).resolve()),'--capture',str(work),
-        '--old-root',str(args.old_root.resolve()),'--tiles',str(args.tiles.resolve())],check=True)
+        '--old-root',str(args.old_root.resolve()),'--tiles',str(args.tiles.resolve()),*(['--wide'] if args.wide else [])],check=True)
     history=json.loads((work/'history.json').read_bytes())
     source=work/'saved.npz'
     with np.load(source,allow_pickle=False) as f:
@@ -82,27 +89,50 @@ def experiment(tiles, args, work):
         adapter=next(a for a in wgpu.gpu.enumerate_adapters_sync()
                      if a.info['backend_type']==api and a.info['adapter_type']=='DiscreteGPU')
         runs=[]
-        for share in (False,True):
+        modes=('separate','program','tables') if args.table_comparison else ('separate','tables')
+        if args.wide:
+            modes=('small_limit','reserved_limit')
+        for mode in modes:
+            share=mode!='separate'
             builds=[]
+            host_builds=[]
             previous=_SearchProgram.__init__
             def build(instance,*args):
                 previous(instance,*args)
                 builds.append(instance)
-            with patch.object(_SearchProgram,'__init__',build):
+            prepare=DFS._prepare_tables
+            def host_prepare(engine):
+                host_builds.append(engine.n)
+                return prepare(engine)
+            with patch.object(_SearchProgram,'__init__',build), patch.object(DFS,'_prepare_tables',host_prepare):
                 start=perf_counter()
-                live=WebGPUDFS(**base,n=64,seed=7,adapter=adapter,prefixes=[[int(x) for x in rows[0]]])
+                live=WebGPUDFS(**base,n=64,seed=7,adapter=adapter,reserve_replay=mode=='reserved_limit',prefixes=[[int(x) for x in rows[0]]])
+                assert live.buffers[0].size==165*64*4
                 try:
                     original=live.snapshot_checkpoint()
                     inputs=dict(base,adapter=adapter)
                     if share:
                         inputs['reuse_from']=live
-                    verified=verify_native_history(WebGPUDFS,inputs,features,source,history,prefixes,lengths,lambda:False)
-                    assert verified,(api,share)
+                    writes=[int(live.buffers[6].size)]
+                    native_queue=type(live.queue)
+                    normal_write=native_queue.write_buffer
+                    def watched_write(queue,buffer,offset,data,*args,**kwargs):
+                        if buffer.label in ('DFS storage 6','DFS replay lookup'):
+                            writes.append(memoryview(data).nbytes)
+                        return normal_write(queue,buffer,offset,data,*args,**kwargs)
+                    verifier=verify_native_history if mode in ('tables','small_limit','reserved_limit') else prior_verify
+                    with patch.object(native_queue,'write_buffer',watched_write):
+                        verified=verifier(WebGPUDFS,inputs,features,source,history,prefixes,lengths,lambda:False)
+                    assert verified,(api,mode)
                     count=len(builds)
+                    prepared=len(host_builds)
+                    assert len(writes)==(2 if mode in ('tables','reserved_limit') else 4),writes
+                    if args.table_comparison and not args.wide:
+                        assert prepared==(2 if mode=='tables' else 4),host_builds
                     after=live.snapshot_checkpoint()
                     assert set(original)==set(after) and all(np.array_equal(original[k],after[k]) for k in original)
                     elapsed=perf_counter()-start
-                    if share:
+                    if share and not args.wide:
                         assert not verify_native_history(WebGPUDFS,inputs,features,work/'forged.npz',history,prefixes,lengths,lambda:False)
                         assert not verify_native_history(WebGPUDFS,inputs,features,source,history,prefixes,lengths,lambda:True)
                         assert len(builds)==count
@@ -116,8 +146,9 @@ def experiment(tiles, args, work):
                         child.close()
                 finally:
                     live.close()
-                assert count==(1 if share else 4),(api,share,count)
-                runs.append(dict(shared=share,devices=count,programs=count,native_histories=3,seconds=round(elapsed,4)))
+                assert count==(3 if mode=='small_limit' else 1 if share else 4),(api,mode,count)
+                runs.append(dict(mode=mode,shared=share,devices=count,programs=count,host_lookup_builds=prepared,
+                                 device_lookup_uploads=len(writes),lookup_bytes=sum(writes),native_histories=3,seconds=round(elapsed,4)))
         out[api]=runs
     return out
 
@@ -127,14 +158,16 @@ if __name__=='__main__':
     cli.add_argument('--tiles',required=True,type=Path)
     cli.add_argument('--old-root',required=True,type=Path)
     cli.add_argument('--capture',type=Path)
+    cli.add_argument('--wide',action='store_true')
     cli.add_argument('--dxc',type=Path)
+    cli.add_argument('--table-comparison',action='store_true')
     cli.add_argument('--api',action='append',choices=('Vulkan','D3D12','Metal'),default=[])
     cli.add_argument('--output',type=Path)
     args=cli.parse_args()
     data=json.loads(args.tiles.read_bytes())
     if args.capture:
         sys.path.insert(0,str(args.old_root.resolve()))
-        capture(data,args.capture)
+        capture(data,args.capture,args.wide)
     else:
         with TemporaryDirectory() as tmp:
             out=experiment(data,args,Path(tmp))

@@ -117,8 +117,9 @@ class HashedStream:
         self.stream.flush()
 
 
-def check_receipt(run, origin, generation, checkpoint, binding):
-    receipt = read(run_dir(run,origin)/f'checkpoint-{generation}.json')
+def check_receipt(run, origin, generation, checkpoint, binding, *, parked=False):
+    suffix = '-parked' if parked else ''
+    receipt = read(run_dir(run,origin)/f'checkpoint-{generation}{suffix}.json')
     with checkpoint.open('rb') as stream:
         actual = hashlib.file_digest(stream, 'sha256').hexdigest()
     if receipt != {'sha256':actual, 'bytes':checkpoint.stat().st_size, 'source_binding':binding}:
@@ -266,8 +267,26 @@ def verify_native_history(engine, inputs, features, checkpoint, history, prefixe
     import numpy as np
     from systematic_jobs import JobLedger
 
+    # A replay chain has one puzzle. Keep its first independently computed
+    # candidate buckets; sizes, seeds and mutable search fields remain per engine.
+    buckets = {}
     # v1.14 used mask compatibility and loop tracing before the physical mate table.
     class HistoricalDFS(engine):
+        def _prepare_tables(self):
+            key = self.masks.tobytes()
+            if key in buckets:
+                for name,value in buckets[key].items():
+                    setattr(self,name,value)
+                return
+            super()._prepare_tables()
+            names=('colors','host_faces','host_reverse','host_single_offsets','host_pair_offsets','host_pool')
+            values={name:getattr(self,name) for name in names}
+            for value in values.values():
+                if isinstance(value,np.ndarray):
+                    value.setflags(write=False)
+            buckets.clear()
+            buckets[key]=values
+
         def _prepare_gold(self, data):
             super()._prepare_gold(data)
             self.host_gold_blocked = np.zeros(1,np.uint32)
@@ -288,6 +307,10 @@ def verify_native_history(engine, inputs, features, checkpoint, history, prefixe
         return False
 
     generation, carry = 0, None
+    owner=inputs.get('reuse_from')
+    tables=owner.replay_tables() if owner is not None and len(history)>1 else None
+    if tables is not None:
+        inputs={**inputs,'replay_tables':tables}
     try:
         for config, status in history:
             gpu = HistoricalDFS(**inputs, n=config['replicas'], seed=config['seed'], prefixes=[],
@@ -318,3 +341,6 @@ def verify_native_history(engine, inputs, features, checkpoint, history, prefixe
             return all(k in archive and np.array_equal(v,archive[k]) for k,v in carry.items())
     except (KeyError, ValueError, RuntimeError, MemoryError):
         return False
+    finally:
+        if tables is not None:
+            tables.close()

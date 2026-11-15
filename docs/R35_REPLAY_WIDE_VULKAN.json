@@ -1,0 +1,30 @@
+{
+  "v114_fields": 38,
+  "jobs": 32,
+  "generations": 6,
+  "cuda_valid": true,
+  "Vulkan": [
+    {
+      "mode": "small_limit",
+      "shared": true,
+      "devices": 3,
+      "programs": 3,
+      "host_lookup_builds": 2,
+      "device_lookup_uploads": 4,
+      "lookup_bytes": 935632,
+      "native_histories": 3,
+      "seconds": 1.6779
+    },
+    {
+      "mode": "reserved_limit",
+      "shared": true,
+      "devices": 1,
+      "programs": 1,
+      "host_lookup_builds": 2,
+      "device_lookup_uploads": 2,
+      "lookup_bytes": 497936,
+      "native_histories": 3,
+      "seconds": 0.7002
+    }
+  ]
+}

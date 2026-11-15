@@ -1,0 +1,1062 @@
+{
+  "128/128": [
+    {
+      "nodes_per_lane": 0,
+      "active": 128,
+      "baseline_bytes": 211840,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.000892,
+      "variants": {
+        "4096": {
+          "read_bytes": 57,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.000647
+        },
+        "16384": {
+          "read_bytes": 22,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.000624
+        },
+        "65536": {
+          "read_bytes": 12,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.000723
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 1,
+      "active": 128,
+      "baseline_bytes": 211840,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.000985,
+      "variants": {
+        "4096": {
+          "read_bytes": 57,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.000572
+        },
+        "16384": {
+          "read_bytes": 22,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.000649
+        },
+        "65536": {
+          "read_bytes": 12,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.000715
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 8,
+      "active": 128,
+      "baseline_bytes": 211840,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.000829,
+      "variants": {
+        "4096": {
+          "read_bytes": 27193,
+          "upload_bytes": 20,
+          "maps": 11,
+          "changed": 10,
+          "seconds": 0.004073
+        },
+        "16384": {
+          "read_bytes": 88598,
+          "upload_bytes": 20,
+          "maps": 11,
+          "changed": 10,
+          "seconds": 0.003969
+        },
+        "65536": {
+          "read_bytes": 211468,
+          "upload_bytes": 0,
+          "maps": 11,
+          "changed": 10,
+          "seconds": 0.003183
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 64,
+      "active": 128,
+      "baseline_bytes": 211840,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.001522,
+      "variants": {
+        "4096": {
+          "read_bytes": 80441,
+          "upload_bytes": 72,
+          "maps": 11,
+          "changed": 23,
+          "seconds": 0.004295
+        },
+        "16384": {
+          "read_bytes": 113174,
+          "upload_bytes": 16,
+          "maps": 11,
+          "changed": 12,
+          "seconds": 0.004015
+        },
+        "65536": {
+          "read_bytes": 211468,
+          "upload_bytes": 0,
+          "maps": 11,
+          "changed": 10,
+          "seconds": 0.002904
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 256,
+      "active": 128,
+      "baseline_bytes": 211840,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.001069,
+      "variants": {
+        "4096": {
+          "read_bytes": 105017,
+          "upload_bytes": 96,
+          "maps": 11,
+          "changed": 29,
+          "seconds": 0.003761
+        },
+        "16384": {
+          "read_bytes": 113174,
+          "upload_bytes": 16,
+          "maps": 11,
+          "changed": 12,
+          "seconds": 0.002861
+        },
+        "65536": {
+          "read_bytes": 211468,
+          "upload_bytes": 0,
+          "maps": 11,
+          "changed": 10,
+          "seconds": 0.002406
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 4096,
+      "active": 128,
+      "baseline_bytes": 211840,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.000772,
+      "variants": {
+        "4096": {
+          "read_bytes": 105017,
+          "upload_bytes": 96,
+          "maps": 11,
+          "changed": 29,
+          "seconds": 0.002882
+        },
+        "16384": {
+          "read_bytes": 113174,
+          "upload_bytes": 16,
+          "maps": 11,
+          "changed": 12,
+          "seconds": 0.002544
+        },
+        "65536": {
+          "read_bytes": 211468,
+          "upload_bytes": 0,
+          "maps": 11,
+          "changed": 10,
+          "seconds": 0.002142
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 32768,
+      "active": 128,
+      "baseline_bytes": 211840,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.000825,
+      "variants": {
+        "4096": {
+          "read_bytes": 137785,
+          "upload_bytes": 128,
+          "maps": 11,
+          "changed": 37,
+          "seconds": 0.002674
+        },
+        "16384": {
+          "read_bytes": 178710,
+          "upload_bytes": 32,
+          "maps": 11,
+          "changed": 16,
+          "seconds": 0.002408
+        },
+        "65536": {
+          "read_bytes": 211468,
+          "upload_bytes": 0,
+          "maps": 11,
+          "changed": 10,
+          "seconds": 0.001818
+        }
+      }
+    }
+  ],
+  "2048/128": [
+    {
+      "nodes_per_lane": 0,
+      "active": 128,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.003016,
+      "variants": {
+        "4096": {
+          "read_bytes": 828,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.000706
+        },
+        "16384": {
+          "read_bytes": 211,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.000779
+        },
+        "65536": {
+          "read_bytes": 57,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.001053
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 1,
+      "active": 128,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.003602,
+      "variants": {
+        "4096": {
+          "read_bytes": 828,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.000737
+        },
+        "16384": {
+          "read_bytes": 211,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.000807
+        },
+        "65536": {
+          "read_bytes": 57,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.00112
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 8,
+      "active": 128,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.003994,
+      "variants": {
+        "4096": {
+          "read_bytes": 205628,
+          "upload_bytes": 192,
+          "maps": 11,
+          "changed": 50,
+          "seconds": 0.005239
+        },
+        "16384": {
+          "read_bytes": 336083,
+          "upload_bytes": 68,
+          "maps": 11,
+          "changed": 23,
+          "seconds": 0.004139
+        },
+        "65536": {
+          "read_bytes": 434233,
+          "upload_bytes": 20,
+          "maps": 11,
+          "changed": 10,
+          "seconds": 0.00447
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 64,
+      "active": 128,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.003023,
+      "variants": {
+        "4096": {
+          "read_bytes": 664380,
+          "upload_bytes": 640,
+          "maps": 11,
+          "changed": 162,
+          "seconds": 0.005783
+        },
+        "16384": {
+          "read_bytes": 843987,
+          "upload_bytes": 180,
+          "maps": 11,
+          "changed": 54,
+          "seconds": 0.005242
+        },
+        "65536": {
+          "read_bytes": 1286201,
+          "upload_bytes": 72,
+          "maps": 11,
+          "changed": 23,
+          "seconds": 0.006519
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 256,
+      "active": 128,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.003491,
+      "variants": {
+        "4096": {
+          "read_bytes": 979772,
+          "upload_bytes": 948,
+          "maps": 11,
+          "changed": 239,
+          "seconds": 0.0063
+        },
+        "16384": {
+          "read_bytes": 1220819,
+          "upload_bytes": 272,
+          "maps": 11,
+          "changed": 77,
+          "seconds": 0.005354
+        },
+        "65536": {
+          "read_bytes": 1679417,
+          "upload_bytes": 96,
+          "maps": 11,
+          "changed": 29,
+          "seconds": 0.005534
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 4096,
+      "active": 128,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.003537,
+      "variants": {
+        "4096": {
+          "read_bytes": 1110844,
+          "upload_bytes": 1076,
+          "maps": 11,
+          "changed": 271,
+          "seconds": 0.005499
+        },
+        "16384": {
+          "read_bytes": 1319123,
+          "upload_bytes": 296,
+          "maps": 11,
+          "changed": 83,
+          "seconds": 0.005392
+        },
+        "65536": {
+          "read_bytes": 1679417,
+          "upload_bytes": 96,
+          "maps": 11,
+          "changed": 29,
+          "seconds": 0.005562
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 32768,
+      "active": 128,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.005818,
+      "variants": {
+        "4096": {
+          "read_bytes": 1495868,
+          "upload_bytes": 1452,
+          "maps": 11,
+          "changed": 365,
+          "seconds": 0.006676
+        },
+        "16384": {
+          "read_bytes": 1761491,
+          "upload_bytes": 404,
+          "maps": 11,
+          "changed": 110,
+          "seconds": 0.006881
+        },
+        "65536": {
+          "read_bytes": 2203705,
+          "upload_bytes": 128,
+          "maps": 11,
+          "changed": 37,
+          "seconds": 0.007222
+        }
+      }
+    }
+  ],
+  "2048/2048": [
+    {
+      "nodes_per_lane": 0,
+      "active": 2048,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.003173,
+      "variants": {
+        "4096": {
+          "read_bytes": 828,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.000725
+        },
+        "16384": {
+          "read_bytes": 211,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.000906
+        },
+        "65536": {
+          "read_bytes": 57,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.001082
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 1,
+      "active": 2036,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.005056,
+      "variants": {
+        "4096": {
+          "read_bytes": 56124,
+          "upload_bytes": 48,
+          "maps": 6,
+          "changed": 14,
+          "seconds": 0.002317
+        },
+        "16384": {
+          "read_bytes": 80083,
+          "upload_bytes": 8,
+          "maps": 6,
+          "changed": 7,
+          "seconds": 0.002248
+        },
+        "65536": {
+          "read_bytes": 161849,
+          "upload_bytes": 4,
+          "maps": 6,
+          "changed": 5,
+          "seconds": 0.002514
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 8,
+      "active": 2036,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.003392,
+      "variants": {
+        "4096": {
+          "read_bytes": 254780,
+          "upload_bytes": 192,
+          "maps": 11,
+          "changed": 62,
+          "seconds": 0.005927
+        },
+        "16384": {
+          "read_bytes": 336083,
+          "upload_bytes": 68,
+          "maps": 11,
+          "changed": 23,
+          "seconds": 0.005741
+        },
+        "65536": {
+          "read_bytes": 434233,
+          "upload_bytes": 20,
+          "maps": 11,
+          "changed": 10,
+          "seconds": 0.005566
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 64,
+      "active": 2036,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.003773,
+      "variants": {
+        "4096": {
+          "read_bytes": 709436,
+          "upload_bytes": 588,
+          "maps": 11,
+          "changed": 173,
+          "seconds": 0.005354
+        },
+        "16384": {
+          "read_bytes": 843987,
+          "upload_bytes": 180,
+          "maps": 11,
+          "changed": 54,
+          "seconds": 0.006396
+        },
+        "65536": {
+          "read_bytes": 1286201,
+          "upload_bytes": 72,
+          "maps": 11,
+          "changed": 23,
+          "seconds": 0.006879
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 256,
+      "active": 2036,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.003598,
+      "variants": {
+        "4096": {
+          "read_bytes": 1106748,
+          "upload_bytes": 976,
+          "maps": 11,
+          "changed": 270,
+          "seconds": 0.004936
+        },
+        "16384": {
+          "read_bytes": 1253587,
+          "upload_bytes": 280,
+          "maps": 11,
+          "changed": 79,
+          "seconds": 0.006193
+        },
+        "65536": {
+          "read_bytes": 1679417,
+          "upload_bytes": 96,
+          "maps": 11,
+          "changed": 29,
+          "seconds": 0.007345
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 4096,
+      "active": 2036,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.003622,
+      "variants": {
+        "4096": {
+          "read_bytes": 1545020,
+          "upload_bytes": 1404,
+          "maps": 11,
+          "changed": 377,
+          "seconds": 0.006787
+        },
+        "16384": {
+          "read_bytes": 1712339,
+          "upload_bytes": 392,
+          "maps": 11,
+          "changed": 107,
+          "seconds": 0.005016
+        },
+        "65536": {
+          "read_bytes": 1941561,
+          "upload_bytes": 112,
+          "maps": 11,
+          "changed": 33,
+          "seconds": 0.005939
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 32768,
+      "active": 2036,
+      "baseline_bytes": 3389440,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.003584,
+      "variants": {
+        "4096": {
+          "read_bytes": 1729340,
+          "upload_bytes": 1584,
+          "maps": 11,
+          "changed": 422,
+          "seconds": 0.006532
+        },
+        "16384": {
+          "read_bytes": 1908947,
+          "upload_bytes": 440,
+          "maps": 11,
+          "changed": 119,
+          "seconds": 0.006704
+        },
+        "65536": {
+          "read_bytes": 2203705,
+          "upload_bytes": 128,
+          "maps": 11,
+          "changed": 37,
+          "seconds": 0.007636
+        }
+      }
+    }
+  ],
+  "32768/512": [
+    {
+      "nodes_per_lane": 0,
+      "active": 512,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.022479,
+      "variants": {
+        "4096": {
+          "read_bytes": 13240,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.001523
+        },
+        "16384": {
+          "read_bytes": 3310,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.00151
+        },
+        "65536": {
+          "read_bytes": 828,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.002107
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 1,
+      "active": 512,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.035868,
+      "variants": {
+        "4096": {
+          "read_bytes": 13240,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.001128
+        },
+        "16384": {
+          "read_bytes": 3310,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.001893
+        },
+        "65536": {
+          "read_bytes": 828,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.003258
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 8,
+      "active": 512,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.031598,
+      "variants": {
+        "4096": {
+          "read_bytes": 218040,
+          "upload_bytes": 200,
+          "maps": 11,
+          "changed": 50,
+          "seconds": 0.020159
+        },
+        "16384": {
+          "read_bytes": 822510,
+          "upload_bytes": 200,
+          "maps": 11,
+          "changed": 50,
+          "seconds": 0.02223
+        },
+        "65536": {
+          "read_bytes": 3277628,
+          "upload_bytes": 192,
+          "maps": 11,
+          "changed": 50,
+          "seconds": 0.029779
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 64,
+      "active": 512,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.031029,
+      "variants": {
+        "4096": {
+          "read_bytes": 598968,
+          "upload_bytes": 572,
+          "maps": 11,
+          "changed": 143,
+          "seconds": 0.020692
+        },
+        "16384": {
+          "read_bytes": 2346222,
+          "upload_bytes": 572,
+          "maps": 11,
+          "changed": 143,
+          "seconds": 0.026387
+        },
+        "65536": {
+          "read_bytes": 9372476,
+          "upload_bytes": 564,
+          "maps": 11,
+          "changed": 143,
+          "seconds": 0.034135
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 256,
+      "active": 512,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.030741,
+      "variants": {
+        "4096": {
+          "read_bytes": 1053624,
+          "upload_bytes": 1016,
+          "maps": 11,
+          "changed": 254,
+          "seconds": 0.02248
+        },
+        "16384": {
+          "read_bytes": 4164846,
+          "upload_bytes": 1016,
+          "maps": 11,
+          "changed": 254,
+          "seconds": 0.027448
+        },
+        "65536": {
+          "read_bytes": 16646972,
+          "upload_bytes": 1008,
+          "maps": 11,
+          "changed": 254,
+          "seconds": 0.054311
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 4096,
+      "active": 512,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.031092,
+      "variants": {
+        "4096": {
+          "read_bytes": 1270712,
+          "upload_bytes": 1228,
+          "maps": 11,
+          "changed": 307,
+          "seconds": 0.022128
+        },
+        "16384": {
+          "read_bytes": 5033198,
+          "upload_bytes": 1228,
+          "maps": 11,
+          "changed": 307,
+          "seconds": 0.024868
+        },
+        "65536": {
+          "read_bytes": 20120380,
+          "upload_bytes": 1220,
+          "maps": 11,
+          "changed": 307,
+          "seconds": 0.041424
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 32768,
+      "active": 512,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.027998,
+      "variants": {
+        "4096": {
+          "read_bytes": 1450936,
+          "upload_bytes": 1404,
+          "maps": 11,
+          "changed": 351,
+          "seconds": 0.020176
+        },
+        "16384": {
+          "read_bytes": 5754094,
+          "upload_bytes": 1404,
+          "maps": 11,
+          "changed": 351,
+          "seconds": 0.023463
+        },
+        "65536": {
+          "read_bytes": 23003964,
+          "upload_bytes": 1396,
+          "maps": 11,
+          "changed": 351,
+          "seconds": 0.037316
+        }
+      }
+    }
+  ],
+  "32768/32768": [
+    {
+      "nodes_per_lane": 0,
+      "active": 32768,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.021196,
+      "variants": {
+        "4096": {
+          "read_bytes": 13240,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.001461
+        },
+        "16384": {
+          "read_bytes": 3310,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.001447
+        },
+        "65536": {
+          "read_bytes": 828,
+          "upload_bytes": 0,
+          "maps": 1,
+          "changed": 0,
+          "seconds": 0.00222
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 1,
+      "active": 32515,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.025139,
+      "variants": {
+        "4096": {
+          "read_bytes": 549816,
+          "upload_bytes": 524,
+          "maps": 6,
+          "changed": 131,
+          "seconds": 0.006143
+        },
+        "16384": {
+          "read_bytes": 904430,
+          "upload_bytes": 196,
+          "maps": 6,
+          "changed": 55,
+          "seconds": 0.006704
+        },
+        "65536": {
+          "read_bytes": 1213244,
+          "upload_bytes": 28,
+          "maps": 6,
+          "changed": 19,
+          "seconds": 0.006663
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 8,
+      "active": 32203,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.031075,
+      "variants": {
+        "4096": {
+          "read_bytes": 3937208,
+          "upload_bytes": 2136,
+          "maps": 12,
+          "changed": 944,
+          "seconds": 0.022717
+        },
+        "16384": {
+          "read_bytes": 3968238,
+          "upload_bytes": 544,
+          "maps": 12,
+          "changed": 241,
+          "seconds": 0.019995
+        },
+        "65536": {
+          "read_bytes": 4162364,
+          "upload_bytes": 148,
+          "maps": 12,
+          "changed": 64,
+          "seconds": 0.033108
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 64,
+      "active": 32203,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.030035,
+      "variants": {
+        "4096": {
+          "read_bytes": 12313528,
+          "upload_bytes": 10348,
+          "maps": 11,
+          "changed": 3003,
+          "seconds": 0.033936
+        },
+        "16384": {
+          "read_bytes": 12815598,
+          "upload_bytes": 2712,
+          "maps": 11,
+          "changed": 782,
+          "seconds": 0.026385
+        },
+        "65536": {
+          "read_bytes": 13370172,
+          "upload_bytes": 712,
+          "maps": 11,
+          "changed": 204,
+          "seconds": 0.025771
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 256,
+      "active": 32203,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.030488,
+      "variants": {
+        "4096": {
+          "read_bytes": 18854840,
+          "upload_bytes": 16736,
+          "maps": 11,
+          "changed": 4600,
+          "seconds": 0.033854
+        },
+        "16384": {
+          "read_bytes": 19909870,
+          "upload_bytes": 4444,
+          "maps": 11,
+          "changed": 1215,
+          "seconds": 0.040357
+        },
+        "65536": {
+          "read_bytes": 20251452,
+          "upload_bytes": 1132,
+          "maps": 11,
+          "changed": 309,
+          "seconds": 0.030645
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 4096,
+      "active": 32201,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.02491,
+      "variants": {
+        "4096": {
+          "read_bytes": 23135160,
+          "upload_bytes": 20916,
+          "maps": 12,
+          "changed": 5645,
+          "seconds": 0.042984
+        },
+        "16384": {
+          "read_bytes": 24366318,
+          "upload_bytes": 5532,
+          "maps": 12,
+          "changed": 1487,
+          "seconds": 0.036165
+        },
+        "65536": {
+          "read_bytes": 25264956,
+          "upload_bytes": 1436,
+          "maps": 12,
+          "changed": 386,
+          "seconds": 0.030992
+        }
+      }
+    },
+    {
+      "nodes_per_lane": 32768,
+      "active": 32184,
+      "baseline_bytes": 54231040,
+      "baseline_maps": 12,
+      "baseline_seconds": 0.024818,
+      "variants": {
+        "4096": {
+          "read_bytes": 26010552,
+          "upload_bytes": 23692,
+          "maps": 12,
+          "changed": 6346,
+          "seconds": 0.052846
+        },
+        "16384": {
+          "read_bytes": 27004142,
+          "upload_bytes": 6168,
+          "maps": 12,
+          "changed": 1648,
+          "seconds": 0.033264
+        },
+        "65536": {
+          "read_bytes": 27624252,
+          "upload_bytes": 1580,
+          "maps": 12,
+          "changed": 422,
+          "seconds": 0.034065
+        }
+      }
+    }
+  ]
+}

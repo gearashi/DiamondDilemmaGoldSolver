@@ -127,6 +127,38 @@ class NativeTests(unittest.TestCase):
         self.addCleanup(gpu.close)
         return gpu
 
+    def test_sequential_replay_tables_recheck_contents_and_restore_dirty_policy(self):
+        owner = self.new(n=16)
+        cache = owner.replay_tables()
+        self.addCleanup(cache.close)
+        opts = dict(n=4,prefixes=[],reuse_from=owner,replay_tables=cache,
+                    allow_software=os.environ.get('DIAMOND_TEST_SOFTWARE_GPU')=='1')
+        def build(**extra):
+            gpu=WebGPUDFS(*arguments(),**opts,**extra)
+            self.addCleanup(gpu.close)
+            return gpu
+        first=build()
+        shared=first.buffers[6]
+        self.assertIsNot(shared,owner.buffers[6])
+        concurrent=build()
+        self.assertIsNot(concurrent.buffers[6],shared)
+        concurrent.close()
+        first.host_policy[0]=17
+        first._upload_policy()
+        first.close()
+        different=build(order=np.arange(159,-1,-1,dtype=np.int16))
+        self.assertIsNot(different.buffers[6],shared)
+        different.close()
+        same=build()
+        self.assertIs(same.buffers[6],shared)
+        raw=same.queue.read_buffer(shared,0,cache.data.nbytes)
+        np.testing.assert_array_equal(np.frombuffer(raw,np.uint32),cache.data)
+        cache.close()
+        owner.close()
+        same.step(1)
+        same.close()
+        self.assertIsNone(cache.buffer)
+
     def test_shared_program_isolates_buffers_and_releases_after_last_owner(self):
         live = self.new(n=8)
         opts = dict(prefixes=[], reuse_from=live, allow_software=os.environ.get('DIAMOND_TEST_SOFTWARE_GPU') == '1')

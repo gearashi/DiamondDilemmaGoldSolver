@@ -291,6 +291,27 @@ jobs:
           subprocess.check_call([executable, '-c', code])
           PY
 
+      - name: Check replay ownership on an available hardware Metal adapter
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          venv/bin/python - <<'PY'
+          import os
+          import subprocess
+          import sys
+          import wgpu
+          adapters = [dict(adapter.info) for adapter in wgpu.gpu.enumerate_adapters_sync()]
+          if any(info.get('backend_type') == 'Metal' and info.get('adapter_type') in ('IntegratedGPU', 'DiscreteGPU')
+                 for info in adapters):
+              env = {**os.environ, 'DIAMOND_TEST_WEBGPU': '1'}
+              subprocess.run([sys.executable, '-B', '-m', 'unittest', '-v',
+                  'test_webgpu.NativeTests.test_shared_program_isolates_buffers_and_releases_after_last_owner',
+                  'test_webgpu.NativeTests.test_sequential_replay_tables_recheck_contents_and_restore_dirty_policy'],
+                  env=env, check=True)
+          else:
+              print('Hardware Metal replay checks unavailable on this runner.', adapters)
+          PY
+
   shader-validation:
     name: WGSL finite checks (software Vulkan, Python ${{ matrix.python }})
     runs-on: ubuntu-24.04

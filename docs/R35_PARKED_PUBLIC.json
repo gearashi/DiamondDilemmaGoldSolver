@@ -1,0 +1,186 @@
+{
+  "2048-to-1/consume-False": {
+    "generations": [
+      {
+        "gen": 0,
+        "paused": 2035,
+        "offset": 0,
+        "external": false,
+        "full_write": 211153,
+        "actual_write": 211153,
+        "full_size": 211015,
+        "active_size": 211015
+      },
+      {
+        "gen": 1,
+        "paused": 2035,
+        "offset": 0,
+        "external": true,
+        "full_write": 211154,
+        "actual_write": 8505,
+        "full_size": 211016,
+        "active_size": 8369
+      },
+      {
+        "gen": 2,
+        "paused": 2035,
+        "offset": 0,
+        "external": true,
+        "full_write": 211154,
+        "actual_write": 8505,
+        "full_size": 211016,
+        "active_size": 8369
+      },
+      {
+        "gen": 3,
+        "paused": 2035,
+        "offset": 0,
+        "external": true,
+        "full_write": 211280,
+        "actual_write": 8631,
+        "full_size": 211142,
+        "active_size": 8495
+      },
+      {
+        "gen": 4,
+        "paused": 2035,
+        "offset": 0,
+        "external": true,
+        "full_write": 211274,
+        "actual_write": 8625,
+        "full_size": 211136,
+        "active_size": 8489
+      }
+    ],
+    "portable_same_gen_write": 211274,
+    "cold_resizes": {}
+  },
+  "8192-to-128/consume-False": {
+    "generations": [
+      {
+        "gen": 0,
+        "paused": 8001,
+        "offset": 0,
+        "external": false,
+        "full_write": 750350,
+        "actual_write": 750350,
+        "full_size": 750212,
+        "active_size": 750212
+      },
+      {
+        "gen": 1,
+        "paused": 8001,
+        "offset": 0,
+        "external": true,
+        "full_write": 750351,
+        "actual_write": 22715,
+        "full_size": 750213,
+        "active_size": 22578
+      },
+      {
+        "gen": 2,
+        "paused": 8001,
+        "offset": 0,
+        "external": true,
+        "full_write": 750340,
+        "actual_write": 22704,
+        "full_size": 750202,
+        "active_size": 22567
+      },
+      {
+        "gen": 3,
+        "paused": 8001,
+        "offset": 0,
+        "external": true,
+        "full_write": 755496,
+        "actual_write": 27860,
+        "full_size": 755358,
+        "active_size": 27723
+      },
+      {
+        "gen": 4,
+        "paused": 8001,
+        "offset": 0,
+        "external": true,
+        "full_write": 760158,
+        "actual_write": 32522,
+        "full_size": 760020,
+        "active_size": 32385
+      }
+    ],
+    "portable_same_gen_write": 760158,
+    "cold_resizes": {}
+  },
+  "2304-to-128/consume-True": {
+    "generations": [
+      {
+        "gen": 0,
+        "paused": 2176,
+        "offset": 0,
+        "external": false,
+        "full_write": 52483,
+        "actual_write": 52483,
+        "full_size": 52346,
+        "active_size": 52346
+      },
+      {
+        "gen": 1,
+        "paused": 2048,
+        "offset": 128,
+        "external": true,
+        "full_write": 50262,
+        "actual_write": 11088,
+        "full_size": 50125,
+        "active_size": 10951
+      },
+      {
+        "gen": 2,
+        "paused": 1920,
+        "offset": 256,
+        "external": true,
+        "full_write": 48041,
+        "actual_write": 11033,
+        "full_size": 47904,
+        "active_size": 10896
+      },
+      {
+        "gen": 3,
+        "paused": 1792,
+        "offset": 384,
+        "external": true,
+        "full_write": 45880,
+        "actual_write": 11193,
+        "full_size": 45743,
+        "active_size": 11056
+      },
+      {
+        "gen": 4,
+        "paused": 1664,
+        "offset": 512,
+        "external": true,
+        "full_write": 43588,
+        "actual_write": 11096,
+        "full_size": 43451,
+        "active_size": 10959
+      }
+    ],
+    "portable_same_gen_write": 43588,
+    "cold_resizes": {
+      "CUDA": {
+        "lanes": 16,
+        "fields": 38,
+        "matched_before_and_after": true
+      },
+      "Vulkan": {
+        "lanes": 16,
+        "fields": 38,
+        "matched_before_and_after": true
+      },
+      "D3D12": {
+        "lanes": 16,
+        "fields": 38,
+        "matched_before_and_after": true
+      }
+    }
+  }
+}
