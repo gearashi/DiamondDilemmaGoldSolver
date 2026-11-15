@@ -76,7 +76,22 @@ def _negative_page(db, scope, errors, start, stop):
     return inserted
 
 
-def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False, all_groups=False, sphere_euler=False, mate_support=False):
+def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=2048, emit=None, *, refine_integer=False, all_groups=False, sphere_euler=False, mate_support=False, geographic_hints=()):
+    """Replay optional geometric evidence before handing it to the ranked loss search."""
+    from r35_geographic_replay import geographic_departures
+    ref=frozenset(ref)
+    geo=geographic_departures(problem,ref,inventory(problem).required,geographic_hints) if geographic_hints else ()
+    result=_ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refine_integer,
+                        all_groups,sphere_euler,mate_support,geo)
+    if geo:
+        result.update(verified_geographic_departures=len(geo),
+                      relaxation=('signed_inventory_with_geographic_departures' if refine_integer
+                                  else 'parity_with_geographic_departures'))
+    return result
+
+
+def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refine_integer,
+                 all_groups,sphere_euler,mate_support,geo):
     """Save completed disjoint prefix ranges together with their negative result."""
     if page<1 or seconds<0:raise ValueError('Expected positive page size and nonnegative duration')
     ref = frozenset(ref)
@@ -113,6 +128,17 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
         read_scopes += (packed_scope,)
         if refine_integer:
             read_scopes += (digest([packed_scope,'integer-pattern-v1']),)
+    weaker_identity=None
+    # The packed coordinates and outside ordering remain the original ones.
+    # Only negatives transport from the corresponding weaker physical scope.
+    # Any phase from that scope is independently repriced with the added groups.
+    if geo:
+        weaker_identity=identity
+        identity=[*identity,'verified-geographic-departures-v1',sorted(sorted(g) for g in geo)]
+        charged_groups=[*charged_groups,*geo]
+        geo_plain=digest([*identity,upper])
+        scope=digest([geo_plain,'integer-pattern-v1']) if refine_integer else geo_plain
+        read_scopes=tuple(dict.fromkeys((scope,geo_plain,*read_scopes)))
     searched_caps = registered_cap = False
     budget = monotonic()+seconds if seconds else float('inf')
     pattern_filter = None
@@ -122,7 +148,7 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     def get_filter():
         nonlocal pattern_filter, excludes
         if pattern_filter is None:
-            if aggregate or conditions is not None:
+            if aggregate or conditions is not None or geo:
                 from r35_overlap_loss import OverlapPattern
                 pattern_filter=OverlapPattern(problem,packed,charged_groups,required,outside,upper,refine_integer,work,conditions)
             else:
@@ -154,6 +180,11 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     from r35_loss_bound import checked_lower_bound, REFERENCE_PHASES, published_hit
     if any(type(e) is not int or not 0 <= e <= len(outside) for e in indices) or type(upper) is not int or upper < 0:
         raise ValueError('Invalid loss cap or outside-error layer')
+    if geo and not all(geo):
+        covered=sum(comb(len(outside)-min(e,2),max(0,e-2)) for e in indices)
+        return dict(status='INFEASIBLE',loss_budget=upper,checked_layers=indices,
+                    all_outside_layers=set(indices)>=set(range(max_error+1)),completed_prefixes=covered,
+                    total_prefixes=covered,new_pages=0,work={'required_geographic_conflict':1})
     bound=checked_lower_bound(packed_identity,charged_groups) if refine_integer else None
     if bound is not None and upper < bound:
         covered = sum(comb(len(outside)-min(e,2),max(0,e-2)) for e in indices)
@@ -193,6 +224,11 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
             if witness_hits is None:
                 from r35_loss_witness import checked_hits
                 witness_hits = checked_hits(db,identity_key,problem,ref,charged_groups,required,outside,upper,refine_integer,conditions)
+                if weaker_identity is not None:
+                    weak_hits=checked_hits(db,digest(weaker_identity),problem,ref,charged_groups,
+                                           required,outside,upper,refine_integer,conditions)
+                    for layer,positive in weak_hits.items():
+                        witness_hits.setdefault(layer,positive)
                 for layer,positive in public_hits.items():
                     witness_hits.setdefault(layer,positive)
             if errors in witness_hits:
@@ -200,6 +236,8 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
             current = _advance_saved(db, read_scopes, errors, 0)
             if current < count and not searched_caps:
                 higher = _higher_loss_scopes(db, identity, upper, len(ref), refine_integer)
+                if weaker_identity is not None:
+                    higher += _higher_loss_scopes(db,weaker_identity,upper,len(ref),refine_integer)
                 searched_caps = True
                 if higher:
                     read_scopes += higher
@@ -283,7 +321,7 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
                     with leases.computing(claim):
                         options = {'accept_errors':accept_errors, 'reject_before_joint':reject_before_joint,
                                    'verified_cores':lambda: getattr(pattern_filter,'verified',())} if refine_integer else {}
-                        if aggregate or conditions is not None:
+                        if aggregate or conditions is not None or geo:
                             options={'accept_errors':accept_errors,
                                      'accept_status':('INTEGER_RELAXATION_FEASIBLE' if refine_integer else 'PHASE_RELAXATION_FEASIBLE')}
                         out=query.indexed(upper,errors,remaining,start=current,stop=end,**options)
@@ -387,7 +425,8 @@ def main():
             if case.keys()-{'codes'}:parser.error('loss accepts an unrestricted physical reference only')
             indices=None if args.outside is None else [args.outside]
             out=run_syndrome(p,ref,groups,args.upper,indices,args.database,args.seconds,args.page,
-                             refine_integer=args.refine_integer,all_groups=args.all_groups,sphere_euler=args.sphere_euler,mate_support=args.mate_support)
+                             refine_integer=args.refine_integer,all_groups=args.all_groups,sphere_euler=args.sphere_euler,
+                             mate_support=args.mate_support,geographic_hints=geographic_hints)
         elif args.mode=='integer-bound':
             if case.keys()-{'codes'} or args.outside is not None:
                 parser.error('integer-bound solves every outside pattern of one unrestricted reference')
