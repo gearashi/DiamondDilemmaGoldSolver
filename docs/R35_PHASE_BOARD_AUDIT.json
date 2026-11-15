@@ -1,0 +1,322 @@
+{
+  "anchors": {
+    "results": {
+      "whole_boards": 15680,
+      "signed_edge_perfect": 50,
+      "gold_layouts": 31,
+      "positive_scope_cases": 36,
+      "verified_individual_witnesses": 1064,
+      "empty_scope_cases": 60,
+      "other_deadline_cases": 20,
+      "interrupted_with_completed_earlier_split": 4
+    },
+    "filter_calls": 768,
+    "stabilizer_histogram": {
+      "2": 128,
+      "1": 256
+    },
+    "statuses": {
+      "SURVIVING": 156,
+      "INFEASIBLE": 228
+    },
+    "work": [
+      {
+        "seed": 81,
+        "odd_midpoints": false,
+        "extra_closed_pairs": false,
+        "domain": "half-turn",
+        "boards": 32,
+        "edge_and_phase": 2
+      },
+      {
+        "seed": 81,
+        "odd_midpoints": false,
+        "extra_closed_pairs": false,
+        "domain": "four-free",
+        "boards": 1944,
+        "edge_and_phase": 1
+      },
+      {
+        "seed": 81,
+        "odd_midpoints": false,
+        "extra_closed_pairs": false,
+        "domain": "rotated-fixed",
+        "boards": 1944,
+        "edge_and_phase": 0
+      },
+      {
+        "seed": 94,
+        "odd_midpoints": true,
+        "extra_closed_pairs": false,
+        "domain": "half-turn",
+        "boards": 32,
+        "edge_and_phase": 4
+      },
+      {
+        "seed": 94,
+        "odd_midpoints": true,
+        "extra_closed_pairs": false,
+        "domain": "four-free",
+        "boards": 1944,
+        "edge_and_phase": 24
+      },
+      {
+        "seed": 94,
+        "odd_midpoints": true,
+        "extra_closed_pairs": false,
+        "domain": "rotated-fixed",
+        "boards": 1944,
+        "edge_and_phase": 0
+      },
+      {
+        "seed": 21,
+        "odd_midpoints": false,
+        "extra_closed_pairs": true,
+        "domain": "half-turn",
+        "boards": 32,
+        "edge_and_phase": 2
+      },
+      {
+        "seed": 21,
+        "odd_midpoints": false,
+        "extra_closed_pairs": true,
+        "domain": "four-free",
+        "boards": 1944,
+        "edge_and_phase": 1
+      },
+      {
+        "seed": 21,
+        "odd_midpoints": false,
+        "extra_closed_pairs": true,
+        "domain": "rotated-fixed",
+        "boards": 1944,
+        "edge_and_phase": 0
+      },
+      {
+        "seed": 37,
+        "odd_midpoints": true,
+        "extra_closed_pairs": true,
+        "domain": "half-turn",
+        "boards": 32,
+        "edge_and_phase": 4
+      },
+      {
+        "seed": 37,
+        "odd_midpoints": true,
+        "extra_closed_pairs": true,
+        "domain": "four-free",
+        "boards": 1944,
+        "edge_and_phase": 12
+      },
+      {
+        "seed": 37,
+        "odd_midpoints": true,
+        "extra_closed_pairs": true,
+        "domain": "rotated-fixed",
+        "boards": 1944,
+        "edge_and_phase": 0
+      }
+    ]
+  },
+  "board": {
+    "counts": {
+      "formulas": 116,
+      "positive_formulas": 20,
+      "checked_projected_witnesses": 88,
+      "empty_formulas": 96,
+      "complement_equalities": 50,
+      "invalid_domains_rejected": 5
+    },
+    "small_unrestricted": [
+      {
+        "tiles": 2,
+        "phase": 0,
+        "boards": 6
+      },
+      {
+        "tiles": 2,
+        "phase": 1,
+        "boards": 0
+      },
+      {
+        "tiles": 2,
+        "phase": 2,
+        "boards": 0
+      },
+      {
+        "tiles": 2,
+        "phase": 3,
+        "boards": 6
+      },
+      {
+        "tiles": 4,
+        "phase": 0,
+        "boards": 0
+      },
+      {
+        "tiles": 4,
+        "phase": 1,
+        "boards": 0
+      },
+      {
+        "tiles": 4,
+        "phase": 2,
+        "boards": 0
+      },
+      {
+        "tiles": 4,
+        "phase": 3,
+        "boards": 0
+      },
+      {
+        "tiles": 4,
+        "phase": 4,
+        "boards": 0
+      },
+      {
+        "tiles": 4,
+        "phase": 5,
+        "boards": 0
+      },
+      {
+        "tiles": 4,
+        "phase": 6,
+        "boards": 0
+      },
+      {
+        "tiles": 4,
+        "phase": 7,
+        "boards": 12
+      },
+      {
+        "tiles": 4,
+        "phase": 8,
+        "boards": 12
+      },
+      {
+        "tiles": 4,
+        "phase": 9,
+        "boards": 0
+      },
+      {
+        "tiles": 4,
+        "phase": 10,
+        "boards": 0
+      },
+      {
+        "tiles": 4,
+        "phase": 11,
+        "boards": 0
+      },
+      {
+        "tiles": 4,
+        "phase": 12,
+        "boards": 0
+      },
+      {
+        "tiles": 4,
+        "phase": 13,
+        "boards": 0
+      },
+      {
+        "tiles": 4,
+        "phase": 14,
+        "boards": 0
+      },
+      {
+        "tiles": 4,
+        "phase": 15,
+        "boards": 0
+      }
+    ],
+    "macroface_orbits": [
+      {
+        "seed": 81,
+        "multiple_loops": false,
+        "phase": "0x14e",
+        "tile": 0,
+        "face": 0,
+        "full_poses": 10,
+        "quotient_poses": 1
+      },
+      {
+        "seed": 81,
+        "multiple_loops": false,
+        "phase": "0x14e",
+        "tile": 4,
+        "face": 6,
+        "full_poses": 10,
+        "quotient_poses": 1
+      },
+      {
+        "seed": 81,
+        "multiple_loops": false,
+        "phase": "0x2b1",
+        "tile": 0,
+        "face": 0,
+        "full_poses": 10,
+        "quotient_poses": 1
+      },
+      {
+        "seed": 81,
+        "multiple_loops": false,
+        "phase": "0x2b1",
+        "tile": 4,
+        "face": 6,
+        "full_poses": 10,
+        "quotient_poses": 1
+      },
+      {
+        "seed": 21,
+        "multiple_loops": true,
+        "phase": "0x2fe",
+        "tile": 0,
+        "face": 0,
+        "full_poses": 10,
+        "quotient_poses": 1
+      },
+      {
+        "seed": 21,
+        "multiple_loops": true,
+        "phase": "0x2fe",
+        "tile": 4,
+        "face": 6,
+        "full_poses": 10,
+        "quotient_poses": 1
+      },
+      {
+        "seed": 21,
+        "multiple_loops": true,
+        "phase": "0x101",
+        "tile": 0,
+        "face": 0,
+        "full_poses": 10,
+        "quotient_poses": 1
+      },
+      {
+        "seed": 21,
+        "multiple_loops": true,
+        "phase": "0x101",
+        "tile": 4,
+        "face": 6,
+        "full_poses": 10,
+        "quotient_poses": 1
+      }
+    ]
+  },
+  "public": {
+    "GOLD": 12,
+    "INFEASIBLE": 6,
+    "same_input_error": 4
+  },
+  "source_sha256_lf": {
+    "bench_r35_phase_board.py": "51c73c1a57d6c33d252b8f23e57b043a64257af93ffdedd8c4f06a2249b0a47c",
+    "r35_phase_anchors.py": "c3e60bb0bce50c594042851ff29f90b52128b56a4e45ddcd657fb62e5258dd03",
+    "r30_gold.py": "ef85f80c9e63607d519aaf4e32ce4e8adf83f1baff073038e453dfc00c771378",
+    "r35_mixed_sewings.py": "d5324d28d9892650b59ccc82bbd6ae557b8e16d04f861d777abf15f823367597",
+    "r35_loss_witness.py": "d7e0b6701f6c3797a6ac427f737bb19a1a78283f4c0fe3fc65fe9d532b897060",
+    "r35_signed_mate_support.py": "aeaac29f010f07d84c1f8299d147fda7ca4c0f7fa72562760ca3404db21b4dcb",
+    "constraint_symmetry.py": "83875a6bfd298424e85639286a3bf9f158b45e19f24b6b56e2725c8bb09df153",
+    "verify_r35_phase_board.py": "644a4d401c3ef5b553609e719edec3270d03f21c1cf1f168fc7a5f12cd20f111"
+  }
+}
