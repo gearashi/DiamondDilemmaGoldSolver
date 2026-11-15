@@ -1420,9 +1420,17 @@
       "source_id": "adverse maximum-width validation of #68",
       "title": "Bound expensive native GPU dispatches and stop between disjoint lane pages",
       "mechanism": "GPU-BOUNDED-PHYSICAL-LANE-DISPATCH",
-      "state": "testing",
+      "state": "keep bounded native pages, interval service and interrupted-page continuation",
       "proposal_and_validation": "Actual Windows Display event 4101 during a dense 131072-lane Direct3D MRV search. Bound the width and work of each dispatch, skip idle pages by synchronized device state, and let public Stop or pending Gold save exact partially advanced cursors. Compare against single-launch physical fields on safe configurations, resume a partially completed interval, test static and dynamic original at 131072, and record device recovery and search overhead.",
-      "interrupted_sweeps": "On the prior public runner three short visits advanced the same 128 jobs three times, leaving the other 128 untouched. Testing continuation on actual page boundaries across active, pending, sparse, resized, cold and legacy states."
+      "interrupted_sweeps": "On the prior public runner three short visits advanced the same 128 jobs three times, leaving the other 128 untouched. Testing continuation on actual page boundaries across active, pending, sparse, resized, cold and legacy states.",
+      "decision": "Bound individual expensive dispatches, service due checkpoints and live updates, validate pending Gold, and carry the next unserved page across stops. Full 131072-lane dynamic original completed on CUDA, Vulkan and Direct3D, including 512 steps per replica: 1024 pages, all sampled native fields equal, no further Windows recovery. Portable final saves after Stop took 1.282, 2.047 and 2.516 seconds respectively. Legacy, corrupt optional hint, mixed pending, parked winning lane, failed publication and resized ownership controls settled. Uninterrupted step results and independently validated complete Gold remain authoritative.",
+      "evidence": [
+        "docs/R35_DISPATCH_CONTINUATION.json",
+        "docs/ROUND35_GPU_PAGES.md",
+        "test_r35_dispatch_pages.py",
+        "test_r35_public_pages.py",
+        "bench_r35_public_checkpoints.py"
+      ]
     },
     {
       "id": 79,
@@ -1452,7 +1460,7 @@
       "state": "keep scoped signed and ranked geographic departures",
       "proposal_and_validation": "Propagate original target-cell poses along retained named bonds and the compulsory nonreference mate. Derive reusable loss clauses only with independent replay and exact assumptions. Test reduced obstructions, all alternative minimum losses of both near-reference phases, other near loss profiles and a positive geographic control. Compare previously allowed fixed phases and effects on unpinned signed loss work.",
       "decision": "Replay the full 194 verified conflict sets with --claims on this reference. Preserve original outside ranks, project only with compulsory outside mates, transport weaker negative coverage one way, and reprice positive phases. Retain one bounded complete read-only batch on the same root.",
-      "measurement": "104 distinct four-flip neighbors, 100 stricter signed prices (+167 total), 71 above the original two cuts. Fifteen of sixteen old-cost boundaries fully excluded. Supported fixed phase signed23 to25, full physical pairings26, connected sewing27. The 129-rule subset preserved 106 signed prices but weakened the connected optimum to26. Two actual geographic donor completions exhausted 622080 labelled full boards, maxima200 and201. Ranked weak-to-conditional layers0â€“3 avoided 121 prefixes and 12526 joint queries; a repeated 155-rule batch avoided all 155 pose replays.",
+      "measurement": "104 distinct four-flip neighbors, 100 stricter signed prices (+167 total), 71 above the original two cuts. Fifteen of sixteen old-cost boundaries fully excluded. Supported fixed phase signed23 to25, full physical pairings26, connected sewing27. The 129-rule subset preserved 106 signed prices but weakened the connected optimum to26. Two actual geographic donor completions exhausted 622080 labelled full boards, maxima200 and201. Ranked weak-to-conditional layers0–3 avoided 121 prefixes and 12526 joint queries; a repeated 155-rule batch avoided all 155 pose replays.",
       "evidence": [
         "docs/ROUND35_GEOGRAPHIC_DEPLOYMENT.md",
         "docs/R35_GEOGRAPHIC_RESIDUALS.json",
@@ -1460,6 +1468,15 @@
         "test_r35_ranked_geographic_cores.py"
       ],
       "reopen_if": "A materially different reference, physically attainable lower-cost donor or a new independently checkable geometric obstruction changes a surviving boundary. A new cap alone does not change existing certificates."
+    },
+    {
+      "id": 81,
+      "area": "Geographic Gold and reference loss",
+      "source_id": "genuine packing-positive follow-up to #80",
+      "title": "Certify incompatible incidental contacts in every pose of a retained physical-bond path",
+      "mechanism": "INDUCED-EDGE-CONTACT-CERTIFICATE",
+      "state": "testing",
+      "proposal_and_validation": "Compare all labelled root poses and actual raw line-endpoints; retain the physically embeddable but edge-perfect-impossible type separately. Discover alternate reference paths, phase and full matching costs, construct an integer-weight certificate, check objective scope, positive controls and global retention deployment."
     }
   ],
   "priorities": [
@@ -1478,7 +1495,7 @@
   ],
   "baseline": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
   "worktree": "C:/DiamondDilemmaGoldSolver/round35",
-  "total_candidates": 80,
+  "total_candidates": 81,
   "first_parallel_groups": [
     [
       1
@@ -1490,5 +1507,5 @@
       57
     ]
   ],
-  "release_gate": "Close every actionable candidate and decision-changing follow-up, with prior evidence and deployment scope. Run regressions, verify official release archives on the accepted source, then publish and continue discovery."
+  "release_gate": "Accumulate every retained addition. After all known proposals and follow-ups have final tested decisions, review the combined solver, measurements and earlier registers across the full solver again. Work through every new actionable lead before release. When the fresh review yields no further actionable improvement, test the final source and platform packages, publish a consolidated GitHub release under gearashi, and verify its assets and CI."
 }
