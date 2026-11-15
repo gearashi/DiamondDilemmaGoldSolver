@@ -100,7 +100,7 @@ def _group_inventory_cuts(closed, n):
 
 def inventory_coverage(closed, root):
     """Publish each necessary physical inventory restriction in the proved root."""
-    from constraint_pruning import _tile_choices
+    from constraint_pruning import _orientation_choices, _tile_choices
     from constraint_work import contains
 
     n = len(root)
@@ -114,7 +114,7 @@ def inventory_coverage(closed, root):
             if tiles.bit_count() >= len(cells):
                 raise ArithmeticError("Inventory exclusion has no physical tile deficit.")
             # All three rotations of a tile consume the same physical piece.
-            poses = sum(7 << (3 * tile) for tile in range(n) if tiles & (1 << tile))
+            poses = _orientation_choices(tiles)
             lifted = list(root)
             for cell in cells:
                 lifted[cell] &= poses
