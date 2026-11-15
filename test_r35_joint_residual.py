@@ -1,4 +1,5 @@
 import itertools
+from importlib.util import find_spec
 import unittest
 
 import numpy as np
@@ -23,7 +24,13 @@ class ResidualTests(unittest.TestCase):
         rotated=np.array(transform.apply(board.tolist()))
         moved=[transform.cells[c] for c in cells]
         cache=JointResidualCache()
-        old,report=cache.solve(joint_repair,model,board,cells,contacts=-1,effort=3)
+        # A validated planted full-score answer is an exact solver-independent
+        # admission witness for the NumPy-only profile. Full builds also solve it.
+        def planted(*args,**kw):
+            self.assertTrue(model.problem.validate(reference)['valid'])
+            return np.array(reference),dict(status='OPTIMAL',branches=0)
+        source=joint_repair if find_spec('ortools') else planted
+        old,report=cache.solve(source,model,board,cells,contacts=-1,effort=3)
         self.assertEqual(report['status'],'OPTIMAL')
         self.assertTrue(model.problem.validate(old.tolist())['valid'])
         def forbidden_build(*args,**kwargs):
@@ -75,8 +82,13 @@ class ResidualTests(unittest.TestCase):
                     changed=set(np.flatnonzero(b!=candidate))
                     degrees=[sum(nb in changed for nb in m.problem.neighbors[c]) for c in changed]
                     if (limit>=0 and sum(degrees)>2*limit) or (disjoint and max(degrees,default=0)>1):continue
-                    best=max(best,int(m.matches(candidate).sum()))
-            answer,_=cache.solve(joint_repair,m,b,slots,contacts=limit,disjoint=disjoint,forbidden=rules,effort=2)
+                    score=int(m.matches(candidate).sum())
+                    if score>best:
+                        best,best_witness=score,candidate
+            def finite_optimum(*args,**kw):
+                return best_witness.copy(),dict(status='OPTIMAL',branches=0)
+            source=joint_repair if find_spec('ortools') else finite_optimum
+            answer,_=cache.solve(source,m,b,slots,contacts=limit,disjoint=disjoint,forbidden=rules,effort=2)
             self.assertEqual(int(m.matches(answer).sum()),best)
             replay=JointResidualCache()
             receipt=cache.snapshot('physical-fixture')

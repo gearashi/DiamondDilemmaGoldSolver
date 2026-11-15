@@ -117,7 +117,7 @@ class CycleContactTests(unittest.TestCase):
         with TemporaryDirectory() as folder:
             db = Path(folder)/'traj.sqlite'
             for size in (0,1,2,3):
-                engine = Engine(problem,pair_cycles=3,contact_group=size)
+                engine = Engine(problem,pair_cycles=3,contact_group=size,joint_bound='exact',pool=4)
                 cold = engine.run(11,rounds=1,trajectory_db=db)
                 warm = engine.run(11,rounds=1,trajectory_db=db)
                 self.assertEqual(cold['codes'],warm['codes'])
