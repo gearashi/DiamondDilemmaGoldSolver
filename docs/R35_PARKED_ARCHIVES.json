@@ -1,0 +1,305 @@
+{
+  "baseline": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
+  "finite": {
+    "device": "NVIDIA GeForce RTX 2060",
+    "scope": "b0353aea8df0bda0c4f1877c3a7da8dfd9421b35fe0584d9ec83c4ddb208c3e7",
+    "solutions": 6,
+    "stages": [
+      {
+        "width": 2,
+        "parked": 3,
+        "before": {
+          "archive_decodes": 1,
+          "parked_reencodes": 3,
+          "parked_reencoded_raw_bytes": 17976,
+          "peak_traced_host_bytes": 412422
+        },
+        "after": {
+          "archive_decodes": 1,
+          "parked_reencodes": 3,
+          "parked_reencoded_raw_bytes": 17976,
+          "peak_traced_host_bytes": 403321
+        }
+      },
+      {
+        "width": 2,
+        "parked": 3,
+        "before": {
+          "archive_decodes": 4,
+          "parked_reencodes": 3,
+          "parked_reencoded_raw_bytes": 17976,
+          "peak_traced_host_bytes": 386449
+        },
+        "after": {
+          "archive_decodes": 4,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 379146
+        }
+      },
+      {
+        "width": 3,
+        "parked": 2,
+        "before": {
+          "archive_decodes": 4,
+          "parked_reencodes": 2,
+          "parked_reencoded_raw_bytes": 14980,
+          "peak_traced_host_bytes": 394617
+        },
+        "after": {
+          "archive_decodes": 4,
+          "parked_reencodes": 1,
+          "parked_reencoded_raw_bytes": 8988,
+          "peak_traced_host_bytes": 393037
+        }
+      },
+      {
+        "width": 3,
+        "parked": 2,
+        "before": {
+          "archive_decodes": 3,
+          "parked_reencodes": 2,
+          "parked_reencoded_raw_bytes": 14980,
+          "peak_traced_host_bytes": 387621
+        },
+        "after": {
+          "archive_decodes": 3,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 382726
+        }
+      },
+      {
+        "width": 1,
+        "parked": 7,
+        "before": {
+          "archive_decodes": 3,
+          "parked_reencodes": 7,
+          "parked_reencoded_raw_bytes": 20972,
+          "peak_traced_host_bytes": 390489
+        },
+        "after": {
+          "archive_decodes": 3,
+          "parked_reencodes": 7,
+          "parked_reencoded_raw_bytes": 20972,
+          "peak_traced_host_bytes": 390393
+        }
+      },
+      {
+        "width": 1,
+        "parked": 7,
+        "before": {
+          "archive_decodes": 8,
+          "parked_reencodes": 7,
+          "parked_reencoded_raw_bytes": 20972,
+          "peak_traced_host_bytes": 388309
+        },
+        "after": {
+          "archive_decodes": 8,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 382130
+        }
+      },
+      {
+        "width": 4,
+        "parked": 1,
+        "before": {
+          "archive_decodes": 8,
+          "parked_reencodes": 1,
+          "parked_reencoded_raw_bytes": 11984,
+          "peak_traced_host_bytes": 401622
+        },
+        "after": {
+          "archive_decodes": 8,
+          "parked_reencodes": 1,
+          "parked_reencoded_raw_bytes": 11984,
+          "peak_traced_host_bytes": 400505
+        }
+      },
+      {
+        "width": 4,
+        "parked": 1,
+        "before": {
+          "archive_decodes": 2,
+          "parked_reencodes": 1,
+          "parked_reencoded_raw_bytes": 11984,
+          "peak_traced_host_bytes": 397253
+        },
+        "after": {
+          "archive_decodes": 2,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 386066
+        }
+      },
+      {
+        "width": 8,
+        "parked": 0,
+        "before": {
+          "archive_decodes": 2,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 407852
+        },
+        "after": {
+          "archive_decodes": 2,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 408380
+        }
+      }
+    ]
+  },
+  "original": {
+    "device": "NVIDIA GeForce RTX 2060",
+    "scope": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+    "solutions": null,
+    "stages": [
+      {
+        "width": 2,
+        "parked": 3,
+        "before": {
+          "archive_decodes": 1,
+          "parked_reencodes": 3,
+          "parked_reencoded_raw_bytes": 5653944,
+          "peak_traced_host_bytes": 15659140
+        },
+        "after": {
+          "archive_decodes": 1,
+          "parked_reencodes": 3,
+          "parked_reencoded_raw_bytes": 5653944,
+          "peak_traced_host_bytes": 15658584
+        }
+      },
+      {
+        "width": 2,
+        "parked": 3,
+        "before": {
+          "archive_decodes": 4,
+          "parked_reencodes": 3,
+          "parked_reencoded_raw_bytes": 5653944,
+          "peak_traced_host_bytes": 6732491
+        },
+        "after": {
+          "archive_decodes": 4,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 6287707
+        }
+      },
+      {
+        "width": 3,
+        "parked": 2,
+        "before": {
+          "archive_decodes": 4,
+          "parked_reencodes": 2,
+          "parked_reencoded_raw_bytes": 4711620,
+          "peak_traced_host_bytes": 11223107
+        },
+        "after": {
+          "archive_decodes": 4,
+          "parked_reencodes": 1,
+          "parked_reencoded_raw_bytes": 2826972,
+          "peak_traced_host_bytes": 11221667
+        }
+      },
+      {
+        "width": 3,
+        "parked": 2,
+        "before": {
+          "archive_decodes": 3,
+          "parked_reencodes": 2,
+          "parked_reencoded_raw_bytes": 4711620,
+          "peak_traced_host_bytes": 9337863
+        },
+        "after": {
+          "archive_decodes": 3,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 9011332
+        }
+      },
+      {
+        "width": 1,
+        "parked": 7,
+        "before": {
+          "archive_decodes": 3,
+          "parked_reencodes": 7,
+          "parked_reencoded_raw_bytes": 6596268,
+          "peak_traced_host_bytes": 9125992
+        },
+        "after": {
+          "archive_decodes": 3,
+          "parked_reencodes": 7,
+          "parked_reencoded_raw_bytes": 6596268,
+          "peak_traced_host_bytes": 9126700
+        }
+      },
+      {
+        "width": 1,
+        "parked": 7,
+        "before": {
+          "archive_decodes": 8,
+          "parked_reencodes": 7,
+          "parked_reencoded_raw_bytes": 6596268,
+          "peak_traced_host_bytes": 4005435
+        },
+        "after": {
+          "archive_decodes": 8,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 3505269
+        }
+      },
+      {
+        "width": 4,
+        "parked": 1,
+        "before": {
+          "archive_decodes": 8,
+          "parked_reencodes": 1,
+          "parked_reencoded_raw_bytes": 3769296,
+          "peak_traced_host_bytes": 13166571
+        },
+        "after": {
+          "archive_decodes": 8,
+          "parked_reencodes": 1,
+          "parked_reencoded_raw_bytes": 3769296,
+          "peak_traced_host_bytes": 13165479
+        }
+      },
+      {
+        "width": 4,
+        "parked": 1,
+        "before": {
+          "archive_decodes": 2,
+          "parked_reencodes": 1,
+          "parked_reencoded_raw_bytes": 3769296,
+          "peak_traced_host_bytes": 12223023
+        },
+        "after": {
+          "archive_decodes": 2,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 11873215
+        }
+      },
+      {
+        "width": 8,
+        "parked": 0,
+        "before": {
+          "archive_decodes": 2,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 19884433
+        },
+        "after": {
+          "archive_decodes": 2,
+          "parked_reencodes": 0,
+          "parked_reencoded_raw_bytes": 0,
+          "peak_traced_host_bytes": 19885433
+        }
+      }
+    ]
+  }
+}

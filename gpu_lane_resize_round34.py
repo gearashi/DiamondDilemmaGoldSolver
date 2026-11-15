@@ -1,5 +1,5 @@
 """Partition validated native DFS columns on the host without restoring old-width GPU allocations."""
-from copy import copy
+from copy import copy, deepcopy
 
 import numpy as np
 
@@ -34,6 +34,14 @@ def restore_slices(engine, archives, replicas, owner_ids, counter_names, pack, u
     group_roots=[]
     records=[]
     first=True
+    packed_fields = {"schema", "binding", "cubes", "state_sha256", "delivered",
+                     "rows", "shape", "compressed_state"}
+
+    def park(view, state, native):
+        counts = view.stats(snapshot=state)
+        pending.append({"native": native, "boxes": view.remaining_domain_cubes(snapshot=state),
+                        "counts": {key: counts.get(key, 0) for key in (*counter_names, "exhausted")}})
+
     def emit():
         nonlocal first
         view=copy(engine)
@@ -45,12 +53,10 @@ def restore_slices(engine, archives, replicas, owner_ids, counter_names, pack, u
             engine.restore(snapshot)
             first=False
         else:
-            counts=view.stats(snapshot=state)
-            pending.append({"native":pack(view,snapshot), "boxes":view.remaining_domain_cubes(snapshot=state),
-                            "counts":{key:counts.get(key,0) for key in (*counter_names,"exhausted")}})
+            park(view, state, pack(view,snapshot))
         group.clear()
         group_roots.clear()
-    for native in archives:
+    for index, native in enumerate(archives):
         view=copy(engine)
         view.cubes=tuple(view._validate_cube(tuple(int(x,16) for x in row)) for row in native["cubes"])
         view.lanes=len(view.cubes)
@@ -64,6 +70,13 @@ def restore_slices(engine, archives, replicas, owner_ids, counter_names, pack, u
                 counts=view.stats([lane],snapshot=state)
                 idle=state[0,lane]==2 and not any(counts.get(key,0) for key in counter_names)
             records.append((cube,idle))
+        # Only self-contained legacy archives can be carried byte-for-byte into
+        # the native queue. External chunk references belong to their generation.
+        aligned = view.lanes == replicas or (index == len(archives)-1 and view.lanes < replicas)
+        if not first and not group and aligned and native.keys() == packed_fields:
+            # Counters, frontier and ownership still come from the verified state.
+            park(view, state, deepcopy(native))
+            continue
         begin=0
         while begin<view.lanes:
             end=min(view.lanes,begin+replicas-len(group_roots))
