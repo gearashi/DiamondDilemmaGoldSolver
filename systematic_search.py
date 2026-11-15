@@ -101,6 +101,36 @@ class AdaptiveBatchBudget:
 
 class StartupStopped(Exception): pass
 
+def terminal_certificate(gpu, ledger, data, terminal, target):
+    """Find an independently verified pending certificate, including parked jobs."""
+    def candidates():
+        for lane in np.flatnonzero(gpu.states.get()==1):
+            idx=int(lane)
+            yield int(ledger.ids[idx]),idx,gpu.boards[:,idx].get()
+        bank=ledger.paused.remaining_arrays()
+        ids=ledger.paused.remaining_ids()
+        for lane in np.flatnonzero(bank['states']==1):
+            idx=int(lane)
+            yield int(ids[idx]),None,bank['boards'][:,idx]
+
+    first=None
+    for job,replica,board in candidates():
+        codes=board.astype(int).tolist()
+        report=validate_arrangement(data,codes)
+        if report['matched_edges']!=240 or not report['unique_tiles']:
+            raise ValueError('Terminal checkpoint failed independent full-board validation.')
+        current=job,replica,codes,report
+        if report['valid'] or (terminal=='edge_perfect' and target=='edges'):
+            return current
+        if first is None:
+            first=current
+    if first is None:
+        raise ValueError('Terminal checkpoint has no pending full-board certificate.')
+    if terminal=='solved':
+        raise ValueError('Terminal checkpoint failed independent full-board validation.')
+    return first
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--seconds',type=float,default=3600,help='Run duration in seconds; 0 means unlimited.')
@@ -149,6 +179,8 @@ def main():
         stop=True
     signal.signal(signal.SIGINT,request_stop); signal.signal(signal.SIGTERM,request_stop)
     def stopping(): return stop or stopfile.exists()
+    def dispatch_stopped():
+        return stopping() or (args.seconds>0 and time.monotonic()-began>=args.seconds)
     def publish(phase=None,message=None):
         status.update(state=state,elapsed_seconds=round(time.monotonic()-began,2),updated_at=dt.datetime.now(dt.timezone.utc).isoformat())
         if phase: status.update(startup_phase=phase,phase_message=message)
@@ -189,6 +221,9 @@ def main():
             status['best_matched_edges']=report['matched_edges']; status['best_components']=report['line_components']
             status['required_matched_edges']=240
             if report['matched_edges']==240 and (report['valid'] or args.target=='edges'):
+                if report['valid'] and not (run/'solution.json').exists():
+                    atomic_json(run/'solution.json',{**previous_best,'solved':True,'validation':report,
+                                                     'revalidated_previous_record':True})
                 state='solved' if report['valid'] else 'edge_perfect'
                 publish(); return
         if stopping(): raise StartupStopped()
@@ -413,25 +448,21 @@ def main():
             trusted = bool(status.get('historical_exhaustion_verified'))
             publish(); return
         if terminal in ('solved','edge_perfect'):
-            pending=np.flatnonzero(gpu.states.get()==1)
-            if not len(pending):
-                trusted=False
-                raise ValueError('Terminal checkpoint has no pending full-board certificate.')
-            idx=int(pending[0]); codes=gpu.boards[:,idx].get().astype(int).tolist()
-            report=validate_arrangement(data,codes)
-            if report['matched_edges']!=240 or not report['unique_tiles'] or (terminal=='solved' and not report['valid']):
-                trusted=False
-                raise ValueError('Terminal checkpoint failed independent full-board validation.')
+            trusted=False
+            job,idx,codes,report=terminal_certificate(gpu,ledger,data,terminal,args.target)
             record={'solved':report['valid'],'codes':codes,'validation':report,'method':'systematic',
                     'run_id':run_id,'source_sha256':hashes,'input_snapshot':str(input_snapshot),
-                    'job_id':int(ledger.ids[idx]),'replica':idx,'revalidated_previous_record':True}
+                    'job_id':job,'replica':idx,'revalidated_previous_record':True}
             atomic_json(run/'best.json',record); atomic_json(run/'edge-perfect.json',record)
             render(run/'best.html',data['tiles'],codes,report)
             if report['valid']: atomic_json(run/'solution.json',record)
             state='solved' if report['valid'] else 'edge_perfect'
             status.update(best_matched_edges=240,best_components=report['line_components'])
             if report['valid'] or args.target=='edges':
-                publish(); return
+                publish()
+                trusted=True
+                return
+            trusted=True
             # A legacy edge-perfect terminal is unfinished for the Gold target.
             # Its frozen candidate is retained until the first Gold dispatch
             # proves and unwinds the closed proper component.
@@ -440,10 +471,10 @@ def main():
         last_live=last_status=last_verify=0.0
         # Larger pools did not show a stable full-iteration benefit. Use the
         # actual restored/resized engine size and retain ordinary step above it.
-        if getattr(gpu,'backend',None)=='webgpu' or hasattr(getattr(gpu,'cp',None),'RawKernel'):
-            gpu._page_stop=lambda: stopping() or (args.seconds>0 and time.monotonic()-began>=args.seconds)
+        if hasattr(gpu,'_page_stop'):
+            gpu._page_stop=dispatch_stopped
         step_and_states=getattr(gpu,'step_and_states',None) if gpu.n<=4096 else None
-        while (args.seconds==0 or time.monotonic()-began<args.seconds) and not stopping():
+        while not dispatch_stopped():
             trusted=False
             batch_started=time.perf_counter()
             if step_and_states is None:
@@ -458,11 +489,15 @@ def main():
             ledger.retire(flags)
             trusted=True
             pending=np.flatnonzero(flags==1)
-            if len(pending):
-                idx=int(pending[0]); codes=gpu.boards[:,idx].get().astype(int).tolist()
+            # A Stop request can arrive as a page completes. Check every
+            # already-pending board for Gold before acknowledging or stopping.
+            for lane in pending:
+                trusted=False
+                idx=int(lane); codes=gpu.boards[:,idx].get().astype(int).tolist()
                 report=validate_arrangement(data,codes)
                 if report['matched_edges']!=240 or not report['unique_tiles']:
                     raise RuntimeError('A complete GPU candidate failed independent validation.')
+                trusted=True
                 checked+=1; maximum=160
                 record={'solved':report['valid'],'codes':codes,'validation':report,'method':'systematic',
                         'run_id':run_id,'source_sha256':hashes,'input_snapshot':str(input_snapshot),'job_id':int(ledger.ids[idx]),
@@ -476,13 +511,18 @@ def main():
                 if report['valid'] or args.target=='edges':
                     break
                 state='running'
+            if state in ('solved','edge_perfect'):
+                break
+            if len(pending):
                 # Independent validation remains authoritative even for a
                 # legacy/mocked device that emits a multi-loop full board.
                 trusted=False
-                gpu.acknowledge([idx])
+                gpu.acknowledge(pending.tolist())
                 ledger.retire(gpu.states.get())
                 trusted=True
-            if stopping(): break
+            if ledger.completed==ledger.total:
+                state='exhausted' if origin_verified else 'unverified_exhaustion'; break
+            if dispatch_stopped(): break
             # retire(flags) already validated this completed launch. Reading and
             # validating every lane again cannot assign work unless both a free
             # lane and queued/paused jobs exist.
@@ -490,8 +530,6 @@ def main():
                 trusted=False
                 ledger.refill(gpu,prefixes,lengths)
                 trusted=True
-            if ledger.completed==ledger.total:
-                state='exhausted' if origin_verified else 'unverified_exhaustion'; break
             elapsed=time.monotonic()-began
             if elapsed-last_live>=1:
                 depths=gpu.depths.get(); high=gpu.maxdepths.get()

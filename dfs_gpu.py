@@ -132,6 +132,7 @@ class DFS:
     prevents overlaps among currently active/pending jobs and new assignments.
     Loading an exhausted lane is allowed; the ledger must never reassign past work.
     """
+    _page_stop = None
     CHECKPOINT_VERSION = 3
     DEVICE_FIELDS = ('boards', 'used', 'depths', 'maxdepths', 'states', 'floors',
                      'firsts', 'lengths', 'cursors', 'shifts', 'rng', 'counters')
