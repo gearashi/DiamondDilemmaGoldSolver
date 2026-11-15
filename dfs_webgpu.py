@@ -12,6 +12,10 @@ import numpy as np
 from dfs_gpu import DFS
 
 ROOT = Path(__file__).resolve().parent
+# Two uploads and one dispatch replace a group of native writes. Small strided
+# reads still favor direct copies; large board-height reads favor one dispatch.
+PACKED_UPLOAD_MIN_WRITES = 4
+PACKED_READ_MIN_ROWS = 128
 
 
 class _Readback:
@@ -98,6 +102,88 @@ class _CounterReduction:
             self.buffers.clear()
             if first_error is not None:
                 raise first_error
+
+
+class _ColumnCopies:
+    """Batch strided native field uploads and readbacks in one GPU dispatch."""
+    def __init__(self, gpu):
+        self.gpu = gpu
+        self.shader = gpu.gpu_device.create_shader_module(code=(ROOT / 'dfs_column_copies.wgsl').read_text(encoding='utf-8'))
+        self.pipelines = {}
+
+    def _pipeline(self, entry):
+        if entry not in self.pipelines:
+            self.pipelines[entry] = self.gpu.gpu_device.create_compute_pipeline(layout='auto',
+                compute={'module':self.shader,'entry_point':entry})
+        return self.pipelines[entry]
+
+    def _submit(self, entry, source, indices, destination, width, height):
+        device = self.gpu.gpu_device
+        pipeline = self._pipeline(entry)
+        group = device.create_bind_group(layout=pipeline.get_bind_group_layout(0),entries=[
+            {'binding':i,'resource':{'buffer':obj}} for i,obj in enumerate((source,indices,destination))])
+        encoder = device.create_command_encoder()
+        compute = encoder.begin_compute_pass()
+        compute.set_pipeline(pipeline)
+        compute.set_bind_group(0,group)
+        compute.dispatch_workgroups((width+63)//64,height)
+        compute.end()
+        self.gpu.queue.submit([encoder.finish()])
+
+    def frames(self, descriptor, width, total):
+        gpu = self.gpu
+        usage = gpu.wgpu.BufferUsage
+        with ExitStack() as resources:
+            ids = gpu.gpu_device.create_buffer(size=descriptor.nbytes,usage=usage.STORAGE | usage.COPY_DST)
+            resources.callback(ids.destroy)
+            packed = gpu.gpu_device.create_buffer(size=4*total,usage=usage.STORAGE | usage.COPY_SRC)
+            resources.callback(packed.destroy)
+            gpu.queue.write_buffer(ids,0,descriptor)
+            result = []
+            for source in gpu.buffers[1:5]:
+                self._submit('gather_frames',source,ids,packed,width,160)
+                raw = gpu.queue.read_buffer(packed,0,4*total)
+                result.append(np.frombuffer(raw,np.uint32).astype(np.uint16))
+                gpu.readback_bytes += 4*total
+            return result
+
+    def transfer(self, buffer, rows, cols, values=None):
+        gpu = self.gpu
+        entry = 'gather' if values is None else 'scatter'
+        width, height = len(cols), len(rows)
+        size = width*height*4
+        device, usage = gpu.gpu_device, gpu.wgpu.BufferUsage
+        with ExitStack() as resources:
+            def temporary(length, flags):
+                obj = device.create_buffer(size=length, usage=flags)
+                resources.callback(obj.destroy)
+                return obj
+            # Consecutive rows or lanes need only their starting offsets.
+            header = np.array([gpu.n,width,height,0,0],np.uint32)
+            parts = [header]
+            offset = len(header)
+            for i,axis in enumerate((rows,cols),3):
+                if len(axis)==1 or (int(axis[-1])-int(axis[0])+1==len(axis) and np.all(np.diff(axis)==1)):
+                    header[i] = 0x80000000 | int(axis[0])
+                else:
+                    header[i] = offset
+                    parts.append(axis.astype(np.uint32,copy=False))
+                    offset += len(axis)
+            descriptor = np.concatenate(parts) if len(parts)>1 else header
+            indices = temporary(descriptor.nbytes,usage.STORAGE | usage.COPY_DST)
+            gpu.queue.write_buffer(indices,0,descriptor)
+            if values is None:
+                packed = temporary(size,usage.STORAGE | usage.COPY_SRC)
+                source,destination = buffer,packed
+            else:
+                packed = temporary(size,usage.STORAGE | usage.COPY_DST)
+                gpu.queue.write_buffer(packed,0,np.ascontiguousarray(values))
+                source,destination = packed,buffer
+            self._submit(entry,source,indices,destination,width,height)
+            if values is None:
+                result = np.frombuffer(gpu.queue.read_buffer(packed,0,size),np.uint32).reshape(height,width).copy()
+                gpu.readback_bytes += size
+                return result
 
 
 class DeviceField:
@@ -304,6 +390,7 @@ class WebGPUDFS(DFS):
         self.gpu_device, self.pipeline = program.device, program.pipeline
         self.queue = self.gpu_device.queue
         self._counter_reduction = None
+        self._column_copies = None
         with ExitStack() as resources:
             resources.callback(program.release)
             usage = wgpu.BufferUsage.STORAGE | wgpu.BufferUsage.COPY_SRC | wgpu.BufferUsage.COPY_DST
@@ -348,23 +435,35 @@ class WebGPUDFS(DFS):
                 self.load_prefixes(initial, lanes=np.arange(len(initial), dtype=np.int32))
             self._resources = resources.pop_all()
 
+    def _columns(self):
+        if self._column_copies is None:
+            self._column_copies = _ColumnCopies(self)
+        return self._column_copies
+
     def _read_rows(self, buffer, rows, cols):
         if not len(rows) or not len(cols): return np.empty((len(rows), len(cols)), np.uint32)
         left, right = int(cols.min()), int(cols.max()) + 1
         width = right - left
+        if ((width > 2*len(cols) and width*len(rows) >= 2048)
+                or (width < self.n and len(rows)>=PACKED_READ_MIN_ROWS)):
+            return self._columns().transfer(buffer,rows,cols)
         if left == 0 and right == self.n and np.all(np.diff(rows) == 1):
             result = np.frombuffer(self.queue.read_buffer(buffer, int(rows[0]) * self.n * 4, len(rows) * self.n * 4), np.uint32).reshape(len(rows), self.n)
         else:
             # Gather strided board cells with GPU buffer copies, then map once.
             size = len(rows) * width * 4
             staging = self.gpu_device.create_buffer(size=size, usage=self.wgpu.BufferUsage.COPY_SRC | self.wgpu.BufferUsage.COPY_DST)
-            encoder = self.gpu_device.create_command_encoder()
-            for i, row in enumerate(rows):
-                encoder.copy_buffer_to_buffer(buffer, (int(row) * self.n + left) * 4, staging, i * width * 4, width * 4)
-            self.queue.submit([encoder.finish()])
-            result = np.frombuffer(self.queue.read_buffer(staging), np.uint32).reshape(len(rows), width)
-            staging.destroy()
+            try:
+                encoder = self.gpu_device.create_command_encoder()
+                for i, row in enumerate(rows):
+                    encoder.copy_buffer_to_buffer(buffer, (int(row) * self.n + left) * 4, staging, i * width * 4, width * 4)
+                self.queue.submit([encoder.finish()])
+                result = np.frombuffer(self.queue.read_buffer(staging), np.uint32).reshape(len(rows), width)
+            finally:
+                staging.destroy()
         self.readback_bytes += len(rows) * width * 4
+        if len(cols)==width and (len(cols)==1 or np.all(np.diff(cols)==1)):
+            return result.copy()
         return result[:, cols - left].copy()
 
     def _write_rows(self, buffer, rows, cols, values):
@@ -373,6 +472,13 @@ class WebGPUDFS(DFS):
             self.queue.write_buffer(buffer, int(rows[0]) * self.n * 4, np.ascontiguousarray(values))
             return
         breaks = np.flatnonzero(np.diff(cols) != 1) + 1
+        if (len(rows)*(len(breaks)+1) >= PACKED_UPLOAD_MIN_WRITES and len(np.unique(cols)) == len(cols)
+                and len(np.unique(rows)) == len(rows)):
+            # Many scattered writes consume large native upload allocations on
+            # D3D12. One packed upload/dispatch has a bounded staging footprint.
+            # Repeated coordinates keep the original serial last-write ordering.
+            self._columns().transfer(buffer,rows,cols,values)
+            return
         starts, stops = np.r_[0, breaks], np.r_[breaks, len(cols)]
         for i, row in enumerate(rows):
             for start, stop in zip(starts, stops):
@@ -459,17 +565,7 @@ class WebGPUDFS(DFS):
         counters |= raw[5::2]
         fields['counters'] = counters
         del raw
-        payload = {name: fields[name] for name in self.DEVICE_FIELDS}
-        payload.update(dfs_version=np.int32(self.CHECKPOINT_VERSION), gold_fingerprint=np.array(self.gold_fingerprint),
-                       fingerprint=np.array(self.fingerprint), order=self.order.copy(),
-                       roots=self.roots.copy(), prefix_codes=self.prefix_codes.copy())
-        if getattr(self, 'cpu_assist', None) is not None:
-            import json
-            payload['cpu_assist_state'] = np.array(json.dumps(self.cpu_assist.snapshot(), separators=(',', ':')))
-        for value in payload.values():
-            if isinstance(value, np.ndarray):
-                value.setflags(write=False)
-        return payload
+        return self._checkpoint_payload(fields)
 
     def _counter_totals(self):
         reducer = self._counter_reduction
@@ -490,6 +586,7 @@ class WebGPUDFS(DFS):
         try:
             self._synchronize()
         finally:
+            self._column_copies = None
             self._program = None
             try:
                 if self._counter_reduction is not None:

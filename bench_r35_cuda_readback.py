@@ -28,6 +28,7 @@ extern "C" __global__ void gather(const unsigned char *cur, unsigned char *last,
  for (int j=threadIdx.x; j<width; j+=blockDim.x) {
     int i=begin+j;
     if (i<size) out[blockIdx.x*width+j]=last[i]=cur[i];
+    else out[blockIdx.x*width+j]=0;
  }
 }
 """

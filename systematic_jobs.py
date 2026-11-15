@@ -96,6 +96,9 @@ class JobLedger:
     paused: _PausedBank = field(default_factory=_PausedBank, repr=False)
     retired_counters: np.ndarray = field(default_factory=lambda: np.zeros(3, np.uint64))
 
+    # Set by the optional incremental checkpoint reader. Even a job installed and
+    # retired between two captures can replace every frame in its native lane.
+    checkpoint_installs: np.ndarray | None = field(default=None, init=False, repr=False, compare=False)
     _validated_unique_ids: np.ndarray | None = field(default=None, init=False, repr=False, compare=False)
 
     _ownership_cache_hits: int = field(default=0, init=False, repr=False, compare=False)
@@ -179,6 +182,8 @@ class JobLedger:
             lanes = free[:resumed]
             jobs, payload = self.paused.take(resumed)
             old_counts = gpu.counters[:, lanes].get().sum(axis=1, dtype=np.uint64)
+            if self.checkpoint_installs is not None:
+                self.checkpoint_installs[lanes] = True
             gpu.restore_lanes(_with_metadata(gpu, payload), lanes)
             self.retired_counters += old_counts
             self.ids[lanes] = jobs
@@ -188,6 +193,8 @@ class JobLedger:
         if count:
             lanes = free[:count]
             jobs = np.arange(self.cursor, self.cursor + count, dtype=np.int64)
+            if self.checkpoint_installs is not None:
+                self.checkpoint_installs[lanes] = True
             gpu.load_prefixes([prefixes[j, :int(lengths[j])].tolist() for j in jobs], lanes=lanes)
             self.ids[lanes] = jobs
             self.cursor += count

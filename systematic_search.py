@@ -25,6 +25,7 @@ from gpu_reasoning import feature_identity, normalize_features
 from exact_frontier import plan_frontier
 import systematic_evidence as proof
 from systematic_jobs import JobLedger
+from classic_checkpoint_ranges import CheckpointRanges
 from classic_parked_storage import ParkedCheckpointWriter, REFERENCE, restore_parked
 from checkpoint_writer import CheckpointWriter
 from io_utils import atomic_json, replace_with_retry
@@ -298,9 +299,15 @@ def main():
             engine_options['reserve_replay']=True
         gpu=engine(masks,board.neighbor_cells,board.neighbor_sides,n=replicas,seed=args.seed,order=order,
                    prefixes=[],gold_data=data if args.target=='gold' else None,**engine_options)
+        prior_backends=set()
         if args.resume and checkpoint.exists():
             publish('restoring_checkpoint','Restoring saved branches; excess branches will pause with their progress preserved.')
             with np.load(checkpoint,allow_pickle=False) as archive:
+                previous_scope=proof.checkpoint_scope(archive,scope)
+                proof.check_cpu_scope(archive,gpu_features)
+                # A predecessor without a bound contribution history, including
+                # a migrated legacy stack, can have traversed both kernels.
+                prior_backends.update(previous_scope.get('proof_backends',('cuda','webgpu')))
                 with restore_parked(checkpoint,archive) as stack:
                     ledger=JobLedger.resume(gpu,stack,prefixes,lengths)
                 external_bank = REFERENCE in archive.files
@@ -345,13 +352,14 @@ def main():
             else:
                 try:
                     proof.check_receipt(run,old_origin,generation,checkpoint,old_binding,parked=external_bank)
-                    previous_source = proof.verify_origin(run, old_origin, old_binding, hashes, scope)
+                    previous_source = proof.verify_origin(run, old_origin, old_binding, hashes, previous_scope,
+                                                        required_backend=backend if not closed else None)
                 except (KeyError, TypeError, OSError, ValueError) as exc:
                     origin_verified = False
                     if closed and terminal != 'unverified_exhaustion':
                         raise ValueError('Systematic exhaustion source evidence failed: '+str(exc)) from exc
                 if closed and origin_verified:
-                    proof.check_terminal_record(run,old_origin,previous_source,scope,ledger.total,checked,old_record,marker)
+                    proof.check_terminal_record(run,old_origin,previous_source,previous_scope,ledger.total,checked,old_record,marker)
             if closed and terminal in ('', 'exhausted', 'unverified_exhaustion'):
                 terminal = 'exhausted' if origin_verified else 'unverified_exhaustion'
 
@@ -360,13 +368,19 @@ def main():
             ledger=JobLedger.empty(len(prefixes),replicas); terminal=''
             publish('assigning_branches','Assigning a different fixed prefix to each active GPU lane.')
             ledger.refill(gpu,prefixes,lengths)
+        # Include the engine entrusted with initializing or restoring native state.
+        # Earlier untracked stacks retain both engines throughout later resumes.
+        used_backends=sorted(prior_backends | {backend})
+        scope={**scope,'proof_backends':used_backends}
+        source_binding=proof.origin_binding(hashes,scope)
         trusted=True
+        ranges=CheckpointRanges(gpu,ledger)
         def snapshot():
-            payload=gpu.snapshot_checkpoint()
+            payload=ranges.capture()
             ledger.validate(payload['states'])
             ledger.validate_prefixes(payload['prefix_codes'],payload['floors'],prefixes,lengths)
             payload.update(ledger.fields())
-            payload.update(exact_gpu_features=np.array(json.dumps(feature_identity(gpu_features),sort_keys=True)),exact_frontier_sha256=np.array(frontier_hash),exact_data_sha256=np.array(data_sha),
+            payload.update(exact_proof_backends=np.array(json.dumps(used_backends)),exact_gpu_features=np.array(json.dumps(feature_identity(gpu_features),sort_keys=True)),exact_frontier_sha256=np.array(frontier_hash),exact_data_sha256=np.array(data_sha),
                            exact_generation=np.array(generation,np.int64),exact_max_depth=np.array(maximum,np.int16),
                            exact_candidates=np.array(checked,np.int64),
                            exact_source_origin=np.array(run_id),exact_source_target=np.array(args.target),
@@ -379,7 +393,7 @@ def main():
         writer=CheckpointWriter(snapshot,lambda packet,gen: parked_writer.write(packet))
         config={'method':'systematic','backend':backend,'run_id':run_id,'pid':os.getpid(),'started_at':started.isoformat(),
                 'replicas':gpu.n,'requested_replicas':args.replicas,'gpu_features':gpu_features,'search_profile':profile,'seconds':args.seconds,'seed':args.seed,
-                'source_sha256':hashes,'verified_coverage_origin':origin_verified,'frontier_sha256':frontier_hash,'total_jobs':ledger.total,
+                'source_sha256':hashes,'verified_coverage_origin':origin_verified,'proof_backends':used_backends,'frontier_sha256':frontier_hash,'total_jobs':ledger.total,
                 'paused_jobs':ledger.paused_count,'checkpoint_seconds':args.checkpoint_seconds,
                 'target':args.target,'stop_on_gold_solution':args.target=='gold',
                 'adaptive_gpu_batches':batches.adaptive,'gpu_batch_target_ms':batches.target_ms,

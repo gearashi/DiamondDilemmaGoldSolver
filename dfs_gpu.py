@@ -700,8 +700,15 @@ class DFS:
         """Capture independent CPU arrays; the caller may add SSD-ledger metadata fields."""
         self.cp.cuda.get_current_stream().synchronize()
         payload = {key: getattr(self, key).get() for key in self.DEVICE_FIELDS}
+        return self._checkpoint_payload(payload)
+
+    def _checkpoint_payload(self, fields, *, fixed=None):
+        """Attach the current host ownership and proof state to frozen lane arrays."""
+        payload = {name: fields[name] for name in self.DEVICE_FIELDS}
         payload.update(dfs_version=np.int32(self.CHECKPOINT_VERSION), gold_fingerprint=np.array(self.gold_fingerprint), fingerprint=np.array(self.fingerprint),
-                       order=self.order.copy(), roots=self.roots.copy(), prefix_codes=self.prefix_codes.copy())
+                       order=self.order.copy() if fixed is None else fixed['order'],
+                       roots=self.roots.copy() if fixed is None else fixed['roots'],
+                       prefix_codes=self.prefix_codes.copy() if fixed is None else fixed['prefix_codes'])
         if getattr(self, 'cpu_assist', None) is not None:
             payload['cpu_assist_state'] = np.array(json.dumps(self.cpu_assist.snapshot(), separators=(',', ':')))
         for value in payload.values():
@@ -795,6 +802,8 @@ class DFS:
         if 'cpu_assist_state' in checked:
             from gpu_cpu_assist import CPUAssist
             decoded=json.loads(str(checked['cpu_assist_state']))
+            if not self.cpu_assist.endgame_enabled:
+                CPUAssist.check_probe_ownership(decoded)
             CPUAssist.validate_ownership(decoded, [checked] if _cpu_owner_payloads is None else _cpu_owner_payloads)
             if decoded.get('fingerprint')!=self.fingerprint:raise ValueError('CPU assistance checkpoint binding differs.')
         self._install_lanes(checked, np.arange(self.n, dtype=np.int32))
