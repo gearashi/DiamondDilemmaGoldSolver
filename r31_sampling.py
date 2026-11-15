@@ -235,33 +235,42 @@ def run_seeds(database, scope, seed, starts, run_one, *, ttl=120, progress=None,
                                 cursor = state['cursor']
                                 if type(cursor) is not int or not 0 <= cursor <= horizon:
                                     raise ValueError('Unexpected trajectory cursor.')
+                                from r34_signed_snapshot import archive
+                                packed=json.dumps(archive(conn,state))
                                 conn.execute("INSERT OR IGNORE INTO r34_trajectories VALUES(?,?,?,?,?)",
-                                             (stream,job,cursor,raw,trajectory_digest(cursor,raw)))
+                                             (stream,job,cursor,packed,trajectory_digest(cursor,packed)))
                     if checkpointed:
                         pending = conn.execute("SELECT state FROM r31_pending WHERE scope=? AND seed=?",
                                                (scope, job)).fetchone()
                         state = json.loads(pending[0]) if pending else None
                         if trajectory is not None:
+                            tagged=False
                             if state is not None:
                                 source=state.pop('_trajectory_stream',None)
+                                tagged=source==stream
                                 if source is not None and source!=stream:
                                     state=None
                                 elif source is None:
                                     # An old seed may finish in its original horizon. Its source
                                     # identity is unknown, so never export this state to later runs.
                                     promotable=False
-                            earlier = state['cursor'] if state is not None and promotable else -1
+                            # A tagged pending state always has an atomically committed,
+                            # checksummed trajectory. Prefer that to the inline legacy copy.
+                            earlier = state['cursor'] if state is not None and not tagged else 0
                             saved = conn.execute("""SELECT cursor,state,checksum FROM r34_trajectories
-                                WHERE stream=? AND seed=? AND cursor>? AND cursor<=?
+                                WHERE stream=? AND seed=? AND cursor>=? AND cursor<=?
                                 ORDER BY cursor DESC LIMIT 1""",(stream,job,earlier,horizon)).fetchone()
                             if saved:
                                 cursor,raw,checksum = saved
                                 if checksum != trajectory_digest(cursor,raw):
                                     raise ValueError('Trajectory checkpoint checksum mismatch.')
-                                state = json.loads(raw)
+                                from r34_signed_snapshot import expand
+                                state=expand(conn,json.loads(raw))
                                 promotable=True
                                 if state['cursor'] != cursor:
                                     raise ValueError('Trajectory state and cursor disagree.')
+                            elif tagged:
+                                raise ValueError('Missing committed trajectory for a pending seed.')
                         item = run_one(job, state, save)
                     else:
                         item = run_one(job)

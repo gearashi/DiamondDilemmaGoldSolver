@@ -243,9 +243,102 @@ def hall_control(problem,path):
     atomic_json(path,report)
 
 
+def hall_extensions(problem,path):
+    from collections import Counter
+    from fractions import Fraction
+    from math import prod
+    from constraint_pruning import _tile_choices
+    from gpu_domain_runner import inventory_screen,split_cubes
+    from test_gpu_domain_round25 import (joint_hall_fixture,planted160_fixture,word_boundary_fixture,
+                                         independent_solutions)
+    from test_gpu_exact_round26 import inventory_fixture
+    from test_r34_allocation import crossing_box
+
+    def small_union(box,n,pairs):
+        groups=Counter(map(_tile_choices,box))
+        if any(c>m.bit_count() for m,c in groups.items()):
+            return True
+        if pairs:
+            groups.pop((1<<n)-1,None)
+            used=0
+            for tiles in groups:
+                if tiles&used:
+                    break
+                used|=tiles
+            else:
+                return False
+            for a,b in itertools.combinations(groups,2):
+                mask=a|b
+                if sum(c for m,c in groups.items() if not m&~mask)>mask.bit_count():
+                    return True
+        return False
+
+    def compare(boxes,n):
+        sizes={b:prod(row.bit_count() for row in b) for b in boxes}
+        total=sum(sizes.values())
+        closed={}
+        timings={}
+        for name in ('same','pairs','matching'):
+            start=time.perf_counter()
+            if name=='matching':
+                live,cuts=inventory_screen(boxes,n)
+                closed[name]={b for b,cells in cuts}
+            else:
+                closed[name]={b for b in boxes if small_union(b,n,name=='pairs')}
+            timings[name]=round(time.perf_counter()-start,6)
+        for b,cells in cuts:
+            tiles={v//3 for c in cells for v in range(b[c].bit_length()) if b[c]>>v&1}
+            assert len(tiles)<len(cells)
+        assert closed['same']<=closed['pairs']<=closed['matching']
+        out=dict(boxes=len(boxes),closed={k:len(v) for k,v in closed.items()},seconds=timings,
+                 excluded_cartesian_fraction={k:str(Fraction(sum(sizes[b] for b in v),total)) for k,v in closed.items()})
+        return out,live
+
+    rows={}
+    root=WorkScope.for_problem(problem,'gold').root
+    for count in (32,64,128,256,512):
+        rows['original-'+str(count)],_=compare(split_cubes([root],count),problem.n)
+    rows['higher-order-and-feasible'],_=compare([crossing_box(False),crossing_box(True)],8)
+    for name,f in [('prism',precise_reason_fixture),('planted160',planted160_fixture),
+                   ('word-boundary',word_boundary_fixture),('joint',joint_hall_fixture),
+                   ('inventory',inventory_fixture),('failure',lambda:inventory_fixture('failure'))]:
+        fixture=f()
+        sr=WorkScope.for_problem(fixture,'gold').root
+        boxes=split_cubes([sr],128)
+        row,live=compare(boxes,fixture.n)
+        valid=independent_solutions(fixture,'gold')
+        assert all(sum(all(box[i]>>v&1 for i,v in enumerate(ans)) for box in live)==1 for ans in valid)
+        row['gold_preserved']=len(valid)
+        rows[name]=row
+    atomic_json(path,rows)
+
+
+def hall_migration(problem,path):
+    from unittest.mock import patch
+    from gpu_domain_runner import inventory_screen,solve as cuda
+    from constraint_symbolic_transfer import engine_remaining
+    from test_gpu_domain_round25 import planted160_fixture
+    with patch('gpu_domain_runner.inventory_screen',side_effect=lambda boxes,n:(boxes,[])):
+        source,_=solve('gpu',problem,.35)
+    _,boxes=engine_remaining(problem,'gpu',source['checkpoint'])
+    sampled=[boxes[i] for i in np.linspace(0,len(boxes)-1,min(12,len(boxes))).astype(int)]
+    live,closed=inventory_screen(sampled,problem.n)
+    for b,cells in closed:
+        tiles={v//3 for c in cells for v in range(b[c].bit_length()) if b[c]>>v&1}
+        assert len(tiles)<len(cells)
+    planted=planted160_fixture()
+    scope=WorkScope.for_problem(planted,'gold')
+    result=cuda(planted,seconds=10,backend='cuda',replicas=128,
+                options={'gpu_global_matching':True},work_frontier=frontier_snapshot(scope,[scope.root]))
+    assert result['status']=='solved' and planted.validate(result['codes'])['valid']
+    atomic_json(path,dict(source_boxes=len(boxes),sampled=len(sampled),host_closed=len(closed),
+                          host_survivors=len(live),positive=result['status'],
+                          positive_score=planted.validate(result['codes'])['matched_edges']))
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('mode',choices=('exact','discovery','transfer','boxes','screen'))
+    p.add_argument('mode',choices=('exact','discovery','transfer','boxes','screen','hall-extensions','hall-migration'))
     p.add_argument('--tiles',default='data/tiles.json')
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--legacy-split',action='store_true',help='Reproduce the allocation matrix before the host Hall filter.')
@@ -256,7 +349,7 @@ def main():
     old=patch('gpu_domain_runner.inventory_screen',side_effect=lambda cubes,n:(cubes,[]))
     with old if args.legacy_split else nullcontext():
         {'exact':exact,'discovery':discovery,'transfer':transfer,'boxes':migrated_boxes,
-         'screen':hall_control}[args.mode](problem,args.output)
+         'screen':hall_control,'hall-extensions':hall_extensions,'hall-migration':hall_migration}[args.mode](problem,args.output)
 
 
 if __name__=='__main__':

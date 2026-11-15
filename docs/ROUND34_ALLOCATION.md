@@ -1,4 +1,4 @@
-# Round 34 backend allocation (43)
+# Round 34 backend allocation and portable inventory screening (43, 52)
 
 The paired controls used the local i7-4790 and RTX 2060. Separate exact proof and discovery cases were assigned before scheduling. Only independent finite enumeration, full witness validation or a replayed physical-inventory proof received credit. Backend decision counters retain their own native units. Data: [R34_ALLOCATION.json](R34_ALLOCATION.json).
 
@@ -12,12 +12,18 @@ A 0.35-second CPU original-puzzle slice exported two pending boxes (80,790 porta
 
 ## Dispatch change retained
 
-When global matching is enabled, the CUDA domain runner screens newly split portable boxes on the host before creating native lanes. It groups cells by the exact set of available physical tiles after projecting away rotation. More cells than available tiles in one group certifies a negative. The runner records those closed boxes in its portable remainder, progress and enabled coverage ledger. Native parked lanes continue with their existing ownership.
+When global matching is enabled, the CUDA domain runner screens newly split portable boxes on the host before creating native lanes. It groups cells by the exact set of available physical tiles after projecting away rotation. More cells than available tiles in one group certifies a negative. If restricted tile sets overlap after that first pass, an alternating-path maximum matching on those cells produces either an injection or an explicit deficient set of cells. An injection extends to the remaining full-domain cells. Disjoint tile groups need only their size checks. The runner records those closed boxes in its portable remainder, progress and enabled coverage ledger. Native parked lanes continue with their existing ownership.
 
 In the actual initial 128-box split on the original puzzle, 47 independently checked boxes were impossible on inventory alone. The RTX 2060 allocated 81 native lanes instead of 128 and 84,077,028 native state bytes instead of 132,862,464. The saved native search state was 4,028,740 serialized bytes versus 6,135,719. Both bounded runs remained open. Each discarded box was independently replayed using explicit physical tile sets. Regression tests enumerate finite permutations, check resumption and verify that an entirely impossible queue completes without GPU allocation.
 
+Extra controls at initial queue sizes 32, 64, 128, 256 and 512 closed 0, 0, 47, 175 and 431 boxes. Comparing equal tile sets, all two-set unions and full matching gave the same counts for this original root. The split boxes have very unequal sizes. At 128, 256 and 512 boxes, the fraction of the original Cartesian product of oriented cell domains excluded by these proofs is exactly 2⁻⁸¹. This measures candidate tuples before tile uniqueness and seam conditions.
+
+On a held-out six-cell prism split 128 ways, equal sets closed zero, while unequal two-set unions and full matching closed 69 each (171/320 of its oriented product). A constructed six-row restriction over five tiles escaped every two-set union and was retired by full matching. Adding one tile restored feasibility and the screening admitted that neighbor. A one-shot 128-box host pass on the original took 0.0062 seconds with matching and 0.0035 with equal sets alone. Independent certificate replay was measured separately.
+
+A fresh RTX legacy checkpoint exported 128 pending original boxes. The screen independently retired five of twelve sampled native-to-portable remainders. The other seven remained open. A portable planted 160-cell job recovered its independently validated 240-edge one-loop witness on the RTX. All four Gold witnesses in the separate six-cell inventory fixture remained admitted. Other held-out cut counts are in the data file. Retain full matching when the existing GPU global-matching option is enabled, including on migrated portable work.
+
 ## Fresh-board discovery
 
-At 24 repair rounds each, the CPU-only fresh starts scored 167/169/165/170 on seeds 340–343. CUDA-assisted fresh starts at 512 replicas and 16 dispatches scored 166/162/168/166. Each cold CUDA start made 524,288 proposals, and exact archive reopens made zero new proposals with identical scores. CPU-only reached 160 in 13/12/12/12 rounds; CUDA-assisted took 18/14/11/7. There is no stable cross-seed win warranting a change of discovery default.
+At 24 repair rounds each, the CPU-only fresh starts scored 167/169/165/170 on seeds 340-343. CUDA-assisted fresh starts at 512 replicas and 16 dispatches scored 166/162/168/166. Each cold CUDA start made 524,288 proposals, and exact archive reopens made zero new proposals with identical scores. CPU-only reached 160 in 13/12/12/12 rounds; CUDA-assisted took 18/14/11/7. There is no stable cross-seed win warranting a change of discovery default.
 
-Use `bench_r34_allocation.py exact|transfer|boxes --legacy-split` to reproduce the allocator comparisons with the original split. Use its `discovery` and `screen` modes for the fresh and before/after host checks. Set `--tiles` and `--output` explicitly for an isolated project run.
+Use `bench_r34_allocation.py exact|transfer|boxes --legacy-split` to reproduce the allocator comparisons with the original split. Use its `discovery` and `screen` modes for the fresh and before/after host checks. The `hall-extensions` and `hall-migration` modes reproduce the held-out and migration controls. Set `--tiles` and `--output` explicitly for an isolated project run.

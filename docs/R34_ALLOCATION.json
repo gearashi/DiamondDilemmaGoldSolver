@@ -650,5 +650,237 @@
       "completed": 47,
       "checkpoint_bytes": 4028740
     }
+  },
+  "host_matching_controls": {
+    "original-32": {
+      "boxes": 32,
+      "closed": {
+        "same": 0,
+        "pairs": 0,
+        "matching": 0
+      },
+      "seconds": {
+        "same": 0.00184,
+        "pairs": 0.001787,
+        "matching": 0.003282
+      },
+      "excluded_cartesian_fraction": {
+        "same": "0",
+        "pairs": "0",
+        "matching": "0"
+      }
+    },
+    "original-64": {
+      "boxes": 64,
+      "closed": {
+        "same": 0,
+        "pairs": 0,
+        "matching": 0
+      },
+      "seconds": {
+        "same": 0.003315,
+        "pairs": 0.003623,
+        "matching": 0.006205
+      },
+      "excluded_cartesian_fraction": {
+        "same": "0",
+        "pairs": "0",
+        "matching": "0"
+      }
+    },
+    "original-128": {
+      "boxes": 128,
+      "closed": {
+        "same": 47,
+        "pairs": 47,
+        "matching": 47
+      },
+      "seconds": {
+        "same": 0.003474,
+        "pairs": 0.003424,
+        "matching": 0.006184
+      },
+      "excluded_cartesian_fraction": {
+        "same": "1/2417851639229258349412352",
+        "pairs": "1/2417851639229258349412352",
+        "matching": "1/2417851639229258349412352"
+      }
+    },
+    "original-256": {
+      "boxes": 256,
+      "closed": {
+        "same": 175,
+        "pairs": 175,
+        "matching": 175
+      },
+      "seconds": {
+        "same": 0.008241,
+        "pairs": 0.013808,
+        "matching": 0.011996
+      },
+      "excluded_cartesian_fraction": {
+        "same": "1/2417851639229258349412352",
+        "pairs": "1/2417851639229258349412352",
+        "matching": "1/2417851639229258349412352"
+      }
+    },
+    "original-512": {
+      "boxes": 512,
+      "closed": {
+        "same": 431,
+        "pairs": 431,
+        "matching": 431
+      },
+      "seconds": {
+        "same": 0.020249,
+        "pairs": 0.015259,
+        "matching": 0.025763
+      },
+      "excluded_cartesian_fraction": {
+        "same": "1/2417851639229258349412352",
+        "pairs": "1/2417851639229258349412352",
+        "matching": "1/2417851639229258349412352"
+      }
+    },
+    "higher-order-and-feasible": {
+      "boxes": 2,
+      "closed": {
+        "same": 0,
+        "pairs": 0,
+        "matching": 1
+      },
+      "seconds": {
+        "same": 7.3e-05,
+        "pairs": 9.2e-05,
+        "matching": 0.000124
+      },
+      "excluded_cartesian_fraction": {
+        "same": "0",
+        "pairs": "0",
+        "matching": "2/5"
+      }
+    },
+    "prism": {
+      "boxes": 128,
+      "closed": {
+        "same": 0,
+        "pairs": 69,
+        "matching": 69
+      },
+      "seconds": {
+        "same": 0.000722,
+        "pairs": 0.003058,
+        "matching": 0.003807
+      },
+      "excluded_cartesian_fraction": {
+        "same": "0",
+        "pairs": "171/320",
+        "matching": "171/320"
+      },
+      "gold_preserved": 0
+    },
+    "planted160": {
+      "boxes": 27,
+      "closed": {
+        "same": 0,
+        "pairs": 0,
+        "matching": 0
+      },
+      "seconds": {
+        "same": 0.002222,
+        "pairs": 0.002247,
+        "matching": 0.002269
+      },
+      "excluded_cartesian_fraction": {
+        "same": "0",
+        "pairs": "0",
+        "matching": "0"
+      },
+      "gold_preserved": 1
+    },
+    "word-boundary": {
+      "boxes": 36,
+      "closed": {
+        "same": 18,
+        "pairs": 18,
+        "matching": 18
+      },
+      "seconds": {
+        "same": 0.000498,
+        "pairs": 0.000361,
+        "matching": 0.000278
+      },
+      "excluded_cartesian_fraction": {
+        "same": "1/2",
+        "pairs": "1/2",
+        "matching": "1/2"
+      },
+      "gold_preserved": 0
+    },
+    "joint": {
+      "boxes": 54,
+      "closed": {
+        "same": 48,
+        "pairs": 48,
+        "matching": 48
+      },
+      "seconds": {
+        "same": 0.000164,
+        "pairs": 0.000153,
+        "matching": 9.5e-05
+      },
+      "excluded_cartesian_fraction": {
+        "same": "8/9",
+        "pairs": "8/9",
+        "matching": "8/9"
+      },
+      "gold_preserved": 0
+    },
+    "inventory": {
+      "boxes": 96,
+      "closed": {
+        "same": 92,
+        "pairs": 92,
+        "matching": 92
+      },
+      "seconds": {
+        "same": 0.000417,
+        "pairs": 0.0004,
+        "matching": 0.000271
+      },
+      "excluded_cartesian_fraction": {
+        "same": "23/24",
+        "pairs": "23/24",
+        "matching": "23/24"
+      },
+      "gold_preserved": 4
+    },
+    "failure": {
+      "boxes": 128,
+      "closed": {
+        "same": 128,
+        "pairs": 128,
+        "matching": 128
+      },
+      "seconds": {
+        "same": 0.000401,
+        "pairs": 0.000392,
+        "matching": 0.00025
+      },
+      "excluded_cartesian_fraction": {
+        "same": "1",
+        "pairs": "1",
+        "matching": "1"
+      },
+      "gold_preserved": 0
+    }
+  },
+  "portable_replay": {
+    "source_boxes": 128,
+    "sampled": 12,
+    "host_closed": 5,
+    "host_survivors": 7,
+    "positive": "solved",
+    "positive_score": 240
   }
 }

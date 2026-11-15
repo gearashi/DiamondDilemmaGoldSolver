@@ -1,0 +1,301 @@
+{
+  "seed": 19,
+  "cells": 40,
+  "edges": 60,
+  "target": 60,
+  "calls_per_open": 1,
+  "seconds_per_open": 0.35,
+  "conflict_budget": 2000,
+  "repeat": [
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 0,
+      "pending": 1,
+      "conflicts": 2054,
+      "decisions": 22097
+    }
+  ],
+  "partition": [
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 2,
+      "conflicts": 2054,
+      "decisions": 22097
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 3,
+      "conflicts": 1930,
+      "decisions": 23485
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 4,
+      "conflicts": 2237,
+      "decisions": 23753
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 5,
+      "conflicts": 1788,
+      "decisions": 21715
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 6,
+      "conflicts": 1868,
+      "decisions": 22378
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 7,
+      "conflicts": 2764,
+      "decisions": 28886
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 8,
+      "conflicts": 2001,
+      "decisions": 18153
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 9,
+      "conflicts": 1398,
+      "decisions": 14942
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 10,
+      "conflicts": 1770,
+      "decisions": 21143
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 11,
+      "conflicts": 1900,
+      "decisions": 18048
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 12,
+      "conflicts": 1624,
+      "decisions": 19021
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 1,
+      "pending": 11,
+      "conflicts": 0,
+      "decisions": 0
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 12,
+      "conflicts": 1445,
+      "decisions": 16709
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 13,
+      "conflicts": 781,
+      "decisions": 9092
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 0,
+      "placement_local_unsat": 1,
+      "pending": 12,
+      "conflicts": 0,
+      "decisions": 0
+    },
+    {
+      "status": "open",
+      "calls": 1,
+      "placement_splits": 1,
+      "placement_local_unsat": 0,
+      "pending": 13,
+      "conflicts": 1476,
+      "decisions": 16398
+    }
+  ]
+}

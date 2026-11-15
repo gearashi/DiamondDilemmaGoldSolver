@@ -73,7 +73,8 @@ def trajectory(problem,backend='cpu'):
         baseline=run_fresh_seeds(SearchProblem(problem.tiles,problem.board),cold,0,1,dict(opts,rounds=64))
         def state(path):
             with closing(sqlite3.connect(path)) as db:
-                return json.loads(db.execute("SELECT state FROM r34_trajectories WHERE cursor=64").fetchone()[0])
+                from r34_signed_snapshot import expand
+                return expand(db,json.loads(db.execute("SELECT state FROM r34_trajectories WHERE cursor=64").fetchone()[0]))
         left,right=state(hot),state(cold)
         assert left==right and extended['best']==baseline['best'],{
             k:(left[k],right[k]) for k in left if left[k]!=right[k]}
@@ -83,6 +84,25 @@ def trajectory(problem,backend='cpu'):
                     same_rng_phases_and_board=True,score=extended['best']['score'],work=extended['best']['work'],
                     snapshot_darts=state(hot)['dart_prices']['count'],snapshot_json_bytes=len(
                         json.dumps(state(hot)['dart_prices'],separators=(',',':')).encode()))
+
+
+def price_storage(problem):
+    from r32_fresh import run_fresh_seeds
+    from r34_signed_snapshot import expand
+    opts=dict(rounds=256,cube_bits=2,refit=8,merges=0,backend='cpu',replicas=128,dispatches=3,effort=.15,contour=False)
+    with tempfile.TemporaryDirectory() as temp:
+        path=Path(temp)/'phases.sqlite'
+        run_fresh_seeds(problem,path,0,1,opts)
+        with closing(sqlite3.connect(path)) as db:
+            raw=[json.loads(row[0]) for row in db.execute('SELECT state FROM r34_trajectories ORDER BY cursor')]
+            stored=int(db.execute('SELECT sum(length(payload)) FROM r34_price_blobs').fetchone()[0])
+            blobs=db.execute('SELECT count(*) FROM r34_price_blobs').fetchone()[0]
+            keys=sum(len(json.dumps({'dart_price_blob':row['dart_price_blob']})) for row in raw)
+            expanded=[expand(db,row)['dart_prices'] for row in raw]
+            earlier=sum(len(json.dumps(row)) for row in expanded)
+            assert len(raw)==32 and blobs==len({row['checksum'] for row in expanded})
+            return dict(cursors=len(raw),unique_images=blobs,inline_price_json_bytes=earlier,
+                        shared_price_json_bytes=stored,reference_json_bytes=keys)
 
 
 def classic(problem,apis=None,dxc=None):
@@ -191,7 +211,7 @@ def geographic_reuse(problem):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('experiment',choices=('device','trajectory','classic','seams','geographic'))
+    parser.add_argument('experiment',choices=('device','trajectory','classic','seams','geographic','prices'))
     parser.add_argument('--tiles',default='data/tiles.json')
     parser.add_argument('--sampler-backend',choices=['cpu','cuda','webgpu'],default='cpu')
     parser.add_argument('--api',action='append',choices=['CUDA','Vulkan','D3D12','Metal'])
@@ -204,4 +224,4 @@ if __name__=='__main__':
     if args.experiment=='classic':
         print(json.dumps(classic(problem,args.api,args.dxc)))
         raise SystemExit
-    print(json.dumps({'device':device,'trajectory':trajectory,'classic':classic,'seams':seam_reuse,'geographic':geographic_reuse}[args.experiment](problem)))
+    print(json.dumps({'device':device,'trajectory':trajectory,'classic':classic,'seams':seam_reuse,'geographic':geographic_reuse,'prices':price_storage}[args.experiment](problem)))

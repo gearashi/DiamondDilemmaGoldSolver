@@ -1,7 +1,7 @@
 {
   "round": 34,
   "baseline": "8e010cc8b716f93b1567211cf04aa0318e3fb4b4",
-  "release": "v1.14.0",
+  "release": "v1.15.0",
   "priority_groups": [
     [
       3,
@@ -95,7 +95,7 @@
     {
       "id": 10,
       "area": "Routes to 208 and repair on unrelated boards",
-      "proposal_and_validation": "Extend exact typed exchange enumeration to all five-swap families: (6), (2,5), (3,4), (2,2,4), (2,3,3), (2,2,2,3) and (2,2,2,2,2). Test lazy family-specific rank/unrank, 9\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u201c10 mover ownership and checkpoint reopens against full permutation enumeration on finite pools.",
+      "proposal_and_validation": "Extend exact typed exchange enumeration to all five-swap families: (6), (2,5), (3,4), (2,2,4), (2,3,3), (2,2,2,3) and (2,2,2,2,2). Test lazy family-specific rank/unrank, 9\u201310 mover ownership and checkpoint reopens against full permutation enumeration on finite pools.",
       "state": "retained in worktree",
       "evidence": "docs/ROUND34_REPAIR.md"
     },
@@ -103,9 +103,8 @@
       "id": 11,
       "area": "Routes to 208 and repair on unrelated boards",
       "proposal_and_validation": "Test disconnected five-swap exclusions only when each needed smaller component has applicable completed coverage and the additive bound is sound. Include positive multi-component fixtures and deliberately incomplete four-swap coverage.",
-      "state": "retained mechanism; follow-up open",
-      "evidence": "docs/ROUND34_REPAIR.md",
-      "next_test": "Compare first-rejection counts in actual ranked five-swap pages and check actionable larger interacting components."
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_REPAIR.md"
     },
     {
       "id": 12,
@@ -265,9 +264,8 @@
       "id": 34,
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Test the physical Gold mating requirements in classic CUDA and WebGPU DFS candidate and lookahead kernels. Preserve ordinary edge scoring and old checkpoints; benchmark available Vulkan/DX12 hardware and distinguish CI from physical Metal testing.",
-      "state": "open",
-      "evidence": "docs/ROUND34_CHECKPOINTS.md",
-      "next_test": "Validate original prefixes on available CUDA/Vulkan/DX12 devices and audit restored prefix and dynamic-order behavior."
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_PHYSICAL.md"
     },
     {
       "id": 35,
@@ -295,7 +293,7 @@
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Test disjoint fenced leases for ranked pages in Gold loss, multicenter and route pools. Move expensive compute outside SQLite writer transactions, atomically commit owned ranges and witnesses, and measure work duplication under contention or worker death. A positive prefix can contain other suffixes.",
       "state": "retained in worktree",
-      "evidence": "docs/ROUND34_CHECKPOINTS.md"
+      "evidence": "docs/ROUND34_LOSS.md"
     },
     {
       "id": 39,
@@ -316,7 +314,7 @@
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Resume partway through a costly loss prefix by recording a versioned suffix/oracle cursor. Exact continuation must preserve every eligible candidate, including another witness in the same prefix. Compare deliberately interrupted and uninterrupted candidate sets.",
       "state": "retained in worktree",
-      "evidence": "docs/ROUND34_CHECKPOINTS.md"
+      "evidence": "docs/ROUND34_LOSS.md"
     },
     {
       "id": 42,
@@ -364,9 +362,8 @@
       "id": 48,
       "area": "Checkpoints, CPU/GPU scheduling and backend reuse",
       "proposal_and_validation": "Preserve released heuristic continuation where a newly reachable helper does not affect that algorithm. Test verified v1.14 LF/CRLF and actual release source digests, a nonempty OptimizingCrossover snapshot, distinct domains/policies and mismatching sources. Include all reachable physical/coverage dependencies in new exact-search evidence snapshots.",
-      "state": "retained mechanism; follow-up open",
-      "evidence": "docs/ROUND34_PHYSICAL.md",
-      "next_test": "Exact search source closure now covered. Recheck after optional host matching source changes settle."
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_PHYSICAL.md"
     },
     {
       "id": 49,
@@ -393,16 +390,15 @@
       "id": 52,
       "area": "CPU/GPU work allocation",
       "proposal_and_validation": "Prove all-different violations on new GPU roots with an inexpensive host Hall-count check before allocating native lanes. Replay all exclusions, compare exact scope and device bytes, preserve active native checkpoints.",
-      "state": "retained mechanism; follow-up open",
-      "evidence": "docs/ROUND34_ALLOCATION.md",
-      "next_test": "Compare unequal small unions and full physical-tile matching with the identical-domain Hall screen, including held-out boxes."
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_ALLOCATION.md"
     },
     {
       "id": 53,
       "area": "Native WebGPU backends",
       "proposal_and_validation": "Determine whether the classic DX12 shader FXC compile failure pre-dates the Gold mate change. Test a source-level fix or bounded alternate compiler path and preserve end-to-end matched results.",
-      "state": "open",
-      "evidence": "docs/ROUND34_CONTINUATION.md"
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_PHYSICAL.md"
     },
     {
       "id": 54,
@@ -415,25 +411,38 @@
       "id": 55,
       "area": "Interrupted and concurrent residual searches",
       "proposal_and_validation": "On single-call SAT restarts persist inconclusive or unusable transferred-core checks per query so the next slice can reach its actual branch. Compare every nonempty saved core to independent finite enumeration.",
-      "state": "open",
+      "state": "retained in worktree",
+      "evidence": "docs/ROUND34_SEAM_AUDIT.md"
+    },
+    {
+      "id": 56,
+      "state": "retained in worktree",
+      "proposal_and_validation": "Advance a fully fixed geographic count box after an inconclusive native call by disjoint placement splits. Measure saved progress across small reopen budgets and scope negatives to true placement assumptions.",
+      "area": "Search continuation and shared evidence",
+      "evidence": "docs/ROUND34_SEAM_AUDIT.md"
+    },
+    {
+      "id": 57,
+      "state": "retained in worktree",
+      "proposal_and_validation": "Reuse immutable signed price images in phase-trajectory checkpoints across multiple cursor positions. Measure serialization work and storage with cold-state, corruption and inline-format controls.",
+      "area": "Search continuation and shared evidence",
       "evidence": "docs/ROUND34_CONTINUATION.md"
+    },
+    {
+      "id": 58,
+      "state": "open",
+      "area": "Classic exact GPU evidence",
+      "proposal_and_validation": "Bind classic systematic exhaustion to the actual physical and GPU source closure, independently verify terminal reuse, and preserve resumable older partial stacks.",
+      "evidence": "docs/ROUND34_PHYSICAL.md"
     }
   ],
   "release_gate": "All open workstreams and follow-ups, final full discovery review, migration and checkpoint compatibility, full suite, independent release CI/packages, measured settings.",
   "next_parallel_groups": [
     [
-      11,
-      52
-    ],
-    [
-      34,
-      53
-    ],
-    [
-      48
-    ],
-    [
-      55
+      58
     ]
-  ]
+  ],
+  "baseline_release": "v1.14.0",
+  "branch": "codex/round34-search",
+  "worktree": "C:/DiamondDilemmaGoldSolver/round34"
 }

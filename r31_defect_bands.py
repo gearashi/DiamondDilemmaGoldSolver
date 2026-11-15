@@ -13,6 +13,7 @@ from r27_reason_maxsat import Budget, SeamFormula, checked_score, domain_rows
 from validator import reverse_mask
 from constraint_work import digest
 import r34_band_cores as shared_cores
+import r34_band_placements as placements
 
 
 def bands(problem, count):
@@ -132,7 +133,8 @@ def _solve(problem,database,*,target,domains,group_count,width,seconds,slice_con
         if time.monotonic() >= deadline:
             raise Budget
     stats = dict(shared_core_checks=0, shared_core_skips=0, calls=0, conflicts=0, decisions=0, core_skips=0, budget_skips=0,
-                 adaptive_splits=0, completed_branches=0, inventory_queries=0, inventory_tightened=0)
+                 adaptive_splits=0, completed_branches=0, inventory_queries=0, inventory_tightened=0,
+                 placement_splits=0, placement_local_unsat=0, placement_leaf_checks=0)
     with closing(sqlite3.connect(database, timeout=60)) as db, ExitStack() as leases:
         shared_cores.schema(db)
         db.execute("""CREATE TABLE IF NOT EXISTS r31_bands(scope TEXT PRIMARY KEY,
@@ -185,7 +187,8 @@ def _solve(problem,database,*,target,domains,group_count,width,seconds,slice_con
         shared=shared_cores.candidates(db,core_scope,budget,key)
         def applies(core,box):
             return all(box[k][0]>=v if sign==1 else box[k][1]<=v for k,sign,v in core)
-        retained=[box for box in stack if not any(verified and applies(core,box) for core,verified in shared.items())]
+        retained=[node for node in stack if not any(verified and applies(core,placements.region(node))
+                                                    for core,verified in shared.items())]
         if len(retained)<len(stack):
             stats['shared_core_skips']+=len(stack)-len(retained)
             stack=retained
@@ -200,7 +203,9 @@ def _solve(problem,database,*,target,domains,group_count,width,seconds,slice_con
                     check()
                     if max_calls is not None and stats['calls'] >= max_calls:
                         break
-                    box = stack[-1]
+                    node = stack[-1]
+                    box = placements.region(node)
+                    pins = node['pins'] if isinstance(node,dict) else ()
                     if split and box != [list(pair) for pair in limits]:
                         for k, (lo, hi) in enumerate(box):
                             if hi < limits[k][1] and k not in priced:
@@ -241,12 +246,33 @@ def _solve(problem,database,*,target,domains,group_count,width,seconds,slice_con
                         stats['shared_core_skips'] += 1
                         save()
                         continue
+                    bounds = placements.intervals(rows,pins) if pins else None
+                    if pins and all(hi-lo == 1 for lo,hi in bounds):
+                        codes = [row[lo] for row,(lo,_) in zip(rows,bounds)]
+                        stats['placement_leaf_checks'] += 1
+                        if len({v//3 for v in codes}) == problem.n:
+                            score,gold = checked_score(problem,rows,codes)
+                            counts = defect_counts(codes)
+                            if score >= target and all(lo <= v <= hi for (lo,hi),v in zip(box,counts)):
+                                witness = dict(codes=codes,score=score,gold=gold,defects=counts)
+                        if witness is None:
+                            stack.pop()
+                            stats['placement_local_unsat'] += 1
+                            stats['completed_branches'] += 1
+                        save()
+                        if witness is not None:
+                            break
+                        continue
                     literals=list(conditions)
+                    if pins:
+                        literals.extend(placements.assumptions(rows,formula.literals,pins))
                     if match is not None:
                         # This new query has a fresh native solver. Verify the stored
                         # assumption subset independently before publishing an exclusion.
                         literals=shared_cores.assumptions(match,thresholds,budget)
                         stats['shared_core_checks'] += 1
+                    check()
+                    prior_search = stats['conflicts'] + stats['decisions']
                     sat.conf_budget(slice_conflicts)
                     timer = Timer(max(.001, deadline-time.monotonic()), sat.interrupt) if seconds else None
                     if timer:
@@ -278,21 +304,36 @@ def _solve(problem,database,*,target,domains,group_count,width,seconds,slice_con
                         codes = formula.board(sat.get_model())
                         score, gold = checked_score(problem, rows, codes)
                         counts = defect_counts(codes)
-                        if score < target or any(not lo<=v<=hi for (lo,hi),v in zip(box,counts)):
+                        if (score < target or any(not lo<=v<=hi for (lo,hi),v in zip(box,counts))
+                                or any(codes[cell] not in rows[cell][lo:hi] for cell,lo,hi in pins)):
                             raise RuntimeError("Decoded board violated its geographic defect budget")
                         witness = dict(codes=codes, score=score, gold=gold, defects=counts)
                         save()
                         break
                     if answer is False:
-                        core = frozenset(conditions[x] for x in sat.get_core() or [])
-                        if not any(old <= core for old in cores):
-                            shared_cores.store(db,guard,core_scope,budget,key,core,False)
-                            cores = [old for old in cores if not core < old] + [core]
+                        native_core = sat.get_core()
+                        if pins and (native_core is None or any(x not in conditions for x in native_core)):
+                            # This proof used a placement assumption. Its sibling
+                            # or a different geographic query can still have a witness.
+                            stats['placement_local_unsat'] += 1
+                        else:
+                            core = frozenset(conditions[x] for x in native_core or [])
+                            if not any(old <= core for old in cores):
+                                shared_cores.store(db,guard,core_scope,budget,key,core,False)
+                                cores = [old for old in cores if not core < old] + [core]
                         stack.pop()
                         stats['completed_branches'] += 1
                     elif split and high > low:
                         subdivide()
                         stats['adaptive_splits'] += 1
+                    elif ((max_calls is not None and stats['calls'] >= max_calls or time.monotonic() >= deadline)
+                          and stats['conflicts'] + stats['decisions'] > prior_search):
+                        # The working native solver keeps its learned clauses across
+                        # conflict slices. Refine only when the solver is about to close.
+                        children = placements.split_placement(box,bounds or placements.intervals(rows,()),pins)
+                        if children:
+                            stack[-1:] = children
+                            stats['placement_splits'] += 1
                     save()
             except Budget:
                 pass

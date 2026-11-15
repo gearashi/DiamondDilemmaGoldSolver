@@ -399,6 +399,28 @@ class ComponentBudgetTests(unittest.TestCase):
             differences.append(scores[1]-scores[0])
         self.assertEqual(undo._cycle_gain(cells),max(differences))
 
+    def test_multiple_cycles_with_changed_ports_preserve_exact_thresholds(self):
+        from r28_exchange_rotations import RotationOracle
+        tiles,geometry,codes=planted_gold(1134,1,4)
+        b=ExchangeBound(BoardModel(SearchProblem(tiles,geometry)),codes)
+        oracle=RotationOracle(b.model)
+        for group in (((0,1,2,3),(4,5,6)),((0,3,4,6,7),(1,2)),
+                      ((0,2),(1,4),(5,7,3))):
+            def optimum(subset):
+                board=b.board.copy()
+                for cycle in subset:
+                    for cell,src in zip(cycle,cycle[1:]+cycle[:1]):
+                        board[cell]=3*b.tiles[src]
+                return oracle.optimum(board)[0]
+            endpoint=optimum(group)
+            for threshold in (endpoint,endpoint+1,endpoint+3):
+                earlier=lambda subset:optimum(subset)<threshold
+                bank=CoveredUndo(b,earlier)
+                if bank.rejects(group):
+                    self.assertLess(endpoint,threshold)
+                if threshold==endpoint:
+                    self.assertFalse(bank.rejects(group))
+
 
 @unittest.skipUnless(find_spec('ortools'), 'CP-SAT requires the full Python profile')
 class SeamMasterTests(unittest.TestCase):

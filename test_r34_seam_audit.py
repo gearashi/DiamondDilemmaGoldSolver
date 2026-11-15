@@ -113,6 +113,32 @@ class SeamAuditTests(unittest.TestCase):
                 self.assertFalse(any(sum(v) <= cap and admits(v, terms) for v in self.vectors),
                                  (cap, terms))
 
+    def test_native_mixed_polarity_core_survives_replay_at_a_stronger_budget(self):
+        from constraint_work import digest
+        from pysat.solvers import Glucose4
+        from r34_query_ownership import query_lease
+        scope = digest([encoded_scope(self.problem, self.rows, True), self.groups, 'regional-cores-v1'])
+        terms = frozenset(((1, -1, 1), (2, 1, 2)))
+        with closing(sqlite3.connect(':memory:')) as db:
+            cores.schema(db)
+            for cap, owner in ((10, 'source'), (9, 'destination')):
+                feasible = [v for v in self.vectors if sum(v) <= cap]
+                self.assertTrue(all(any(admits(v, [t]) for v in feasible) for t in terms))
+                self.assertFalse(any(admits(v, terms) for v in feasible))
+                with Glucose4() as sat:
+                    _, thresholds = self.prepare(db, cap, sat, {})
+                    if owner == 'destination':
+                        self.assertEqual(cores.candidates(db, scope, cap, owner), {terms: False})
+                    literals = cores.assumptions(terms, thresholds, cap)
+                    self.assertTrue(all(sat.solve(assumptions=[lit]) for lit in literals))
+                    self.assertFalse(sat.solve(assumptions=literals))
+                    self.assertEqual(set(sat.get_core()), set(literals))
+                    with query_lease(db, ':memory:', owner) as guard:
+                        cores.store(db, guard, scope, cap, owner, terms, owner == 'destination')
+            self.assertEqual(cores.candidates(db, scope, 8, 'child'), {terms: True})
+            self.assertEqual(cores.candidates(db, scope, 10, 'sibling'), {terms: False})
+            self.assertEqual(cores.candidates(db, scope, 11, 'looser'), {})
+
     def test_inconclusive_imported_hints_never_starve_one_call_reopens(self):
         from pysat.solvers import Glucose4
         class Probe(list):

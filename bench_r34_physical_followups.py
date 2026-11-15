@@ -99,12 +99,80 @@ def contour_results(p, full):
     return dict(root=controls(p,16,3 if full else 0),ring=controls(ring_puzzle(),6,6))
 
 
+def check_restored_mate_prefixes(p, api):
+    """Restore the three real non-loop forbidden mates above the prefix ownership floor."""
+    from dfs_gpu import DFS, fill_order
+    from gpu_reasoning import pack_frame
+    import numpy as np
+    if api == 'CUDA':
+        factory, kwargs = DFS, {}
+    else:
+        import wgpu
+        from dfs_webgpu import WebGPUDFS
+        adapter = next(a for a in wgpu.gpu.enumerate_adapters_sync()
+                       if a.info['backend_type'] == api and a.info['adapter_type'] == 'DiscreteGPU')
+        factory, kwargs = WebGPUDFS, {'adapter': adapter}
+    rules = inventory(p)
+    pairs = sorted(rules.forbidden - rules.loops)
+    order = fill_order(p.neighbors)
+    a = int(order[0])
+    results = {}
+    for dynamic in (False, True):
+        # Exercise a dynamic child whose static order rank differs from its actual rank.
+        b = (next(int(cell) for cell in p.neighbors[a] if int(cell) != int(order[1]))
+             if dynamic else int(order[1]))
+        side = list(p.neighbors[a]).index(b)
+        other_side = int(p.sides[a, side])
+        rows = [[3*(y//3)+(side-y%3)%3, 3*(x//3)+(other_side-x%3)%3] for x, y in pairs]
+        assert len({row[0] for row in rows}) == len(rows) > 0
+        gpu = factory(p.masks, p.neighbors, p.sides, n=len(rows), order=order,
+                      prefixes=[[head] for head, _ in rows], gold_data=p.tiles,
+                      gpu_features={'dynamic_mrv': dynamic}, **kwargs)
+        try:
+            saved = {name: value.copy() for name, value in gpu.snapshot_checkpoint().items()}
+            for lane, (head, child) in enumerate(rows):
+                # Exact stack representation of a legacy search which consumed this child first.
+                key = other_side*gpu.colors + int(gpu.host_reverse[head,side])
+                first, end = map(int, gpu.host_single_offsets[key:key+2])
+                shift, = np.flatnonzero(gpu.host_pool[first:end] == child)
+                frame = pack_frame(first, int(shift), b) if dynamic else (first, int(shift))
+                saved['firsts'][1,lane], saved['shifts'][1,lane] = frame
+                saved['lengths'][1,lane] = end-first
+                saved['cursors'][1,lane] = 1
+                saved['boards'][b,lane] = child
+                tile = child//3
+                saved['used'][tile//32,lane] |= np.uint32(1 << (tile%32))
+                saved['depths'][lane] = saved['maxdepths'][lane] = 2
+            gpu.restore_checkpoint(saved)
+            gpu.verify()
+            gpu.step(1)
+            gpu.verify()
+            post = gpu.snapshot_checkpoint()
+            for lane, (head, child) in enumerate(rows):
+                assert int(post['states'][lane]) == 0 and int(post['depths'][lane]) == 1
+                assert post['boards'][a,lane] == head and post['boards'][b,lane] == -1
+                assert np.count_nonzero(post['boards'][:,lane] >= 0) == 1
+            for field in ('prefix_codes','firsts','lengths','cursors','shifts','rng'):
+                np.testing.assert_array_equal(post[field],saved[field])
+            assert list(map(int, post['counters'].sum(axis=1))) == [0,0,len(rows)]
+            results['dynamic' if dynamic else 'static'] = dict(lanes=len(rows), unplaced=len(rows),
+                sibling_cursors_preserved=True, restored_active=len(rows), child_static_rank=int(np.where(order==b)[0][0]))
+        finally:
+            if hasattr(gpu,'close'):
+                gpu.close()
+    return results
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--tiles',default='data/tiles.json')
     parser.add_argument('--root-lifts',action='store_true')
+    parser.add_argument('--gpu-prefix', choices=('CUDA','D3D12','Vulkan','Metal'))
     args=parser.parse_args()
     puzzle=SearchProblem(read_json(args.tiles))
+    if args.gpu_prefix:
+        print(json.dumps(check_restored_mate_prefixes(puzzle,args.gpu_prefix),indent=2))
+        return
     print(json.dumps(dict(phases=phase_results(puzzle),mates=mate_results(puzzle),donors=donor_results(puzzle),
                           contours=contour_results(puzzle,args.root_lifts)),indent=2))
 

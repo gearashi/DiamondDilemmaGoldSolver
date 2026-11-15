@@ -93,3 +93,27 @@ class PhaseContinuation(unittest.TestCase):
                     proceed.set()
                     self.assertEqual([a.result()['best']['score'],b.result()['best']['score']],[first,second])
                 self.assertEqual(rounds,list(range(1,65)))
+
+    def test_shared_phase_rows_support_legacy_and_detect_corrupt_or_missing_data(self):
+        from r34_signed_snapshot import archive,expand
+        from types import SimpleNamespace
+        signed=SimpleNamespace(scope='a',dart_phases=np.zeros(15,np.int8),prices={3:np.arange(15)%2==0})
+        with closing(sqlite3.connect(':memory:')) as db,db:
+            a=dict(cursor=8,dart_prices=snapshot(signed))
+            b=dict(cursor=16,dart_prices=snapshot(signed))
+            saved_a=archive(db,a)
+            saved_b=archive(db,b)
+            self.assertEqual(saved_a['dart_price_blob'],saved_b['dart_price_blob'])
+            self.assertEqual(db.execute('SELECT COUNT(*) FROM r34_price_blobs').fetchone()[0],1)
+            self.assertEqual(expand(db,saved_a.copy()),a)
+            self.assertEqual(expand(db,a.copy()),a)
+            self.assertEqual(expand(db,saved_b.copy()),b)
+            signed.prices[4]=np.arange(15)%3==0
+            c=archive(db,dict(cursor=24,dart_prices=snapshot(signed)))
+            self.assertNotEqual(c['dart_price_blob'],saved_a['dart_price_blob'])
+            db.execute("UPDATE r34_price_blobs SET payload='broken'")
+            with self.assertRaisesRegex(ValueError,'damaged'):
+                expand(db,saved_a.copy())
+            db.execute('DELETE FROM r34_price_blobs')
+            with self.assertRaisesRegex(ValueError,'Missing'):
+                expand(db,c.copy())

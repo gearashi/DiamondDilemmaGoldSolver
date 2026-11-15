@@ -39,12 +39,11 @@ def split_cubes(cubes,count):
 
 def inventory_screen(cubes,n):
     """Preflight queued physical inventories and retain a Hall witness for each cut."""
-    from constraint_advanced import _complete_matching
+    from constraint_deep import hall_certificate
     from constraint_pruning import _tile_choices
     full=(1<<n)-1
     live=[]
     closed=[]
-    hint=None
     for box in cubes:
         rows=tuple(map(_tile_choices,box))
         groups={}
@@ -62,26 +61,18 @@ def inventory_screen(cubes,n):
                 if tiles==full:
                     continue
                 if tiles&used:
-                    matching=_complete_matching(rows,hint=hint)
-                    if matching is None:
-                        # Full-domain cells can always take the remaining tiles.
-                        # Minimize only a failed restricted graph for a compact
-                        # Hall witness independently checked below.
-                        cells=[c for c,row in enumerate(rows) if row!=full]
-                        for c in tuple(cells):
-                            subset=[i for i in cells if i!=c]
-                            if _complete_matching(tuple(rows[i] for i in subset)) is None:
-                                cells=subset
-                        cells=tuple(cells)
-                        union=0
-                        for c in cells:
-                            union|=rows[c]
+                    # Any injection for the restricted cells extends to the
+                    # full-domain cells. Avoid matching those broad rows.
+                    restricted=[c for c,row in enumerate(rows) if row!=full]
+                    proof=hall_certificate(tuple(rows[c] for c in restricted))
+                    if proof is None:
+                        live.append(box)
+                    else:
+                        local,union=proof
+                        cells=tuple(restricted[i] for i in local)
                         if union.bit_count()>=len(cells):
                             raise ArithmeticError("Matching failed without a deficient tile set.")
                         closed.append((box,cells))
-                    else:
-                        hint=matching
-                        live.append(box)
                     break
                 used|=tiles
             else:
