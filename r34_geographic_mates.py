@@ -2,11 +2,12 @@
 from collections import Counter
 from functools import lru_cache
 
-from r32_gold_bonds import forbidden_codes, inventory
+from r32_gold_bonds import forbidden_codes
+from r35_physical_adjacency import geographic_inventory
 
 
 def _post(problem, domains, emit, check):
-    rules = inventory(problem)
+    rules = geographic_inventory(problem)
     rows = [set(row) for row in domains]
     count = Counter()
     claims = getattr(problem,'physical_conflicts',())

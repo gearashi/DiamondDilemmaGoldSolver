@@ -1,0 +1,222 @@
+{
+  "root": {
+    "before": 3036,
+    "after": 3035,
+    "removed": [
+      [
+        319,
+        365
+      ]
+    ],
+    "fixed_capacity": 1,
+    "multiplicity": 1,
+    "cp_pair_limits": 133
+  },
+  "residuals": [
+    {
+      "pins": 4,
+      "local_closed": 0,
+      "newly_closed_over_corner": 0,
+      "connectivity_only_closed": 0,
+      "undecided_connectivity": 0,
+      "retained_mates_removed": 11,
+      "distinct_from_corners_on_both_survivors": 0,
+      "fixed_capacity": 11,
+      "neighbor_hall": 0,
+      "independently_infeasible_pose_checks": 11
+    },
+    {
+      "pins": 12,
+      "local_closed": 0,
+      "newly_closed_over_corner": 0,
+      "connectivity_only_closed": 0,
+      "undecided_connectivity": 0,
+      "retained_mates_removed": 17,
+      "distinct_from_corners_on_both_survivors": 0,
+      "fixed_capacity": 17,
+      "neighbor_hall": 0,
+      "independently_infeasible_pose_checks": 17
+    },
+    {
+      "pins": 24,
+      "local_closed": 0,
+      "newly_closed_over_corner": 0,
+      "connectivity_only_closed": 0,
+      "undecided_connectivity": 0,
+      "retained_mates_removed": 24,
+      "distinct_from_corners_on_both_survivors": 0,
+      "fixed_capacity": 24,
+      "neighbor_hall": 0,
+      "independently_infeasible_pose_checks": 24,
+      "prior_matching_closed": 1
+    },
+    {
+      "pins": 48,
+      "local_closed": 0,
+      "newly_closed_over_corner": 0,
+      "connectivity_only_closed": 0,
+      "undecided_connectivity": 0,
+      "retained_mates_removed": 25,
+      "distinct_from_corners_on_both_survivors": 0,
+      "fixed_capacity": 25,
+      "neighbor_hall": 0,
+      "independently_infeasible_pose_checks": 25,
+      "prior_matching_closed": 2
+    },
+    {
+      "pins": 96,
+      "local_closed": 0,
+      "newly_closed_over_corner": 0,
+      "connectivity_only_closed": 0,
+      "undecided_connectivity": 0,
+      "retained_mates_removed": 8,
+      "distinct_from_corners_on_both_survivors": 0,
+      "fixed_capacity": 8,
+      "neighbor_hall": 0,
+      "independently_infeasible_pose_checks": 8,
+      "prior_matching_closed": 6
+    },
+    {
+      "pins": 144,
+      "prior_matching_closed": 10
+    }
+  ],
+  "planted": [
+    {
+      "seed": 35,
+      "prior": {
+        "status": "GOLD",
+        "cp_calls": 13,
+        "branches": 1198
+      },
+      "local": {
+        "status": "GOLD",
+        "cp_calls": 13,
+        "branches": 1198
+      },
+      "connectivity": {
+        "status": "GOLD",
+        "cp_calls": 13,
+        "branches": 1198
+      },
+      "channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      }
+    },
+    {
+      "seed": 71,
+      "prior": {
+        "status": "GOLD",
+        "cp_calls": 34,
+        "branches": 8575
+      },
+      "local": {
+        "status": "GOLD",
+        "cp_calls": 14,
+        "branches": 2721
+      },
+      "connectivity": {
+        "status": "GOLD",
+        "cp_calls": 14,
+        "branches": 2721
+      },
+      "channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      }
+    },
+    {
+      "seed": 103,
+      "prior": {
+        "status": "UNKNOWN",
+        "cp_calls": 40,
+        "branches": 10805
+      },
+      "local": {
+        "status": "UNKNOWN",
+        "cp_calls": 40,
+        "branches": 10805
+      },
+      "connectivity": {
+        "status": "UNKNOWN",
+        "cp_calls": 40,
+        "branches": 10805
+      },
+      "channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      }
+    },
+    {
+      "seed": 157,
+      "prior": {
+        "status": "GOLD",
+        "cp_calls": 9,
+        "branches": 180
+      },
+      "local": {
+        "status": "GOLD",
+        "cp_calls": 7,
+        "branches": 223
+      },
+      "connectivity": {
+        "status": "GOLD",
+        "cp_calls": 7,
+        "branches": 223
+      },
+      "channel": {
+        "status": "GOLD",
+        "cp_calls": 1,
+        "branches": 0
+      }
+    }
+  ],
+  "native_prefixes_prior_then_trial": {
+    "CUDA": [
+      {
+        "exhausted": 2,
+        "tries": 2,
+        "placements": 0,
+        "backtracks": 2
+      },
+      {
+        "exhausted": 2,
+        "tries": 0,
+        "placements": 0,
+        "backtracks": 2
+      }
+    ],
+    "Vulkan": [
+      {
+        "exhausted": 2,
+        "tries": 2,
+        "placements": 0,
+        "backtracks": 2
+      },
+      {
+        "exhausted": 2,
+        "tries": 0,
+        "placements": 0,
+        "backtracks": 2
+      }
+    ],
+    "D3D12": [
+      {
+        "exhausted": 2,
+        "tries": 2,
+        "placements": 0,
+        "backtracks": 2
+      },
+      {
+        "exhausted": 2,
+        "tries": 0,
+        "placements": 0,
+        "backtracks": 2
+      }
+    ]
+  }
+}

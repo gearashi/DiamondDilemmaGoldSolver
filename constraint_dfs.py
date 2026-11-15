@@ -250,8 +250,9 @@ def _build_support_tables(problem, initial, target, check):
     forbidden = ()
     physical_gold_support = target == 'gold' and problem.physical_gold_support
     if physical_gold_support:
-        from r32_gold_bonds import inventory, forbidden_codes
-        forbidden = inventory(problem).forbidden
+        from r32_gold_bonds import forbidden_codes
+        from r35_physical_adjacency import geographic_inventory
+        forbidden = geographic_inventory(problem).forbidden
     compatible, groups = [], []
     for side in range(3):
         compatible_row, groups_row = [], []

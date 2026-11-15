@@ -76,12 +76,12 @@ def ensure_disjoint_prefixes(prefixes):
 
 @lru_cache(maxsize=4)
 def _physical_gold_table(topology):
-    """Closed-board Gold mating restrictions depend only on physical segment pairs."""
+    """Physical Gold restrictions for the three distinct cell neighbors accepted by this engine."""
     from search_problem import SearchProblem
-    from r32_gold_bonds import inventory
+    from r35_physical_adjacency import geographic_inventory
     tiles=[{'id':str(i),'segments':[[pair[:2],pair[2:]] for pair in segments]}
            for i,segments in enumerate(topology)]
-    blocked=inventory(SearchProblem(tiles)).forbidden
+    blocked=geographic_inventory(SearchProblem(tiles)).forbidden
     if blocked:
         table=np.zeros((480,15),np.uint32)
         for a,b in blocked:

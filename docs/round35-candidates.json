@@ -43,7 +43,14 @@
       "source_id": 3,
       "title": "Enforce simple-mesh adjacency and physical-neighbor structure in the partner model",
       "proposal_and_validation": "Two original cells share at most one seam, so two tile identities cannot select multiple physical bonds to one another. Group r30_gold.GoldMatching.mate by unordered tile pair and limit it by the observed maximum multiplicity on the actual mesh. r32_gold_bonds.inventory currently excludes same-tile pairs and relies on separate side matching and path checks. The R25 joint-support rule is about neighbor *cells* in geographic domains. In the physical mate relaxation, test neighbor all-different on a tile's three sides for simple cubic meshes and propagate surviving supports, including cross-mask interactions. For sufficiently narrowed mate graphs, test the actual mesh's verified vertex-connectivity as a further condition: the optimistic *tile* graph must remain connected after every deletion of one or two tiles for which the mesh does. Check only when justified by graph size/selectivity. R27's pair separator scan concerns strand vertices. Existing R28 boundary-supply checks bound small tile subsets. Compare additive rejections over those checks and pose packing. Include multi-edge meshes, open/generic meshes (guard or disable), same tile pair opposite rotations, restricted bonds, and held-out partial sewings. If no selectable duplicates or independent cut obstructions exist at relevant depths, close the corresponding refinement.",
-      "state": "in progress"
+      "state": "keep with exact scope",
+      "evidence": [
+        "docs/ROUND35_PHYSICAL_ADJACENCY.md",
+        "docs/R35_PHYSICAL_ADJACENCY.json",
+        "test_r35_physical_adjacency.py"
+      ],
+      "decision": "Retain verified target-mesh capacity in the geographic Gold lookup and explicit physical-model bounds. On both actual forbidden prefixes CUDA, Vulkan and D3D12 used zero candidate tries, previously two per backend. All 85 local removals on 41 surviving original residuals independently fail geographic poses and overlap #2 on mutual survivors. All two-vertex scans finished without a further original cut. Keep the existing full geographic channel default.",
+      "reopen_if": "A narrowed physical tile graph passes mandatory corners yet exhibits a new Hall or separator obstruction at representative search depth."
     },
     {
       "id": 4,
@@ -51,7 +58,7 @@
       "source_id": 4,
       "title": "Price short physical tile-adjacency words against the mesh",
       "proposal_and_validation": "When following non-backtracking physical tile bonds, the two sides used at every intermediate tile specify a left/right turn. Precompute the walk of each short turn word from every oriented cell of the target mesh. A closed polygon of distinct physical tiles requires a return to the initial pose with the prescribed headings and no internal duplicate cells. For witnessed impossible words learn explicitly scoped co-selection nogoods over just the participating side pairs, including two distinct physical paths between the same named tiles that imply incompatible relative poses. Use anchored domains as an optional finer table. r28_geo_sewing.PosePacking and the R27 partial component embedder already discover contradictions by enumerating root poses for each named component. The proposed reusable object is shared across different physical identities with the same oriented mesh word, and can be applied before a complete sewing. Constant-turn words overlap item 2; restrict the comparison here to mixed-turn words. Use short-word registry cardinalities as a stop gate. Compare all flags to direct traversal including reversed roots/words on small target meshes. Count reused nonconstant word obstructions, earlier exclusions and saved component root trials.",
-      "state": "open"
+      "state": "in progress"
     },
     {
       "id": 5,

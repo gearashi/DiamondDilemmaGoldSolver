@@ -183,8 +183,9 @@ class DomainCUDA:
         for code,rows in enumerate(self.problem._segment_ports):ports[code]=np.asarray(rows,dtype=np.int32).ravel().view(np.uint32)
         masks=np.asarray(self.problem.masks,np.uint32)
         reverse=np.asarray([[reverse_mask(value) for value in row] for row in masks],np.uint32)
-        from r32_gold_bonds import inventory, forbidden_codes
-        excluded = inventory(self.problem).forbidden if self.target == 'gold' else ()
+        from r32_gold_bonds import forbidden_codes
+        from r35_physical_adjacency import geographic_inventory
+        excluded = geographic_inventory(self.problem).forbidden if self.target == 'gold' else ()
         compatible=np.zeros((9,self.nc,self.words),np.uint32)
         for side in range(3):
             for other_side in range(3):

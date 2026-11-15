@@ -172,7 +172,7 @@ def embedding(problem, domains, mates):
 
 
 class GoldMatching:
-    def __init__(self,problem,domains,pins,bonds,cutsets=(),forbidden=(),*,physical_support=True,project_blanks=False,corner_mode=None):
+    def __init__(self,problem,domains,pins,bonds,cutsets=(),forbidden=(),*,physical_support=True,project_blanks=False,corner_mode=None,neighbor_mode=None):
         self.problem=problem
         self.domains=domains
         self.inputs=EndpointCuts(problem)
@@ -209,6 +209,12 @@ class GoldMatching:
                     supported = rows
                 options = [] if supported is None else [
                     (a,b) for a,b in options if b in supported[a]]
+        self.neighbor_stats = None
+        if neighbor_mode:
+            from r35_physical_adjacency import filter_neighbors
+            allowed,self.neighbor_stats = filter_neighbors(problem,set(options)-banned,wanted,
+                                                           connect=neighbor_mode=='connectivity')
+            options=sorted(allowed)
         self.corner_state = None
         self.corner_stats = None
         if corner_mode:
@@ -252,6 +258,9 @@ class GoldMatching:
                 self.m.add(self.mate[pair]==1)
             else:
                 self.m.add_bool_or([])
+        if neighbor_mode:
+            from r35_physical_adjacency import post_tile_limits
+            self.neighbor_stats['pair_bounds']=post_tile_limits(self)
         if corner_mode=='positions':
             from r35_corner_chains import post_positions
             self.corner_stats['positions'] = post_positions(self)
@@ -400,7 +409,7 @@ class GoldMatching:
 
 def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=(), matching=True,
            geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=(),
-           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None):
+           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None):
     from ortools.sat.python import cp_model
     if seconds<=0 or max_rounds<1 or (geography and not matching):
         raise ValueError("Invalid Gold solve budget or mode.")
@@ -411,6 +420,8 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             raise ValueError("Invalid physical side index.")
     started=time.monotonic()
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
+    if neighbor_mode not in (None,'local','connectivity') or (neighbor_mode and not geography):
+        raise ValueError("Physical tile-neighbor constraints require an embed search.")
     if corner_mode not in (None,'chains','packing','positions') or (corner_mode and not geography):
         raise ValueError("Corner constraints require an embed search and a supported corner mode.")
     if type(project_blanks) is not bool:
@@ -424,7 +435,9 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             stats['blank_projection_fallback'] = 'full-side channel, pricing, bridge, reference-loss, or vertex position model'
             project_blanks = False
         check=GoldMatching(problem,domains,pins,bonds,cutsets,forbidden,physical_support=physical_support,
-                           project_blanks=project_blanks,corner_mode=corner_mode)
+                           project_blanks=project_blanks,corner_mode=corner_mode,neighbor_mode=neighbor_mode)
+        if neighbor_mode:
+            stats['tile_neighbor_preprocessing']=check.neighbor_stats
         if corner_mode:
             stats.update(corner_preprocessing=check.corner_stats,corner_sewing_cuts=0)
         if check.blank_projection is not None:
@@ -589,6 +602,8 @@ def main():
     cli.add_argument("--input",type=Path)
     cli.add_argument("--seconds",type=float,default=5)
     cli.add_argument("--rounds",type=int,default=32)
+    cli.add_argument("--neighbor-mode",choices=("local","connectivity"),
+                     help="Check tile-neighbor multiplicity/Hall support and optionally target-mesh connectivity.")
     cli.add_argument("--corner-mode",choices=("chains","packing","positions"),
                      help="Check partial physical vertex rings when embedding a sewing.")
     cli.add_argument("--project-blanks",action="store_true",
@@ -600,6 +615,9 @@ def main():
     data=read_json(args.input) if args.input else {}
     project_blanks=args.project_blanks or data.get('project_blanks',False)
     corner_mode=args.corner_mode or data.get('corner_mode')
+    neighbor_mode=args.neighbor_mode or data.get('neighbor_mode')
+    if neighbor_mode and args.method!='embed':
+        cli.error('--neighbor-mode requires embed.')
     if corner_mode and args.method!='embed':
         cli.error('--corner-mode requires embed.')
     if project_blanks and args.method not in ('embed','matching'):
@@ -641,8 +659,8 @@ def main():
         out=search(problem,matching=args.method!='types',geography=args.method=='embed',
                    cutsets=data.get('strand_cuts',()),type_cuts=reusable,max_rounds=args.rounds,
                    learned_geometry=args.method=="embed" and data.get("learn_geography",True),
-                   channel=data.get("channel",args.method=="embed" and not project_blanks and not corner_mode),
-                   corner_mode=corner_mode,
+                   channel=data.get("channel",args.method=="embed" and not project_blanks and not corner_mode and not neighbor_mode),
+                   corner_mode=corner_mode,neighbor_mode=neighbor_mode,
                    project_blanks=project_blanks,fraction=data.get("fractional",False),
                    bridges=[*data.get("bridges",()),*prior.get("bridge_hints",())],
                    geographic_cores=prior.get("geographic_cores",()) if args.method=="embed" else (),
