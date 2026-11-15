@@ -59,10 +59,26 @@ def _pages(n,plans,sizes,limit):
 
 
 def _restore(arrays,start,descriptor,raw):
+    n=int(descriptor[0])
+    if not (0<n<=131072 and int(descriptor[1])==(n+127)//128 and int(descriptor[2])==start
+            and 0<=start<=160 and len(descriptor)>=3 and (len(descriptor)-3)%10==0
+            and (len(descriptor)-3)//10<=160-start and len(arrays)==4
+            and all(a.shape==(160,n) for a in arrays)):
+        raise ValueError('Invalid physical frame decoder dimensions.')
     end=0
     for row,plan in enumerate(descriptor[3:].reshape(-1,10),start):
         mode,low,high,base,directory,count,a,b,widths,total=map(int,plan)
-        if not mode:continue
+        if base!=end:raise ValueError('Noncontiguous physical frame payload.')
+        if not mode:
+            if (count,directory,low,high,a,b,widths,total)!=(0,0,n,0,0,0,0,0):
+                raise ValueError('Invalid empty frame row.')
+            continue
+        if mode not in (1,2,3) or not 0<=low<high<=n or not 0<count<=high-low:
+            raise ValueError('Invalid nondefault physical frame bounds.')
+        expected=(0,(high-1)//32-low//32+1,count)[mode-1]
+        field_widths=[(widths>>(5*i))&31 for i in range(4)]
+        if directory!=expected or widths>>20 or max(field_widths)>16 or sum(field_widths)!=total:
+            raise ValueError('Invalid physical frame layout.')
         directory_data=raw[base:base+directory]
         if mode==1:
             ids=slice(low,high);take=high-low
@@ -77,6 +93,13 @@ def _restore(arrays,start,descriptor,raw):
         words=(total*take+31)//32
         end=base+directory+words
         if end>len(raw):raise ValueError('Truncated physical frame data.')
+        bits=(total*take)&31
+        if bits and int(raw[end-1])>>bits:raise ValueError('Nonzero physical frame padding.')
+        if not total and mode==1:
+            values=(a&65535,a>>16,b&65535,b>>16)
+            if count!=take or values==DEFAULTS:raise ValueError('Invalid constant nondefault physical frame row.')
+            for target,value in zip(arrays,values):target[row,ids]=value
+            continue
         stream=np.zeros(words+1,np.uint32)
         stream[:words]=raw[base+directory:end]
         offsets=np.arange(take,dtype=np.uint32)*total
@@ -98,8 +121,45 @@ def _restore(arrays,start,descriptor,raw):
     if end!=len(raw):raise ValueError('Unconsumed physical frame payload.')
 
 
+
+def _worth_unpacking(plans, *, web, native):
+    # On a warm pool the CPU can become more expensive than the avoided transfer.
+    # Constant or untouched rows need only their already measured default/range.
+    varying=plans[:,9]!=0
+    records=np.where(plans[:,0]==1,plans[:,2].astype(np.int64)-plans[:,1],plans[:,5])
+    return int(records[varying].sum())<=262144 or (web and native)
+
+
+def verified_restore(directory=None):
+    """Use the same source- and binary-checked library as the other physical checkpoint decoders."""
+    import ctypes
+    from r35_board_codec import verified_library
+    library = verified_library(directory)
+    if library is None:
+        return None
+    try:
+        unpack = library.dd_restore_default_frames
+    except AttributeError:
+        return None
+    words = np.ctypeslib.ndpointer(dtype=np.uint32, ndim=1, flags=('C_CONTIGUOUS', 'ALIGNED'))
+    field = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags=('C_CONTIGUOUS', 'ALIGNED', 'WRITEABLE'))
+    unpack.argtypes = [ctypes.c_uint32]*3 + [words, words] + [field]*4
+    unpack.restype = ctypes.c_int
+    def restore(arrays,start,descriptor,raw):
+        if (len(arrays) != 4 or len(descriptor) < 3 or (len(descriptor)-3)%10 or
+                int(descriptor[2]) != start or len(raw) > 2**32-1):
+            raise ValueError('Invalid physical frame decoder dimensions.')
+        n = int(descriptor[0])
+        if any(a.shape != (160,n) for a in arrays):
+            raise ValueError('Invalid physical frame decoder destination.')
+        if not unpack(n,(len(descriptor)-3)//10,len(raw),descriptor,raw,*arrays):
+            raise ValueError('Invalid nondefault physical frame data.')
+    return restore
+
 class FrameDefaults:
-    def __init__(self,gpu):
+    def __init__(self,gpu,*,native_directory=None,force=False):
+        self.force=force
+        self.decoder=verified_restore(native_directory)
         self.gpu=gpu
         self.web=getattr(gpu,'backend',None)=='webgpu'
         self.kernels=None
@@ -189,6 +249,7 @@ class FrameDefaults:
             if not np.array_equal(meta[:,0]!=0,advertised):raise ValueError('Conflicting physical frame activity.')
             plans,sizes=_prices(n,meta)
             self.distribution={mode:int((plans[:,0]==i).sum()) for i,mode in enumerate(('empty','span','bits','indices'))}
+            if not self.force and not _worth_unpacking(plans,web=self.web,native=self.decoder is not None):return None
             pages=list(_pages(n,plans,sizes,limit-1))
             if self.read_bytes+4*sum(size+bool(size) for _,_,size in pages)>=8*160*n:return None
             arrays=empty_frames()
@@ -199,5 +260,5 @@ class FrameDefaults:
                     self.maps+=1;self.read_bytes+=4*len(packet)
                     if packet[0]:raise ValueError('Physical fields changed during frame packing.')
                     raw=packet[1:]
-                _restore(arrays,start,plan,raw)
+                (self.decoder or _restore)(arrays,start,plan,raw)
         return tuple(a.ravel() for a in arrays)

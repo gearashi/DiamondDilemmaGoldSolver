@@ -82,3 +82,79 @@ EXPORT int dd_merge_frame_spans(unsigned n, unsigned k, unsigned size,
     }
     return at == size;
 }
+
+/* Decode rows from the measured, bounded nondefault-frame representation.
+   The four outputs belong to a fresh generation initialized to their physical defaults. */
+EXPORT int dd_restore_default_frames(uint32_t n, uint32_t rows, uint32_t size,
+    const uint32_t *desc, const uint32_t *packet, uint16_t *firsts,
+    uint16_t *lengths, uint16_t *cursors, uint16_t *shifts) {
+    if (!n || n > 131072 || desc[0] != n || desc[1] != (n + 127) / 128 ||
+        desc[2] > 160 || rows > 160 - desc[2]) return 0;
+    uint32_t consumed = 0;
+    for (uint32_t row = 0; row < rows; ++row) {
+        const uint32_t *plan = desc + 3 + 10 * row;
+        uint32_t mode = plan[0], lo = plan[1], hi = plan[2], base = plan[3];
+        uint32_t directory = plan[4], count = plan[5], total = plan[9];
+        if (base != consumed) return 0;
+        if (!mode) {
+            if (count || directory || lo != n || hi || plan[6] || plan[7] || plan[8] || total) return 0;
+            continue;
+        }
+        if (mode > 3 || lo >= hi || hi > n || !count || count > hi-lo) return 0;
+        uint32_t expected = mode == 1 ? 0 : mode == 2 ? (hi-1)/32-lo/32+1 : count;
+        uint32_t take = mode == 1 ? hi-lo : count;
+        uint32_t bias[4], width[4], mask[4], shift[4], bits = 0;
+        for (unsigned f = 0; f < 4; ++f) {
+            bias[f] = (plan[6+f/2] >> (16*(f&1))) & 65535;
+            width[f] = (plan[8] >> (5*f)) & 31;
+            if (width[f] > 16) return 0;
+            mask[f] = (1u << width[f])-1;
+            shift[f] = bits;
+            bits += width[f];
+        }
+        if (plan[8] >> 20 || bits != total || directory != expected) return 0;
+        uint32_t stream_bits = take*total;
+        uint32_t words = (stream_bits+31)/32;
+        if (directory > size-base || words > size-base-directory) return 0;
+        const uint32_t *index = packet+base, *values = index+directory;
+        if ((stream_bits & 31) && values[words-1] >> (stream_bits & 31)) return 0;
+        size_t target = (size_t)(desc[2]+row)*n;
+        uint32_t prior = 0, present = 0, word = 0, bitmap = 0;
+        for (uint32_t i = 0; i < take; ++i) {
+            uint32_t lane = lo+i;
+            if (mode == 2) {
+                while (!bitmap && word < directory) bitmap = index[word++];
+                if (!bitmap) return 0;
+                lane = (lo/32 + word-1)*32 + low_bit(bitmap);
+                bitmap &= bitmap-1;
+            } else if (mode == 3) {
+                lane = index[i];
+            }
+            if (lane < lo || lane >= hi || (i ? lane <= prior : lane != lo) ||
+                (i+1 == take && lane+1 != hi)) return 0;
+            uint32_t value[4], first_bit = i*total;
+            for (unsigned f = 0; f < 4; ++f) {
+                uint32_t v = bias[f];
+                if (width[f]) {
+                    uint32_t at = first_bit+shift[f], off = at&31;
+                    uint32_t val = values[at/32] >> off;
+                    if (off+width[f] > 32) val |= values[at/32+1] << (32-off);
+                    v += val & mask[f];
+                    if (v > 65535) return 0;
+                }
+                value[f] = v;
+            }
+            uint32_t changed = value[0] || value[1] || value[2] != 65535 || value[3];
+            if (!changed && (mode != 1 || i == 0 || i+1 == take)) return 0;
+            present += changed;
+            firsts[target+lane] = (uint16_t)value[0];
+            lengths[target+lane] = (uint16_t)value[1];
+            cursors[target+lane] = (uint16_t)value[2];
+            shifts[target+lane] = (uint16_t)value[3];
+            prior = lane;
+        }
+        if (present != count || (mode == 2 && (bitmap || word != directory))) return 0;
+        consumed += directory+words;
+    }
+    return consumed == size;
+}

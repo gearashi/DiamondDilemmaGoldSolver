@@ -42,7 +42,7 @@ def measure(api,checkpoint,tiles,repeats,previous=None):
         mod=importlib.util.spec_from_file_location('r35_plain_frames',previous/'classic_frame_defaults.py')
         old=importlib.util.module_from_spec(mod)
         mod.loader.exec_module(old)
-    arms={'packed':None,'bounded':FrameDefaults}
+    arms={'packed':None,'bounded':lambda gpu:FrameDefaults(gpu,force=True),'auto':FrameDefaults}
     if old is not None:arms['rows']=old.FrameDefaults
     stages={}
     def reader(arm):
@@ -60,7 +60,7 @@ def measure(api,checkpoint,tiles,repeats,previous=None):
         s={'seconds':seconds,'maps':r.maps,'bytes':r.read_bytes}
         if r.frame_defaults is not None:
             s.update(frame_bytes=r.frame_defaults.read_bytes,frame_maps=r.frame_defaults.maps,
-                     modes=r.frame_defaults.distribution)
+                     modes=r.frame_defaults.distribution, native_decode=bool(getattr(r.frame_defaults,"decoder",None)))
             if r.defaults_disabled:raise ValueError('Frame compression failed and silently fell back.')
         return s
     def stage(name):

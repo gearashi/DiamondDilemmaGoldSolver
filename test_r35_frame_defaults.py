@@ -73,7 +73,106 @@ def packet(fields,dirty,row,desc):
     return np.array(data,np.uint32)
 
 
+
+def check_native(directory):
+    from classic_frame_defaults import verified_restore
+    decode=verified_restore(directory)
+    assert decode is not None
+    n=257
+    fields=control(n)
+    rnd=np.random.default_rng(350680)
+    for r in range(20,60):
+        ids=np.arange(1,n-1,1+r%7)
+        for i,field in enumerate(fields):
+            width=(r+i*5)%17
+            limit=(1<<width)-1
+            values=rnd.integers(0,limit+1,len(ids),dtype=np.uint16)
+            values[:2]=[0,limit]
+            field[r,ids]=values
+    dirty,meta=summary(fields)
+    plans,sizes=_prices(n,meta)
+    widths={(int(word)>>(5*f))&31 for word in plans[:,8] for f in range(4)}
+    assert widths==set(range(17))
+    out=rows(n)
+    for start,desc,size in _pages(n,plans,sizes,int(sizes.max())):
+        raw=packet(fields,dirty,start,desc)
+        decode(out,start,desc,raw)
+    for a,b in zip(out,fields):np.testing.assert_array_equal(a,b)
+    # Single row with one 1-bit field per lane. Padding, bias, counts,
+    # raw word count and descriptor offsets each have an independent adverse control.
+    n=7
+    small=rows(n)
+    small[0][0,:]=[1,2,2,1,2,1,2]
+    dirty,meta=summary(small)
+    plans,sizes=_prices(n,meta)
+    start,desc,size=next(_pages(n,plans,sizes,int(sizes.sum())))
+    raw=packet(small,dirty,start,desc)
+    for f in (decode,_restore):
+        for key,changed in ((3,7),(4,2),(5,n+1),(6,1),(7,12),(8,6),
+                             (9,65535),(11,18),(12,17),(13+8,17)):
+            d=desc.copy();d[key]=changed
+            try:f(rows(n),start,d,raw)
+            except ValueError:pass
+            else:raise AssertionError(('Accepted bad descriptor',key))
+        for bad in (np.r_[raw,np.uint32(2)],raw[:-1],raw|np.uint32(1<<31)):
+            try:f(rows(n),start,desc,bad)
+            except ValueError:pass
+            else:raise AssertionError('Accepted bad packed word count or nonzero padding.')
+    small=rows(2051)
+    small[1][6,::2]=65432
+    small[0][7,1::509]=49200
+    dirty,meta=summary(small)
+    plans,sizes=_prices(2051,meta)
+    start,desc,size=next(_pages(2051,plans,sizes,int(sizes.sum())))
+    raw=packet(small,dirty,start,desc)
+    for row in (6,7):
+        base=int(desc[3+10*row+3])
+        assert int(plans[row,0]) in (2,3)
+        bad=raw.copy()
+        bad[base]=np.uint32(0)
+        try:decode(rows(2051),start,desc,bad)
+        except ValueError:pass
+        else:raise AssertionError('Accepted a damaged directory.')
+
+
 class PriceControls(unittest.TestCase):
+    def test_source_checked_shared_c_decoder_against_independent_packets(self):
+        import json
+        from pathlib import Path
+        import subprocess
+        import sys
+        import tempfile
+        from build_native import _build_one,find_compiler
+        from classic_frame_defaults import verified_restore
+        try:compiler=find_compiler()
+        except RuntimeError:self.skipTest('Optional frame decoder needs a C compiler.')
+        with tempfile.TemporaryDirectory() as temp:
+            self.assertIsNone(verified_restore(temp))
+            _build_one(compiler=compiler,output_dir=temp,stem='r35_board_codec_decode',
+                       manifest_name='physical-board-build.json')
+            subprocess.run([sys.executable,'-B','-c',
+                            'import sys; from test_r35_frame_defaults import check_native; check_native(sys.argv[1])',
+                            temp],check=True)
+            path=Path(temp,'physical-board-build.json')
+            manifest=json.loads(path.read_bytes())
+            manifest['source_sha256']='0'*64
+            path.write_text(json.dumps(manifest))
+            self.assertIsNone(verified_restore(temp))
+
+    def test_large_varying_warm_rows_select_implementation_by_backend_and_decoder(self):
+        from classic_frame_defaults import _worth_unpacking
+        plans=np.zeros((160,10),np.uint32)
+        plans[:90,0]=1
+        plans[:90,2]=plans[:90,5]=131072
+        self.assertTrue(_worth_unpacking(plans,web=False,native=False))
+        plans[:90,9]=36
+        for web in (True,False):
+            for native in (True,False):
+                self.assertEqual(_worth_unpacking(plans,web=web,native=native),web and native)
+        plans[1:,9]=0
+        self.assertTrue(_worth_unpacking(plans,web=False,native=False))
+
+
     def test_all_physical_directory_forms_and_batch_boundaries(self):
         n=2051
         fields=control(n)

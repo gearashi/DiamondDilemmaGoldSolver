@@ -312,7 +312,8 @@ jobs:
                   'test_webgpu.NativeTests.test_sequential_replay_tables_recheck_contents_and_restore_dirty_policy',
                   'test_r35_checkpoint_ranges.WebTests',
                   'test_r35_board_delta.WebDeltaTests.test_packets_match_independent_bits_readback_and_immutable_generations',
-                  'test_r35_frame_packet.WebPacketTests.test_nonconsecutive_windows_and_immutable_frame_tails_match_physical_copy'],
+                  'test_r35_frame_packet.WebPacketTests.test_nonconsecutive_windows_and_immutable_frame_tails_match_physical_copy',
+                  'test_r35_frame_defaults.WebDefaultTests.test_cold_arbitrary_restored_tails_dense_fallback_and_reinstalled_lanes'],
                   env=env, check=True)
           else:
               print('Hardware Metal replay checks unavailable on this runner.', adapters)
@@ -369,7 +370,8 @@ jobs:
           chmod 700 "$XDG_RUNTIME_DIR"
           python -B -m unittest -v \
             test_r35_board_delta.WebDeltaTests.test_packets_match_independent_bits_readback_and_immutable_generations \
-            test_r35_frame_packet.WebPacketTests.test_nonconsecutive_windows_and_immutable_frame_tails_match_physical_copy
+            test_r35_frame_packet.WebPacketTests.test_nonconsecutive_windows_and_immutable_frame_tails_match_physical_copy \
+            test_r35_frame_defaults.WebDefaultTests.test_cold_arbitrary_restored_tails_dense_fallback_and_reinstalled_lanes
           python -B -m unittest -v test_webgpu test_webgpu_counters test_r35_checkpoint_ranges test_gpu_sampling test_gpu_sampling_round24 test_gpu_gold test_gpu_reasoning test_gpu_hybrid_reasoning test_gpu_chains_round25.WebGPUChains test_gpu_crossover_round25.WebGPUCrossover test_gpu_gold_scoring_round25.WebGPUGoldScoring test_gpu_temperatures_round25.WebGPUTemperatures test_gpu_incremental_round26.WebGPUIncremental test_gpu_recombination_native_round26.WebGPURecombination
 
   native-sat-evidence:
