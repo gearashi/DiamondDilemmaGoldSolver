@@ -11,6 +11,23 @@ REFERENCE_PHASE = 0xd237aba7e99101e88041403e8c589902025e5326
 REFERENCE_PHASES = (REFERENCE_PHASE,0xce55aaa6e89109fca073547e8c580ba32e0e5fa2)
 
 
+# Cap 20 of the thirteen-group model is independently refuted. These three
+# obligations supplement the source-bound ten in REFERENCE_SCOPE.
+OVERLAPPING_OBLIGATIONS = frozenset({
+    frozenset({(115,176), (174,382), (285,383)}),
+    frozenset({(14,473), (54,433), (55,356), (133,354), (355,471)}),
+    frozenset({(26,178), (37,338), (38,331), (177,401), (179,332), (324,399), (325,337)}),
+})
+
+
+def checked_lower_bound(packed_identity, groups):
+    if packed_identity != REFERENCE_SCOPE:
+        return None
+    if OVERLAPPING_OBLIGATIONS.issubset(frozenset(group) for group in groups):
+        return 21
+    return CHECKED_LOWER_BOUND
+
+
 def published_hit(problem, reference, groups, required, outside, identity, cap, integer, phase=REFERENCE_PHASE):
     if identity != REFERENCE_SCOPE:
         return None
@@ -37,9 +54,10 @@ def global_integer(problem, reference, groups, required, outside, cap, seconds, 
         if (identity==REFERENCE_SCOPE and len(outside)==len(set(outside)) and set(outside)==expected
                 and all(set(g)<=allowed for g in additional_groups)):
             kind='all_group_signed_inventory' if additional_groups else 'disjoint_group_signed_inventory'
-            if cap<CHECKED_LOWER_BOUND:
+            bound=checked_lower_bound(identity,additional_groups)
+            if cap<bound:
                 return dict(status='INFEASIBLE',cap=cap,all_outside_layers=True,relaxation=kind,
-                            certified_loss_lower_bound=CHECKED_LOWER_BOUND,
+                            certified_loss_lower_bound=bound,
                             work={'decisions':0,'conflicts':0,'reference_loss_certificate_reused':1})
             for phase in REFERENCE_PHASES:
                 hit=published_hit(problem,reference,[*groups,*additional_groups],required,outside,identity,cap,True,phase)

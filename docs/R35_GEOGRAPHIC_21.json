@@ -1,0 +1,487 @@
+{
+  "scope_bonds": 207,
+  "limit": 186,
+  "individual_conflicts": 13,
+  "bond_assumptions": [
+    {
+      "seed": 0,
+      "explicit_kept": 186,
+      "prior_conflicts": 0,
+      "forced": 186,
+      "discarded": false,
+      "excluded_mates": 21
+    },
+    {
+      "seed": 0,
+      "explicit_kept": 187,
+      "prior_conflicts": 0,
+      "forced": 187,
+      "discarded": true,
+      "excluded_mates": 0,
+      "base": {
+        "status": "UNKNOWN",
+        "cp_calls": 0,
+        "branches": 0
+      },
+      "bound": {
+        "status": "INFEASIBLE",
+        "cp_calls": 0,
+        "branches": 0
+      }
+    },
+    {
+      "seed": 0,
+      "explicit_kept": 188,
+      "prior_conflicts": 0,
+      "forced": 188,
+      "discarded": true,
+      "excluded_mates": 0,
+      "base": {
+        "status": "INFEASIBLE",
+        "cp_calls": 1,
+        "branches": 0
+      },
+      "bound": {
+        "status": "INFEASIBLE",
+        "cp_calls": 0,
+        "branches": 0
+      }
+    },
+    {
+      "seed": 0,
+      "explicit_kept": 189,
+      "prior_conflicts": 0,
+      "forced": 189,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 1,
+      "explicit_kept": 186,
+      "prior_conflicts": 0,
+      "forced": 187,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 1,
+      "explicit_kept": 187,
+      "prior_conflicts": 0,
+      "forced": 188,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 1,
+      "explicit_kept": 188,
+      "prior_conflicts": 0,
+      "forced": 189,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 1,
+      "explicit_kept": 189,
+      "prior_conflicts": 0,
+      "forced": 190,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 2,
+      "explicit_kept": 186,
+      "prior_conflicts": 0,
+      "forced": 186,
+      "discarded": false,
+      "excluded_mates": 21
+    },
+    {
+      "seed": 2,
+      "explicit_kept": 187,
+      "prior_conflicts": 0,
+      "forced": 187,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 2,
+      "explicit_kept": 188,
+      "prior_conflicts": 0,
+      "forced": 188,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 2,
+      "explicit_kept": 189,
+      "prior_conflicts": 0,
+      "forced": 189,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 3,
+      "explicit_kept": 186,
+      "prior_conflicts": 0,
+      "forced": 186,
+      "discarded": false,
+      "excluded_mates": 21
+    },
+    {
+      "seed": 3,
+      "explicit_kept": 187,
+      "prior_conflicts": 0,
+      "forced": 187,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 3,
+      "explicit_kept": 188,
+      "prior_conflicts": 0,
+      "forced": 188,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 3,
+      "explicit_kept": 189,
+      "prior_conflicts": 0,
+      "forced": 189,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 4,
+      "explicit_kept": 186,
+      "prior_conflicts": 0,
+      "forced": 187,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 4,
+      "explicit_kept": 187,
+      "prior_conflicts": 0,
+      "forced": 188,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 4,
+      "explicit_kept": 188,
+      "prior_conflicts": 0,
+      "forced": 189,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 4,
+      "explicit_kept": 189,
+      "prior_conflicts": 0,
+      "forced": 190,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 5,
+      "explicit_kept": 186,
+      "prior_conflicts": 0,
+      "forced": 186,
+      "discarded": false,
+      "excluded_mates": 21
+    },
+    {
+      "seed": 5,
+      "explicit_kept": 187,
+      "prior_conflicts": 0,
+      "forced": 187,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 5,
+      "explicit_kept": 188,
+      "prior_conflicts": 0,
+      "forced": 188,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 5,
+      "explicit_kept": 189,
+      "prior_conflicts": 0,
+      "forced": 189,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 6,
+      "explicit_kept": 186,
+      "prior_conflicts": 0,
+      "forced": 186,
+      "discarded": false,
+      "excluded_mates": 21
+    },
+    {
+      "seed": 6,
+      "explicit_kept": 187,
+      "prior_conflicts": 0,
+      "forced": 187,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 6,
+      "explicit_kept": 188,
+      "prior_conflicts": 0,
+      "forced": 188,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 6,
+      "explicit_kept": 189,
+      "prior_conflicts": 0,
+      "forced": 189,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 7,
+      "explicit_kept": 186,
+      "prior_conflicts": 0,
+      "forced": 186,
+      "discarded": false,
+      "excluded_mates": 21
+    },
+    {
+      "seed": 7,
+      "explicit_kept": 187,
+      "prior_conflicts": 0,
+      "forced": 187,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 7,
+      "explicit_kept": 188,
+      "prior_conflicts": 0,
+      "forced": 188,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 7,
+      "explicit_kept": 189,
+      "prior_conflicts": 0,
+      "forced": 189,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 8,
+      "explicit_kept": 186,
+      "prior_conflicts": 0,
+      "forced": 186,
+      "discarded": false,
+      "excluded_mates": 21
+    },
+    {
+      "seed": 8,
+      "explicit_kept": 187,
+      "prior_conflicts": 0,
+      "forced": 187,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 8,
+      "explicit_kept": 188,
+      "prior_conflicts": 0,
+      "forced": 188,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 8,
+      "explicit_kept": 189,
+      "prior_conflicts": 0,
+      "forced": 189,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 9,
+      "explicit_kept": 186,
+      "prior_conflicts": 0,
+      "forced": 187,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 9,
+      "explicit_kept": 187,
+      "prior_conflicts": 0,
+      "forced": 188,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 9,
+      "explicit_kept": 188,
+      "prior_conflicts": 0,
+      "forced": 188,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 9,
+      "explicit_kept": 189,
+      "prior_conflicts": 0,
+      "forced": 189,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 10,
+      "explicit_kept": 186,
+      "prior_conflicts": 0,
+      "forced": 186,
+      "discarded": false,
+      "excluded_mates": 21
+    },
+    {
+      "seed": 10,
+      "explicit_kept": 187,
+      "prior_conflicts": 0,
+      "forced": 187,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 10,
+      "explicit_kept": 188,
+      "prior_conflicts": 0,
+      "forced": 188,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 10,
+      "explicit_kept": 189,
+      "prior_conflicts": 0,
+      "forced": 189,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 11,
+      "explicit_kept": 186,
+      "prior_conflicts": 0,
+      "forced": 187,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 11,
+      "explicit_kept": 187,
+      "prior_conflicts": 0,
+      "forced": 188,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 11,
+      "explicit_kept": 188,
+      "prior_conflicts": 0,
+      "forced": 189,
+      "discarded": true,
+      "excluded_mates": 0
+    },
+    {
+      "seed": 11,
+      "explicit_kept": 189,
+      "prior_conflicts": 0,
+      "forced": 190,
+      "discarded": true,
+      "excluded_mates": 0
+    }
+  ],
+  "geographic": [
+    {
+      "free": 0,
+      "forced": 207,
+      "discarded": true,
+      "units": 0,
+      "excluded_mates": 0
+    },
+    {
+      "free": 2,
+      "forced": 207,
+      "discarded": true,
+      "units": 0,
+      "excluded_mates": 0
+    },
+    {
+      "free": 5,
+      "forced": 205,
+      "discarded": true,
+      "units": 0,
+      "excluded_mates": 0
+    },
+    {
+      "free": 8,
+      "forced": 199,
+      "discarded": true,
+      "units": 0,
+      "excluded_mates": 0
+    },
+    {
+      "free": 12,
+      "forced": 190,
+      "discarded": true,
+      "units": 0,
+      "excluded_mates": 0
+    },
+    {
+      "free": 20,
+      "forced": 172,
+      "discarded": false,
+      "units": 0,
+      "excluded_mates": 0
+    },
+    {
+      "free": 32,
+      "forced": 147,
+      "discarded": false,
+      "units": 0,
+      "excluded_mates": 0
+    },
+    {
+      "free": 48,
+      "forced": 114,
+      "discarded": false,
+      "units": 0,
+      "excluded_mates": 0
+    },
+    {
+      "free": 80,
+      "forced": 64,
+      "discarded": false,
+      "units": 0,
+      "excluded_mates": 0
+    },
+    {
+      "free": 160,
+      "forced": 7,
+      "discarded": false,
+      "units": 0,
+      "excluded_mates": 0
+    }
+  ],
+  "original_different_sewings": {
+    "raw": 38,
+    "contract": 35
+  }
+}

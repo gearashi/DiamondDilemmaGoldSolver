@@ -5,7 +5,7 @@ from r32_gold_bonds import inventory
 from r32_gold_loss import digest, read_json, reference_groups
 from r32_gold_syndrome import OutsideSyndromes
 from r32_gold_watch import BondWatcher
-from r35_loss_bound import CHECKED_LOWER_BOUND, REFERENCE_SCOPE
+from r35_loss_bound import REFERENCE_SCOPE, checked_lower_bound
 
 
 def certified_reference(problem, codes=None):
@@ -23,7 +23,7 @@ def certified_reference(problem, codes=None):
     packed,required,_=OutsideSyndromes.layout(reference,groups,inventory(problem).required)
     identity=digest([3,problem.fingerprint,sorted(reference),sorted(required),[sorted(g) for g in packed]])
     if identity!=REFERENCE_SCOPE:return None
-    return frozenset(reference),len(reference)-CHECKED_LOWER_BOUND
+    return frozenset(reference),len(reference)-checked_lower_bound(identity,groups)
 
 
 def retained_bound(problem,domains,reference,limit,required=()):

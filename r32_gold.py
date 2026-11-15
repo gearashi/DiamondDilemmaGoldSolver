@@ -142,15 +142,16 @@ def run_syndrome(problem, ref, groups, upper, indices, db_path, seconds, page=20
     total = solved = pages = 0
     witness_hits = None
     identity_key = digest(identity)
-    from r35_loss_bound import CHECKED_LOWER_BOUND, REFERENCE_SCOPE, REFERENCE_PHASES, published_hit
+    from r35_loss_bound import checked_lower_bound, REFERENCE_PHASES, published_hit
     if any(type(e) is not int or not 0 <= e <= len(outside) for e in indices) or type(upper) is not int or upper < 0:
         raise ValueError('Invalid loss cap or outside-error layer')
-    if refine_integer and packed_identity == REFERENCE_SCOPE and upper < CHECKED_LOWER_BOUND:
+    bound=checked_lower_bound(packed_identity,charged_groups) if refine_integer else None
+    if bound is not None and upper < bound:
         covered = sum(comb(len(outside)-min(e,2),max(0,e-2)) for e in indices)
         return dict(status='INFEASIBLE',loss_budget=upper,checked_layers=indices,
                     all_outside_layers=set(indices)>=set(range(max_error+1)),completed_prefixes=covered,
                     total_prefixes=covered,new_pages=0,work={'reference_loss_certificate_reused':1},
-                    certified_loss_lower_bound=CHECKED_LOWER_BOUND,
+                    certified_loss_lower_bound=bound,
                     relaxation="all_group_signed_inventory" if aggregate else "disjoint_group_signed_inventory")
     public_hits={}
     for phase in REFERENCE_PHASES:
