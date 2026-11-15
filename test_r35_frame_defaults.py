@@ -18,11 +18,16 @@ def rows(n):
 def summary(fields):
     dirty=np.logical_or.reduce([a!=d for a,d in zip(fields,DEFAULTS)])
     n=dirty.shape[1]
-    meta=np.zeros((160,3),np.uint32)
+    meta=np.zeros((160,7),np.uint32)
+    meta[:,3:]=65535
     meta[:,1]=n
     for row,line in enumerate(dirty):
         ids=np.flatnonzero(line)
-        if len(ids):meta[row]=len(ids),ids[0],ids[-1]+1
+        if len(ids):
+            meta[row,:3]=len(ids),ids[0],ids[-1]+1
+            for i,field in enumerate(fields):
+                vals=field[row,ids]
+                meta[row,3+i]=int(vals.min())|(int(vals.max())<<16)
     return dirty,meta
 
 
@@ -42,8 +47,8 @@ def control(n):
 
 def packet(fields,dirty,row,desc):
     data=[]
-    for j,(mode,lo,hi,start,directory,count) in enumerate(desc[3:].reshape(-1,6),row):
-        mode,lo,hi,start,count=map(int,(mode,lo,hi,start,count))
+    for j,p in enumerate(desc[3:].reshape(-1,10),row):
+        mode,lo,hi,start,directory,count,base1,base2,widths,total=map(int,p)
         if not mode:continue
         assert len(data)==start
         ids=np.flatnonzero(dirty[j]).tolist()
@@ -53,9 +58,18 @@ def packet(fields,dirty,row,desc):
             for lane in ids:masks[lane//32-lo//32]|=1<<(lane%32)
             data.extend(masks)
         elif mode==3:data.extend(ids)
+        stream=0
+        at=0
         for i in ids:
-            a,b,c,d=(int(field[j,i]) for field in fields)
-            data.extend((a|(b<<16),c|(d<<16)))
+            for f,field in enumerate(fields):
+                bias=((base1 if f<2 else base2)>>(16*(f%2)))&65535
+                width=(widths>>(5*f))&31
+                value=int(field[j,i])-bias
+                assert 0<=value<(1<<width)
+                stream|=value<<at
+                at+=width
+        assert at==total*len(ids)
+        data.extend((stream>>k)&0xffffffff for k in range(0,at,32))
     return np.array(data,np.uint32)
 
 
@@ -74,6 +88,32 @@ class PriceControls(unittest.TestCase):
                 _restore(out,row,desc,data)
             for want,got in zip(fields,out):np.testing.assert_array_equal(want,got)
 
+    def test_lossless_range_packing_for_all_u16_widths_and_odd_bit_offsets(self):
+        n=257
+        fields=rows(n)
+        rnd=np.random.default_rng(5331)
+        for r in range(160):
+            ids=np.arange(r%7,n,1+r%9,dtype=np.int32)
+            for i,field in enumerate(fields):
+                width=(r*(2*i+1)+i)%17
+                limit=(1<<width)-1
+                bias=7*i if width<16 else 0
+                vals=rnd.integers(0,limit+1,len(ids),dtype=np.uint16)
+                vals[:2]=[0,limit]
+                field[r,ids]=vals+bias
+        dirty,meta=summary(fields)
+        plans,sizes=_prices(n,meta)
+        widths={(int(word)>>(5*f))&31 for word in plans[:,8] for f in range(4)}
+        self.assertEqual(widths,set(range(17)))
+        offsets={(rank*int(width))%32 for width in plans[:,9] for rank in range(32)}
+        self.assertEqual(offsets,set(range(32)))
+        out=rows(n)
+        for row,desc,size in _pages(n,plans,sizes,int(sizes.max())):
+            body=packet(fields,dirty,row,desc)
+            self.assertEqual(len(body),size)
+            _restore(out,row,desc,body)
+        for got,want in zip(out,fields):np.testing.assert_array_equal(got,want)
+
     def test_stale_or_damaged_payload_cannot_be_used_as_a_full_frame(self):
         n=2051
         fields=control(n)
@@ -84,12 +124,12 @@ class PriceControls(unittest.TestCase):
         for j in (11,32):
             corrupted=packed.copy()
             at=int(plans[j,0]);self.assertNotEqual(at,0)
-            start=int(desc[3+6*j+3])
+            start=int(desc[3+10*j+3])
             corrupted[start]^=1
             with self.assertRaises(ValueError):
                 _restore(rows(n),row,desc,corrupted)
         for bad in ((0,0,0),(9,5,6),(1,n,n)):
-            changed=meta.copy();changed[0]=bad
+            changed=meta.copy();changed[0,:3]=bad
             with self.assertRaises(ValueError):_prices(n,changed)
 
     def test_small_pool_uses_packed_fallback_without_a_device_request(self):
@@ -119,7 +159,7 @@ class NativeChecks:
                 np.testing.assert_array_equal(a,b)
             return result
         cold=check('empty')
-        self.assertEqual(native.read_bytes,1920)
+        self.assertEqual(native.read_bytes,20)
         for key,field in zip(FIELDS,control(n)):
             getattr(gpu,key)[:,:]=gpu.cp.asarray(field)
         restored=check('sparse')
@@ -129,6 +169,12 @@ class NativeChecks:
         # Arbitrary high-bit tails, even on completely inactive lanes, remain physical data.
         for i,key in enumerate(FIELDS):
             field=np.full((160,n),0xf123+i,np.uint16)
+            getattr(gpu,key)[:,:]=gpu.cp.asarray(field)
+        check('sparse')
+        self.assertEqual(native.maps,2)
+        rng=np.random.default_rng(35068)
+        for key in FIELDS:
+            field=rng.integers(0,65536,size=(160,n),dtype=np.uint16)
             getattr(gpu,key)[:,:]=gpu.cp.asarray(field)
         check('packed')
         for k,field in enumerate(cold):self.assertTrue(np.all(field==DEFAULTS[k]))
