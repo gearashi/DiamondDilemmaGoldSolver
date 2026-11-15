@@ -544,11 +544,19 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
     initial = ([sum(1 << code for code in domain) for domain in problem.domains]
                if _initial_domains is None else list(_initial_domains))
     stats = dict.fromkeys(BASE_STAT_KEYS + CHAIN_STAT_KEYS + PROPAGATION_CURSOR_STATS + RELATION_CERTIFICATE_STATS + PRUNER_STAT_KEYS + CONFLICT_STAT_KEYS + CONNECTIVITY_STAT_KEYS + NATIVE_STAT_KEYS + GUIDANCE_STAT_KEYS + ADVANCED_STAT_KEYS + EXPLANATION_STAT_KEYS + SCHEDULING_STAT_KEYS + KNOWLEDGE_STAT_KEYS + REASON_STAT_KEYS + SAT_ASSIST_STAT_KEYS + ORDERING_STAT_KEYS + SHARED_STAT_KEYS + BRANCH_STAT_KEYS + LCG_STAT_KEYS + GOLD_ORACLE_STAT_KEYS + NATIVE_SEARCH_STAT_KEYS + NATIVE_LEARNING_STAT_KEYS + GROUP_STAT_KEYS + DEEP_STAT_KEYS + POLICY_STAT_KEYS + MASK_STAT_KEYS + RESEARCH_STAT_KEYS + ROUTING_STAT_KEYS + RESIDUAL_STAT_KEYS + HIGHER_STAT_KEYS + REGION26_STATS + ARCHIVE_STATS + SERVICE_STATS + WITNESS_STATS + RELATIONAL_STATS + ('lcg_trace_budget_skips',), 0)
-    stats.update(reference_pose_closed=0,reference_pose_removed=0)
+    stats.update(reference_pose_closed=0,reference_pose_removed=0,cut_dense_inventory_certificates=0)
     pose_receiver=None
     if target=='gold' and getattr(problem,'reference_pose_cuts',False):
         from r35_pose_frontiers import FrontierPoses
         pose_receiver=FrontierPoses(problem)
+    # A policy-free saved cursor keeps its original bounded cut traversal.
+    # An opted-in new cursor can also resume with reference poses disabled.
+    cut_policy = 'dense-inventory-v1'
+    saved_policy = resume.get('cut_inventory_policy') if isinstance(resume,dict) else None
+    if isinstance(resume,dict) and 'cut_inventory_policy' in resume and saved_policy != cut_policy:
+        raise ValueError('Unknown conditional inventory checkpoint policy.')
+    dense_eligible = (resume is None and pose_receiver is not None) or saved_policy == cut_policy
+    dense_inventory = dense_eligible and pose_receiver is not None and options['multi_seam_cuts']
     nodes, previous_elapsed = 0, 0.0
     if resume is not None:
         if not isinstance(resume, dict) or resume.get('version') != VERSION or resume.get('fingerprint') != problem.fingerprint or resume.get('target') != target:
@@ -622,6 +630,11 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             stack.append(frame)
     else:
         stack = [{'domains': initial.copy(), 'cell': -1, 'choices': [], 'next': 0}]
+    if not dense_eligible:
+        # Preserve legacy result/worker schemas. An unmarked frontier cannot
+        # have counted work from this policy.
+        if stats.pop('cut_dense_inventory_certificates'):
+            raise ValueError('Conditional inventory counts need a marked checkpoint.')
     if hints is None:
         normalized_hints = {}
     elif isinstance(hints, dict):
@@ -795,6 +808,8 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
     probe_deadline = None
     pruner_baseline = {key: stats[key] for key in PRUNER_STAT_KEYS}
     connectivity_baseline = {key: stats[key] for key in CONNECTIVITY_STAT_KEYS}
+    dense_baseline = stats.get('cut_dense_inventory_certificates', 0)
+    dense_entry = 0
     advanced_baseline = {key:stats[key] for key in ADVANCED_STAT_KEYS}
     advanced_entry = dict.fromkeys(ADVANCED_STAT_KEYS,0)
     sat_baseline={key:stats[key] for key in SAT_ASSIST_STAT_KEYS}
@@ -866,6 +881,10 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             for key in ADVANCED_STAT_KEYS:
                 stats[key] = (advanced.stats[key] if key in ('regional_cache_entries','separator_cache_entries','hierarchical_cache_entries', 'hierarchical_subtable_entries','hierarchical_subtable_states','hierarchical_subtable_support_slots','hierarchical_cached_summaries','hierarchical_cached_support_slots') else
                               advanced_baseline[key]+advanced.stats[key]-advanced_entry[key])
+            if dense_inventory:
+                supplied = advanced._cut_inventory_cache.certificates - dense_entry
+                stats['cut_dense_inventory_certificates'] = dense_baseline + supplied
+                stats['cut_global_matching_cache_hits'] -= supplied
         if runtime.sat is not None:
             for key in SAT_ASSIST_STAT_KEYS:
                 stats[key]=(runtime.sat.stats[key] if key=='sat_assist_clauses' else sat_baseline[key]+runtime.sat.stats[key]-sat_entry[key])
@@ -1061,6 +1080,8 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
                 'stack': [{'domains': [hex(value) for value in frame['domains']], 'cell': frame['cell'],
                            'choices': frame['choices'].copy(), 'next': frame['next'],
                            **({'choice_masks':[hex(value) for value in frame['choice_masks']]} if 'choice_masks' in frame else {})} for frame in stack]}
+        if dense_eligible:
+            payload['cut_inventory_policy'] = cut_policy
         if options['resumable_reasoning'] and advanced is not None:payload['reasoning_continuation']=advanced.reasoning_snapshot()
         if runtime.local_mask_conflicts is not None and options['smart_learning']:payload['local_mask_conflicts']=runtime.local_mask_conflicts.snapshot()
         if runtime.certificates is not None and options['proof_certificates']:payload['certificates']=runtime.certificates.snapshot()
@@ -1112,13 +1133,20 @@ def _solve_core(problem, *, seconds=10, seed=0, target='gold', hints=None, stop=
             from r32_gold_watch import BondWatcher
             pruner.bond_watcher = BondWatcher(problem,physical_claims,check,geographic=geographic_claims,domains=initial)
         advanced_options = tuple(sorted(options.items()))
+        if dense_inventory:
+            advanced_options += (('cut_inventory_policy',cut_policy),)
         if runtime.advanced is not None and not isinstance(runtime.advanced,AdvancedPruner):
             raise ValueError('The in-memory advanced pruning cache is malformed.')
         if any(options.get(key,True) for key in ('strand_connectivity','multi_seam_cuts','regional_cache','biconnected','separator_regions','hierarchical_regions','extended_regions','symbolic_regions','symbolic_inventory')):
             if runtime.advanced is None or runtime.advanced_options!=advanced_options:
                 runtime.advanced=AdvancedPruner(problem,target=target,options=options)
+                if dense_inventory:
+                    from r35_cut_inventory import CutInventoryCache
+                    runtime.advanced._cut_inventory_cache = CutInventoryCache()
                 runtime.advanced_options=advanced_options
             advanced=runtime.advanced
+            if dense_inventory:
+                dense_entry = advanced._cut_inventory_cache.certificates
             advanced.regional_cache_dir=learning_state.get('_regional_cache_dir')
             if options['resumable_reasoning'] and resume is not None and resume.get('reasoning_continuation') is not None and not advanced._cut_pending:
                 advanced.restore_reasoning(resume['reasoning_continuation'])

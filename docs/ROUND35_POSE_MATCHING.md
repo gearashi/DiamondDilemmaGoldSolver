@@ -25,3 +25,18 @@ python -m unittest test_r35_pose_matching
 ```
 
 The independent finite tests enumerate complete physical assignments and allowed rotations on 300 seeded domains. The shared alternating-path utility is checked against every injection of small square and rectangular matrices. Empty domains, duplicate and malformed images, alternative permitted rotations of a tile, modified puzzle masks and loss of the authenticated theorem have separate controls.
+
+## Dense conditional inventory on CPU DFS
+
+Single-process Gold DFS started with `--reference-pose-cuts` also uses an injective tile-assignment certificate on each bounded seam cut. Each tile fixed by a singleton cell is unavailable elsewhere. The receiver removes those tile bits and sorts the remaining row sizes. Fixing an arbitrary candidate in one free cell consumes at most one choice from every other row. When the i-th smallest of the remaining row sizes has at least i+1 choices before that consumption (one-based), every candidate extends greedily to a legal assignment. Empty or newly singleton residual rows and unmet size bounds use the ordinary matcher. The receiver stores only complete results, using the existing 128-entry cache and one previous miss. A failed check consumes zero units from either matching work budget. Cancellation is checked by the caller immediately before the bounded lookup.
+
+Across 24 original scopes, standard and wide cut budgets returned exactly the same narrowed domain at every cell and recorded the same 54 cut prunes. The certificate supplied 1,467 exact results. It reduced matching callbacks from 1,558,781 to 808,535, SCC support callbacks from 22,619,669 to 15,228,646, and support-budget skips from 2,145 to 798. Sixteen scopes improved. The eight deeper negative controls at depths 20 and 23 had zero certificates and unchanged matching and support callbacks. The twelve held-out depth-5/12/20 scopes independently reduced support callbacks from 12,595,176 to 8,393,381. Testing the row-size criterion without removing already-owned tiles gave only 17 hits across the full sample. These measurements count work within the cut propagator. The experiment did not demonstrate fewer DFS branches or a higher board score.
+
+On a fresh single-process run over the saved depth-5 original DFS domain, the public entry stopped at its fourth certificate with one search node, zero SCC support callbacks and zero memo-table hits. Cold resume preserved the stack and all four counts. The two installed legacy cursors carried no conditional-policy marker. Under both CLI policy choices the zero-budget public resume preserved all 25 DFS frames at 21,184 visited nodes and all 26 inner hybrid DFS frames at 1,348 nodes. Existing unmarked cursors keep the prior matching policy even when reference-pose clauses are requested. A freshly opted-in cursor carries a digest-covered version marker. Switching that cursor off uses the previous matcher and retains eligibility for a later opt-in. Portable, symbolic, and hybrid worker searches keep their own policy. Exact terminal source validation and the byte-fingerprinted original conditional matcher remain intact.
+
+The standalone tests compare all certified results to every injection of 8,457 finite graphs, including square, rectangular and undersupplied universes. They also exercise cancellation, tiny budgets, cache eviction, disjoint high tile IDs, malformed and legacy checkpoints, and resumed planted Gold. Reproduce the original-frame comparison from the project folder when those saved DFS and hybrid stacks are available.
+
+```text
+python bench_r35_cut_inventory.py --tiles data/tiles.json --checkpoints runtime/searches --output cut-inventory-controls.json
+python -m unittest test_r35_cut_inventory
+```

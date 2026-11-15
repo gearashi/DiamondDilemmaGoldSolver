@@ -1,0 +1,506 @@
+[
+  {
+    "frame": "dfs-gold-5",
+    "wide": false,
+    "baseline": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 23174,
+      "cut_global_support_steps": 610223,
+      "cut_global_matching_cache_hits": 8,
+      "cut_global_support_budget_skips": 13,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 12629,
+      "cut_global_support_steps": 90516,
+      "cut_global_matching_cache_hits": 8,
+      "cut_global_support_budget_skips": 0,
+      "cut_dense_inventory_certificates": 24
+    },
+    "output_sha256": "08421a467a37d636ba3b7cffb7ee838e5febe17e2ce58931d1f50f10a3c01817"
+  },
+  {
+    "frame": "dfs-gold-5",
+    "wide": true,
+    "baseline": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 140165,
+      "cut_global_support_steps": 2010223,
+      "cut_global_matching_cache_hits": 9,
+      "cut_global_support_budget_skips": 234,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 23006,
+      "cut_global_support_steps": 897805,
+      "cut_global_matching_cache_hits": 43,
+      "cut_global_support_budget_skips": 5,
+      "cut_dense_inventory_certificates": 217
+    },
+    "output_sha256": "08421a467a37d636ba3b7cffb7ee838e5febe17e2ce58931d1f50f10a3c01817"
+  },
+  {
+    "frame": "dfs-gold-8",
+    "wide": false,
+    "baseline": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 19092,
+      "cut_global_support_steps": 561166,
+      "cut_global_matching_cache_hits": 27,
+      "cut_global_support_budget_skips": 7,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 12065,
+      "cut_global_support_steps": 120272,
+      "cut_global_matching_cache_hits": 28,
+      "cut_global_support_budget_skips": 0,
+      "cut_dense_inventory_certificates": 15
+    },
+    "output_sha256": "a48a851c111c4b141ff99bfd03b76511e4edb29bbaa1f60d95ce1911cbd2a493"
+  },
+  {
+    "frame": "dfs-gold-8",
+    "wide": true,
+    "baseline": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 130207,
+      "cut_global_support_steps": 880570,
+      "cut_global_matching_cache_hits": 30,
+      "cut_global_support_budget_skips": 229,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 59946,
+      "cut_global_support_steps": 520080,
+      "cut_global_matching_cache_hits": 25,
+      "cut_global_support_budget_skips": 88,
+      "cut_dense_inventory_certificates": 153
+    },
+    "output_sha256": "a48a851c111c4b141ff99bfd03b76511e4edb29bbaa1f60d95ce1911cbd2a493"
+  },
+  {
+    "frame": "dfs-gold-12",
+    "wide": false,
+    "baseline": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 21768,
+      "cut_global_support_steps": 437026,
+      "cut_global_matching_cache_hits": 13,
+      "cut_global_support_budget_skips": 13,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 0,
+      "cut_global_support_steps": 0,
+      "cut_global_matching_cache_hits": 13,
+      "cut_global_support_budget_skips": 0,
+      "cut_dense_inventory_certificates": 24
+    },
+    "output_sha256": "c80e92ab8072fd6ba057e96825380f59c0546cfec3b23696368396f11235facf"
+  },
+  {
+    "frame": "dfs-gold-12",
+    "wide": true,
+    "baseline": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 85822,
+      "cut_global_support_steps": 621782,
+      "cut_global_matching_cache_hits": 12,
+      "cut_global_support_budget_skips": 137,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 13054,
+      "cut_global_support_steps": 200000,
+      "cut_global_matching_cache_hits": 12,
+      "cut_global_support_budget_skips": 2,
+      "cut_dense_inventory_certificates": 146
+    },
+    "output_sha256": "48fcaa01b788c2d16d8c4ea56c05a70be3b9fb42bebb9a893989ddd089555421"
+  },
+  {
+    "frame": "dfs-gold-15",
+    "wide": false,
+    "baseline": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 14737,
+      "cut_global_support_steps": 231675,
+      "cut_global_matching_cache_hits": 14,
+      "cut_global_support_budget_skips": 4,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 11581,
+      "cut_global_support_steps": 157873,
+      "cut_global_matching_cache_hits": 14,
+      "cut_global_support_budget_skips": 0,
+      "cut_dense_inventory_certificates": 6
+    },
+    "output_sha256": "3528f97adb7bb726f0eb70bf312c23df37fb289c287830bf64518a61ac87ec24"
+  },
+  {
+    "frame": "dfs-gold-15",
+    "wide": true,
+    "baseline": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 120088,
+      "cut_global_support_steps": 831675,
+      "cut_global_matching_cache_hits": 11,
+      "cut_global_support_budget_skips": 205,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 79868,
+      "cut_global_support_steps": 757989,
+      "cut_global_matching_cache_hits": 11,
+      "cut_global_support_budget_skips": 123,
+      "cut_dense_inventory_certificates": 84
+    },
+    "output_sha256": "3528f97adb7bb726f0eb70bf312c23df37fb289c287830bf64518a61ac87ec24"
+  },
+  {
+    "frame": "dfs-gold-20",
+    "wide": false,
+    "baseline": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 24831,
+      "cut_global_support_steps": 585722,
+      "cut_global_matching_cache_hits": 12,
+      "cut_global_support_budget_skips": 14,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 24831,
+      "cut_global_support_steps": 585722,
+      "cut_global_matching_cache_hits": 12,
+      "cut_global_support_budget_skips": 14,
+      "cut_dense_inventory_certificates": 0
+    },
+    "output_sha256": "4665bfa94d1e85c9e2433ca32eb7489b95c501c13da685dc4dbe00b70e26a2d3"
+  },
+  {
+    "frame": "dfs-gold-20",
+    "wide": true,
+    "baseline": {
+      "cut_prunes": 18,
+      "cut_global_matching_steps": 46205,
+      "cut_global_support_steps": 1276892,
+      "cut_global_matching_cache_hits": 8,
+      "cut_global_support_budget_skips": 30,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 18,
+      "cut_global_matching_steps": 46205,
+      "cut_global_support_steps": 1276892,
+      "cut_global_matching_cache_hits": 8,
+      "cut_global_support_budget_skips": 30,
+      "cut_dense_inventory_certificates": 0
+    },
+    "output_sha256": "d25dbc554f5af22c69ac5987e576f442c294f80e00086f22cd837a9d0b84f3bd"
+  },
+  {
+    "frame": "dfs-gold-23",
+    "wide": false,
+    "baseline": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 19572,
+      "cut_global_support_steps": 357949,
+      "cut_global_matching_cache_hits": 13,
+      "cut_global_support_budget_skips": 11,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 19572,
+      "cut_global_support_steps": 357949,
+      "cut_global_matching_cache_hits": 13,
+      "cut_global_support_budget_skips": 11,
+      "cut_dense_inventory_certificates": 0
+    },
+    "output_sha256": "18f3b835d552974b7cc310aeee9ded2302ad9665990108d8eb0aba6066ad3dc8"
+  },
+  {
+    "frame": "dfs-gold-23",
+    "wide": true,
+    "baseline": {
+      "cut_prunes": 18,
+      "cut_global_matching_steps": 44417,
+      "cut_global_support_steps": 1205446,
+      "cut_global_matching_cache_hits": 8,
+      "cut_global_support_budget_skips": 26,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 18,
+      "cut_global_matching_steps": 44417,
+      "cut_global_support_steps": 1205446,
+      "cut_global_matching_cache_hits": 8,
+      "cut_global_support_budget_skips": 26,
+      "cut_dense_inventory_certificates": 0
+    },
+    "output_sha256": "e80ba9e47546781b68d1eb5bb5da6fe86f2ebd08bf37d715b08fb34a1f9fa3a4"
+  },
+  {
+    "frame": "hybrid-gold-5",
+    "wide": false,
+    "baseline": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 14379,
+      "cut_global_support_steps": 244272,
+      "cut_global_matching_cache_hits": 4,
+      "cut_global_support_budget_skips": 1,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 0,
+      "cut_global_support_steps": 0,
+      "cut_global_matching_cache_hits": 4,
+      "cut_global_support_budget_skips": 0,
+      "cut_dense_inventory_certificates": 6
+    },
+    "output_sha256": "04dc90d6c38a1e5b6a0fa95dc4039cece4d918dd24a64468c91a3e27677d5a29"
+  },
+  {
+    "frame": "hybrid-gold-5",
+    "wide": true,
+    "baseline": {
+      "cut_prunes": 2,
+      "cut_global_matching_steps": 126871,
+      "cut_global_support_steps": 1620996,
+      "cut_global_matching_cache_hits": 10,
+      "cut_global_support_budget_skips": 210,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 2,
+      "cut_global_matching_steps": 20524,
+      "cut_global_support_steps": 530994,
+      "cut_global_matching_cache_hits": 11,
+      "cut_global_support_budget_skips": 7,
+      "cut_dense_inventory_certificates": 224
+    },
+    "output_sha256": "0d948349a99fc6dd87ec0e1f0c6935a894bfcfeabd301f32694ac0059a3e209d"
+  },
+  {
+    "frame": "hybrid-gold-8",
+    "wide": false,
+    "baseline": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 16133,
+      "cut_global_support_steps": 441198,
+      "cut_global_matching_cache_hits": 9,
+      "cut_global_support_budget_skips": 2,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 0,
+      "cut_global_matching_steps": 0,
+      "cut_global_support_steps": 0,
+      "cut_global_matching_cache_hits": 9,
+      "cut_global_support_budget_skips": 0,
+      "cut_dense_inventory_certificates": 11
+    },
+    "output_sha256": "55b5487c8a4a33832e8ca537beeadad5b17127b85b930444b903c8ed6d0bff19"
+  },
+  {
+    "frame": "hybrid-gold-8",
+    "wide": true,
+    "baseline": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 101043,
+      "cut_global_support_steps": 1082238,
+      "cut_global_matching_cache_hits": 13,
+      "cut_global_support_budget_skips": 168,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 20486,
+      "cut_global_support_steps": 640938,
+      "cut_global_matching_cache_hits": 14,
+      "cut_global_support_budget_skips": 8,
+      "cut_dense_inventory_certificates": 168
+    },
+    "output_sha256": "bb90a41e8f2dab6bc618ea4196dbfbf8a73e011f63e0ef8a68fd8ee1715c3bec"
+  },
+  {
+    "frame": "hybrid-gold-12",
+    "wide": false,
+    "baseline": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 33409,
+      "cut_global_support_steps": 637524,
+      "cut_global_matching_cache_hits": 11,
+      "cut_global_support_budget_skips": 32,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 21285,
+      "cut_global_support_steps": 474706,
+      "cut_global_matching_cache_hits": 11,
+      "cut_global_support_budget_skips": 11,
+      "cut_dense_inventory_certificates": 25
+    },
+    "output_sha256": "a7627db7e7f9735cd066d8a8a5699151cbc50b13a1af4304f2f915b98f684f5c"
+  },
+  {
+    "frame": "hybrid-gold-12",
+    "wide": true,
+    "baseline": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 160376,
+      "cut_global_support_steps": 1837524,
+      "cut_global_matching_cache_hits": 16,
+      "cut_global_support_budget_skips": 279,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 107695,
+      "cut_global_support_steps": 1623754,
+      "cut_global_matching_cache_hits": 35,
+      "cut_global_support_budget_skips": 170,
+      "cut_dense_inventory_certificates": 95
+    },
+    "output_sha256": "a7627db7e7f9735cd066d8a8a5699151cbc50b13a1af4304f2f915b98f684f5c"
+  },
+  {
+    "frame": "hybrid-gold-15",
+    "wide": false,
+    "baseline": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 32856,
+      "cut_global_support_steps": 668118,
+      "cut_global_matching_cache_hits": 11,
+      "cut_global_support_budget_skips": 30,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 12144,
+      "cut_global_support_steps": 203706,
+      "cut_global_matching_cache_hits": 11,
+      "cut_global_support_budget_skips": 0,
+      "cut_dense_inventory_certificates": 41
+    },
+    "output_sha256": "acb16998b8d5ce5cd20ace2183f0d78774900b642329504990087586f196fe9c"
+  },
+  {
+    "frame": "hybrid-gold-15",
+    "wide": true,
+    "baseline": {
+      "cut_prunes": 3,
+      "cut_global_matching_steps": 128508,
+      "cut_global_support_steps": 1770072,
+      "cut_global_matching_cache_hits": 16,
+      "cut_global_support_budget_skips": 203,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 3,
+      "cut_global_matching_steps": 24099,
+      "cut_global_support_steps": 876626,
+      "cut_global_matching_cache_hits": 5,
+      "cut_global_support_budget_skips": 6,
+      "cut_dense_inventory_certificates": 228
+    },
+    "output_sha256": "c05c4276e52e818a04697bb0aa81e698ac6edf325982dbdf014be783f1a52102"
+  },
+  {
+    "frame": "hybrid-gold-20",
+    "wide": false,
+    "baseline": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 54875,
+      "cut_global_support_steps": 1196072,
+      "cut_global_matching_cache_hits": 8,
+      "cut_global_support_budget_skips": 55,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 54875,
+      "cut_global_support_steps": 1196072,
+      "cut_global_matching_cache_hits": 8,
+      "cut_global_support_budget_skips": 55,
+      "cut_dense_inventory_certificates": 0
+    },
+    "output_sha256": "2944e93dce19389d117d100777ab9c52f71ee7ffd82b71cb3814dde9f3f055a3"
+  },
+  {
+    "frame": "hybrid-gold-20",
+    "wide": true,
+    "baseline": {
+      "cut_prunes": 5,
+      "cut_global_matching_steps": 116863,
+      "cut_global_support_steps": 1516920,
+      "cut_global_matching_cache_hits": 7,
+      "cut_global_support_budget_skips": 181,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 5,
+      "cut_global_matching_steps": 116863,
+      "cut_global_support_steps": 1516920,
+      "cut_global_matching_cache_hits": 7,
+      "cut_global_support_budget_skips": 181,
+      "cut_dense_inventory_certificates": 0
+    },
+    "output_sha256": "37d74604fa9fedcaded8dec8f89d35474531f005722907363ff2faebc1edf01a"
+  },
+  {
+    "frame": "hybrid-gold-23",
+    "wide": false,
+    "baseline": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 43497,
+      "cut_global_support_steps": 996582,
+      "cut_global_matching_cache_hits": 8,
+      "cut_global_support_budget_skips": 34,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 43497,
+      "cut_global_support_steps": 996582,
+      "cut_global_matching_cache_hits": 8,
+      "cut_global_support_budget_skips": 34,
+      "cut_dense_inventory_certificates": 0
+    },
+    "output_sha256": "dc68d6d4fe9464dd8f2e3b1f3a618c5ea6f09916a248b3ebc5d1f7130460d490"
+  },
+  {
+    "frame": "hybrid-gold-23",
+    "wide": true,
+    "baseline": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 39893,
+      "cut_global_support_steps": 997804,
+      "cut_global_matching_cache_hits": 9,
+      "cut_global_support_budget_skips": 27,
+      "cut_dense_inventory_certificates": 0
+    },
+    "dense": {
+      "cut_prunes": 1,
+      "cut_global_matching_steps": 39893,
+      "cut_global_support_steps": 997804,
+      "cut_global_matching_cache_hits": 9,
+      "cut_global_support_budget_skips": 27,
+      "cut_dense_inventory_certificates": 0
+    },
+    "output_sha256": "bcc8dc5a66c95ef12ea726e590e031f05f7d25e1f85b1cf898f823a1f85ab5b0"
+  }
+]
