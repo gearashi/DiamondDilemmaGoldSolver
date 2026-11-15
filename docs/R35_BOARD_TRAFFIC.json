@@ -1,0 +1,382 @@
+{
+  "128/128/refill-False/dynamic-False": [
+    {
+      "nodes_per_lane": 1,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 128,
+      "occupancy_board_values": 0,
+      "reset_lanes": 0,
+      "observed_changed_cells": 0
+    },
+    {
+      "nodes_per_lane": 64,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 2229,
+      "occupancy_board_values": 2027,
+      "reset_lanes": 0,
+      "observed_changed_cells": 2027
+    },
+    {
+      "nodes_per_lane": 512,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 3396,
+      "occupancy_board_values": 2878,
+      "reset_lanes": 0,
+      "observed_changed_cells": 1166
+    },
+    {
+      "nodes_per_lane": 4096,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 3958,
+      "occupancy_board_values": 3354,
+      "reset_lanes": 0,
+      "observed_changed_cells": 1301
+    }
+  ],
+  "128/128/refill-False/dynamic-True": [
+    {
+      "nodes_per_lane": 1,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20352,
+      "occupancy_board_values": 0,
+      "reset_lanes": 0,
+      "observed_changed_cells": 0
+    },
+    {
+      "nodes_per_lane": 64,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20352,
+      "occupancy_board_values": 2910,
+      "reset_lanes": 0,
+      "observed_changed_cells": 2910
+    },
+    {
+      "nodes_per_lane": 512,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20352,
+      "occupancy_board_values": 5785,
+      "reset_lanes": 0,
+      "observed_changed_cells": 3174
+    },
+    {
+      "nodes_per_lane": 4096,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20352,
+      "occupancy_board_values": 7470,
+      "reset_lanes": 0,
+      "observed_changed_cells": 3021
+    }
+  ],
+  "2048/128/refill-False/dynamic-False": [
+    {
+      "nodes_per_lane": 1,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 128,
+      "occupancy_board_values": 0,
+      "reset_lanes": 0,
+      "observed_changed_cells": 0
+    },
+    {
+      "nodes_per_lane": 64,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 2229,
+      "occupancy_board_values": 2027,
+      "reset_lanes": 0,
+      "observed_changed_cells": 2027
+    },
+    {
+      "nodes_per_lane": 512,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 3396,
+      "occupancy_board_values": 2878,
+      "reset_lanes": 0,
+      "observed_changed_cells": 1166
+    },
+    {
+      "nodes_per_lane": 4096,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 3958,
+      "occupancy_board_values": 3354,
+      "reset_lanes": 0,
+      "observed_changed_cells": 1301
+    }
+  ],
+  "2048/128/refill-False/dynamic-True": [
+    {
+      "nodes_per_lane": 1,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20352,
+      "occupancy_board_values": 0,
+      "reset_lanes": 0,
+      "observed_changed_cells": 0
+    },
+    {
+      "nodes_per_lane": 64,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20352,
+      "occupancy_board_values": 2910,
+      "reset_lanes": 0,
+      "observed_changed_cells": 2910
+    },
+    {
+      "nodes_per_lane": 512,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20352,
+      "occupancy_board_values": 5785,
+      "reset_lanes": 0,
+      "observed_changed_cells": 3174
+    },
+    {
+      "nodes_per_lane": 4096,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20352,
+      "occupancy_board_values": 7470,
+      "reset_lanes": 0,
+      "observed_changed_cells": 3021
+    }
+  ],
+  "2048/2048/refill-False/dynamic-False": [
+    {
+      "nodes_per_lane": 1,
+      "previously_mutable_lanes": 2048,
+      "existing_board_values": 327680,
+      "structural_board_values": 3956,
+      "occupancy_board_values": 1920,
+      "reset_lanes": 0,
+      "observed_changed_cells": 24
+    },
+    {
+      "nodes_per_lane": 64,
+      "previously_mutable_lanes": 2036,
+      "existing_board_values": 325760,
+      "structural_board_values": 33879,
+      "occupancy_board_values": 30290,
+      "reset_lanes": 0,
+      "observed_changed_cells": 30290
+    },
+    {
+      "nodes_per_lane": 512,
+      "previously_mutable_lanes": 2036,
+      "existing_board_values": 325760,
+      "structural_board_values": 51071,
+      "occupancy_board_values": 43424,
+      "reset_lanes": 0,
+      "observed_changed_cells": 18223
+    },
+    {
+      "nodes_per_lane": 4096,
+      "previously_mutable_lanes": 2036,
+      "existing_board_values": 325760,
+      "structural_board_values": 57663,
+      "occupancy_board_values": 49120,
+      "reset_lanes": 0,
+      "observed_changed_cells": 19068
+    }
+  ],
+  "2048/2048/refill-False/dynamic-True": [
+    {
+      "nodes_per_lane": 1,
+      "previously_mutable_lanes": 2048,
+      "existing_board_values": 327680,
+      "structural_board_values": 323948,
+      "occupancy_board_values": 1920,
+      "reset_lanes": 0,
+      "observed_changed_cells": 24
+    },
+    {
+      "nodes_per_lane": 64,
+      "previously_mutable_lanes": 2036,
+      "existing_board_values": 325760,
+      "structural_board_values": 322028,
+      "occupancy_board_values": 41775,
+      "reset_lanes": 0,
+      "observed_changed_cells": 41775
+    },
+    {
+      "nodes_per_lane": 512,
+      "previously_mutable_lanes": 2036,
+      "existing_board_values": 325760,
+      "structural_board_values": 322032,
+      "occupancy_board_values": 87259,
+      "reset_lanes": 0,
+      "observed_changed_cells": 50406
+    },
+    {
+      "nodes_per_lane": 4096,
+      "previously_mutable_lanes": 2034,
+      "existing_board_values": 325440,
+      "structural_board_values": 321712,
+      "occupancy_board_values": 120058,
+      "reset_lanes": 0,
+      "observed_changed_cells": 53078
+    }
+  ],
+  "128/4096/refill-True/dynamic-False": [
+    {
+      "nodes_per_lane": 1,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20480,
+      "occupancy_board_values": 20480,
+      "reset_lanes": 128,
+      "observed_changed_cells": 128
+    },
+    {
+      "nodes_per_lane": 64,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20480,
+      "occupancy_board_values": 20480,
+      "reset_lanes": 128,
+      "observed_changed_cells": 128
+    },
+    {
+      "nodes_per_lane": 512,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20480,
+      "occupancy_board_values": 20480,
+      "reset_lanes": 128,
+      "observed_changed_cells": 204
+    },
+    {
+      "nodes_per_lane": 4096,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20480,
+      "occupancy_board_values": 20480,
+      "reset_lanes": 128,
+      "observed_changed_cells": 384
+    }
+  ],
+  "128/4096/refill-True/dynamic-True": [
+    {
+      "nodes_per_lane": 1,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20480,
+      "occupancy_board_values": 20480,
+      "reset_lanes": 128,
+      "observed_changed_cells": 128
+    },
+    {
+      "nodes_per_lane": 64,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20480,
+      "occupancy_board_values": 20480,
+      "reset_lanes": 128,
+      "observed_changed_cells": 128
+    },
+    {
+      "nodes_per_lane": 512,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20480,
+      "occupancy_board_values": 20480,
+      "reset_lanes": 128,
+      "observed_changed_cells": 204
+    },
+    {
+      "nodes_per_lane": 4096,
+      "previously_mutable_lanes": 128,
+      "existing_board_values": 20480,
+      "structural_board_values": 20480,
+      "occupancy_board_values": 20480,
+      "reset_lanes": 128,
+      "observed_changed_cells": 384
+    }
+  ],
+  "32768/32768/refill-False/dynamic-False": [
+    {
+      "nodes_per_lane": 1,
+      "previously_mutable_lanes": 32768,
+      "existing_board_values": 5242880,
+      "structural_board_values": 72995,
+      "occupancy_board_values": 40480,
+      "reset_lanes": 0,
+      "observed_changed_cells": 722
+    },
+    {
+      "nodes_per_lane": 64,
+      "previously_mutable_lanes": 32515,
+      "existing_board_values": 5202400,
+      "structural_board_values": 550372,
+      "occupancy_board_values": 494305,
+      "reset_lanes": 0,
+      "observed_changed_cells": 445321
+    },
+    {
+      "nodes_per_lane": 512,
+      "previously_mutable_lanes": 32203,
+      "existing_board_values": 5152480,
+      "structural_board_values": 769350,
+      "occupancy_board_values": 645452,
+      "reset_lanes": 0,
+      "observed_changed_cells": 282719
+    },
+    {
+      "nodes_per_lane": 4096,
+      "previously_mutable_lanes": 32203,
+      "existing_board_values": 5152480,
+      "structural_board_values": 870235,
+      "occupancy_board_values": 734169,
+      "reset_lanes": 0,
+      "observed_changed_cells": 295484
+    }
+  ],
+  "32768/32768/refill-False/dynamic-True": [
+    {
+      "nodes_per_lane": 1,
+      "previously_mutable_lanes": 32768,
+      "existing_board_values": 5242880,
+      "structural_board_values": 5148916,
+      "occupancy_board_values": 40480,
+      "reset_lanes": 0,
+      "observed_changed_cells": 722
+    },
+    {
+      "nodes_per_lane": 64,
+      "previously_mutable_lanes": 32515,
+      "existing_board_values": 5202400,
+      "structural_board_values": 5111843,
+      "occupancy_board_values": 790327,
+      "reset_lanes": 0,
+      "observed_changed_cells": 611334
+    },
+    {
+      "nodes_per_lane": 512,
+      "previously_mutable_lanes": 31375,
+      "existing_board_values": 5020000,
+      "structural_board_values": 4929966,
+      "occupancy_board_values": 1316298,
+      "reset_lanes": 0,
+      "observed_changed_cells": 764416
+    },
+    {
+      "nodes_per_lane": 4096,
+      "previously_mutable_lanes": 31200,
+      "existing_board_values": 4992000,
+      "structural_board_values": 4902193,
+      "occupancy_board_values": 1812630,
+      "reset_lanes": 0,
+      "observed_changed_cells": 825040
+    }
+  ]
+}

@@ -1,0 +1,4234 @@
+{
+  "hardware": "RTX 2060 6 GB. Each range reader was compared to an independent ordinary full snapshot on the same state.",
+  "timing_scope": "Transfer counts and equality are matched controls. Several tests shared hardware. Detailed timings are observations of these runs.",
+  "ownership_span_and_single_high_water": {
+    "CUDA": {
+      "128/128/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.000616,
+          "read": 50048,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 2,
+          "seconds": 0.001259
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.000694,
+          "read": 50048,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 2,
+          "seconds": 0.000921
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.000656,
+          "read": 58240,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 10,
+          "seconds": 0.000962
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.000725,
+          "read": 84864,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 36,
+          "seconds": 0.000991
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.000793,
+          "read": 102272,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 53,
+          "seconds": 0.001106
+        },
+        {
+          "nodes": 4096,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.00079,
+          "read": 108416,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 59,
+          "seconds": 0.001327
+        },
+        {
+          "nodes": 32768,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.000742,
+          "read": 131968,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 82,
+          "seconds": 0.000998
+        }
+      ],
+      "2048/128/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.002893,
+          "read": 50048,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 2,
+          "seconds": 0.800092
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.003489,
+          "read": 50048,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 2,
+          "seconds": 0.003329
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.003482,
+          "read": 58240,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 10,
+          "seconds": 0.003586
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.003219,
+          "read": 84864,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 36,
+          "seconds": 0.003869
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.003302,
+          "read": 102272,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 53,
+          "seconds": 0.003361
+        },
+        {
+          "nodes": 4096,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.002796,
+          "read": 108416,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 59,
+          "seconds": 0.00278
+        },
+        {
+          "nodes": 32768,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.003489,
+          "read": 131968,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 82,
+          "seconds": 0.003622
+        }
+      ],
+      "2048/2048/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.002413,
+          "read": 817152,
+          "maps": 12,
+          "reset": false,
+          "span": 2048,
+          "rows": 3,
+          "seconds": 0.002423
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.003502,
+          "read": 817152,
+          "maps": 12,
+          "reset": false,
+          "span": 2048,
+          "rows": 3,
+          "seconds": 0.003395
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.003893,
+          "read": 931840,
+          "maps": 12,
+          "reset": false,
+          "span": 2048,
+          "rows": 10,
+          "seconds": 0.003506
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.003729,
+          "read": 1357824,
+          "maps": 12,
+          "reset": false,
+          "span": 2048,
+          "rows": 36,
+          "seconds": 0.003096
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.003004,
+          "read": 1669120,
+          "maps": 12,
+          "reset": false,
+          "span": 2048,
+          "rows": 55,
+          "seconds": 0.002267
+        },
+        {
+          "nodes": 4096,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.003214,
+          "read": 2045952,
+          "maps": 12,
+          "reset": false,
+          "span": 2048,
+          "rows": 78,
+          "seconds": 0.002839
+        },
+        {
+          "nodes": 32768,
+          "baseline_bytes": 3389440,
+          "baseline_seconds": 0.003972,
+          "read": 2177024,
+          "maps": 12,
+          "reset": false,
+          "span": 2048,
+          "rows": 86,
+          "seconds": 0.003754
+        }
+      ],
+      "128/4096/True": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.000738,
+          "read": 52096,
+          "maps": 12,
+          "reset": false,
+          "span": 128,
+          "rows": 4,
+          "seconds": 0.001107
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.000831,
+          "read": 211840,
+          "maps": 12,
+          "reset": true,
+          "seconds": 0.000851
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.000798,
+          "read": 211840,
+          "maps": 12,
+          "reset": true,
+          "seconds": 0.000844
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.000918,
+          "read": 211840,
+          "maps": 12,
+          "reset": true,
+          "seconds": 0.000787
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.000717,
+          "read": 211840,
+          "maps": 12,
+          "reset": true,
+          "seconds": 0.000785
+        },
+        {
+          "nodes": 4096,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.000669,
+          "read": 211840,
+          "maps": 12,
+          "reset": true,
+          "seconds": 0.00071
+        },
+        {
+          "nodes": 32768,
+          "baseline_bytes": 211840,
+          "baseline_seconds": 0.000656,
+          "read": 211840,
+          "maps": 12,
+          "reset": true,
+          "seconds": 0.000686
+        }
+      ],
+      "32768/512/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.018807,
+          "read": 204288,
+          "maps": 12,
+          "reset": false,
+          "span": 512,
+          "rows": 3,
+          "seconds": 0.014471
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.021863,
+          "read": 204288,
+          "maps": 12,
+          "reset": false,
+          "span": 512,
+          "rows": 3,
+          "seconds": 0.013366
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.02782,
+          "read": 232960,
+          "maps": 12,
+          "reset": false,
+          "span": 512,
+          "rows": 10,
+          "seconds": 0.02328
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.029315,
+          "read": 323072,
+          "maps": 12,
+          "reset": false,
+          "span": 512,
+          "rows": 32,
+          "seconds": 0.01765
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.031115,
+          "read": 417280,
+          "maps": 12,
+          "reset": false,
+          "span": 512,
+          "rows": 55,
+          "seconds": 0.016523
+        },
+        {
+          "nodes": 4096,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.035013,
+          "read": 458240,
+          "maps": 12,
+          "reset": false,
+          "span": 512,
+          "rows": 65,
+          "seconds": 0.021279
+        },
+        {
+          "nodes": 32768,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.026877,
+          "read": 495104,
+          "maps": 12,
+          "reset": false,
+          "span": 512,
+          "rows": 74,
+          "seconds": 0.016528
+        }
+      ],
+      "32768/32768/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.024558,
+          "read": 13336576,
+          "maps": 12,
+          "reset": false,
+          "span": 32768,
+          "rows": 4,
+          "seconds": 0.015485
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.031649,
+          "read": 13336576,
+          "maps": 12,
+          "reset": false,
+          "span": 32768,
+          "rows": 4,
+          "seconds": 0.015599
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.027744,
+          "read": 14909440,
+          "maps": 12,
+          "reset": false,
+          "span": 32768,
+          "rows": 10,
+          "seconds": 0.020055
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.03541,
+          "read": 22773760,
+          "maps": 12,
+          "reset": false,
+          "span": 32768,
+          "rows": 40,
+          "seconds": 0.025184
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.030712,
+          "read": 28540928,
+          "maps": 12,
+          "reset": false,
+          "span": 32768,
+          "rows": 62,
+          "seconds": 0.03001
+        },
+        {
+          "nodes": 4096,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.031129,
+          "read": 32210944,
+          "maps": 12,
+          "reset": false,
+          "span": 32768,
+          "rows": 76,
+          "seconds": 0.03273
+        },
+        {
+          "nodes": 32768,
+          "baseline_bytes": 54231040,
+          "baseline_seconds": 0.022528,
+          "read": 34308096,
+          "maps": 12,
+          "reset": false,
+          "span": 32768,
+          "rows": 84,
+          "seconds": 0.027721
+        }
+      ]
+    },
+    "VULKAN": {
+      "128/128/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.00289,
+          "read": 94208,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 2,
+          "seconds": 0.004136
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.006517,
+          "read": 94208,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 2,
+          "seconds": 0.003077
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.002878,
+          "read": 110592,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 10,
+          "seconds": 0.003612
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.003138,
+          "read": 163840,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 36,
+          "seconds": 0.003641
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.002797,
+          "read": 198656,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 53,
+          "seconds": 0.003395
+        }
+      ],
+      "2048/128/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.008125,
+          "read": 94208,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 2,
+          "seconds": 0.008522
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.008394,
+          "read": 94208,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 2,
+          "seconds": 0.008503
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.009221,
+          "read": 110592,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 10,
+          "seconds": 0.008224
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.008306,
+          "read": 163840,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 36,
+          "seconds": 0.008617
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.008935,
+          "read": 198656,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 53,
+          "seconds": 0.009065
+        }
+      ],
+      "2048/2048/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.006864,
+          "read": 1540096,
+          "maps": 6,
+          "reset": false,
+          "span": 2048,
+          "rows": 3,
+          "seconds": 0.006366
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.00713,
+          "read": 1540096,
+          "maps": 6,
+          "reset": false,
+          "span": 2048,
+          "rows": 3,
+          "seconds": 0.006495
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007495,
+          "read": 1769472,
+          "maps": 6,
+          "reset": false,
+          "span": 2048,
+          "rows": 10,
+          "seconds": 0.007774
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007281,
+          "read": 2621440,
+          "maps": 6,
+          "reset": false,
+          "span": 2048,
+          "rows": 36,
+          "seconds": 0.007756
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.008822,
+          "read": 3244032,
+          "maps": 6,
+          "reset": false,
+          "span": 2048,
+          "rows": 55,
+          "seconds": 0.011716
+        }
+      ],
+      "128/4096/True": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.00247,
+          "read": 98304,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 4,
+          "seconds": 0.002915
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.002681,
+          "read": 417792,
+          "maps": 6,
+          "reset": true,
+          "seconds": 0.002918
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.002562,
+          "read": 417792,
+          "maps": 6,
+          "reset": true,
+          "seconds": 0.002973
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.003166,
+          "read": 417792,
+          "maps": 6,
+          "reset": true,
+          "seconds": 0.003084
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.002405,
+          "read": 417792,
+          "maps": 6,
+          "reset": true,
+          "seconds": 0.003234
+        }
+      ]
+    },
+    "D3D12": {
+      "128/128/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.003908,
+          "read": 94208,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 2,
+          "seconds": 0.004605
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.003795,
+          "read": 94208,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 2,
+          "seconds": 0.011557
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.00397,
+          "read": 110592,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 10,
+          "seconds": 0.004594
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.004381,
+          "read": 163840,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 36,
+          "seconds": 0.005239
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.007646,
+          "read": 198656,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 53,
+          "seconds": 0.005838
+        }
+      ],
+      "2048/128/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007301,
+          "read": 94208,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 2,
+          "seconds": 0.006545
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007293,
+          "read": 94208,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 2,
+          "seconds": 0.005598
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.00749,
+          "read": 110592,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 10,
+          "seconds": 0.006188
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007295,
+          "read": 163840,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 36,
+          "seconds": 0.006938
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.008502,
+          "read": 198656,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 53,
+          "seconds": 0.007733
+        }
+      ],
+      "2048/2048/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007283,
+          "read": 1540096,
+          "maps": 6,
+          "reset": false,
+          "span": 2048,
+          "rows": 3,
+          "seconds": 0.007158
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.00766,
+          "read": 1540096,
+          "maps": 6,
+          "reset": false,
+          "span": 2048,
+          "rows": 3,
+          "seconds": 0.007209
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007678,
+          "read": 1769472,
+          "maps": 6,
+          "reset": false,
+          "span": 2048,
+          "rows": 10,
+          "seconds": 0.006956
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007876,
+          "read": 2621440,
+          "maps": 6,
+          "reset": false,
+          "span": 2048,
+          "rows": 36,
+          "seconds": 0.008342
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.006971,
+          "read": 3244032,
+          "maps": 6,
+          "reset": false,
+          "span": 2048,
+          "rows": 55,
+          "seconds": 0.008879
+        }
+      ],
+      "128/4096/True": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.002541,
+          "read": 98304,
+          "maps": 6,
+          "reset": false,
+          "span": 128,
+          "rows": 4,
+          "seconds": 0.002962
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.002407,
+          "read": 417792,
+          "maps": 6,
+          "reset": true,
+          "seconds": 0.002411
+        },
+        {
+          "nodes": 8,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.002456,
+          "read": 417792,
+          "maps": 6,
+          "reset": true,
+          "seconds": 0.002594
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.002513,
+          "read": 417792,
+          "maps": 6,
+          "reset": true,
+          "seconds": 0.002562
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 417792,
+          "baseline_seconds": 0.002468,
+          "read": 417792,
+          "maps": 6,
+          "reset": true,
+          "seconds": 0.002369
+        }
+      ]
+    }
+  },
+  "grouped_floor_maximum": {
+    "ordinary": {
+      "CUDA": {
+        "128/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000628,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.001095
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.00148,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.001546
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.001,
+            "read": 56960,
+            "maps": 11,
+            "seconds": 0.001437
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.001092,
+            "read": 83584,
+            "maps": 11,
+            "seconds": 0.001543
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000785,
+            "read": 100992,
+            "maps": 11,
+            "seconds": 0.000984
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000658,
+            "read": 107136,
+            "maps": 11,
+            "seconds": 0.001157
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000579,
+            "read": 130688,
+            "maps": 11,
+            "seconds": 0.000852
+          }
+        ],
+        "2048/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002954,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.028463
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003104,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.004642
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002669,
+            "read": 56960,
+            "maps": 11,
+            "seconds": 0.013765
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002619,
+            "read": 83584,
+            "maps": 11,
+            "seconds": 0.003753
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003079,
+            "read": 100992,
+            "maps": 11,
+            "seconds": 0.003939
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003486,
+            "read": 107136,
+            "maps": 11,
+            "seconds": 0.006407
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002113,
+            "read": 130688,
+            "maps": 11,
+            "seconds": 0.003323
+          }
+        ],
+        "2048/2048/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003254,
+            "read": 796672,
+            "maps": 11,
+            "seconds": 0.003659
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003184,
+            "read": 796672,
+            "maps": 11,
+            "seconds": 0.003816
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002972,
+            "read": 906020,
+            "maps": 11,
+            "seconds": 1.332799
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003121,
+            "read": 1264740,
+            "maps": 15,
+            "seconds": 0.011229
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002208,
+            "read": 1339612,
+            "maps": 15,
+            "seconds": 0.010563
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002536,
+            "read": 1446620,
+            "maps": 19,
+            "seconds": 0.01294
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003095,
+            "read": 1529604,
+            "maps": 19,
+            "seconds": 0.014185
+          }
+        ],
+        "128/4096/True": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000896,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.001372
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000831,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.001273
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000802,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.001353
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000809,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.00144
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000873,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.001275
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000746,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.001476
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000854,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.001304
+          }
+        ],
+        "32768/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.025037,
+            "read": 199168,
+            "maps": 11,
+            "seconds": 0.022137
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.028901,
+            "read": 199168,
+            "maps": 11,
+            "seconds": 0.030036
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.029062,
+            "read": 227840,
+            "maps": 11,
+            "seconds": 0.027712
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.0292,
+            "read": 317952,
+            "maps": 11,
+            "seconds": 0.026076
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.024132,
+            "read": 335616,
+            "maps": 15,
+            "seconds": 0.024479
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.024004,
+            "read": 356448,
+            "maps": 19,
+            "seconds": 0.028455
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.024832,
+            "read": 383544,
+            "maps": 19,
+            "seconds": 0.032517
+          }
+        ],
+        "32768/32768/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.021524,
+            "read": 12746752,
+            "maps": 11,
+            "seconds": 0.020398
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.02542,
+            "read": 12746752,
+            "maps": 11,
+            "seconds": 0.023523
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.023028,
+            "read": 14209055,
+            "maps": 11,
+            "seconds": 0.11564
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.029765,
+            "read": 19753687,
+            "maps": 15,
+            "seconds": 0.136626
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.023569,
+            "read": 21266839,
+            "maps": 15,
+            "seconds": 0.117777
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.026121,
+            "read": 22613207,
+            "maps": 19,
+            "seconds": 0.144497
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.023319,
+            "read": 23851277,
+            "maps": 19,
+            "seconds": 0.133996
+          }
+        ]
+      },
+      "VULKAN": {
+        "128/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002431,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.003447
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.00986,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.002566
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002881,
+            "read": 161792,
+            "maps": 6,
+            "seconds": 0.00293
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002435,
+            "read": 196608,
+            "maps": 6,
+            "seconds": 0.002713
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003488,
+            "read": 208896,
+            "maps": 6,
+            "seconds": 0.004397
+          }
+        ],
+        "2048/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.011639,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.008827
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.011746,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.009364
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.017102,
+            "read": 161792,
+            "maps": 6,
+            "seconds": 0.014805
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.013171,
+            "read": 196608,
+            "maps": 6,
+            "seconds": 0.014834
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.012646,
+            "read": 208896,
+            "maps": 6,
+            "seconds": 0.012668
+          }
+        ],
+        "2048/2048/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008501,
+            "read": 1507328,
+            "maps": 6,
+            "seconds": 0.017531
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.01312,
+            "read": 1507328,
+            "maps": 6,
+            "seconds": 0.009601
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.009374,
+            "read": 2458688,
+            "maps": 10,
+            "seconds": 0.021204
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.007256,
+            "read": 2806528,
+            "maps": 10,
+            "seconds": 0.017407
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008553,
+            "read": 3183712,
+            "maps": 14,
+            "seconds": 0.021021
+          }
+        ],
+        "128/4096/True": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.001744,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.002049
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.00204,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.002857
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.00179,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.002389
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002112,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.002791
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002004,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.0023
+          }
+        ],
+        "32768/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.067458,
+            "read": 376832,
+            "maps": 6,
+            "seconds": 0.019215
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.076912,
+            "read": 376832,
+            "maps": 6,
+            "seconds": 0.02581
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.074326,
+            "read": 614400,
+            "maps": 6,
+            "seconds": 0.02392
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.077784,
+            "read": 695120,
+            "maps": 10,
+            "seconds": 0.037036
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.07523,
+            "read": 779184,
+            "maps": 14,
+            "seconds": 0.030046
+          }
+        ],
+        "32768/32768/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.095796,
+            "read": 24117248,
+            "maps": 6,
+            "seconds": 0.173992
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.097017,
+            "read": 24117248,
+            "maps": 6,
+            "seconds": 0.206707
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.099674,
+            "read": 38845120,
+            "maps": 10,
+            "seconds": 0.320584
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.130529,
+            "read": 44721856,
+            "maps": 10,
+            "seconds": 0.360487
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.116455,
+            "read": 49913440,
+            "maps": 14,
+            "seconds": 0.343818
+          }
+        ]
+      },
+      "D3D12": {
+        "128/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003548,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.005317
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003655,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.003961
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003818,
+            "read": 161792,
+            "maps": 6,
+            "seconds": 0.003253
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003975,
+            "read": 196608,
+            "maps": 6,
+            "seconds": 0.010493
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003407,
+            "read": 208896,
+            "maps": 6,
+            "seconds": 0.004251
+          }
+        ],
+        "2048/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.007702,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.007427
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.00982,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.006898
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.009954,
+            "read": 161792,
+            "maps": 6,
+            "seconds": 0.009948
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.011493,
+            "read": 196608,
+            "maps": 6,
+            "seconds": 0.009666
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.011375,
+            "read": 208896,
+            "maps": 6,
+            "seconds": 0.012986
+          }
+        ],
+        "2048/2048/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.011256,
+            "read": 1507328,
+            "maps": 6,
+            "seconds": 0.010614
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008632,
+            "read": 1507328,
+            "maps": 6,
+            "seconds": 0.011291
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.009774,
+            "read": 2458688,
+            "maps": 10,
+            "seconds": 0.044211
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.013466,
+            "read": 2806528,
+            "maps": 10,
+            "seconds": 0.036533
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.010597,
+            "read": 3183712,
+            "maps": 14,
+            "seconds": 0.022855
+          }
+        ],
+        "128/4096/True": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.00246,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.0032
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002706,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.003165
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002565,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.003351
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002552,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.003043
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002407,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.00272
+          }
+        ],
+        "32768/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.082108,
+            "read": 376832,
+            "maps": 6,
+            "seconds": 0.031347
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.083843,
+            "read": 376832,
+            "maps": 6,
+            "seconds": 0.031609
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.079974,
+            "read": 614400,
+            "maps": 6,
+            "seconds": 0.029927
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.079691,
+            "read": 695120,
+            "maps": 10,
+            "seconds": 0.043852
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.100681,
+            "read": 779184,
+            "maps": 14,
+            "seconds": 0.035286
+          }
+        ],
+        "32768/32768/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.069145,
+            "read": 24117248,
+            "maps": 6,
+            "seconds": 0.132622
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.0931,
+            "read": 24117248,
+            "maps": 6,
+            "seconds": 0.141469
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.07399,
+            "read": 38845120,
+            "maps": 10,
+            "seconds": 0.263434
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.074515,
+            "read": 44721856,
+            "maps": 10,
+            "seconds": 0.250968
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.08066,
+            "read": 49913440,
+            "maps": 14,
+            "seconds": 0.266587
+          }
+        ]
+      }
+    },
+    "scattered": {
+      "CUDA": {
+        "2048/32/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.004859,
+            "read": 12192,
+            "maps": 11,
+            "seconds": 0.644046
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003967,
+            "read": 12192,
+            "maps": 11,
+            "seconds": 0.006802
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003078,
+            "read": 20640,
+            "maps": 11,
+            "seconds": 0.019119
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003948,
+            "read": 24224,
+            "maps": 11,
+            "seconds": 0.006561
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003358,
+            "read": 26272,
+            "maps": 11,
+            "seconds": 0.00701
+          }
+        ],
+        "2048/256/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.004594,
+            "read": 97536,
+            "maps": 11,
+            "seconds": 0.007318
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.004161,
+            "read": 97536,
+            "maps": 11,
+            "seconds": 0.010104
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003719,
+            "read": 158976,
+            "maps": 11,
+            "seconds": 0.00705
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003679,
+            "read": 197888,
+            "maps": 11,
+            "seconds": 0.00714
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003114,
+            "read": 226560,
+            "maps": 11,
+            "seconds": 0.005503
+          }
+        ],
+        "32768/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.033379,
+            "read": 199168,
+            "maps": 11,
+            "seconds": 0.030635
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.029477,
+            "read": 199168,
+            "maps": 11,
+            "seconds": 0.081066
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.03959,
+            "read": 326144,
+            "maps": 11,
+            "seconds": 0.044641
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.031342,
+            "read": 335088,
+            "maps": 15,
+            "seconds": 0.0387
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.043847,
+            "read": 364824,
+            "maps": 15,
+            "seconds": 0.043048
+          }
+        ]
+      },
+      "VULKAN": {
+        "2048/32/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.013868,
+            "read": 23040,
+            "maps": 6,
+            "seconds": 0.166611
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008892,
+            "read": 23040,
+            "maps": 6,
+            "seconds": 0.008495
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008377,
+            "read": 39936,
+            "maps": 6,
+            "seconds": 0.008331
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008868,
+            "read": 47104,
+            "maps": 6,
+            "seconds": 0.007382
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.00997,
+            "read": 51200,
+            "maps": 6,
+            "seconds": 0.009287
+          }
+        ],
+        "2048/256/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.0093,
+            "read": 184320,
+            "maps": 6,
+            "seconds": 0.010072
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.010066,
+            "read": 184320,
+            "maps": 6,
+            "seconds": 0.007762
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.009314,
+            "read": 307200,
+            "maps": 6,
+            "seconds": 0.008443
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.009087,
+            "read": 385024,
+            "maps": 6,
+            "seconds": 0.00907
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.009413,
+            "read": 442368,
+            "maps": 6,
+            "seconds": 0.008761
+          }
+        ],
+        "32768/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.074649,
+            "read": 376832,
+            "maps": 6,
+            "seconds": 0.02802
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.125494,
+            "read": 376832,
+            "maps": 6,
+            "seconds": 0.04613
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.139931,
+            "read": 630784,
+            "maps": 6,
+            "seconds": 0.071195
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.119229,
+            "read": 648672,
+            "maps": 10,
+            "seconds": 0.04973
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.077928,
+            "read": 708144,
+            "maps": 10,
+            "seconds": 0.037803
+          }
+        ]
+      },
+      "D3D12": {
+        "2048/32/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008039,
+            "read": 23040,
+            "maps": 6,
+            "seconds": 0.0091
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.007839,
+            "read": 23040,
+            "maps": 6,
+            "seconds": 0.008144
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.00826,
+            "read": 39936,
+            "maps": 6,
+            "seconds": 0.007742
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.00948,
+            "read": 47104,
+            "maps": 6,
+            "seconds": 0.010061
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008146,
+            "read": 51200,
+            "maps": 6,
+            "seconds": 0.012531
+          }
+        ],
+        "2048/256/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.009311,
+            "read": 184320,
+            "maps": 6,
+            "seconds": 0.008799
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008844,
+            "read": 184320,
+            "maps": 6,
+            "seconds": 0.009726
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008545,
+            "read": 307200,
+            "maps": 6,
+            "seconds": 0.00868
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008636,
+            "read": 385024,
+            "maps": 6,
+            "seconds": 0.010067
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.011435,
+            "read": 442368,
+            "maps": 6,
+            "seconds": 0.012818
+          }
+        ],
+        "32768/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.123197,
+            "read": 376832,
+            "maps": 6,
+            "seconds": 0.053273
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.138315,
+            "read": 376832,
+            "maps": 6,
+            "seconds": 0.072434
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.113795,
+            "read": 630784,
+            "maps": 6,
+            "seconds": 0.065171
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.120575,
+            "read": 648672,
+            "maps": 10,
+            "seconds": 0.045531
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.078746,
+            "read": 708144,
+            "maps": 10,
+            "seconds": 0.033905
+          }
+        ]
+      }
+    },
+    "maximum": {
+      "131072/512/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.135052,
+          "read": 199168,
+          "maps": 11,
+          "seconds": 0.104058
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.172949,
+          "read": 313856,
+          "maps": 11,
+          "seconds": 0.158282
+        },
+        {
+          "nodes": 512,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.146968,
+          "read": 339480,
+          "maps": 15,
+          "seconds": 0.129006
+        }
+      ],
+      "131072/131072/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.090581,
+          "read": 50987008,
+          "maps": 11,
+          "seconds": 0.088123
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.131539,
+          "read": 79314968,
+          "maps": 15,
+          "seconds": 0.295783
+        },
+        {
+          "nodes": 512,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.136021,
+          "read": 84641043,
+          "maps": 19,
+          "seconds": 0.698396
+        }
+      ]
+    }
+  },
+  "row_partitions_separate_maps": {
+    "ordinary": {
+      "CUDA": {
+        "128/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.001032,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.001682
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.00124,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.001863
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.001594,
+            "read": 56960,
+            "maps": 11,
+            "seconds": 0.001693
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.001017,
+            "read": 83584,
+            "maps": 11,
+            "seconds": 0.002814
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000755,
+            "read": 100992,
+            "maps": 11,
+            "seconds": 0.001667
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000982,
+            "read": 107136,
+            "maps": 11,
+            "seconds": 0.00289
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000872,
+            "read": 130688,
+            "maps": 11,
+            "seconds": 0.002256
+          }
+        ],
+        "2048/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.004385,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.012392
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.004724,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.004383
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003887,
+            "read": 56960,
+            "maps": 11,
+            "seconds": 0.005862
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003769,
+            "read": 83584,
+            "maps": 11,
+            "seconds": 0.004978
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003935,
+            "read": 100992,
+            "maps": 11,
+            "seconds": 0.004074
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.004635,
+            "read": 107136,
+            "maps": 11,
+            "seconds": 0.007371
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003958,
+            "read": 130688,
+            "maps": 11,
+            "seconds": 0.005799
+          }
+        ],
+        "2048/2048/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003718,
+            "read": 796672,
+            "maps": 11,
+            "seconds": 0.00309
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003072,
+            "read": 796672,
+            "maps": 11,
+            "seconds": 0.003099
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003305,
+            "read": 906020,
+            "maps": 11,
+            "seconds": 0.083893
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002563,
+            "read": 1119828,
+            "maps": 19,
+            "seconds": 0.014555
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002586,
+            "read": 1267668,
+            "maps": 19,
+            "seconds": 0.011916
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002613,
+            "read": 1331524,
+            "maps": 23,
+            "seconds": 0.013986
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002775,
+            "read": 1419468,
+            "maps": 23,
+            "seconds": 0.013321
+          }
+        ],
+        "128/4096/True": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000924,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.001575
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000653,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.000897
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000639,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.001048
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000728,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.001028
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000947,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.00147
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.001081,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.001721
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000765,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.001239
+          }
+        ],
+        "32768/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.034649,
+            "read": 199168,
+            "maps": 11,
+            "seconds": 0.023116
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.035687,
+            "read": 199168,
+            "maps": 11,
+            "seconds": 0.041463
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.043578,
+            "read": 227840,
+            "maps": 11,
+            "seconds": 0.028717
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.042568,
+            "read": 317952,
+            "maps": 11,
+            "seconds": 0.039033
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.035527,
+            "read": 334360,
+            "maps": 15,
+            "seconds": 0.051725
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.032021,
+            "read": 362616,
+            "maps": 15,
+            "seconds": 0.028234
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.029806,
+            "read": 391776,
+            "maps": 15,
+            "seconds": 0.031192
+          }
+        ],
+        "32768/32768/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.027282,
+            "read": 12484608,
+            "maps": 15,
+            "seconds": 0.023098
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.051838,
+            "read": 12484608,
+            "maps": 15,
+            "seconds": 0.044602
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.048629,
+            "read": 13755519,
+            "maps": 19,
+            "seconds": 0.164947
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.066869,
+            "read": 16317655,
+            "maps": 47,
+            "seconds": 0.207138
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.06319,
+            "read": 18048207,
+            "maps": 63,
+            "seconds": 0.207888
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.047168,
+            "read": 19142375,
+            "maps": 71,
+            "seconds": 0.184664
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.078246,
+            "read": 20471493,
+            "maps": 75,
+            "seconds": 0.232878
+          }
+        ]
+      },
+      "VULKAN": {
+        "128/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003223,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.003855
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.008209,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.003316
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003369,
+            "read": 161792,
+            "maps": 6,
+            "seconds": 0.00578
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002628,
+            "read": 196608,
+            "maps": 6,
+            "seconds": 0.004482
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003048,
+            "read": 208896,
+            "maps": 6,
+            "seconds": 0.00509
+          }
+        ],
+        "2048/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.014918,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.008697
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.017803,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.00879
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.010874,
+            "read": 161792,
+            "maps": 6,
+            "seconds": 0.009483
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.012464,
+            "read": 196608,
+            "maps": 6,
+            "seconds": 0.0079
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.010683,
+            "read": 208896,
+            "maps": 6,
+            "seconds": 0.010348
+          }
+        ],
+        "2048/2048/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.013888,
+            "read": 1507328,
+            "maps": 6,
+            "seconds": 0.012717
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.014392,
+            "read": 1507328,
+            "maps": 6,
+            "seconds": 0.020211
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.01331,
+            "read": 2241952,
+            "maps": 14,
+            "seconds": 0.098652
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.011958,
+            "read": 2460416,
+            "maps": 14,
+            "seconds": 0.047256
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.012469,
+            "read": 2591168,
+            "maps": 18,
+            "seconds": 0.054624
+          }
+        ],
+        "128/4096/True": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.004244,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.003703
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003235,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.004287
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002817,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.004272
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003405,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.004111
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.00202,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.002848
+          }
+        ],
+        "32768/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.095804,
+            "read": 376832,
+            "maps": 6,
+            "seconds": 0.022364
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.111986,
+            "read": 376832,
+            "maps": 6,
+            "seconds": 0.039794
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.152889,
+            "read": 548640,
+            "maps": 10,
+            "seconds": 0.053
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.140741,
+            "read": 646416,
+            "maps": 10,
+            "seconds": 0.065108
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.187304,
+            "read": 703728,
+            "maps": 10,
+            "seconds": 0.061333
+          }
+        ],
+        "32768/32768/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.110979,
+            "read": 23592960,
+            "maps": 10,
+            "seconds": 0.181409
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.125562,
+            "read": 23592960,
+            "maps": 10,
+            "seconds": 0.166269
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.128676,
+            "read": 32904544,
+            "maps": 46,
+            "seconds": 0.358855
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.133215,
+            "read": 37039104,
+            "maps": 58,
+            "seconds": 0.389177
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.161092,
+            "read": 39195664,
+            "maps": 66,
+            "seconds": 0.74068
+          }
+        ]
+      }
+    },
+    "scattered_dx12": {
+      "2048/32/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.010961,
+          "read": 23040,
+          "maps": 6,
+          "seconds": 0.009221
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007259,
+          "read": 23040,
+          "maps": 6,
+          "seconds": 0.007
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.008906,
+          "read": 39936,
+          "maps": 6,
+          "seconds": 0.007585
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.009155,
+          "read": 47104,
+          "maps": 6,
+          "seconds": 0.008184
+        },
+        {
+          "nodes": 4096,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.011046,
+          "read": 51200,
+          "maps": 6,
+          "seconds": 0.008769
+        }
+      ],
+      "2048/256/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007058,
+          "read": 184320,
+          "maps": 6,
+          "seconds": 0.007341
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007599,
+          "read": 184320,
+          "maps": 6,
+          "seconds": 0.007391
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007332,
+          "read": 307200,
+          "maps": 6,
+          "seconds": 0.007836
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007291,
+          "read": 318832,
+          "maps": 10,
+          "seconds": 0.011166
+        },
+        {
+          "nodes": 4096,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007846,
+          "read": 354672,
+          "maps": 10,
+          "seconds": 0.012023
+        }
+      ],
+      "32768/512/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 106954752,
+          "baseline_seconds": 0.064836,
+          "read": 376832,
+          "maps": 6,
+          "seconds": 0.019021
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 106954752,
+          "baseline_seconds": 0.07082,
+          "read": 376832,
+          "maps": 6,
+          "seconds": 0.022328
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 106954752,
+          "baseline_seconds": 0.069379,
+          "read": 555136,
+          "maps": 10,
+          "seconds": 0.026516
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 106954752,
+          "baseline_seconds": 0.070038,
+          "read": 646960,
+          "maps": 10,
+          "seconds": 0.02765
+        },
+        {
+          "nodes": 4096,
+          "baseline_bytes": 106954752,
+          "baseline_seconds": 0.094118,
+          "read": 700736,
+          "maps": 10,
+          "seconds": 0.033006
+        }
+      ]
+    },
+    "maximum_cuda": {
+      "131072/512/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.096245,
+          "read": 199168,
+          "maps": 11,
+          "seconds": 0.071201
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.125166,
+          "read": 313856,
+          "maps": 11,
+          "seconds": 0.127441
+        },
+        {
+          "nodes": 512,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.123632,
+          "read": 339480,
+          "maps": 15,
+          "seconds": 0.130105
+        }
+      ],
+      "131072/131072/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.169143,
+          "read": 49938432,
+          "maps": 15,
+          "seconds": 0.136717
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.169532,
+          "read": 64040760,
+          "maps": 67,
+          "seconds": 0.910817
+        },
+        {
+          "nodes": 512,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.136639,
+          "read": 71200291,
+          "maps": 91,
+          "seconds": 1.587439
+        }
+      ]
+    }
+  },
+  "row_partitions_packed": {
+    "ordinary": {
+      "CUDA": {
+        "128/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.001139,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.001813
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000836,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.00115
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000914,
+            "read": 56960,
+            "maps": 11,
+            "seconds": 0.001318
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000781,
+            "read": 83584,
+            "maps": 11,
+            "seconds": 0.0019
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000758,
+            "read": 100992,
+            "maps": 11,
+            "seconds": 0.002159
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.001168,
+            "read": 107136,
+            "maps": 11,
+            "seconds": 0.002842
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000969,
+            "read": 130688,
+            "maps": 11,
+            "seconds": 0.002616
+          }
+        ],
+        "2048/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.004644,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.007936
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002424,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.002239
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002214,
+            "read": 56960,
+            "maps": 11,
+            "seconds": 0.0039
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003417,
+            "read": 83584,
+            "maps": 11,
+            "seconds": 0.0065
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002479,
+            "read": 100992,
+            "maps": 11,
+            "seconds": 0.003938
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003231,
+            "read": 107136,
+            "maps": 11,
+            "seconds": 0.004098
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.00285,
+            "read": 130688,
+            "maps": 11,
+            "seconds": 0.006316
+          }
+        ],
+        "2048/2048/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.003414,
+            "read": 796672,
+            "maps": 11,
+            "seconds": 0.003083
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.004075,
+            "read": 796672,
+            "maps": 11,
+            "seconds": 0.003054
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002336,
+            "read": 906020,
+            "maps": 11,
+            "seconds": 0.016607
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.002639,
+            "read": 1119828,
+            "maps": 11,
+            "seconds": 0.119652
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.004559,
+            "read": 1267668,
+            "maps": 11,
+            "seconds": 0.014346
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.00665,
+            "read": 1331524,
+            "maps": 11,
+            "seconds": 0.013638
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 3389440,
+            "baseline_seconds": 0.004391,
+            "read": 1419468,
+            "maps": 11,
+            "seconds": 0.018
+          }
+        ],
+        "128/4096/True": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000942,
+            "read": 48768,
+            "maps": 11,
+            "seconds": 0.001411
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000842,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.000907
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000868,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.000847
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.001719,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.000971
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000958,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.000975
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000871,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.000878
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 211840,
+            "baseline_seconds": 0.000922,
+            "read": 211840,
+            "maps": 12,
+            "seconds": 0.001329
+          }
+        ],
+        "32768/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.029194,
+            "read": 199168,
+            "maps": 11,
+            "seconds": 0.021319
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.036773,
+            "read": 199168,
+            "maps": 11,
+            "seconds": 0.132078
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.035779,
+            "read": 227840,
+            "maps": 11,
+            "seconds": 0.027463
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.036534,
+            "read": 317952,
+            "maps": 11,
+            "seconds": 0.031221
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.041628,
+            "read": 334360,
+            "maps": 11,
+            "seconds": 0.031684
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.034987,
+            "read": 362616,
+            "maps": 11,
+            "seconds": 0.023923
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.027573,
+            "read": 391776,
+            "maps": 11,
+            "seconds": 0.023753
+          }
+        ],
+        "32768/32768/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.024855,
+            "read": 12484608,
+            "maps": 11,
+            "seconds": 0.025573
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.041938,
+            "read": 12484608,
+            "maps": 11,
+            "seconds": 0.037796
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.04921,
+            "read": 13755519,
+            "maps": 11,
+            "seconds": 0.178786
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.037899,
+            "read": 16317655,
+            "maps": 11,
+            "seconds": 0.151943
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.048478,
+            "read": 18048207,
+            "maps": 11,
+            "seconds": 0.28834
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.070104,
+            "read": 19142375,
+            "maps": 11,
+            "seconds": 0.194923
+          },
+          {
+            "nodes": 32768,
+            "baseline_bytes": 54231040,
+            "baseline_seconds": 0.036659,
+            "read": 20471493,
+            "maps": 11,
+            "seconds": 0.141115
+          }
+        ]
+      },
+      "VULKAN": {
+        "128/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.01188,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.005847
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.010436,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.004057
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003441,
+            "read": 161792,
+            "maps": 6,
+            "seconds": 0.005011
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003444,
+            "read": 196608,
+            "maps": 6,
+            "seconds": 0.004712
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.004675,
+            "read": 208896,
+            "maps": 6,
+            "seconds": 0.005442
+          }
+        ],
+        "2048/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.013561,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.007596
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.014186,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.008753
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.010845,
+            "read": 161792,
+            "maps": 6,
+            "seconds": 0.008733
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.01189,
+            "read": 196608,
+            "maps": 6,
+            "seconds": 0.013656
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.013896,
+            "read": 208896,
+            "maps": 6,
+            "seconds": 0.014295
+          }
+        ],
+        "2048/2048/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.049304,
+            "read": 1507328,
+            "maps": 6,
+            "seconds": 0.012588
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.012453,
+            "read": 1507328,
+            "maps": 6,
+            "seconds": 0.012797
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.017543,
+            "read": 2134016,
+            "maps": 6,
+            "seconds": 0.13855
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.012985,
+            "read": 2455616,
+            "maps": 6,
+            "seconds": 0.020226
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.011654,
+            "read": 2585984,
+            "maps": 6,
+            "seconds": 0.016736
+          }
+        ],
+        "128/4096/True": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002567,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.00315
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002945,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.002877
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002632,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.002786
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003139,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.002909
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002766,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.002455
+          }
+        ],
+        "32768/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.077308,
+            "read": 376832,
+            "maps": 6,
+            "seconds": 0.019415
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.091341,
+            "read": 376832,
+            "maps": 6,
+            "seconds": 0.022919
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.113453,
+            "read": 548640,
+            "maps": 6,
+            "seconds": 0.050368
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.112898,
+            "read": 646416,
+            "maps": 6,
+            "seconds": 0.032982
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.113663,
+            "read": 703728,
+            "maps": 6,
+            "seconds": 0.038108
+          }
+        ],
+        "32768/32768/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.08728,
+            "read": 23592960,
+            "maps": 6,
+            "seconds": 0.138805
+          },
+          {
+            "nodes": 1,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.139458,
+            "read": 23592960,
+            "maps": 6,
+            "seconds": 0.160136
+          },
+          {
+            "nodes": 64,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.104338,
+            "read": 31261376,
+            "maps": 6,
+            "seconds": 0.286662
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.103363,
+            "read": 35100704,
+            "maps": 6,
+            "seconds": 0.277965
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.083946,
+            "read": 37327696,
+            "maps": 6,
+            "seconds": 0.240164
+          }
+        ]
+      },
+      "D3D12": {
+        "128/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002522,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.002845
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002575,
+            "read": 106496,
+            "maps": 6,
+            "seconds": 0.002804
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002376,
+            "read": 196608,
+            "maps": 6,
+            "seconds": 0.003226
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.003058,
+            "read": 208896,
+            "maps": 6,
+            "seconds": 0.004049
+          }
+        ],
+        "2048/128/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008019,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.006827
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008266,
+            "read": 106496,
+            "maps": 6,
+            "seconds": 0.006789
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.009281,
+            "read": 196608,
+            "maps": 6,
+            "seconds": 0.01148
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.007813,
+            "read": 208896,
+            "maps": 6,
+            "seconds": 0.008337
+          }
+        ],
+        "2048/2048/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008529,
+            "read": 1507328,
+            "maps": 6,
+            "seconds": 0.012134
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008791,
+            "read": 1703936,
+            "maps": 6,
+            "seconds": 0.009387
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.007741,
+            "read": 2428832,
+            "maps": 6,
+            "seconds": 0.044451
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 6684672,
+            "baseline_seconds": 0.008198,
+            "read": 2584944,
+            "maps": 6,
+            "seconds": 0.015136
+          }
+        ],
+        "128/4096/True": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.00256,
+            "read": 92160,
+            "maps": 6,
+            "seconds": 0.002752
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002433,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.00243
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002267,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.002124
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 417792,
+            "baseline_seconds": 0.002914,
+            "read": 417792,
+            "maps": 6,
+            "seconds": 0.003023
+          }
+        ],
+        "32768/512/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.106141,
+            "read": 376832,
+            "maps": 6,
+            "seconds": 0.031484
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.114694,
+            "read": 425984,
+            "maps": 6,
+            "seconds": 0.03356
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.097413,
+            "read": 640416,
+            "maps": 6,
+            "seconds": 0.045735
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.103057,
+            "read": 703728,
+            "maps": 6,
+            "seconds": 0.027884
+          }
+        ],
+        "32768/32768/False": [
+          {
+            "nodes": 0,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.095482,
+            "read": 23592960,
+            "maps": 6,
+            "seconds": 0.174996
+          },
+          {
+            "nodes": 8,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.121682,
+            "read": 26116720,
+            "maps": 6,
+            "seconds": 0.185664
+          },
+          {
+            "nodes": 256,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.093336,
+            "read": 34801584,
+            "maps": 6,
+            "seconds": 0.276597
+          },
+          {
+            "nodes": 4096,
+            "baseline_bytes": 106954752,
+            "baseline_seconds": 0.096351,
+            "read": 37310864,
+            "maps": 6,
+            "seconds": 0.281948
+          }
+        ]
+      }
+    },
+    "scattered_dx12": {
+      "2048/32/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.00933,
+          "read": 23040,
+          "maps": 6,
+          "seconds": 0.007061
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.008387,
+          "read": 23040,
+          "maps": 6,
+          "seconds": 0.00716
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.008134,
+          "read": 39936,
+          "maps": 6,
+          "seconds": 0.007222
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007503,
+          "read": 47104,
+          "maps": 6,
+          "seconds": 0.006781
+        },
+        {
+          "nodes": 4096,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007938,
+          "read": 51200,
+          "maps": 6,
+          "seconds": 0.006859
+        }
+      ],
+      "2048/256/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.007786,
+          "read": 184320,
+          "maps": 6,
+          "seconds": 0.008104
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.008694,
+          "read": 184320,
+          "maps": 6,
+          "seconds": 0.008188
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.008104,
+          "read": 307200,
+          "maps": 6,
+          "seconds": 0.0084
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.008429,
+          "read": 318832,
+          "maps": 6,
+          "seconds": 0.038178
+        },
+        {
+          "nodes": 4096,
+          "baseline_bytes": 6684672,
+          "baseline_seconds": 0.008347,
+          "read": 354672,
+          "maps": 6,
+          "seconds": 0.008198
+        }
+      ],
+      "32768/512/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 106954752,
+          "baseline_seconds": 0.069704,
+          "read": 376832,
+          "maps": 6,
+          "seconds": 0.022106
+        },
+        {
+          "nodes": 1,
+          "baseline_bytes": 106954752,
+          "baseline_seconds": 0.084732,
+          "read": 376832,
+          "maps": 6,
+          "seconds": 0.027741
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 106954752,
+          "baseline_seconds": 0.080432,
+          "read": 555136,
+          "maps": 6,
+          "seconds": 0.033357
+        },
+        {
+          "nodes": 256,
+          "baseline_bytes": 106954752,
+          "baseline_seconds": 0.075197,
+          "read": 646960,
+          "maps": 6,
+          "seconds": 0.025107
+        },
+        {
+          "nodes": 4096,
+          "baseline_bytes": 106954752,
+          "baseline_seconds": 0.077267,
+          "read": 700736,
+          "maps": 6,
+          "seconds": 0.025503
+        }
+      ]
+    },
+    "maximum_cuda": {
+      "131072/512/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.101661,
+          "read": 199168,
+          "maps": 11,
+          "seconds": 0.084771
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.108931,
+          "read": 313856,
+          "maps": 11,
+          "seconds": 0.115852
+        },
+        {
+          "nodes": 512,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.10314,
+          "read": 339480,
+          "maps": 11,
+          "seconds": 0.114385
+        }
+      ],
+      "131072/131072/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.096182,
+          "read": 49938432,
+          "maps": 11,
+          "seconds": 0.091794
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.147154,
+          "read": 64040760,
+          "maps": 11,
+          "seconds": 0.298749
+        },
+        {
+          "nodes": 512,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.162516,
+          "read": 71200291,
+          "maps": 11,
+          "seconds": 0.716929
+        }
+      ]
+    }
+  },
+  "large_row_major_merges": {
+    "CUDA": {
+      "131072/512/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.090634,
+          "read": 199168,
+          "maps": 11,
+          "seconds": 0.069198
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.124418,
+          "read": 313856,
+          "maps": 11,
+          "seconds": 0.10034
+        },
+        {
+          "nodes": 512,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.191509,
+          "read": 339480,
+          "maps": 11,
+          "seconds": 0.132176
+        }
+      ],
+      "131072/131072/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.089454,
+          "read": 49938432,
+          "maps": 11,
+          "seconds": 0.08983
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.160471,
+          "read": 64040760,
+          "maps": 11,
+          "seconds": 0.185657
+        },
+        {
+          "nodes": 512,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.144286,
+          "read": 71200291,
+          "maps": 11,
+          "seconds": 0.274677
+        }
+      ]
+    },
+    "VULKAN": {
+      "131072/512/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.593111,
+          "read": 376832,
+          "maps": 6,
+          "seconds": 0.093831
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.629642,
+          "read": 606208,
+          "maps": 6,
+          "seconds": 0.132738
+        },
+        {
+          "nodes": 512,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.428837,
+          "read": 657456,
+          "maps": 6,
+          "seconds": 0.127651
+        }
+      ],
+      "131072/131072/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.431642,
+          "read": 94371840,
+          "maps": 6,
+          "seconds": 0.196802
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.395422,
+          "read": 122576496,
+          "maps": 6,
+          "seconds": 0.278904
+        },
+        {
+          "nodes": 512,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.403647,
+          "read": 139820624,
+          "maps": 6,
+          "seconds": 0.908561
+        }
+      ]
+    },
+    "D3D12": {
+      "131072/512/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.444016,
+          "read": 376832,
+          "maps": 6,
+          "seconds": 0.083546
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.568018,
+          "read": 606208,
+          "maps": 6,
+          "seconds": 0.097942
+        },
+        {
+          "nodes": 512,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.430973,
+          "read": 657456,
+          "maps": 6,
+          "seconds": 0.12097
+        }
+      ],
+      "131072/131072/False": [
+        {
+          "nodes": 0,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.444431,
+          "read": 94371840,
+          "maps": 6,
+          "seconds": 0.233282
+        },
+        {
+          "nodes": 64,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.469145,
+          "read": 122576496,
+          "maps": 6,
+          "seconds": 0.284043
+        },
+        {
+          "nodes": 512,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.800793,
+          "read": 139820624,
+          "maps": 6,
+          "seconds": 1.062809
+        }
+      ]
+    }
+  },
+  "final_131072_lanes": {
+    "CUDA": {
+      "131072/512/False": [
+        {
+          "nodes": 512,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.131296,
+          "read": 338560,
+          "maps": 11,
+          "seconds": 0.089788
+        }
+      ],
+      "131072/131072/False": [
+        {
+          "nodes": 512,
+          "baseline_bytes": 216924160,
+          "baseline_seconds": 0.142897,
+          "read": 72488448,
+          "maps": 11,
+          "seconds": 0.244204
+        }
+      ]
+    },
+    "VULKAN": {
+      "131072/512/False": [
+        {
+          "nodes": 512,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.673756,
+          "read": 655616,
+          "maps": 6,
+          "seconds": 0.108121
+        }
+      ],
+      "131072/131072/False": [
+        {
+          "nodes": 512,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.5039,
+          "read": 139471872,
+          "maps": 6,
+          "seconds": 0.390207
+        }
+      ]
+    },
+    "D3D12": {
+      "131072/512/False": [
+        {
+          "nodes": 512,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.430967,
+          "read": 655616,
+          "maps": 6,
+          "seconds": 0.103226
+        }
+      ],
+      "131072/131072/False": [
+        {
+          "nodes": 512,
+          "baseline_bytes": 427819008,
+          "baseline_seconds": 0.408062,
+          "read": 139471872,
+          "maps": 6,
+          "seconds": 0.305507
+        }
+      ]
+    }
+  }
+}

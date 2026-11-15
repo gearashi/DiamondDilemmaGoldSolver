@@ -1,0 +1,45 @@
+{
+  "initial": {
+    "generation": 51,
+    "origin": "20261115T045713584178Z",
+    "external": false,
+    "total": 2051,
+    "completed": 12,
+    "cursor": 2051,
+    "paused": 0,
+    "counters": [
+      717846,
+      152474,
+      110316
+    ]
+  },
+  "after_kill": {
+    "generation": 223,
+    "origin": "20261115T045730110957Z",
+    "external": true,
+    "total": 2051,
+    "completed": 12,
+    "cursor": 2051,
+    "paused": 1911,
+    "counters": [
+      865887,
+      177862,
+      135493
+    ]
+  },
+  "normal_resume": {
+    "generation": 973,
+    "origin": "20261115T045740696053Z",
+    "external": false,
+    "total": 2051,
+    "completed": 12,
+    "cursor": 2051,
+    "paused": 1975,
+    "counters": [
+      1189056,
+      237211,
+      194747
+    ]
+  },
+  "verified_origin": true
+}

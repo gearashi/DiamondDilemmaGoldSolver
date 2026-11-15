@@ -1138,7 +1138,7 @@
       "source_id": 4,
       "title": "Checkpoint only changed classic GPU fields and frame chunks",
       "proposal_and_validation": "The classic (non-domain) GPU checkpoint is still an uncompressed whole NPZ. The installed native sample has 43 members and 260,190,250 bytes, including six arrays of 41,943,168 bytes each. Screen constant prefix data, idle lanes, and dirty frame/column chunks across real consecutive saves. Compare reusing the existing incremental checkpoint store with chunked certified native payloads, preserve old NPZ imports, cheap host-only exhaustion checks, crash-safe publication, checksums, independent witnesses and exact restart ownership. Count device readbacks, writes and unchanged payloads; cover Windows and Vulkan and disk-full fallback.",
-      "state": "validated portable and parked checkpoint formats; testing native readback ranges",
+      "state": "native frame and sparse lane transfers settled; testing remaining board-array scope",
       "evidence": [
         "bench_r35_native_chunks.py",
         "docs/R35_NATIVE_CHUNKS.json",
@@ -1152,10 +1152,18 @@
         "docs/R35_PARKED_PUBLIC_FINAL.json",
         "docs/R35_PARKED_ADMISSION.json",
         "docs/R35_PARKED_LONG_FINAL.json",
-        "docs/R35_CUDA_READBACK.json"
+        "docs/R35_CUDA_READBACK.json",
+        "docs/R35_NATIVE_RANGE_TRANSFERS.json",
+        "docs/R35_NATIVE_COLUMN_TRANSFERS.json",
+        "docs/R35_RANGE_CRASH_RESUME.json",
+        "docs/R35_BOARD_TRAFFIC.json",
+        "bench_r35_native_ranges.py",
+        "bench_r35_board_traffic.py",
+        "test_r35_checkpoint_ranges.py"
       ],
-      "measurement": "Original real crash at generation 298 with 1911 parked jobs resumed and saved portable generation 1456 with verified origin. True suffix consuming 512 jobs across checkpoints reproduced all 38 native fields after cold resize and steps on CUDA, Vulkan, D3D12. 8001 parked jobs: 3766695 to 1616309 Windows write bytes with a standalone final. 33-generation adverse 512/480 ties standalone after gating. CUDA exact-difference widths compared on actual 128–32768 lanes and 0–32768 steps.",
-      "next_step": "Choose and integrate the validated native readback path using ownership/range vs device comparison or full capture. Test old noncanonical tail frames, terminal lanes, Gold rewinds, private snapshots, static/dynamic/CPU assistance and realistic long intervals on CUDA/Vulkan/D3D12. Reconfirm normal stopped portable materialization on final image."
+      "measurement": "At 131072 lanes, final 512-step native captures transferred 72488448/216924160 CUDA and 139471872/427819008 Vulkan or D3D12 bytes with all fields equal. Sparse 512-job case: 338560 CUDA/655616 WebGPU. Actual D3D12 OOM fixed; dispersed 384-job installation 311040 to 23 queue writes, one job 810 to 17. Frozen final source recovered a 1911-job parked process kill from generation 223 to portable 973. Static board-only screen has 870235 structurally mutable of 5152480 entries; dynamic occupancy screen 1812630 of 4992000.",
+      "next_step": "Implement and compare strict static board-row and frame-derived occupied-cell native reads against the present 160 rows per mutable lane. Preserve independent board/used validity, test damaged inputs, dynamic/forced/CPU and 160-depth pending/rewind, real refills, native stop/resize and 131072 lanes. Decide their precise scope, repin reviewed active source only if changed, and close #68 after all decision-relevant extensions.",
+      "decision_to_date": "Keep authenticated parked-bank storage, ownership-aware native frame readback and compact sparse WebGPU transfers for the verified layouts. The separate board-array projection has materially fewer values in the original controls and requires an actual native transport and independent validity checks."
     },
     {
       "id": 69,
