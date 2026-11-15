@@ -1,0 +1,106 @@
+{
+  "1024/0": [
+    {
+      "cap": 262144,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 195848
+    },
+    {
+      "cap": 1048576,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 195848
+    },
+    {
+      "cap": 4194304,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 195848
+    },
+    {
+      "cap": 16777216,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 195848
+    }
+  ],
+  "1024/256": [
+    {
+      "cap": 262144,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 120018
+    },
+    {
+      "cap": 1048576,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 120018
+    },
+    {
+      "cap": 4194304,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 120018
+    },
+    {
+      "cap": 16777216,
+      "checked": 512,
+      "payload": 21474749,
+      "estimated_bytes": 120018
+    }
+  ],
+  "16384/0": [
+    {
+      "cap": 262144,
+      "checked": 48953,
+      "payload": 2050205063,
+      "estimated_bytes": 261932
+    },
+    {
+      "cap": 1048576,
+      "checked": 34205,
+      "payload": 1432335467,
+      "estimated_bytes": 1048492
+    },
+    {
+      "cap": 4194304,
+      "checked": 8192,
+      "payload": 343120553,
+      "estimated_bytes": 2654252
+    },
+    {
+      "cap": 16777216,
+      "checked": 8192,
+      "payload": 343120553,
+      "estimated_bytes": 2654252
+    }
+  ],
+  "16384/256": [
+    {
+      "cap": 262144,
+      "checked": 45107,
+      "payload": 1889046929,
+      "estimated_bytes": 262022
+    },
+    {
+      "cap": 1048576,
+      "checked": 18627,
+      "payload": 780087788,
+      "estimated_bytes": 1048494
+    },
+    {
+      "cap": 4194304,
+      "checked": 8192,
+      "payload": 343120553,
+      "estimated_bytes": 1394056
+    },
+    {
+      "cap": 16777216,
+      "checked": 8192,
+      "payload": 343120553,
+      "estimated_bytes": 1394056
+    }
+  ]
+}

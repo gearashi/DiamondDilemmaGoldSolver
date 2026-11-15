@@ -1,0 +1,20 @@
+{
+  "unique": {
+    "rows": 541,
+    "estimated": 8382872,
+    "traced_current": 8371648,
+    "traced_peak": 8399168
+  },
+  "eight_families": {
+    "rows": 4096,
+    "estimated": 2051744,
+    "traced_current": 1760568,
+    "traced_peak": 1799749
+  },
+  "singleton": {
+    "rows": 4096,
+    "estimated": 685364,
+    "traced_current": 509400,
+    "traced_peak": 525376
+  }
+}

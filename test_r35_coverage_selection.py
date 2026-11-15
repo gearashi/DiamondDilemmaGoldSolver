@@ -123,3 +123,62 @@ class SelectiveCoverageTests(unittest.TestCase):
             with CoverageLedger(path,scope) as reader:
                 with self.assertRaisesRegex(ValueError,'corrupt'):
                     reader.remaining([(4,4)])
+
+    def test_dense_changes_preserve_reordered_queries_and_numeric_widths(self):
+        from constraint_work import _CoverageMaskTable
+        rng = Random(3572)
+        root = ((1 << 96) - 1,) * 64
+        table = _CoverageMaskTable(root)
+        # Sampled coordinates are identical. Other coordinates repair disjoint
+        # anchors, add fresh restrictions, or explicitly return to the full root.
+        anchor = tuple(1 << (i % 96) for i in range(64))
+        rows = [anchor]
+        for _ in range(160):
+            current = list(anchor)
+            for i in (1,2,3,9,10,17,33,57):
+                current[i] = root[i] if rng.randrange(4) == 0 else rng.getrandbits(95) | 1
+            rows.append(tuple(current))
+        records = [table.encode(row, 16 << 20)[0] for row in rows]
+        self.assertTrue(any(record[1] is not None for record in records))
+        self.assertTrue(any(record[2].typecode=='H' for record in records))
+        for hull in (root, *rows, *((1 << (i%95),)*64 for i in range(65))):
+            expected = [row for row in rows if all(a&b for a,b in zip(row,hull))]
+            self.assertEqual(list(table.matching(records,hull,lambda:None)), expected)
+        before = len(table.ids),len(table.masks),len(table.anchors)
+        self.assertIsNone(table.encode((1 << 111,)*64, 1))
+        self.assertEqual(before,(len(table.ids),len(table.masks),len(table.anchors)))
+
+    def test_literal_anchor_collisions_and_over_budget_replacements(self):
+        from constraint_work import _CoverageMaskTable
+        from unittest.mock import patch
+        rng = Random(35065)
+        root = ((1 << 480) - 1,) * 160
+        table = _CoverageMaskTable(root)
+        rows = []
+        records = []
+        with patch('builtins.hash',return_value=0):
+            for i in range(24):
+                row = [rng.getrandbits(480) | 1 for _ in root] if i % 4 == 0 else list(rows[-1])
+                row[3] = root[3] if i % 3 == 0 else (1 << i) | 2
+                row = tuple(row)
+                records.append(table.encode(row, 1048576)[0])
+                rows.append(row)
+            before = dict(table.literal_anchors)
+            self.assertIsNone(table.encode(tuple(reversed(rows[0])), 8))
+            self.assertEqual(table.literal_anchors, before)
+        self.assertTrue(any(record[0] is None and record[2] for record in records))
+        self.assertTrue(any(record[0] is None and not record[2] for record in records))
+        for hull in (root, *rows, *[root[:3]+(1<<i,)+root[4:] for i in range(24)]):
+            self.assertEqual(list(table.matching(records,hull,lambda:None)),
+                             [row for row in rows if all(a&b for a,b in zip(row,hull))])
+
+    def test_index_wider_than_uint16_and_clipped_rows(self):
+        from constraint_work import _CoverageMaskTable
+        n=65537
+        root=(7,)*n
+        table=_CoverageMaskTable(root)
+        row=root[:-1]+(1,)
+        packed=table.encode(row,4 << 20)[0]
+        self.assertIn(packed[2].typecode,('I','Q'))
+        self.assertEqual(list(table.matching([None,packed], root, lambda:None)), [row])
+        self.assertEqual(list(table.matching([packed], root[:-1]+(2,), lambda:None)), [])

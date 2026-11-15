@@ -95,7 +95,7 @@ class BlockLedger(MeasuredLedger):
             self.db.rollback()
 
 
-def mixed_families(tiles, directory, family_count, splits):
+def mixed_families(tiles, directory, family_count, splits, *, engines=None):
     from constraint_work import WorkScope
     from gpu_domain_runner import split_cubes
     from search_problem import SearchProblem
@@ -120,9 +120,11 @@ def mixed_families(tiles, directory, family_count, splits):
                 db.record_completed(boxes[j],status='infeasible',complete=True,source_scope=family,
                                     evidence={'kind':'fixed_mismatch','seam':seam})
     out = {}
-    for width in (0,1,4,8,16,32):
-        engine = MeasuredLedger if width==0 else BlockLedger
-        BlockLedger.width = width
+    if engines is None:
+        engines = [(n, MeasuredLedger if n == 0 else BlockLedger) for n in (0,1,4,8,16,32)]
+    for width, engine in engines:
+        if engine is BlockLedger:
+            BlockLedger.width = width
         runs = []
         for cap in (65536,4194304):
             with engine(path,scope) as db:

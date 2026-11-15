@@ -1,0 +1,260 @@
+{
+  "dense": {
+    "mask_ids": [
+      {
+        "cap": 65536,
+        "checked": 2687,
+        "payload": 112728955,
+        "estimated_bytes": 65172
+      },
+      {
+        "cap": 262144,
+        "checked": 512,
+        "payload": 21474749,
+        "estimated_bytes": 191752
+      },
+      {
+        "cap": 1048576,
+        "checked": 512,
+        "payload": 21474749,
+        "estimated_bytes": 191752
+      },
+      {
+        "cap": 4194304,
+        "checked": 512,
+        "payload": 21474749,
+        "estimated_bytes": 191752
+      }
+    ],
+    "shared_root": [
+      {
+        "cap": 65536,
+        "checked": 2897,
+        "payload": 121524505,
+        "estimated_bytes": 65144
+      },
+      {
+        "cap": 262144,
+        "checked": 1462,
+        "payload": 61328084,
+        "estimated_bytes": 261536
+      },
+      {
+        "cap": 1048576,
+        "checked": 512,
+        "payload": 21474749,
+        "estimated_bytes": 410876
+      },
+      {
+        "cap": 4194304,
+        "checked": 512,
+        "payload": 21474749,
+        "estimated_bytes": 410876
+      }
+    ]
+  },
+  "sparse": {
+    "mask_ids": [
+      {
+        "cap": 0,
+        "checked": 6176,
+        "payload": 200735985,
+        "retained": 0
+      },
+      {
+        "cap": 4096,
+        "checked": 4153,
+        "payload": 134920560,
+        "retained": 3940
+      },
+      {
+        "cap": 32768,
+        "checked": 64,
+        "payload": 2080006,
+        "retained": 11460
+      },
+      {
+        "cap": 65536,
+        "checked": 64,
+        "payload": 2080006,
+        "retained": 11460
+      },
+      {
+        "cap": 4194304,
+        "checked": 64,
+        "payload": 2080006,
+        "retained": 11460
+      },
+      {
+        "cap": 16777216,
+        "checked": 64,
+        "payload": 2080006,
+        "retained": 11460
+      }
+    ],
+    "shared_root": [
+      {
+        "cap": 0,
+        "checked": 6176,
+        "payload": 200735985,
+        "retained": 0
+      },
+      {
+        "cap": 4096,
+        "checked": 5551,
+        "payload": 180385304,
+        "retained": 3912
+      },
+      {
+        "cap": 32768,
+        "checked": 1618,
+        "payload": 52577576,
+        "retained": 32232
+      },
+      {
+        "cap": 65536,
+        "checked": 64,
+        "payload": 2080006,
+        "retained": 47888
+      },
+      {
+        "cap": 4194304,
+        "checked": 64,
+        "payload": 2080006,
+        "retained": 47888
+      },
+      {
+        "cap": 16777216,
+        "checked": 64,
+        "payload": 2080006,
+        "retained": 47888
+      }
+    ]
+  },
+  "sat": {
+    "mask_ids": {
+      "closes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "native": 8,
+      "decisions": 0,
+      "checked": 11,
+      "payload": 3553
+    },
+    "shared_root": {
+      "closes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "native": 8,
+      "decisions": 0,
+      "checked": 11,
+      "payload": 3553
+    }
+  },
+  "mixed": {
+    "8": {
+      "mask_ids": [
+        {
+          "cap": 65536,
+          "rows": 1285,
+          "payload": 54007008,
+          "retained": 65288
+        },
+        {
+          "cap": 4194304,
+          "rows": 256,
+          "payload": 10761760,
+          "retained": 111464
+        }
+      ],
+      "shared_root": [
+        {
+          "cap": 65536,
+          "rows": 2009,
+          "payload": 84453153,
+          "retained": 57744
+        },
+        {
+          "cap": 4194304,
+          "rows": 256,
+          "payload": 10761760,
+          "retained": 271616
+        }
+      ]
+    },
+    "32": {
+      "mask_ids": [
+        {
+          "cap": 65536,
+          "rows": 1240,
+          "payload": 52229925,
+          "retained": 65440
+        },
+        {
+          "cap": 4194304,
+          "rows": 256,
+          "payload": 10777704,
+          "retained": 110680
+        }
+      ],
+      "shared_root": [
+        {
+          "cap": 65536,
+          "rows": 2009,
+          "payload": 84579685,
+          "retained": 57744
+        },
+        {
+          "cap": 4194304,
+          "rows": 256,
+          "payload": 10777704,
+          "retained": 543524
+        }
+      ]
+    },
+    "128": {
+      "mask_ids": [
+        {
+          "cap": 65536,
+          "rows": 247,
+          "payload": 10424022,
+          "retained": 65252
+        },
+        {
+          "cap": 4194304,
+          "rows": 128,
+          "payload": 5405876,
+          "retained": 70556
+        }
+      ],
+      "shared_root": [
+        {
+          "cap": 65536,
+          "rows": 989,
+          "payload": 41768986,
+          "retained": 55524
+        },
+        {
+          "cap": 4194304,
+          "rows": 128,
+          "payload": 5405876,
+          "retained": 1421760
+        }
+      ]
+    }
+  }
+}

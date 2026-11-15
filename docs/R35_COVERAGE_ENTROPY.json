@@ -1,0 +1,82 @@
+{
+  "entropy": {
+    "unique/262144/False": {
+      "rows": 7,
+      "reads": 3549,
+      "bytes": 247960
+    },
+    "unique/262144/True": {
+      "rows": 16,
+      "reads": 3504,
+      "bytes": 248896
+    },
+    "unique/4194304/False": {
+      "rows": 118,
+      "reads": 2994,
+      "bytes": 4175972
+    },
+    "unique/4194304/True": {
+      "rows": 271,
+      "reads": 2229,
+      "bytes": 4189420
+    },
+    "clustered/262144/False": {
+      "rows": 256,
+      "reads": 2304,
+      "bytes": 245244
+    },
+    "clustered/262144/True": {
+      "rows": 189,
+      "reads": 2639,
+      "bytes": 256732
+    },
+    "clustered/4194304/False": {
+      "rows": 512,
+      "reads": 1024,
+      "bytes": 490968
+    },
+    "clustered/4194304/True": {
+      "rows": 512,
+      "reads": 1024,
+      "bytes": 712076
+    },
+    "interleaved/262144/False": {
+      "rows": 7,
+      "reads": 3549,
+      "bytes": 247960
+    },
+    "interleaved/262144/True": {
+      "rows": 106,
+      "reads": 3054,
+      "bytes": 261912
+    },
+    "interleaved/4194304/False": {
+      "rows": 512,
+      "reads": 1024,
+      "bytes": 491688
+    },
+    "interleaved/4194304/True": {
+      "rows": 512,
+      "reads": 1024,
+      "bytes": 772188
+    }
+  },
+  "cpu": {
+    "0": {
+      "checked": 1553,
+      "payload": 561838,
+      "solved_jobs": 14,
+      "workers": 2,
+      "nodes": 97,
+      "pending": 0
+    },
+    "4194304": {
+      "checked": 29,
+      "payload": 10513,
+      "solved_jobs": 14,
+      "workers": 2,
+      "nodes": 97,
+      "pending": 0
+    }
+  }
+}

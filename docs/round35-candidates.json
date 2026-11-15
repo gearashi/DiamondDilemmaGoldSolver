@@ -876,7 +876,7 @@
       "source_id": 1,
       "title": "Index exact coverage by cells that distinguish pending work",
       "proposal_and_validation": "For shared exact coverage, compare the current scope-only SQL index with conflict filtering on highly restricted cell masks before decoding whole 160-cell records. Screen a selective axis index and cheap bound-based skip under target roots and pending frontier boxes. Include symbolic and ordinary subtraction, old ledgers, concurrent inserts, deletes, corrupt records and no-selectivity controls. Compare certified work remaining and database reads/bytes.",
-      "state": "testing dense shared-root memory extension",
+      "state": "keep with exact scope",
       "measurement": "Original 128-query control: 6176 actual payloads in released stream, 127 with four checked axes, 64 using the complete checked row cache, 64 symbolic. Eight true SAT slices: 60 to 11 checks at identical 8 calls and outcomes. Dense outer scope 3332 to 2285 at 4 MiB, to 512 at 16 MiB. Four-cell interned blocks held the 512-proof dense stream in 657808 bytes vs 12329704. All 8- and 32-family queries matched; 128 unrelated roots use more bytes with blocks.",
       "evidence": [
         "docs/ROUND35_COVERAGE.md",
@@ -885,9 +885,18 @@
         "docs/R35_COVERAGE_CONSUMERS.json",
         "docs/R35_DENSE_COVERAGE.json",
         "docs/R35_COVERAGE_BLOCKS.json",
-        "docs/R35_MIXED_COVERAGE_BLOCKS.json"
+        "docs/R35_MIXED_COVERAGE_BLOCKS.json",
+        "docs/R35_COVERAGE_PACKING.json",
+        "docs/R35_COVERAGE_ANCHORS.json",
+        "docs/R35_LARGE_COVERAGE.json",
+        "docs/R35_COVERAGE_FINAL.json",
+        "docs/R35_COVERAGE_ENTROPY_TWO.json",
+        "docs/R35_COVERAGE_ALLOCATIONS.json",
+        "test_r35_coverage_selection.py"
       ],
-      "next_step": "Integrate and compare four-cell block sharing or compact source-root reuse with a sparse/low-reuse fallback. Verify budget/admission order, rollback and no-selectivity cases on all real consumers. Select or reject the extension in this round."
+      "mechanism": "COVERAGE-CHECKED-BOXES",
+      "decision": "Keep process-private checked ordinary coverage, packed mask IDs, dense-row deltas and literal fallback for mostly fresh wide masks. Eight MiB reached the cold-read minimum on all tested representative and adverse 512-proof workloads and on the 8192-proof original stream. A cold reader always authenticates each encountered record. Keep symbolic and transactional fallbacks.",
+      "reopen_if": "A new authenticated persisted selector or observed repeated production suffix beyond the tested eight-MiB budget materially changes the decision."
     },
     {
       "id": 66,

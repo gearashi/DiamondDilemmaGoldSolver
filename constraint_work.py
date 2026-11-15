@@ -7,6 +7,8 @@ Proof imports must be independently checked before their boxes enter a ledger.
 """
 from __future__ import annotations
 from dataclasses import dataclass
+from array import array
+from sys import getsizeof
 import hashlib
 import json
 from pathlib import Path
@@ -252,6 +254,149 @@ def checkpoint_boxes(checkpoint):
     return tuple(result)
 
 
+class _CoverageMaskTable:
+    """Lossless masks and sparse changes to previously verified dense boxes."""
+    anchor_limit = 256
+    literal_fallback = True
+
+    def __init__(self, root):
+        self.root = root
+        self.ids = {}
+        self.masks = [0]  # Zero denotes this axis's target-root mask.
+        self.anchors = {}
+        self.literal_anchors = {}
+
+    def encode(self, row, available):
+        if row is None:
+            return (None, 16) if available >= 16 else None
+        values = [0] * len(row)
+        changed = []
+        new = {}
+        for axis, (mask, root_mask) in enumerate(zip(row, self.root)):
+            if mask == root_mask:
+                continue
+            ident = self.ids.get(mask) or new.get(mask)
+            if ident is None:
+                ident = len(self.masks) + len(new)
+                new[mask] = ident
+            values[axis] = ident
+            changed.extend((axis, ident))
+        if (self.literal_fallback and len(new) >= max(16, len(row) // 2)
+                and sum(mask.bit_count() > 1 for mask in new) >= len(new) // 2):
+            # Fresh, unrelated wide masks cost more to intern than to store once.
+            # Nearby boxes can still share such a row. A bucket only suggests a
+            # base; all positions are compared, including on a hash collision.
+            stride = max(2, len(row) // 8)
+            buckets = (hash(row[::stride]) % 32, 32 + hash(row[1::stride]) % 32)
+            base = None
+            delta = ()
+            for bucket in buckets:
+                candidate = self.literal_anchors.get(bucket)
+                if candidate is None:
+                    continue
+                changes = tuple((i, v) for i, v in enumerate(row) if v != candidate[i])
+                if len(changes) * 4 <= len(row):
+                    base, delta = candidate, changes
+                    break
+            full = base is None
+            if full:
+                base = row
+                size = getsizeof(row) + sum(map(getsizeof, row))
+                size += 128 * sum(bucket not in self.literal_anchors for bucket in buckets)
+            else:
+                size = getsizeof(delta) + sum(getsizeof(pair) + sum(map(getsizeof,pair)) for pair in delta)
+            record = None, base, delta
+            size += 16 + getsizeof(record)
+            if size > available:
+                return None
+            if full:
+                for bucket in buckets:
+                    self.literal_anchors[bucket] = base
+            return record, size
+        anchor = None
+        key = None
+        dense = len(changed) >= len(row)
+        if dense and len(row) >= 16 and self.anchor_limit:
+            # A collision changes compression only. Every coordinate difference is stored.
+            key = hash(tuple(values[::max(1, len(row) // 8)]))
+            previous = self.anchors.get(key)
+            if previous is not None:
+                patch = []
+                for i, value in enumerate(values):
+                    if value != previous[i]:
+                        patch.extend((i, value))
+                if len(patch) < len(values):
+                    dense, anchor, changed = False, previous, patch
+        values = values if dense else changed
+        largest = max(values, default=0)
+        typecode = 'B' if largest < 256 else 'H' if largest < 65536 else 'I' if largest < 2**32 else 'Q'
+        packed = array(typecode, values)
+        record = dense, anchor, packed
+        size = 16 + getsizeof(record) + getsizeof(packed)
+        size += sum(104 + getsizeof(mask) + getsizeof(ident) for mask, ident in new.items())
+        remember = dense and key is not None and key not in self.anchors and len(self.anchors) < self.anchor_limit
+        if remember:
+            size += 112 + getsizeof(key)
+        if size > available:
+            return None
+        self.ids.update(new)
+        self.masks.extend(new)
+        if remember:
+            self.anchors[key] = packed
+        return record, size
+
+    def matching(self, records, hull, check):
+        restricted = [i for i, mask in enumerate(hull) if mask != self.root[i]]
+        bad_axes = {}
+        decoded = {}
+        for record in records:
+            check()
+            if record is None:
+                continue
+            dense, anchor, values = record
+            if dense is None:
+                if values:
+                    row = list(anchor)
+                    for i, mask in values:
+                        row[i] = mask
+                    row = tuple(row)
+                else:
+                    row = anchor
+                if all(row[i] & hull[i] for i in restricted):
+                    yield row
+                continue
+            if dense:
+                if any(values[i] and not self.masks[values[i]] & hull[i] for i in restricted):
+                    continue
+                yield tuple(self.masks[v] if v else base for v, base in zip(values, self.root))
+                continue
+
+            bad = ()
+            key = id(anchor)
+            if anchor is not None:
+                if key not in bad_axes:
+                    bad_axes[key] = {i for i in restricted if anchor[i] and not self.masks[anchor[i]] & hull[i]}
+                bad = bad_axes[key]
+            repaired = 0
+            for j in range(0, len(values), 2):
+                axis, ident = values[j], values[j + 1]
+                if ident and not self.masks[ident] & hull[axis]:
+                    break
+                repaired += axis in bad
+            else:
+                if repaired == len(bad):
+                    if anchor is None:
+                        row = list(self.root)
+                    else:
+                        if key not in decoded:
+                            decoded[key] = tuple(self.masks[v] if v else base for v, base in zip(anchor, self.root))
+                        row = list(decoded[key])
+                    for j in range(0, len(values), 2):
+                        axis, ident = values[j], values[j + 1]
+                        row[axis] = self.masks[ident] if ident else self.root[axis]
+                    yield tuple(row)
+
+
 class CoverageLedger:
     """SQLite-transactional local completed coverage, shared across search policies.
 
@@ -265,7 +410,7 @@ class CoverageLedger:
         # Private, checked prefix for repeated ordinary coverage queries.
         self._coverage_key = None
         self._coverage_prefix = []
-        self._coverage_cache_limit = 4 * 1024 * 1024
+        self._coverage_cache_limit = 8 * 1024 * 1024
         self._coverage_bytes = 0
         self._coverage_after = 0
         self.path.parent.mkdir(parents=True,exist_ok=True)
@@ -343,7 +488,6 @@ class CoverageLedger:
         return self._use_checked_coverage(target, hull, check, subtract_checked)
 
     def _use_checked_coverage(self, target, hull, check, consume):
-        from sys import getsizeof
         from r34_coverage_index import scope_id, version
         # Read the generation and payloads in the same committed WAL snapshot.
         self.db.execute('BEGIN')
@@ -356,17 +500,10 @@ class CoverageLedger:
                 self._coverage_after = 0
                 self._coverage_bytes = 0
 
-            def survives(deltas):
-                return deltas is not None and all(hull[axis] & mask for axis, mask in deltas)
+                self._coverage_table = _CoverageMaskTable(target.root)
 
             def records():
-                for delta in self._coverage_prefix:
-                    check()
-                    if survives(delta):
-                        row = list(target.root)
-                        for axis, mask in delta:
-                            row[axis] = mask
-                        yield tuple(row)
+                yield from self._coverage_table.matching(self._coverage_prefix, hull, check)
                 if self._coverage_after == through:
                     return
                 sql = """SELECT s.seq,c.scope,c.box,c.evidence,c.checksum
@@ -381,13 +518,11 @@ class CoverageLedger:
                         # Only cache a contiguous, independently checked sequence prefix.
                         # Sparse deltas reconstruct the complete box in this exact root.
                         if can_extend:
-                            delta = None if row is None else tuple((i, v) for i, v in enumerate(row) if v != target.root[i])
-                            size = 16 + getsizeof(delta)  # List slot and spare capacity.
-                            if delta is not None:
-                                size += sum(getsizeof(pair) + getsizeof(pair[0]) + getsizeof(pair[1]) for pair in delta)
-                            can_extend = self._coverage_bytes + size <= self._coverage_cache_limit
+                            encoded = self._coverage_table.encode(row, self._coverage_cache_limit - self._coverage_bytes)
+                            can_extend = encoded is not None
                             if can_extend:
-                                self._coverage_prefix.append(delta)
+                                record, size = encoded
+                                self._coverage_prefix.append(record)
                                 self._coverage_bytes += size
                                 self._coverage_after = seq
                         if row is not None:

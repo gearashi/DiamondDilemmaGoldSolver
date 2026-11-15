@@ -30,7 +30,7 @@ def budget_matrix(tiles,folder):
     return out
 
 
-def dense_proofs(tiles, folder, *, engine=MeasuredLedger, budgets=(0,65536,1048576,4194304,16777216,33554432)):
+def dense_proofs(tiles, folder, *, engine=MeasuredLedger, budgets=(0,65536,1048576,4194304,16777216,33554432), count=1024):
     """Many closures share 156 fixed cells, read from the unrestricted original root."""
     from search_problem import SearchProblem
     original = SearchProblem(tiles)
@@ -38,8 +38,8 @@ def dense_proofs(tiles, folder, *, engine=MeasuredLedger, budgets=(0,65536,10485
     scope = WorkScope.for_problem(original)
     subroot = WorkScope.for_problem(restricted).root
     source = WorkScope.for_problem(original, root=subroot)
-    boxes = split_cubes([subroot], 1024)
-    assert len(boxes) == 1024
+    boxes = split_cubes([subroot], count)
+    assert len(boxes) == count
     path = folder/'dense.sqlite'
     with MeasuredLedger(path,scope) as writer:
         for box in boxes[::2]:
@@ -51,7 +51,7 @@ def dense_proofs(tiles, folder, *, engine=MeasuredLedger, budgets=(0,65536,10485
     for cap in budgets:
         with engine(path,scope) as db:
             db._coverage_cache_limit=cap
-            for i in (1,0,2,3,512,513,1022,1023,1):
+            for i in (1,0,2,3,count//2,count//2+1,count-2,count-1,1):
                 expected = () if i%2==0 else (boxes[i],)
                 assert db.remaining([boxes[i]]) == (expected,True)
             reports.append(dict(cap=cap,checked=db.stats['coverage_records_checked'],
