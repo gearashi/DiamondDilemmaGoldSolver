@@ -1558,8 +1558,75 @@
       "source_id": "positive surviving full-phase mate graphs after #8",
       "title": "Refute full signed phases by probing scarce tile anchors and sharing eliminated geographic poses",
       "mechanism": "SIGNED-PHASE-GEOGRAPHIC-ANCHOR-CLOSURE",
-      "state": "testing",
-      "proposal_and_validation": "Permit every signed mate for an entire phase, beyond the donor union. Compare tile zero with scarce anchors, independent geographic SAT, cumulative pose elimination, all-different, stable rotations and global complement. Preserve planted Gold and restricted domains, separate phase-only geographic exclusions from physical matching, and test on held-out phases and in actual Gold entry points. Measure eliminated roots, phases and downstream calls."
+      "state": "keep authenticated partial-phase exclusions and optional geographic anchor probes",
+      "proposal_and_validation": "Permit every signed mate for an entire phase, beyond the donor union. Compare tile zero with scarce anchors, independent geographic SAT, cumulative pose elimination, all-different, stable rotations and global complement. Preserve planted Gold and restricted domains, separate phase-only geographic exclusions from physical matching, and test on held-out phases and in actual Gold entry points. Measure eliminated roots, phases and downstream calls.",
+      "decision": "The normal original-mesh geographic search detects the two checked scarce-anchor obstructions, the fixed phase, and the three independently verified 48-, 49- and 50-pin conditions in either global color convention. Reuse the shared inventory basis across projected queries and stop before CP only for an implied verified condition. Keep on-demand anchor propagation and the independent native route for unclassified signed inputs.",
+      "measurement": {
+        "small_board_anchor_filter_calls": 768,
+        "small_whole_boards": 15680,
+        "independent_board_formulas": 116,
+        "projected_positive_witnesses": 88,
+        "invalid_domains_rejected": 5,
+        "short_rule_near_source_coverage": [
+          19,
+          43
+        ],
+        "near_source_panel": 54,
+        "near_source_pass_both_prior_conditions": [
+          7,
+          20
+        ],
+        "heldout_panel": 105,
+        "heldout_anchor_rejections_already_known": 48,
+        "original_fixed_phase_native_decisions": [
+          472912,
+          299387
+        ],
+        "original_fixed_phase_prefilter_removed_poses": 12291,
+        "full_phase_verified_drat_resolution_steps": 526397865,
+        "partial_pins": [
+          48,
+          49,
+          50
+        ],
+        "balanced_phases_per_gauge": [
+          22,
+          22,
+          6
+        ],
+        "direct_small_core_proof_drat_steps": 817211113,
+        "extra_balanced_full_phases_per_gauge": 5,
+        "extra_matched_and_euler_feasible_per_gauge": 4,
+        "direct_public_unfinished_branches_before": [
+          104009,
+          106340
+        ],
+        "direct_public_cp_calls_after": [
+          0,
+          0
+        ],
+        "shared_inventory_builds": [
+          108,
+          1
+        ],
+        "shared_inventory_decisions_unchanged": 108,
+        "audit_scope": "Published rules bound to the signed artwork, authoritative mesh edges, reciprocal neighbours and independently checked full-board, interval census and mate evidence. Colored planted positives, altered samples, both complements, altered domains, deadline/interruption, both CP and dependency-free Python paths checked."
+      },
+      "evidence": [
+        "docs/ROUND35_PHASE_EXCLUSIONS.md",
+        "docs/ROUND35_PHASE_BOARD_AUDIT.md",
+        "docs/R35_PHASE_BOARD_AUDIT.json",
+        "docs/R35_HELDOUT_PHASE_ANCHORS.json",
+        "docs/R35_FIXED_PHASE_COMPARISON.json",
+        "docs/R35_FIXED_PHASE_PROOF.json",
+        "docs/R35_PARTIAL_PHASE_PUBLIC.json",
+        "docs/ROUND35_PARTIAL_PHASES.md",
+        "docs/R35_PARTIAL_PHASE_CORES.json",
+        "docs/R35_PARTIAL_PHASE_PROOF.json",
+        "docs/R35_PARTIAL_PHASE_DIRECT_COUNTS.json",
+        "docs/R35_VARIABLE_PHASE_BENCH.json"
+      ],
+      "reopen_if": "A new partial sign condition or additional supported full phase escapes all current rules and can supply an independently verified geographic exclusion, or an actual new application scope changes the mesh, artwork, root symmetry or prefilter work. Redoing pin deletions that preserve the same implication adds no current decision."
     },
     {
       "id": 84,

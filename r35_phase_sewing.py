@@ -154,10 +154,32 @@ def _published_sewings(problem, phase):
     import json
     if problem.n != 160:
         return
-    donor = 0xd237aba7e91101e88041413e8c589902021e5126
-    if phase not in (donor, donor ^ ((1 << problem.n)-1)):
+    original = 0xd237aba7e91101e88041413e8c589902021e5126
+    first = 0xcc57eae4e99109f8b073557e8c590b9202465766
+    second = 0xcc778d82e99c517987f6b57ec15837c21207cf06
+    mask = (1 << problem.n) - 1
+    selected = {
+        original: {"mip84-path-old-1"},
+        first: {"mip84-29-combined-0", "mip84-path-new-1", "mip84-29-combined-19"},
+        second: {"mip84-path-second-0"},
+    }
+    representative = next((p for p in selected if phase in (p, p ^ mask)), None)
+    if representative is None:
         return
     docs = Path(__file__).resolve().parent / "docs"
+    try:
+        catalog = json.loads((docs / "R35_MIXED_MIP_DONOR.json").read_bytes())
+    except (OSError, ValueError):
+        catalog = None
+    if isinstance(catalog, dict):
+        others = catalog.get("others", [])
+        if isinstance(others, list):
+            for record in [catalog, *others]:
+                if (isinstance(record, dict) and record.get("phase") == hex(representative)
+                        and isinstance(record.get("name"), str) and record["name"] in selected[representative]):
+                    yield {"pairs": record.get("pairs")}
+    if representative != original:
+        return
     for file in ("R35_NEAR_REFERENCE_TOURS.json", "R35_MATE_PORTFOLIOS.json"):
         try:
             data = json.loads((docs / file).read_bytes())

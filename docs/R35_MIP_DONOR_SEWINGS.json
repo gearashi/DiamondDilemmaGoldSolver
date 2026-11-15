@@ -1,0 +1,987 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "reference": "R29_INCUMBENT.json",
+  "physical_tiles": 160,
+  "named_reference_seams": 207,
+  "signed_scope": {
+    "base_groups": 13,
+    "geographic_cores": 194,
+    "edge_perfect_cores": 985,
+    "add_13": "R35_CONTACT_RESIDUALS.json",
+    "add_19": "R35_PATH_CIRCUITS.json",
+    "add_29": "the single geographic core in this document"
+  },
+  "complete_witnesses": "R35_MIXED_MIP_DONOR.json",
+  "geographic_cores": [
+    [
+      [
+        45,
+        367
+      ],
+      [
+        46,
+        116
+      ],
+      [
+        100,
+        454
+      ],
+      [
+        101,
+        391
+      ],
+      [
+        115,
+        176
+      ],
+      [
+        141,
+        451
+      ],
+      [
+        143,
+        466
+      ],
+      [
+        165,
+        220
+      ],
+      [
+        167,
+        456
+      ],
+      [
+        174,
+        382
+      ],
+      [
+        180,
+        381
+      ],
+      [
+        181,
+        476
+      ],
+      [
+        195,
+        450
+      ],
+      [
+        196,
+        440
+      ],
+      [
+        202,
+        357
+      ],
+      [
+        203,
+        474
+      ],
+      [
+        221,
+        365
+      ],
+      [
+        306,
+        453
+      ],
+      [
+        307,
+        430
+      ],
+      [
+        310,
+        336
+      ],
+      [
+        311,
+        390
+      ],
+      [
+        318,
+        364
+      ],
+      [
+        319,
+        351
+      ],
+      [
+        325,
+        337
+      ],
+      [
+        326,
+        406
+      ],
+      [
+        353,
+        368
+      ],
+      [
+        358,
+        467
+      ],
+      [
+        405,
+        457
+      ],
+      [
+        431,
+        439
+      ]
+    ]
+  ],
+  "geographic_replay": {
+    "donor": "pairs",
+    "pairs": 240,
+    "core_size": 29,
+    "connected_poses": 0,
+    "independent": {
+      "feasible": false,
+      "poses_per_component": [
+        0
+      ],
+      "nodes": 1
+    },
+    "each_deletion": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "required": [
+      [
+        141,
+        451
+      ],
+      [
+        167,
+        456
+      ],
+      [
+        318,
+        364
+      ]
+    ]
+  },
+  "anchor_control": {
+    "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+    "rules": {
+      "replayed": 0,
+      "reused": 0,
+      "clauses": 0,
+      "terminal": false,
+      "inventory_builds": 1,
+      "certified_fixed_phase": true,
+      "stored_partial_phases": 2,
+      "stored_geographic_rules": 2
+    },
+    "anchors": {
+      "edges": {
+        "status": "SURVIVING",
+        "removed": 4610,
+        "stats": {
+          "root_probes": 565,
+          "cell_revisions": 17098,
+          "anchor_splits": 12
+        },
+        "symmetries": 10,
+        "order": [
+          22,
+          86,
+          14,
+          21,
+          157,
+          17,
+          153,
+          7,
+          47,
+          50,
+          55,
+          118
+        ]
+      },
+      "Gold": {
+        "status": "SURVIVING",
+        "removed": 8260,
+        "stats": {
+          "root_probes": 553,
+          "cell_revisions": 18536,
+          "anchor_splits": 12
+        },
+        "symmetries": 10,
+        "order": [
+          22,
+          86,
+          14,
+          21,
+          157,
+          17,
+          153,
+          7,
+          47,
+          50,
+          55,
+          118
+        ]
+      }
+    }
+  },
+  "connected_comparisons": [
+    {
+      "tag": "new",
+      "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+      "paths": 19,
+      "scope": [
+        13,
+        194,
+        985
+      ],
+      "raw": 35,
+      "euler": true,
+      "mate": true,
+      "physical": 37,
+      "status": "CONNECTED_SEWING",
+      "connected": 37,
+      "lower": 37,
+      "genus": 27,
+      "has_codes": false,
+      "decisions": 7735,
+      "rounds": 2,
+      "cold_rounds": [
+        {
+          "cap": 36,
+          "verdict": false,
+          "decisions": 5478
+        },
+        {
+          "cap": 37,
+          "verdict": true,
+          "decisions": 219,
+          "cycles": [
+            8,
+            19,
+            40,
+            113,
+            185
+          ]
+        },
+        {
+          "cap": 37,
+          "verdict": true,
+          "decisions": 158,
+          "cycles": [
+            365
+          ]
+        }
+      ],
+      "cold_decisions": 5855,
+      "warm_prior_proper_loop_cuts": 3
+    },
+    {
+      "tag": "old",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "paths": 19,
+      "scope": [
+        13,
+        194,
+        985
+      ],
+      "raw": 38,
+      "euler": true,
+      "mate": true,
+      "physical": 40,
+      "status": "CONNECTED_SEWING",
+      "connected": 40,
+      "lower": 40,
+      "genus": 29,
+      "has_codes": false,
+      "decisions": 890544,
+      "rounds": 3
+    },
+    {
+      "tag": "raw31",
+      "phase": "0xce77aac6e89509e8867b457e8c580a233a5e5f22",
+      "paths": 0,
+      "scope": [
+        13,
+        194,
+        985
+      ],
+      "raw": 31,
+      "euler": false,
+      "mate": false,
+      "physical": null,
+      "status": "INFEASIBLE",
+      "connected": null,
+      "lower": null,
+      "genus": null,
+      "has_codes": false,
+      "decisions": 0,
+      "rounds": 0
+    },
+    {
+      "tag": "raw31",
+      "phase": "0xce77aac6e89509e8867b457e8c580a233a5e5f22",
+      "paths": 19,
+      "scope": [
+        13,
+        194,
+        985
+      ],
+      "raw": 33,
+      "euler": false,
+      "mate": false,
+      "physical": null,
+      "status": "INFEASIBLE",
+      "connected": null,
+      "lower": null,
+      "genus": null,
+      "has_codes": false,
+      "decisions": 0,
+      "rounds": 0
+    },
+    {
+      "tag": "second",
+      "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+      "paths": 0,
+      "scope": [
+        13,
+        194,
+        985
+      ],
+      "raw": 33,
+      "euler": true,
+      "mate": true,
+      "physical": 38,
+      "status": "CONNECTED_SEWING",
+      "connected": 39,
+      "lower": 39,
+      "genus": 28,
+      "has_codes": false,
+      "decisions": 5680,
+      "rounds": 4
+    },
+    {
+      "tag": "second",
+      "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+      "paths": 19,
+      "scope": [
+        13,
+        194,
+        985
+      ],
+      "raw": 33,
+      "euler": true,
+      "mate": true,
+      "physical": 38,
+      "status": "CONNECTED_SEWING",
+      "connected": 39,
+      "lower": 39,
+      "genus": 29,
+      "has_codes": false,
+      "decisions": 3762,
+      "rounds": 8
+    }
+  ],
+  "checked_witness_variants": [
+    {
+      "scope": "985",
+      "upper": 35,
+      "label": "cold",
+      "decisions": 4017,
+      "rounds": 3
+    },
+    {
+      "scope": "985",
+      "upper": 35,
+      "label": "witness",
+      "decisions": 3930,
+      "rounds": 2
+    },
+    {
+      "scope": "985",
+      "upper": 35,
+      "label": "short",
+      "decisions": 5679,
+      "rounds": 1
+    },
+    {
+      "scope": "985",
+      "upper": 35,
+      "label": "short-pair",
+      "decisions": 5679,
+      "rounds": 1
+    },
+    {
+      "scope": "985",
+      "upper": 35,
+      "label": "all",
+      "decisions": 5679,
+      "rounds": 1
+    },
+    {
+      "scope": "985",
+      "upper": 35,
+      "label": "short-only",
+      "decisions": 8048,
+      "rounds": 3
+    },
+    {
+      "scope": "985",
+      "upper": 36,
+      "label": "cold",
+      "decisions": 5142,
+      "rounds": 3
+    },
+    {
+      "scope": "985",
+      "upper": 36,
+      "label": "witness",
+      "decisions": 3930,
+      "rounds": 2
+    },
+    {
+      "scope": "985",
+      "upper": 36,
+      "label": "short",
+      "decisions": 5679,
+      "rounds": 1
+    },
+    {
+      "scope": "985",
+      "upper": 36,
+      "label": "short-pair",
+      "decisions": 5679,
+      "rounds": 1
+    },
+    {
+      "scope": "985",
+      "upper": 36,
+      "label": "all",
+      "decisions": 5679,
+      "rounds": 1
+    },
+    {
+      "scope": "985",
+      "upper": 36,
+      "label": "short-only",
+      "decisions": 4455,
+      "rounds": 3
+    },
+    {
+      "scope": "residual",
+      "upper": 35,
+      "label": "cold",
+      "decisions": 4550,
+      "rounds": 3
+    },
+    {
+      "scope": "residual",
+      "upper": 35,
+      "label": "witness",
+      "decisions": 4354,
+      "rounds": 2
+    },
+    {
+      "scope": "residual",
+      "upper": 35,
+      "label": "short",
+      "decisions": 5131,
+      "rounds": 1
+    },
+    {
+      "scope": "residual",
+      "upper": 35,
+      "label": "short-pair",
+      "decisions": 5131,
+      "rounds": 1
+    },
+    {
+      "scope": "residual",
+      "upper": 35,
+      "label": "all",
+      "decisions": 5131,
+      "rounds": 1
+    },
+    {
+      "scope": "residual",
+      "upper": 35,
+      "label": "short-only",
+      "decisions": 5397,
+      "rounds": 2
+    },
+    {
+      "scope": "residual",
+      "upper": 36,
+      "label": "cold",
+      "decisions": 4788,
+      "rounds": 3
+    },
+    {
+      "scope": "residual",
+      "upper": 36,
+      "label": "witness",
+      "decisions": 4354,
+      "rounds": 2
+    },
+    {
+      "scope": "residual",
+      "upper": 36,
+      "label": "short",
+      "decisions": 5131,
+      "rounds": 1
+    },
+    {
+      "scope": "residual",
+      "upper": 36,
+      "label": "short-pair",
+      "decisions": 5131,
+      "rounds": 1
+    },
+    {
+      "scope": "residual",
+      "upper": 36,
+      "label": "all",
+      "decisions": 5131,
+      "rounds": 1
+    },
+    {
+      "scope": "residual",
+      "upper": 36,
+      "label": "short-only",
+      "decisions": 6249,
+      "rounds": 3
+    }
+  ],
+  "circuit_native_controls": [
+    {
+      "tag": "second",
+      "paths": 0,
+      "witness": "cold",
+      "status": "CONNECTED_SEWING",
+      "cost": 39,
+      "decisions": 5680,
+      "rounds": 4
+    },
+    {
+      "tag": "second",
+      "paths": 0,
+      "witness": "mip84-path-second-0",
+      "status": "CONNECTED_SEWING",
+      "cost": 39,
+      "decisions": 4445,
+      "rounds": 3
+    },
+    {
+      "tag": "second",
+      "paths": 0,
+      "witness": "mip84-path-second-1",
+      "status": "CONNECTED_SEWING",
+      "cost": 39,
+      "decisions": 4445,
+      "rounds": 3
+    },
+    {
+      "tag": "second",
+      "paths": 19,
+      "witness": "cold",
+      "status": "CONNECTED_SEWING",
+      "cost": 39,
+      "decisions": 3762,
+      "rounds": 8
+    },
+    {
+      "tag": "second",
+      "paths": 19,
+      "witness": "mip84-path-second-0",
+      "status": "CONNECTED_SEWING",
+      "cost": 39,
+      "decisions": 3614,
+      "rounds": 3
+    },
+    {
+      "tag": "second",
+      "paths": 19,
+      "witness": "mip84-path-second-1",
+      "status": "CONNECTED_SEWING",
+      "cost": 39,
+      "decisions": 3614,
+      "rounds": 3
+    },
+    {
+      "tag": "new",
+      "paths": 19,
+      "witness": "cold",
+      "status": "CONNECTED_SEWING",
+      "cost": 37,
+      "decisions": 5855,
+      "rounds": 3
+    },
+    {
+      "tag": "new",
+      "paths": 19,
+      "witness": "mip84-path-new-1",
+      "status": "CONNECTED_SEWING",
+      "cost": 37,
+      "decisions": 5580,
+      "rounds": 1
+    },
+    {
+      "tag": "old",
+      "paths": 19,
+      "witness": "cold",
+      "status": "CONNECTED_SEWING",
+      "cost": 40,
+      "decisions": 890544,
+      "rounds": 3
+    },
+    {
+      "tag": "old",
+      "paths": 19,
+      "witness": "mip84-path-old-1",
+      "status": "CONNECTED_SEWING",
+      "cost": 40,
+      "decisions": 803375,
+      "rounds": 2
+    }
+  ],
+  "geographic_control": [
+    {
+      "tag": "new",
+      "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+      "paths": 0,
+      "witness_survives": false,
+      "previous": 35,
+      "connected": 35,
+      "signed": 33,
+      "decisions": 6974
+    },
+    {
+      "tag": "new",
+      "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+      "paths": 19,
+      "witness_survives": true,
+      "previous": 37,
+      "connected": 37,
+      "signed": 35,
+      "decisions": 0
+    },
+    {
+      "tag": "second",
+      "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+      "paths": 0,
+      "witness_survives": true,
+      "previous": 39,
+      "connected": 39,
+      "signed": 33,
+      "decisions": 0
+    },
+    {
+      "tag": "second",
+      "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+      "paths": 19,
+      "witness_survives": true,
+      "previous": 39,
+      "connected": 39,
+      "signed": 33,
+      "decisions": 0
+    },
+    {
+      "tag": "old",
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "paths": 19,
+      "witness_survives": true,
+      "previous": 40,
+      "connected": 40,
+      "signed": 38,
+      "decisions": 0
+    }
+  ],
+  "native_joint_controls": [
+    {
+      "extra_29": 0,
+      "circuits": 19,
+      "policy": "cold",
+      "status": "CONNECTED_SEWING",
+      "loss": 38,
+      "decisions": 18358,
+      "rounds": 5
+    },
+    {
+      "extra_29": 0,
+      "circuits": 19,
+      "policy": "hint",
+      "status": "CONNECTED_SEWING",
+      "loss": 38,
+      "decisions": 17415,
+      "rounds": 3
+    },
+    {
+      "extra_29": 1,
+      "circuits": 0,
+      "policy": "hint",
+      "status": "CONNECTED_SEWING",
+      "loss": 35,
+      "decisions": 5571,
+      "rounds": 2
+    },
+    {
+      "extra_29": 1,
+      "circuits": 19,
+      "policy": "hint",
+      "status": "CONNECTED_SEWING",
+      "loss": 38,
+      "decisions": 15020,
+      "rounds": 3
+    }
+  ],
+  "strongest_first_donor_case": {
+    "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+    "raw_signed": 35,
+    "physical": 37,
+    "connected": 38,
+    "genus": 26,
+    "rounds": [
+      {
+        "cap": 36,
+        "verdict": false,
+        "decisions": 6000
+      },
+      {
+        "cap": 37,
+        "verdict": true,
+        "decisions": 1170,
+        "cycles": [
+          4,
+          8,
+          141,
+          212
+        ]
+      },
+      {
+        "cap": 37,
+        "verdict": false,
+        "decisions": 8954
+      },
+      {
+        "cap": 38,
+        "verdict": true,
+        "decisions": 2949,
+        "cycles": [
+          21,
+          27,
+          33,
+          284
+        ]
+      },
+      {
+        "cap": 38,
+        "verdict": true,
+        "decisions": 107,
+        "cycles": [
+          365
+        ]
+      }
+    ]
+  },
+  "first_donor_985": {
+    "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766",
+    "raw_signed": 33,
+    "physical": 34,
+    "connected": 35,
+    "genus": 26,
+    "rounds": [
+      {
+        "cap": 34,
+        "verdict": true,
+        "decisions": 681,
+        "cycles": [
+          8,
+          68,
+          289
+        ]
+      },
+      {
+        "cap": 34,
+        "verdict": false,
+        "decisions": 3418
+      },
+      {
+        "cap": 35,
+        "verdict": true,
+        "decisions": 1043,
+        "cycles": [
+          48,
+          317
+        ]
+      }
+    ]
+  },
+  "portfolio_checks": [
+    {
+      "add_13": false,
+      "add_29": false,
+      "add_19": false,
+      "cost": 35,
+      "seed": "mip84-29-combined-0",
+      "decisions": 3930,
+      "rounds": 2,
+      "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766"
+    },
+    {
+      "add_13": false,
+      "add_29": false,
+      "add_19": true,
+      "cost": 37,
+      "seed": "mip84-path-new-1",
+      "decisions": 5580,
+      "rounds": 1,
+      "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766"
+    },
+    {
+      "add_13": false,
+      "add_29": true,
+      "add_19": false,
+      "cost": 35,
+      "seed": "mip84-29-combined-0",
+      "decisions": 3930,
+      "rounds": 2,
+      "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766"
+    },
+    {
+      "add_13": false,
+      "add_29": true,
+      "add_19": true,
+      "cost": 37,
+      "seed": "mip84-path-new-1",
+      "decisions": 5580,
+      "rounds": 1,
+      "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766"
+    },
+    {
+      "add_13": true,
+      "add_29": false,
+      "add_19": false,
+      "cost": 35,
+      "seed": "mip84-29-combined-0",
+      "decisions": 4354,
+      "rounds": 2,
+      "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766"
+    },
+    {
+      "add_13": true,
+      "add_29": false,
+      "add_19": true,
+      "cost": 38,
+      "seed": "mip84-29-combined-19",
+      "decisions": 17415,
+      "rounds": 3,
+      "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766"
+    },
+    {
+      "add_13": true,
+      "add_29": true,
+      "add_19": false,
+      "cost": 35,
+      "seed": "mip84-29-combined-0",
+      "decisions": 5571,
+      "rounds": 2,
+      "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766"
+    },
+    {
+      "add_13": true,
+      "add_29": true,
+      "add_19": true,
+      "cost": 38,
+      "seed": "mip84-29-combined-19",
+      "decisions": 15020,
+      "rounds": 3,
+      "phase": "0xcc57eae4e99109f8b073557e8c590b9202465766"
+    },
+    {
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "seed": "mip84-path-old-1",
+      "add_13": false,
+      "add_29": false,
+      "add_19": true,
+      "cost": 40,
+      "decisions": 803375,
+      "rounds": 2
+    },
+    {
+      "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+      "seed": "mip84-path-second-0",
+      "add_13": false,
+      "add_29": false,
+      "add_19": false,
+      "cost": 39,
+      "decisions": 4445,
+      "rounds": 3
+    },
+    {
+      "phase": "0xcc778d82e99c517987f6b57ec15837c21207cf06",
+      "seed": "mip84-path-second-0",
+      "add_13": false,
+      "add_29": false,
+      "add_19": true,
+      "cost": 39,
+      "decisions": 3614,
+      "rounds": 3
+    }
+  ],
+  "five_claim_public_case": {
+    "connected": 38,
+    "lower": 38,
+    "status": "CONNECTED_SEWING",
+    "genus": 26,
+    "geographic": 205,
+    "contact": 988,
+    "circuits": 19,
+    "published": true,
+    "decisions": 15020,
+    "round_counts": [
+      {
+        "cap": 36,
+        "result": false,
+        "decisions": 5985
+      },
+      {
+        "cap": 37,
+        "result": true,
+        "decisions": 1171
+      },
+      {
+        "cap": 37,
+        "result": false,
+        "decisions": 7864
+      }
+    ]
+  }
+}
