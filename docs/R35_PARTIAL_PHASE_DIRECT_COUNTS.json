@@ -1,0 +1,96 @@
+{
+  "partial_pins": 50,
+  "direct_pins": 152,
+  "direct_free": [
+    5,
+    9,
+    15,
+    36,
+    38,
+    80,
+    89,
+    141
+  ],
+  "original_with_previous_two_rules": [
+    {
+      "gauge": 0,
+      "status": "UNKNOWN",
+      "branches": 104009,
+      "cp_calls": 4,
+      "rules": {
+        "replayed": 0,
+        "reused": 0,
+        "clauses": 4,
+        "terminal": false,
+        "inventory_builds": 1,
+        "certified_fixed_phase": true,
+        "stored_partial_phases": 2,
+        "redundant_relative_signs": 21,
+        "stored_geographic_rules": 2
+      }
+    },
+    {
+      "gauge": 1,
+      "status": "UNKNOWN",
+      "branches": 106340,
+      "cp_calls": 4,
+      "rules": {
+        "replayed": 0,
+        "reused": 0,
+        "clauses": 4,
+        "terminal": false,
+        "inventory_builds": 0,
+        "certified_fixed_phase": true,
+        "stored_partial_phases": 2,
+        "redundant_relative_signs": 21,
+        "stored_geographic_rules": 2
+      }
+    }
+  ],
+  "additional_coverage": [
+    {
+      "phase": "0xd2378ba7e91101e88040413e8c589902021e5126",
+      "passes_mate_euler": true,
+      "already_excluded": false
+    },
+    {
+      "phase": "0xd2378ba7e91101e88040413e8c589912021e5326",
+      "passes_mate_euler": true,
+      "already_excluded": false
+    },
+    {
+      "phase": "0xd2378ba7e91101e88040413e8c589942021ed306",
+      "passes_mate_euler": true,
+      "already_excluded": false
+    },
+    {
+      "phase": "0xd237aba7e91101e88041413e8c589902021e5126",
+      "passes_mate_euler": true,
+      "already_excluded": true
+    },
+    {
+      "phase": "0xd237aba7e91101e88041413e8c589912021e5326",
+      "passes_mate_euler": false,
+      "already_excluded": false
+    },
+    {
+      "phase": "0xd237aba7e91101e88041413e8c589942021ed306",
+      "passes_mate_euler": true,
+      "already_excluded": false
+    }
+  ],
+  "with_direct_rule": [
+    {
+      "gauge": 0,
+      "status": "INFEASIBLE",
+      "cp_calls": 0,
+      "branches": 0
+    },
+    {
+      "gauge": 1,
+      "status": "INFEASIBLE",
+      "cp_calls": 0,
+      "branches": 0
+    }
+  ]
+}

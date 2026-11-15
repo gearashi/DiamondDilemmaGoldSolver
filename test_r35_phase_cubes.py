@@ -7,10 +7,10 @@ from pathlib import Path
 import unittest
 
 from r35_phase_census import census, count_equations
-from r35_phase_cube_rules import certificate_rules, certified_rules, published_rules
+from r35_phase_cube_rules import certificate_rules, certified_rules, direct_rule, published_rules
 from search_problem import SearchProblem
 from verify_r35_phase_board import small_sphere, specimen
-from verify_r35_phase_cube import check
+from verify_r35_phase_cube import check, check_direct
 
 
 DOCS = Path(__file__).resolve().parent / "docs"
@@ -44,9 +44,13 @@ class PhaseCubeTests(unittest.TestCase):
     def test_authenticated_data_and_changed_scope(self):
         file = json.loads((DOCS/"R35_PARTIAL_PHASE_CORES.json").read_bytes())
         rules = published_rules()
-        self.assertEqual(tuple(map(len,rules)), (48,49))
+        self.assertEqual(tuple(map(len,rules)), (48,49,50))
         self.assertIs(published_rules(), rules)
-        self.assertEqual(certificate_rules(file), rules)
+        self.assertEqual(certificate_rules(file), rules[:2])
+        other = json.loads((DOCS/"R35_PARTIAL_PHASE_PROOF.json").read_bytes())
+        self.assertEqual(direct_rule(other), rules[2:])
+        other["partial_rule"]["pins"][0] *= -1
+        self.assertEqual(direct_rule(other), ())
         damaged = deepcopy(file)
         damaged["rules"][0]["pins"][0] *= -1
         self.assertEqual(certificate_rules(damaged), ())
@@ -65,6 +69,14 @@ class PhaseCubeTests(unittest.TestCase):
         self.assertEqual(report["gauges"]["labelled_roots"], 1920)
         self.assertEqual(report["gauges"]["signed_physical_matching"], 38)
         self.assertEqual(report["cubes"], [48,49])
+        direct = json.loads((DOCS/"R35_PARTIAL_PHASE_PROOF.json").read_bytes())
+        report = check_direct(problem, direct)
+        self.assertEqual((report["direct_pins"], report["projected_pins"], report["balanced_per_gauge"]), (152,50,6))
+        from r30_gold import search
+        row = direct_rule(direct)[0]
+        for gauge in (0,1):
+            result = search(problem, pins={t:v^gauge for t,v in row}, geography=True, seconds=1)
+            self.assertEqual((result["status"],result["cp_calls"]),("INFEASIBLE",0))
         old = problem.edges
         problem.edges = (old[1], *old[1:])
         self.assertEqual(certified_rules(problem), ())

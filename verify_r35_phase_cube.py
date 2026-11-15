@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 from r35_phase_census import census, count_equations, gap_profiles, reverse_side
-from r35_phase_cube_rules import certificate_rules, certified_rules
+from r35_phase_cube_rules import certificate_rules, certified_rules, direct_rule
 from search_problem import SearchProblem
 
 
@@ -84,7 +84,7 @@ def failed_roots(problem, labels, anchor):
 
 def check(problem, doc, fixed):
     rules = certificate_rules(doc)
-    if not rules or rules != certified_rules(problem):
+    if not rules or not set(rules) <= set(certified_rules(problem)):
         raise ValueError("Unrecognized certificate or signed geometry.")
     if (fixed["signed_mesh_sha256"] != doc["signed_mesh_sha256"] or
         fixed["external_result"] != "VERIFIED" or fixed["phase"] != doc["fixed_phase"] or
@@ -132,6 +132,43 @@ def check(problem, doc, fixed):
     return dict(cubes=[len(r) for r in rules], census=nodes, gauges=dict(phase_count))
 
 
+def check_direct(problem, document):
+    """Connect the second board DRAT proof to its six exact inventory phases."""
+    from r35_anchor_rules import has_proved_mesh
+    if not direct_rule(document) or not has_proved_mesh(problem):
+        raise ValueError("The signed mesh does not match the board refutation.")
+    if (document["external_result"] != "VERIFIED" or
+            document["files"]["board.cnf"]["sha256"] != "96df3a89f566133aef3dd7569bec9d37b9976406e5187cfd6c78a803e534c57e" or
+            document["dimacs_header"] != "p cnf 272720 793278" or
+            document["anchor_tile"] != 25 or document["macroface"] != 0):
+        raise ValueError("Unrecognized six-phase board formula.")
+    phase = int(document["phase"], 16)
+    free = document["free_tiles"]
+    if free != [5,9,15,36,38,80,89,141]:
+        raise ValueError("Direct proof sign scope changed.")
+    pins = {t:(phase>>t)&1 for t in range(problem.n) if t not in free}
+    shorter = {abs(l)-1:int(l>0) for l in document["partial_rule"]["pins"]}
+    rows = count_equations(problem.tiles)
+    raw = gap_profiles(problem.tiles)
+    work = []
+    for complement in (0,1):
+        expected = {int(w,16) for w in document["partial_rule"]["complement_phases" if complement else "phases"]}
+        for seed in (pins,shorter):
+            actual = census(rows,problem.n,{t:v^complement for t,v in seed.items()})
+            assert actual["complete"] and len(expected) == 6 and set(actual["phases"]) == expected
+            work.append(actual["work"])
+        changed = set()
+        for text in document["partial_rule"]["adverse"]:
+            word = int(text,16) ^ (((1<<problem.n)-1) if complement else 0)
+            missing = [t for t,v in shorter.items() if (word>>t)&1 != (v^complement)]
+            assert len(missing)==1 and word not in expected
+            changed.add(missing[0])
+            tally = Counter(physical_labels(raw,word))
+            assert all(n == tally[reverse_side(k)] and (k!=reverse_side(k) or not n%2) for k,n in tally.items())
+        assert changed == set(shorter)
+    return dict(direct_pins=len(pins), projected_pins=len(shorter), balanced_per_gauge=6, census=work)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--tiles", type=Path, required=True)
@@ -139,7 +176,8 @@ if __name__ == "__main__":
     if not __debug__:
         raise RuntimeError("Run without -O to check all assertions.")
     docs = Path(__file__).resolve().parent / "docs"
-    report = check(SearchProblem(json.loads(args.tiles.read_bytes())),
-                   json.loads((docs/"R35_PARTIAL_PHASE_CORES.json").read_bytes()),
+    problem = SearchProblem(json.loads(args.tiles.read_bytes()))
+    report = check(problem, json.loads((docs/"R35_PARTIAL_PHASE_CORES.json").read_bytes()),
                    json.loads((docs/"R35_FIXED_PHASE_PROOF.json").read_bytes()))
+    report["direct"] = check_direct(problem, json.loads((docs/"R35_PARTIAL_PHASE_PROOF.json").read_bytes()))
     print(json.dumps(report, indent=2))
