@@ -55,12 +55,72 @@ def oracle(p,family,count):
     return sum(not loop_groups(arcs,slots,family.pairs(mask),p.total_segments) for mask in range(count))
 
 
+def near_family(problem,reference,required,source):
+    """Exhaust two recorded donors, including every labelled blank-side choice."""
+    from bench_r35_near_reference_tour import raw_cycles
+    from r30_gold import embedding
+    from r31_geographic import ribbon_genus
+    import hashlib
+    phase=int(source['phase'],0)
+    phases=[(phase>>tile)&1 for tile in range(problem.n)]
+    parents=[dict(pairs=row['pairs'],phases=phases) for row in source['parents']]
+    checked,status=common_phases(problem,*parents)
+    if status!='COMPATIBLE' or checked!=phases:raise ValueError('Expected two common-phase donors.')
+    seams=[set(map(tuple,row['pairs'])) for row in parents]
+    fixed=set.intersection(*seams)
+    neighbors=defaultdict(set)
+    for a,b in set.union(*seams)-fixed:
+        neighbors[a].add(b);neighbors[b].add(a)
+    def match(open_sides,selected):
+        if not open_sides:
+            yield fixed|selected
+            return
+        a=min(open_sides)
+        for b in sorted(neighbors[a]&open_sides):
+            yield from match(open_sides-{a,b},selected|{tuple(sorted((a,b)))})
+    family=Family(problem,*parents,phases)
+    counted=family.solve(geography=True,memo=True,count_after_exclusion=True)
+    direct=family.solve(geography=True)
+    domains=domain_bits(problem)
+    rows=[]
+    for mesh in match(set(neighbors),set()):
+        assert len(mesh)==240 and required<=mesh
+        cycles=raw_cycles(problem,mesh)
+        mate=[-1]*(3*problem.n)
+        for a,b in mesh:mate[a]=b;mate[b]=a
+        codes=embedding(problem,domains,mate)
+        if codes is not None and not problem.validate(codes)['valid']:
+            raise ValueError('Geographic witness failed independent Gold validation.')
+        rows.append(dict(connected=len(cycles)==1,genus=ribbon_genus(problem,mesh),
+                         retained=len(reference&mesh),cycles=cycles,gold=codes,
+                         mate_sha256=hashlib.sha256(json.dumps(sorted(mesh),separators=(',',':')).encode()).hexdigest()))
+    assert counted['complete'] and direct['complete']
+    assert len(rows)==len({r['mate_sha256'] for r in rows})==counted['possible_full_sewings']
+    assert sum(r['connected'] for r in rows)==counted['connected_full']
+    assert bool(direct['gold'])==any(r['gold'] for r in rows)
+    return dict(phase=source['phase'],fingerprint=problem.fingerprint,parents=source['parents'],
+                shared_seams=len(fixed),shared_reference=len(fixed&reference),
+                identical_to_second_retention=(fixed&reference)==(seams[1]&reference),
+                nonblank_group_sizes=[len(g[0]) for g in family.groups],
+                blank_group_sizes=[len(g[0]) for g in family.blanks],
+                permitted_root_poses=sum(sum(bool(mask&(1<<rot)) for rot in range(3)) for mask in domains),
+                projection=direct,connected_count=counted,all_choices=rows)
+
+
 def main():
     cli=argparse.ArgumentParser(description=__doc__)
     cli.add_argument('--tiles',default='data/tiles.json')
     cli.add_argument('--output',type=Path)
     cli.add_argument('--save-parents',type=Path)
+    cli.add_argument('--near-parents',type=Path,help='Check each complete sewing from two recorded common-phase parents.')
     args=cli.parse_args()
+    if args.near_parents:
+        from bench_r35_loss_boundary344 import problem_scope
+        problem,reference,_,required=problem_scope(args.tiles)
+        result=near_family(problem,reference,required,read_json(args.near_parents))
+        if args.output:args.output.write_text(json.dumps(result,indent=2)+'\n',encoding='utf8')
+        print(result['connected_count']['possible_full_sewings'],result['connected_count']['connected_full'],result['projection']['geographic_status'])
+        return
     p=SearchProblem(read_json(args.tiles));saved=read_json('docs/R35_CONNECTED_TOURS.json')
     root=saved['contract']
     phases,state=common_phases(p,saved['raw'],root)
