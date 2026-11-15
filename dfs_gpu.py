@@ -75,14 +75,20 @@ def ensure_disjoint_prefixes(prefixes):
 
 
 @lru_cache(maxsize=4)
-def _physical_gold_table(topology):
-    """Physical Gold restrictions for the three distinct cell neighbors accepted by this engine."""
+def _geographic_gold_rules(topology):
     from search_problem import SearchProblem
     from r35_physical_adjacency import geographic_inventory
     tiles=[{'id':str(i),'segments':[[pair[:2],pair[2:]] for pair in segments]}
            for i,segments in enumerate(topology)]
-    blocked=geographic_inventory(SearchProblem(tiles)).forbidden
-    if blocked:
+    return geographic_inventory(SearchProblem(tiles))
+
+
+@lru_cache(maxsize=4)
+def _physical_gold_table(topology):
+    """Physical Gold restrictions for the three distinct cell neighbors accepted by this engine."""
+    rules=_geographic_gold_rules(topology)
+    blocked=rules.forbidden
+    if blocked or rules.required:
         table=np.zeros((480,15),np.uint32)
         for a,b in blocked:
             table[a,b//32] |= np.uint32(1<<(b%32))
@@ -123,13 +129,14 @@ class DFS:
         self.pair_offsets = cp.asarray(self.host_pair_offsets)
         self.device_order = cp.asarray(self.order)
         self.gold_partners = cp.asarray(self.host_gold_partners)
-        self.device_gold_blocked = cp.asarray(self.host_gold_blocked)
+        self.device_gold_blocked = cp.asarray(self.host_gold_rules)
         self.gold_ranks = cp.asarray(self.order_rank.astype(np.int16))
         self.gold_checked = cp.zeros(n, np.uint8)
         self.device_policy = cp.asarray(self.host_policy)
         self.module = cp.RawModule(code=(ROOT / 'dfs_kernels.cu').read_text(encoding='utf-8-sig'),
                                   options=('--std=c++17', '-DREASONING_FLAGS='+str(self.feature_bits),
-                                           '-DPHYSICAL_GOLD='+str(int(self.host_gold_blocked.ndim==2))), name_expressions=('dfs_search',))
+                                           '-DPHYSICAL_GOLD='+str(int(self.host_gold_blocked.ndim==2)),
+                                            '-DFUTURE_GOLD='+str(int(bool(self.host_future_poses.size)))), name_expressions=('dfs_search',))
         self.kernel = self.module.get_function('dfs_search')
         self.boards = cp.full((160, n), -1, np.int16)
         self.used = cp.zeros((5, n), np.uint32)
@@ -205,6 +212,8 @@ class DFS:
         self.gold_segments = 0
         self.gold_fingerprint = ''
         self.host_gold_blocked = np.zeros(1,np.uint32)
+        self.host_future_poses = np.empty(0,np.uint32)
+        self.host_gold_rules = self.host_gold_blocked
         if data is None:
             return
         from validator import normalize_tiles, orientation_masks
@@ -223,6 +232,11 @@ class DFS:
         if self.gold_segments:
             topology=tuple(tuple((*left,*right) for left,right in tile['segments']) for tile in tiles)
             self.host_gold_blocked=_physical_gold_table(topology)
+            if self.host_gold_blocked.ndim==2:
+                from r35_gpu_mates import pose_table
+                self.host_future_poses=pose_table(self.neighbors,self.neighbor_sides,
+                                                 _geographic_gold_rules(topology).required)
+            self.host_gold_rules=np.concatenate((self.host_gold_blocked.ravel(),self.host_future_poses))
 
 
     def _prepare_tables(self):
@@ -662,6 +676,11 @@ class DFS:
                             dart2=3*(code2//3)+(int(self.neighbor_sides[cell,side])-code2%3)%3
                             supported=[c for c in supported if not int(self.host_gold_blocked[
                                 3*(c//3)+(side-c%3)%3,dart2//32]) & (1<<(dart2%32))]
+                    if supported != [selected] and getattr(self,'host_future_poses',np.empty(0)).size:
+                        from r35_gpu_mates import host_conflict
+                        prefix=np.where(rank<frame,arrays['boards'][:,lane],-1)
+                        supported=[c for c in supported if host_conflict(self.host_future_poses,prefix,cell,c,
+                                   self.neighbors,self.neighbor_sides,self.host_faces,self.host_reverse)<0]
                     if supported != [selected]:
                         raise ValueError('DFS forced checkpoint frame is not a proved singleton at its saved shift.')
                 if frame < depth:

@@ -1,5 +1,5 @@
 // Exact persistent DFS. One invocation owns one disjoint prefix and private stack.
-struct Parameters { n: u32, budget: u32, colors: u32, gold_total: u32, flags: u32, mate_offset: u32, reserved1: u32, reserved2: u32 }
+struct Parameters { n: u32, budget: u32, colors: u32, gold_total: u32, flags: u32, mate_offset: u32, future_enabled: u32, reserved2: u32 }
 @group(0) @binding(0) var<storage, read_write> board_used: array<u32>;
 @group(0) @binding(1) var<storage, read_write> firsts: array<u32>;
 @group(0) @binding(2) var<storage, read_write> lengths: array<u32>;
@@ -82,9 +82,61 @@ fn forbidden_neighbor(cell:u32,code:u32,lane:u32) -> i32 {
     }
     return -1;
 }
+fn demand_conflict(base:u32,cell:u32,skip:u32,wanted:u32,lane:u32) -> i32 {
+    for(var j=0u;j<3u;j++) {
+        let anchor=neighbor(cell,j);let v=board(anchor,lane);
+        if anchor==skip || v<0 {continue;}
+        let header=policy(base+u32(v)/3u);
+        if header==0u {continue;}
+        let count=policy(base+header);let start=base+header+1u+(3u*anchor+u32(v)%3u)*count;
+        for(var i=0u;i<count;i++) {
+            let val=policy(start+i);
+            if val>>9u!=cell {continue;}
+            let code=val&511u;
+            if code!=wanted {return i32(anchor);}
+        }
+    }
+    return -1;
+}
+fn future_conflict(cell:u32,code:u32,lane:u32,locate:bool) -> i32 {
+    if parameters.future_enabled==0u {return -1;}
+    let base=parameters.mate_offset+7200u;
+    let header=policy(base+code/3u);
+    if header==0u {return -1;}
+    var anchors=false;
+    for(var w=0u;w<5u;w++) {
+        anchors=anchors || ((board_used[(160u+w)*parameters.n+lane]&policy(base+160u+w))!=0u);
+    }
+    let count=policy(base+header);
+    let start=base+header+1u+(3u*cell+code%3u)*count;
+    for(var i=0u;i<count;i++) {
+        let val=policy(start+i);
+        if val==0xffffffffu {return i32(cell);}
+        let target_cell=val>>9u;let expected=val&511u;let other=board(target_cell,lane);
+        if other>=0 {if u32(other)!=expected {return i32(target_cell);} continue;}
+        if anchors {
+            let conflict=demand_conflict(base,target_cell,cell,expected,lane);
+            if conflict>=0 {return conflict;}
+        }
+        if taken(expected/3u,lane) {
+            if !locate {return i32(cell);}
+            for(var k=0u;k<160u;k++) {
+                let v=board(k,lane);
+                if v>=0 && u32(v)/3u==expected/3u {return i32(k);}
+            }
+        }
+        for(var side=0u;side<3u;side++) {
+            let outer=neighbor(target_cell,side);let v=board(outer,lane);
+            if outer!=cell && v>=0 && face(expected,side)!=reverse_face(u32(v),other_side(target_cell,side)) {
+                return i32(outer);
+            }
+        }
+    }
+    return -1;
+}
 // bucket() already covers the first two occupied sides of this candidate.
 fn matches_after_bucket(cell: u32, code: u32, lane: u32) -> bool {
-    if forbidden_neighbor(cell,code,lane)>=0 {return false;}
+    if forbidden_neighbor(cell,code,lane)>=0 || future_conflict(cell,code,lane,false)>=0 {return false;}
     if board(neighbor(cell, 0u), lane) < 0 || board(neighbor(cell, 1u), lane) < 0 { return true; }
     let other = board(neighbor(cell, 2u), lane);
     return other < 0 || face(code, 2u) == reverse_face(u32(other), other_side(cell, 2u));
@@ -249,7 +301,8 @@ fn dfs_search(@builtin(global_invocation_id) invocation: vec3<u32>) {
             let scan = metadata[11u * n + lane];
             if scan >= depth { metadata[11u * n + lane] = 255u; break; }
             let cell=selected_cell(scan,floor,lane);
-            let other=forbidden_neighbor(cell,u32(board(cell,lane)),lane);
+            var other=forbidden_neighbor(cell,u32(board(cell,lane)),lane);
+            if other<0 {other=future_conflict(cell,u32(board(cell,lane)),lane,true);}
             var closed:i32;
             if other>=0 {closed=i32(max(rank_at(cell,&ranks),rank_at(u32(other),&ranks)));}
             else {closed=gold_closed_rank(cell,lane,&ranks);}

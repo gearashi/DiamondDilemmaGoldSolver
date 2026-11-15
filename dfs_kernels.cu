@@ -18,13 +18,68 @@ __device__ __forceinline__ int forbidden_neighbor(const short *board,const short
 #endif
     return -1;
 }
+// Check whether an occupied neighbor already dictates a different tile pose here.
+__device__ __forceinline__ int demand_conflict(const short *board,const short *neighbors,
+        const unsigned int *future,int cell,int skip,int wanted,int n,int tid) {
+    for(int j=0;j<3;++j) {
+        int anchor=neighbors[3*cell+j],v=board[anchor*n+tid];
+        if(anchor==skip || v<0) continue;
+        int header=future[v/3];
+        if(!header) continue;
+        int count=future[header],start=header+1+(3*anchor+v%3)*count;
+        for(int i=0;i<count;++i) {
+            unsigned int val=future[start+i];
+            if(val>>9!=(unsigned int)cell) continue;
+            int code=val&511;
+            if(code!=wanted) return anchor;
+        }
+    }
+    return -1;
+}
+// A compulsory component is determined by the anchor. Return an actual assigned
+// blocker for restoration so the latest of its rank and the anchor's can be unwound.
+__device__ __forceinline__ int future_conflict(const short *board,const unsigned int *used,
+        const unsigned short *faces,const unsigned short *reverse,const short *neighbors,
+        const unsigned char *sides,const unsigned int *blocked,int cell,int code,int n,int tid,bool locate) {
+#if FUTURE_GOLD
+    const unsigned int *future=blocked+480*15;
+    int header=future[code/3];
+    if(!header) return -1;
+    bool anchors=false;
+    for(int w=0;w<5;++w) anchors|=(used[w*n+tid]&future[160+w])!=0;
+    int count=future[header],start=header+1+(3*cell+code%3)*count;
+    for(int i=0;i<count;++i) {
+        unsigned int val=future[start+i];
+        if(val==0xffffffffu) return cell;
+        int target=val>>9,expected=val&511,other=board[target*n+tid];
+        if(other>=0) {if(other!=expected) return target; continue;}
+        if(anchors) {
+            int conflict=demand_conflict(board,neighbors,future,target,cell,expected,n,tid);
+            if(conflict>=0) return conflict;
+        }
+        if(taken(used,expected/3,n,tid)) {
+            if(!locate) return cell;
+            for(int k=0;k<160;++k) {
+                int placed=board[k*n+tid];
+                if(placed>=0 && placed/3==expected/3) return k;
+            }
+        }
+        for(int side=0;side<3;++side) {
+            int out=neighbors[3*target+side],v=board[out*n+tid];
+            if(out!=cell && v>=0 && faces[3*expected+side]!=reverse[3*v+sides[3*target+side]]) return out;
+        }
+    }
+#endif
+    return -1;
+}
 // The candidate came from bucket(), which covers the first two occupied sides.
 // With three sides total, only an occupied third side can remain unchecked.
 __device__ __forceinline__ bool matches_after_bucket(
-    const short *board, const unsigned short *faces, const unsigned short *reverse,
+    const short *board, const unsigned int *used, const unsigned short *faces, const unsigned short *reverse,
     const short *neighbors, const unsigned char *sides, const unsigned int *blocked, int cell, int code, int n, int tid
 ) {
-    if(forbidden_neighbor(board,neighbors,sides,blocked,cell,code,n,tid)>=0) return false;
+    if(forbidden_neighbor(board,neighbors,sides,blocked,cell,code,n,tid)>=0 ||
+       future_conflict(board,used,faces,reverse,neighbors,sides,blocked,cell,code,n,tid,false)>=0) return false;
     if (board[neighbors[cell * 3] * n + tid] < 0 ||
         board[neighbors[cell * 3 + 1] * n + tid] < 0) return true;
     int other = board[neighbors[cell * 3 + 2] * n + tid];
@@ -66,7 +121,7 @@ __device__ __forceinline__ bool possible(
     bucket(board, reverse, neighbors, sides, single_offsets, pair_offsets, colors, cell, n, tid, first, length);
     for (int j = 0; j < length; ++j) {
         int code = pool[first + j];
-        if (!taken(used, code / 3, n, tid) && matches_after_bucket(board, faces, reverse, neighbors, sides, blocked, cell, code, n, tid)) return true;
+        if (!taken(used, code / 3, n, tid) && matches_after_bucket(board, used, faces, reverse, neighbors, sides, blocked, cell, code, n, tid)) return true;
     }
     return false;
 }
@@ -88,7 +143,7 @@ struct Reasoning {
         bucket(board, reverse, neighbors, sides, single_offsets, pair_offsets, colors, cell,n,tid,first,length);
         for(int j=0;j<length;++j) {
             int code=pool[first+j];
-            if(taken(used,code/3,n,tid)||!allowed(cell,code)||!matches_after_bucket(board,faces,reverse,neighbors,sides,blocked,cell,code,n,tid)) continue;
+            if(taken(used,code/3,n,tid)||!allowed(cell,code)||!matches_after_bucket(board,used,faces,reverse,neighbors,sides,blocked,cell,code,n,tid)) continue;
             singleton_index=j; ++count;
             if(pieces) {
                 int tile=code/3; bool known=false;
@@ -249,6 +304,7 @@ extern "C" __global__ void dfs_search(
             if (scan >= depth) { gold_checked[tid] = 255; break; }
             int cell=selected_cell(scan,floor,order,firsts,shifts,n,tid,flags);
             int other=forbidden_neighbor(board,neighbors,sides,blocked,cell,board[cell*n+tid],n,tid);
+            if(other<0) other=future_conflict(board,used,faces,reverse,neighbors,sides,blocked,cell,board[cell*n+tid],n,tid,true);
             int closed=other>=0 ? max((int)ranks[cell],(int)ranks[other]) :
                 gold_closed_rank(board,gold_partners,neighbors,sides,ranks,cell,n,tid,gold_total);
             ++work;
@@ -304,7 +360,7 @@ extern "C" __global__ void dfs_search(
         int code = pool[(firsts[location]&4095) + (cursor + (shifts[location]&4095)) % length];
         cursors[location] = cursor + 1; ++tried;
         int tile = code / 3, cell = selected_cell(depth,floor,order,firsts,shifts,n,tid,flags);
-        if (!reasoning.allowed(cell,code) || taken(used, tile, n, tid) || !matches_after_bucket(board, faces, reverse, neighbors, sides, blocked, cell, code, n, tid)) continue;
+        if (!reasoning.allowed(cell,code) || taken(used, tile, n, tid) || !matches_after_bucket(board, used, faces, reverse, neighbors, sides, blocked, cell, code, n, tid)) continue;
         board[cell * n + tid] = code;
         used[(tile >> 5) * n + tid] |= 1u << (tile & 31);
         bool feasible = !(flags&192) || reasoning.shared();

@@ -59,7 +59,8 @@ def residuals(p,reference):
 
 def native(p):
     import wgpu
-    from dfs_gpu import DFS,_physical_gold_table,fill_order
+    from dfs_gpu import DFS,_geographic_gold_rules,_physical_gold_table,fill_order
+    import numpy as np
     from dfs_webgpu import WebGPUDFS
     from r35_physical_adjacency import geographic_inventory
     order=fill_order(p.neighbors)
@@ -76,8 +77,8 @@ def native(p):
     for label,factory,kwargs in apis:
         runs=[]
         for rule in (inventory,geographic_inventory):
-            _physical_gold_table.cache_clear()
-            with patch('r35_physical_adjacency.geographic_inventory',rule):
+            _physical_gold_table.cache_clear();_geographic_gold_rules.cache_clear()
+            with patch('r35_gpu_mates.pose_table',return_value=np.empty(0,np.uint32)),patch('r35_physical_adjacency.geographic_inventory',rule):
                 engine=factory(p.masks,p.neighbors,p.sides,n=len(prefixes),order=order,prefixes=prefixes,
                                gold_data=p.tiles,seed=91,**kwargs)
             try:
