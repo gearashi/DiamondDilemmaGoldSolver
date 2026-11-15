@@ -1,0 +1,16 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "checked": {
+    "physical": 5,
+    "required_xor": 2,
+    "labelled_roots": 15840,
+    "geographic": 1,
+    "edge_perfect": 32
+  },
+  "named_reference": 207,
+  "compulsory": 8,
+  "weight": 2017,
+  "maximum_load": 84,
+  "minimum_lost": 25,
+  "maximum_retained": 182
+}
