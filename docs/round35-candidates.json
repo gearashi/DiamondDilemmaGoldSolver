@@ -1,0 +1,637 @@
+{
+  "round": 35,
+  "state": "active",
+  "baseline_release": "v1.15.0",
+  "initial_candidates": 71,
+  "candidates": [
+    {
+      "id": 1,
+      "area": "Physical one-loop Gold",
+      "source_id": 1,
+      "title": "Defer blank-side pairings and infer them when lifting a tour",
+      "proposal_and_validation": "In r30_gold.GoldMatching, a blank-side pair has zero entries in transitions but gets its own physical_seam Boolean, participates in exactly-one, sign and geographic restrictions, and goes into a complete embedding or blocking clause. Different blank pairings can describe precisely the same strand circuit. Generate a connected sewing on nonblank sides first. Every original tile has a segment, so a cycle visiting all segments makes the graph of tiles joined by nonblank sides connected. Assigning one tile to one face with one rotation determines every other tile pose by traversing those sides. Try at most 480 root poses before root-domain or symmetry filtering. Each complete pose dictates all 23 blank pairs; verify all blank-domain, fixed, forbidden, signed phase, reciprocal and geographic conditions and the physical board. Change r30_gold.embedding or add a partial-pairing lift with this explicit contract. In a physical-only query with no geographic witness, use exact signed residual matching on the blank class when a full sewing is requested. For other inputs with genuinely empty tiles, use residual pose packing or the old engine. Keep blank-only obligations in explanations. An unembeddable arbitrary blank completion cannot exclude a nonblank sewing. Compare exhaustive completions on tiny meshes, several blank completions of one nonblank cycle, incomplete root-pose scans, restricted blank choices, and single-loop positive/multiple-loop negatives. Count distinct nonblank projections, repeated strand trials, failed embeddings, signed blank checks and actual geographic lifts against the all-side model. R34's sparse blank matching supports are the oracle for one stage; they did not project blank choices from Gold search.",
+      "state": "in progress"
+    },
+    {
+      "id": 2,
+      "area": "Physical one-loop Gold",
+      "source_id": 2,
+      "title": "Propagate physical corner cycles while assigning mates",
+      "proposal_and_validation": "A mate (a,b) fixes both directed corner successors, using next(b) for a and next(a) for b, with next advancing one side on its triangle. Maintain rollback chains with corner count and tile membership. Reject a proper closure of unavailable vertex degree, extending a path past the maximum degree, using a tile twice at one vertex, or exceeding any count of completed vertex rings. Pack remaining free chain lengths against the remaining degree slots and try bounded successor/distance encodings in CP. Derive the inventory from the active mesh. The original has five degree-four vertices, two degree-five and 75 degree-six. R28 ring_census generates complete columns, R31 price_rings reached 100,001 successors on the original, and r31_geographic.ribbon_genus checks partial ribbon genus. These tests do not maintain live corner-chain lengths and degree budgets across optional mate decisions. Compare their closures against the three baselines on identical partial sewings. Directly enumerate small spherical maps and test complete realizable orientations, rollback/reordered assignments, interval packing false positives and a mesh with different degree inventory. Count mate removals before a completed map and complete ring columns avoided.",
+      "state": "open"
+    },
+    {
+      "id": 3,
+      "area": "Physical one-loop Gold",
+      "source_id": 3,
+      "title": "Enforce simple-mesh adjacency and physical-neighbor structure in the partner model",
+      "proposal_and_validation": "Two original cells share at most one seam, so two tile identities cannot select multiple physical bonds to one another. Group r30_gold.GoldMatching.mate by unordered tile pair and limit it by the observed maximum multiplicity on the actual mesh. r32_gold_bonds.inventory currently excludes same-tile pairs and relies on separate side matching and path checks. The R25 joint-support rule is about neighbor *cells* in geographic domains. In the physical mate relaxation, test neighbor all-different on a tile's three sides for simple cubic meshes and propagate surviving supports, including cross-mask interactions. For sufficiently narrowed mate graphs, test the actual mesh's verified vertex-connectivity as a further condition: the optimistic *tile* graph must remain connected after every deletion of one or two tiles for which the mesh does. Check only when justified by graph size/selectivity. R27's pair separator scan concerns strand vertices. Existing R28 boundary-supply checks bound small tile subsets. Compare additive rejections over those checks and pose packing. Include multi-edge meshes, open/generic meshes (guard or disable), same tile pair opposite rotations, restricted bonds, and held-out partial sewings. If no selectable duplicates or independent cut obstructions exist at relevant depths, close the corresponding refinement.",
+      "state": "open"
+    },
+    {
+      "id": 4,
+      "area": "Physical one-loop Gold",
+      "source_id": 4,
+      "title": "Price short physical tile-adjacency words against the mesh",
+      "proposal_and_validation": "When following non-backtracking physical tile bonds, the two sides used at every intermediate tile specify a left/right turn. Precompute the walk of each short turn word from every oriented cell of the target mesh. A closed polygon of distinct physical tiles requires a return to the initial pose with the prescribed headings and no internal duplicate cells. For witnessed impossible words learn explicitly scoped co-selection nogoods over just the participating side pairs, including two distinct physical paths between the same named tiles that imply incompatible relative poses. Use anchored domains as an optional finer table. r28_geo_sewing.PosePacking and the R27 partial component embedder already discover contradictions by enumerating root poses for each named component. The proposed reusable object is shared across different physical identities with the same oriented mesh word, and can be applied before a complete sewing. Constant-turn words overlap item 2; restrict the comparison here to mixed-turn words. Use short-word registry cardinalities as a stop gate. Compare all flags to direct traversal including reversed roots/words on small target meshes. Count reused nonconstant word obstructions, earlier exclusions and saved component root trials.",
+      "state": "open"
+    },
+    {
+      "id": 5,
+      "area": "Physical one-loop Gold",
+      "source_id": 5,
+      "title": "Test factor-criticality of the odd optimistic strand graph",
+      "proposal_and_validation": "A Hamiltonian cycle of odd length loses one vertex to become an even path with a perfect matching. Hence each vertex of an odd optimistic segment graph must be exposable by a maximum matching. An even Hamiltonian graph has a perfect matching. The same necessity applies after contracting already selected disjoint open strand paths, using actual remaining free endpoints for adjacencies. Handle trivial one/two-component cases and completed circuits separately; a simple collapsed two-vertex graph does not encode two distinct required joins. Start with r27_structure_filters.strand_graph, r32_gold_bonds._open_paths and r30_gold.GoldMatching.transitions. Extend to exposing all vertices in one matching decomposition and independently check any negative witness using an unmatched residual or an odd-component obstruction. Sparse conditional mate tests can use the same graph after selecting that whole seam bundle. R27 tested removing every single and pair of strand vertices for excessive component count. R34 tested matching on physical *side* classes. Neither supplies this strand matching condition. Enumerate small Hamiltonian positives and synthetic factor-critical obstructions that pass the existing checks; compare real post-matching residuals by independent cuts and added mate deletions.",
+      "state": "open"
+    },
+    {
+      "id": 6,
+      "area": "Physical one-loop Gold",
+      "source_id": 6,
+      "title": "Put a single circuit directly on mandatory physical strand IDs",
+      "proposal_and_validation": "r30_gold.GoldMatching.process solves phase-compatible side matchings, then checks connected components and adds strand cuts. constraint_circuit builds a geographic circuit on optional port nodes or fixed geographic contractions. In the mate model, create directed supported successor arcs on the 365 mandatory segment IDs and add a single circuit there. Use the signed endpoint direction illustrated by r31_gold_switch.sewn_switches, guard both endpoints consistently and bundle every occupied slot of one selected mate. OR together duplicate directed arc supports. Contract forced open paths, handle parallel joins on tiny controls, and try switching from lazy cut separation only below a measured arc count/density. Follow up with SAT encoding using the same projected physical arcs only if native CP shows an opportunity. R27 successor-rank and sparse-elimination SAT were geographic placement experiments. Verify the complete physical matching set on small scopes against enumeration and both existing circuit methods. Count disconnected completions, duplicate strand cuts, branches, propagated arcs and real geographic lifts.",
+      "state": "open",
+      "decision_changing_followups": [
+        "Compare the R27/R28/R29/R31 apex, pocket, flow and contracted-circuit connectivity encodings on the same completed Gold residuals as the physical circuit. Include adverse five-loop, empty-edge and nonplanar controls."
+      ]
+    },
+    {
+      "id": 7,
+      "area": "Physical one-loop Gold",
+      "source_id": 7,
+      "title": "Find stronger comb cuts with general handles and odd sets of teeth",
+      "proposal_and_validation": "r31_gold_pricing.fractional_cuts selects the first twelve fractional edges, enumerates triples of disjoint two-strand teeth and eight three-strand handles per triple. For additional handles from actual min cuts or fractional clusters, price disjoint crossing two-strand teeth as a cardinality-constrained bipartite matching. With strand degree two, x(delta({u,v})) = 4 - 2*x_uv. For each odd t >= 3, choose t disjoint crossing pairs, maximizing the sum of 2*x_uv - 1. Directly reconstruct and evaluate x(delta(H)) + sum x(delta(T)) >= 3*t + 1 on the unrounded LP values, preserving every transition multiplicity supplied by one mate. Candidate discovery may be incomplete; mathematical verification of each installed row is sufficient. Consider larger multi-vertex teeth only if real fractional handles survive and two-strand rows leave measurable slack. Enumerate all handles/teeth on small graphs, check every cycle satisfies each reconstructed row, compare with published triples and odd *side* matching cuts on the original and pinned residuals. Count uniquely violated rows, integral matchings excluded early and ensuing CP calls/branches.",
+      "state": "open"
+    },
+    {
+      "id": 8,
+      "area": "Physical one-loop Gold",
+      "source_id": 8,
+      "title": "Recombine full alternating cycles between two physical sewings",
+      "proposal_and_validation": "Two complete side matchings with the same signed phase differ on disjoint even alternating cycles. Taking either parent's whole matching on each such cycle preserves side ownership, signed compatibility and reciprocal masks. r31_gold_switch.sewn_switches accepts only nonoverlapping two-bond trades, and its successor permutation must be an involution. Compose the actual segment successors for changes of six/eight or more darts, count distinct cycle-choice masks, trace connected offspring, then verify geography and Gold. Start with exact direct rewiring and a rollback partial circuit check. Add memoization keyed by actual remaining cycles and endpoint state only with observed reuse. If parents differ in phase, require a compatible phase solve or retain separate families. Screen for suitable distinct parents first, including R31's positive finite matches; the old unrestricted runs did not supply a geographically recoverable original cover. Exhaust all 2^k offspring on controlled small parents and compare against direct per-side enumeration. Count newly connected sewings and validated geographic lifts per unique combination.",
+      "state": "open"
+    },
+    {
+      "id": 9,
+      "area": "Physical one-loop Gold",
+      "source_id": 9,
+      "title": "Propagate support across several rigid component poses",
+      "proposal_and_validation": "constraint_pruning.Pruner.prune_clusters projects placements supported by each mandatory component on its own. r28_geo_sewing.PosePacking.check tests whether *some* simultaneous disjoint footprint packing exists, and collapses same-footprint labelled poses. r32_fresh_geometry._skeleton_pose_masks also starts from supports per component. Compute which poses participate in at least one simultaneous packing under current domains; project labelled per-cell placements back, preserving different orientations with identical footprints. Start with pairs having overlapping footprints, then independent connected groups; include residual matching of free tiles and only supported cells/tiles under a budget. Keep all unresolved alternatives. A later exact branching comparison can choose a low-count surviving component pose, creating a disjoint and complete decision over its members. Validate every retained/removed pose against direct small-board enumeration, including overlap, singleton, multi-orientation identical footprints, a positive and a case that has some packing but a uniquely unsupported pose. Compare redundant labelled enumerations to current independent pruning and yes/no packing, then count removed poses and DFS nodes on actual Gold/skeleton residuals.",
+      "state": "open",
+      "decision_changing_followups": [
+        "Among already archived distinct lifted-contour histories, audit refusals, survivors and true finite lifts versus short UNKNOWNs. Count actual geographical lifts per unique contour under the same budget; do not regenerate identical contours."
+      ]
+    },
+    {
+      "id": 10,
+      "area": "Physical one-loop Gold",
+      "source_id": 10,
+      "title": "Reserve the future poses of compulsory partners in classic CUDA and WebGPU DFS",
+      "proposal_and_validation": "dfs_gpu._physical_gold_table exposes blocked physical pairs. dfs_kernels.cu forbidden_neighbor and its WGSL counterpart inspect already occupied adjacent faces. For a candidate belonging to a compulsory component, compile Pruner's labelled templates keyed by root tile/rotation. Check the dictated future cells, occupied tile owners, and known external seams upon the first placement. Optionally reserve future poses or narrow owned disjoint prefixes in a host-side pass; retain replayable evidence and correct stop/checkpoint behavior. Begin with checks that have no persistent per-lane reservation state. Use rollback bookkeeping and GPU domain/CPU completed-fragment deductions only after an observed benefit. R31 uses rigid components in fresh heuristic construction, R34 adds existential physical requirements on partial parity skeletons and binary CP implications, while classic 34 checks occupied forbidden pairs. Compare the exact final solution or frontier union, cuts by depth and candidate steps at matched prefix budgets with disabled/fixed/current checks on CUDA and WGSL. Include FXC, restart at a partially occupied fragment, sibling unwind, a fixed prefix spanning both directions, open controls and edges-only isolation.",
+      "state": "open"
+    },
+    {
+      "id": 11,
+      "area": "Physical one-loop Gold",
+      "source_id": 11,
+      "title": "Check the signed inventory column lattice before full integer solves",
+      "proposal_and_validation": "In r31_gold_connectivity.PhaseInterface each physical phase chooses one of two signed coefficient rows. Contract phases tied by retained bond XORs, respecting complements, accumulate the fixed offsets, and express the balance system as A*x=b for remaining binary components. Add exact slack columns of size two for mod-two inventory rows. Feasibility requires b to lie in the integer lattice generated by A; a witnessed divisibility obstruction is conclusive before considering binary bounds. Check simple per-row gcd/divisibility first, then joint modular/normal-form certificates only on actual unresolved integer queries. Treat admissible Euler targets separately if Euler is used. r33_gold_refine.IntegerPatternFilter currently runs native bounded integer CP after GF(2) screens; R34 caches checked CP cores and precomputes parity reduction. Compare with that baseline on the archived integer arrivals. Test against every binary assignment on small controls, artificial higher-modulus incompatibilities, parity slack and sign complements. Count independently verifiable new rejections and avoided native integer calls; if the actual residual matrices have no stronger obstructions, stop here.",
+      "state": "open",
+      "decision_changing_followups": [
+        "R25 #11 and R26 F07 already measured generic lattice membership. Compare emission of genuinely new certificates on the XOR-contracted signed inventory at actual loss arrivals against rational span, GF(2), the prior lattice checker and full integer CP."
+      ]
+    },
+    {
+      "id": 12,
+      "area": "Physical one-loop Gold",
+      "source_id": 12,
+      "title": "Compile phase balances by their interaction graph and interchangeable increments",
+      "proposal_and_validation": "PhaseInterface.project visits tiles roughly in input order after applying pins/boundary status, merges equal residual sums and retires a class after its final occurrence. Strip fixed offsets, group uninvolved labels with identical two-choice increments (including signed-complement orientation and Euler delta), and process a group of k interchangeable internal components as k+1 count choices. Do not merge labelled phase-request/boundary variables. Use min-frontier variable order based on actual shared live classes, project retired coordinates from keys, or split independent balance blocks and combine only their Euler totals. Try exact meet-in-the-middle across the smallest actual shared interface only if the one-pass DP still hits its state allowance. Existing R31 phase interfaces cache compiled boundary projections and R34 chooses independent phase nullspace cubes; they did not use these group-count transitions or a class-graph elimination order. Measure identical signatures and maximum live coordinates before coding wide variants. Test labelled boundary patterns/witnesses against old DP and CP, exact multiplicity when requested, complement flips, equal count in a different class, capped unknowns. Report transition counts, peak states and new completed queries under the same limit.",
+      "state": "open"
+    },
+    {
+      "id": 13,
+      "area": "Physical one-loop Gold",
+      "source_id": 13,
+      "title": "Transport certified reference-loss cardinalities into geographic Gold residuals",
+      "proposal_and_validation": "r31_geographic.add_departure_rules posts individual parity core clauses. r32_gold_watch.BondWatcher translates checked core membership into placement exclusions. r32_gold_loss and r32_gold_syndrome separately certify a global lower bound for the saved 207/52 set. Transfer a verified, input-bound complete coverage certificate as a cardinality bound, e.g. at most 190 of the 207 can be retained using the published 17 lower bound. A geographical domain may force a named physical mate across several possible owner poses. Count uniquely forced retained reference bonds and apply a unit if retaining one more would exceed the bound. In the physical CP model use sum(mate[p] for p in reference) directly, and measure on reference-near placements. Combine multiple proven reference cuts only after independent binding verification, without adding lower bounds over shared bonds. Proof transfer needs complete verified coverage, source and exact coordinates, or a fresh independent replay. Optional if the cost of authenticating the bound is prohibitive. Test under/at/above threshold, board moving intact bonds, interleaved releases, mixed objectives, corrupt/incomplete proof and nonreference controls. Count pure cardinality cuts not already covered by the published individual cores, then cut cells/branches. If all realistic unrestricted trajectories are far outside the retained set, close unrestricted promotion and confine testing to near-reference neighborhoods.",
+      "state": "open"
+    },
+    {
+      "id": 14,
+      "area": "Physical one-loop Gold",
+      "source_id": 14,
+      "title": "Replay geometric and physical matching explanations across engines",
+      "proposal_and_validation": "r32_gold_loss.Certificates checks local banned pairs, conflicting incidents, proper loops and signed XOR. r31_geographic.GeographicConflicts independently rechecks ribbon genus/pose packing under a domain scope. gpu_deduction_round26._Producer.removal can produce boundary, seam, cell-tile Hall and singleton loop evidence. Screen an actual native/user trace for repeated verified geometric/mate conflicts unrepresentable as small reusable placement deductions. If present, define narrow replayable rules for a short mesh-word/vertex obstruction, independently verified unsupported physical mate, or incompatible labelled component footprints. Keep scope-specific inventories, topology, domains, required bonds and sign assumptions in the proof. First feed a checked nogood to CPU SAT/CP/DFS, then GPU-domain cross-lane and prefix checks if the same conditions recur. Retain the ordinary edges objective for geometric rules valid for it, and explicitly isolate Gold-only derivations. Compare complete projected boards, rule applicability and exact original-scope replay, including weakened domains, changed tiles/drawings, forged certificates and limits. Report repeated expensive proof checks replaced, transferred branch eliminations and checker cost. R24–26 already transfer checked generic clause/proof data; an unchanged new transport or another general clause store has no separate merit.",
+      "state": "open"
+    },
+    {
+      "id": 15,
+      "area": "Physical one-loop Gold",
+      "source_id": 15,
+      "title": "Propagate correlations between physical mates within one mask class",
+      "proposal_and_validation": "r27_structure_filters._perfect_supports and r32_gold_bonds.gold_matching_supports decide whether each single pair belongs to some complete matching; R34 repeats the search after newly mandatory partners or a premature proper loop. For a small structured class with several perfect matchings, record co-occurrences: selecting e may necessarily select f, or exclude f, although neither is globally mandatory or forbidden. Detect forced alternating blocks through matching decompositions or memoized conditional exact matching. Combine the **whole implied set** with forced strand paths, corner chains, geometry and phase checks before exploring its alternate side mates. Translate a failed branch into a checked conditional nogood; compile compact finite options per sparse class only when actual nontrivial equivalences occur. r28_geo_sewing.sign_filter handled a two-by-two switch for parity, and r32_gold_bonds.bounded_loop_cores searches small selected tuples for direct strand closure. Neither exposes general co-selection implications from complete side matching to the other propagators. Use complete enumeration on small bipartite/nonbipartite classes and signed/restricted conditions; avoid expanding the 46-dart dense class unconditionally. Count nontrivial implications, bundled early exclusions beyond individual support and native nodes saved on actual residuals.",
+      "state": "open"
+    },
+    {
+      "id": 16,
+      "area": "Routes and fresh boards",
+      "source_id": 1,
+      "title": "Attainable two- and three-wildcard rank blocks",
+      "proposal_and_validation": "In r32_route_ranges.PrefixRanges.possible, each wildcard beyond one currently borrows all fixed-neighbor bits and every pair of wildcards is treated as adjacent. Group actual available lower cells by fixed contact mask and core membership. Test the existence of distinct pairs/triples with the requisite mutual contacts and core hits, for one common choice. Precompute bitset adjacency between classes or memoize restricted suffixes; try adaptive widths only after that screen pays. Compare support ranks eliminated before enumeration against R32's 10,381/24,576 and full physical leaves under both implementations. Exhaust small pools, arbitrary start/stop inside colex blocks, duplicate contact patterns, pinned cells and positive witnesses.",
+      "state": "open"
+    },
+    {
+      "id": 17,
+      "area": "Routes and fresh boards",
+      "source_id": 2,
+      "title": "Regional budget join dominance",
+      "proposal_and_validation": "In r34_component_budget.ComponentBudget.upper, for the same occupied donor mask, discard rows no better in gain, swap cost and minimum movers settled. Keep A over B only when A.cost<=B.cost, A.gain>=B.gain and A.movers>=B.movers for this at-most-swap, at-least-movers query. Compare lower-cardinality joins first, meet-in-the-middle on higher costs and reuse partial joins across compatible budgets. R34 measured 67,414 cheap joins in a reported comparison; cached exact results for the same budget already exist. Check compatible pool and cap, prefix states/joins/memory and complete bounds against permutation enumeration; protect mismatched mover directions.",
+      "state": "open"
+    },
+    {
+      "id": 18,
+      "area": "Routes and fresh boards",
+      "source_id": 3,
+      "title": "Account for actual donor chains at geographic cuts",
+      "proposal_and_validation": "ComponentBudget._responses currently aggregates crossing count, not open chain endpoints or cycle lengths. Carry endpoint connectivity at small boundaries, stitch donor chains to charge actual cycle budget/family, then condition an articulation/small separator of a connected interaction component that currently returns only the coarse bound. Record incremental closures at each stage and cap/saturation counts. Have an admissible relaxation or return the previous cap above width budget. Compare exhaustive crossing cycles, legal donor restrictions, hidden shared rotations and planted positive pools. R34 summed bounds over disjoint stars, it did not condition connected separators.",
+      "state": "open",
+      "decision_changing_followups": [
+        "Use the R30 donor-path decision diagram as an oracle for endpoints and cycle lengths; benchmark transfer to geographic joins only on scopes not already cheaply closed."
+      ]
+    },
+    {
+      "id": 19,
+      "area": "Routes and fresh boards",
+      "source_id": 4,
+      "title": "Certified predecessor splits for distance five",
+      "proposal_and_validation": "r30_multicenter.make_undo uses r34_exchange_undo.CoveredUndo on proper subsets of whole cycles. A single 6-cycle had zero such opportunities in 250 sampled endpoints. R30 Predecessors.consistent_splits and R31 six-cell comparisons already tried splits on specific four-swap families. Apply/transport certified single-cycle vertex removal and within-cycle split, or mixed-cycle partial shortcut, to the actual five-swap runner. Bind each transformed predecessor to the corresponding owner/family/rank or released closed shell. If a certified numeric predecessor ceiling U exists, allow U+G<target even with positive differential ceiling G. A recorded best witness alone is a lower bound; below-target page evidence generally supplies only its certified threshold minus one. Count incremental first rejects over R34's 341/54,152 scoped first cuts, including the single-cycle class and an uncovered predecessor. Independent rotation optima with moved exterior donors, strict equality and positive controls.",
+      "state": "open"
+    },
+    {
+      "id": 20,
+      "area": "Routes and fresh boards",
+      "source_id": 5,
+      "title": "Width-bounded differential price above the 12-cell table cap",
+      "proposal_and_validation": "CoveredUndo compares old/new nearby arrangements under the same exterior rotation. R34 handles 4- and 5-cell connected interiors where the combined interior/exterior fits 12 cells. Try factor elimination over the joint boundary or branch on a small separator instead of counting all boundary tuples when the cap is exceeded. Must upper-bound max over boundary b of (new optimum given b minus old optimum given b); independently maximizing before and after then subtracting can be unsound. Test exact boundary tables, a counterexample with different maximizing old/new boundary, and real previously skipped supports. Count new first exclusions and factor work, with budget failure returning unknown.",
+      "state": "open"
+    },
+    {
+      "id": 21,
+      "area": "Routes and fresh boards",
+      "source_id": 6,
+      "title": "Derived contact-graph alternatives for higher shells",
+      "proposal_and_validation": "r30_cycles.certified_contacts, r31_route_geometry.proved_connected and PrefixRanges today have proved connectivity for the relevant four-swap families only. For each five-swap family and then larger ones, bound gains for partitions of its contact graph using checked predecessors and numeric component bounds. Permit unions of feasible shapes, including disconnected pairs of profitable components; prune only when all compatible shapes are excluded by verified inequalities. Propagate allowed graph shapes down to attachment/rank intervals if opportunity exists. Compare pruned interval lengths/endpoint prices beyond existing affordable tests. Check every shape and witness on small domains, then report real verified assumptions per center/family.",
+      "state": "open"
+    },
+    {
+      "id": 22,
+      "area": "Routes and fresh boards",
+      "source_id": 7,
+      "title": "Minimum-transposition optimization beyond a fixed shell",
+      "proposal_and_validation": "The family index in r34_cycle_orders and the fixed-family/short-distance CP experiments already address ranks up to five swaps. Test an exact or bounded improvement decision using cycle count relative to the incumbent permutation (distance equals n minus cycles including fixed points) directly alongside the score threshold on confined pools. Preserve free rotations. Use independently certified minimum distance/relaxation bounds before generating further shells; six swaps covers up to twelve movers and each family obeys sum(length-1)=6. The existing r29_exchange_route generic distance enumerator is a control. Compare solver branches, proven distance lower bounds and earliest verified physical route vs family-by-family enumeration. Exhaust tiny planted displacements, exact vs at-most distance, disconnected supports and a case where the shortest route drops score temporarily. A timeout settles no shell.",
+      "state": "open"
+    },
+    {
+      "id": 23,
+      "area": "Routes and fresh boards",
+      "source_id": 8,
+      "title": "Remote-donor exchanges selected by actual boundary demand",
+      "proposal_and_validation": "r31_fresh.forest_pool, joint_repair and the ranked finite-pool runner assume the chosen pool supplies all its own pieces. Select promising geographically distant donors whose legal orientations fit a defect neighborhood, include named return paths/targets to preserve the bijection, adapt import/export count to measured gain and combine with seven/eight-mover repair. Distinct from an optimistic satellite/donor bound and from drawing a geographically unrelated random pool. Compare same-size forest/random/response-guided pools, exact verified assignments, steps to gain and unique donors touched. Test a control whose only improvement imports a distant tile, and one with no return path; restricting an optional pool proves nothing about other boards.",
+      "state": "open"
+    },
+    {
+      "id": 24,
+      "area": "Routes and fresh boards",
+      "source_id": 9,
+      "title": "Incremental donor-prefix defect obligations and durable budget cores",
+      "proposal_and_validation": "r32_route_pool.defect_cover rebuilds every seam/star for a typed prefix and CoverCores scans a process-local latest-1,024 deque. Recompute changed obligations only on affected stars, apply available-mover masks after the immutable inventory work, index a minimal core antichain by rare failure sets and persist proved cores under domain/semantic binding. If enough distinct budgets recur, derive verified frontier points in the (remaining movers, permitted seam failures) plane, using actual certified infeasibility or bounds. R34 already avoided 116 CP calls on the published comparison. Measure clauses/stars rebuilt, new first hits/avoided calls across prefix orders and restarts. Check both implication directions and multiple clauses for identical failed-seam sets, no shared global negatives from UNKNOWN.",
+      "state": "open"
+    },
+    {
+      "id": 25,
+      "area": "Routes and fresh boards",
+      "source_id": 10,
+      "title": "Reuse checked owner intervals and the actual transformed family",
+      "proposal_and_validation": "r32_route_store.PageProofs caches a successful point (source,owner,rank,family), even when the row certifies a long interval. r30_multicenter.SharedSupports.earlier_support returns only owner and rank while computing actual transformed cycle type. Store the transformed family and, where worthwhile, dependent rank/order subranges. Resolve interval hits in memory and ledger dependencies iteratively with cycle detection; current depth limit 64 leaves a valid long acyclic chain unknown. Full dependency union gives a conservative fallback on older rows. Check mixed-family positive, missing/arriving/cyclic/deep dependencies, cross-threshold replay. Measure distinct ranks/SQL reads and newly transferable certified intervals vs today's repeated-same-rank cache.",
+      "state": "open"
+    },
+    {
+      "id": 26,
+      "area": "Routes and fresh boards",
+      "source_id": 11,
+      "title": "Live, two-way root/region/ranked coverage",
+      "proposal_and_validation": "RootCoverage caches false and snapshots available scopes. r30_multicenter.make_undo.covered caches missed ranks. r31_routes.search_roots fixes ranked_exists at startup and caches support misses; its fast coverage path looks for a bare singleton page whose best is null. Key failed lookups to a cheap commit generation, or cache successes only with bounded negative expiry. Consume certified multicenter owner/family negatives, lower-threshold proof data and pinned pool membership using PageProofs, including witnesses on a different owner. Verify both traversal orders using separate connections where the other worker finishes during a run. Count duplicate leaf and pricing calls, time spent polling and source registration misses. Partial work, an unfenced dependency or an insufficient threshold cannot prove a negative.",
+      "state": "open"
+    },
+    {
+      "id": 27,
+      "area": "Routes and fresh boards",
+      "source_id": 12,
+      "title": "Fence root-cursor page work",
+      "proposal_and_validation": "r31_routes.search_roots still holds BEGIN IMMEDIATE around advance and possibly an exact rotation query. R34 fenced four other writer paths. Claim an independent root/page by generation, save stack/best under compare-and-swap and keep long pricing outside the writer transaction. Permit an available root to proceed while another is being computed. Check completed intervals before building a full join/catalogue/oracle where practical. Compare actual duplicate cursor steps, contention and warm setup with one/two workers, stale lease reclamation and termination during an exact positive. Root completion must cover its entire original subtree.",
+      "state": "open"
+    },
+    {
+      "id": 28,
+      "area": "Routes and fresh boards",
+      "source_id": 13,
+      "title": "Durable sub-support order ranges on expensive ranked pages",
+      "proposal_and_validation": "r30_multicenter.run commits by combinations of cells, even with up to 2,520 orders per owner in a five-swap family. Use r34_cycle_orders.CycleOrders mixed-radix seek to checkpoint completed order subranges, optionally split stragglers across workers or group orders by a certified common digit prefix. Use bounded adaptive quantums only when measured endpoint work/restart exposure warrants it. Avoid full sparse bitmaps for cheap supports. Carry max witness, first cuts and transformed dependencies through to promotion of a completed support. Compare exact ranked coverage to full traversal, actual order repeats/bytes on forced stops and fences, and warm opening of legacy full pages.",
+      "state": "open"
+    },
+    {
+      "id": 29,
+      "area": "Routes and fresh boards",
+      "source_id": 14,
+      "title": "Fair scheduling across unrelated center groups",
+      "proposal_and_validation": "r34_centers.search runs selected disjoint groups by a sequential list of full run() calls. At an unlimited timer the first enormous group can effectively monopolize the search. Interleave bounded persistent rank quotas between eligible groups, preserve each singleton's scope, then compare fair quotas with a fair minimum plus headroom/observed-unique-yield priority. This moves the order of exploration only. Check no group starvation, correct resume after adding a center, planted easy positive in group two and identical closed union after full finite runs. Near-center candidates were all certified below 208 in R34's measured independent archive; use eligible controls and avoid claiming original 208 benefit in that sample.",
+      "state": "open"
+    },
+    {
+      "id": 30,
+      "area": "Routes and fresh boards",
+      "source_id": 15,
+      "title": "Rotation-orbit identity for center caps, exact rotation optima and plateau vertices",
+      "proposal_and_validation": "r34_centers.select uses physical_hash(board//3); SwapGraph.key and some route optimum keys also use raw identity. Use only verified domain-preserving proper rotations, with actual cell/side/orientation transports and independent physical witness reconstruction. Preserve distinct original coordinates in the returned path and all labels. If caps and exact query results share first, evaluate orbit keys for centers/walk vertices and incremental archive selection. Scope mixed objectives and coordinate-specific pins separately. R29-R34 already rotate shells for overlap, reuse relative pricing frames and select by novelty. Count equal-orbit cap/price rebuilds in real archives first. Check asymmetric, fixed orientation, rotated duplicate and inverse path controls; the ordinary sphere group is not a blanket divisor of support counts.",
+      "state": "open"
+    },
+    {
+      "id": 31,
+      "area": "Routes and fresh boards",
+      "source_id": 16,
+      "title": "Stronger proof of center-shell separation and novelty",
+      "proposal_and_validation": "r29_exchange_route.owner_copies filters by moved support/Hamming difference; SharedSupports also screens parity. Under actual allowed rotations, test transposition triangle inequality then constrained product-of-cycle-class feasibility on the small differing label set, accounting for any eligible extra labels and family parity. For nearby sparse overlaps, count exactly by feasible strata when practical; otherwise use estimates only to order centers beyond r34_centers.select's 64 sampled moves. Compare permanently avoided ownership checks, eligible group counts and truly distinct endpoints. Exhaustively compare intersections on small boards with unequal families, extra-label bridges and restricted domains. No proof from sampled nonintersection.",
+      "state": "open",
+      "decision_changing_followups": [
+        "Use the R30 exact 668,394,211,290-overlap result for the two published outer shells as the oracle. Measure transfer only on distinct center/family pairs."
+      ]
+    },
+    {
+      "id": 32,
+      "area": "Routes and fresh boards",
+      "source_id": 17,
+      "title": "Corrected joint scores for two positive cycles and higher-order interactions",
+      "proposal_and_validation": "r34_pair_cycles.pair_repair skips both positive cycles even if touching prevents the packer taking both. Price viable positive/positive contacts, index pairs sharing actual physical seams instead of all pairs, and compress rotation rows by their full interface masks/old match flags before max-sum. Compare three contacting disjoint cycles after two-cycle gains saturate, including nonpairwise effects. Compare a retained baseline even where an existing footprint's score improves without adding a key. Prior length-three control priced 33,737 interactions with one or more nonpositive cycles. Count scored pairs/rows, gains vs either move and first improvements; exhaustive all orientations plus actual board rescoring and held-out trajectories.",
+      "state": "in progress",
+      "decision_changing_followups": [
+        "Resolve the retained three-cycle short-horizon policy before promoting its extensions. Use matched incumbent-free starts and held-out seeds through 64 and 320 repair rounds, cold and resumed within the correct profile. Compare steps to score, final incumbent, unique endpoints, work, and seeds where it loses. Earlier R31 rankings reversed by 320. Carry the result through positive touching cycles and sparse packing variants only when evidence changes deployment."
+      ]
+    },
+    {
+      "id": 33,
+      "area": "Routes and fresh boards",
+      "source_id": 18,
+      "title": "Permit touching chosen moves with verified additive or pairwise score",
+      "proposal_and_validation": "r34_swap_packing.pack_swaps and r31_fresh.simultaneous_swaps prohibit all neighboring footprints; an exact zero seam correction may allow both chosen code assignments, as may a nonzero correction whose total is profitable. Start with zero-correction pairs; then solve the sparse weighted pairwise objective for fixed move/orientation alternatives, treating reused cells as incompatible. Each physical seam must be charged once; retain the current packing witness as a fallback. This tests selection across a global move list, independently of generating corrected local clusters (#17). Compare packed gain on identical candidates and verify direct physical rescoring, including a connected triangle of candidate moves.",
+      "state": "open"
+    },
+    {
+      "id": 34,
+      "area": "Routes and fresh boards",
+      "source_id": 19,
+      "title": "Exact packing of large nearly bipartite or separable conflict graphs",
+      "proposal_and_validation": "r34_swap_packing.pack_swaps already solves small components (up to 22) or large bipartite components via weighted min cut. Test articulation/block-cut dynamic programming and bounded branching over an odd-cycle transversal with the existing exact bipartite routine on residues. Screen actual conflict graph structure before enabling expensive branching. Compare gain and explored residuals vs old greedy on identical lists; match complete independent-set enumeration on small graphs and retain the greedy witness whenever a budget ends.",
+      "state": "open"
+    },
+    {
+      "id": 35,
+      "area": "Routes and fresh boards",
+      "source_id": 20,
+      "title": "Maintain positive swap candidate lists across small physical changes",
+      "proposal_and_validation": "r31_fresh.simultaneous_swaps updates price rows, but reconstructs full gain+gain.T, legal filters and sorted positive pairs each invocation. Retain candidates, best rotations, stable tie order and chosen pack inputs. Invalidate changed donors/rotations, affected geography and changes to the active allowed cells or protection. Deliberately consider unchanged pairs losing eligibility after a nearby change. Count recomputed pair entries after sparse moves and compare every resulting gain/board to complete reconstruction. Use high-churn controls to decide where full rebuild wins.",
+      "state": "open"
+    },
+    {
+      "id": 36,
+      "area": "Routes and fresh boards",
+      "source_id": 21,
+      "title": "Disjoint branching in the nonadjacent donor assignment",
+      "proposal_and_validation": "r31_fresh.pack_cycles splits a conflicting pair of changed cells into i stays / j stays, repeating their intersection. Encode i stays or (i changes and j stays), using the actual unchanged code so same-tile reorientation is legal as a change. Recompute correct maxima when the unchanged orientation is forbidden on the diagonal; optionally repair the parent's matching/dual after each small constraint change. R34 already tested dual reuse for a different numeric family bound. Measure duplicate relaxed assignments, full solves, exact bound and valid selected cycles, including ties, forced rotations and infeasible children. Test unrestricted small complete nonadjacent neighborhoods before using the disjoint split for pruning.",
+      "state": "open"
+    },
+    {
+      "id": 37,
+      "area": "Routes and fresh boards",
+      "source_id": 22,
+      "title": "Keep mandatory Gold mate rules inside ordinary repair",
+      "proposal_and_validation": "r31_fresh.Engine.repair runs several stages before clear_forbidden; unsuccessful cleanup can reset the whole board. Measure rejection and also the score gained then lost by successful cleanup. Enforce forbidden internal/exterior physical pairs during joint repair and separable assignment/rotation stages when their environment permits, or maintain incident dirtiness for a local rollback. r32 fresh signed repair already respects its own inventory; target the ordinary eight-bond builder only. Compare returned score, work/steps to threshold and retained starts; verify exact bond set/physical score, a case where removing one collision creates another, and a no-conflict held-out group.",
+      "state": "open"
+    },
+    {
+      "id": 38,
+      "area": "Routes and fresh boards",
+      "source_id": 23,
+      "title": "Joint mandatory-assembly relocation and priced displaced pieces",
+      "proposal_and_validation": "r31_fresh.Assemblies.relocate chooses one mandatory assembly and up to eight sampled poses; displaced pieces currently receive random legal matching weights. Compare physical marginal score and small exact repair for displaced pieces/rotations, then a pair of bonded assemblies that mutually block each other's target cells. Preserve each mandatory physical mate, all forbidden mates and all individual domains. Prior optional merge/undo deals with hypothesized bonds, a different operation. Count unique legal coordinated relocations and steps to maintained gains; planted two-assembly relocation and rescore every placement.",
+      "state": "open"
+    },
+    {
+      "id": 39,
+      "area": "Routes and fresh boards",
+      "source_id": 24,
+      "title": "Forward checks in the fresh constructor",
+      "proposal_and_validation": "r31_fresh.Assemblies.seed visits groups in static order, tests footprint collisions and waits until the leaf for residual tile matching. Use occupancy-indexed viable pose lists, dynamic most-constrained assembly order, cheap residual slot/Hall checks and selective full matching. Compare with the existing geographic pose-packing and host Hall implementations, preserving this constructor's ranked/random/seed behavior under a separate policy. Count pose nodes, full assignments, found starts and failures by reason. On exhaustive pinned examples retain every feasible embedding; a bounded stochastic construction failure is not Gold infeasibility.",
+      "state": "open"
+    },
+    {
+      "id": 40,
+      "area": "Routes and fresh boards",
+      "source_id": 25,
+      "title": "Conflict-directed optional merge rollback and incremental pose joins",
+      "proposal_and_validation": "r32_fresh.speculate recomputes _poses for an enlarged component and removes the newest optional join if a bounded pack fails. Cache verified component pose tables and join them on the actual extra physical edge. Extract a proved packing conflict among optional merges where available, backjump or replace a culprit while preserving unrelated choices. Ordinary time/budget failures can guide a different attempt but cannot add persistent negatives. Measure rows constructed, productive merges retained, full legal lifts and scores on same seeds; planted irrelevant last merge and failed-then-successful time budget. Compare existing suffix-reversal fallback.",
+      "state": "open"
+    },
+    {
+      "id": 41,
+      "area": "Routes and fresh boards",
+      "source_id": 26,
+      "title": "Reuse a whole small exact joint-repair residual",
+      "proposal_and_validation": "r31_fresh.joint_repair builds a new local model. Screen actual repeated small residuals across nearby repair steps and seeds by exact donor resources, slots, rotations, internal graph, signed/forbidden constraints if active and exterior masks. Bind move/contact options, score offset, query and proof status, and map cached witness labels into actual positions. R32 signed price-row reuse, R34 snapshots and complete trajectory reuse are established. Measure full-model hits, builds/branches eliminated, bytes and physical witness validation. Timeout assignments are feasible suggestions only; if no certified repeat occurs beyond existing caches, close the hypothesis immediately.",
+      "state": "open"
+    },
+    {
+      "id": 42,
+      "area": "Routes and fresh boards",
+      "source_id": 27,
+      "title": "Checkpoint inside the one-swap plateau center",
+      "proposal_and_validation": "r29_plateau.walk runs SwapGraph.neighbors under BEGIN IMMEDIATE; all qualifying child optimizations on an unfinished center can be rolled back together. Fence candidate-swap chunks and atomically bind discovered edges/physical optima, exact remaining floor band and parent generation. Prevent advancing walk_bounds.lowest before its entire relevant band finishes. Parallelize at a BFS frontier level only if shortest/widest parent and witness selection survive. Measure exact rotations and star calculations replayed after forced kills; bound stop latency, old graph import, different depths and one costly positive at a chunk boundary. R34 fenced rank pages, not this graph.",
+      "state": "open"
+    },
+    {
+      "id": 43,
+      "area": "Routes and fresh boards",
+      "source_id": 28,
+      "title": "Transport the star-bound vector across actual adjacent BFS centers",
+      "proposal_and_validation": "At a newly opened parent/child one-swap center, SwapGraph.neighbors currently computes every candidate pair bound afresh. If the candidate's local star footprint is independent of the two changed locations, transport its *doubled* star delta and add the exact new baseline total. R29's existing per-center bound vector is already reused at lower floors; it stores floored integers which can lose parity. Compare a lossless compact representation and recompute only the marked parent fringe, with cold fallback. Validate every pair on adjacent real 206-floor vertices and random planted ones, including parity changes, ties and disallowed swaps. Count pair-star work, additional bytes and database locality.",
+      "state": "open",
+      "decision_changing_followups": [
+        "Use R30 two-center star transport as the baseline. Test only new saved breadth-first vectors, exact parity under changed baselines and actual avoided pair rebuilds."
+      ]
+    },
+    {
+      "id": 44,
+      "area": "Routes and fresh boards",
+      "source_id": 29,
+      "title": "Avoid re-expanding entire connected plateaus at lower floors",
+      "proposal_and_validation": "The widest loop in r29_plateau.walk creates a new BFS queue at every floor. Its arcs, optima and star vectors are already threshold-independent, but traversing and querying all previous frontier vertices again can be redundant. Incrementally activate edges and vertices entering a score band, update connectivity/distances/parent records including shortcuts through newly enabled vertices. Extra care on bounded max_swaps searches where a new shortcut changes remaining budget. Compare full BFS/descending controls for reachable sets, highest reachable floor and minimum swap distance, including an instance whose old shortest path becomes shorter. Count edge/queue reads and closed vertices genuinely avoided.",
+      "state": "open"
+    },
+    {
+      "id": 45,
+      "area": "Routes and fresh boards",
+      "source_id": 30,
+      "title": "Event-driven rotation threshold propagation",
+      "proposal_and_validation": "r28_exchange_rotations.RotationOracle.threshold_reduce scans cells in full passes and rebuilds immutable binary edge-support lookup templates for each candidate target. Update local test margins after neighboring domains change; schedule remote checks at proven global slack decreases so a globally reduced star sum does not leave distant rotations untested. Reuse immutable lookups across thresholds; removed masks at a stricter target cannot simply carry over to a looser target. Measure star/support calls, intermediate domains, exact optima and all tied witnesses. Compare tiny brute force, past oracle tests and a distant rotation eliminated only by a global slack change.",
+      "state": "open"
+    },
+    {
+      "id": 46,
+      "area": "Routes and fresh boards",
+      "source_id": 31,
+      "title": "Reuse structural rotation-elimination plans",
+      "proposal_and_validation": "RotationOracle._eliminate rebuilds adjacency for all active scopes to choose the next variable at every step even on a numeric factor-cache hit. Screen whether adjacent physical boards have equal scopes and widths after additive decomposition. Cache a deterministic elimination plan/trace skeleton or maintain a local priority update, evaluating only changed scopes while preserving all operand bytes for numeric cache entries and directional witness maps. Include disconnected residual components, changed widths, cap crossings and tied optima. Compare scope/neighbor rebuilds, numeric messages, resident bytes and resulting witnesses against exact cold plans. R31 common rotation frames and R34 exterior messages capture other repeat units.",
+      "state": "open"
+    },
+    {
+      "id": 47,
+      "area": "Routes and fresh boards",
+      "source_id": 32,
+      "title": "Screen whole-tile indistinguishability for the soft score",
+      "proposal_and_validation": "Look for different real tile identities with exactly identical cyclically oriented seam-mask triples, taking legal placement domains into account. If none exist, close immediately for the original puzzle. Otherwise explore ordered representatives with multiplicities only in queries where the objective and current constraints are label-independent. For a swap-distance query reassigning labels may change distance; either prove transportation preserves it or use the grouping only in an admissible bound. Gold additionally needs per-piece strand data and pins. Compare against R25 verified complete residual Gold graph isomorphism and R32 numeric response classes, which do not establish global interchangeable identities. Check all labeled arrangements and physical label lifting in a small positive and a broken-symmetry control. Report actual distinct repeats available before implementing a general quotient.",
+      "state": "open"
+    },
+    {
+      "id": 48,
+      "area": "Reference loss and signed phase",
+      "source_id": 1,
+      "title": "Share the cap-independent suffix catalogue across error layers",
+      "proposal_and_validation": "The R33 lookup already survives every page of one layer. In `OutsideSyndromes.indexed`, the single retained table is still keyed by (cap, errors). For every layer with at least two errors, the same 7,140 position pairs, their packed column XORs and outside-check projections are independent of cap and total error count. Separate those facts from the cap-dependent first/second anchors, admissible charges, bucket order and ordinal masks. Count repeated catalogue/anchor builds in real multi-layer runs and on independent workers. Only share projected subindexes when the actual layout and anchor fields match. Cross-process materialization is a follow-up if repeated builds survive in practice. Preserve rank order and validate the old cursor when just the implementation changes.",
+      "state": "open"
+    },
+    {
+      "id": 49,
+      "area": "Reference loss and signed phase",
+      "source_id": 2,
+      "title": "Exact suffix block filtering with verified integer cores",
+      "proposal_and_validation": "The retained R34 core filter sees a full error mask just before a joint call. At a fixed prefix and bucket, compile each already-verified core’s required-one and required-zero masks into eligible suffix ordinals, subtract its mask before iterating tails, and OR together overlapping exclusions. A core can rule out an entire prefix only if *every* still-owned suffix is covered. Use the prefix’s actual allowed indices, exact suffix cardinality and the first-anchor order to avoid counting already-filtered tails twice. Measure eliminated iterations in the original 17/four and 17/five traces, including the seven observed arrivals and the 73-literal checked core. A dormant or UNKNOWN hint cannot remove ordinals. Sparse-core and no-core controls bound the overhead.",
+      "state": "open"
+    },
+    {
+      "id": 50,
+      "area": "Reference loss and signed phase",
+      "source_id": 3,
+      "title": "Reuse residual bucket unions and exact paired-group bounds",
+      "proposal_and_validation": "`_secondary_tails` rebuilds the OR of allowed ordinal masks on every call. Measure repeats by (first bucket, exact secondary residual, available slack) before proposing a bounded memo. Apply the lexicographic-owner/resume cut only after that reuse. Separately, `compile(groups)` supports multiple disjoint groups but production builds single-group tables. Compile low-rank *pairs* which share remaining phase variables and use their joint minimum in place of the two single charges. At a prefix select a disjoint family of pairs or take the maximum over alternative admissible bounds. Never add overlapping bounds twice. Try a triple only where the pair has demonstrable additional exclusions and an acceptable table rank. Report surviving joint calls, stopped-prefix/tail work and table bytes with all current R34 filters enabled.",
+      "state": "open"
+    },
+    {
+      "id": 51,
+      "area": "Reference loss and signed phase",
+      "source_id": 4,
+      "title": "Prune a whole ranked prefix subtree by exact suffix reachability",
+      "proposal_and_validation": "Build a backward table on (remaining position, exact number left, projected outside XOR) for a small set of dependent checks; only expand a prefix when at least one admissible suffix can hit the required syndrome. Choose informative projections from held-out column ranks. Compare a full bitset for modest rank against sparse reachable states, partitioned into blocks with conservative bounds otherwise. Add a group-price bound to reachable states only when an independent finite scan agrees. An unreachable subtree can map to a contiguous lexicographic interval, so it can advance the existing lease without flattening all prefixes. Test gaps beginning in the middle of the subtree, cursor reopens, high-rank/no-prune controls, and an exhaustive count of every outside-error set on tiny boards.",
+      "state": "open"
+    },
+    {
+      "id": 52,
+      "area": "Reference loss and signed phase",
+      "source_id": 5,
+      "title": "Amortize the integer relaxation across new full patterns",
+      "proposal_and_validation": "The current filter preserves the CP-SAT model structure, but each undecided outside pattern invokes another native solve. Measure identical active assumptions, propagated equalities and integer solves in the 17-loss streams before coding. Compare a persistent incremental SAT or pseudo-Boolean encoding of this *specific* signed-inventory and reference-budget model under fully matched assumptions, with independently checked CP-SAT witnesses/negatives on finite scopes. Cache checked feasible assignments for cross-pattern reuse only when all physical bond assumptions and budget still validate. Repeated UNKNOWN on the same real pattern can justify splitting on remaining independent phase coordinates and committing disjoint completed children. Pricing/status from a partial child cannot exclude its parent.",
+      "state": "open"
+    },
+    {
+      "id": 53,
+      "area": "Reference loss and signed phase",
+      "source_id": 6,
+      "title": "Transport unconditional integer-core evidence between references",
+      "proposal_and_validation": "Native cores currently belong to a budget/model-dependent scope. Besides the one published core, test whether learned contradictions still hold in the relaxed model containing only the puzzle’s unconditional integer inventory plus a small set of physical bond equalities/inequalities. Encode by ordered physical side pairs and required polarity, replay the relaxed oracle first, and reuse across another outside layout only when the relevant physical pairs are present with the same semantics. Keep cap-specific proofs scoped. Measure genuinely different reference/layout hits, independent native replays and amortized calls. If the available references share no applicable verified proof, close this transfer path for current inputs.",
+      "state": "open"
+    },
+    {
+      "id": 54,
+      "area": "Reference loss and signed phase",
+      "source_id": 7,
+      "title": "Cache a canonical affine residual across different outside error masks",
+      "proposal_and_validation": "After outside dependencies pass, `joint` prices the grouped bonds using fixed coefficient rows and an RHS affine in the chosen errors. Two RHS vectors differing by the coefficient matrix times a common free phase assignment have precisely the same achievable mismatch patterns. Precompute a canonical coset remainder, screen the rate of actual collisions across distinct tails, then cache exact exclusions or an attained minimum cost for that grouped problem. Translate a witness via the corresponding free-phase difference and verify in the destination. The downstream signed-integer and physical constraints still require the destination’s actual outside pattern. Report work without counting repeats already removed by learned integer cores.",
+      "state": "open"
+    },
+    {
+      "id": 55,
+      "area": "Reference loss and signed phase",
+      "source_id": 8,
+      "title": "Reuse the single-drop elimination performed when ordering joint groups",
+      "proposal_and_validation": "`joint.difficulty` constructs a basis for each candidate single loss, and `resolve` rebuilds the same root cases. Retain the admissible child basis or a compact row delta for the selected group. Follow with prefix/suffix elimination over candidate dropped bonds, and a reversible echelon trail when enumerating multi-drop candidates. Include dependent rows, contradictory zero rows, changed affine RHS, sibling rollback and interruption. Count actual row insertions, XORs and saved candidate branches against the precompiled R34 basis. Leave the old path for instances where storing the bases costs more and does not save meaningful work.",
+      "state": "open"
+    },
+    {
+      "id": 56,
+      "area": "Reference loss and signed phase",
+      "source_id": 9,
+      "title": "Branch on a contradictory parity circuit",
+      "proposal_and_validation": "The current loop enumerates dropped-bond combinations up to the remaining cap. Start from kept equations, attach provenance to reductions, and when inconsistent, branch only on dropping an eligible member of the checked contradiction. Make descendants disjoint by requiring all earlier eligible members to remain. Also enforce at least one physical loss in every disjoint mandatory-drop group even when its phase equations happen to be consistent; a required bond cannot be dropped. Independently replay every circuit before pruning. Test alternative order by shared incidence/remaining group slack, subsumed conflict removal and prefix-state reuse only after basic coverage matches direct enumeration. Report search nodes, circuits, and work per actually closed original tail.",
+      "state": "open"
+    },
+    {
+      "id": 57,
+      "area": "Reference loss and signed phase",
+      "source_id": 10,
+      "title": "Compute minimum grouped cost in free-phase coordinates",
+      "proposal_and_validation": "For fixed free phases, each disjoint group costs at least one and otherwise exactly its number of incompatible optional bonds. Every additional mandatory drop must remain legal. Try enumerating the rank of the grouped free coefficients, with Gray-code updates only to incident groups. If the global rank is too large, eliminate low-width connected components of the group/free-coordinate incidence graph and project each component to its true boundary bits with a min-plus table. Stop when estimated table width exceeds the measured R34 cost and fall back. This concerns the grouped reference-loss oracle; the physical inventory colleague’s lattice/coupling experiment targets different equations. Compare minimum against exhaustive phase+drop enumeration at *every* budget; include groups with no removable bonds, couplings that prevent independent minima, and positive assignment reconstruction. A finite minimum can answer multiple cap queries.",
+      "state": "in progress",
+      "decision_changing_followups": [
+        "On the original reference, 80 grouped equations after outside elimination have rank four, allowing 16 grouped mismatch vectors. Compare all seven archived integer arrivals, coset reuse, independent enumeration, changed ranks, timeout and viable examples. Distinguish phase minima from a geographic Gold proof."
+      ]
+    },
+    {
+      "id": 58,
+      "area": "Reference loss and signed phase",
+      "source_id": 11,
+      "title": "Persist inner joint progress after an actual long interruption",
+      "proposal_and_validation": "The R34 cursor saves a tail/stage; an interrupted `joint` still restarts at that candidate’s first branch. Profile actual interrupted joint calls, distinguishing their native work from saved outer suffix work. If material, persist only a bounded disjoint group/drop frontier and verified finished siblings, keyed by full coefficient/RHS/group order, objective budget and cursor generation. Reconstruct fresh bases on reopening and preserve a deep positive sibling. Prefer L9 or L10’s stable state if either wins. Test killed workers, stale fenced writes, incompatible search-order versions and at least one case where the old retry is cheaper.",
+      "state": "open"
+    },
+    {
+      "id": 59,
+      "area": "Reference loss and signed phase",
+      "source_id": 12,
+      "title": "Reuse checked positive witnesses across compatible caps",
+      "proposal_and_validation": "Existing cross-cap replay inherited completed *negative* intervals. A joint or integer witness with a reconstructed concrete assignment and verified attained loss can also answer a looser cap on the same reference, outside error count, required pairs and model. Phase/integer status alone in a legacy hit is insufficient: reconstruct and recheck the assignment once or treat it as a hint. Derive a physical drop set consistent with every compulsory group and pin, and verify requested rank ownership. A positive outside a requested page cannot mark the page searched. Screen actual replay requests before persisting a bound table; test smaller caps, directions of phase/integer implication and multiple hits sharing one prefix.",
+      "state": "open"
+    },
+    {
+      "id": 60,
+      "area": "Reference loss and signed phase",
+      "source_id": 13,
+      "title": "Alternate disjoint contradiction packings as parallel bounds on the same assignment",
+      "proposal_and_validation": "A reference may have more checked proper-loop/inventory conflicts than fit the one maximized disjoint packing. For an outside pattern in the *primary* rank space, project a secondary disjoint packing onto the *same* physical bond variables or obtain an independent compatible lower bound over its unpinned bonds. Take the maximum of valid lower bounds, never add overlapping groups or equate the two layouts’ outside counts. Screen alternative packings for structural/effective diversity first. Close this candidate when current certificates force one useful packing or none of the new projections tightens an original joint call. This complements the physical workstream transporting certified cardinalities into geographic domains.",
+      "state": "open"
+    },
+    {
+      "id": 61,
+      "area": "Reference loss and signed phase",
+      "source_id": 14,
+      "title": "Avoid phase refits that cannot improve the current board",
+      "proposal_and_validation": "On a refit `fresh` computes the signed score and the set of scored physical bonds, and `fit` solves a new CP optimization. If the current score already reaches the count of permissible scored bonds, a strictly better refit is impossible. Across consecutive refits on the same pins/mandatory constraints, a certified upper bound for objective set A raises by at most the number of newly added unit-weight terms in B. Reuse that bound when it rules out a strict gain at B; account for removed terms conservatively, disconnected-inventory cuts and differing pins. R32's four seeds with unsuccessful refits are an opportunity screen, not a claim that they could all be skipped. Compare board, RNG and trajectories to the no-skip control and report native refits actually avoided.",
+      "state": "open"
+    },
+    {
+      "id": 62,
+      "area": "Reference loss and signed phase",
+      "source_id": 15,
+      "title": "Reuse universally valid endpoint cuts across phase refits",
+      "proposal_and_validation": "`fit` starts with fresh endpoint structures and an empty cut set at each board/objective. Compile the coefficient rows for a verified disconnected endpoint partition once per puzzle/mandatory model, then compare adding only previously violated endpoint cuts with rebuilding/refitting from scratch. Retain geometry-independent cuts only if their proof holds for all feasible phase vectors under the destination pins; do not transfer a bound learned from the previous objective. Compare exact feasible label sets on small models and calls, repeated cut discoveries and stricter optimum on held-out original refits. Merge accounting with the physical cut-pool proposal wherever it already provides an independently reusable proof.",
+      "state": "open"
+    },
+    {
+      "id": 63,
+      "area": "Reference loss and signed phase",
+      "source_id": 16,
+      "title": "Incrementally update signed prices and scores across changed phase fits",
+      "proposal_and_validation": "R34 snapshots and shares a complete price image at a particular phase vector. On a genuine improved refit, the signed price of donor dart j against exterior dart i depends on the phase XOR of their physical tiles. It is unchanged if both tiles changed phase or neither did. Intersect the XOR-change rows/columns with reciprocal capability and forbidden pairs, patch just the affected entries, and compare with cold `_DartPrices.price` for every bit; if there are no improved refits, this has no opportunity there. Likewise compare updating raw/signed/forbidden seam counts only for the union of incident edges of moved cells and flipped tiles. Preserve independent validation at best-board publication. Test full global phase complement, a single flip, blank sides, adjacent changed tiles, native checkpoint reopen, exact preserved trajectories and sparse/dense crossover. Do not reopen complete-price-image deduplication.",
+      "state": "open"
+    },
+    {
+      "id": 64,
+      "area": "Reference loss and signed phase",
+      "source_id": 17,
+      "title": "Use tied signed optima to escape a demonstrably stalled trajectory",
+      "proposal_and_validation": "`SignedRepair.block` optimizes a signed independent-cell assignment, while its retained incumbent also uses raw matched seams and components. Compare the existing signed-then-unchanged-pose tie break with signed-then-raw-then-unchanged-pose ordering, using an integer width/scale that remains exact up to 160 cells. Keep forbidden physical mates as hard constraints and count any newly repeated neutral moves. Only after a measured signed plateau try distinct equally scoring phase fits or equally optimal donor assignments chosen by changed effective dart relations, bounded in count and charged to the same repair budget. This changes discovery order; it cannot certify an excluded board or loss layer. Compare returns over held-out paired seeds, work/steps to a verified new best, distribution of both raw and signed scores, and distinct phases modulo the global complement. Account for already-tested general repair tie sets and slate/fork policies; test the additional signed refit/assignment interaction only.",
+      "state": "open"
+    },
+    {
+      "id": 65,
+      "area": "Coverage, checkpoints and backends",
+      "source_id": 1,
+      "title": "Index exact coverage by cells that distinguish pending work",
+      "proposal_and_validation": "For shared exact coverage, compare the current scope-only SQL index with conflict filtering on highly restricted cell masks before decoding whole 160-cell records. Screen a selective axis index and cheap bound-based skip under target roots and pending frontier boxes. Include symbolic and ordinary subtraction, old ledgers, concurrent inserts, deletes, corrupt records and no-selectivity controls. Compare certified work remaining and database reads/bytes.",
+      "state": "open"
+    },
+    {
+      "id": 66,
+      "area": "Coverage, checkpoints and backends",
+      "source_id": 2,
+      "title": "Invalidate symbolic proof replays only in the affected scope",
+      "proposal_and_validation": "The symbolic ledger uses one invalidation epoch over all puzzle scopes. Quantify duplicate reconstruction when a different scope is updated or deleted; try a per-scope epoch/target-root reuse only if this occurs. Include replacements changing both scopes, concurrent transactions and exact replay.",
+      "state": "open"
+    },
+    {
+      "id": 67,
+      "area": "Coverage, checkpoints and backends",
+      "source_id": 3,
+      "title": "Coalesce compatible siblings in portable search remainders",
+      "proposal_and_validation": "Evaluate lossless sibling coalescing specifically for exported portable remainders. It already exists as a box-algebra helper and symbolic diagrams cover some cases. Screen actual compressed/archive sizes and avoid partitioning the same siblings immediately after reopening. Native owner groups and native history must remain distinguishable.",
+      "state": "open"
+    },
+    {
+      "id": 68,
+      "area": "Coverage, checkpoints and backends",
+      "source_id": 4,
+      "title": "Checkpoint only changed classic GPU fields and frame chunks",
+      "proposal_and_validation": "The classic (non-domain) GPU checkpoint is still an uncompressed whole NPZ. The installed native sample has 43 members and 260,190,250 bytes, including six arrays of 41,943,168 bytes each. Screen constant prefix data, idle lanes, and dirty frame/column chunks across real consecutive saves. Compare reusing the existing incremental checkpoint store with chunked certified native payloads, preserve old NPZ imports, cheap host-only exhaustion checks, crash-safe publication, checksums, independent witnesses and exact restart ownership. Count device readbacks, writes and unchanged payloads; cover Windows and Vulkan and disk-full fallback.",
+      "state": "open"
+    },
+    {
+      "id": 69,
+      "area": "Coverage, checkpoints and backends",
+      "source_id": 5,
+      "title": "Carry verified parked lane slices through repeated resizes",
+      "proposal_and_validation": "Native lane resize validates and re-encodes every parked batch in gpu_lane_resize_round34.restore_slices. For a multi-stage resize and partially retired backlog, measure exact verified slices that could be carried through without recompression or remain lazily decoded until activated. Compare equivalent lane ownership, sums of counters, identical continuation, early-stop, tamper/deferred-error handling and CPU memory peak; never certify a negative before every contributing native state was validated.",
+      "state": "open"
+    },
+    {
+      "id": 70,
+      "area": "Coverage, checkpoints and backends",
+      "source_id": 6,
+      "title": "Reuse WebGPU devices and pipelines during repeated construction",
+      "proposal_and_validation": "WebGPUDFS creates an adapter device and compute pipeline per engine. Profile actual repeat constructors in classic old-history verification and multi-session comparisons. Test explicit shared device/pipeline ownership only for repeated same-adapter/same-shader/same-layout instances, retaining separate buffers/counters. Compare D3D12 FXC/DXC, Vulkan and available platform CI. If a normal search constructs one instance and no practical repeat exists, close the idea at the opportunity screen.",
+      "state": "open"
+    },
+    {
+      "id": 71,
+      "area": "Coverage, checkpoints and backends",
+      "source_id": 7,
+      "title": "Bind exact completion reuse to active proof dependencies",
+      "proposal_and_validation": "Scope-bound source archive compatibility: the current classic closure reaches 166 Python/shader/native sources for both backends, without benchmark/test leaves. Measure actual historical cases where a change solely to a dormant policy/backend/transitive helper prevents otherwise identical completion reuse. Only introduce narrower reviewed proof-dependency identities if outcomes are matched independently and every active prover/kernel/validator mutation still rejects; preserve all diagnostic source snapshots. Contrast with the existing reviewed heuristic-only historical aliases.",
+      "state": "open"
+    },
+    {
+      "id": 72,
+      "area": "Routes and fresh boards",
+      "source_id": "R32 #26 closure",
+      "title": "Resolve the six reciprocal seam-slot projections on the 24-free incumbent residual",
+      "proposal_and_validation": "The 207 and 208 controls timed out under tiny budgets while even the simpler 240 control closed. Compare no, one and six layers with geographic equations off/on against exact band/direct controls, including smaller held-outs and up to an hour on decision-relevant cases. Count independently verified additional negatives or saved ground search, all projection costs and materialized witnesses. If only inconclusive projected hits or dominated work persist, close the solver adoption question as rejected for this scope.",
+      "state": "open"
+    }
+  ],
+  "priorities": [
+    "Physical 1 blank-side projection and forced geographic recovery",
+    "Routes 1 attainable wildcard relations, 4 checked predecessor splits, 11 live coverage and 17 interacting repairs",
+    "Loss 1 shared cap-independent suffix catalogue; screen 2 and 3 at exact matched ranks",
+    "Coverage first screen real classic checkpoint repeated writes and selective scope index hits"
+  ],
+  "reconciliation": "The cross-area corner-cycle proposal duplicates physical 2 and is recorded there. Remaining similarly named proposals have different consumers or proof scopes. Cross-check residual overlap in the individual experiments before allocating benchmark work. Add all newly justified follow-ups, documenting negative or inconclusive outcomes and the next step.",
+  "decision_policy": "Reuse all prior decisive evidence. Tie each new or recurrent proposal to a stable mechanism and its predecessor aliases. Predefine the comparison and what result would change deployment. Exhaust decision-relevant variants, adverse cases and held-out inputs in the same workstream. Record keep, keep with exact scope, or reject, with measured scope, boundaries, evidence and a closing reason. Only reopen when a documented change or counterexample can alter that decision. Unanswered material questions stay open automatically.",
+  "historical_closure_inputs": [
+    "closure-backends.json",
+    "closure-routes.md",
+    "closure-physical.md",
+    "closure-loss.md"
+  ],
+  "baseline": "9abc6fc0dc3f1f2dc8537b05ed77c6e566fe2112",
+  "worktree": "C:/DiamondDilemmaGoldSolver/round35",
+  "total_candidates": 72,
+  "first_parallel_groups": [
+    [
+      1
+    ],
+    [
+      32
+    ],
+    [
+      57
+    ]
+  ],
+  "release_gate": "Close every actionable candidate and decision-changing follow-up, with prior evidence and deployment scope. Run regressions, verify official release archives on the accepted source, then publish and continue discovery."
+}
