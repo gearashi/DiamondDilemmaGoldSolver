@@ -39,7 +39,7 @@ def run(problem, method, request, seconds=5, work=10000):
         interface=PhaseInterface(problem)
         queries=request.get('queries',[request])
         return [interface.project({int(t):v for t,v in row.get('pins',{}).items()},
-                                  row.get('boundary',()),work) for row in queries]
+                                  row.get('boundary',()),work,method=row.get('phase_order','auto')) for row in queries]
     if method=='switches':
         return sewn_switches(problem,domains,bonds,request['phases'],request['trades'],work)
     raise ValueError("Unknown Gold experiment.")

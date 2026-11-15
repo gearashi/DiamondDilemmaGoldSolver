@@ -143,7 +143,9 @@ class PhaseInterface:
         self.euler={6-x for x in sums}
         self.cache={}
 
-    def project(self, pins, boundary=(), max_states=10000):
+    def project(self, pins, boundary=(), max_states=10000, *, method='auto'):
+        if method not in ('auto','single','split','legacy'):
+            raise ValueError('Unknown signed phase projection order.')
         pins=checked_pins(len(self.rows),pins)
         boundary=tuple(boundary)
         if (len(set(boundary))!=len(boundary) or any(type(t)is not int or not 0<=t<len(self.rows) for t in boundary)
@@ -164,6 +166,14 @@ class PhaseInterface:
                 if all((mask>>old_boundary.index(t))&1==pins[t] for t in extra):
                     patterns.add(sum(((mask>>old_boundary.index(t))&1)<<j for j,t in enumerate(boundary)))
             return dict(status='COMPLETE',patterns=sorted(patterns),transitions=0,reused=True)
+        if method!='legacy':
+            from r35_phase_frontier import compile_projection
+            result=compile_projection(self,pins,boundary,max_states=max_states,
+                                      split=None if method=='auto' else method=='split')
+            result['reused']=False
+            if result['status']=='COMPLETE':
+                self.cache[key]=result
+            return result
         start=(0,)*len(self.mod)
         order=sorted(range(len(self.rows)),key=lambda t:(t not in pins,t in boundary,t))
         # Once a signed class has no remaining contributing tile, its final

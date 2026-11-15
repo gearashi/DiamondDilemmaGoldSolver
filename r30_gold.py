@@ -407,7 +407,7 @@ class GoldMatching:
 
 def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=(), matching=True,
            geography=False, max_rounds=32, seconds=5, lazy_types=True, type_cuts=(),
-           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None, joint_poses=False):
+           learned_geometry=False, channel=False, fraction=False, bridges=(), geographic_cores=(), departure_rules=(), physical_support=True, physical_loss=None, project_blanks=False, corner_mode=None, neighbor_mode=None, turn_length=None, tour_mode=None, joint_poses=False, reference_bound=False):
     from ortools.sat.python import cp_model
     if seconds<=0 or max_rounds<1 or (geography and not matching):
         raise ValueError("Invalid Gold solve budget or mode.")
@@ -418,6 +418,21 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
             raise ValueError("Invalid physical side index.")
     started=time.monotonic()
     stats=dict(cp_calls=0,branches=0,type_cuts=0,strand_cuts=0,failed_embeddings=0)
+    cardinality=None
+    if reference_bound:
+        if not geography:
+            raise ValueError('The certified reference bound requires geographic Gold.')
+        from r35_geographic_loss import certified_reference,retained_bound
+        cardinality=certified_reference(problem)
+        if cardinality is not None:
+            reference,limit=cardinality
+            domains=list(domains)
+            from r32_gold_bonds import inventory
+            restriction=retained_bound(problem,domains,reference,limit,[*bonds,*inventory(problem).required])
+            forbidden=[*forbidden,*restriction.pop('forbidden')]
+            stats['certified_reference']=restriction
+            if restriction['over'] or any(not mask for mask in domains):
+                return dict(status='INFEASIBLE',**stats)
     if joint_poses:
         if not geography:
             raise ValueError('Compulsory joint poses require a geographic Gold search.')
@@ -442,11 +457,14 @@ def search(problem, *, domains=None, pins=None, bonds=(), forbidden=(), cutsets=
     if matching:
         # These optional full-side formulas refer directly to individual blank literals.
         # Preserve their constraints whenever one of them is requested.
-        if project_blanks and (channel or fraction or bridges or physical_loss is not None or corner_mode=='positions'):
+        if project_blanks and (channel or fraction or bridges or physical_loss is not None or cardinality is not None or corner_mode=='positions'):
             stats['blank_projection_fallback'] = 'full-side channel, pricing, bridge, reference-loss, or vertex position model'
             project_blanks = False
         check=GoldMatching(problem,domains,pins,bonds,cutsets,forbidden,physical_support=physical_support,
                            project_blanks=project_blanks,corner_mode=corner_mode,neighbor_mode=neighbor_mode,turn_length=turn_length,tour_mode=tour_mode)
+        if cardinality is not None:
+            reference,limit=cardinality
+            check.m.add(sum(check.mate[p] for p in reference if p in check.mate)<=limit)
         if check.tour_stats is not None:
             stats['physical_circuit']=check.tour_stats
         if check.turns is not None:
@@ -617,6 +635,7 @@ def main():
     cli.add_argument("--input",type=Path)
     cli.add_argument("--seconds",type=float,default=5)
     cli.add_argument("--rounds",type=int,default=32)
+    cli.add_argument("--reference-bound",action="store_true",help="Apply the published certified incumbent-loss bound in geographic Gold.")
     cli.add_argument("--joint-poses",action="store_true",help="Prune unsupported simultaneous mandatory component poses before geographic search.")
     cli.add_argument("--tour-mode",choices=("raw","contract","sparse"),help="Post a circuit on mandatory physical strand paths.")
     cli.add_argument("--turn-length",type=int,help="Check mixed-turn physical polygons up to this length (3 to 16).")
@@ -634,6 +653,9 @@ def main():
     project_blanks=args.project_blanks or data.get('project_blanks',False)
     corner_mode=args.corner_mode or data.get('corner_mode')
     neighbor_mode=args.neighbor_mode or data.get('neighbor_mode')
+    reference_bound=args.reference_bound or data.get('reference_bound',False)
+    if reference_bound and args.method!='embed':
+        cli.error('--reference-bound requires embed.')
     joint_poses=args.joint_poses or data.get('joint_poses',False)
     if joint_poses and args.method!='embed':
         cli.error('--joint-poses requires embed.')
@@ -687,7 +709,7 @@ def main():
                    cutsets=data.get('strand_cuts',()),type_cuts=reusable,max_rounds=args.rounds,
                    learned_geometry=args.method=="embed" and data.get("learn_geography",True),
                    channel=data.get("channel",args.method=="embed" and not project_blanks and not corner_mode and not neighbor_mode and not turn_length and not tour_mode),
-                   corner_mode=corner_mode,neighbor_mode=neighbor_mode,turn_length=turn_length,tour_mode=tour_mode,joint_poses=joint_poses,
+                   corner_mode=corner_mode,neighbor_mode=neighbor_mode,turn_length=turn_length,tour_mode=tour_mode,joint_poses=joint_poses,reference_bound=reference_bound,
                    project_blanks=project_blanks,fraction=data.get("fractional",False),
                    bridges=[*data.get("bridges",()),*prior.get("bridge_hints",())],
                    geographic_cores=prior.get("geographic_cores",()) if args.method=="embed" else (),
