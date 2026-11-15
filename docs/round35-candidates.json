@@ -1307,10 +1307,12 @@
         "docs/ROUND35_CLASSIC_SOURCES.md",
         "docs/R35_CLASSIC_DEPENDENCIES.json",
         "docs/R35_V115_CROSSOVER.json",
-        "docs/R35_CLASSIC_SOURCE_HISTORY.json"
+        "docs/R35_CLASSIC_SOURCE_HISTORY.json",
+        "docs/R35_CLASSIC_SOURCE_HISTORY_RELEASE.json"
       ],
       "decision": "Retain both backend families for untracked or mixed histories, authenticate the incoming family on partial transfer, and retain full comparison for CPU endgame and unknown sources.",
-      "reopen_if": "A new proof dependency, ownership transfer, native backend, resource family, or changed source image requires another independently matched and pinned producer scope."
+      "reopen_if": "A new proof dependency, ownership transfer, native backend, resource family, or changed source image requires another independently matched and pinned producer scope.",
+      "release_verification": "Frozen f8ea1d5 image, 216 files. Pure CUDA, WebGPU, mixed, prefix-probe and proof-probe histories exhausted all 480 branches with identical 230400 decisions. Individually modified all 50/51/58 active files; tested 57 and 54 native CPU probes on two original depth79 partial histories."
     },
     {
       "id": 72,
@@ -1407,7 +1409,7 @@
       "source_id": "new stronger boundary after #76",
       "title": "Apply spherical Euler at the original all-group loss threshold",
       "mechanism": "LOSS-EULER-THRESHOLD",
-      "state": "keep optional checked Euler-model restriction; unrestricted 21 still unknown",
+      "state": "keep optional Euler restriction; geographic deployment decision closed",
       "proposal_and_validation": "The known physical cost-21 signed phase misses the possible sphere Euler values by 38 units; the separate cost-22 phase satisfies Euler +3. Search every phase at 21 with an exact weighted-sum encoder and inclusion-minimal departures, checking an independent 22 positive and a native CP encoding. Require independent proof for a stronger bound.",
       "decision": "Keep the optional full spherical Euler and an independent 320-weight raw disk/corner reconstruction. The all-group signed+Euler minimum is 21 or 22; cost 22 is attained and an unqualified lower bound of 22 is unsupported.",
       "measurement": "On the exact known 21-cost outside pattern all 16 affine images were excluded at caps 21–23. Native CP and Glucose at 720 s, CaDiCaL at 900 s, and two exhaustive 540-s branches returned UNKNOWN at the unrestricted cap21. The independent CP recovers the cost22 positive in zero branches. Absolute Euler 3,1,5 branches each kept both signs and also ended unknown (988459,649978,450545 decisions).",
@@ -1415,9 +1417,11 @@
         "docs/ROUND35_SIGNED_CONDITIONS.md",
         "docs/R35_SIGNED_CONDITIONS.json",
         "verify_r35_loss_euler.py",
-        "test_r35_loss_euler.py"
+        "test_r35_loss_euler.py",
+        "docs/R35_CONTACT_LOSS_CERTIFICATE.json"
       ],
-      "reopen_if": "A distinct physical Euler-feasible 21 phase or independently checkable cap21 refutation changes the scalar bound."
+      "reopen_if": "A distinct physical Euler-feasible 21 phase or independently checkable cap21 refutation changes the scalar bound.",
+      "operational_closeout": "The authenticated geographic loss lower bound is 25. A signed+Euler minimum of 21 or 22 cannot raise normal original Gold pruning or change the recommendation. The no-contacts diagnostic at cap21 remains UNKNOWN; only a matching signed phase with an allowed spherical total or an independently checked all-phase cap21 refutation would change that narrower API result. At 22 a valid +3 phase is known. Unrestricted CP, two SAT solvers, both 10-group ownership branches and all three absolute Euler cases remained open."
     },
     {
       "id": 78,
@@ -1443,7 +1447,7 @@
       "source_id": "fresh-board follow-up to #15 and #77",
       "title": "Reject phase-only reference-loss assignments without a complete physical mating",
       "mechanism": "GLOBAL-PHASE-PHYSICAL-MATE-SUPPORT",
-      "state": "keep scoped signed support and lazy small-family Hall checks",
+      "state": "keep conditional physical costs, bounded transfer and fixed-phase connected SAT",
       "proposal_and_validation": "Check every fixed phase for at least one legal mate per physical side and joint Hall support by signed class. Test both physically repriced low-loss phases, accepted abstract tours, positive and deficient cases, then compare ranked/global work with proper scope and independent replay.",
       "decision": "Keep direct reciprocal support and exact per-phase matching through sixteen physical sides. Shrink and cache genuine Hall contradictions, with separate flags and checkpoint identities. Eager enumeration of all clauses adds no completed unrestricted cap21 query. Optionally price all lost named pairs on classes of up to eight sides and combine their overlapping obligations. A held-out four-flip phase supplies an authenticated positive.",
       "measurement": "742 direct clauses; exhaustive local compilation on 39 classes and 9776 balanced assignments produced 552 more clauses. Two zero rows excluded one real boundary phase; an independently paired fourteen-side family excluded the other using ten pins. Both actual connected tours and complements pass. The two original fixed outside patterns are both closed through 23 under mate support. A 540-second all-phase eager upper-cap check returned UNKNOWN in 2251834 decisions. On the held-out 23 phase (Euler -3), joint class cost raises 23 to 24 for 13 and 344 groups, or 24 to 25 with both geographic obligations. Complete native mating independently optimizes 24, with five proper subloops in its matching. Class limits 8 through 18 agree. The full fixed phase admits one-loop physical sewings attaining losses 24 and 25 (183 and 182 retained), genus 26 and 29, no embedding.",
@@ -1452,9 +1456,14 @@
         "docs/R35_SIGNED_CONDITIONS.json",
         "test_r35_signed_mate_support.py",
         "test_r35_mate_price.py",
-        "docs/R35_NEAR_REFERENCE_TOURS.json"
+        "docs/R35_NEAR_REFERENCE_TOURS.json",
+        "docs/R35_MATE_CLAUSES.json",
+        "docs/R35_MATE_PORTFOLIOS.json",
+        "r35_phase_sewing.py",
+        "test_r35_phase_sewing.py"
       ],
-      "reopen_if": "An independently checked lower-cost phase with a larger-family residual obstruction justifies expanding the existing sixteen-side ceiling."
+      "reopen_if": "An independently checked lower-cost phase with a larger-family residual obstruction justifies expanding the existing sixteen-side ceiling.",
+      "physical_pricing_followup": "Native eight-side channels eliminated 96 of 192 original candidate returns with all 96 positives preserved. Inner decision cost mixed: thirteen-group 1625 to 1485, fifteen-group 2249 to 2838. Full-scope price clauses shrink 160 to 25 pins; complement remains live. 146-phase screen had 48 mate-supported arrivals and no extra under-cap arrival sharing its seed-specific absolute clause. Broad, twelve-side loss-pattern branching reduced 1632 to 135 search nodes on 194 ordinary geographic groups; for 194+19 contacts it certified 34 in 1124 nodes. Finite checks include 768 original/mixed endpoint costs and 3888 partial pin cases. Independent geometric and one-loop thresholds in #80/#81 are explicitly scoped. One held-out phase attains connected minima 26/26/27 on ordinary 129/155/194, and 34/37/37 with 194 ordinary plus 19/117/985 edge-perfect contacts. Every recorded witness in those cases failed the direct geographic lift. The public phase-sewing command handles graph verification, increasing caps, reusable thresholds and certified local exchanges."
     },
     {
       "id": 80,

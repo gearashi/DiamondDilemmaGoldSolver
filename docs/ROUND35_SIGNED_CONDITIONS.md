@@ -18,10 +18,45 @@ Use `python r32_gold.py integer-bound --all-groups --sphere-euler --mate-support
 
 A held-out phase four flips away from the ten-group cost-20 assignment has signed loss 23 under both 13 and 344 groups. It has allowed Euler weight −3 and passes the signed mate checks. It supplies a positive upper bound of 23 in their combined relaxation. Adding the two verified geographic departures raises this phase's ordinary price to 24.
 
-The optional `--mate-cost` counts reference bonds lost inside a feasible pairing. The solver prices each reciprocal class of up to eight sides. It carries which overlapping departure obligations each choice has already hit and combines them across different classes. Each named bond has one owner. Larger classes may relax their pair choices. If more than twelve undominated unresolved obligations remain, the ordinary hitting price applies. The solver rechecks every positive at the requested price, and the ranked checkpoint identity includes this option.
+The optional `--mate-cost` counts reference bonds lost inside a feasible pairing. The solver prices each reciprocal class of up to eight sides. It carries which overlapping departure obligations each choice has already hit and combines them across different classes. Each named bond has one owner. Larger classes may relax their pair choices. Broad overlapping obligations use the bounded matching-profile search described below. The solver rechecks every positive at the requested price, and the ranked checkpoint identity includes this option.
 
 Enforcing small class matches raises this phase's cost from 23 to 24 for 13 and 344 groups. With both geographic departures the costs are 24 and 25. Limits of 8, 12, 14, 16 and 18 agree in all four comparisons. An independent native model over complete signed pairings and the thirteen groups found the same optimum of 24, with 18,004 branches. Its 240-pair witness still has five proper closed subloops. Omitting all departure groups gives an optimum of 22 versus 19 signed mismatches on this phase. Full matching enumeration on 768 finite phase/obligation cases, including 192 with possible endpoint conflicts among the reference bonds, checks the prices. The public sparse catalogue reprices the new phase under the actual scope.
 
 Incremental exact Euler-magnitude queries retained the first tile gauge and both possible signs. The absolute 3, 1 and 5 cases returned unknown after 988,459, 649,978 and 450,545 decisions respectively. These branches cover the six admissible signed totals.
 
 Cutting only actual premature loops from the held-out phase's full pairing model also produced a complete 365-strand connected physical sewing at each of the two optimal loss costs. The 24-loss sewing retains 183 original bonds and has genus 26. The 25-loss sewing retains 182, respects both geographic obligations and has genus 29. An independent graph walk checks every physical strand, and testing every root pose found no embedding. The original geographic best remains 207. [Physical pairings, bounds and all rounds](R35_NEAR_REFERENCE_TOURS.json)
+
+## Partial price conflicts and native matching variables
+
+The cost-23 phase returns two sound cost conflicts of 25 tile pins each at cap 23. Both omit tile zero, so the dark/light complements both constrain the representative with tile zero fixed. Forgetting 134 pins left 26, and a compulsory reciprocal seam removed one more. The result for the model including the first two geographic conflicts at cap 24 also has 25 pins. A partial union graph admits both signs at unpinned endpoints. Every completed matching remains available. The search removes a pin only after the remaining price proves the cap impossible. A timeout retains every still-needed literal.
+
+On 146 actual signed phases, 48 passed mate support. At their individual signed caps, the absolute partial conflicts covered no additional already-under-cap arrival among these 48. The optional native matching channel encodes exactly one mate at each side in 27 small classes and whether an optional named pair was actually kept. The 48 priced optional pairs are separate from seven compulsory ones. It checked 192 pinned phase/cap cases in the thirteen-group scope and that scope with the first two geographic conflicts. The number of complete candidates returned before the Python price check fell from 192 to 96. All 96 affordable cases survived. Native decisions changed from 1,625 to 1,485 on the first scope and 2,249 to 2,838 on the second. The global signed parity check bounds the largest possible number of undominated, unhit obligations before enabling this encoding. [Per-case receipts and adverse results](R35_MATE_CLAUSES.json)
+
+When more than twelve overlapping obligations survive, the solver can price reciprocal families of up to twelve sides. It keeps each possible loss pattern of a small family, filters patterns against the remaining budget, propagates forced losses and branches on an unhit group. A family also supplies any small set of reference bonds of which every local matching must lose one. A disjoint subfamily provides a lower bound on independently charged losses. Exhausting the 4,096-node budget returns only the lower bound already proved. A signed or partial-state witness is still distinct from a physical matching. Former eight-side checkpoint witnesses are repriced before reuse.
+
+## Fixed-phase connected sewing
+
+The original 207-bond reference has a separate signed phase with mask `0xd237aba7e91101e88041413e8c589902021e5126`. Each row below is for that one phase. The ordinary geographic conflicts are the verified missing-seam obstructions. The edge-perfect contact conflicts also require complete matching at every geographic seam. The connected minima count losses among the original 207 named bonds. [Physical pairings, proper-loop cuts and original control data](R35_MATE_PORTFOLIOS.json)
+
+| Ordinary geographic conflicts | Extra edge-perfect contact conflicts | Signed minimum | Full pairing minimum | Single 365-strand circuit minimum |
+| ---: | ---: | ---: | ---: | ---: |
+| 129 | 0 | 25 | 26 | 26 |
+| 155 | 0 | 25 | 26 | 26 |
+| 194 | 0 | 25 | 26 | 27 |
+| 194 | 19 | 33 | 34 | 34 |
+| 194 | 117 | 37 | 37 | 37 |
+| 194 | 985 | 37 | 37 | 37 |
+
+The 129-rule reduction loses a full unit of connected strength on the third row. On all 194 ordinary conflicts, widths 8 and 10 give a bound of 25 while width 12 proves 26. On the 19-contact case the original broad search had only proved 33 after 16,384 outer nodes. Budget propagation certified 34 in 1,124. A separate full pairing CP search produced a cost-34 matching with three proper subloops. Two legal exchanges reached a complete 365-strand circuit in 83 tested states. All published connected pairings in this comparison have positive genus and failed the direct geographical pose test.
+
+The public `phase-sewing` search keeps one set of physical mate variables across increasing loss caps and blocks only witnessed proper subloops. A bounded, positive-only local exchange check can also join the current circuit. Failure of that check leaves the complete SAT search available. Python 3.12 with the optional SAT backend can replay the strongest case from the project root.
+
+```console
+python r32_gold.py phase-sewing --phase 0xd237aba7e91101e88041413e8c589902021e5126 --upper 37 --seconds 0 --claims docs/R35_GEOGRAPHIC_RESIDUALS.json --claims docs/R35_EDGE_CONTACTS.json
+```
+
+On all 985 contacts this public path used 24,816 SAT decisions and four trial pairings in the successful local exchange. It reached the signed lower bound with a connected sewing of genus 28. A separate native fixed-phase replay with the exchange disabled spent 35,500 decisions and found a genus-29 optimum. A full geographic Gold placement would additionally have to embed on the actual board.
+
+## Euler deployment decision after the contact proof
+
+The geographic solver now authenticates a stronger, global 25-departure bound by independently replaying forty weighted physical and contact conditions on the same puzzle and reference. Neither possible Euler-only optimum, 21 or 22, can strengthen the deployed geographic bound on this original board. Keep the optional Euler equation, its validated upper witness at 22 and its exact finite phase eliminations. The remaining question concerns the deliberately narrower signed-inventory command without any contact claims. A checked 21-loss phase with Euler weight ±1, ±3 or ±5 would close that diagnostic positively. A proof that all such phases fail would close its cap-21 query negatively and raise its optional lower gate to the attained 22. The unrestricted CP, Glucose, CaDiCaL, ten-group splits and absolute-weight cases above returned unknown. Repeating the same budgets does not change the geographic deployment decision. [Global contact certificate](R35_CONTACT_LOSS_CERTIFICATE.json)

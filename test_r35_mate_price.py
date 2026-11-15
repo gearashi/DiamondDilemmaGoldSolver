@@ -177,9 +177,10 @@ class MatePriceTests(unittest.TestCase):
         self.assertEqual((strong['phase'],strong['loss_cost']),(hex(w),24))
         declined=run_syndrome(p,ref,g[:13],23,None,':memory:',.01,refine_integer=True,all_groups=True,sphere_euler=True,mate_cost=True)
         self.assertEqual(declined['status'],'UNKNOWN')
+        from contextlib import closing
         from sqlite3 import connect
         from r35_loss_witness import save_witness, checked_hits
-        with connect(':memory:') as db:
+        with closing(connect(':memory:')) as db:
             save_witness(db,'ordinary-scope',w)
             priced=SignedConditions(p,euler=True,mate_cost=True)
             for cap in (23,24):

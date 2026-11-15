@@ -385,15 +385,17 @@ def _ranked_loss(problem,ref,groups,upper,indices,db_path,seconds,page,emit,refi
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('mode',choices=('inventory','loss','integer-bound','dropout','master','geographic','poses','cores','loops','watch'))
+    parser.add_argument('mode',choices=('inventory','loss','integer-bound','phase-sewing','dropout','master','geographic','poses','cores','loops','watch'))
     parser.add_argument('--tiles',default='data/tiles.json')
+    parser.add_argument('--phase',type=lambda value:int(value,0),help='The tile-color assignment for phase-sewing, as a decimal or 0x integer.')
+    parser.add_argument('--switch-trials',type=int,default=128,help='Maximum distinct local pair exchanges per complete sewing; zero disables this witness probe.')
     parser.add_argument('--center',default='docs/R29_INCUMBENT.json')
     parser.add_argument('--backend',choices=('cpu','cuda'),default='cpu',help='Runtime for the checked placement watcher')
     parser.add_argument('--replicas',type=int,default=128)
     parser.add_argument('--claims',action='append',default=[],help='JSON file with clauses to replay')
     parser.add_argument('--case',help='JSON with optional codes, pins, domains, required and forbidden')
     parser.add_argument('--database',default=':memory:')
-    parser.add_argument('--seconds',type=float,default=15,help='Zero is unlimited in loss mode')
+    parser.add_argument('--seconds',type=float,default=15,help='Zero is unlimited for loss, integer-bound and phase-sewing')
     parser.add_argument('--upper',type=int,default=17)
     parser.add_argument('--lower',type=int,default=0)
     parser.add_argument('--outside',type=int,help='In loss, outside phase errors. In geographic, exact physical bond losses outside the packed groups.')
@@ -410,8 +412,11 @@ def main():
     parser.add_argument('--limit',type=int,default=10000)
     parser.add_argument('--output')
     args=parser.parse_args()
-    if args.seconds<0 or args.limit<0 or args.page<1 or args.upper<0 or (args.mode not in ('loss','integer-bound') and args.seconds==0):
+    if args.seconds<0 or args.limit<0 or args.page<1 or args.upper<0 or (args.mode not in ('loss','integer-bound','phase-sewing') and args.seconds==0):
         parser.error('Invalid budget')
+    if (args.phase is not None) != (args.mode=='phase-sewing'):
+        parser.error('--phase is required and valid only for phase-sewing')
+    if args.switch_trials<0:parser.error('Negative switch budget')
     if (args.sphere_euler or args.mate_support or args.mate_cost) and not (args.mode=='integer-bound' or args.mode=='loss' and args.refine_integer):
         parser.error('Signed physical conditions require integer-bound or loss --refine-integer')
     if args.independent_native and args.mode!='integer-bound':parser.error('--independent-native requires integer-bound')
@@ -456,6 +461,17 @@ def main():
             out=run_syndrome(p,ref,groups,args.upper,indices,args.database,args.seconds,args.page,
                              refine_integer=args.refine_integer,all_groups=args.all_groups,sphere_euler=args.sphere_euler,
                              mate_support=args.mate_support,mate_cost=args.mate_cost,geographic_hints=geographic_hints,contact_hints=contact_hints)
+        elif args.mode=='phase-sewing':
+            if case.keys()-{'codes'} or args.outside is not None:
+                parser.error('phase-sewing accepts an unrestricted reference and one tile-color assignment')
+            from r35_geographic_replay import geographic_departures
+            from r35_induced_contacts import contact_departures
+            from r35_phase_sewing import search as phase_sewing
+            geo=geographic_departures(p,ref,rules.required,geographic_hints)
+            contacts=contact_departures(p,ref,rules.required,contact_hints)
+            out=phase_sewing(p,ref,[*groups,*geo,*contacts],rules.required,args.phase,args.upper,args.seconds,
+                             switch_trials=args.switch_trials)
+            out.update(verified_geographic_departures=len(geo),verified_contact_departures=len(contacts))
         elif args.mode=='integer-bound':
             if case.keys()-{'codes'} or args.outside is not None:
                 parser.error('integer-bound solves every outside pattern of one unrestricted reference')

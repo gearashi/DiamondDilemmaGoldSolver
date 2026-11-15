@@ -1,5 +1,15 @@
 """Bound broad overlapping departure systems by branching on unhit groups."""
+from functools import lru_cache
 from math import inf
+
+
+def _disjoint_in_order(groups):
+    occupied = count = 0
+    for group in groups:
+        if not group & occupied:
+            occupied |= group
+            count += 1
+    return count
 
 
 def family_bound(classes, allowed, remaining, obligations, limit, *, node_limit=4096, work=None):
@@ -21,47 +31,95 @@ def family_bound(classes, allowed, remaining, obligations, limit, *, node_limit=
         loose &= ~mask
         if mask:
             profiles.append((mask, options))
-    groups = sorted({sum(positions[e] for e in g) for g in obligations}, key=int.bit_count)
+    original_groups = {sum(positions[e] for e in g) for g in obligations}
+    physical_groups = set()
+    for owner, options in profiles:
+        if owner.bit_count() > 8 or not all(options):
+            continue
+        sub = owner
+        candidates = []
+        while sub:
+            if all(sub & opt for opt in options):
+                candidates.append(sub)
+            sub = (sub - 1) & owner
+        small = []
+        for sub in sorted(candidates, key=int.bit_count):
+            if not any(old & sub == old for old in small):
+                small.append(sub)
+        physical_groups.update(small)
+    groups = []
+    for g in sorted(original_groups | physical_groups, key=lambda mask: (mask.bit_count(), mask)):
+        if not any(old & g == old for old in groups):
+            groups.append(g)
+    if work is not None:
+        work.update(projected_groups=len(physical_groups), input_groups=len(original_groups))
     visits = 0
 
-    def propagate(selected):
-        forced = selected
-        cost = (selected & loose).bit_count()
-        for owner, options in profiles:
-            must = selected & owner
-            common = owner
-            cheapest = inf
-            for losses in options:
-                if losses & must != must:
-                    continue
-                common &= losses
-                cheapest = min(cheapest, losses.bit_count())
-            if cheapest == inf:
-                return inf, 0
-            forced |= common
-            cost += cheapest
-        return cost, forced
+    @lru_cache(maxsize=1024)
+    def disjoint_lower_bound(pending):
+        # A low-degree group leaves more disjoint groups available. Every
+        # selected group is certified to need a separately charged bond.
+        neighbors = {g: frozenset(v for v in pending if v & g) for g in pending}
+        remaining = set(pending)
+        count = 0
+        while remaining:
+            group = min(remaining, key=lambda g: (len(neighbors[g] & remaining), g.bit_count(), g))
+            remaining.difference_update(neighbors[group])
+            count += 1
+        return count
+
+    def propagate(selected, cap):
+        while True:
+            cost = (selected & loose).bit_count()
+            factors = []
+            for owner, options in profiles:
+                must = selected & owner
+                domain = [(v, v.bit_count()) for v in options if v & must == must]
+                if not domain:
+                    return inf, 0, ()
+                cheapest = min(n for _, n in domain)
+                cost += cheapest
+                factors.append((owner, domain, cheapest))
+            if cost > cap:
+                return inf, 0, ()
+            slack = cap - cost
+            forced = selected
+            possible = loose if slack else selected & loose
+            for owner, domain, cheapest in factors:
+                common = owner
+                for v, n in domain:
+                    if n <= cheapest + slack:
+                        common &= v
+                        possible |= v
+                forced |= common
+            pending = [g & possible for g in groups if not g & forced]
+            if not all(pending):
+                return inf, 0, ()
+            must = 0
+            for g in pending:
+                if g & (g - 1) == 0:
+                    must |= g
+            if not must:
+                return cost, forced, sorted(set(pending), key=lambda g: (g.bit_count(), g))
+            selected = forced | must
 
     def under(selected, cap, seen):
         nonlocal visits
         visits += 1
         if visits > node_limit:
             return None
-        price, forced = propagate(selected)
+        price, forced, pending = propagate(selected, cap)
         if price > cap or forced in seen:
             return False
         seen.add(forced)
-        pending = [g for g in groups if not g & forced]
         if not pending:
             return True
         # Every set in a disjoint subfamily must acquire a separately charged
         # member in addition to the already forced losses.
-        disjoint = count = 0
-        for g in pending:
-            if not disjoint & g:
-                disjoint |= g
-                count += 1
-        if forced.bit_count() + count > cap:
+        spare = cap - forced.bit_count()
+        if _disjoint_in_order(pending) > spare:
+            return False
+        if disjoint_lower_bound(tuple(pending)) > spare:
             return False
         row = pending[0]
         candidates = []
@@ -76,7 +134,7 @@ def family_bound(classes, allowed, remaining, obligations, limit, *, node_limit=
                 return answer
         return False
 
-    price, forced = propagate(0)
+    price, forced, _ = propagate(0, inf)
     if price == inf:
         return inf
     upper = len(positions)
@@ -86,8 +144,12 @@ def family_bound(classes, allowed, remaining, obligations, limit, *, node_limit=
             # A successful search attains cap. A cutoff only certifies the
             # previous failed caps; returning cap remains a safe lower bound.
             if work is not None:
-                work.update(nodes=visits, finished=answer is True, outstanding_groups=len(groups), certified=cap)
+                work.update(packing_states=disjoint_lower_bound.cache_info().misses,
+                            packing_reuses=disjoint_lower_bound.cache_info().hits, nodes=visits,
+                            finished=answer is True, outstanding_groups=len(groups), certified=cap)
             return cap
     if work is not None:
-        work.update(nodes=visits, finished=True, outstanding_groups=len(groups), infeasible=True)
+        work.update(packing_states=disjoint_lower_bound.cache_info().misses,
+                    packing_reuses=disjoint_lower_bound.cache_info().hits, nodes=visits,
+                    finished=True, outstanding_groups=len(groups), infeasible=True)
     return inf
