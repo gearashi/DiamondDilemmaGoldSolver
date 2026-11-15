@@ -109,9 +109,16 @@ def check_rules(problem, pins, deadline, *, candidates=None, project=False, requ
         return stats["terminal"]
 
     if proven:
+        from r35_phase_cube_rules import published_rules
+        cubes = published_rules()
         stats["certified_fixed_phase"] = True
-        if include(proven):
-            return accepted, stats
+        stats["stored_partial_phases"] = len(cubes)
+        # The complete phase is covered by any certified subset with matching relative signs.
+        complete_covered = any(len({((PROVED_PHASE >> t) & 1) ^ bit for t, bit in row}) <= 1
+                               for row in cubes)
+        for row in cubes if complete_covered else (*cubes, proven):
+            if include(row):
+                return accepted, stats
     entries = []
     for anchor, row in candidates:
         signature = sha256(json.dumps([anchor, row], separators=(",", ":")).encode("ascii")).hexdigest()

@@ -1,0 +1,150 @@
+{
+  "fingerprint": "e96470e2d302f4d3c350479f49a21bf05f7124f1e62cecfa34b879140403f853",
+  "per_solve_seconds": 5,
+  "queries": [
+    {
+      "pins": 48,
+      "complement": 0,
+      "withheld": 8,
+      "weaker_remains_open": true,
+      "previous_terminal": false,
+      "current": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "cp_calls": 0,
+        "phase_rules": {
+          "replayed": 0,
+          "reused": 0,
+          "clauses": 2,
+          "terminal": true,
+          "certified_fixed_phase": true,
+          "stored_partial_phases": 2,
+          "redundant_relative_signs": 47
+        }
+      },
+      "previous": {
+        "status": "UNKNOWN",
+        "branches": 161001,
+        "cp_calls": 8,
+        "phase_rules": {
+          "replayed": 0,
+          "reused": 0,
+          "clauses": 2,
+          "terminal": false,
+          "certified_fixed_phase": true,
+          "stored_partial_phases": 0,
+          "redundant_relative_signs": 92,
+          "stored_geographic_rules": 2
+        }
+      }
+    },
+    {
+      "pins": 48,
+      "complement": 1,
+      "withheld": 8,
+      "weaker_remains_open": true,
+      "previous_terminal": false,
+      "current": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "cp_calls": 0,
+        "phase_rules": {
+          "replayed": 0,
+          "reused": 0,
+          "clauses": 2,
+          "terminal": true,
+          "certified_fixed_phase": true,
+          "stored_partial_phases": 2,
+          "redundant_relative_signs": 47
+        }
+      },
+      "previous": {
+        "status": "UNKNOWN",
+        "branches": 197141,
+        "cp_calls": 9,
+        "phase_rules": {
+          "replayed": 0,
+          "reused": 0,
+          "clauses": 2,
+          "terminal": false,
+          "certified_fixed_phase": true,
+          "stored_partial_phases": 0,
+          "redundant_relative_signs": 92,
+          "stored_geographic_rules": 2
+        }
+      }
+    },
+    {
+      "pins": 49,
+      "complement": 0,
+      "withheld": 8,
+      "weaker_remains_open": true,
+      "previous_terminal": false,
+      "current": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "cp_calls": 0,
+        "phase_rules": {
+          "replayed": 0,
+          "reused": 0,
+          "clauses": 4,
+          "terminal": true,
+          "certified_fixed_phase": true,
+          "stored_partial_phases": 2,
+          "redundant_relative_signs": 91
+        }
+      },
+      "previous": {
+        "status": "UNKNOWN",
+        "branches": 163193,
+        "cp_calls": 11,
+        "phase_rules": {
+          "replayed": 0,
+          "reused": 0,
+          "clauses": 2,
+          "terminal": false,
+          "certified_fixed_phase": true,
+          "stored_partial_phases": 0,
+          "redundant_relative_signs": 93,
+          "stored_geographic_rules": 2
+        }
+      }
+    },
+    {
+      "pins": 49,
+      "complement": 1,
+      "withheld": 8,
+      "weaker_remains_open": true,
+      "previous_terminal": false,
+      "current": {
+        "status": "INFEASIBLE",
+        "branches": 0,
+        "cp_calls": 0,
+        "phase_rules": {
+          "replayed": 0,
+          "reused": 0,
+          "clauses": 4,
+          "terminal": true,
+          "certified_fixed_phase": true,
+          "stored_partial_phases": 2,
+          "redundant_relative_signs": 91
+        }
+      },
+      "previous": {
+        "status": "UNKNOWN",
+        "branches": 180940,
+        "cp_calls": 12,
+        "phase_rules": {
+          "replayed": 0,
+          "reused": 0,
+          "clauses": 2,
+          "terminal": false,
+          "certified_fixed_phase": true,
+          "stored_partial_phases": 0,
+          "redundant_relative_signs": 93,
+          "stored_geographic_rules": 2
+        }
+      }
+    }
+  ]
+}
