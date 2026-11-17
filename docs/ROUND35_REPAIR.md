@@ -38,7 +38,7 @@ Across those 48 pools the physical seam index considered 60,057 disjoint, actual
 
 A 64-round eight-cell-forest trajectory used the released, expanded pair and triple policy on the same four seeds. All three finished with identical best board hashes (178, 168, 172, 169). Applying each local stage before the full-board circulation instead produced 176/171/170/174, 177/171/169/173 and 177/170/171/173 respectively. This earlier order shortened the time to 160 on some seeds and lowered some final scores. Keep the new two/three-cycle rules as opt-in exact local repair capabilities; reject the early reordering and their promotion over individual cycles for ordinary sustained search. No method in this comparison reached 208 or Gold.
 
-[Per-seed scores, witness digests, work and 48 local comparisons](R35_CYCLE_REPAIR.json). Reproduce with `bench_r35_trajectories.py --help` and `bench_r35_cycle_contacts.py --help`; use an isolated output directory, the installed physical tile file, and seeds 3500 through 3503 for the trajectory arms.
+[Per-seed scores, witness digests, work and 48 local comparisons](R35_CYCLE_REPAIR.json). Reproduce with `python -m benchmarks.bench_r35_trajectories --help` and `python -m benchmarks.bench_r35_cycle_contacts --help`; use an isolated output directory, the installed physical tile file, and seeds 3500 through 3503 for the trajectory arms.
 
 ## 33. Select neighboring swaps by their physical seam gains
 
@@ -88,7 +88,7 @@ For independent discovery at the measured 180 threshold:
 .\venv\Scripts\python.exe r31_fresh.py --backend cpu --bonds --cycle-budget 3 --exact-packing --rounds 320 --starts 0 --database runtime/fresh-exact-swap.sqlite --output runtime/fresh-exact-swap.json
 ```
 
-[Physical pools, branches, per-seed milestones and board digests](R35_SWAP_PACKING.json). Reproduce with `bench_r35_packing.py`, `bench_r35_fixed_packing.py` and `bench_r35_trajectories.py` using the original tile file. Fixed packing optimizes only the supplied oriented candidates. A feasible CP result establishes its checked score. A proof of optimality on that scope never closes a full unexamined board.
+[Physical pools, branches, per-seed milestones and board digests](R35_SWAP_PACKING.json). Reproduce with `benchmarks/bench_r35_packing.py`, `benchmarks/bench_r35_fixed_packing.py` and `benchmarks/bench_r35_trajectories.py` using the original tile file. Fixed packing optimizes only the supplied oriented candidates. A feasible CP result establishes its checked score. A proof of optimality on that scope never closes a full unexamined board.
 
 ## 35. Retain profitable swap candidates when the board changes
 
@@ -143,4 +143,4 @@ The two-bound profile reached 180 on seeds 3500 and 3502 at rounds 180 and 202. 
 
 For the NumPy-only Python 3.15 installation, add `--regional-only` and use a separate database. The actual 3.15.0 installation with NumPy 2.5.3, eight mandatory bonds and no OR-Tools reached 155 after 16 rounds, then 161 after 32 with 16 reused and 16 new rounds. The retained regular Python 3.12 and portable Python 3.15 options return physical heuristic boards; 208 and one-loop Gold remain open.
 
-[Regional optima, matched assignments, trajectory receipts and native/portable controls](R35_CIRCULATION.json). Reproduce with `bench_r35_cycle_branches.py`, `bench_r35_identity_duals.py` and `bench_r35_trajectories.py`.
+[Regional optima, matched assignments, trajectory receipts and native/portable controls](R35_CIRCULATION.json). Reproduce with `benchmarks/bench_r35_cycle_branches.py`, `benchmarks/bench_r35_identity_duals.py` and `benchmarks/bench_r35_trajectories.py`.

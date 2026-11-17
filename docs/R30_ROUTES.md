@@ -46,7 +46,7 @@ To reproduce the cold production measurements use a new database. A rerun on the
 
 ```text
 python -B -m unittest -v test_r30_routes
-python bench_r30_routes.py --tiles data/tiles.json --database fresh-four.sqlite --output routes.json
+python -m benchmarks.bench_r30_routes --tiles data/tiles.json --database fresh-four.sqlite --output routes.json
 python bench_r30_single_contact.py --tiles data/tiles.json --output contact-regeneration.json
 python bench_r30_cycle_groups.py --tiles data/tiles.json --output component-regeneration.json
 ```

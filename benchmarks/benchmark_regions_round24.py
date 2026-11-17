@@ -1,6 +1,6 @@
 """Reproducible bounded logical-work discriminators for R24 regional proposals.
 
-Run: python -B benchmark_regions_round24.py --output PATH
+Run: python -B -m benchmarks.benchmark_regions_round24 --output PATH
 Optional --original-tiles PATH adds one capped full-original factor query.
 Results are finite scope; they do not establish an original Gold solution.
 """

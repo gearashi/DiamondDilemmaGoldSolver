@@ -83,6 +83,25 @@ class BenchmarkProvenanceTests(unittest.TestCase):
     self.assertNotEqual(after[name]['lf_sha256'],changed[name]['lf_sha256'])
 
 
+ def test_nested_benchmark_sources_are_frozen_with_stable_relative_names(self):
+  from benchmark_provenance import source_snapshot
+  with tempfile.TemporaryDirectory(prefix='benchmark-nested-',dir=benchmark.ROOT) as directory:
+   root=Path(directory);(root/'benchmarks/round35').mkdir(parents=True)
+   names=('benchmarks/bench_sample.py','benchmarks/round35/helper.py','benchmarks/round35/kernel.cu',
+          'benchmarks/requirements-benchmark.txt')
+   for name in names:(root/name).write_bytes(b'first\r\n')
+   (root/'benchmarks/round35/result.json').write_text('{}',encoding='utf-8')
+   before=source_snapshot(root)
+   self.assertEqual(set(before),set(names))
+   nested='benchmarks/round35/helper.py'
+   (root/nested).write_bytes(b'first\n');normalized=source_snapshot(root)
+   self.assertEqual(before[nested]['lf_sha256'],normalized[nested]['lf_sha256'])
+   self.assertNotEqual(before[nested]['raw_sha256'],normalized[nested]['raw_sha256'])
+   (root/nested).write_bytes(b'changed\n');after=source_snapshot(root)
+   self.assertNotEqual(normalized[nested]['lf_sha256'],after[nested]['lf_sha256'])
+   for name in set(names)-{nested}:self.assertEqual(before[name],after[name])
+
+
 class BenchmarkFreezeTests(unittest.TestCase):
  def test_frozen_run_rejects_uncommitted_sources_before_search(self):
   for repository in ({}, {'commit':'abc','dirty':True}):

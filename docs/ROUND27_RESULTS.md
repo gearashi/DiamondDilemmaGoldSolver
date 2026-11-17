@@ -52,7 +52,7 @@ For a separate, inspectable output without starting the dashboard, run `python r
 
 The [structural report](R27_STRUCTURE.md) describes the tested limits and alternatives for proposals 1, 2, 6–15 and 22. The finite comparisons include independently validated outputs, adverse cases and scoped interruption tests. A full-root work cap, timeout or sampled failure leaves the unresolved branch open. Statistics from planted or constrained fixtures apply to those fixtures. For the smaller diagrams, one globally bijective assignment resolves competing number matches. Five path readings needed manual review against the white-only boards.
 
-- Structural suites and full-input caps are in [the finite results](r27_structure_finite.json) and [the full-size results](r27_structure_full.json). Run `python bench_r27_structure.py --help` for the independent and planted cases.
+- Structural suites and full-input caps are in [the finite results](r27_structure_finite.json) and [the full-size results](r27_structure_full.json). Run `python -m benchmarks.bench_r27_structure --help` for the independent and planted cases.
 - Reasoning algorithms, bounds and reproduction commands are in [the scoped reasoning report](R27_REASONING.md).
 - Per-seed scores and native resume checks are in [the incumbent experiments](R27_INCUMBENT.md).
 - Native dispatch and donation evidence is in [the CUDA measurements](r27-gpu-evidence.json). Run `python benchmark_r27_cuda.py` on CUDA.

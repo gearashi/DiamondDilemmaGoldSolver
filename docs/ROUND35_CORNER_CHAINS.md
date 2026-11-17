@@ -31,7 +31,7 @@ Four three-mover planted scopes used seeds 35, 71, 103 and 157. The position and
 
 ```text
 python r30_gold.py embed --corner-mode chains --input restrictions.json --seconds 60
-python bench_r35_corner_chains.py --tiles data/tiles.json --output runtime/corner-comparison.json
+python -m benchmarks.bench_r35_corner_chains --tiles data/tiles.json --output runtime/corner-comparison.json
 python -m unittest -v test_r35_corner_chains
 ```
 

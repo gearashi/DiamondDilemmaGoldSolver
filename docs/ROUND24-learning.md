@@ -29,7 +29,7 @@ Windows native proof-logging experiments were reported by the release coordinato
 Run:
 
 ```powershell
-& C:\DiamondDilemmaGoldSolver\github-release\.venv-compare\Scripts\python.exe -B benchmark_learning_round24.py --output audit/optimization-round24/learning-finite-02.json --cases 60
+.\venv\Scripts\python.exe -B -m benchmarks.benchmark_learning_round24 --output audit/optimization-round24/learning-finite-02.json --cases 60
 ```
 
 The report records seed 240071, source hashes, Python version, exact supported-domain digests, and logical counters. Its baseline reaches a fixpoint of the default seam/Hall/cluster/neighborhood/parity machinery plus existing path consistency and scalar conservation. It does not claim to exhaust every optional Gold oracle on every context. All SAT variants then seek the same edge-model supports; these witnesses are not accepted as Gold solutions.

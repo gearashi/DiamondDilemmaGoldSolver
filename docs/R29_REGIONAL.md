@@ -38,7 +38,7 @@ On a six-variable parity conflict, boundary-cube enumeration used 98 SAT calls a
 
 ```text
 python -B -m unittest -v test_r29_regional test_r28_logic test_r28_geometry
-python -B bench_r29_regional.py --samples 600 --tiles data/tiles.json --incumbent runtime/best.json
+python -B -m benchmarks.bench_r29_regional --samples 600 --tiles data/tiles.json --incumbent runtime/best.json
 ```
 
 The benchmark uses deterministic synthetic data and an optional read-only 160-cell reference. OR-Tools and python-sat are required for the full benchmark. Core DFS and durable regional joins also run in the portable dependency profile.

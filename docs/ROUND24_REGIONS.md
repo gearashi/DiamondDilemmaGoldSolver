@@ -33,7 +33,7 @@ reviewed.
 
 ```
 python -B -m unittest test_constraint_region_symbolic test_constraint_region_reasoning_round24 test_constraint_region_network
-python -B benchmark_regions_round24.py --output audit/optimization-round24/regions.json
+python -B -m benchmarks.benchmark_regions_round24 --output audit/optimization-round24/regions.json
 ```
 
 Optional `--original-tiles /path/to/tiles.json` adds a 50,000-operation capped

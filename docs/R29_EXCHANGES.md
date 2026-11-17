@@ -35,5 +35,5 @@ To regenerate the evidence, supply a fresh database path to the benchmark. The p
 
 ```sh
 python -m unittest -v test_r29_exchange
-python bench_r29_exchange.py --database fresh-r29.sqlite --output r29-results.json
+python -m benchmarks.bench_r29_exchange --database fresh-r29.sqlite --output r29-results.json
 ```

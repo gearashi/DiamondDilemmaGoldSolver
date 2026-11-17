@@ -8,4 +8,4 @@ An audit of the installed 16 fresh CPU/GPU starts, three published centers, 4,57
 
 The planted full-edge witness moved from support rank zero to rank one under rotation. A direct run used one native exact query and the transported run used zero. Both independently replayed the 15-edge single loop. For the real fresh archives, exact posed-board mask caching priced eight boards on the initial eight-board read, eight more when expanded to sixteen, and zero on a third full read. A changed pose receives a new mask key. All sixteen original inputs remained excluded at the tested 208 cutoff.
 
-Reproduce with `python bench_r35_orbit_archive.py --tiles ../data/tiles.json --output docs/R35_ORBIT_ARCHIVE.json` and `python -m unittest test_r35_center_orbits`.
+Reproduce with `python -m benchmarks.bench_r35_orbit_archive --tiles ../data/tiles.json --output docs/R35_ORBIT_ARCHIVE.json` and `python -m unittest test_r35_center_orbits`.

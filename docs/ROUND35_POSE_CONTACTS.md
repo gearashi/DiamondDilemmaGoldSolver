@@ -33,9 +33,9 @@ Direct enumeration checked every code surviving the declared constraints on 64 r
 
 ```sh
 python -m unittest test_r35_pose_contacts test_r35_joint_poses test_r35_speculative_poses
-python bench_r35_pose_contacts.py --tiles data/tiles.json --output projection.json
+python -m benchmarks.bench_r35_pose_contacts --tiles data/tiles.json --output projection.json
 python bench_r35_signed_pose_contacts.py --tiles data/tiles.json --output signed.json
 python bench_r35_incidental_joins.py --tiles data/tiles.json --output fresh.json --count 64
-python bench_r35_pose_contact_outcomes.py --tiles data/tiles.json --output choices.json --count 64
-python bench_r35_pose_contact_starts.py --tiles data/tiles.json --output trajectories.json --count 16
+python -m benchmarks.bench_r35_pose_contact_outcomes --tiles data/tiles.json --output choices.json --count 64
+python -m benchmarks.bench_r35_pose_contact_starts --tiles data/tiles.json --output trajectories.json --count 16
 ```

@@ -24,7 +24,7 @@ On the first four starts, prices-only finished at 176/181/181/175 and final proj
 .\venv\Scripts\python.exe r31_fresh.py --backend cpu --bonds --cycle-budget 3 --contact-group 1 --forbidden-repair guarded --rounds 320 --starts 0 --database runtime/fresh-guarded-cycles.sqlite --output runtime/fresh-guarded-cycles.json
 ```
 
-[Physical and trajectory receipts](R35_FORBIDDEN_REPAIR.json). Reproduce stage incidence with `bench_r35_forbidden_repair.py`, exact local rollbacks with `bench_r35_mate_rollback.py`, and the three matched regional trajectories with `bench_r35_trajectories.py`.
+[Physical and trajectory receipts](R35_FORBIDDEN_REPAIR.json). Reproduce stage incidence with `benchmarks/bench_r35_forbidden_repair.py`, exact local rollbacks with `benchmarks/bench_r35_mate_rollback.py`, and the three matched regional trajectories with `benchmarks/bench_r35_trajectories.py`.
 
 ## 38. Coordinate whole mandatory assemblies and price displaced pieces
 
@@ -54,7 +54,7 @@ Each profile used 16/64/320-round prefixes and a cold 64-round repeat on seed 35
 
 **Decision.** Retain the displacement and coordinated search as optional moves. Guarded reciprocal is the smallest tested variant to attain 184 twice on this seed group. Partial overlap added verified local moves and had mixed trajectory effects. Use fresh independent starts for this comparison. The incumbent remains 207 and Gold requires 240 seams on one loop.
 
-[Assembly controls, physical hashes and trajectories](R35_ASSEMBLY_RELOCATION.json). Use `bench_r35_assembly_relocation.py` for independent one-move comparisons and `bench_r35_trajectories.py` for saved prefixes.
+[Assembly controls, physical hashes and trajectories](R35_ASSEMBLY_RELOCATION.json). Use `benchmarks/bench_r35_assembly_relocation.py` for independent one-move comparisons and `benchmarks/bench_r35_trajectories.py` for saved prefixes.
 
 ## 39. Forward-check fresh placements and complete their weighted donor assignment
 
@@ -106,4 +106,4 @@ When the bounded assembly constructor fails, a separate occupancy search can pro
 
 **Decision.** Keep incremental joins for optional phase-compatible assembly experiments. Conflict-directed removal applies only to a proved occupancy conflict. It has a planted positive and produced no additional full original starts at the tested merge depths. Reopen expansion of conflict explanations only after recording a recurring original packing failure where this occupancy proof leaves a relevant earlier choice unidentified.
 
-[Joined and full traversal receipts](R35_SPECULATIVE_JOINS.json). `bench_r35_speculative_poses.py` reproduces both builders. `test_r35_speculative_poses.py` compares sorted poses on unrestricted and restricted physical domains with reversed join order.
+[Joined and full traversal receipts](R35_SPECULATIVE_JOINS.json). `benchmarks/bench_r35_speculative_poses.py` reproduces both builders. `test_r35_speculative_poses.py` compares sorted poses on unrestricted and restricted physical domains with reversed join order.

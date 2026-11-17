@@ -4,7 +4,7 @@ Use `--project-blanks` with `r30_gold.py matching` to return a fully materialize
 
 ```text
 python r30_gold.py embed --project-blanks --input restrictions.json --seconds 60
-python bench_r35_blank_projection.py --tiles data/tiles.json --sewing docs/R35_NONBLANK_SEWING.json --root-rounds 4
+python -m benchmarks.bench_r35_blank_projection --tiles data/tiles.json --sewing docs/R35_NONBLANK_SEWING.json --root-rounds 4
 python -m unittest -v test_r35_blank_projection
 ```
 

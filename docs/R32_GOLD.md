@@ -48,6 +48,6 @@ Use `r32_gold.py dropout --stage integer` or `--stage mating` for the cost model
 
 ```powershell
 .\venv\Scripts\python.exe -B -m unittest -v test_r32_gold
-.\venv\Scripts\python.exe -B bench_r32_gold.py --output gold-results.json --max-budget 15 --layer-seconds 420
-.\venv\Scripts\python.exe -B bench_r32_gold_followups.py --fresh runtime/fresh-cpu.sqlite --fresh runtime/fresh-cuda.sqlite --output followups.json
+.\venv\Scripts\python.exe -B -m benchmarks.bench_r32_gold --output gold-results.json --max-budget 15 --layer-seconds 420
+.\venv\Scripts\python.exe -B -m benchmarks.bench_r32_gold_followups --fresh runtime/fresh-cpu.sqlite --fresh runtime/fresh-cuda.sqlite --output followups.json
 ```

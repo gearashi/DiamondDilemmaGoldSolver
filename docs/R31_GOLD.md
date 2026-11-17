@@ -28,7 +28,7 @@ python r31_gold.py salvage --input fragments.json --output runtime/salvaged.json
 python r31_gold.py phases --input phase-interface.json
 python r31_gold.py parents --input residual.json
 python -B -m unittest -v test_r31_gold test_r30_exactgold
-python bench_r31_gold.py --tiles data/tiles.json --output gold-benchmark.json
+python -m benchmarks.bench_r31_gold --tiles data/tiles.json --output gold-benchmark.json
 ```
 
 The embedding command enables geographic channels within the size limit and learns geographic conflicts. The restricted matching and embedding commands accept `"fractional": true` and `"bridges": [[...]]`. Each bridge is a proper subset of physical strand IDs in tile/segment order. A saved result includes recheckable geographic exclusions and bridge hints. Controls use `"channel": false` and `"learn_geography": false` to disable those additions.

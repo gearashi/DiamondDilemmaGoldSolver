@@ -30,6 +30,10 @@ def source_snapshot(root):
     root=Path(root)
     paths={p for p in root.iterdir() if p.is_file() and
            (p.suffix in SOURCE_SUFFIXES or p.name.startswith('requirements') and p.suffix=='.txt')}
+    benchmarks=root/'benchmarks'
+    if benchmarks.is_dir():
+        paths.update(p for p in benchmarks.rglob('*') if p.is_file() and
+                     (p.suffix in SOURCE_SUFFIXES or p.name.startswith('requirements') and p.suffix=='.txt'))
     workflow=root/'.github/workflows/tests.yml'
     if workflow.is_file():paths.add(workflow)
     native=root/'.native'

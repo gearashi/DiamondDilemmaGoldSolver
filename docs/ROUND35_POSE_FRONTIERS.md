@@ -32,10 +32,10 @@ The raw counts, seeds, paths, checkpoint hashes and eight paired public results 
 
 ```sh
 python bench_r35_pose_frontiers.py --tiles data/tiles.json --native .native --checkpoints runtime/searches --output pose-frontier-cpu.json
-python bench_r35_pose_cuda.py --tiles data/tiles.json --cpu pose-frontier-cpu.json --checkpoints runtime/searches --symmetry --output pose-frontier-cuda.json
-python bench_r35_pose_paths.py --tiles data/tiles.json --native .native --output pose-frontier-paths.json
-python bench_r35_pose_transactions.py --tiles data/tiles.json --output matched-cpu.json
-python bench_r35_pose_transactions.py --tiles data/tiles.json --gpu --output matched-cuda.json
+python -m benchmarks.bench_r35_pose_cuda --tiles data/tiles.json --cpu pose-frontier-cpu.json --checkpoints runtime/searches --symmetry --output pose-frontier-cuda.json
+python -m benchmarks.bench_r35_pose_paths --tiles data/tiles.json --native .native --output pose-frontier-paths.json
+python -m benchmarks.bench_r35_pose_transactions --tiles data/tiles.json --output matched-cpu.json
+python -m benchmarks.bench_r35_pose_transactions --tiles data/tiles.json --gpu --output matched-cuda.json
 python -m unittest test_r35_pose_frontiers
 ```
 

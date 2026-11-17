@@ -88,11 +88,11 @@ changed lane counts, CPU→GPU→CPU transport, coverage reuse and failed-restor
 cleanup. Hardware tests require `DIAMOND_TEST_CUDA=1`;
 sampling WebGPU tests additionally require `DIAMOND_TEST_WEBGPU=1`.
 
-`benchmark_hybrid_round24.py` compares all 8 sampling configurations using paired
+`benchmarks/benchmark_hybrid_round24.py` compares all 8 sampling configurations using paired
 seeds and equal proposed moves. Example:
 
 ```
-python -B benchmark_hybrid_round24.py --data data/tiles.json --output audit/sampling.json --steps 1024 --replicas 128 --seeds 1,2,3,4 --backend cuda
+python -B -m benchmarks.benchmark_hybrid_round24 --data data/tiles.json --output audit/sampling.json --steps 1024 --replicas 128 --seeds 1,2,3,4 --backend cuda
 ```
 
 Repeat with `--gold` to include loop-aware sampling scores. Its archive-repeat

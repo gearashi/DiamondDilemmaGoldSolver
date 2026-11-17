@@ -22,7 +22,7 @@ The frozen `finite-final-02` runs used the implementations and source hashes rec
 
 The six additional forty-cell ordering pairs all reached their 1.5-second query caps. They remain inconclusive. Existing time-bounded optional reasoning can cause small node-count variation between runs. The original 160-cell factor query also capped during its 50,000-operation construction/reasoning allowance: it removed zero values and returned unknown.
 
-Details and independent checks are in [learning/proofs](ROUND24-learning.md), [regional reasoning](ROUND24_REGIONS.md), and [ordering](ROUND24_ORDERING.md). Frozen records: `audit/optimization-round24/finite-final-02/{learning,regions,ordering}.json` and `manifest.json`. Reproduction scripts are [learning](../benchmark_learning_round24.py), [regions](../benchmark_regions_round24.py), and [bundled ordering](../benchmark_learned_ordering_round24.py) (`--evaluate-bundled`).
+Details and independent checks are in [learning/proofs](ROUND24-learning.md), [regional reasoning](ROUND24_REGIONS.md), and [ordering](ROUND24_ORDERING.md). Frozen records: `audit/optimization-round24/finite-final-02/{learning,regions,ordering}.json` and `manifest.json`. Reproduction scripts are [learning](../benchmarks/benchmark_learning_round24.py), [regions](../benchmarks/benchmark_regions_round24.py), and [bundled ordering](../benchmark_learned_ordering_round24.py) (`--evaluate-bundled`).
 
 ## Whole-board comparisons
 

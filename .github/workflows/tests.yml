@@ -444,6 +444,8 @@ jobs:
           from pathlib import Path, PurePosixPath
           import subprocess
           files = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', 'HEAD', '-z']).decode().split('\0')
+          root_entries = {PurePosixPath(name).parts[0] for name in files if name}
+          assert len(root_entries) < 1000, 'Organize root files into folders before GitHub truncates the listing.'
           forbidden = {'.native', 'data', 'runtime', 'venv', '.venv', '.venv-test', '.venv-webgpu', '.venv-compare', '.venv-wsl-proof', '.codex', 'audit', 'dist', 'stochastic-runtime', 'dfs-runtime'}
           for name in filter(None, files):
               path = PurePosixPath(name)

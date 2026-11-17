@@ -42,8 +42,8 @@ Prepare the original pieces using the project's setup. For a version-to-version 
 
 ```shell
 python -B -m unittest discover -v -p "test_r33*.py"
-python bench_r33_gold_lookup.py --released-syndrome ../v1.13.0/r32_gold_syndrome.py --output lookup.json
-python bench_r33_gold_buckets.py --output buckets.json
+python -m benchmarks.bench_r33_gold_lookup --released-syndrome ../v1.13.0/r32_gold_syndrome.py --output lookup.json
+python -m benchmarks.bench_r33_gold_buckets --output buckets.json
 python bench_r33_gold_resume.py --legacy-source ../v1.13.0/r32_gold.py --output resume.json
 python bench_r33_gold_pipeline.py --baseline ../v1.13.0 --output pipeline.json
 python bench_r33_gold_hit.py --legacy-source ../v1.13.0/r32_gold_syndrome.py --output hit.json

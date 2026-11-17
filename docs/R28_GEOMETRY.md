@@ -30,7 +30,7 @@ python r28_geometry.py dual --input restricted-domains.json
 python r28_geometry.py regions --input partition.json --method orbit
 python r28_geometry.py regions --input partition.json --method paged --checkpoint join-progress.json --max-work 10000
 python -m unittest test_r28_geometry -v
-python bench_r28_geo.py --tiles data/tiles.json --incumbent runtime/best.json
+python -m benchmarks.bench_r28_geo --tiles data/tiles.json --incumbent runtime/best.json
 ```
 
 A phase request may include `probe_tiles`, `probe_bonds`, a `pins` map and `euler`. A core request has a `bonds` array of physical side pairs. Supplying restricted `domains` in the same request runs the checked physical nogood as a placement filter, returning the surviving domains. A partition file has `regions` (arrays of zero-based cell IDs) and optional `domains` (allowed orientation codes for each cell). The phase and packing commands answer feasibility in their respective relaxations. Any published full geographic witness passes the existing independent validator. Resource-limited searches report unknown or incomplete. Measured original outcomes use the saved 207-edge, 52-component board and can differ for other incumbents.

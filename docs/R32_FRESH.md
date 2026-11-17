@@ -68,8 +68,8 @@ The benchmark runs against an unmodified prepared inventory. Use a fresh databas
 
 ```text
 python -B -m unittest -v test_r32_fresh test_r31_fresh
-python -B bench_r32_fresh.py cpu --tiles data/tiles.json --database runtime/check-fresh.sqlite --output cpu.json
-python -B bench_r32_fresh.py cuda --seeds 4 5 --tiles data/tiles.json --database runtime/check-cuda.sqlite --output cuda.json
-python -B bench_r32_fresh.py geometry --tiles data/tiles.json --database runtime/check-geometry.sqlite --output geometry.json
-python -B bench_r32_fresh.py cache --rounds 24 --tiles data/tiles.json --database runtime/check-rows.sqlite --output rows.json
+python -B -m benchmarks.bench_r32_fresh cpu --tiles data/tiles.json --database runtime/check-fresh.sqlite --output cpu.json
+python -B -m benchmarks.bench_r32_fresh cuda --seeds 4 5 --tiles data/tiles.json --database runtime/check-cuda.sqlite --output cuda.json
+python -B -m benchmarks.bench_r32_fresh geometry --tiles data/tiles.json --database runtime/check-geometry.sqlite --output geometry.json
+python -B -m benchmarks.bench_r32_fresh cache --rounds 24 --tiles data/tiles.json --database runtime/check-rows.sqlite --output rows.json
 ```

@@ -1,6 +1,6 @@
 # Round 34 physical and geographic Gold experiments
 
-Base commit 8e010cc8 (v1.14.0). Use `python bench_r34_physical.py --tiles ../data/tiles.json` from the checkout. The finite regression command is `python -m unittest -q test_r34_physical test_r28_geometry test_r30_exactgold test_r31_gold test_r32_gold test_r32_fresh`. All 40 tests passed on the project Python 3.12 environment with OR-Tools.
+Base commit 8e010cc8 (v1.14.0). Use `python -m benchmarks.bench_r34_physical --tiles ../data/tiles.json` from the checkout. The finite regression command is `python -m unittest -q test_r34_physical test_r28_geometry test_r30_exactgold test_r31_gold test_r32_gold test_r32_fresh`. All 40 tests passed on the project Python 3.12 environment with OR-Tools.
 
 ## 16. Mandatory paths and mating support
 
@@ -65,7 +65,7 @@ The application's Gold option gives direct SAT, persistent SAT, CP-SAT, the dire
 
 Signed repair retains the existing versioned SQLite table for completed three-side prices. Cold rows now combine phase-independent dart compatibility templates with one signed vector per exterior dart and phase configuration. Seed 0-7, 16 full-data repair rounds each, produced identical board codes and independently recomputed scores at every round relative to the pre-change solver. The 7,852 response rows previously computed 23,556 signed vectors; the same 128 assignments needed 3,832. A total of 480 physical templates were built and 3,352 later phase-specific builds reused one of them. Template vectors occupied 230,400 bytes and the final phase's vectors occupied 229,920 bytes, excluding Python container overhead. Changing the forbidden set rebuilds scoped templates.
 
-Run `python bench_r34_physical_followups.py --tiles ../data/tiles.json --root-lifts` to regenerate [the measured results](R34_PHYSICAL_FOLLOWUPS.json). The two physical test modules, ordinary SAT/CP and persistent SAT, and related geometry, Gold and fresh suites passed 72 tests. The maintained public board remains at 207 matched edges; these exact controls and scoped reductions do not establish a higher score.
+Run `python -m benchmarks.bench_r34_physical_followups --tiles ../data/tiles.json --root-lifts` to regenerate [the measured results](R34_PHYSICAL_FOLLOWUPS.json). The two physical test modules, ordinary SAT/CP and persistent SAT, and related geometry, Gold and fresh suites passed 72 tests. The maintained public board remains at 207 matched edges; these exact controls and scoped reductions do not establish a higher score.
 
 ## 48. Resume published heuristic checkpoints
 
@@ -81,7 +81,7 @@ The constraint runner now snapshots the transitive local Python imports and refe
 
 ### Classic GPU prefix replay and DX12
 
-The full puzzle has three forbidden physical mates which match their edge masks and do not themselves close a short loop. On the RTX 2060, all three were restored as consumed children above the ownership floor on CUDA, Vulkan and Direct3D 12. For each API the static-order and dynamic-order cases unwound exactly three children, kept all three owned prefixes active, and retained all sibling cursors, shifts, prefix identities and random states. The dynamic child had actual rank 1 and static rank 37. The independent Gold GPU suite passed 18 tests with CUDA and Vulkan enabled, including a finite-tail oracle and legacy 4→1→3 lane restoration. Reproduce each full-puzzle control with `python bench_r34_physical_followups.py --tiles ../data/tiles.json --gpu-prefix CUDA`, then with `Vulkan` and `D3D12`.
+The full puzzle has three forbidden physical mates which match their edge masks and do not themselves close a short loop. On the RTX 2060, all three were restored as consumed children above the ownership floor on CUDA, Vulkan and Direct3D 12. For each API the static-order and dynamic-order cases unwound exactly three children, kept all three owned prefixes active, and retained all sibling cursors, shifts, prefix identities and random states. The dynamic child had actual rank 1 and static rank 37. The independent Gold GPU suite passed 18 tests with CUDA and Vulkan enabled, including a finite-tail oracle and legacy 4→1→3 lane restoration. Reproduce each full-puzzle control with `python -m benchmarks.bench_r34_physical_followups --tiles ../data/tiles.json --gpu-prefix CUDA`, then with `Vulkan` and `D3D12`.
 
 With the native Windows FXC compiler, the original v1.14.0 WGSL at `8e010cc` failed to compile on D3D12 in both static and dynamic order with error X3511. The pre-fix Round 34 shader reproduced both failures. Spelling out the triangle's three neighbor checks and the three local Hall tile slots eliminated the nested unroll while preserving candidate scan order and the full dispatch budget. The production-sized shader compiled on that same FXC with static flags, Hall, dynamic ordering, connectivity, and all GPU-side options together. The three real prefixes described above also passed under FXC without a Windows SDK compiler override.
 

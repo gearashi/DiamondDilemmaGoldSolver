@@ -41,6 +41,6 @@ Use the full Python 3.12 environment for the geographic CP search. A case file c
 python r30_gold.py embed --tiles data/tiles.json --input case.json --reference-bound
 python bench_r35_pose_departures.py --tiles data/tiles.json --output comparison.json
 python bench_r35_pose_departures.py --tiles data/tiles.json --compare-seams --cases pool-3-120 pool-7-40 pool-10-80 --rounds 3 --output seam-comparison.json
-python bench_r35_pose_seams.py --tiles data/tiles.json --checkpoints runtime/searches --output widths.json
+python -m benchmarks.bench_r35_pose_seams --tiles data/tiles.json --checkpoints runtime/searches --output widths.json
 python -m unittest test_r35_pose_departures test_r35_pose_transfer_authority
 ```

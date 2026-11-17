@@ -37,6 +37,6 @@ On a fresh single-process run over the saved depth-5 original DFS domain, the pu
 The standalone tests compare all certified results to every injection of 8,457 finite graphs, including square, rectangular and undersupplied universes. They also exercise cancellation, tiny budgets, cache eviction, disjoint high tile IDs, malformed and legacy checkpoints, and resumed planted Gold. Reproduce the original-frame comparison from the project folder when those saved DFS and hybrid stacks are available.
 
 ```text
-python bench_r35_cut_inventory.py --tiles data/tiles.json --checkpoints runtime/searches --output cut-inventory-controls.json
+python -m benchmarks.bench_r35_cut_inventory --tiles data/tiles.json --checkpoints runtime/searches --output cut-inventory-controls.json
 python -m unittest test_r35_cut_inventory
 ```

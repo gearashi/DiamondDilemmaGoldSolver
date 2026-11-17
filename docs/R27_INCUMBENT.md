@@ -55,10 +55,10 @@ The reproducible scripts accept or read a *copy* of the incumbent at `audit/r27/
 ```shell
 python -m unittest test_r27_incumbent
 python bench_r27_incumbent.py --seeds 4 --rounds 18 --proposals 1024 --output audit/r27/incumbent-screen.json
-python bench_r27_incumbent_followups.py
-python bench_r27_incumbent_perturb.py --epochs 700 --seeds 4 --output audit/r27/incumbent-perturb.json
-python bench_r27_incumbent_rewiring.py --output audit/r27/rewiring.json
-python bench_r27_incumbent_trades.py --boards 4000 --output audit/r27/trade-record.json
+python -m benchmarks.bench_r27_incumbent_followups
+python -m benchmarks.bench_r27_incumbent_perturb --epochs 700 --seeds 4 --output audit/r27/incumbent-perturb.json
+python -m benchmarks.bench_r27_incumbent_rewiring --output audit/r27/rewiring.json
+python -m benchmarks.bench_r27_incumbent_trades --boards 4000 --output audit/r27/trade-record.json
 python bench_r27_incumbent_gpu.py --backend cuda --replicas 128 --dispatches 32 --seeds 4 --restore --output audit/r27/native-seeded.json
 python bench_r27_incumbent_gpu.py --backend cuda --replicas 1024 --dispatches 192 --seeds 4 --from-polished --output audit/r27/native-seeded-deep.json
 python bench_r27_incumbent_gpu.py --backend webgpu --replicas 32 --dispatches 2 --seeds 1 --gold --restore --output audit/r27/native-webgpu-restore.json

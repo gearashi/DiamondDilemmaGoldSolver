@@ -16,4 +16,4 @@ In the controlled 256-job comparison, three one-page sessions on the predecessor
 
 The tests also cover an older checkpoint with no scheduling hint, a smaller restored pool, malformed optional scheduling data, a multi-loop candidate before the genuine Gold on the same page, loss of the separate solution files, and failed publication while restoring from a checkpoint. [Public runner tests](../test_r35_public_pages.py) · [Native dispatch tests](../test_r35_dispatch_pages.py)
 
-Run `bench_r35_gpu_pages.py --help` for direct physical replay and `bench_r35_public_checkpoints.py --help` for the isolated public dashboard, checkpoint and Stop test. Both preserve independently validated Gold output.
+Run `python -m benchmarks.bench_r35_gpu_pages --help` for direct physical replay and `bench_r35_public_checkpoints.py --help` for the isolated public dashboard, checkpoint and Stop test. Both preserve independently validated Gold output.

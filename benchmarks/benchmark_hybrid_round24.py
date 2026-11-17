@@ -1,6 +1,6 @@
 """Serial fixed-work sampling comparisons, with independently checked boards.
 
-Example: python -B benchmark_hybrid_round24.py --data data/tiles.json --output audit/sampling.json --steps1024
+Example: python -B -m benchmarks.benchmark_hybrid_round24 --data data/tiles.json --output audit/sampling.json --steps 1024
 Use a dedicated hardware window. Proposal counts are not uniform operation costs:
 experimental chains currently rescore full boards, unlike the legacy delta path.
 """

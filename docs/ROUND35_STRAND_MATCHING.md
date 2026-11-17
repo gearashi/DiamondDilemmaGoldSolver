@@ -8,4 +8,4 @@ The actual root has 365 segments and 345 contracted components. It passed. Every
 
 The implementation is preserved as a reproducible research benchmark. Independent recursive perfect matching agrees on every labelled simple graph with three through six vertices and 2,100 additional seven- through nine-vertex graphs. The complete bipartite graphs with parts (3,4) and (3,5) pass the existing two-vertex separator test but fail the new matching conditions, with verifiable odd-component obstructions. Planted geographic single loops stay accepted through every prefix of three complete sewings. A completed split-control circuit is rejected by the pre-existing proper-loop condition. A new representative residual showing an odd-component barrier after actual side-matching and separator checks would justify reopening.
 
-Run `python -m unittest test_r35_strand_matching` and `python bench_r35_strand_matching.py --tiles data/tiles.json --output docs/R35_STRAND_MATCHING.json`.
+Run `python -m unittest test_r35_strand_matching` and `python -m benchmarks.bench_r35_strand_matching --tiles data/tiles.json --output docs/R35_STRAND_MATCHING.json`.

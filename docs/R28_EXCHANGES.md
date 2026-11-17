@@ -42,4 +42,4 @@ At the 2026-11-14T17:09:43+00:00 pilot snapshot, the six-piece shell on the 52-c
 
 The machine-readable record includes the exact shell, plateau, and patch counters. [Exchange results](R28_EXCHANGE_RESULTS.json)
 
-To reproduce the controls, run `python -m unittest -v test_r28_exchange`. To benchmark a new incumbent run `python bench_r28_exchange.py --tiles data/tiles.json --incumbent runtime/best.json --output exchange-comparison.json`. The counters measure threshold coverage and work performed on the stated incumbents.
+To reproduce the controls, run `python -m unittest -v test_r28_exchange`. To benchmark a new incumbent run `python -m benchmarks.bench_r28_exchange --tiles data/tiles.json --incumbent runtime/best.json --output exchange-comparison.json`. The counters measure threshold coverage and work performed on the stated incumbents.

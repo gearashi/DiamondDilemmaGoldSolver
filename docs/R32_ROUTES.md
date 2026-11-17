@@ -30,7 +30,7 @@ python r32_route_pool.py --family 2222 --cells 0 1 2 3 4 5 6 7 8 9 --database ru
 python r32_route_pool.py --family 2222 --cells 0 1 2 3 4 5 6 7 8 9 --cover --bridge --database runtime/four-swap-control.sqlite
 python -B -m unittest -v test_r32_route_work test_r31_routes test_r30_multicenter
 python bench_r32_route_work.py --tiles data/tiles.json --ranks 4096 --output route-screen.json
-python bench_r32_route_followups.py --tiles data/tiles.json --output route-followups.json
+python -m benchmarks.bench_r32_route_followups --tiles data/tiles.json --output route-followups.json
 ```
 
 All exclusion counts are scoped to the named objective, center, family and domains. Center-labelled counts can overlap. Lowering the target or changing physical data can invalidate a deduction. Every candidate for 208 is scored by the existing full rotation solver.

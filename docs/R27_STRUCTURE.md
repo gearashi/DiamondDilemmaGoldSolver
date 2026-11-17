@@ -37,8 +37,8 @@ The original-root comparator used bounded work; full-board time-to-solution was 
 
 ```shell
 python -m unittest test_r27_structure -v
-python bench_r27_structure.py --section finite
-python bench_r27_structure.py --section full
+python -m benchmarks.bench_r27_structure --section finite
+python -m benchmarks.bench_r27_structure --section full
 ```
 
 With an original local best-board JSON, the full benchmark also accepts `--incumbent PATH`. It reports only counts and the incumbent score. The two baseline test engines in the finite benchmark require the optional SAT and OR-Tools dependencies.

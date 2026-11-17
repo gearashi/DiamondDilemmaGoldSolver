@@ -21,7 +21,7 @@ python r29_gold.py soft-rings --input residual.json --seconds 10
 python r29_gold.py capacity --input residual.json --max-work 100
 python r29_gold.py cut-witness --input residual.json --max-work 150000
 python -m unittest test_r29_gold test_r28_geometry -v
-python bench_r29_gold.py --tiles data/tiles.json
+python -m benchmarks.bench_r29_gold --tiles data/tiles.json
 ```
 
 A phase request can provide a `pins` object mapping physical tile indices to 0/1, a `bonds` array of physical side pairs, `width` for connected type-subset size, and `boundary` for variables to keep in the parity projection. Use `"cp": false` for quick deductions only. With a feasible CP result the signed model has a phase assignment under that relaxation. It does not supply physical placements. Width two is a starting point. Width three costs more preprocessing and proved a strict extra rejection. The subset budget controls discovery and never turns an incomplete scan into a proof of feasibility.
