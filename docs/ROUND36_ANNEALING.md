@@ -25,9 +25,9 @@ In the app, four chains at 300 million moves per run reached 215 in 11 seconds o
 
 ## Completion check
 
-Each new best board at 200 seams or more gets an exact check in the background. Every cell whose three seams already match stays fixed, and the engine searches all ways to put the remaining tiles back so that every seam matches. It then repeats the search with one more ring of cells freed. The result is saved with the board in `best.json` as `completion_check`.
+Each new best board at 200 seams or more gets an exact check in the background. Every cell whose three seams already match stays fixed, and the engine searches all ways to put the remaining tiles back so that every seam matches. It then repeats the search with one more ring of cells freed, and a third time with two more rings, where the app's constraint search does the work because its propagation settles such a wide ring in about a tenth of a second. The constraint search also takes over a narrower ring when the first search runs out of its budget. The result is saved with the board in `best.json` as `completion_check`.
 
-For the 216 board both searches finished with no completion (43 free cells, then 98). The same held for every 208, 209, 211 and 215 board tested, and a separate C program gave the same answers for the 216 board and for the other boards it was run on. This says that these boards cannot be finished into a 240-seam board by rearranging only their mismatched cells and the neighbours of those cells. It says nothing about boards that differ in more cells.
+For the 216 board all three searches finished with no completion (43 free cells, then 98, then 136 of the 160). The same held for every 208, 209, 211 and 215 board tested, and a separate C program gave the same answers for the 216 board and for the other boards it was run on. This says that these boards cannot be finished into a 240-seam board by rearranging only their mismatched cells and the neighbours of those cells (for the 216 board, also the neighbours of those neighbours). It says nothing about boards that differ in more cells.
 
 ## Running it
 
@@ -51,4 +51,4 @@ The kernel is one C99 file, `anneal_native.c`, with no dependencies. The first a
 
 ## Limits
 
-The scores level off near 216 on this machine. No run reached 217. The engine has been run on Linux only. The Windows start script was edited but not executed for this release, and the kernel has not been compiled on Windows or macOS.
+The scores level off near 216 on this machine. No run reached 217. Long runs were made on Linux only. The project's checks build the kernel and pass the annealing tests on Windows, Ubuntu, Intel macOS and Apple Silicon macOS. The Windows start script was edited but not executed for this release: the checks read it as text.

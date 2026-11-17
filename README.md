@@ -10,7 +10,7 @@ The [v1.7.0 results and recommended settings](docs/ROUND26_RESULTS.md) cover 17 
 
 ## Search improvements in v1.17.0
 
-A new **Targeted annealing** engine found a full board with **216 of 240 matched seams** and 45 line components. The earlier best was 207. It is not a Gold solution. The engine runs on the CPU from the dashboard or the command line, saves its chains on Stop, and checks each new best board for an exact completion. Its compiled kernel makes 15 to 26 million moves per second per core. On equal seeds and moves, targeted exchanges raised the average score from 202.1 to 210.0. [Results, settings and limits](docs/ROUND36_ANNEALING.md)
+A new **Targeted annealing** engine found a full board with **216 of 240 matched seams** and 45 line components. The earlier best was 207. It is not a Gold solution. The engine runs on the CPU from the dashboard or the command line, saves its chains on Stop, and checks each new best board for an exact completion. Its compiled kernel makes 15 to 26 million moves per second per core. On equal seeds and moves, targeted exchanges raised the average score from 202.1 to 210.0. [Results, settings and limits](docs/ROUND36_ANNEALING.md) · [Exact engines on solvable look-alike boards](docs/ROUND37_EXACT_BENCHMARKS.md)
 
 ## Search improvements in v1.16.0
 

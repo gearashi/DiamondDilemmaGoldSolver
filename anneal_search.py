@@ -26,7 +26,7 @@ import time
 from pathlib import Path
 
 from anneal_core import (DEFAULT_T_COLD, DEFAULT_T_HOT, DEFAULT_TARGETED, AnnealModel,
-                         completion_check, cooling_temperature)
+                         completion_check, cooling_temperature, exact_engine_check)
 from io_utils import atomic_json, read_json_shared
 
 ROOT = Path(__file__).resolve().parent
@@ -83,6 +83,33 @@ class Chain:
         if chain.best_score != -1 and model.score(chain.best_codes) != chain.best_score:
             raise ValueError('Checkpoint best board does not reproduce its score.')
         return chain
+
+
+def completion_report(model, data, codes, cancelled=None, *, node_limit=200000, seconds=20):
+    """Exact completion checks around one board, from the narrowest ring outwards.
+
+    Rings 0 and 1 use completion_check; the app's constraint search takes over
+    when that runs out of budget, and always for ring 2. Stops at the first
+    ring that finds a completion or stays undetermined. Returns the outcome
+    per ring and the completion found, if any.
+    """
+    outcome, completion = {}, None
+    for rings in (0, 1, 2):
+        found = None
+        if rings < 2:
+            found = completion_check(model, codes, rings=rings, node_limit=node_limit, seconds=seconds, cancelled=cancelled)
+        if found is None or found['status'] == 'undetermined':
+            # The constraint search propagates much more, so it settles wider rings.
+            try:
+                found = exact_engine_check(data, codes, rings=rings, seconds=seconds, cancelled=cancelled, board=model.board)
+            except Exception as exc:
+                found = {'status': 'undetermined', 'rings': rings, 'reason': f'{type(exc).__name__}: {exc}'}
+        outcome[f'rings_{rings}'] = {key: value for key, value in found.items() if key not in ('codes', 'validation')}
+        if found['status'] == 'completion_found':
+            completion = found
+        if found['status'] in ('completion_found', 'undetermined'):
+            break
+    return outcome, completion
 
 
 def main(argv=None):
@@ -277,17 +304,10 @@ def main(argv=None):
                     if stop.is_set():
                         return
                     codes = check_job.pop()
-                outcome = {}
-                for rings in (0, 1):
-                    found = completion_check(model, codes, rings=rings, node_limit=200000, seconds=20,
-                                             cancelled=lambda: stop.is_set() or bool(check_job))
-                    outcome[f'rings_{rings}'] = {k: v for k, v in found.items() if k not in ('codes', 'validation')}
-                    if found['status'] == 'completion_found':
-                        with state_lock:      # a full board: hand it to the main thread like any candidate
-                            pending_best.append((found['validation']['matched_edges'], found['codes']))
-                        break
-                    if found['status'] == 'undetermined':
-                        break
+                outcome, completion = completion_report(model, data, codes, lambda: stop.is_set() or bool(check_job))
+                if completion is not None:
+                    with state_lock:      # a full board: hand it to the main thread like any candidate
+                        pending_best.append((completion['validation']['matched_edges'], completion['codes']))
                 with state_lock:
                     record = best['record']
                     if record is not None and record['codes'] == codes:

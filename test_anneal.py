@@ -17,7 +17,7 @@ from unittest.mock import patch
 import anneal_search
 import dashboard_server as dashboard
 import platform_launcher as launcher
-from anneal_core import AnnealModel, completion_check, cooling_temperature
+from anneal_core import AnnealModel, completion_check, cooling_temperature, exact_engine_check
 from search_algorithms import ALGORITHMS, LABELS, LAUNCHABLE, SCORE_ALGORITHMS
 from search_fixtures import planted_gold
 from validator import validate_arrangement
@@ -144,6 +144,61 @@ class CompletionTests(unittest.TestCase):
         codes = list(self.planted)
         codes[3], codes[20] = codes[20], codes[3]
         self.assertEqual(completion_check(self.model, codes, node_limit=1)['status'], 'undetermined')
+
+    def test_the_constraint_search_answers_the_same_question(self):
+        self.assertEqual(exact_engine_check(self.data, self.planted, board=self.board)['status'], 'already_matched')
+        # Positive control: displaced tiles are put back.
+        codes = list(self.planted)
+        codes[3], codes[20], codes[31] = codes[20], codes[31], codes[3]
+        codes[10] = 3 * (codes[10] // 3) + (codes[10] + 1) % 3
+        for rings in (0, 1, 2):
+            result = exact_engine_check(self.data, codes, rings=rings, board=self.board)
+            self.assertEqual(result['status'], 'completion_found', result)
+            self.assertEqual(result['free_cells'], completion_check(self.model, codes, rings=rings)['free_cells'])
+            self.assertEqual(self.model.score(result['codes']), self.model.total_edges)
+            self.assertTrue(result['validation']['unique_tiles'])
+        # Negative control: the unmatchable tile of the test above.
+        data = json.loads(json.dumps(self.data))
+        data['tiles'][self.planted[7] // 3]['segments'] = [[[0, 1], [0, 2]], [[0, 3], [0, 5]]]
+        model = AnnealModel(data, self.board, native='python')
+        for rings in (0, 1, 2):
+            result = exact_engine_check(data, self.planted, rings=rings, board=self.board)
+            self.assertEqual(result['status'], 'no_completion', result)
+            self.assertEqual(result['status'], completion_check(model, self.planted, rings=rings)['status'])
+        with self.assertRaisesRegex(ValueError, 'rings'):
+            exact_engine_check(self.data, codes, rings=-1, board=self.board)
+
+    def test_a_cancelled_constraint_search_is_undetermined_not_a_refutation(self):
+        codes = list(self.planted)
+        codes[3], codes[20] = codes[20], codes[3]
+        result = exact_engine_check(self.data, codes, board=self.board, cancelled=lambda: True)
+        self.assertEqual(result['status'], 'undetermined')
+
+    def test_the_report_widens_ring_by_ring_and_hands_over_when_out_of_budget(self):
+        data = json.loads(json.dumps(self.data))
+        data['tiles'][self.planted[7] // 3]['segments'] = [[[0, 1], [0, 2]], [[0, 3], [0, 5]]]
+        model = AnnealModel(data, self.board, native='python')
+        outcome, completion = anneal_search.completion_report(model, data, self.planted)
+        self.assertIsNone(completion)
+        self.assertEqual([outcome[f'rings_{rings}']['status'] for rings in (0, 1, 2)], ['no_completion'] * 3)
+        self.assertNotIn('engine', outcome['rings_0'])
+        self.assertEqual(outcome['rings_2']['engine'], 'constraint search')
+        self.assertLessEqual(outcome['rings_0']['free_cells'], outcome['rings_1']['free_cells'])
+        self.assertLessEqual(outcome['rings_1']['free_cells'], outcome['rings_2']['free_cells'])
+        # With no budget for the first search the constraint search decides every ring.
+        outcome, completion = anneal_search.completion_report(model, data, self.planted, node_limit=1)
+        self.assertEqual([outcome[f'rings_{rings}']['engine'] for rings in (0, 1, 2)], ['constraint search'] * 3)
+        self.assertEqual({row['status'] for row in outcome.values()}, {'no_completion'})
+        # A completion ends the report and comes back whole.
+        codes = list(self.planted)
+        codes[3], codes[20] = codes[20], codes[3]
+        outcome, completion = anneal_search.completion_report(self.model, self.data, codes, node_limit=1)
+        self.assertEqual(list(outcome), ['rings_0'])
+        self.assertNotIn('codes', outcome['rings_0'])
+        self.assertEqual(self.model.score(completion['codes']), self.model.total_edges)
+        # A cancelled report claims nothing.
+        outcome, completion = anneal_search.completion_report(model, data, self.planted, lambda: True)
+        self.assertEqual((list(outcome), outcome['rings_0']['status'], completion), (['rings_0'], 'undetermined', None))
 
 
 class RunnerTests(unittest.TestCase):

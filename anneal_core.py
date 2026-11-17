@@ -339,3 +339,36 @@ def completion_check(model, codes, *, rings=0, node_limit=20000, seconds=None, c
     else:
         result['status'] = 'no_completion'
     return result
+
+
+def exact_engine_check(data, codes, *, rings=2, seconds=20, cancelled=None, board=None):
+    """The question of completion_check, answered by the app's constraint search.
+
+    The same cells are freed (those touching a mismatched seam, plus `rings`
+    layers of neighbours) and all others keep their tile and rotation. The
+    constraint search propagates far more than completion_check does, so it
+    usually settles a wider ring without branching. Same result keys and
+    statuses; 'undetermined' when the time budget or `cancelled()` ends it.
+    """
+    from search_problem import SearchProblem
+    import constraint_dfs
+    if type(rings) is not int or rings < 0:
+        raise ValueError('rings must be nonnegative.')
+    whole = SearchProblem(data, board)
+    free = set()
+    for edge in whole.validate(codes)['unmatched_edges']:
+        free.update((edge['cell_a'], edge['cell_b']))
+    if not free:
+        return {'status': 'already_matched', 'free_cells': 0, 'rings': rings, 'nodes': 0}
+    for _ in range(rings):
+        free |= {int(whole.neighbors[cell][side]) for cell in free for side in range(3)}
+    problem = SearchProblem(data, board, fixed={cell: codes[cell] for cell in range(whole.n) if cell not in free})
+    found = constraint_dfs.solve(problem, seconds=seconds, target='edges', stop=cancelled, options={'native': 'auto'})
+    result = {'free_cells': len(free), 'rings': rings, 'nodes': int(found.get('nodes') or 0), 'engine': 'constraint search'}
+    if found.get('codes'):
+        report = whole.validate(found['codes'])
+        if report['matched_edges'] == report['total_edges'] and report['unique_tiles']:
+            result.update(status='completion_found', codes=[int(code) for code in found['codes']], validation=report)
+            return result
+    result['status'] = 'no_completion' if found.get('status') == 'infeasible' and found.get('complete') else 'undetermined'
+    return result
