@@ -14,6 +14,12 @@
 #include <string.h>
 #include <math.h>
 
+#ifdef _WIN32
+#define EXPORT __declspec(dllexport)
+#else
+#define EXPORT __attribute__((visibility("default")))
+#endif
+
 #define DD_MAX_CELLS 512
 #define DD_MAX_COLOURS 512
 
@@ -57,7 +63,7 @@ static int dd_score(const dd_state *s) {
  * targeted_per_1024: share of swap moves that pick a mismatched side and
  * bring in a tile carrying the colour that side needs.
  * accepted: optional counter of accepted moves. */
-int dd_anneal(int n, int k, const uint16_t *tc, const int32_t *revid,
+EXPORT int dd_anneal(int n, int k, const uint16_t *tc, const int32_t *revid,
               const int32_t *nbc, const int32_t *nbs,
               const int32_t *by_start, const int32_t *by_tile,
               int32_t *codes, uint64_t *rng_state, int64_t iters, double temperature,

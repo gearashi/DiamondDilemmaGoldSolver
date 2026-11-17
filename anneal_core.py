@@ -89,7 +89,7 @@ class AnnealModel:
         if native != 'python':
             try:
                 self._dll = _load_native()
-            except (OSError, RuntimeError) as exc:
+            except (OSError, RuntimeError, AttributeError) as exc:
                 if native == 'compiled':
                     raise RuntimeError('The compiled annealing kernel is unavailable: ' + str(exc)) from exc
                 self.native_error = str(exc)

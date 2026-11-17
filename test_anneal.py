@@ -5,6 +5,7 @@ kernel is exercised when a C compiler is present and skipped otherwise; the
 Python kernel always runs.
 """
 import json
+import os
 import random
 import shutil
 import tempfile
@@ -29,6 +30,8 @@ def compiled_available():
     try:
         return AnnealModel(data, board, native='compiled').backend == 'compiled'
     except RuntimeError:
+        if os.environ.get('DIAMOND_REQUIRE_NATIVE') == '1':
+            raise
         return False
 
 
