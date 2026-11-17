@@ -97,6 +97,7 @@ jobs:
           test_linux_setup
           test_windows_setup
           test_platform
+          test_anneal
           test_runtime_capabilities
           test_webgpu
           test_webgpu_checkpoint

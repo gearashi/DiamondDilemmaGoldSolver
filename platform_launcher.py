@@ -14,7 +14,7 @@ import urllib.error
 import urllib.request
 import webbrowser
 from gpu_backends import BACKENDS, choose_backend
-from search_algorithms import ALGORITHMS
+from search_algorithms import ALGORITHMS, LAUNCHABLE, SCORE_ALGORITHMS
 from gpu_reasoning import normalize_features
 from search_options import EXACT_ALGORITHMS, normalize_options, validate_workers
 from io_utils import read_json_shared
@@ -137,8 +137,17 @@ def solver_command(hours=1, unlimited=False, replicas=None, seed=20261007, backe
     validate_workers(workers)
     options = normalize_options(search_options)
     algorithm = 'gpu-dfs' if algorithm is None else algorithm
-    if algorithm not in ALGORITHMS:
+    if algorithm not in LAUNCHABLE:
         raise ValueError('Unknown search algorithm.')
+    if algorithm in SCORE_ALGORITHMS:
+        # CPU score search with its own runner; GPU and exact-search options do not apply.
+        if replicas is not None or backend != 'auto' or search_options is not None or gpu_features is not None:
+            raise ValueError('Annealing takes hours, seed and workers only.')
+        command = [str(venv_python()), str(ROOT / 'anneal_search.py'),
+                   '--seconds', str(0 if unlimited else hours * 3600), '--seed', str(seed), '--workers', str(workers)]
+        if not fresh:
+            command.append('--resume')
+        return command
     if replicas is None:
         replicas = 128 if algorithm == 'gpu-domains' or options['coordinated_gpu'] else 4096
     if type(replicas) is not int or not 128 <= replicas <= 131072:
@@ -186,7 +195,7 @@ def main(argv=None):
     start.add_argument('--search-options', type=json.loads, default=None)
     start.add_argument('--gpu-features', type=json.loads, default=None)
     start.add_argument('--fresh', action='store_true')
-    start.add_argument('--algorithm', choices=ALGORITHMS, default=None, help='New contenders target Gold; omission preserves saved GPU DFS branches.')
+    start.add_argument('--algorithm', choices=LAUNCHABLE, default=None, help='New contenders target Gold; anneal maximizes matched seams; omission preserves saved GPU DFS branches.')
     sub.add_parser('stop', help='Request a graceful stop and checkpoint')
     sub.add_parser('status', help='Print saved search status')
     args = parser.parse_args(argv)
