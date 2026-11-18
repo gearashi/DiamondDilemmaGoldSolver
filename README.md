@@ -2,11 +2,15 @@
 
 A CPU and GPU search tool for the **Gold Challenge** of Diamond Dilemma on Windows, Linux, and macOS, with a local 3D dashboard, resumable search branches, and independent solution validation.
 
-**This repository contains a solver, not a verified Gold solution.** A complete result must place all 160 tiles once, match all 240 edges, and join every gold segment into **one closed loop**. The dashboard offers strongly pruned DFS, SAT, CP-SAT (including an experimental direct Gold-circuit model), traditional constraint programming, and experimental GPU sampling and CPU neighborhood repair followed by smart DFS. All dashboard search modes require a single closed loop, including GPU DFS. GPU DFS also rejects branches that already contain a smaller closed loop and preserves its saved branch pool. Only a verified single loop earns `solution.json`.
+**This repository contains a solver, not a verified Gold solution.** A complete result must place all 160 tiles once, match all 240 edges, and join every gold segment into **one closed loop**. The dashboard offers strongly pruned DFS, SAT, CP-SAT (including an experimental direct Gold-circuit model), traditional constraint programming, and experimental GPU sampling and CPU neighborhood repair followed by smart DFS. All dashboard Gold search modes require a single closed loop, including GPU DFS. **Targeted annealing** is a separate score search for boards with many matched seams. GPU DFS also rejects branches that already contain a smaller closed loop and preserves its saved branch pool. Only a verified single loop earns `solution.json`.
 
 The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaapsch.net/puzzles/diamdil.htm).
 
 The [v1.7.0 results and recommended settings](docs/ROUND26_RESULTS.md) cover 17 workstreams and 81 scoped evaluations. They include exact CPU and CUDA search, shared SAT reasoning, disk-backed progress, regional pruning, incremental GPU scoring and repair. The [workstream register](docs/round26-workstreams.json) records which candidates reduced steps, which saved repeated work and where extra work outweighed the benefit. Earlier evaluations are available for [Round 25](docs/ROUND25_RESULTS.md), [Round 24](docs/ROUND24.md) and [Round 23](docs/ROUND23.md).
+
+## Search improvements in v1.17.0
+
+A new **Targeted annealing** engine found a full board with **216 of 240 matched seams** and 45 line components. The earlier best was 207. It is not a Gold solution. The engine runs on the CPU from the dashboard or the command line, saves its chains on Stop, and checks each new best board for an exact completion. Its compiled kernel makes 15 to 26 million moves per second per core. On equal seeds and moves, targeted exchanges raised the average score from 202.1 to 210.0. [Results, settings and limits](docs/ROUND36_ANNEALING.md) · [Exact engines on solvable look-alike boards](docs/ROUND37_EXACT_BENCHMARKS.md)
 
 ## Search improvements in v1.16.0
 
@@ -132,7 +136,7 @@ Select **Stop** to finish the current work and save progress. Wait until the sta
 
 **Recommended starting settings for the tested i7-4790 / 16 GiB / RTX 2060:** resume existing DFS progress with **Unlimited** duration and **Automatic** CPU propagation. For **Parallel CPU DFS**, start with **4 workers** for resource efficiency, or use **8** for a dedicated run with greater measured bounded throughput. For an experimental hybrid run, use **NVIDIA CUDA**, **4,096 replicas**, and **Resume GPU sampling and completed repair work**. Leave the other new experimental controls off initially. No configuration has established the fewest total steps to the original Gold solution. See [the measured settings and limitations](docs/ROUND25_RESULTS.md).
 
-For compatibility, the command-line launcher defaults to the existing GPU DFS. GPU DFS now also searches for a single Gold loop. Select `dfs`, `parallel-dfs`, `cp`, `cp-sat`, `cp-sat-circuit`, `cp-sat-regions`, `sat`, `sat-propagator`, `sat-channel`, or `hybrid` to use another engine. The dashboard and launcher resume the selected algorithm's compatible saved state.
+For compatibility, the command-line launcher defaults to the existing GPU DFS. GPU DFS now also searches for a single Gold loop. Select `dfs`, `parallel-dfs`, `cp`, `cp-sat`, `cp-sat-circuit`, `cp-sat-regions`, `sat`, `sat-propagator`, `sat-channel`, or `hybrid` to use another engine, or `anneal` for the targeted annealing score search. The dashboard and launcher resume the selected algorithm's compatible saved state.
 
 Windows:
 
@@ -142,6 +146,9 @@ Windows:
 
 # Experimental GPU sampling followed by CPU DFS.
 .\StartSolver.cmd -Algorithm hybrid -Hours 1 -Replicas 4096
+
+# Targeted annealing for the best matched-seam score, four CPU chains.
+.\StartSolver.cmd -Algorithm anneal -Hours 1 -Workers 4
 
 # Run without a time limit.
 .\StartSolver.cmd -Unlimited -Replicas 4096
@@ -155,6 +162,7 @@ Linux and macOS:
 ```bash
 bash StartSolver.sh --algorithm dfs --hours 1
 bash StartSolver.sh --algorithm hybrid --hours 1 --replicas 4096
+bash StartSolver.sh --algorithm anneal --hours 1 --workers 4
 bash StartSolver.sh --unlimited --replicas 4096 --backend webgpu
 bash StopSolver.sh
 bash Status.sh
@@ -176,6 +184,7 @@ For the **GPU DFS** option, the dashboard accepts 128–131,072 replicas, includ
 | --- | --- |
 | `searches/<algorithm>-gold/checkpoint.json` | Per-algorithm exact DFS stack, or native solver cuts and hints |
 | `searches/<algorithm>-gold/solution.json` | Independently validated single-loop solution |
+| `searches/anneal-edges/checkpoint.json` | Annealing chains: each chain's board, best board, cooling step and random state |
 | `systematic/frontier.npz` | Immutable list of disjoint prefix jobs |
 | `systematic/checkpoint.npz` | Active and paused DFS stacks, cursors, and job ownership saved together |
 | `systematic/candidate-job-*.json` | Independently checked complete candidates |
@@ -185,7 +194,7 @@ For the **GPU DFS** option, the dashboard accepts 128–131,072 replicas, includ
 | `solution.json` | A fully validated Gold solution |
 | `inputs/`, `runs/` | Input snapshots and run-specific source provenance |
 
-DFS and hybrid Stop/Resume preserve their exact pending DFS branches. SAT, CP-SAT, and CP retain validated loop exclusions and hints, but their internal native search restarts after stopping. Switching algorithms uses separate state and does not transfer coverage between engines.
+DFS and hybrid Stop/Resume preserve their exact pending DFS branches. SAT, CP-SAT, and CP retain validated loop exclusions and hints, but their internal native search restarts after stopping. Switching algorithms uses separate state and does not transfer coverage between engines. Targeted annealing resumes its chains when the seed and worker count are unchanged; it records scores, not coverage.
 
 For the DFS engines, normal Stop/Resume preserves search progress. A crash or power loss can replay work since the last completed checkpoint. Restoring an older checkpoint also restores its older progress.
 
@@ -224,7 +233,7 @@ The CPU suite uses synthetic fixtures and needs no source diagrams or GPU:
 ```powershell
 py -3.12 -m venv .venv-test
 .\.venv-test\Scripts\python.exe -m pip install -r requirements-dev.txt
-.\.venv-test\Scripts\python.exe -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io test_replica_resize test_linux_setup test_windows_setup test_platform test_webgpu test_webgpu_checkpoint test_webgpu_counters test_constraint_dfs test_constraint_branching test_constraint_gold_oracle test_constraint_lcg test_constraint_native_search test_constraint_engines test_constraint_pruning test_constraint_projection test_constraint_parity test_constraint_connectivity test_constraint_advanced test_constraint_separator test_constraint_learning test_constraint_scheduling test_constraint_knowledge test_constraint_parallel test_constraint_native test_search_options test_search_problem test_constraint_symmetry test_smart_dfs test_constraint_lns test_constraint_models test_constraint_circuit test_constraint_residual test_constraint_regions test_constraint_region_pairs test_constraint_sat_assist test_constraint_sat_domains test_constraint_sat_integration test_constraint_shared_conflicts test_constraint_ordering test_constraint_explanations test_constraint_reasons test_constraint_search test_gpu_sampling test_search_fixtures
+.\.venv-test\Scripts\python.exe -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io test_replica_resize test_linux_setup test_windows_setup test_platform test_anneal test_webgpu test_webgpu_checkpoint test_webgpu_counters test_constraint_dfs test_constraint_branching test_constraint_gold_oracle test_constraint_lcg test_constraint_native_search test_constraint_engines test_constraint_pruning test_constraint_projection test_constraint_parity test_constraint_connectivity test_constraint_advanced test_constraint_separator test_constraint_learning test_constraint_scheduling test_constraint_knowledge test_constraint_parallel test_constraint_native test_search_options test_search_problem test_constraint_symmetry test_smart_dfs test_constraint_lns test_constraint_models test_constraint_circuit test_constraint_residual test_constraint_regions test_constraint_region_pairs test_constraint_sat_assist test_constraint_sat_domains test_constraint_sat_integration test_constraint_shared_conflicts test_constraint_ordering test_constraint_explanations test_constraint_reasons test_constraint_search test_gpu_sampling test_search_fixtures
 ```
 
 On Linux/macOS, use the same test modules with a native Python virtual environment:
@@ -232,7 +241,7 @@ On Linux/macOS, use the same test modules with a native Python virtual environme
 ```bash
 python3.12 -m venv .venv-test
 .venv-test/bin/python -m pip install -r requirements-dev.txt
-.venv-test/bin/python -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io test_replica_resize test_linux_setup test_windows_setup test_platform test_webgpu test_webgpu_checkpoint test_webgpu_counters test_constraint_dfs test_constraint_branching test_constraint_gold_oracle test_constraint_lcg test_constraint_native_search test_constraint_engines test_constraint_pruning test_constraint_projection test_constraint_parity test_constraint_connectivity test_constraint_advanced test_constraint_separator test_constraint_learning test_constraint_scheduling test_constraint_knowledge test_constraint_parallel test_constraint_native test_search_options test_search_problem test_constraint_symmetry test_smart_dfs test_constraint_lns test_constraint_models test_constraint_circuit test_constraint_residual test_constraint_regions test_constraint_region_pairs test_constraint_sat_assist test_constraint_sat_domains test_constraint_sat_integration test_constraint_shared_conflicts test_constraint_ordering test_constraint_explanations test_constraint_reasons test_constraint_search test_gpu_sampling test_search_fixtures
+.venv-test/bin/python -B -m unittest -v test_geometry test_exact_frontier test_systematic_jobs test_systematic_runner test_dashboard_control test_stop test_position_cache test_prepare_data test_atomic_io test_replica_resize test_linux_setup test_windows_setup test_platform test_anneal test_webgpu test_webgpu_checkpoint test_webgpu_counters test_constraint_dfs test_constraint_branching test_constraint_gold_oracle test_constraint_lcg test_constraint_native_search test_constraint_engines test_constraint_pruning test_constraint_projection test_constraint_parity test_constraint_connectivity test_constraint_advanced test_constraint_separator test_constraint_learning test_constraint_scheduling test_constraint_knowledge test_constraint_parallel test_constraint_native test_search_options test_search_problem test_constraint_symmetry test_smart_dfs test_constraint_lns test_constraint_models test_constraint_circuit test_constraint_residual test_constraint_regions test_constraint_region_pairs test_constraint_sat_assist test_constraint_sat_domains test_constraint_sat_integration test_constraint_shared_conflicts test_constraint_ordering test_constraint_explanations test_constraint_reasons test_constraint_search test_gpu_sampling test_search_fixtures
 ```
 
 CI runs CPU checks on Windows, Ubuntu 24.04, Intel macOS, and Apple Silicon macOS. Windows-specific sharing and launcher tests skip elsewhere. Separate installation jobs import the native WebGPU library on all four platforms; an Ubuntu CUDA package check imports CuPy. These installation checks use `--skip-data`, do not request a GPU adapter, and do not validate kernel execution. A separate shader job executes finite WGSL DFS and GPU sampler checks through Mesa lavapipe, a software Vulkan implementation. That test explicitly enables a test-only software adapter; production search still requires hardware. It verifies shader behavior on those finite fixtures, not AMD or Apple GPU compatibility.
@@ -300,7 +309,7 @@ An optional compiled C engine accelerates seam propagation. Build it locally wit
 .\venv\Scripts\python.exe build_native.py
 ```
 
-On Linux or macOS, use `venv/bin/python build_native.py`. **Automatic** uses a matching local build when available and otherwise uses Python. **Compiled CPU** requires that build and reports an error if it is unavailable. Source and binary hashes are checked before loading. Builds stay in `.native/` and are not included in source packages.
+On Linux or macOS, use `venv/bin/python build_native.py`. **Automatic** uses a matching local build when available and otherwise uses Python. **Compiled CPU** requires that build and reports an error if it is unavailable. Source and binary hashes are checked before loading. Builds stay in `.native/` and are not included in source packages. The annealing kernel (`anneal_native.c`) builds itself the same way on the first annealing run; without a compiler it uses a Python kernel that is more than 100 times slower, and the dashboard names the kernel in use.
 
 The counters report deductions, cached local results and pending jobs; they do not estimate the fraction of all complete boards exhausted. See [the optimization report](docs/OPTIMIZATIONS.md) for the bounds and correctness conditions.
 

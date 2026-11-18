@@ -40,6 +40,8 @@ extraction_*.png
 /position-cache-test-*/
 /atomic-io-test-*/
 /diamond-runner-*/
+/anneal-test-*/
+/anneal-dash-test-*/
 
 # Editor and machine-local files
 .vscode/

@@ -6,7 +6,7 @@ from urllib.parse import urlsplit
 from io_utils import read_json_shared
 from dashboard_snapshots import read_display_file
 from gpu_backends import BACKENDS
-from search_algorithms import ALGORITHMS,LABELS
+from search_algorithms import ALGORITHMS,LABELS,SCORE_ALGORITHMS
 from search_options import EXACT_ALGORITHMS,normalize_options,validate_workers
 from gpu_reasoning import feature_identity, normalize_features
 from systematic_evidence import profile_name, terminal_features, terminal_profiles
@@ -51,6 +51,7 @@ def live_pid():
 def start_solver(body):
     global CHILD,LAUNCH_CONFIG
     if live_pid():raise ValueError('A solver is already running.')
+    if body.get('algorithm') in SCORE_ALGORITHMS:return start_score_solver(body,body['algorithm'])
     seconds=body.get('seconds',3600);replicas=body.get('replicas',128 if body.get('algorithm')=='gpu-domains' else 131072);seed=body.get('seed',20261007)
     method=body.get('method','systematic')
     if method not in ('systematic','stochastic','constraint'):raise ValueError('Unknown search method.')
@@ -127,6 +128,31 @@ def start_solver(body):
             'algorithm':actual_algorithm,'method':method,'target':target,
             'workers':workers if algorithm=='parallel-dfs' or coordinated else 1,'search_options':options,'gpu_features':gpu_features}
 
+def start_score_solver(body,algorithm):
+    """Start a CPU score engine (annealing). It takes duration, seed and workers only."""
+    global CHILD,LAUNCH_CONFIG
+    if body.get('method','anneal')!='anneal':raise ValueError('Annealing is its own search method.')
+    if body.get('target','edges')!='edges':raise ValueError('This algorithm searches the edges target.')
+    if body.get('verify_terminal',False) is not False:raise ValueError('Terminal verification applies only to GPU DFS.')
+    if body.get('gpu_features') or body.get('search_options'):raise ValueError('Annealing has no GPU or exact-search options.')
+    seconds=body.get('seconds',3600);seed=body.get('seed',20261007)
+    if isinstance(seconds,bool) or not isinstance(seconds,(int,float)) or type(seed)is not int:
+        raise ValueError('Duration must be numeric; seed must be an integer.')
+    if (seconds!=0 and not 1<=seconds<=86400) or not 0<=seed<2**32:raise ValueError('Choose Unlimited (0) or 1..86400 seconds and a nonnegative 32-bit seed.')
+    workers=validate_workers(body.get('workers',4))
+    seconds=float(seconds)
+    (RUNTIME/'run.lock').unlink(missing_ok=True)
+    (RUNTIME/'stop.request').unlink(missing_ok=True)
+    cmd=[sys.executable,str(ROOT/'anneal_search.py'),'--resume','--stop-file-initialized','--seconds',str(seconds),'--seed',str(seed),'--workers',str(workers)]
+    with (RUNTIME/'solver.log').open('a',encoding='utf-8')as log:
+        log.write('\nStarted '+datetime.datetime.now(datetime.timezone.utc).isoformat()+'\n');log.flush()
+        CHILD=subprocess.Popen(cmd,cwd=str(ROOT),stdout=log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt'else 0)
+    LAUNCH_CONFIG={'method':'anneal','algorithm':algorithm,'target':'edges','backend':'cpu','launcher_pid':CHILD.pid,
+                  'replicas':workers,'requested_replicas':workers,'workers':workers,'search_options':{},'gpu_features':{},
+                  'time_limit_seconds':seconds,'seed':seed,'resume':True,'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+    return {'started':True,'pid':CHILD.pid,'replicas':workers,'backend':'cpu','algorithm':algorithm,'method':'anneal',
+            'target':'edges','workers':workers,'search_options':{},'gpu_features':{}}
+
 def request_stop():
     pid=live_pid()
     if pid is None:return {'stop_requested':False,'process_running':False}
@@ -151,10 +177,17 @@ def startup_status(pid):
             try:status[field]=cast(args[args.index(flag)+1])
             except (ValueError,IndexError,TypeError):pass
         scripts={Path(str(value)).name for value in args}
-        if 'constraint_search.py' in scripts:status['method']='constraint'
+        if 'anneal_search.py' in scripts:status.update(method='anneal',algorithm='anneal')
+        elif 'constraint_search.py' in scripts:status['method']='constraint'
         elif 'systematic_search.py' in scripts:status['method']='systematic'
         elif 'solve.py' in scripts:status['method']='stochastic'
     algorithm=status.get('algorithm')
+    if algorithm in SCORE_ALGORITHMS:
+        restoring=(RUNTIME/'searches'/'anneal-edges'/'checkpoint.json').exists()
+        status.update(method='anneal',target='edges',backend='cpu',replicas=status.get('workers',0),
+                      startup_phase='restoring_checkpoint' if restoring else 'building_model',
+                      phase_message='Restoring saved annealing chains.' if restoring else 'Preparing the annealing kernel.')
+        return status
     if status.get('method')=='constraint' or algorithm in ALGORITHMS[1:]:
         status.update(method='constraint',target='gold')
         cpu=algorithm not in ('hybrid','gpu-domains')

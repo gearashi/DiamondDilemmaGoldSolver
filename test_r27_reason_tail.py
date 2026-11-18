@@ -34,7 +34,8 @@ class DFSTailIntegration(unittest.TestCase):
                        biconnected=False,regional_cache=False,separator_regions=False)
         gold = solve(p,target='gold',seconds=5,options=options)
         self.assertEqual(gold['status'],'infeasible')
-        self.assertEqual(gold['stats']['easy_remainder_infeasible'],1)
+        # Probe budgets are wall-clock limits, so a slow machine asks the tail more than once.
+        self.assertGreaterEqual(gold['stats']['easy_remainder_infeasible'],1)
         self.assertFalse(any(ok for _,_,ok in answers(p,p.domains)))
         edges = solve(p,target='edges',seconds=5,options=options)
         self.assertEqual(edges['status'],'edge_perfect')

@@ -6,3 +6,10 @@ LABELS = {'parallel-dfs':'Parallel DFS with constraint pruning', 'gpu-dfs':'GPU 
 LABELS.update({'sat-propagator':'Experimental SAT with partial Gold propagation','sat-channel':'Experimental SAT tile/orientation channeling','cp-sat-regions':'Experimental CP-SAT regional alternatives'})
 
 LABELS['gpu-domains']='Experimental CUDA domain search (128 lanes)'
+
+# Score engines maximize matched seams and are launched by their own runner.
+# They stay out of ALGORITHMS, whose entries all target Gold through
+# systematic_search.py or constraint_search.py.
+SCORE_ALGORITHMS = ('anneal',)
+LAUNCHABLE = ALGORITHMS + SCORE_ALGORITHMS
+LABELS['anneal'] = 'Targeted annealing (best matched-seam scores, CPU)'

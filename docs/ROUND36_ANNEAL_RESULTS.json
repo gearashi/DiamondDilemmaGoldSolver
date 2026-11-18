@@ -1,0 +1,497 @@
+{
+  "schema": "diamond-dilemma-anneal-results-v1",
+  "date": "2026-11-17",
+  "machine": "Cloud VM, 4 x86-64 virtual CPUs, 15 GB RAM, no GPU; GCC -O3; four runs in parallel, one per core",
+  "scope": "Matched-seam score of full 160-tile boards under the release rules (rotations only). No board here is a Gold solution; none has 240 matched seams.",
+  "earlier_annealer": {
+    "note": "Untargeted swap/rotate annealer written the same day (sa.c, 4.6 million moves per second per core), 1.5e9 moves, T 2.0 to 0.12.",
+    "seeds": [
+      2001,
+      1001,
+      1002,
+      2002,
+      2003,
+      1003,
+      1004,
+      2004,
+      1005,
+      2005,
+      1006,
+      2006,
+      1007,
+      2007,
+      1008,
+      2008,
+      1009,
+      2009,
+      1010,
+      2010,
+      1011,
+      2011,
+      1012,
+      2012,
+      1013,
+      2013,
+      1014,
+      2014
+    ],
+    "best_matched_seams": [
+      206,
+      207,
+      206,
+      205,
+      207,
+      206,
+      205,
+      206,
+      204,
+      206,
+      207,
+      207,
+      208,
+      209,
+      206,
+      207,
+      204,
+      204,
+      208,
+      206,
+      206,
+      203,
+      205,
+      204,
+      203,
+      208,
+      209,
+      209
+    ],
+    "mean": 206.11,
+    "runs": 28
+  },
+  "targeted_share_sweep": [
+    {
+      "targeted_per_1024": 0,
+      "t_hot": 2.0,
+      "t_cold": 0.12,
+      "moves_per_run": 300000000,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "best_matched_seams": [
+        203,
+        201,
+        201,
+        201,
+        204,
+        202,
+        203,
+        202
+      ],
+      "mean": 202.12,
+      "million_moves_per_second": [
+        26.1,
+        24.8,
+        24.8,
+        23.8,
+        24.5,
+        24.6,
+        22.8,
+        25.6
+      ]
+    },
+    {
+      "targeted_per_1024": 256,
+      "t_hot": 2.0,
+      "t_cold": 0.12,
+      "moves_per_run": 300000000,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "best_matched_seams": [
+        206,
+        209,
+        208,
+        207,
+        212,
+        210,
+        207,
+        209
+      ],
+      "mean": 208.5,
+      "million_moves_per_second": [
+        20.7,
+        21.2,
+        20.7,
+        19.6,
+        20.8,
+        21.8,
+        20.5,
+        22.6
+      ]
+    },
+    {
+      "targeted_per_1024": 512,
+      "t_hot": 2.0,
+      "t_cold": 0.12,
+      "moves_per_run": 300000000,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "best_matched_seams": [
+        211,
+        207,
+        210,
+        208,
+        210,
+        211,
+        209,
+        210
+      ],
+      "mean": 209.5,
+      "million_moves_per_second": [
+        19.7,
+        18.9,
+        17.8,
+        19.0,
+        18.8,
+        19.1,
+        18.1,
+        18.9
+      ]
+    },
+    {
+      "targeted_per_1024": 768,
+      "t_hot": 2.0,
+      "t_cold": 0.12,
+      "moves_per_run": 300000000,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "best_matched_seams": [
+        206,
+        208,
+        210,
+        209,
+        208,
+        209,
+        211,
+        210
+      ],
+      "mean": 208.88,
+      "million_moves_per_second": [
+        17.6,
+        17.0,
+        16.7,
+        17.9,
+        17.7,
+        17.6,
+        17.8,
+        18.2
+      ]
+    },
+    {
+      "targeted_per_1024": 960,
+      "t_hot": 2.0,
+      "t_cold": 0.12,
+      "moves_per_run": 300000000,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "best_matched_seams": [
+        213,
+        208,
+        213,
+        212,
+        207,
+        210,
+        210,
+        207
+      ],
+      "mean": 210,
+      "million_moves_per_second": [
+        16.1,
+        16.7,
+        17.2,
+        16.6,
+        16.4,
+        15.8,
+        17.1,
+        16.3
+      ]
+    }
+  ],
+  "cold_temperature_sweep": [
+    {
+      "targeted_per_1024": 512,
+      "t_hot": 2.0,
+      "t_cold": 0.12,
+      "moves_per_run": 1500000000,
+      "seeds": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "best_matched_seams": [
+        213,
+        210,
+        211,
+        216
+      ],
+      "mean": 212.5,
+      "million_moves_per_second": [
+        18.8,
+        19.1,
+        18.5,
+        18.8
+      ]
+    },
+    {
+      "targeted_per_1024": 512,
+      "t_hot": 2.0,
+      "t_cold": 0.2,
+      "moves_per_run": 1500000000,
+      "seeds": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "best_matched_seams": [
+        210,
+        211,
+        210,
+        212
+      ],
+      "mean": 210.75,
+      "million_moves_per_second": [
+        17.7,
+        18.1,
+        18.1,
+        18.3
+      ]
+    },
+    {
+      "targeted_per_1024": 960,
+      "t_hot": 2.0,
+      "t_cold": 0.12,
+      "moves_per_run": 1500000000,
+      "seeds": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "best_matched_seams": [
+        214,
+        214,
+        213,
+        212
+      ],
+      "mean": 213.25,
+      "million_moves_per_second": [
+        16.4,
+        16.3,
+        16.1,
+        16.5
+      ]
+    },
+    {
+      "targeted_per_1024": 960,
+      "t_hot": 2.0,
+      "t_cold": 0.2,
+      "moves_per_run": 1500000000,
+      "seeds": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "best_matched_seams": [
+        211,
+        213,
+        211,
+        212
+      ],
+      "mean": 211.75,
+      "million_moves_per_second": [
+        16.6,
+        16.7,
+        16.6,
+        16.4
+      ]
+    }
+  ],
+  "temperature_sweep": [
+    {
+      "targeted_per_1024": 960,
+      "t_hot": 0.5,
+      "t_cold": 0.09,
+      "moves_per_run": 1500000000,
+      "seeds": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "best_matched_seams": [
+        213,
+        214,
+        216,
+        213
+      ],
+      "mean": 214,
+      "million_moves_per_second": [
+        15.5,
+        16.1,
+        16.4,
+        15.4
+      ]
+    },
+    {
+      "targeted_per_1024": 960,
+      "t_hot": 0.5,
+      "t_cold": 0.12,
+      "moves_per_run": 1500000000,
+      "seeds": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "best_matched_seams": [
+        215,
+        213,
+        214,
+        212
+      ],
+      "mean": 213.5,
+      "million_moves_per_second": [
+        16.5,
+        16.5,
+        16.3,
+        16.2
+      ]
+    },
+    {
+      "targeted_per_1024": 960,
+      "t_hot": 2.0,
+      "t_cold": 0.09,
+      "moves_per_run": 1500000000,
+      "seeds": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "best_matched_seams": [
+        211,
+        215,
+        213,
+        216
+      ],
+      "mean": 213.75,
+      "million_moves_per_second": [
+        15.9,
+        15.9,
+        16.1,
+        16.0
+      ]
+    },
+    {
+      "targeted_per_1024": 960,
+      "t_hot": 2.0,
+      "t_cold": 0.12,
+      "moves_per_run": 1500000000,
+      "seeds": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "best_matched_seams": [
+        212,
+        212,
+        210,
+        215
+      ],
+      "mean": 212.25,
+      "million_moves_per_second": [
+        16.4,
+        16.5,
+        16.2,
+        16.3
+      ]
+    }
+  ],
+  "long_runs": {
+    "targeted_per_1024": 960,
+    "t_hot": 0.5,
+    "t_cold": 0.09,
+    "moves_per_run": 8000000000,
+    "seeds": [
+      31,
+      32,
+      33
+    ],
+    "best_matched_seams": [
+      216,
+      215,
+      215
+    ],
+    "mean": 215.33,
+    "million_moves_per_second": [
+      14.5,
+      14.5,
+      14.5
+    ]
+  },
+  "parallel_tempering": {
+    "note": "Two 90-second runs on 4 cores with replica exchange between temperatures reached 214 and 213. Independent restarts on the same budget did as well or better, so tempering is not in the app.",
+    "best_matched_seams": [
+      214,
+      213
+    ]
+  },
+  "best_board": {
+    "file": "ROUND36_ANNEAL_216.json",
+    "matched_seams": 216,
+    "line_components": 45,
+    "gold": false
+  }
+}
