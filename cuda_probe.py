@@ -108,7 +108,7 @@ def _fresh_result(stamp):
         return 1, f'Could not finish the CUDA check: {exc}'
 
 
-def installed_result():
+def installed_result(*, probe_on_miss=True):
     stamp = installation_stamp()
     try:
         data = json.loads(record_path().read_text(encoding='utf-8'))
@@ -117,6 +117,8 @@ def installed_result():
             return data['code'], data['reason']
     except (OSError, ValueError, TypeError, KeyError):
         pass
+    if not probe_on_miss:
+        return 1, 'Setup has not verified CUDA for the current driver and wheels.'
     return _fresh_result(stamp)
 
 

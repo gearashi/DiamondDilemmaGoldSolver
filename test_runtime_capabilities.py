@@ -22,6 +22,18 @@ def capabilities(*modules, platform='win32', cuda=(0, 'NVRTC compiled and CUDA r
 
 
 class RuntimeCapabilityTests(unittest.TestCase):
+    def test_dashboard_does_not_launch_cuda_on_a_missing_setup_record(self):
+        import cuda_probe
+        with tempfile.TemporaryDirectory() as tmp, \
+             patch.object(cuda_probe, 'record_path', return_value=Path(tmp) / 'absent.json'), \
+             patch.object(cuda_probe, '_fresh_result', side_effect=AssertionError('GPU probe in HTTP request')), \
+             patch.object(runtime, '_installed', return_value=True), \
+             patch.object(runtime.sys, 'platform', 'win32'):
+            cuda = runtime.runtime_capabilities(display=True)['backends']['cuda']
+        self.assertFalse(cuda['available'])
+        self.assertIn('not verified', cuda['reason'])
+        self.assertEqual(cuda['fix'], r'.\Setup.cmd -Backend cuda')
+
     def test_cuda_probe_error_codes_and_venv_record_identity(self):
         import cuda_probe
         with patch.object(cuda_probe,'check_driver',side_effect=cuda_probe.DriverUnavailable('Missing NVIDIA display driver.')), \

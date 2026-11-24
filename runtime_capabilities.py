@@ -82,7 +82,7 @@ def runtime_capabilities(*, display=False):
     elif not _installed('cupy'):
         cuda = feature(False, 'Requires CuPy and the CUDA runtime and NVRTC wheels in this environment.', cuda_setup)
     elif windows:
-        code, reason = cuda_result()
+        code, reason = cuda_result(probe_on_miss=not display)
         fix = ('Install the NVIDIA display driver for your GPU, then run ' if code == 2 else '') + cuda_setup
         cuda = {**feature(code == 0, reason, fix), 'check': reason, 'detection': 'nvrtc_kernel'}
     else:

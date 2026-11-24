@@ -295,7 +295,7 @@ Passing tests is not a puzzle solution or a prediction of completion time.
 
 Standalone research drivers are organized in [benchmarks/](benchmarks/README.md), with module commands and links to the recorded evidence. See that guide before reproducing a benchmark.
 
-Successful CI runs produce source archives labelled Windows x64, Linux x64, macOS x64, and macOS ARM64, with SHA-256 checksums. They contain the same portable source and setup scripts, not bundled standalone executables. Install native Python 3.12 for all engines, or standard Python 3.15 for DFS and WebGPU, and run the appropriate setup script after extraction. Environments, runtime state, puzzle diagrams, and generated tile data are excluded.
+Successful CI runs produce source archives labelled Windows x64, Linux x64, macOS x64, and macOS ARM64, with SHA-256 checksums. Each archive includes the portable source, setup scripts and the three Windows x64 DLLs alongside their build manifests and notices. On Windows, run `Setup.cmd` after extraction. On Linux or macOS, run `bash Setup.sh` with Python 3.12 for all platform-supported engines, or Python 3.15 for DFS and WebGPU. Setup prepares puzzle data and the local environment on the user's machine.
 
 ## License
 
@@ -307,13 +307,13 @@ The dashboard's **Exact-search optimizations** controls apply to DFS, parallel C
 
 Choose **Parallel CPU DFS** and a CPU worker count to search disjoint unfinished branches. The first resumed parallel run imports an existing `dfs-gold` checkpoint into its own `parallel-dfs-gold` queue; the original DFS save stays intact. Subsequent starts resume the parallel queue. Changing the worker count redistributes its jobs. A graceful Stop commits current job progress; an abrupt process failure may replay work since the last committed job checkpoint.
 
-An optional compiled C engine accelerates seam propagation. Build it locally with GCC or Clang:
+An optional compiled C engine accelerates seam propagation. Windows x64 Setup verifies and activates the supplied libraries. To build locally with GCC or Clang on Windows, run this command.
 
 ```powershell
 .\venv\Scripts\python.exe build_native.py
 ```
 
-On Linux or macOS, use `venv/bin/python build_native.py`. **Automatic** uses a matching local build when available and otherwise uses Python. **Compiled CPU** requires that build and reports an error if it is unavailable. Source and binary hashes are checked before loading. Builds stay in `.native/` and are not included in source packages. The annealing kernel (`anneal_native.c`) builds itself the same way on the first annealing run; without a compiler it uses a Python kernel that is more than 100 times slower, and the dashboard names the kernel in use.
+On Linux or macOS, use `venv/bin/python build_native.py`. **Automatic** loads the matching library from `.native/` when available and otherwise uses Python. **Compiled CPU** requires the verified library. For targeted annealing, Windows x64 loads the packaged kernel from `native/windows-x64/`. On Linux and macOS the first annealing run attempts a local build of `anneal_native.c`. The Python fallback runs more than 100 times slower in the round 36 measurements. The dashboard names the kernel in use.
 
 The counters report deductions, cached local results and pending jobs; they do not estimate the fraction of all complete boards exhausted. See [the optimization report](docs/OPTIMIZATIONS.md) for the bounds and correctness conditions.
 
