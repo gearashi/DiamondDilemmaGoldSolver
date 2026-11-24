@@ -404,9 +404,10 @@ def main(*,entry_path=None):
   if any(HYBRID_PROFILES[name].get('adaptive_temperatures') for name in args.hybrid_profiles) and any(n<8 for n in args.hybrid_replica_counts or [args.replicas]):parser.error('Adaptive temperatures require at least8 replicas.')
  if args.worker:return worker(args)
  require_fresh((args.output/'report.json',args.output/'results.json'))
- args.output.mkdir(parents=True,exist_ok=True);before=source_hashes();runtime_before=runtime_snapshot();repository=repository_snapshot(ROOT);records=[]
+ repository=repository_snapshot(ROOT)
  if args.evidence_stage=='frozen' and (not repository.get('commit') or repository.get('dirty') is not False):
   raise RuntimeError('Frozen benchmark evidence requires a clean, readable committed checkout.')
+ args.output.mkdir(parents=True,exist_ok=True);before=source_hashes();runtime_before=runtime_snapshot();records=[]
  worker_counts=list(dict.fromkeys(args.worker_counts or [args.workers]))
  free_cell_counts=list(dict.fromkeys(args.free_cell_counts or [args.free_cells]))
  finite_cases=list(dict.fromkeys(args.finite_cases));args.profiles=list(dict.fromkeys(args.profiles))

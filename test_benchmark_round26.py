@@ -54,8 +54,16 @@ class Round26BenchmarkTests(unittest.TestCase):
 
     def test_frozen_dirty_guard_precedes_any_search(self):
         with tempfile.TemporaryDirectory() as folder:
-            argv=['benchmark_round26.py','--suite','finite','--profiles','round26-reuse','--output',folder,'--evidence-stage','frozen']
-            with patch.object(sys,'argv',argv),patch.object(benchmark.harness,'repository_snapshot',return_value={'commit':'abc','dirty':True}),patch.object(benchmark.harness.subprocess,'Popen',side_effect=AssertionError('No child search')):
-                with self.assertRaisesRegex(RuntimeError,'clean, readable committed'):benchmark.main()
+            output = Path(folder) / 'frozen'
+            argv = ['benchmark_round26.py', '--suite', 'finite', '--profiles', 'round26-reuse',
+                    '--output', str(output), '--evidence-stage', 'frozen']
+            for repository in ({'commit': 'abc', 'dirty': True}, {'available': False}):
+                with (self.subTest(repository=repository), patch.object(sys, 'argv', argv),
+                      patch.object(benchmark.harness, 'repository_snapshot', return_value=repository),
+                      patch.object(benchmark.harness, 'runtime_snapshot', side_effect=AssertionError('No runtime probe')),
+                      patch.object(benchmark.harness.subprocess, 'Popen', side_effect=AssertionError('No child search'))):
+                    with self.assertRaisesRegex(RuntimeError, 'clean, readable committed'):
+                        benchmark.main()
+                    self.assertFalse(output.exists())
 
 if __name__=='__main__':unittest.main()
