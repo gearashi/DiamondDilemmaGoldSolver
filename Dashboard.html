@@ -227,6 +227,7 @@ function round25OptionReason(key,algorithm,options,caps){
  if(key==='coordinated_gpu'&&caps?.backends?.cuda?.available===false)return caps.backends.cuda.reason;
  if(key==='persistent_theory'&&options.native_sat_persistence)return 'Persistent theory cannot use Glucose native proof logging.';
  if(key==='gpu_shared_clauses'&&options.gpu_proof_transport)return '';
+ if(key==='smart_learning'&&options.proof_transport)return '';
  const capability=caps?.options?.[key];
  if(key==='native_sat_persistence'&&!capability)return 'Native SAT proof logging availability has not been checked by this server.';
  return capability?.available===false?(capability.reason||'This option is unavailable in this environment.'):'';
@@ -235,6 +236,70 @@ function searchOptionIssues(algorithm,options,caps){
  const issues=[...round25Keys,...round26Keys,...round34Keys].filter(key=>options[key]).map(key=>round25OptionReason(key,algorithm,options,caps)).filter(Boolean);
  if((algorithm==='sat'||options.coordinated_sat)&&options.persistent_sat&&options.sat_theory&&!options.persistent_theory)issues.push('Persistent SAT and SAT theory cannot be combined. Turn off one option.');
  return [...new Set(issues)];
+}
+function capabilityHelp(item){
+ return item?.available===false?[item.reason,item.fix].filter(Boolean).join(' '):'';
+}
+function showSettingHelp(input,message){
+ const anchor=input.closest?.('label')||input;
+ if(!anchor.insertAdjacentElement)return;
+ const id=input.id+'Availability';
+ let note=document.getElementById(id);
+ if(!note){
+  if(!message)return;
+  note=document.createElement('div');note.id=id;note.className='helper';
+  note.style.whiteSpace='pre-line';note.style.overflowWrap='anywhere';
+  anchor.insertAdjacentElement('afterend',note);
+  const descriptions=(input.getAttribute('aria-describedby')||'').split(/\s+/).filter(Boolean);
+  input.setAttribute('aria-describedby',[...descriptions,id].join(' '));
+ }
+ if(note.textContent!==message)note.textContent=message;
+ note.hidden=!message;
+}
+function explainDisabledSettings(algorithm,running,options){
+ const caps=state?.capabilities,locked=running?'A search is running. Select Stop and wait for its checkpoint.':
+  commandBusy?'A command is in progress. Wait for it to finish.':'';
+ const pick=engine=>'Select '+(algorithmLabels[engine]||engine)+' in Search algorithm.';
+ const gpuHelp='This setting applies to GPU search. '+pick('hybrid');
+ for(const [field,items] of [['algorithmInput',caps?.algorithms],['backendInput',caps?.backends]]){
+  const control=$(field),messages=[];
+  if(control.disabled)messages.push(locked||gpuHelp);
+  for(const option of Array.from(control.options||[])){
+   const message=capabilityHelp(items?.[option.value])||
+    (algorithm==='gpu-domains'&&option.value==='webgpu'?'GPU domain search requires CUDA. Select NVIDIA CUDA in GPU engine.':'');
+   option.title=option.disabled?message:'';
+   // Show the reason inside the native menu as well as beside the closed menu.
+   if(option.disabled&&message){
+    const name=option.textContent;
+    option.label=name+' — '+message;
+    messages.push(name+' — '+message);
+   }else option.removeAttribute?.('label');
+  }
+  showSettingHelp(control,messages.join('\n'));
+ }
+ for(const [key,id] of Object.entries(optionIds)){
+  const control=$(id),reason=round25OptionReason(key,algorithm,options,caps);
+  let message='';
+  if(control.disabled||control.checked&&reason){
+   const engines=caps?.option_engines?.[key]??optionEnginesDefault[key];
+   const item=key==='coordinated_gpu'?caps?.backends?.cuda:key==='coordinated_sat'?caps?.algorithms?.sat:caps?.options?.[key];
+   if(locked)message=locked;
+   else if(reason.startsWith('This option requires ')&&engines?.length)message=reason+' '+pick(engines[0]);
+   else if(reason&&item?.available===false&&reason===item.reason)message=capabilityHelp(item);
+   else if(key==='native_explanations'&&options.native==='python')message=reason+' Select Automatic in CPU propagation.';
+   else if(key==='coordinated_gpu'&&$('backendInput').value==='webgpu')message=reason+' Select NVIDIA CUDA in GPU engine.';
+   else if(key==='persistent_theory'&&options.native_sat_persistence)message=reason+' Clear the native SAT clause-persistence option.';
+   else if(reason)message=reason;
+   else if(key==='sat_theory'&&algorithm==='sat'&&options.persistent_sat)message='SAT theory requires a compatible session. Clear Preserve SAT sessions between time slices.';
+   else message='This setting applies to DFS-family searches. '+pick('dfs');
+  }
+  control.title=message;
+  showSettingHelp(control,message);
+ }
+ for(const id of ['seconds','seedInput','replicaInput','workersInput','nativeInput','orderingGoalInput','lookaheadBudgetInput','satServiceInstancesInput',...Object.values(gpuFeatureIds)]){
+  const control=$(id);
+  showSettingHelp(control,control.disabled?(locked||(id==='replicaInput'?gpuHelp:'This setting applies to CPU constraint search. '+pick('dfs'))):'');
+ }
 }
 $('satServiceInstancesInput').value='1';$('nativeInput').value='auto';$('orderingGoalInput').value='auto';$('workersInput').value='4';$('lookaheadBudgetInput').value='100';
 try{const saved=JSON.parse(window.localStorage?.getItem('diamond.searchOptions')||'null');if(saved&&typeof saved==='object'){for(const[key,id]of Object.entries(optionIds))if(typeof saved[key]==='boolean')$(id).checked=saved[key];if(['auto','python','compiled'].includes(saved.native))$('nativeInput').value=saved.native;if(['auto','solution','conflict'].includes(saved.ordering_goal))$('orderingGoalInput').value=saved.ordering_goal;if(Number.isInteger(saved.lookahead_ms)&&saved.lookahead_ms>=1&&saved.lookahead_ms<=1000)$('lookaheadBudgetInput').value=String(saved.lookahead_ms);if(Number.isInteger(saved.sat_service_instances)&&saved.sat_service_instances>=1&&saved.sat_service_instances<=8)$('satServiceInstancesInput').value=String(saved.sat_service_instances)}const workers=Number(window.localStorage?.getItem('diamond.workers'));if([1,2,4,8,16,32,64].includes(workers))$('workersInput').value=String(workers)}catch(_){}
@@ -270,7 +335,8 @@ function renderRuntimeAvailability(algorithm,exact,usesGPU,running){
  if(usesGPU&&!verify){const selectedBackend=caps.backends?.[$('backendInput').value];if(selectedBackend?.available===false)blocked.push(selectedBackend.reason)}
  for(const [key,item]of Object.entries(caps.options||{})){
   const id=optionIds[key];if(!id)continue;
-  const control=$(id),unavailable=item.available===false&&!(key==='smart_learning'&&options.proof_transport);
+  const transported=(key==='smart_learning'&&options.proof_transport)||(key==='gpu_shared_clauses'&&options.gpu_proof_transport);
+  const control=$(id),unavailable=item.available===false&&!transported;
   // A saved unavailable selection stays visible and can be unchecked. Never
   // rewrite saved preferences merely because this interpreter lacks a package.
   control.disabled=control.disabled||running||commandBusy||(!exact&&!((id.startsWith('r25_')||id.startsWith('r26_')||id.startsWith('r34_'))&&control.checked))||(unavailable&&!control.checked);
@@ -331,6 +397,7 @@ function renderAlgorithmControls(){
  $('algorithmHint').textContent=algorithm==='anneal'?'Score search on the CPU: each worker cools a random board, aiming swaps at mismatched seams. Maximizes matched seams and saves every new best board; reaching 240 stops the run. It proves nothing about boards it did not visit. Stop saves each chain for exact resume.':algorithm==='gpu-domains'?'Experimental NVIDIA CUDA domain search. Start with 128 lanes; persistent domains and learned backjumping use more memory per lane. 512 MiB state budget; Stop saves exact remaining work.':algorithm==='gpu-dfs'?'Resumes saved GPU branches, rejects premature loops, and stops only for a verified single-loop Gold solution or exhaustion.':algorithm==='parallel-dfs'?'CPU workers search disjoint saved branches. On first use, imports unfinished DFS progress into a separate queue. Stops only for verified Gold or exhaustion.':algorithm==='hybrid'?(effective.durable_hybrid?'Gold target: one complete loop. Saves GPU sampling, completed repair work, and DFS progress. Unfinished sampling needs its saved GPU configuration; interrupted native repair queries can restart. Samples may repeat.':'Gold target: one complete loop. GPU sampling and CPU neighborhood repair guide smart DFS. Resumes continue the saved DFS stack. Experimental; samples may repeat.'):algorithm==='cp-sat-circuit'?'Experimental direct single-loop model. Every chosen gold segment belongs to one circuit. Construction has resource limits; native search restarts after Stop.':['cp','cp-sat','sat',"sat-propagator","sat-channel","cp-sat-regions"].includes(algorithm)?'Gold target: one complete loop. Saved loop exclusions survive a restart; native solver search restarts.':'Recommended for exact search: forced neighbors, tile competition, face budgets, learned conflicts and loop pruning. Resumes the saved DFS stack; stops only for a verified Gold solution or exhaustion.';
  if(effective.symbolic_frontier)$('algorithmHint').textContent='Disjoint CPU, SAT or CUDA work with a shared symbolic queue. Save/resume retains completed ownership; CPU nodes, SAT decisions and CUDA decisions are reported separately.';
  renderRuntimeAvailability(algorithm,exact,usesGPU,running);
+ explainDisabledSettings(algorithm,running,effective);
 }
 function renderConstraintState(){
  const status=sourceStatus(),algorithm=status.algorithm||'dfs',method='constraint:'+algorithm;

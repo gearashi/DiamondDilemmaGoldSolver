@@ -5,6 +5,7 @@ import os
 import shutil
 import subprocess
 import sys
+from cuda_probe import installed_result
 
 BACKENDS = ('auto', 'cuda', 'webgpu')
 
@@ -13,6 +14,9 @@ def _automatic_backend():
     if sys.platform == 'darwin':
         return 'webgpu'
     if importlib.util.find_spec('cupy') is not None:
+        if sys.platform == 'win32':
+            code, _ = installed_result()
+            return 'cuda' if code == 0 else 'webgpu'
         executable = shutil.which('nvidia-smi')
         if executable:
             try:

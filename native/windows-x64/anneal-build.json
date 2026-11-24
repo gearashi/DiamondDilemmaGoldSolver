@@ -1,0 +1,17 @@
+{
+  "abi": 1,
+  "platform": "win32",
+  "machine": "AMD64",
+  "library": "anneal_native.dll",
+  "source_sha256": "f5904d5646bfb1dc6d966f5feb04a7fb20576bd137ffe0be25d31674d169c83a",
+  "library_sha256": "255b80fb94d29677176c666f9143ce85b8385db810dc26837bf52a09d92823e1",
+  "compiler_version": "gcc.exe (Rev8, Built by MSYS2 project) 15.2.0",
+  "flags": [
+    "-std=c99",
+    "-O3",
+    "-shared",
+    "-static-libgcc",
+    "-s",
+    "-Wl,--no-insert-timestamp,--disable-auto-image-base"
+  ]
+}

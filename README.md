@@ -8,6 +8,10 @@ The puzzle description and diagrams are on [Jaap's Puzzle Page](https://www.jaap
 
 The [v1.7.0 results and recommended settings](docs/ROUND26_RESULTS.md) cover 17 workstreams and 81 scoped evaluations. They include exact CPU and CUDA search, shared SAT reasoning, disk-backed progress, regional pruning, incremental GPU scoring and repair. The [workstream register](docs/round26-workstreams.json) records which candidates reduced steps, which saved repeated work and where extra work outweighed the benefit. Earlier evaluations are available for [Round 25](docs/ROUND25_RESULTS.md), [Round 24](docs/ROUND24.md) and [Round 23](docs/ROUND23.md).
 
+## Windows setup in v1.17.1
+
+Run `.\Setup.cmd` from the extracted Windows x64 kit. Setup tests CP, CP-SAT and SAT and, for the default NVIDIA profile, compiles and runs a CUDA kernel. On a PC with Python 3.15, Setup uses a side-by-side Python 3.12 for the solver. The kit includes the Windows x64 annealing, propagation and native-search libraries. Targeted annealing runs at native speed without installing a C compiler.
+
 ## Search improvements in v1.17.0
 
 A new **Targeted annealing** engine found a full board with **216 of 240 matched seams** and 45 line components. The earlier best was 207. It is not a Gold solution. The engine runs on the CPU from the dashboard or the command line, saves its chains on Stop, and checks each new best board for an exact completion. Its compiled kernel makes 15 to 26 million moves per second per core. On equal seeds and moves, targeted exchanges raised the average score from 202.1 to 210.0. [Results, settings and limits](docs/ROUND36_ANNEALING.md) · [Exact engines on solvable look-alike boards](docs/ROUND37_EXACT_BENCHMARKS.md)
@@ -52,9 +56,9 @@ The [35-proposal register and results](docs/ROUND27_RESULTS.md) give the scope o
 
 ## Requirements
 
-Use **Python 3.12, 64-bit** for all search engines, or **standard Python 3.15, 64-bit** for DFS and WebGPU, a compatible GPU and its driver for GPU modes, and enough free RAM and disk space for the selected population and checkpoints. Initial dependency installation and puzzle-data preparation need internet access.
+Windows x64 Setup accepts **standard 64-bit Python 3.12 or 3.15** and creates a full-profile 3.12 environment. It uses an installed 3.12 when available, or downloads a hash-checked private 3.12 into the kit. GPU modes need a compatible GPU and its driver. Initial setup needs internet access for wheels and the source diagrams.
 
-Python 3.15 uses a separate dependency profile: dashboard, data preparation, Python/compiled DFS, parallel DFS, and WebGPU search/sampling. CUDA, SAT, CP, CP-SAT, CP-SAT subtree checks/repair, regional linear pricing, and SAT assistance require the full Python 3.12 environment because their pinned native packages do not provide Python 3.15 wheels. The dashboard reports installed-package availability. Wheel availability was checked on 2026-10-15 against the pinned [OR-Tools](https://pypi.org/project/ortools/9.15.6755/#files), [PySAT](https://pypi.org/project/python-sat/1.9.dev15/#files), and [CuPy](https://pypi.org/project/cupy-cuda12x/14.2.0/#files) releases. Free-threaded Python is not supported by setup. Installing a newer system Python does not upgrade an existing `venv`.
+On Linux and macOS, use 64-bit Python 3.12 for the full set of platform-supported engines. The Unix Python 3.15 profile includes the dashboard, DFS and WebGPU. Setup requires a regular GIL-enabled interpreter. As checked on 24 November 2026, three solver pins lack a Windows x64 CPython 3.15 wheel. [OR-Tools release files](https://pypi.org/project/ortools/9.15.6755/#files) · [PySAT release files](https://pypi.org/project/python-sat/1.9.dev15/#files) · [CuPy release files](https://pypi.org/project/cupy-cuda12x/14.2.0/#files)
 
 | Platform and GPU | Compute backend |
 | --- | --- |
@@ -96,7 +100,7 @@ bash OpenDashboard.sh
 
 Setup tries `python3.12`, `python3.15`, then a compatible `python3` on PATH, creates `venv/`, and prepares the puzzle data. It does not use `sudo` or change system Python packages. To select a Python interpreter, use `bash Setup.sh --python /path/to/python3.12`. The dashboard is local to [127.0.0.1:8766](http://127.0.0.1:8766/). A desktop browser is needed for the 3D dashboard; command-line search also works without it.
 
-Setup defaults to `auto`: it installs WebGPU on every platform and adds CUDA on Windows/Linux only when an NVIDIA driver query succeeds. To select packages explicitly:
+On Linux and macOS, `auto` installs WebGPU and adds CUDA on Linux when the 3.12 profile detects an NVIDIA driver. To select packages explicitly:
 
 ```bash
 # Native Apple/AMD/Intel GPU backend; supported on Linux and macOS.
@@ -106,7 +110,7 @@ bash Setup.sh --backend webgpu
 bash Setup.sh --backend cuda
 ```
 
-Windows equivalents are `.\Setup.cmd -Backend webgpu` and `.\Setup.cmd -Backend cuda`. CUDA setup is rejected on macOS. Existing virtual environments are reused only when compatible; use a separate checkout/environment for each operating system and native CPU architecture.
+On Windows, both `.\Setup.cmd` and `.\Setup.cmd -Backend cuda` install WebGPU, CUDA and the CPU engines. Use `.\Setup.cmd -Backend webgpu` for a WebGPU-only GPU installation. Use a separate kit folder for each operating system and CPU architecture.
 
 ### Selecting Python 3.15
 
@@ -122,7 +126,7 @@ In a fresh checkout without `venv`, select the interpreter explicitly:
 bash Setup.sh --python python3.15 --backend webgpu
 ```
 
-Setup keeps an existing compatible environment and rejects a requested version that differs from it. To keep CUDA and the SAT/CP engines, retain your Python 3.12 checkout/environment; use a separate checkout for the Python 3.15 profile. Setup never overwrites an existing environment or changes system packages. Without an explicit interpreter, it prefers Python 3.12 and falls back to 3.15 when available. On Python 3.15, `auto` installs WebGPU and an explicit CUDA request fails with an explanation.
+Windows Setup can upgrade a kit that already contains a regular 3.15 venv. It saves the old environment inside the kit and switches the launchers to the full 3.12 environment. On Linux and macOS, Setup reuses a compatible local environment and prefers 3.12 when creating one. The Unix 3.15 profile uses WebGPU.
 
 ### Search controls
 

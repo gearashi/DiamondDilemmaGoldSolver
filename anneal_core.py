@@ -5,8 +5,8 @@ tile once, three rotations, no flips). It is a heuristic: it certifies nothing
 by itself, and every board it reports is rescored by validator.py.
 
 `AnnealModel` holds the colour tables. `AnnealModel.run` executes Metropolis
-moves at one temperature, in the compiled kernel when a C compiler is
-available and in the pure-Python kernel otherwise. Both kernels use the same
+moves at one temperature using a packaged Windows x64 kernel, a local build,
+or a pure-Python implementation. Both kernels use the same
 move set; they do not share a random stream, so equal seeds give different
 boards on the two backends.
 
@@ -19,12 +19,13 @@ from __future__ import annotations
 
 import ctypes
 import hashlib
+import json
 import math
 import random
 import time
 from pathlib import Path
 
-from build_native import _build_one, library_name
+from build_native import _build_one, library_name, native_directory
 from geometry import build_board
 from validator import normalize_tiles, orientation_masks, reverse_mask, validate_arrangement
 
@@ -37,11 +38,20 @@ DEFAULT_T_COLD = 0.09
 
 def _load_native():
     source = ROOT / 'anneal_native.c'
-    key = hashlib.sha256(source.read_bytes()).hexdigest()[:20]
-    folder = ROOT / '.native' / key
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    folder = native_directory('anneal-build.json', ROOT)
+    if folder == ROOT / '.native':
+        folder = folder / digest[:20]
+        if not (folder / library_name('anneal_native')).is_file():
+            _build_one(stem='anneal_native', output_dir=folder, manifest_name='anneal-build.json')
     path = folder / library_name('anneal_native')
-    if not path.is_file():
-        _build_one(stem='anneal_native', output_dir=folder, manifest_name='anneal-build.json')
+    try:
+        metadata = json.loads((folder / 'anneal-build.json').read_text(encoding='utf-8'))
+        if (metadata['abi'] != 1 or metadata['source_sha256'] != digest
+                or metadata['library_sha256'] != hashlib.sha256(path.read_bytes()).hexdigest()):
+            raise RuntimeError('Annealing source or library differs from its build manifest.')
+    except (ValueError, KeyError, TypeError) as exc:
+        raise RuntimeError('Malformed annealing build manifest.') from exc
     dll = ctypes.CDLL(str(path))
     i32p, u16p = ctypes.POINTER(ctypes.c_int32), ctypes.POINTER(ctypes.c_uint16)
     dll.dd_anneal.argtypes = [ctypes.c_int, ctypes.c_int, u16p, i32p, i32p, i32p, i32p, i32p, i32p,

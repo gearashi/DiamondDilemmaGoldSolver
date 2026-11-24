@@ -14,13 +14,56 @@ import runtime_capabilities as runtime
 ROOT = Path(__file__).resolve().parent
 
 
-def capabilities(*modules, platform='win32'):
+def capabilities(*modules, platform='win32', cuda=(0, 'NVRTC compiled and CUDA returned 42 on test GPU.')):
     with patch.object(runtime, '_installed', side_effect=lambda name: name in modules), \
+         patch.object(runtime, 'cuda_result', return_value=cuda), \
          patch.object(runtime.sys, 'platform', platform):
         return runtime.runtime_capabilities()
 
 
 class RuntimeCapabilityTests(unittest.TestCase):
+    def test_cuda_probe_error_codes_and_venv_record_identity(self):
+        import cuda_probe
+        with patch.object(cuda_probe,'check_driver',side_effect=cuda_probe.DriverUnavailable('Missing NVIDIA display driver.')), \
+             patch.object(cuda_probe,'check_kernel') as dispatch:
+            self.assertEqual(cuda_probe.test_cuda(), (2,'Missing NVIDIA display driver.'))
+            dispatch.assert_not_called()
+        with patch.object(cuda_probe,'check_driver'), patch.object(cuda_probe,'check_kernel',side_effect=RuntimeError('missing NVRTC')):
+            code, reason = cuda_probe.test_cuda()
+            self.assertEqual(code,1)
+            self.assertIn('missing NVRTC',reason)
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory, patch.object(cuda_probe.sys,'prefix',directory), \
+             patch.object(cuda_probe,'_fresh_result',return_value=(1,'fresh result')) as fresh:
+            self.assertEqual(cuda_probe.installed_result(), (1,'fresh result'))
+            cuda_probe.save_result(0,'checked kernel')
+            self.assertEqual(cuda_probe.installed_result(), (0,'checked kernel'))
+            with patch.object(cuda_probe.sys,'executable','some-other-python'):
+                self.assertEqual(cuda_probe.installed_result(), (1,'fresh result'))
+            self.assertEqual(fresh.call_count,2)
+
+    def test_recommended_windows_controls_and_packaged_repair_commands(self):
+        full = capabilities('ortools','pysat','cupy','wgpu')
+        for algorithm in ('anneal','dfs','parallel-dfs','hybrid','cp','cp-sat','sat','gpu-dfs','gpu-domains'):
+            with self.subTest(algorithm=algorithm):
+                runtime.validate_runtime_selection(algorithm, 'cuda', capabilities=full)
+        runtime.validate_runtime_selection('hybrid', 'cuda', {'durable_hybrid': True}, capabilities=full)
+        self.assertEqual(full['backends']['cuda']['check'], 'NVRTC compiled and CUDA returned 42 on test GPU.')
+        partial = capabilities('wgpu')
+        for name in ('cp','cp-sat','sat'):
+            self.assertEqual(partial['algorithms'][name]['fix'], r'.\Setup.cmd')
+        self.assertEqual(partial['backends']['cuda']['fix'], r'.\Setup.cmd -Backend cuda')
+
+    def test_installed_cupy_cannot_advertise_a_failed_kernel_or_missing_driver(self):
+        for code, reason in [(1,'NVRTC failed'),(2,'Missing NVIDIA display driver.')]:
+            with self.subTest(code=code):
+                caps=capabilities('cupy','wgpu',cuda=(code,reason))
+                self.assertTrue(caps['backends']['webgpu']['available'])
+                self.assertFalse(caps['backends']['cuda']['available'])
+                self.assertFalse(caps['algorithms']['gpu-domains']['available'])
+                self.assertEqual(caps['backends']['cuda']['reason'], reason)
+                self.assertIn(r'.\Setup.cmd -Backend cuda',caps['backends']['cuda']['fix'])
+                with self.assertRaisesRegex(ValueError, reason):
+                    runtime.validate_runtime_selection('hybrid','cuda',capabilities=caps)
     def test_package_probe_does_not_import_optional_packages_or_probe_hardware(self):
         with patch.object(runtime.importlib.util, 'find_spec', return_value=None) as find, \
              patch.object(runtime.sys, 'platform', 'win32'), \

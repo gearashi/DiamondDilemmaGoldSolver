@@ -23,6 +23,12 @@ class WindowsSetupTests(unittest.TestCase):
         shutil.copyfile(ROOT / 'Setup.ps1', self.repo / 'Setup.ps1')
         for name in ('requirements.txt', 'requirements-common.txt', 'requirements-webgpu.txt', 'requirements-py315.txt'):
             (self.repo / name).write_text('fixture==1.0\n')
+        (self.repo / 'build_native.py').write_text(
+            "import sys\nassert sys.argv[1:] == ['--install-windows-bundle']\n")
+        (self.repo / 'windows_profile.py').write_text(
+            "import os,sys\nsys.exit(int(os.environ.get('SETUP_TEST_PROFILE_EXIT','0')))\n")
+        (self.repo / 'cuda_probe.py').write_text(
+            "import os,sys\nassert sys.argv[1:] == ['--record']\nsys.exit(int(os.environ.get('SETUP_TEST_CUDA_EXIT','0')))\n")
         self.fake = self.root / 'fake modules'
         (self.fake / 'pip').mkdir(parents=True)
         (self.fake / 'pip/__init__.py').write_text('')
@@ -35,24 +41,25 @@ class WindowsSetupTests(unittest.TestCase):
             "import os,sys,json\nfrom pathlib import Path\nPath(os.environ['SETUP_TEST_DATA_LOG']).write_text(json.dumps(sys.argv[1:]))\n")
         (self.fake / 'sitecustomize.py').write_text(
             'import collections,os,sys,sysconfig\n'
-            "version=os.environ.get('SETUP_TEST_VERSION')\n"
+            'from pathlib import Path\n'
+            "if sys.orig_argv[1:3] == ['-m', 'venv']:\n"
+            "    import venv\n"
+            "    venv.EnvBuilder._setup_pip = lambda self, context: None  # pip is the fixture above\n"
+            "version=os.environ.get('SETUP_TEST_VERSION', '3.12')\n"
+            "if (Path(sys.prefix)/'old-profile.flag').is_file(): version='3.15'\n"
             "if version: sys.version_info=collections.namedtuple('version_info','major minor micro releaselevel serial')(*map(int,version.split('.')),0,'final',0)\n"
             "if os.environ.get('SETUP_TEST_FREE_THREADED')=='1':\n"
             "    original=sysconfig.get_config_var\n"
             "    sysconfig.get_config_var=lambda name: 1 if name=='Py_GIL_DISABLED' else original(name)\n")
         self.bin = self.root / 'fake tools'
         self.bin.mkdir()
-        (self.bin / 'nvidia-smi.cmd').write_text(
-            '@echo off\n'
-            'if "%SETUP_TEST_NVIDIA%"=="working" echo Fixture GPU\n'
-            'if "%SETUP_TEST_NVIDIA%"=="failed" exit /b 1\n'
-            'exit /b 0\n')
+        (self.bin / 'py.cmd').write_text(
+            '@echo off\nif not "%1"=="-3.12" exit /b 1\n"' + sys.executable + '" %2 %3\n')
         self.pip_log = self.root / 'pip.json'
         self.data_log = self.root / 'data.json'
         self.env = dict(os.environ, PYTHONPATH=str(self.fake),
                         PATH=str(self.bin) + os.pathsep + os.environ.get('PATH', ''),
-                        SETUP_TEST_PIP_LOG=str(self.pip_log), SETUP_TEST_DATA_LOG=str(self.data_log),
-                        SETUP_TEST_NVIDIA='failed')
+                        SETUP_TEST_PIP_LOG=str(self.pip_log), SETUP_TEST_DATA_LOG=str(self.data_log))
 
     def create_venv(self):
         subprocess.run([sys.executable, '-m', 'venv', '--without-pip', str(self.repo / 'venv')],
@@ -63,38 +70,31 @@ class WindowsSetupTests(unittest.TestCase):
         return subprocess.run([POWERSHELL, '-NoProfile', '-ExecutionPolicy', 'Bypass',
                                '-File', str(self.repo / 'Setup.ps1'), *args], cwd=self.root,
                               env=dict(self.env, **environment), capture_output=True, text=True,
-                              timeout=30, creationflags=subprocess.CREATE_NO_WINDOW)
+                              timeout=90, creationflags=subprocess.CREATE_NO_WINDOW)
 
     def requirements(self):
         args = json.loads(self.pip_log.read_text())['args']
         self.assertIn('--require-virtualenv', args)
         self.assertIn('--no-user', args)
+        self.assertIn('--only-binary=:all:', args)
         return [Path(args[i + 1]).name for i, value in enumerate(args) if value == '-r']
 
-    def test_auto_adds_cuda_only_for_successful_nonempty_driver_query(self):
+    def test_auto_installs_full_software_even_if_driver_is_missing(self):
         self.create_venv()
-        for response, expected in (
-                ('failed', ['requirements-webgpu.txt']),
-                ('empty', ['requirements-webgpu.txt']),
-                ('working', ['requirements-webgpu.txt', 'requirements.txt'])):
-            with self.subTest(response=response):
-                result = self.run_setup('-SkipData', SETUP_TEST_NVIDIA=response)
-                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                self.assertEqual(self.requirements(), ['requirements-py315.txt'] if sys.version_info[:2] == (3, 15) else expected)
-                self.assertFalse(self.data_log.exists())
+        result = self.run_setup('-SkipData', SETUP_TEST_CUDA_EXIT='2')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('missing NVIDIA display driver', result.stdout)
+        self.assertEqual(self.requirements(), ['requirements-webgpu.txt', 'requirements.txt'])
+        self.assertFalse(self.data_log.exists())
 
     def test_explicit_backend_and_pip_destination_isolation(self):
         self.create_venv()
-        for backend, expected in (('webgpu', ['requirements-webgpu.txt']), ('cuda', ['requirements.txt'])):
+        for backend, expected in (('webgpu', ['requirements-webgpu.txt']), ('cuda', ['requirements-webgpu.txt', 'requirements.txt'])):
             with self.subTest(backend=backend):
-                result = self.run_setup('-SkipData', '-Backend', backend, SETUP_TEST_NVIDIA='working',
+                result = self.run_setup('-SkipData', '-Backend', backend,
                                         PIP_TARGET='outside-fixture', PIP_PREFIX='outside-fixture', PIP_USER='1', PIP_ROOT='outside-fixture')
-                if sys.version_info[:2] == (3, 15) and backend == 'cuda':
-                    self.assertNotEqual(result.returncode, 0)
-                    self.assertRegex(result.stdout + result.stderr, r'CUDA\s+is\s+unavailable')
-                    continue
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                self.assertEqual(self.requirements(), ['requirements-py315.txt'] if sys.version_info[:2] == (3, 15) else expected)
+                self.assertEqual(self.requirements(), expected)
                 environment = json.loads(self.pip_log.read_text())['env']
                 self.assertEqual(environment.pop('PIP_CONFIG_FILE'), 'NUL')
                 self.assertTrue(all(value is None for value in environment.values()))
@@ -125,35 +125,49 @@ class WindowsSetupTests(unittest.TestCase):
         result = self.run_setup('-SkipData', '-Python', sys.executable, '-Backend', 'webgpu')
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual(config.read_bytes(), before)
-        expected = 'requirements-py315.txt' if sys.version_info[:2] == (3, 15) else 'requirements-webgpu.txt'
-        self.assertEqual(self.requirements(), [expected])
+        self.assertEqual(self.requirements(), ['requirements-webgpu.txt'])
 
-    def test_requested_version_mismatch_preserves_existing_environment(self):
-        self.create_venv()
-        config = self.repo / 'venv/pyvenv.cfg'
-        before = config.read_bytes()
-        other = '3.12' if sys.version_info[:2] == (3, 15) else '3.15'
+    def test_315_request_selects_full_profile_for_every_backend(self):
         requested = self.bin / "requested python's version.cmd"
-        requested.write_text('@echo off\nset "SETUP_TEST_VERSION=' + other + '"\n"' + sys.executable + '" %*\n')
-        result = self.run_setup('-SkipData', '-Python', str(requested))
-        self.assertNotEqual(result.returncode, 0)
-        self.assertRegex(result.stdout + result.stderr, r'does\s+not\s+match\s+existing\s+venv')
-        self.assertEqual(config.read_bytes(), before)
-        self.assertFalse(self.pip_log.exists())
-
-    def test_python315_profile_uses_webgpu_even_when_nvidia_is_available(self):
-        self.create_venv()
-        for backend in ('auto', 'webgpu'):
+        requested.write_text('@echo off\nset "SETUP_TEST_VERSION=3.15"\n"' + sys.executable + '" %*\n')
+        for backend in ('auto', 'cuda', 'webgpu'):
             with self.subTest(backend=backend):
-                result = self.run_setup('-SkipData', '-Backend', backend,
-                                        SETUP_TEST_VERSION='3.15', SETUP_TEST_NVIDIA='working')
+                result = self.run_setup('-SkipData', '-Python', str(requested), '-Backend', backend)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                self.assertEqual(self.requirements(), ['requirements-py315.txt'])
-        self.pip_log.unlink()
-        result = self.run_setup('-SkipData', '-Backend', 'cuda', SETUP_TEST_VERSION='3.15')
+                self.assertIn('Python 3.15 detected', result.stdout)
+                expected = ['requirements-webgpu.txt']
+                if backend != 'webgpu':
+                    expected.append('requirements.txt')
+                self.assertEqual(self.requirements(), expected)
+
+    def test_existing_315_venv_migrates_with_contents_preserved(self):
+        self.create_venv()
+        (self.repo / 'venv/old-profile.flag').write_bytes(b'original')
+        result = self.run_setup('-SkipData')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertFalse((self.repo / 'venv/old-profile.flag').exists())
+        backups = list((self.repo / '.solver-setup').glob('previous-venv-*'))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual((backups[0] / 'old-profile.flag').read_bytes(), b'original')
+
+    def test_failed_315_migration_restores_original_environment(self):
+        self.create_venv()
+        marker = self.repo / 'venv/old-profile.flag'
+        marker.write_bytes(b'original')
+        result = self.run_setup('-SkipData', SETUP_TEST_PROFILE_EXIT='1')
         self.assertNotEqual(result.returncode, 0)
-        self.assertRegex(result.stdout + result.stderr, r'CUDA\s+is\s+unavailable')
-        self.assertFalse(self.pip_log.exists())
+        self.assertIn('Restored the previous', result.stdout)
+        self.assertEqual(marker.read_bytes(), b'original')
+
+    def test_false_full_profile_and_broken_cuda_fail_setup(self):
+        self.create_venv()
+        for backend, profile_exit, cuda_exit in (
+                ('webgpu', '1', '0'), ('auto', '0', '1'), ('cuda', '0', '2')):
+            with self.subTest(backend=backend):
+                result = self.run_setup('-Backend', backend, SETUP_TEST_PROFILE_EXIT=profile_exit,
+                                        SETUP_TEST_CUDA_EXIT=cuda_exit)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertFalse(self.data_log.exists())
 
     def test_unsupported_and_free_threaded_interpreters_fail_before_install(self):
         self.create_venv()

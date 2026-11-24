@@ -81,23 +81,30 @@ class BackendSelectionTests(unittest.TestCase):
             self.assertEqual(backends.choose_backend(), 'webgpu')
         self.run.assert_not_called()
 
-    def test_linux_and_windows_cuda_probe_success_and_cached_selection(self):
+    def test_linux_cuda_probe_success_and_cached_selection(self):
         self.spec.return_value = object()
         self.which.return_value = '/fake/nvidia-smi'
         self.run.return_value = SimpleNamespace(returncode=0, stdout='Example NVIDIA GPU\n')
-        for platform, os_name in (('linux', 'posix'), ('win32', 'nt')):
-            with self.subTest(platform=platform):
-                backends._automatic_backend.cache_clear()
-                self.run.reset_mock()
-                with self.platform(platform), patch.object(backends, 'os', SimpleNamespace(name=os_name)), \
-                     patch.object(backends.subprocess, 'CREATE_NO_WINDOW', 0x08000000, create=True):
-                    self.assertEqual(backends.choose_backend(), 'cuda')
-                    self.assertEqual(backends.choose_backend(), 'cuda')
-                self.run.assert_called_once()
-                args, kwargs = self.run.call_args
-                self.assertEqual(args[0], ['/fake/nvidia-smi', '--query-gpu=name', '--format=csv,noheader'])
-                self.assertEqual(kwargs['timeout'], 5)
-                self.assertEqual(kwargs['creationflags'], 0x08000000 if os_name == 'nt' else 0)
+        with self.platform('linux'), patch.object(backends, 'os', SimpleNamespace(name='posix')):
+            self.assertEqual(backends.choose_backend(), 'cuda')
+            self.assertEqual(backends.choose_backend(), 'cuda')
+        self.run.assert_called_once()
+        args, kwargs = self.run.call_args
+        self.assertEqual(args[0], ['/fake/nvidia-smi', '--query-gpu=name', '--format=csv,noheader'])
+        self.assertEqual(kwargs['timeout'], 5)
+        self.assertEqual(kwargs['creationflags'], 0)
+
+    def test_windows_auto_follows_kernel_result_without_needing_nvidia_smi(self):
+        self.spec.return_value = object()
+        for result, expected in [((0, 'returned 42'), 'cuda'),
+                                 ((1, 'NVRTC unavailable'), 'webgpu'),
+                                 ((2, 'missing NVIDIA display driver'), 'webgpu')]:
+            backends._automatic_backend.cache_clear()
+            with self.platform('win32'), patch.object(backends, 'installed_result', return_value=result) as probe:
+                self.assertEqual(backends.choose_backend(), expected)
+                self.assertEqual(backends.choose_backend(), expected)
+                probe.assert_called_once()
+        self.which.assert_not_called()
 
     def test_failed_empty_or_timed_out_probe_falls_back_to_webgpu(self):
         self.spec.return_value = object()
@@ -365,6 +372,14 @@ class PortableLauncherTests(unittest.TestCase):
         self.sleep.assert_called_once_with(.2)
         self.browser.assert_called_once_with('http://127.0.0.1:9876/')
 
+    def test_cold_start_can_finish_after_twenty_seconds(self):
+        self.install()
+        self.spawn.return_value.poll.return_value = None
+        with patch.object(launcher, 'read_dashboard', side_effect=[None, None, self.payload]), \
+             patch.object(launcher.time, 'monotonic', side_effect=[0, 0, 35]):
+            self.assertEqual(launcher.open_dashboard(9876, no_browser=True), 'http://127.0.0.1:9876/')
+        self.spawn.assert_called_once()
+
     def test_startup_never_retries_a_foreign_installation(self):
         self.install()
         with patch.object(launcher, 'read_dashboard', side_effect=[
@@ -386,7 +401,7 @@ class PortableLauncherTests(unittest.TestCase):
         self.install()
         self.spawn.return_value.poll.return_value = None
         with patch.object(launcher, 'read_dashboard', return_value=None), \
-             patch.object(launcher.time, 'monotonic', side_effect=[0, 0, 21]):
+             patch.object(launcher.time, 'monotonic', side_effect=[0, 0, launcher.DASHBOARD_STARTUP_TIMEOUT + 1]):
             with self.assertRaisesRegex(RuntimeError, 'timed out'):
                 launcher.open_dashboard(9876)
         self.sleep.assert_called_once_with(.2)

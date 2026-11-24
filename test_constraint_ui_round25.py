@@ -39,6 +39,34 @@ class Inputs(HTMLParser):
 
 
 class Round25Controls(unittest.TestCase):
+    def test_disabled_choices_explain_the_repair_beside_their_controls(self):
+        self.node(r"""
+const notes=new Map();
+context.document.getElementById=id=>id.endsWith('Availability')?notes.get(id):element(id);
+context.document.createElement=()=>({style:{},textContent:''});
+for(const id of ['algorithmInput','backendInput','satAssistInput','r25_durable_hybrid']){
+ const e=element(id);e.id=id;e.getAttribute=()=>'';e.setAttribute=(key,value)=>{e[key]=value};
+ e.insertAdjacentElement=(where,node)=>{assert.equal(where,'afterend');notes.set(node.id,node)};
+}
+element('algorithmInput').options=[{value:'dfs',textContent:'DFS'},{value:'cp-sat',textContent:'CP-SAT'}];
+element('backendInput').options=[{value:'cuda',textContent:'NVIDIA CUDA'}];
+run("state.capabilities={python:'3.12',algorithms:{dfs:{available:true},'cp-sat':{available:false,reason:'Requires OR-Tools.',fix:'Setup.cmd'}},backends:{cuda:{available:false,reason:'Missing NVIDIA display driver.',fix:'Install driver, then run Setup.cmd -Backend cuda'}},options:{sat_assist:{available:false,reason:'Requires python-sat.',fix:'Setup.cmd'}},features:{}}");
+element('satAssistInput').checked=false;
+select('dfs');
+assert.match(notes.get('algorithmInputAvailability').textContent,/CP-SAT.*Requires OR-Tools.*Setup.cmd/);
+assert.match(element('algorithmInput').options[1].label,/Requires OR-Tools.*Setup.cmd/);
+assert.match(notes.get('backendInputAvailability').textContent,/Missing NVIDIA display driver.*-Backend cuda/);
+assert.match(notes.get('satAssistInputAvailability').textContent,/Requires python-sat.*Setup.cmd/);
+assert.match(element('satAssistInput')['aria-describedby'],/satAssistInputAvailability/);
+assert.match(notes.get('r25_durable_hybridAvailability').textContent,/Select GPU sampling \+ repair \+ DFS/);
+select('hybrid');
+assert.equal(element('r25_durable_hybrid').disabled,false);
+assert.equal(notes.get('r25_durable_hybridAvailability').hidden,true);
+run("state.capabilities.options.sat_assist={available:true};state.capabilities.backends.cuda={available:true};renderState()");
+assert.equal(notes.get('satAssistInputAvailability').hidden,true);
+assert.equal(notes.get('backendInputAvailability').hidden,true);
+""")
+
     def test_controls_match_only_implemented_options_and_default_off(self):
         source=(ROOT/'Dashboard.html').read_text(encoding='utf-8');parser=Inputs();parser.feed(source)
         self.assertTrue(set(KEYS)<=set(ROUND25_OPTIONS))

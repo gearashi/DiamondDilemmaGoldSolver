@@ -1,5 +1,9 @@
 * text=auto
 *.py text eol=lf
+/anneal_native.c text eol=lf
+/constraint_native.c text eol=lf
+/constraint_native_search.c text eol=lf
+/native/windows-x64/*.dll binary
 *.cu text eol=lf
 *.wgsl text eol=lf
 *.md text eol=lf

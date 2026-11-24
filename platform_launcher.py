@@ -20,6 +20,7 @@ from search_options import EXACT_ALGORITHMS, normalize_options, validate_workers
 from io_utils import read_json_shared
 
 ROOT = Path(__file__).resolve().parent
+DASHBOARD_STARTUP_TIMEOUT = 90  # A first import of native solver packages can be slow on Windows.
 
 def venv_python():
     return ROOT / 'venv' / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
@@ -108,7 +109,7 @@ def open_dashboard(port=8766, no_browser=False):
             kwargs['start_new_session'] = True
         with (runtime / 'dashboard.log').open('a', encoding='utf-8') as log:
             child = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT, **kwargs)
-        deadline = time.monotonic() + 20
+        deadline = time.monotonic() + DASHBOARD_STARTUP_TIMEOUT
         while time.monotonic() < deadline:
             try:
                 ready = read_dashboard(port) is not None

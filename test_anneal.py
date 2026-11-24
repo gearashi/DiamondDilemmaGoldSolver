@@ -4,10 +4,14 @@ Uses planted fixtures only, so no puzzle data download is needed. The compiled
 kernel is exercised when a C compiler is present and skipped otherwise; the
 Python kernel always runs.
 """
+import hashlib
 import json
 import os
 import random
 import shutil
+import subprocess
+import sys
+import sysconfig
 import tempfile
 import unittest
 from pathlib import Path
@@ -15,6 +19,8 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 import anneal_search
+import anneal_core
+import build_native
 import dashboard_server as dashboard
 import platform_launcher as launcher
 from anneal_core import AnnealModel, completion_check, cooling_temperature, exact_engine_check
@@ -299,6 +305,89 @@ class RunnerTests(unittest.TestCase):
                 anneal_search.validate_settings(**{**good, **change})
 
 
+@unittest.skipUnless(sysconfig.get_platform() == 'win-amd64', 'Windows x64 source kit')
+class WindowsKitTests(unittest.TestCase):
+    def test_packaged_kernels_work_without_build_tools(self):
+        import constraint_native
+        import constraint_native_search
+        packaged = ROOT / 'native' / 'windows-x64'
+        data, board, _ = planted_gold(817, 2)
+        with patch.object(anneal_core, '_build_one', side_effect=AssertionError('No compiler on user PC')):
+            model = AnnealModel(data, board, native='auto')
+            self.assertEqual(model.backend, 'compiled', model.native_error)
+            self.assertEqual(Path(model._dll._name).parent, packaged)
+            codes = model.random_board(random.Random(3))
+            outcome = model.run(codes, 99, 25000, 0.3)
+            self.assertEqual(model.validate(outcome[3])['matched_edges'], outcome[4])
+        with tempfile.TemporaryDirectory() as temp:
+            kit = Path(temp)
+            shutil.copytree(packaged, kit / 'native/windows-x64')
+            for stem in build_native.WINDOWS_KERNELS:
+                shutil.copyfile(ROOT / (stem + '.c'), kit / (stem + '.c'))
+            build_native.install_windows_bundle(kit)
+            build_native.install_windows_bundle(kit)
+            for stem in ('constraint_native', 'constraint_native_search'):
+                dll = stem + '.dll'
+                self.assertEqual((kit / '.native' / dll).read_bytes(), (packaged / dll).read_bytes())
+            # Use a child process so Windows releases the loaded copies before cleanup.
+            subprocess.run([sys.executable, '-B', '-c',
+                            'import sys, constraint_native as p, constraint_native_search as s; '
+                            'assert p.load_library(sys.argv[1]).dd_native_abi() == 1; '
+                            'assert s.load_library(sys.argv[1])[0].dd_search_abi() == 1',
+                            str(kit / '.native')], cwd=ROOT, check=True)
+        rebuilt = os.environ.get('DIAMOND_REBUILT_WINDOWS_NATIVE')
+        if rebuilt:
+            directory = Path(rebuilt)
+            self.assertEqual(constraint_native.load_library(directory).dd_native_abi(), 1)
+            self.assertEqual(constraint_native_search.load_library(directory)[0].dd_search_abi(), 1)
+            with patch.object(anneal_core, 'native_directory', return_value=directory):
+                comparison = AnnealModel(data, board, native='compiled')
+            self.assertEqual(comparison.run(codes, 99, 25000, 0.3), outcome)
+
+    def test_stale_or_damaged_annealer_is_rejected_before_loading(self):
+        with tempfile.TemporaryDirectory() as temp:
+            directory = Path(temp)
+            manifest = json.loads((ROOT / 'native/windows-x64/anneal-build.json').read_text())
+            library = directory / 'anneal_native.dll'
+            library.write_bytes(b'damaged')
+            for changes in ({}, {'library_sha256': hashlib.sha256(library.read_bytes()).hexdigest(),
+                                 'source_sha256': '0' * 64}):
+                (directory / 'anneal-build.json').write_text(json.dumps({**manifest, **changes}))
+                with patch.object(anneal_core, 'native_directory', return_value=directory), \
+                        patch.object(anneal_core.ctypes, 'CDLL', side_effect=AssertionError('Unverified DLL')):
+                    with self.assertRaisesRegex(RuntimeError, 'build manifest'):
+                        anneal_core._load_native()
+
+    def test_cmd_returns_errors_and_runs_the_compiled_annealer(self):
+        with tempfile.TemporaryDirectory(prefix='anneal kit ') as temp:
+            kit = Path(temp)
+            for name in ('StartSolver.cmd', 'StartSolver.ps1', 'anneal_search.py'):
+                shutil.copyfile(ROOT / name, kit / name)
+            # Use a real venv launcher and this interpreter's installed test dependencies.
+            subprocess.run([sys.executable, '-m', 'venv', '--without-pip', str(kit / 'venv')], check=True)
+            env = dict(os.environ, PYTHONPATH=os.pathsep.join([str(ROOT), *filter(None, sys.path)]))
+            command = [os.environ['ComSpec'], '/d', '/c', 'StartSolver.cmd',
+                       '-Algorithm', 'anneal', '-Hours', '0.001', '-Workers', '1', '-Fresh']
+            def start():
+                return subprocess.run(command, cwd=kit, env=env, text=True, stdin=subprocess.DEVNULL,
+                                      capture_output=True, timeout=90)
+            missing = start()
+            self.assertNotEqual(missing.returncode, 0, missing.stdout + missing.stderr)
+            self.assertIn('Puzzle data is missing', missing.stderr)
+            data, board, _ = planted_gold(7, 4)
+            (kit / 'data').mkdir()
+            (kit / 'data/tiles.json').write_text(json.dumps(data))
+            launched = start()
+            self.assertEqual(launched.returncode, 0, launched.stdout + launched.stderr)
+            status = json.loads((kit / 'runtime/status.json').read_text())
+            self.assertEqual(status['algorithm'], 'anneal')
+            self.assertIn('compiled kernel', status['gpu'])
+            self.assertGreater(status['moves_done'], 0)
+            best = json.loads((kit / 'runtime/best.json').read_text())
+            self.assertEqual(validate_arrangement(data, best['codes'], board)['matched_edges'],
+                             best['validation']['matched_edges'])
+
+
 class LaunchTests(unittest.TestCase):
     def test_registry_keeps_gold_engines_separate_from_score_engines(self):
         self.assertEqual(SCORE_ALGORITHMS, ('anneal',))
@@ -341,7 +430,8 @@ class LaunchTests(unittest.TestCase):
                 self.assertEqual(command[2:], ['--resume', '--stop-file-initialized', '--seconds', '600.0', '--seed', '9', '--workers', '2'])
                 self.assertEqual((result['method'], result['target'], result['backend'], result['workers']), ('anneal', 'edges', 'cpu', 2))
                 self.assertFalse((directory / 'stop.request').exists())
-                with patch.object(dashboard, 'live_pid', return_value=5678):
+                with patch.object(dashboard, 'live_pid', return_value=5678), \
+                        patch.object(dashboard, 'runtime_capabilities', return_value={}):
                     status = dashboard.state_payload()['status']
                 self.assertEqual((status['state'], status['algorithm'], status['method'], status['target']),
                                  ('starting', 'anneal', 'anneal', 'edges'))

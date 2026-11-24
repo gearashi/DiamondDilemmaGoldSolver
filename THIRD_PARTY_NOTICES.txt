@@ -18,5 +18,10 @@ Python packages and NVIDIA components are installed separately by Setup.ps1
 from the package index. Those components retain their respective upstream
 licenses; no package binaries or virtual environment are included here.
 
+The three Windows x64 solver kernels in native/windows-x64 were built
+from this repository's C sources with MSYS2 MinGW-w64 GCC. The runtime
+notices and GCC Runtime Library Exception accompany them in
+native/windows-x64/licenses. The project license is in LICENSE.
+
 This is an independent puzzle-solving project. It does not claim affiliation
 with the puzzle manufacturer or the author of the reference site.

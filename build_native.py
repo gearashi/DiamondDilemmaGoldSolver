@@ -1,7 +1,82 @@
 """Build the optional dependency-free C propagation library locally."""
 from pathlib import Path
-import argparse,hashlib,json,os,platform,shutil,subprocess,sys,tempfile
+import argparse,hashlib,json,os,platform,shutil,subprocess,sys,sysconfig,tempfile
 ROOT=Path(__file__).resolve().parent
+WINDOWS_KERNELS = {
+    'anneal_native': 'anneal-build.json',
+    'constraint_native': 'build.json',
+    'constraint_native_search': 'search-build.json',
+}
+
+def native_directory(manifest_name, root=ROOT):
+    """Use shipped x64 libraries on Windows, retaining local builds elsewhere."""
+    root = Path(root)
+    packaged = root / 'native' / 'windows-x64'
+    if (sysconfig.get_platform() == 'win-amd64' and manifest_name in WINDOWS_KERNELS.values()
+            and packaged.is_dir()):
+        return packaged
+    return root / '.native'
+
+def install_windows_bundle(root=ROOT):
+    """Verify the shipped kernels, then activate the existing exact-engine loaders."""
+    if sysconfig.get_platform() != 'win-amd64':
+        raise RuntimeError('The packaged kernels require 64-bit x86 Windows Python.')
+    root = Path(root)
+    packaged = root / 'native' / 'windows-x64'
+    pending = []
+    for stem, manifest in WINDOWS_KERNELS.items():
+        dll = packaged / (stem + '.dll')
+        info = json.loads((packaged / manifest).read_text(encoding='utf-8'))
+        source = root / (stem + '.c')
+        if (info.get('abi') != 1 or info.get('platform') != 'win32'
+                or info.get('machine') != 'AMD64' or info.get('library') != dll.name
+                or info.get('source_sha256') != hashlib.sha256(source.read_bytes()).hexdigest()
+                or info.get('library_sha256') != hashlib.sha256(dll.read_bytes()).hexdigest()):
+            raise RuntimeError(f'Windows kernel verification failed for {stem}. Re-extract the kit.')
+        if stem != 'anneal_native':
+            pending.extend([dll, packaged / manifest])
+    # Existing exact-engine readers and saved source bindings use .native.
+    # Preserve other files and avoid replacing identical DLLs in use.
+    output = root / '.native'
+    output.mkdir(exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=output) as tmp:
+        for source in pending:
+            destination = output / source.name
+            data = source.read_bytes()
+            if destination.is_file() and destination.read_bytes() == data:
+                continue
+            staged = Path(tmp) / source.name
+            staged.write_bytes(data)
+            staged.replace(destination)
+
+def build_windows_bundle(output, compiler=None):
+    """Rebuild the three portable MinGW-w64 DLLs shipped with the Windows kit."""
+    compiler = find_compiler(compiler or shutil.which('x86_64-w64-mingw32-gcc') or
+                             shutil.which('gcc') or 'C:/msys64/mingw64/bin/gcc.exe')
+    env = dict(os.environ, PATH=str(Path(compiler).resolve().parent) + os.pathsep + os.environ['PATH'])
+    def identify(option):
+        return subprocess.check_output([compiler, option], text=True, env=env).splitlines()[0]
+    if identify('-dumpmachine') != 'x86_64-w64-mingw32':
+        raise RuntimeError('The Windows bundle requires an x86_64-w64-mingw32 GCC toolchain.')
+    version = identify('--version')
+    output = Path(output).resolve()
+    output.mkdir(parents=True, exist_ok=True)
+    # GNU ld otherwise derives the preferred DLL base from the temporary output path.
+    flags = ['-std=c99', '-O3', '-shared', '-static-libgcc', '-s',
+             '-Wl,--no-insert-timestamp,--disable-auto-image-base']
+    with tempfile.TemporaryDirectory(dir=output) as tmp:
+        for stem, manifest in WINDOWS_KERNELS.items():
+            name = stem + '.dll'
+            binary = Path(tmp) / name
+            source = ROOT / (stem + '.c')
+            subprocess.run([compiler, *flags, str(source), '-o', str(binary)], check=True, env=env)
+            info = {'abi': 1, 'platform': 'win32', 'machine': 'AMD64', 'library': name,
+                    'source_sha256': hashlib.sha256(source.read_bytes()).hexdigest(),
+                    'library_sha256': hashlib.sha256(binary.read_bytes()).hexdigest(),
+                    'compiler_version': version, 'flags': flags}
+            (Path(tmp) / manifest).write_text(json.dumps(info, indent=2) + '\n', encoding='utf-8', newline='\n')
+        for path in Path(tmp).iterdir():
+            path.replace(output / path.name)
 
 def library_name(stem='constraint_native'):
     return stem+'.dll' if os.name=='nt' else 'lib'+stem+'.dylib' if sys.platform=='darwin' else 'lib'+stem+'.so'
@@ -51,6 +126,18 @@ def build(*,compiler=None,output_dir=None):
     return result
 
 def main(argv=None):
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--compiler');parser.add_argument('--output-dir')
-    args=parser.parse_args(argv);print(json.dumps(build(compiler=args.compiler,output_dir=args.output_dir),indent=2))
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--compiler')
+    destination=parser.add_mutually_exclusive_group()
+    destination.add_argument('--output-dir')
+    destination.add_argument('--windows-bundle', metavar='DIRECTORY', help='Build redistributable Windows x64 libraries')
+    destination.add_argument('--install-windows-bundle', action='store_true', help='Activate verified Windows x64 libraries')
+    args=parser.parse_args(argv)
+    if args.install_windows_bundle:
+        install_windows_bundle()
+        print('Verified Windows x64 annealing, propagation and search kernels.')
+    elif args.windows_bundle:
+        build_windows_bundle(args.windows_bundle, args.compiler)
+        print('Built Windows x64 libraries in', args.windows_bundle)
+    else:
+        print(json.dumps(build(compiler=args.compiler,output_dir=args.output_dir),indent=2))
 if __name__=='__main__':main()

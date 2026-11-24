@@ -1,0 +1,17 @@
+{
+  "abi": 1,
+  "platform": "win32",
+  "machine": "AMD64",
+  "library": "constraint_native_search.dll",
+  "source_sha256": "b991afcb37cd53c4e808039a278b76ab9302eccac571c8d5e99d8921d57a0a23",
+  "library_sha256": "63d0232838ee70087b9dd1106bda9fd5a3f592267e0ab5225a07b13b4143708d",
+  "compiler_version": "gcc.exe (Rev8, Built by MSYS2 project) 15.2.0",
+  "flags": [
+    "-std=c99",
+    "-O3",
+    "-shared",
+    "-static-libgcc",
+    "-s",
+    "-Wl,--no-insert-timestamp,--disable-auto-image-base"
+  ]
+}

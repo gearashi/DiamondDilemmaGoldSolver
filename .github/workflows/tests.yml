@@ -46,6 +46,15 @@ jobs:
       - name: Build optional native CPU propagation
         run: python build_native.py
 
+      - name: Rebuild and compare shipped Windows kernels
+        if: runner.os == 'Windows'
+        env:
+          DIAMOND_REBUILT_WINDOWS_NATIVE: ${{ runner.temp }}/diamond-native
+        run: |
+          python build_native.py --windows-bundle "$env:DIAMOND_REBUILT_WINDOWS_NATIVE"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python -B -m unittest -v test_anneal.WindowsKitTests
+
       - name: Confirm tests use synthetic puzzle data
         run: python -c "from pathlib import Path; assert not Path('data/tiles.json').exists()"
 
@@ -276,9 +285,9 @@ jobs:
             requirements-webgpu.txt
             requirements-common.txt
 
-      - name: Install Windows WebGPU packages
+      - name: Verify full Windows setup from the selected host Python
         if: runner.os == 'Windows'
-        run: .\Setup.ps1 -SkipData -Backend webgpu -Python (Get-Command python).Source
+        run: .\Setup.ps1 -SkipData -Backend auto -Python (Get-Command python).Source
 
       - name: Install Linux or macOS WebGPU packages
         if: runner.os != 'Windows'
@@ -451,6 +460,8 @@ jobs:
           for name in filter(None, files):
               path = PurePosixPath(name)
               assert not any(part in forbidden for part in path.parts), name
+              if name in {'native/windows-x64/' + stem + '.dll' for stem in ('anneal_native', 'constraint_native', 'constraint_native_search')}:
+                  continue
               assert path.suffix.lower() not in {'.gif', '.png', '.jpg', '.jpeg', '.npz', '.sqlite', '.sqlite3', '.dll', '.exe', '.so', '.dylib', '.pyd', '.a', '.lib', '.o', '.obj'}, name
           folder = Path('dist')
           folder.mkdir()
@@ -458,7 +469,7 @@ jobs:
           archive = folder / filename
           subprocess.check_call(['git', 'archive', '--format=' + os.environ['ARCHIVE_FORMAT'], '--prefix=DiamondDilemmaGoldSolver/', '--output=' + str(archive), 'HEAD'])
           (folder / 'SHA256SUMS.txt').write_text(hashlib.sha256(archive.read_bytes()).hexdigest() + '  ' + filename + '\n')
-          (folder / 'PACKAGE-NOTES.txt').write_text('Portable source distribution, not a standalone executable. Install native Python 3.12 for all engines, or standard Python 3.15 for DFS and WebGPU only, and run Setup.cmd (Windows) or bash Setup.sh (Linux/macOS). Dependencies and puzzle data are prepared locally. These target labels identify setup platforms; source contents are shared.\n')
+          (folder / 'PACKAGE-NOTES.txt').write_text('Portable source distribution, not a standalone executable. Run Setup.cmd on Windows x64 for the full Python 3.12 profile and packaged native kernels. On Linux/macOS run bash Setup.sh with Python 3.12 for all platform-supported engines or Python 3.15 for DFS and WebGPU. Dependencies and puzzle data are prepared locally. These target labels identify setup platforms; source contents are shared.\n')
           PY
 
       - name: Upload source distribution

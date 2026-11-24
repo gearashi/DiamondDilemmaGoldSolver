@@ -1,9 +1,4 @@
-"""Installed-package availability, without importing solvers or probing GPU drivers.
-
-Native explanation availability additionally checks local build metadata and hashes.
-An available package/build is not a guarantee of a working device or native library.
-The chosen engine still validates those when its search starts.
-"""
+"""Interpreter-local package availability, Windows CUDA check and native build identity."""
 from __future__ import annotations
 import importlib.util
 import hashlib,json
@@ -13,6 +8,7 @@ import platform
 import sys
 
 from search_options import EXACT_ALGORITHMS, validate_algorithm_options, option_engines
+from cuda_probe import installed_result as cuda_result
 
 
 def _installed(module):
@@ -33,7 +29,8 @@ def _build_metadata(path):
 def _native_explanation_build(root=None, *, display=False):
     """Check the required local build without loading executable native code."""
     root=Path(root) if root is not None else Path(__file__).resolve().parent
-    reason='Native explanations require a matching local compiled search library. Run python build_native.py in this installation first.'
+    reason='Native explanations require a matching compiled search library.'
+    fix=(r'.\Setup.cmd' if sys.platform=='win32' else './venv/bin/python build_native.py')
     try:
         folder=root/'.native'
         load_metadata = _build_metadata
@@ -48,11 +45,12 @@ def _native_explanation_build(root=None, *, display=False):
         if (metadata.get('abi')!=1 or metadata.get('platform')!=sys.platform
                 or metadata.get('machine')!=platform.machine()
                 or not isinstance(name,str) or not name or Path(name).name!=name):
-            return {'available':False,'reason':reason,'detection':'native_build_metadata'}
+            return {'available':False,'reason':reason,'fix':fix,'detection':'native_build_metadata'}
         available=(metadata.get('source_sha256')==digest(root/'constraint_native_search.c')
                    and metadata.get('library_sha256')==digest(folder/name))
     except (OSError,ValueError,TypeError,AttributeError):available=False
-    return {'available':bool(available),'reason':'' if available else reason,'detection':'native_build_metadata'}
+    return {'available':bool(available),'reason':'' if available else reason,
+            'fix':'' if available else fix,'detection':'native_build_metadata'}
 
 
 def _tested_sat_version():
@@ -64,25 +62,38 @@ def _tested_sat_version():
 
 def runtime_capabilities(*, display=False):
     """Describe this interpreter, never another installed Python environment."""
-    def feature(available, requirement):
-        return {'available': bool(available), 'reason': '' if available else requirement}
+    def feature(available, requirement, fix=''):
+        return {'available': bool(available), 'reason': '' if available else requirement,
+                'fix': '' if available else fix}
 
-    cp = feature(_installed('ortools'), 'Requires OR-Tools in this Python environment.')
-    sat = feature(_installed('pysat'), 'Requires python-sat in this Python environment.')
+    windows = sys.platform == 'win32'
+    setup = r'.\Setup.cmd' if windows else 'bash Setup.sh --python python3.12'
+    cuda_setup = setup + (' -Backend cuda' if windows else ' --backend cuda')
+    webgpu_setup = setup + (' -Backend webgpu' if windows else ' --backend webgpu')
+    cp = feature(_installed('ortools'), 'Requires OR-Tools in this Python environment.', setup)
+    sat = feature(_installed('pysat'), 'Requires python-sat in this Python environment.', setup)
     proof_arch=platform.machine().lower() in ({'x86_64','amd64'} if sys.platform=='linux' else {'x86_64','amd64','arm64','aarch64'})
     sat_persistence=feature(sat['available'] and sys.platform in ('linux','darwin') and proof_arch
                             and platform.python_implementation()=='CPython' and sys.version_info[:2]==(3,12) and _tested_sat_version(),
-                            'Verified native SAT clause persistence requires tested Linux x86-64 or macOS x86-64/ARM64, CPython 3.12 and python-sat 1.9.dev15; the tested Windows build is unavailable.')
-    cuda = feature(sys.platform != 'darwin' and _installed('cupy'),
-                   'CUDA is unavailable on macOS.' if sys.platform == 'darwin' else
-                   'Requires CuPy in this Python environment. Choose WebGPU if installed.')
-    webgpu = feature(_installed('wgpu'), 'Requires wgpu in this Python environment.')
+                            'Verified native SAT clause persistence requires tested Linux x86-64 or macOS x86-64/ARM64, CPython 3.12 and python-sat 1.9.dev15. The Windows wheel failed proof-logger cleanup.',
+                            'In a separate supported Linux or macOS checkout: bash Setup.sh --python python3.12')
+    if sys.platform == 'darwin':
+        cuda = feature(False, 'CUDA is unavailable on macOS.', 'Select WebGPU for Metal.')
+    elif not _installed('cupy'):
+        cuda = feature(False, 'Requires CuPy and the CUDA runtime and NVRTC wheels in this environment.', cuda_setup)
+    elif windows:
+        code, reason = cuda_result()
+        fix = ('Install the NVIDIA display driver for your GPU, then run ' if code == 2 else '') + cuda_setup
+        cuda = {**feature(code == 0, reason, fix), 'check': reason, 'detection': 'nvrtc_kernel'}
+    else:
+        cuda = feature(True, '')
+    webgpu = feature(_installed('wgpu'), 'Requires wgpu in this Python environment.', webgpu_setup)
     gpu = feature(cuda['available'] or webgpu['available'],
-                  'Requires a GPU package in this Python environment: CuPy or wgpu.')
+                  'No available GPU backend. ' + cuda['reason'] + ' ' + webgpu['reason'], setup)
     return {
         'option_engines': option_engines(),
         'python': platform.python_version(), 'detection': 'installed_packages',
-        'algorithms': {'dfs': feature(True, ''), 'parallel-dfs': feature(True, ''),
+        'algorithms': {'anneal': feature(True, ''), 'dfs': feature(True, ''), 'parallel-dfs': feature(True, ''),
                        'gpu-dfs': dict(gpu), 'hybrid': dict(gpu), 'gpu-domains':dict(cuda),
                        'cp': dict(cp), 'cp-sat': dict(cp), 'cp-sat-circuit': dict(cp),
                        'sat': dict(sat), 'sat-propagator':dict(sat),
@@ -123,4 +134,4 @@ def validate_runtime_selection(algorithm, backend='auto', options=None, *,
         if item is None:
             raise ValueError('Unknown runtime selection: ' + str(name))
         if not item['available']:
-            raise ValueError(name + ' is unavailable. ' + item['reason'])
+            raise ValueError(' '.join(filter(None,(name + ' is unavailable.',item['reason'],item.get('fix')))))
