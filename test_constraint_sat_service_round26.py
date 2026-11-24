@@ -92,8 +92,14 @@ class SharedSATServiceTests(unittest.TestCase):
             self.assertEqual(backend.stats['sat_service_requests'],1)
             backend.request([{'kind':'prepare','domains':(63,63),'max_candidates':16}],.2)
             requests=[{'kind':'query','domains':(1<<a,1<<b),'max_candidates':16} for a,b in itertools.islice(itertools.product(range(6),repeat=2),16)]
-            answers=backend.request(requests,.25)['answers'];solutions=set(brute(problem,'edges'))
-            for request,answer in zip(requests,answers):
+            # The batch shares one 250 ms lease. Completed answers are cached,
+            # so give unfinished queries bounded additional leases on busy hosts.
+            for _ in range(len(requests)):
+                answers=backend.request(requests,.25)['answers']
+                if all(answer['outcome']!='unknown' for answer in answers):
+                    break
+            solutions=set(brute(problem,'edges'))
+            for request,answer in zip(requests,answers,strict=True):
                 board=tuple(mask.bit_length()-1 for mask in request['domains'])
                 self.assertEqual(answer['outcome'],'sat' if board in solutions else 'unsat')
             client=SATServiceClient(backend,backend.identity(),(1,1));self.assertEqual(client.query([],seconds=.2),());client.close()

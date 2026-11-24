@@ -220,7 +220,7 @@ function round25OptionReason(key,algorithm,options,caps){
  }
  const allowed=caps?.option_engines?.[key]??optionEnginesDefault[key];
  if(allowed&&!allowed.some(engine=>effective.has(engine)))return 'This option requires '+allowed.map(engine=>algorithmLabels[engine]||engine).join(', ')+'.';
- if(key==='symbolic_coverage'&&algorithm==='sat'&&!options.persistent_sat)return 'Enable persistent SAT before symbolic coverage.';
+ if(key==='symbolic_coverage'&&algorithm==='sat'&&!options.persistent_sat)return 'Enable persistent SAT with Preserve SAT sessions between time slices before symbolic coverage.';
  if(key==='native_explanations'&&options.native==='python')return 'Native explanations require the automatic or compiled CPU core.';
  if(key==='coordinated_sat'&&caps?.algorithms?.sat?.available===false)return caps.algorithms.sat.reason;
  if(key==='coordinated_gpu'&&$('backendInput').value==='webgpu')return 'Coordinated exact GPU work requires NVIDIA CUDA.';
@@ -233,7 +233,7 @@ function round25OptionReason(key,algorithm,options,caps){
  return capability?.available===false?(capability.reason||'This option is unavailable in this environment.'):'';
 }
 function searchOptionIssues(algorithm,options,caps){
- const issues=[...round25Keys,...round26Keys,...round34Keys].filter(key=>options[key]).map(key=>round25OptionReason(key,algorithm,options,caps)).filter(Boolean);
+ const issues=Object.keys(optionEnginesDefault).filter(key=>options[key]).map(key=>round25OptionReason(key,algorithm,options,caps)).filter(Boolean);
  if((algorithm==='sat'||options.coordinated_sat)&&options.persistent_sat&&options.sat_theory&&!options.persistent_theory)issues.push('Persistent SAT and SAT theory cannot be combined. Turn off one option.');
  return [...new Set(issues)];
 }
@@ -259,7 +259,10 @@ function showSettingHelp(input,message){
 function explainDisabledSettings(algorithm,running,options){
  const caps=state?.capabilities,locked=running?'A search is running. Select Stop and wait for its checkpoint.':
   commandBusy?'A command is in progress. Wait for it to finish.':'';
- const pick=engine=>'Select '+(algorithmLabels[engine]||engine)+' in Search algorithm.';
+ const pick=engine=>{
+  const choice=Array.from($('algorithmInput').options||[]).find(option=>option.value===engine);
+  return 'Select '+(choice?.textContent?.trim()||algorithmLabels[engine]||engine)+' in Search algorithm.';
+ };
  const gpuHelp='This setting applies to GPU search. '+pick('hybrid');
  for(const [field,items] of [['algorithmInput',caps?.algorithms],['backendInput',caps?.backends]]){
   const control=$(field),messages=[];
@@ -288,7 +291,10 @@ function explainDisabledSettings(algorithm,running,options){
    else if(reason&&item?.available===false&&reason===item.reason)message=capabilityHelp(item);
    else if(key==='native_explanations'&&options.native==='python')message=reason+' Select Automatic in CPU propagation.';
    else if(key==='coordinated_gpu'&&$('backendInput').value==='webgpu')message=reason+' Select NVIDIA CUDA in GPU engine.';
-   else if(key==='persistent_theory'&&options.native_sat_persistence)message=reason+' Clear the native SAT clause-persistence option.';
+   else if(key==='persistent_theory'&&options.native_sat_persistence){
+    const label=$(optionIds.native_sat_persistence).closest?.('label')?.textContent.trim();
+    message=reason+' Clear '+(label||'the native SAT clause-persistence option')+'.';
+   }
    else if(reason)message=reason;
    else if(key==='sat_theory'&&algorithm==='sat'&&options.persistent_sat)message='SAT theory requires a compatible session. Clear Preserve SAT sessions between time slices.';
    else message='This setting applies to DFS-family searches. '+pick('dfs');
@@ -339,7 +345,8 @@ function renderRuntimeAvailability(algorithm,exact,usesGPU,running){
   const control=$(id),unavailable=item.available===false&&!transported;
   // A saved unavailable selection stays visible and can be unchecked. Never
   // rewrite saved preferences merely because this interpreter lacks a package.
-  control.disabled=control.disabled||running||commandBusy||(!exact&&!((id.startsWith('r25_')||id.startsWith('r26_')||id.startsWith('r34_'))&&control.checked))||(unavailable&&!control.checked);
+  const scoped=(caps.option_engines||optionEnginesDefault)[key];
+  control.disabled=control.disabled||running||commandBusy||(!exact&&!(scoped&&control.checked))||(unavailable&&!control.checked);
   control.title=unavailable?item.reason:'';
   if((['dfs','hybrid','parallel-dfs'].includes(algorithm)||options.symbolic_frontier)&&unavailable&&options[key])blocked.push(item.reason+' Uncheck this option to continue.');
  }
@@ -385,10 +392,11 @@ function renderAlgorithmControls(){
  $('gpuReasoningOptions').classList.toggle('hidden',algorithm!=='gpu-dfs');
  for(const[key,id]of Object.entries(gpuFeatureIds)){$(id).disabled=running||commandBusy;$(id).checked=(running?status.gpu_features?.[key]:requestedGPUFeatures[key])===true;}
  $('workersInput').disabled=running||commandBusy;
- $('advancedOptions').classList.toggle('hidden',algorithm==='gpu-dfs'&&![...round25Keys,...round26Keys,...round34Keys].some(key=>$(optionIds[key]).checked));
+ const scopedKeys=Object.keys(optionEnginesDefault);
+ $('advancedOptions').classList.toggle('hidden',algorithm==='gpu-dfs'&&!scopedKeys.some(key=>$(optionIds[key]).checked));
  for(const id of [...Object.values(optionIds),'nativeInput','orderingGoalInput','lookaheadBudgetInput','satServiceInstancesInput'])$(id).disabled=running||commandBusy||!exact;
  if((algorithm==='sat'||algorithm==='gpu-domains')&&!configured.symbolic_frontier){const supported=algorithm==='sat'?['persistent_sat','sat_core_lifting','native_sat_persistence',...($('r24_persistent_sat').checked?['shared_coverage','portable_frontier','symbolic_coverage']:['sat_theory'])]:['shared_coverage','portable_frontier'];for(const[key,id]of Object.entries(optionIds))$(id).disabled=running||commandBusy||(!supported.includes(key)&&!$(id).checked);for(const id of ['nativeInput','orderingGoalInput','lookaheadBudgetInput','satServiceInstancesInput'])$(id).disabled=true;}
- const effective=readSearchOptions();for(const key of [...round25Keys,...round26Keys,...round34Keys]){const control=$(optionIds[key]),reason=round25OptionReason(key,algorithm,effective,state?.capabilities);control.disabled=running||commandBusy||!!reason&&!control.checked;control.title=reason;}
+ const effective=readSearchOptions();for(const key of scopedKeys){const control=$(optionIds[key]),reason=round25OptionReason(key,algorithm,effective,state?.capabilities);control.disabled=running||commandBusy||!!reason&&!control.checked;control.title=reason;}
  $('replicaInput').max=algorithm==='gpu-domains'||effective.coordinated_gpu?'512':'131072';
  if(!running&&effective.coordinated_gpu&&Number($('replicaInput').value)>512)$('replicaInput').value='128';
  $('algorithmInput').disabled=running||commandBusy;

@@ -61,15 +61,18 @@ class RegionalIntegrationTests(unittest.TestCase):
         self.assertTrue(problem.validate(result['codes'])['valid'])
 
 class ReasoningIntegrationTests(unittest.TestCase):
+    # These controls wait for durable writes and validate the recovered state.
+    archive_seconds = 30
+
     def test_source_bound_archive_load_and_scope_isolation(self):
         problem=permutation_ring([(1,0,2),(0,2,1)]*2)
         options={'native':'python','lcg':True,'durable_reasoning':True,'lookahead':True,'pair_lookahead':True}
         with tempfile.TemporaryDirectory() as path:
             state={'_reasoning_cache_dir':path}
-            first=dfs(problem,seconds=5,options=options,learning_state=state)
+            first=dfs(problem,seconds=self.archive_seconds,options=options,learning_state=state)
             self.assertTrue(first['complete'])
             files=list(Path(path).rglob('*.json'));self.assertTrue(files)
-            second=dfs(problem,seconds=5,options=options,learning_state={'_reasoning_cache_dir':path})
+            second=dfs(problem,seconds=self.archive_seconds,options=options,learning_state={'_reasoning_cache_dir':path})
             self.assertEqual(second['status'],first['status'])
             self.assertGreater(second['stats']['reasoning_cache_hits'],0)
             self.assertTrue(problem.validate(second['codes'])['valid'])
@@ -94,12 +97,12 @@ class ReasoningIntegrationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             state={'_reasoning_cache_dir':directory}
             with patch.object(CompletedProbeCache,'run',probe):
-                first=dfs(problem,seconds=8,options=options,learning_state=state,stop=lambda:bool(calls))
+                first=dfs(problem,seconds=self.archive_seconds,options=options,learning_state=state,stop=lambda:bool(calls))
             self.assertTrue(calls);self.assertEqual(first['status'],'stopped')
             self.assertTrue(state['_runtime'].probes.plans.records)
             state['_runtime'].close()
             cold={'_reasoning_cache_dir':directory}
-            second=dfs(problem,seconds=8,options=options,learning_state=cold,resume=first['checkpoint'])
+            second=dfs(problem,seconds=self.archive_seconds,options=options,learning_state=cold,resume=first['checkpoint'])
             self.assertTrue(second['complete']);self.assertIn(tuple(second['codes']),brute(problem,'gold'))
             self.assertGreater(second['stats']['reasoning_cache_hits'],0)
             self.assertGreater(second['stats']['probe_plan_resumes'],0)

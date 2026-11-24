@@ -39,6 +39,32 @@ class Inputs(HTMLParser):
 
 
 class Round25Controls(unittest.TestCase):
+    def test_all_advertised_options_have_scoped_controls_and_saved_round27_flags_are_clearable(self):
+        from search_options import option_engines
+        self.node('const advertised='+json.dumps(option_engines())+';'+r"""
+assert.deepStrictEqual(JSON.parse(JSON.stringify(run('optionEnginesDefault'))),advertised);
+select('anneal');
+for(const key of Object.keys(advertised)){
+ const id=run('optionIds')[key];
+ assert.ok(id,key+' has no control');
+ assert.equal(element(id).disabled,true,key+' must be disabled for score search');
+}
+select('dfs');
+assert.equal(element('r27_easy_remainder').disabled,false);
+assert.equal(element('r27_incumbent_polish').disabled,true);
+element('r27_easy_remainder').checked=true;element('r27_easy_remainder').listeners.change();
+select('cp-sat');
+assert.equal(element('r27_easy_remainder').checked,true);
+assert.equal(element('r27_easy_remainder').disabled,false,'Saved option must be clearable');
+assert.equal(element('startBtn').disabled,true,'Incompatible saved option must block Start');
+assert.match(element('runtimeHint').textContent,/requires DFS/);
+select('gpu-dfs');
+assert.equal(element('advancedOptions').classList.contains('hidden'),false);
+element('r27_easy_remainder').checked=false;element('r27_easy_remainder').listeners.change();
+select('cp-sat');assert.equal(element('startBtn').disabled,false);
+select('hybrid');assert.equal(element('r27_incumbent_polish').disabled,false);
+""")
+
     def test_disabled_choices_explain_the_repair_beside_their_controls(self):
         self.node(r"""
 const notes=new Map();
