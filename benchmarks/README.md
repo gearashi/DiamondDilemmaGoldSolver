@@ -180,6 +180,14 @@ Benchmarks are research/reproduction tools, not the dashboard launcher. Some nee
 - [bench_r35_turn_words.py](bench_r35_turn_words.py)
 - [bench_r35_wide_undo.py](bench_r35_wide_undo.py)
 
+### Round 37
+
+- [bench_r37_planted_inventory.py](bench_r37_planted_inventory.py) measures how many given cells the exact engines need on planted boards with the real side-signature inventory. Use `--engines`, `--seeds`, `--keep` and `--seconds` to reproduce a comparison. The target is 240 matched seams. See the [Round 37 results](../docs/ROUND37_EXACT_BENCHMARKS.md).
+
+```sh
+python -B -m benchmarks.bench_r37_planted_inventory --engines dfs sat --seeds 1 --keep 8 --seconds 60 --output round37-replay.json
+```
+
 ## Evidence and source history
 
 The [research reports](../docs/) and their JSON result/proof receipts retain the recorded evidence. Historical JSON filenames and hashes have not been rewritten: if a receipt names one of the old root paths, locate that same filename here. The [move manifest](relocation.json) maps every old path to its new path and records SHA-256 hashes before and after relocation. Two module docstrings have updated executable examples; their executable code is unchanged. All other moved drivers retain their original bytes.
